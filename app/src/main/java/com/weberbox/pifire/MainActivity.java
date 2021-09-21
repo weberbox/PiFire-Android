@@ -158,12 +158,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        if (intent.getBooleanExtra(Constants.INTENT_SETUP_RESTART, false)) {
-            handleIntent(intent);
-        } else {
-            connectSocketListenData(mSocket);
-        }
+        connectSocketListenData(mSocket);
 
 //        final View content = mBinding.getRoot();
 //        content.getViewTreeObserver().addOnPreDrawListener(
@@ -192,8 +187,7 @@ public class MainActivity extends AppCompatActivity {
         if (restartSocket) {
             PiFireApplication app = (PiFireApplication) getApplication();
             app.disconnectSocket();
-            mSocket = app.getSocket();
-            connectSocketListenData(mSocket);
+            this.recreate();
         }
     }
 

@@ -242,18 +242,15 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
 
         if (preference != null) {
             if (preference instanceof SwitchPreferenceCompat) {
-                if (preference.getContext().getString(R.string.prefs_server_basic_auth)
-                        .equals(preference.getKey())) {
-                    mBasicAuthChanged = sharedPreferences.getBoolean(key, false);
+                if (preference.getContext().getString(R.string.prefs_server_basic_auth).equals(preference.getKey())) {
+                    mBasicAuthChanged = true;
                 }
             }
             if (preference instanceof EditTextPreference) {
-                if (preference.getContext().getString(R.string.prefs_server_basic_auth_password)
-                        .equals(preference.getKey())) {
+                if (preference.getContext().getString(R.string.prefs_server_basic_auth_password).equals(preference.getKey())) {
                     mBasicAuthChanged = true;
                 }
-                if (preference.getContext().getString(R.string.prefs_server_basic_auth_user)
-                        .equals(preference.getKey())) {
+                if (preference.getContext().getString(R.string.prefs_server_basic_auth_user).equals(preference.getKey())) {
                     mBasicAuthChanged = true;
                 }
             }

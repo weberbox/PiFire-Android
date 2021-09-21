@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.MainActivity;
+import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupFinishBinding;
 
@@ -34,6 +35,11 @@ public class SetupFinishFragment extends Fragment {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getActivity() != null) {
+            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
+            app.disconnectSocket();
+        }
 
         Button finishSetup = mBinding.setupFinishButton;
         finishSetup.setOnClickListener(new View.OnClickListener() {
