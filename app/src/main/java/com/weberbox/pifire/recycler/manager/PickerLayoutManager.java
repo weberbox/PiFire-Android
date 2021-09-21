@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.listeners.OnScrollStopListener;
+import com.weberbox.pifire.interfaces.OnScrollStopListener;
 
 public class PickerLayoutManager extends LinearLayoutManager {
 

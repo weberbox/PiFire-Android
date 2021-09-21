@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
-import com.weberbox.pifire.listeners.OnScrollStopListener;
+import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.model.PelletProfileModel;
 import com.weberbox.pifire.recycler.adapter.PelletProfileAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;

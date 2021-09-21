@@ -21,7 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
-import com.weberbox.pifire.listeners.OnScrollStopListener;
+import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
