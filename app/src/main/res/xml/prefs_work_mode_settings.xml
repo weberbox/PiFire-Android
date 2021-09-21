@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_cycle">
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pmode_auger_on"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_auger_on"
+            app:title="@string/settings_pmode_auger_on"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:title="@string/settings_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_pmode_note">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/def_pmode_link" />
+        </Preference>
+
+        <ListPreference
+            app:defaultValue="@string/def_pmode_mode"
+            app:entries="@array/pmode_setting_names"
+            app:entryValues="@array/pmode_setting"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pmode_mode"
+            app:title="@string/settings_pmode_mode"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="@string/prefs_work_pmode_table"
+            app:title="@string/settings_pmode_table"
+            app:summary="@string/settings_pmode_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_splus" >
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@string/def_splus_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_enabled"
+            app:title="@string/settings_splus_enabled" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:title="@string/settings_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_splus_note"/>
+
+        <EditTextPreference
+            app:defaultValue="@string/def_splus_fan"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_fan"
+            app:title="@string/settings_splus_fan"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_splus_min"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_min"
+            app:title="@string/settings_splus_min"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_splus_max"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_max"
+            app:title="@string/settings_splus_max"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_pid" >
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pid_cycle"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_cycle"
+            app:title="@string/settings_pid_cycle"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pid_pb"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_pb"
+            app:title="@string/settings_pid_pb"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pid_ti"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_ti"
+            app:title="@string/settings_pid_ti"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pid_td"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_td"
+            app:title="@string/settings_pid_td"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:title="@string/settings_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_pid_note" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="@string/def_pid_link" />
+        </Preference>
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/event_items_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:padding="10dp"
+    android:clickable="true"
+    android:background="@drawable/bg_ripple_event_item">
+
+    <TextView
+        style="@style/Text18Aller"
+        android:id="@+id/event_icon_holder"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_event_circle"
+        android:gravity="center"
+        android:text="@string/event_type_info"
+        android:textSize="20sp" />
+
+    <TextView
+        style="@style/Text15Aller"
+        android:id="@+id/event_time_text_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/event_icon_holder"
+        android:text="@string/placeholder_text_view" />
+
+    <TextView
+        style="@style/Text15Aller"
+        android:id="@+id/event_date_text_holder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_time_text_holder"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/event_icon_holder"
+        android:text="@string/placeholder_text_view"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/event_text_holder"
+        style="@style/Text15Aller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_date_text_holder"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/event_icon_holder"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/placeholder_string"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+</RelativeLayout>

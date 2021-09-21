@@ -1,0 +1,141 @@
+<resources>
+    <string-array name="refresh_interval">
+        <item>1000</item>
+        <item>3000</item>
+        <item>12000</item>
+        <item>21000</item>
+        <item>30000</item>
+    </string-array>
+
+    <string-array name="refresh_interval_names">
+        <item>1 Seconds</item>
+        <item>3 Seconds</item>
+        <item>12 Seconds</item>
+        <item>21 Seconds</item>
+        <item>30 Seconds</item>
+    </string-array>
+
+    <string-array name="event_amounts">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="event_amounts_names">
+        <item>10 Items</item>
+        <item>20 items</item>
+        <item>30 Items</item>
+        <item>40 Items</item>
+        <item>50 Items</item>
+        <item>60 Items</item>
+    </string-array>
+
+    <string-array name="grill_probe_selection">
+        <item>grill_probe1</item>
+        <item>grill_probe2</item>
+    </string-array>
+
+    <string-array name="grill_probe_selection_names">
+        <item>Grill Probe 1</item>
+        <item>Grill Probe 2</item>
+    </string-array>
+
+    <string-array name="probe_types">
+        <item>TWPS00</item>
+        <item>ET73-HM</item>
+        <item>iGrill-HM</item>
+        <item>PT-1000-OEM</item>
+        <item>PT-1000-PiFire</item>
+        <item>ET73-SP</item>
+    </string-array>
+
+    <string-array name="probe_type_names">
+        <item>Thermoworks Pro Series HeaterMeter</item>
+        <item>ET-73 Heatermeter</item>
+        <item>iGrill Heatermeter</item>
+        <item>PT-1000-Grill-Probe-OEM</item>
+        <item>PT-1000-Grill-Probe-PiFire</item>
+        <item>ET-73 Skyeperry1</item>
+    </string-array>
+
+    <string-array name="pmode_setting">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string-array name="pmode_setting_names">
+        <item>Mode 0</item>
+        <item>Mode 1</item>
+        <item>Mode 2 (Factory Default)</item>
+        <item>Mode 3</item>
+        <item>Mode 4</item>
+        <item>Mode 5</item>
+        <item>Mode 6</item>
+        <item>Mode 7</item>
+        <item>Mode 8</item>
+        <item>Mode 9</item>
+    </string-array>
+
+    <string-array name="reignite_retries">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="pellet_rating">
+        <item>@string/pellets_rating_1</item>
+        <item>@string/pellets_rating_2</item>
+        <item>@string/pellets_rating_3</item>
+        <item>@string/pellets_rating_4</item>
+        <item>@string/pellets_rating_5</item>
+    </string-array>
+
+    <string-array name="pellet_profiles">
+        <item>Custom</item>
+        <item>Generic</item>
+    </string-array>
+
+    <string-array name="pellet_woods">
+        <item>Alder</item>
+        <item>Almond</item>
+        <item>Apple</item>
+        <item>Apricot</item>
+        <item>Blend</item>
+        <item>Cherry</item>
+        <item>Chestnut</item>
+        <item>Competition</item>
+        <item>Hickory</item>
+        <item>Lemon</item>
+        <item>Maple</item>
+        <item>Mesquite</item>
+        <item>Mulberry</item>
+        <item>Nectarine</item>
+        <item>Oak</item>
+        <item>Orange</item>
+        <item>Peach</item>
+        <item>Pear</item>
+        <item>Plum</item>
+        <item>Walnut</item>
+    </string-array>
+
+
+</resources>

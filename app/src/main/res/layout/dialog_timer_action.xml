@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/timer_sheet_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="1.0"
+    android:animateLayoutChanges="true"
+    android:foreground="@android:color/transparent"
+    android:padding="@dimen/default_spacing"
+    android:stretchColumns="*"
+    android:background="@drawable/bg_bottom_sheet_dialog">
+
+    <TableRow>
+
+        <LinearLayout
+            android:id="@+id/timer_button_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_spacing"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_trans"
+            android:padding="@dimen/default_spacing">
+
+            <ImageView
+                android:id="@+id/timer_button_left_image"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_timer_pause" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer_button_left_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/timer_pause"
+                android:textSize="@dimen/action_dialog_text"
+                android:textAlignment="center"
+                android:autoSizeTextType="uniform"
+                style="@style/Text24Knockout"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/timer_button_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_trans"
+            android:padding="@dimen/default_spacing">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_timer_stop" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/timer_stop"
+                android:textSize="@dimen/action_dialog_text"
+                android:textAlignment="center"
+                android:autoSizeTextType="uniform"
+                style="@style/Text24Knockout"/>
+
+        </LinearLayout>
+    </TableRow>
+</TableLayout>

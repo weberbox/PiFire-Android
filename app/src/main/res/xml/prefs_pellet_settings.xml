@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_pellets">
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pellet_full"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_full"
+            app:title="@string/settings_pellet_full"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:defaultValue="@string/def_pellet_empty"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_empty"
+            app:title="@string/settings_pellet_empty"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:title="@string/settings_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_pellet_note" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

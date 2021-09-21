@@ -1,0 +1,253 @@
+package com.weberbox.pifire.ui.fragments.setup;
+
+import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.ResultPoint;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.pixplicity.easyprefs.library.Prefs;
+import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
+import com.weberbox.pifire.utils.Log;
+import com.weberbox.pifire.utils.SSLSocketUtils;
+import com.weberbox.pifire.utils.SecurityUtils;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+import okhttp3.Credentials;
+
+public class QRScanFragment extends Fragment {
+
+    public static final String TAG = QRScanFragment.class.getSimpleName();
+
+    private FragmentSetupQrScanBinding mBinding;
+    private CompoundBarcodeView mBarcodeView;
+    private ProgressBar mConnectProgress;
+    private Snackbar mErrorSnack;
+    private Socket mSocket;
+    private String mValidURL;
+    private Boolean mIsConnecting = false;
+
+    public static QRScanFragment getInstance(){
+        return new QRScanFragment();
+    }
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        mBinding = FragmentSetupQrScanBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mErrorSnack = Snackbar.make(view, R.string.setup_error, Snackbar.LENGTH_LONG);
+
+        mConnectProgress = mBinding.qrCodeScanProgressbar;
+        mBarcodeView = mBinding.barcodeScanner;
+        mBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(true);
+        mBarcodeView.getBarcodeView().getCameraSettings().setContinuousFocusEnabled(true);
+        mBarcodeView.setStatusText(null);
+        mBarcodeView.decodeContinuous(mBarCodeCallback);
+
+    }
+
+    @Override
+    public void onResume() {
+        mBarcodeView.resume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mBarcodeView.pause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mBinding = null;
+        if(mSocket != null) {
+            mSocket.disconnect();
+            mSocket.off(Socket.EVENT_CONNECT, onConnect);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        }
+    }
+
+    private final BarcodeCallback mBarCodeCallback = new BarcodeCallback() {
+
+        @Override
+        public void barcodeResult(BarcodeResult result) {
+            if (result.getText() != null) {
+                mConnectProgress.setVisibility(View.VISIBLE);
+                verifyURLAndTestConnect(result.getText());
+            }
+        }
+
+        @Override
+        public void possibleResultPoints(List<ResultPoint> resultPoints) {
+
+        }
+    };
+
+    private void verifyURLAndTestConnect(String url) {
+        if(url.length() !=0 && isValidUrl(url)) {
+            if(url.startsWith("http://") || url.startsWith("https://")) {
+                testConnection(url);
+            } else {
+                testConnection("http://" + url);
+            }
+        } else {
+            mConnectProgress.setVisibility(View.GONE);
+            if(!mErrorSnack.isShown() && getActivity() != null) {
+                showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
+            }
+        }
+    }
+
+    private void testConnection(String Url) {
+        if(!mIsConnecting) {
+            IO.Options options = new IO.Options();
+
+            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
+                String username = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_user);
+                String password = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_password);
+
+                String credentials = Credentials.basic(username, password);
+
+                options.extraHeaders = Collections.singletonMap("Authorization",
+                        Collections.singletonList(credentials));
+
+                if (Url.startsWith("https://")) {
+                    SSLSocketUtils.set(options);
+                }
+
+                connectSocket(Url, options);
+            } else {
+                if (Url.startsWith("https://")) {
+                    SSLSocketUtils.set(options);
+                    connectSocket(Url, options);
+                } else {
+                    connectSocket(Url, null);
+                }
+            }
+
+            mConnectProgress.setVisibility(View.VISIBLE);
+            mIsConnecting = true;
+
+            mValidURL = Url;
+            mSocket.connect();
+            mSocket.on(Socket.EVENT_CONNECT, onConnect);
+            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        }
+    }
+
+    private void connectSocket(String serverURL, IO.Options options) {
+        if (options != null) {
+            try {
+                mSocket = IO.socket(serverURL, options);
+            } catch (URISyntaxException e) {
+                Log.e("Socket URI Error", e.toString());
+                if(!mErrorSnack.isShown() && getActivity() != null) {
+                    showSnackBarMessage(getActivity(), R.string.setup_error);
+                }
+            }
+        } else {
+            try {
+                mSocket = IO.socket(serverURL);
+            } catch (URISyntaxException e) {
+                Log.e("Socket URI Error", e.toString());
+                if(!mErrorSnack.isShown() && getActivity() != null) {
+                    showSnackBarMessage(getActivity(), R.string.setup_error);
+                }
+            }
+        }
+    }
+
+    private void storeValidURL() {
+        if(mValidURL != null) {
+            Prefs.putString(getString(R.string.prefs_server_address), mValidURL);
+            SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
+            if(getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        } else {
+            mConnectProgress.setVisibility(View.GONE);
+            if(!mErrorSnack.isShown() && getActivity() != null) {
+                showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
+            }
+        }
+    }
+
+    private final Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    mConnectProgress.setVisibility(View.GONE);
+                    mIsConnecting = false;
+                    if(mErrorSnack.isShown()) {
+                        mErrorSnack.dismiss();
+                    }
+                    storeValidURL();
+                });
+            }
+        }
+    };
+
+    private final Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Log.e(TAG, "Error connecting");
+                    mConnectProgress.setVisibility(View.GONE);
+                    mSocket.disconnect();
+                    mIsConnecting = false;
+                    if(!mErrorSnack.isShown()) {
+                        showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
+                    }
+                });
+            }
+        }
+    };
+
+    private void showSnackBarMessage(Activity activity, int message) {
+        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+        mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
+        mErrorSnack.setText(message);
+        mErrorSnack.show();
+    }
+
+    private boolean isValidUrl(String url) {
+        Pattern p = Patterns.WEB_URL;
+        Matcher m = p.matcher(url.toLowerCase());
+        return m.matches();
+    }
+}

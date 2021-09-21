@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="1.0"
+    android:animateLayoutChanges="true"
+    android:foreground="@android:color/transparent"
+    android:paddingStart="@dimen/default_spacing"
+    android:paddingEnd="@dimen/default_spacing"
+    android:paddingTop="20dp"
+    android:stretchColumns="*">
+
+    <TableRow>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="-2dp"
+            android:background="@drawable/bg_table_header_cell_left">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="8dp"
+                    android:text="@string/settings_pmode_mode"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:textColor="@color/colorWhite" />
+            </RelativeLayout>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_table_header_cell_middle">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="8dp"
+                    android:text="@string/settings_pmode_auger_on"
+                    android:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    android:textColor="@color/colorWhite" />
+            </RelativeLayout>
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="-2dp"
+            android:background="@drawable/bg_table_header_cell_right">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:padding="8dp"
+                    android:text="@string/settings_pmode_auger_off"
+                    android:autoSizeTextType="uniform"
+                    android:maxLines="1"
+                    android:textColor="@color/colorWhite" />
+            </RelativeLayout>
+        </FrameLayout>
+    </TableRow>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pmode_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</TableLayout>

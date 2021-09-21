@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/app_settings_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_spacing"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/app_settings_card_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_header_view"
+                android:background="@color/colorPrimary"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/app_settings_header_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/default_spacing"
+                android:src="@drawable/ic_menu_settings"
+                android:contentDescription="@string/placeholder_img"
+                app:layout_constraintBottom_toBottomOf="@+id/app_settings_card_header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/Text18AllerNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/default_spacing"
+                android:gravity="center"
+                android:text="@string/settings_config"
+                app:layout_constraintBottom_toBottomOf="@+id/app_settings_card_header"
+                app:layout_constraintStart_toEndOf="@+id/app_settings_header_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorPrimaryLight"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_settings_card_header">
+
+                <TextView
+                    android:id="@+id/settings_app"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:paddingStart="@dimen/settings_list_items"
+                    android:paddingEnd="@dimen/settings_list_items"
+                    android:paddingBottom="@dimen/settings_list_items"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_settings_app"
+                    android:text="@string/settings_app"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_probe"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_probe"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_grill_probe"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_name"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_grill_name"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_grill"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_work"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_work"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_settings_work"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_pellet"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_pellets"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_grill_pellets"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_shutdown"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_shutdown"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_grill_shutdown"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_history"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_history"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_menu_history"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_safety"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/settings_list_items"
+                    android:text="@string/settings_safety"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_settings_safety"
+                    style="@style/Text15AllerNormal" />
+
+                <TextView
+                    android:id="@+id/settings_notifications"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/settings_list_items"
+                    android:paddingStart="@dimen/settings_list_items"
+                    android:paddingEnd="@dimen/settings_list_items"
+                    android:paddingBottom="24dp"
+                    android:text="@string/settings_notifications"
+                    android:drawablePadding="@dimen/default_spacing"
+                    android:background="?attr/selectableItemBackground"
+                    app:drawableStartCompat="@drawable/ic_settings_notification"
+                    style="@style/Text15AllerNormal" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

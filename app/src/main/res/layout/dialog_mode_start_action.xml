@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/start_mode_sheet_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="1.0"
+    android:animateLayoutChanges="true"
+    android:foreground="@android:color/transparent"
+    android:padding="@dimen/default_spacing"
+    android:stretchColumns="*"
+    android:background="@drawable/bg_bottom_sheet_dialog">
+
+    <TableRow>
+
+        <LinearLayout
+            android:id="@+id/mode_start_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_trans"
+            android:padding="@dimen/default_spacing">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_timer_start" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/grill_mode_start"
+                android:textSize="@dimen/action_dialog_text"
+                style="@style/Text24Knockout"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mode_monitor_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_trans"
+            android:padding="@dimen/default_spacing">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_grill_monitor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/grill_mode_monitor"
+                android:textSize="@dimen/action_dialog_text"
+                style="@style/Text24Knockout"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mode_stop_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:background="@drawable/bg_ripple_trans"
+            android:padding="@dimen/default_spacing">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_timer_stop" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="@string/grill_mode_stop"
+                android:textSize="@dimen/action_dialog_text"
+                style="@style/Text24Knockout"/>
+
+        </LinearLayout>
+    </TableRow>
+</TableLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="def_pid_link">http://engineeredmusings.com/pismoker/</string>
+    <string name="def_pmode_link">http://tipsforbbq.com/Definition/Traeger-P-Setting</string>
+
+    <string name="def_history_refresh_enabled_app">true</string>
+    <string name="def_history_refresh_time_app">3000</string>
+    <string name="def_event_amounts_app">20</string>
+
+    <string name="def_grill_probe_selection">grill1probe</string>
+    <string name="def_grill_probe_one_type">PT-1000-OEM</string>
+    <string name="def_grill_probe_two_type">TWPS00</string>
+    <string name="def_grill_probe_type">PT-1000-OEM</string>
+    <string name="def_probe_one_type">TWPS00</string>
+    <string name="def_probe_two_type">TWPS00</string>
+
+    <string name="def_pmode_auger_on">15</string>
+    <string name="def_pmode_mode">2</string>
+    <string name="def_splus_enabled">false</string>
+    <string name="def_splus_fan">10</string>
+    <string name="def_splus_min">160</string>
+    <string name="def_splus_max">220</string>
+    <string name="def_pid_cycle">20</string>
+    <string name="def_pid_pb">60.0</string>
+    <string name="def_pid_ti">180.0</string>
+    <string name="def_pid_td">45.0</string>
+
+    <string name="def_shutdown_time">60</string>
+
+    <string name="def_history_display">60</string>
+    <string name="def_history_points">60</string>
+    <string name="def_history_clear">true</string>
+    <string name="def_history_auto">true</string>
+
+    <string name="def_safety_min_start">75</string>
+    <string name="def_safety_max_start">100</string>
+    <string name="def_safety_retries">1</string>
+    <string name="def_safety_max_temp">550</string>
+
+    <string name="def_notif_ifttt_enabled">false</string>
+    <string name="def_notif_pushover_enabled">false</string>
+    <string name="def_notif_pushbullet_enabled">false</string>
+    <string name="def_notif_firebase_enabled">false</string>
+
+    <string name="def_pellet_empty">22</string>
+    <string name="def_pellet_full">4</string>
+
+
+</resources>

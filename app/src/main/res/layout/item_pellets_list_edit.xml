@@ -1,0 +1,94 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pellet_edit_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false"
+    app:contentPadding="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/load_out_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/colorPrimaryLight" >
+
+        <ImageView
+            android:id="@+id/pellet_edit_expand_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/placeholder_img"
+            android:paddingStart="20dp"
+            android:paddingTop="@dimen/default_spacing"
+            android:paddingEnd="20dp"
+            android:paddingBottom="@dimen/default_spacing"
+            android:src="@drawable/ic_arrow_down_spinner"
+            app:layout_constraintBottom_toBottomOf="@+id/pellet_edit_card_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/pellet_edit_card_header"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pellets_item"
+            style="@style/Text15Aller"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/default_spacing"
+            android:layout_marginBottom="@dimen/default_spacing"
+            android:gravity="center"
+            android:text="@string/pellets_brand_holder"
+            app:layout_constraintBottom_toBottomOf="@+id/pellet_edit_card_header"
+            app:layout_constraintStart_toEndOf="@+id/pellet_edit_expand_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pellets_item_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/pellets_item_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_ripple_pellet_delete"
+            android:clickable="true"
+            android:contentDescription="@string/placeholder_img"
+            android:paddingStart="30dp"
+            android:paddingTop="@dimen/default_spacing"
+            android:paddingEnd="30dp"
+            android:paddingBottom="@dimen/default_spacing"
+            android:src="@drawable/ic_delete"
+            app:layout_constraintBottom_toBottomOf="@+id/pellet_edit_card_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/colorAccentRed" />
+
+        <LinearLayout
+            android:id="@+id/pellet_edit_card_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/pellet_edit_card_header">
+
+            <include
+                layout="@layout/layout_pellet_profile_edit" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

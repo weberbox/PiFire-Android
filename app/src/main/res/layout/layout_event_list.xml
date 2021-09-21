@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+    <ProgressBar
+        android:id="@+id/loading_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:max="100"
+        android:layout_marginTop="-7dp"
+        android:visibility="gone"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/colorAccent"/>
+
+    <LinearLayout
+        android:id="@+id/events_placeholder_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:alpha="0.3"
+        android:orientation="vertical">
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+        <include layout="@layout/item_events_list_placeholder" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/events_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp" />
+
+</RelativeLayout>

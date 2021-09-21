@@ -1,0 +1,318 @@
+<resources>
+    <string name="app_name">PiFire</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="regex_numbers">[^0-9]</string>
+
+    <string name="menu_dashboard">Dashboard</string>
+    <string name="menu_pellet_manager">Pellets</string>
+    <string name="menu_history">History</string>
+    <string name="menu_events">Events</string>
+    <string name="menu_setting">Settings</string>
+    <string name="menu_info">Info</string>
+
+    <string name="drawer_dashboard">Dashboard</string>
+    <string name="drawer_pellet_manager">Pellet Manager</string>
+    <string name="drawer_history">History</string>
+    <string name="drawer_events">Event Log</string>
+    <string name="drawer_setting">Settings</string>
+    <string name="drawer_admin">Admin</string>
+
+    <string name="placeholder_img">placeholder_img</string>
+    <string name="placeholder_temp">0°</string>
+    <string name="placeholder_percentage">0%</string>
+    <string name="placeholder_time">00:00</string>
+    <string name="placeholder_mode">Off</string>
+    <string name="placeholder_none">--</string>
+    <string name="placeholder_number">Number</string>
+    <string name="placeholder_text_view">TextView</string>
+    <string name="placeholder_string">This is a very long text and we need to show 3…(dots)</string>
+
+    <string name="json_error_settings">JSON Parsing Error - Settings not updated</string>
+    <string name="json_error_events">JSON Parsing Error - Events not updated</string>
+    <string name="json_error_history">JSON Parsing Error - History not updated</string>
+    <string name="json_error_pellets">JSON Parsing Error - Pellets not updated</string>
+    <string name="json_error_dash">JSON Parsing Error - Dashboard not updated</string>
+
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="colon">:</string>
+    <string name="confirm">Confirm</string>
+    <string name="clear">Clear</string>
+    <string name="close">Close</string>
+    <string name="enabled">Enabled</string>
+    <string name="not_set">Not set</string>
+    <string name="continue_button">Continue</string>
+    <string name="skip_button">Skip</string>
+
+    <string name="grill_mode_start">Start</string>
+    <string name="grill_mode_monitor">Monitor</string>
+    <string name="grill_mode_stop">Stop</string>
+    <string name="grill_mode_smoke">Smoke</string>
+    <string name="grill_mode_hold">Hold</string>
+    <string name="grill_mode_shutdown">Shutdown</string>
+
+    <string name="grill_state_mode">Mode</string>
+    <string name="grill_state_grill">Grill</string>
+    <string name="grill_state_current">Current</string>
+    <string name="grill_state_target">Target</string>
+    <string name="grill_state_set">Set</string>
+    <string name="grill_state_probe_one">Probe 1</string>
+    <string name="grill_state_probe_two">Probe 2</string>
+    <string name="grill_state_timer">Timer</string>
+    <string name="grill_state_pellet">Pellets</string>
+    <string name="grill_state_remaining">Remaining</string>
+    <string name="grill_smoke_plus">Smoke Plus</string>
+
+    <string name="probe_cancel">Cancel</string>
+    <string name="probe_disable">Disable</string>
+    <string name="probe_enable">Enable</string>
+
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_stop">Stop</string>
+
+    <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
+    <string name="control_send_error">There was an error sending the request please try again</string>
+    <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
+
+    <string name="history_temp_graph">Temp Graph</string>
+    <string name="history_grill_temp">Grill Temp</string>
+    <string name="history_grill_set">Grill Set</string>
+    <string name="history_probe1_temp">Probe 1 Temp</string>
+    <string name="history_probe1_set">Probe 1 Set</string>
+    <string name="history_probe2_temp">Probe 2 Temp</string>
+    <string name="history_probe2_set">Probe 2 Set</string>
+    <string name="history_delete_content">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
+    <string name="history_delete_positive">I\'m Sure</string>
+    <string name="history_delete_negative">Cancel</string>
+
+    <string name="event_type_info">I</string>
+
+    <string name="setup_label">Server Setup</string>
+    <string name="setup_one">1</string>
+    <string name="setup_two">2</string>
+    <string name="setup_three">3</string>
+    <string name="setup_terms">Terms</string>
+    <string name="setup_connect">Connect</string>
+    <string name="setup_address">Address</string>
+    <string name="setup_finish">Finish</string>
+    <string name="setup_http_address">http:// or https://</string>
+    <string name="setup_invalid_url">Address is invalid!</string>
+    <string name="setup_invalid_url_snack">Address is invalid! Please try again</string>
+    <string name="setup_blank_url">Address cannot blank!</string>
+    <string name="setup_cannot_connect">Cannot connect to PiFire. Verify entered address and that grill is powered on</string>
+    <string name="setup_error">There was an error please try again</string>
+    <string name="setup_have_qr_code">Use QR code</string>
+    <string name="setup_no_qr_code">Setup address manually</string>
+    <string name="setup_with_qr_code">Setup With QR code</string>
+    <string name="setup_with_qr_code_text">You can generate a QR code by holding the down button on the grill\'s display or from the Admin menu in a browser</string>
+    <string name="setup_enter_address">"Enter PiFire Address"</string>
+    <string name="setup_enter_address_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
+    <string name="setup_finish_title">Setup Complete</string>
+    <string name="setup_finish_text">Connection to your PiFire server is complete. If you need to change the address you can find it in the app settings</string>
+    <string name="setup_qr_camera_denied">Camera permission is required to use QR feature. Continue manually or grant permission</string>
+    <string name="setup_scan_qr">Scan QR Code</string>
+    <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
+
+    <string name="settings_config">Configuration</string>
+    <string name="settings_app">App Settings</string>
+    <string name="settings_probe">Probe Settings</string>
+    <string name="settings_grill_name">Grill Name</string>
+    <string name="settings_work">Work Mode</string>
+    <string name="settings_shutdown">Shutdown Settings</string>
+    <string name="settings_history">History Settings</string>
+    <string name="settings_safety">Safety Settings</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_admin">Admin Settings</string>
+    <string name="settings_pellets">Pellet Settings</string>
+
+    <!-- Settings Preferences -->
+    <string name="settings_note">Note:</string>
+    <string name="settings_warning">Warning:</string>
+    <string name="settings_blank_error">Cannot be blank</string>
+    <string name="settings_zero_error">Value must be greater than 0</string>
+    <string name="settings_min_ten_error">Value must be greater than 10</string>
+    <string name="settings_max_hundred_error">Value must be less than 100</string>
+
+    <string name="settings_cat_debug">Debug</string>
+    <string name="settings_firebase_token">Firebase Token</string>
+    <string name="settings_firebase_token_summary">Show firebase token in dialog</string>
+    <string name="settings_debug_logging">Debug Logging</string>
+    <string name="settings_debug_logging_summary">This enables debug logging. May impact performance</string>
+
+    <string name="settings_cat_server_title">Server</string>
+    <string name="settings_server_address">Server Address</string>
+
+    <string name="settings_cat_basic_auth_title">Server Authentication</string>
+    <string name="settings_basic_auth_summary">Use authentication if the server is behind a reverse proxy</string>
+    <string name="settings_basic_auth_title">Use Basic Auth</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_username">Username</string>
+    <string name="settings_password_blank_error">Password cannot be blank</string>
+    <string name="settings_username_blank_error">Username cannot be blank</string>
+    <string name="settings_username_encrypt_error">Error encrypting username</string>
+    <string name="settings_password_encrypt_error">Error encrypting password</string>
+
+    <string name="settings_cat_history_refresh_title">History Refresh</string>
+    <string name="settings_history_refresh_title">Auto History Refresh</string>
+    <string name="settings_history_refresh_summary">Enable auto refreshing on history page. \nNote this is only for the app not the server</string>
+    <string name="settings_history_refresh_interval_title">History Refresh Interval</string>
+    <string name="settings_history_refresh_interval_summary">How often the history will refresh in seconds</string>
+
+    <string name="settings_cat_events_title">Events</string>
+    <string name="settings_events_amount_title">Event List Amount</string>
+    <string name="settings_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
+
+    <string name="settings_cat_grill_probes">Grill Probes</string>
+    <string name="settings_cat_food_probes">Food Probes</string>
+    <string name="settings_grill_probe_selection">Grill Probe Selection</string>
+    <string name="settings_grill_probe_one_type">Grill Probe 1 Type</string>
+    <string name="settings_grill_probe_two_type">Grill Probe 2 Type</string>
+    <string name="settings_grill_probe_type">Grill Probe Type</string>
+    <string name="settings_probe_one_type">Probe 1 Type</string>
+    <string name="settings_probe_two_type">Probe 2 Type</string>
+
+
+    <string name="settings_cat_cycle">Startup / Smoke Mode Cycle Settings</string>
+    <string name="settings_pmode_note">P-Mode is used for both Startup and Smoke modes, but not Hold mode. For more information about the P-Mode click here</string>
+    <string name="settings_pmode_mode">P-Mode</string>
+    <string name="settings_pmode_table">P-Mode Table</string>
+    <string name="settings_pmode_summary">Click here a P-Mode chart</string>
+    <string name="settings_pmode_auger_on">Auger ON Time</string>
+    <string name="settings_pmode_auger_off">Auger OFF Time</string>
+
+    <string name="settings_cat_splus">Smoke Plus Settings</string>
+    <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
+    <string name="settings_splus_note">Fan cycling will only occur between the below min/max temperatures.</string>
+    <string name="settings_splus_fan">Fan Cycle Time (s)</string>
+    <string name="settings_splus_min">Min Operational Temp (F)</string>
+    <string name="settings_splus_max">Max Operational Temp (F)</string>
+
+    <string name="settings_cat_pid">PID Settings (HOLD Mode)</string>
+    <string name="settings_pid_cycle">Cycle Time</string>
+    <string name="settings_pid_pb">Proportional Band (PB)</string>
+    <string name="settings_pid_ti">Integral Time (Ti)</string>
+    <string name="settings_pid_td">Derivative Time (Td)</string>
+    <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
+
+    <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
+    <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
+
+    <string name="settings_cat_grill_name">Grill Naming</string>
+
+    <string name="settings_history_display">History to Display (mins)</string>
+    <string name="settings_history_points">Data points to Display</string>
+    <string name="settings_history_clear">Clear History on Startup</string>
+    <string name="settings_history_auto">History Auto-Refresh</string>
+
+    <string name="settings_safety_min_start">Min Startup Temp (F)</string>
+    <string name="settings_safety_max_start">Max Startup Temp (F)</string>
+    <string name="settings_safety_retries">Reignite Retries</string>
+    <string name="settings_safety_max_temp">Max Operational Temp (F)</string>
+    <string name="settings_safety_note">In an error condition (temp too low, temp too high) the grill will immediately shutdown and log the error in the events log. Notifications of an error will be sent if enabled. The Max Temp safety setting is also enabled in Monitor mode.</string>
+    <string name="settings_safety_warning">Safety features are not infallible and may not prevent safety issues with your grill in all cases. As with any grill, it is the operator\'s responsibility to monitor their equipment to ensure proper operational safety.</string>
+
+    <string name="settings_cat_ifttt">IFTTT WebHooks</string>
+    <string name="settings_cat_pushover">PushOver</string>
+    <string name="settings_cat_pushbullet">PushBullet</string>
+    <string name="settings_cat_firebase">FireBase</string>
+
+    <string name="settings_ifttt_api">API Key</string>
+    <string name="settings_pushover_api">API Key</string>
+    <string name="settings_pushover_keys">User Keys</string>
+    <string name="settings_pushover_url">Public URL</string>
+    <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
+    <string name="settings_pushbullet_api">API Key</string>
+    <string name="settings_pushbullet_url">Public URL</string>
+    <string name="settings_firebase_serverkey">Server Key</string>
+
+    <string name="settings_cat_admin">Admin Options</string>
+    <string name="settings_admin_debug">Debug Mode</string>
+    <string name="settings_admin_debug_note">This mode enables server verbose debug logging. Will impact performance</string>
+    <string name="settings_admin_manual">Manual Controls</string>
+    <string name="settings_admin_manual_note">This mode allows you to control the Auger, Fan, Igniter and Power outputs</string>
+
+    <string name="settings_cat_reset">Reset Data</string>
+    <string name="settings_admin_delete_history">History Log</string>
+    <string name="settings_admin_delete_history_note">Delete all history logs</string>
+    <string name="settings_admin_delete_events">Event Log</string>
+    <string name="settings_admin_delete_events_note">Delete all event logs</string>
+    <string name="settings_admin_delete_events_text">Are you sure that you want to permanently delete the events log? This operation cannot be undone.</string>
+    <string name="settings_admin_delete_pellets_log">Pellets Log</string>
+    <string name="settings_admin_delete_pellets_log_note">Delete all pellet logs</string>
+    <string name="settings_admin_delete_pellets_log_text">Are you sure that you want to permanently delete the pellets log? This operation cannot be undone.</string>
+    <string name="settings_admin_delete_pellets">Pellet Database</string>
+    <string name="settings_admin_delete_pellets_note">Delete all pellet database information</string>
+    <string name="settings_admin_delete_pellets_text">Are you sure that you want to permanently delete the pellets database? This operation cannot be undone.</string>
+    <string name="settings_admin_factory_reset">Factory Reset</string>
+    <string name="settings_admin_factory_reset_note">Remove all user settings and restore to default</string>
+    <string name="settings_admin_factory_reset_text">Are you sure that you want to reset to factory defaults? This operation cannot be undone.</string>
+
+    <string name="settings_cat_power">System Power</string>
+    <string name="settings_admin_reboot">Reboot System</string>
+    <string name="settings_admin_reboot_text">Are you sure that you want to reboot the system</string>
+    <string name="settings_admin_shutdown">Shutdown System</string>
+    <string name="settings_admin_shutdown_text">Are you sure that you want to shutdown the system</string>
+
+    <string name="settings_cat_pellets">Pellet Level</string>
+    <string name="settings_pellet_full">Full Distance (cm)</string>
+    <string name="settings_pellet_empty">Empty Distance (cm)</string>
+    <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
+
+    <string name="info_title">Information</string>
+    <string name="info_system_info">System Information</string>
+    <string name="info_cpu">CPU Info</string>
+    <string name="info_cpu_temp">CPU Temperature</string>
+    <string name="info_network">Network Info</string>
+    <string name="info_gpio">GPIO Pin Information</string>
+    <string name="info_gpio_output_name">Output Name</string>
+    <string name="info_gpio_output_pin">Output Pin</string>
+    <string name="info_gpio_output_auger">Auger</string>
+    <string name="info_gpio_output_fan">Fan</string>
+    <string name="info_gpio_output_igniter">Igniter</string>
+    <string name="info_gpio_output_power">Power</string>
+    <string name="info_gpio_input_name">Input Name</string>
+    <string name="info_gpio_input_pin">Input Pin</string>
+    <string name="info_gpio_input_selector">Selector</string>
+    <string name="info_uptime">Uptime</string>
+    <string name="info_credits">Credits and Licenses</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2020\n\nPiFire Android created by James Weber, &#169; 2021</string>
+
+    <string name="pellets_current_load">Current</string>
+    <string name="pellets_current_band">Brand:</string>
+    <string name="pellets_current_wood">Wood:</string>
+    <string name="pellets_current_rating">Rating:</string>
+    <string name="pellets_current_date">Date Loaded:</string>
+    <string name="pellets_current_comments">Comments:</string>
+
+    <string name="pellets_rating_error">Unknown</string>
+    <string name="pellets_rating_5">★ ★ ★ ★ ★</string>
+    <string name="pellets_rating_4">★ ★ ★ ★</string>
+    <string name="pellets_rating_3">★ ★ ★</string>
+    <string name="pellets_rating_2">★ ★</string>
+    <string name="pellets_rating_1">★</string>
+
+    <string name="pellets_add">Add New</string>
+    <string name="pellets_brands">Brands</string>
+    <string name="pellets_woods">Wood Types</string>
+    <string name="pellets_editor">Pellet Profiles Editor</string>
+    <string name="pellets_log">Pellet Log</string>
+    <string name="pellets_load_new">Load New</string>
+    <string name="pellets_load">Load</string>
+    <string name="pellets_delete">Delete</string>
+    <string name="pellets_delete_content">Are you sure that you want to permanently delete this item?</string>
+    <string name="pellets_cannot_delete_profile">Error cannot delete current profile</string>
+    <string name="pellets_add_brand">Add New Brand</string>
+    <string name="pellets_add_woods">Add New Wood</string>
+    <string name="pellets_dialog_save">Save</string>
+    <string name="pellets_dialog_save_load">Save &amp; Load</string>
+
+    <string name="pellets_brand_holder">Generic</string>
+    <string name="pellets_wood_holder">Alder</string>
+    <string name="pellets_date_holder">2021-09-07 21:39:08</string>
+    <string name="pellets_comments_holder">This is a placeholder profile. Alder is generic and used in almost all pellets, regardless of the wood type indicated on the packaging. It tends to burn consistently and produces a mild smoke.</string>
+    <string name="pellets_comments_hint">Enter comments here</string>
+
+
+</resources>

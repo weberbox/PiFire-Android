@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dashboard items -->
+    <string name="prefs_dash_timer_start_time">pref_dash_timer_start_time</string>
+    <string name="prefs_dash_timer_end_time">prefs_dash_timer_end_time</string>
+    <string name="prefs_dash_timer_pause_time">prefs_dash_timer_pause_time</string>
+    <string name="prefs_dash_timer_onstop_time">prefs_dash_timer_onstop_time</string>
+
+    <!-- App Settings -->
+    <string name="prefs_server_address">pref_server_url</string>
+    <string name="prefs_server_basic_auth">pref_basic_auth</string>
+    <string name="prefs_server_basic_auth_user">pref_basic_auth_user</string>
+    <string name="prefs_server_basic_auth_password">pref_basic_auth_password</string>
+
+    <string name="prefs_history_refresh_app">prefs_history_refresh_app</string>
+    <string name="prefs_history_refresh_interval_app">prefs_history_refresh_interval_app</string>
+
+    <string name="prefs_event_amount">pref_event_amount</string>
+
+    <!-- PiFire Settings -->
+    <string name="prefs_grill_probe">prefs_grill_probe</string>
+    <string name="prefs_grill_probes">prefs_grill_probes</string>
+    <string name="prefs_grill_probe_one_type">prefs_grill_probe_one_type</string>
+    <string name="prefs_grill_probe_two_type">prefs_grill_probe_two_type</string>
+    <string name="prefs_grill_probe_type">prefs_grill_probe_type</string>
+    <string name="prefs_probe_one_type">prefs_probe_one_type</string>
+    <string name="prefs_probe_two_type">prefs_probe_two_type</string>
+    <string name="prefs_probe_profiles">prefs_probe_profiles</string>
+
+    <string name="prefs_grill_units">prefs_grill_units</string>
+
+    <string name="prefs_work_auger_on">prefs_work_auger_on</string>
+    <string name="prefs_work_pmode_mode">prefs_work_pmode_mode</string>
+    <string name="prefs_work_pmode_table">prefs_work_pmode_table</string>
+
+    <string name="prefs_work_splus_enabled">prefs_work_splus_enabled</string>
+    <string name="prefs_work_splus_fan">prefs_work_splus_fan</string>
+    <string name="prefs_work_splus_min">prefs_work_splus_min</string>
+    <string name="prefs_work_splus_max">prefs_work_splus_max</string>
+
+    <string name="prefs_work_pid_cycle">prefs_work_pid_cycle</string>
+    <string name="prefs_work_pid_pb">prefs_work_pid_pb</string>
+    <string name="prefs_work_pid_ti">prefs_work_pid_ti</string>
+    <string name="prefs_work_pid_td">prefs_work_pid_td</string>
+
+    <string name="prefs_shutdown_time">prefs_shutdown_time</string>
+
+    <string name="prefs_grill_name">prefs_grill_name</string>
+
+    <string name="prefs_history_display">prefs_history_display</string>
+    <string name="prefs_history_points">prefs_history_points</string>
+    <string name="prefs_history_clear">prefs_history_clear</string>
+    <string name="prefs_history_auto">prefs_history_auto</string>
+
+    <string name="prefs_safety_min_start">prefs_safety_min_start</string>
+    <string name="prefs_safety_max_start">prefs_safety_max_start</string>
+    <string name="prefs_safety_retries">prefs_safety_retries</string>
+    <string name="prefs_safety_max_temp">prefs_safety_max_temp</string>
+
+    <string name="prefs_notif_ifttt_enabled">prefs_notif_ifttt_enabled</string>
+    <string name="prefs_notif_ifttt_api">prefs_notif_ifttt_api</string>
+    <string name="prefs_notif_pushover_enabled">prefs_notif_pushover_enabled</string>
+    <string name="prefs_notif_pushover_api">prefs_notif_pushover_api</string>
+    <string name="prefs_notif_pushover_keys">prefs_notif_pushover_keys</string>
+    <string name="prefs_notif_pushover_url">prefs_notif_pushover_url</string>
+    <string name="prefs_notif_pushbullet_enabled">prefs_notif_pushbullet_enabled</string>
+    <string name="prefs_notif_pushbullet_api">prefs_notif_pushbullet_api</string>
+    <string name="prefs_notif_pushbullet_channel">prefs_notif_pushbullet_channel</string>
+    <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
+    <string name="prefs_notif_firebase">prefs_notif_firebase</string>
+    <string name="prefs_notif_firebase_enabled">prefs_notif_firebase_enabled</string>
+    <string name="prefs_notif_firebase_serverkey">prefs_notif_firebase_serverkey</string>
+
+    <string name="prefs_admin_debug">prefs_admin_debug</string>
+    <string name="prefs_admin_manual">prefs_admin_manual</string>
+    <string name="prefs_admin_delete_history">prefs_admin_delete_history</string>
+    <string name="prefs_admin_delete_events">prefs_admin_delete_events</string>
+    <string name="prefs_admin_delete_pellets">prefs_admin_delete_pellets</string>
+    <string name="prefs_admin_delete_pellets_log">prefs_admin_delete_pellets_log</string>
+    <string name="prefs_admin_factory_reset">prefs_admin_factory_reset</string>
+    <string name="prefs_admin_reboot">prefs_admin_reboot</string>
+    <string name="prefs_admin_shutdown">prefs_admin_shutdown</string>
+
+    <string name="prefs_pellet_full">prefs_pellet_full</string>
+    <string name="prefs_pellet_empty">prefs_pellet_empty</string>
+
+    <string name="prefs_settings_update_time">prefs_settings_update_time</string>
+
+    <string name="prefs_debug_cat">prefs_debug_cat</string>
+    <string name="prefs_firebase_token">prefs_firebase_token</string>
+    <string name="prefs_debug_logging">prefs_debug_logging</string>
+
+</resources>

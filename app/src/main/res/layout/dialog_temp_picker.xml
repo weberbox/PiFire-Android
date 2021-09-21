@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_spacing"
+    android:background="@drawable/bg_bottom_sheet_dialog">
+
+    <FrameLayout
+        android:id="@+id/temp_list_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_gray_rounded_alpha">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/temp_list"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:clipToPadding="false"
+            android:paddingLeft="@dimen/default_spacing"
+            android:paddingRight="@dimen/default_spacing"
+            android:paddingTop="@dimen/picker_top_bottom_padding"
+            android:paddingBottom="@dimen/picker_top_bottom_padding"/>
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="2dp"
+            android:layout_gravity="start|center"
+            android:background="@color/colorAccent" />
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="2dp"
+            android:layout_gravity="end|center"
+            android:background="@color/colorAccent" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/temp_list_container" >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/set_temp_clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_ripple_grey_button"
+            android:layout_marginEnd="16dp"
+            android:text="@string/clear"
+            android:visibility="visible"
+            style="@style/MainButtonAccent"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/set_temp_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_ripple_grey_button"
+            android:text="@string/confirm"
+            style="@style/MainButtonAccent"/>
+
+    </LinearLayout>
+</RelativeLayout>

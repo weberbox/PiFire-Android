@@ -1,0 +1,80 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/settings_cat_server_title">
+
+        <Preference
+            app:key="@string/prefs_server_address"
+            app:title="@string/settings_server_address" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/settings_cat_basic_auth_title">
+
+        <SwitchPreferenceCompat
+            app:key="@string/prefs_server_basic_auth"
+            app:summary="@string/settings_basic_auth_summary"
+            app:title="@string/settings_basic_auth_title" />
+
+        <com.weberbox.pifire.ui.dialogs.PrefsUsernameDialog
+            app:dependency="@string/prefs_server_basic_auth"
+            app:key="@string/prefs_server_basic_auth_user"
+            app:title="@string/settings_username"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.dialogs.PrefsPasswordDialog
+            app:dependency="@string/prefs_server_basic_auth"
+            app:key="@string/prefs_server_basic_auth_password"
+            app:title="@string/settings_password" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_history_refresh_title">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@string/def_history_refresh_enabled_app"
+            app:key="@string/prefs_history_refresh_app"
+            app:summary="@string/settings_history_refresh_summary"
+            app:title="@string/settings_history_refresh_title" />
+
+        <ListPreference
+            app:defaultValue="@string/def_history_refresh_time_app"
+            app:dependency="@string/prefs_history_refresh_app"
+            app:entries="@array/refresh_interval_names"
+            app:entryValues="@array/refresh_interval"
+            app:key="@string/prefs_history_refresh_interval_app"
+            app:summary="@string/settings_history_refresh_interval_summary"
+            app:title="@string/settings_history_refresh_interval_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_events_title">
+
+        <ListPreference
+            app:defaultValue="@string/def_event_amounts_app"
+            app:entries="@array/event_amounts_names"
+            app:entryValues="@array/event_amounts"
+            app:key="@string/prefs_event_amount"
+            app:summary="@string/settings_events_amount_summary"
+            app:title="@string/settings_events_amount_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="@string/prefs_debug_cat"
+        app:title="@string/settings_cat_debug">
+
+        <Preference
+            app:key="@string/prefs_firebase_token"
+            app:summary="@string/settings_firebase_token_summary"
+            app:title="@string/settings_firebase_token" />
+
+        <SwitchPreferenceCompat
+            app:key="@string/prefs_debug_logging"
+            app:summary="@string/settings_debug_logging_summary"
+            app:title="@string/settings_debug_logging" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

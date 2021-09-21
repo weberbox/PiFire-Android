@@ -1,0 +1,54 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/settings_cat_admin">
+
+        <SwitchPreferenceCompat
+            app:key="@string/prefs_admin_debug"
+            app:summary="@string/settings_admin_debug_note"
+            app:title="@string/settings_admin_debug" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/settings_cat_reset">
+
+        <Preference
+            app:key="@string/prefs_admin_delete_history"
+            app:summary="@string/settings_admin_delete_history_note"
+            app:title="@string/settings_admin_delete_history" />
+
+        <Preference
+            app:key="@string/prefs_admin_delete_events"
+            app:summary="@string/settings_admin_delete_events_note"
+            app:title="@string/settings_admin_delete_events" />
+
+        <Preference
+            app:key="@string/prefs_admin_delete_pellets_log"
+            app:summary="@string/settings_admin_delete_pellets_log_note"
+            app:title="@string/settings_admin_delete_pellets_log" />
+
+        <Preference
+            app:key="@string/prefs_admin_delete_pellets"
+            app:summary="@string/settings_admin_delete_pellets_note"
+            app:title="@string/settings_admin_delete_pellets" />
+
+        <Preference
+            app:key="@string/prefs_admin_factory_reset"
+            app:summary="@string/settings_admin_factory_reset_note"
+            app:title="@string/settings_admin_factory_reset" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_power">
+
+        <Preference
+            app:key="@string/prefs_admin_reboot"
+            app:title="@string/settings_admin_reboot" />
+
+        <Preference
+            app:key="@string/prefs_admin_shutdown"
+            app:title="@string/settings_admin_shutdown" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

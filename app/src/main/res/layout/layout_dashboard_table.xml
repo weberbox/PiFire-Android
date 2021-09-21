@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grill_controls_table"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:alpha="1.0"
+    android:animateLayoutChanges="true"
+    android:foreground="@android:color/transparent"
+    android:padding="@dimen/default_spacing"
+    android:stretchColumns="*">
+
+    <TableRow>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_spacing"
+            android:layout_marginBottom="@dimen/default_spacing">
+
+            <LinearLayout
+                android:id="@+id/grill_status_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_table"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/default_spacing"
+                android:paddingTop="@dimen/default_spacing"
+                android:paddingEnd="@dimen/default_spacing"
+                android:paddingBottom="@dimen/small_spacing">
+
+                <TextView
+                    style="@style/Text16Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_mode" />
+
+                <TextView
+                    android:id="@+id/controls_grill_mode"
+                    style="@style/Text24Knockout"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/placeholder_mode"
+                    android:textSize="55sp"
+                    android:autoSizeTextType="uniform" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/smoke_plus_status_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/grill_status_container"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:background="@drawable/bg_ripple_smokep_disabled"
+                android:clickable="true"
+                android:enabled="false"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing">
+
+
+                <TextView
+                    style="@style/Text16Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_smoke_plus" />
+
+                <TextView
+                    android:id="@+id/controls_smoke_plus"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/placeholder_mode"
+                    android:textSize="55sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_marginBottom="@dimen/default_spacing">
+
+            <ProgressBar
+                android:id="@+id/controls_grill_temp_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_grill_progress" />
+
+            <LinearLayout
+                android:id="@+id/grill_temp_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:background="@drawable/bg_ripple_table_temp"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/grill_thermometer_icon"
+                        android:text="@string/grill_state_grill" />
+
+                    <ImageView
+                        android:id="@+id/grill_thermometer_icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_grill_thermometer" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/controls_grill_temp"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:text="@string/placeholder_temp"
+                    android:textSize="72sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_current" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/controls_grill_set_temp"
+                        style="@style/Text24Knockout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/placeholder_none"
+                        android:textSize="38sp" />
+
+                    <TextView
+                        android:id="@+id/controls_grill_target_temp"
+                        style="@style/Text24Knockout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/placeholder_none"
+                        android:textSize="38sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16AllerAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/grill_state_set" />
+
+                    <TextView
+                        style="@style/Text16AllerAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/grill_state_target" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/default_spacing"
+            android:layout_marginBottom="@dimen/default_spacing">
+
+            <ProgressBar
+                android:id="@+id/controls_probe_one_temp_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_probe_progress" />
+
+            <LinearLayout
+                android:id="@+id/probe_one_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:background="@drawable/bg_ripple_table_temp"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/probe_one_icon"
+                        android:text="@string/grill_state_probe_one" />
+
+                    <ImageView
+                        android:id="@+id/probe_one_icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_grill_probe" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/controls_probe_one_temp"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:text="@string/placeholder_temp"
+                    android:textSize="72sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_current" />
+
+                <TextView
+                    android:id="@+id/controls_probe_one_target_temp"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/placeholder_none"
+                    android:textSize="38sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_target" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <FrameLayout android:layout_width="0dp">
+
+            <ProgressBar
+                android:id="@+id/controls_probe_two_temp_progress"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_probe_progress" />
+
+            <LinearLayout
+                android:id="@+id/probe_two_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:background="@drawable/bg_ripple_table_temp"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/probe_two_icon"
+                        android:text="@string/grill_state_probe_two" />
+
+                    <ImageView
+                        android:id="@+id/probe_two_icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_grill_probe" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/controls_probe_two_temp"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:text="@string/placeholder_temp"
+                    android:textSize="72sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_current" />
+
+                <TextView
+                    android:id="@+id/controls_probe_two_target_temp"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="38dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/placeholder_none"
+                    android:textSize="38sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_target" />
+            </LinearLayout>
+        </FrameLayout>
+    </TableRow>
+
+    <TableRow>
+
+        <FrameLayout
+            android:id="@+id/grill_timer_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_spacing"
+            android:background="@drawable/bg_table_item"
+            android:foreground="@drawable/bg_ripple_table_temp"
+            android:clickable="true">
+
+            <ProgressBar
+                android:id="@+id/grill_timer_progress"
+                style="@style/RoundProgressBar"
+                android:layout_width="112dp"
+                android:layout_height="112dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/default_spacing"
+                android:layoutDirection="ltr"
+                android:max="100"
+                android:progress="0"
+                android:rotation="-90.0" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/default_spacing"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@id/grill_timer_icon"
+                        android:text="@string/grill_state_timer" />
+
+                    <ImageView
+                        android:id="@+id/grill_timer_icon"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_grill_timer" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/grill_timer_time"
+                        style="@style/Text24Knockout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:text="@string/placeholder_time"
+                        android:textSize="72sp" />
+
+                    <TextView
+                        style="@style/Text16AllerAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/grill_state_target" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/grill_timer_pause_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/bg_timer_pause"
+                android:visibility="invisible">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/placeholder_img"
+                    android:src="@drawable/ic_grill_pause" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/controls_pellet_level_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_ripple_table"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:padding="@dimen/default_spacing">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/Text16Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@id/grill_pellet_icon"
+                    android:text="@string/grill_state_pellet" />
+
+                <ImageView
+                    android:id="@+id/grill_pellet_icon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentEnd="true"
+                    android:contentDescription="@string/placeholder_img"
+                    android:src="@drawable/ic_grill_pellets" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/controls_pellet_level"
+                    style="@style/Text24Knockout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:text="@string/placeholder_percentage"
+                    android:textSize="72sp" />
+
+                <TextView
+                    style="@style/Text16AllerAlpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_remaining" />
+            </LinearLayout>
+        </FrameLayout>
+    </TableRow>
+</TableLayout>

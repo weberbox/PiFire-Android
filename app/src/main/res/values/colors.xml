@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="placeholderColor">#666666</color>
+    <color name="probeProgressBgColor">#40164DD9</color>
+    <color name="smokePlusDisabledBgColor">#57D80C0C</color>
+    <color name="timerProgressColor">#ff414243</color>
+
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorPrimary">#ff262626</color>
+    <color name="colorPrimaryLight">#2E2E2E</color>
+    <color name="colorPrimaryLighter">#424242</color>
+    <color name="colorPrimaryDark">#ff1d1d1d</color>
+    <color name="colorAccent">#1942DA</color>
+    <color name="colorAccent_disabled">#811942DA</color>
+    <color name="colorAccentRed">#DC0000</color>
+    <color name="colorLighterGrey">#454545</color>
+    <color name="colorUiPrimary_disabled">#80333333</color>
+    <color name="colorTransBlack">#77000000</color>
+    <color name="colorLightGrey">#FF333333</color>
+    <color name="colorGreyHint">#C8C7C7</color>
+    <color name="colorGreyAlpha2">#D8333333</color>
+    <color name="colorGreyAlpha">#DF333333</color>
+    <color name="colorNote">#DDC701</color>
+    <color name="colorWarning">#BA0101</color>
+    <color name="colorRedButton">#A50202</color>
+</resources>
