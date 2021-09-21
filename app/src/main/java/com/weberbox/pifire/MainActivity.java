@@ -180,12 +180,12 @@ public class MainActivity extends AppCompatActivity {
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         boolean restartSocket = intent.getBooleanExtra(Constants.INTENT_SETUP_RESTART, false);
-
-        PiFireApplication app = (PiFireApplication) getApplication();
         if (restartSocket) {
+            PiFireApplication app = (PiFireApplication) getApplication();
             app.disconnectSocket();
+            mSocket = app.getSocket();
+            connectSocketListenData(mSocket);
         }
-        mSocket = app.getSocket();
     }
 
     @Override

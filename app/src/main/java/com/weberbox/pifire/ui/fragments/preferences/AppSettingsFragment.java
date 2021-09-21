@@ -221,7 +221,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
                 this.setEnabled(false);
                 if (mBasicAuthChanged) {
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
                     startActivity(intent);
                     if (getActivity() != null) {
