@@ -44,7 +44,7 @@ public class PelletPickerDialog {
         mCallBack = (PelletsCallbackInterface) fragment;
         mContext = context;
         mPelletsList = pelletList;
-        mCurrentProfile = currentProfile;
+        mCurrentProfileId = currentProfile;
     }
 
     public BottomSheetDialog showDialog() {
@@ -70,6 +70,7 @@ public class PelletPickerDialog {
         mProfileList.setLayoutManager(pelletPickerLayoutManager);
         mProfileList.setAdapter(mProfileAdapter);
 
+        mCurrentProfileId = mPelletsList.get(0).getId();
 
         pelletPickerLayoutManager.setOnScrollStopListener(
                 new OnScrollStopListener() {
