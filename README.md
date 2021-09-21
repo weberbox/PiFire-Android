@@ -1,4 +1,4 @@
-# ![Dashboard](app/src/main/res/mipmap-xxxhdpi/ic_launcher.png) PiFire Android
+# ![Dashboard](app/src/main/res/mipmap-hdpi/ic_launcher.png) PiFire Android
 ## A native Android app for the PiFire smoker project
 
 ***Warning:*** *The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
