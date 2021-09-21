@@ -18,6 +18,10 @@
 
     <string name="prefs_event_amount">pref_event_amount</string>
 
+    <string name="prefs_debug_cat">prefs_debug_cat</string>
+    <string name="prefs_firebase_token">prefs_firebase_token</string>
+    <string name="prefs_debug_logging">prefs_debug_logging</string>
+
     <!-- PiFire Settings -->
     <string name="prefs_grill_probe">prefs_grill_probe</string>
     <string name="prefs_grill_probes">prefs_grill_probes</string>
@@ -86,9 +90,5 @@
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
 
     <string name="prefs_settings_update_time">prefs_settings_update_time</string>
-
-    <string name="prefs_debug_cat">prefs_debug_cat</string>
-    <string name="prefs_firebase_token">prefs_firebase_token</string>
-    <string name="prefs_debug_logging">prefs_debug_logging</string>
 
 </resources>

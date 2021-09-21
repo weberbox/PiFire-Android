@@ -21,7 +21,7 @@ public class SetupFinishFragment extends Fragment {
 
     private FragmentSetupFinishBinding mBinding;
 
-    public static SetupFinishFragment getInstance(){
+    public static SetupFinishFragment getInstance() {
         return new SetupFinishFragment();
     }
 
@@ -39,10 +39,10 @@ public class SetupFinishFragment extends Fragment {
         finishSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
-                startActivity(intent);
                 if (getActivity() != null) {
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
+                    startActivity(intent);
                     getActivity().finish();
                 }
             }
