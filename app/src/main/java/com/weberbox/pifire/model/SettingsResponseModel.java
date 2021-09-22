@@ -269,6 +269,9 @@ public class SettingsResponseModel {
         @SerializedName("shutdown_timer")
         @Expose
         private String shutdownTimer;
+        @SerializedName("four_probes")
+        @Expose
+        private Boolean fourProbes;
         @SerializedName("units")
         @Expose
         private String units;
@@ -319,6 +322,14 @@ public class SettingsResponseModel {
 
         public void setShutdownTimer(String shutdownTimer) {
             this.shutdownTimer = shutdownTimer;
+        }
+
+        public Boolean getFourProbes() {
+            return fourProbes;
+        }
+
+        public void setFourProbes(Boolean fourProbes) {
+            this.fourProbes = fourProbes;
         }
 
         public String getUnits() {

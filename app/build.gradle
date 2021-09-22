@@ -44,6 +44,22 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    applicationVariants.all { variant ->
+        def appName
+        if (project.hasProperty("applicationName")) {
+            appName = applicationName
+        } else {
+            appName = parent.name
+        }
+        def dimension = variant.productFlavors[0].name
+        def buildType = variant.buildType.name
+        def version = variant.versionName
+
+        variant.outputs.all { output ->
+            outputFileName = "${appName}-${dimension}-${buildType}${version}.apk"
+        }
+    }
 }
 
 dependencies {

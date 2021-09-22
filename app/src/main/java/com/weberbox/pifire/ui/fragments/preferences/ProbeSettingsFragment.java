@@ -87,7 +87,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
 
         if (grillProbe != null && grillProbe1Type != null && grillProbe2Type != null
                 && grillProbeType != null) {
-            if (AppConfig.MULTI_GRILL_PROBES) {
+            if (Prefs.getBoolean(getString(R.string.prefs_four_probe))) {
                 grillProbeType.setVisible(false);
 
                 if (!profilesHash.isEmpty()) {

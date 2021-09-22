@@ -19,7 +19,6 @@ import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSettingsBinding;
@@ -249,6 +248,7 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_grill_name), globals.getGrillName());
             Prefs.putBoolean(getString(R.string.prefs_admin_debug), globals.getDebugMode());
             Prefs.putString(getString(R.string.prefs_shutdown_time), globals.getShutdownTimer());
+            Prefs.putBoolean(getString(R.string.prefs_four_probe), globals.getFourProbes());
             Prefs.putString(getString(R.string.prefs_grill_units), globals.getUnits());
 
             Prefs.putBoolean(getString(R.string.prefs_notif_ifttt_enabled), ifttt.getEnabled());
@@ -266,7 +266,7 @@ public class SettingsFragment extends Fragment {
             Prefs.putBoolean(getString(R.string.prefs_notif_firebase_enabled), fireBase.getEnabled());
             Prefs.putString(getString(R.string.prefs_notif_firebase_serverkey), fireBase.getServerKey());
 
-            if (AppConfig.MULTI_GRILL_PROBES) {
+            if (globals.getFourProbes() != null && globals.getFourProbes()) {
                 GrillProbeSettings grillProbeSettings = settingsResponse.getGrillProbeSettings();
 
                 Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();

@@ -22,6 +22,8 @@
     <string name="prefs_firebase_token">prefs_firebase_token</string>
     <string name="prefs_debug_logging">prefs_debug_logging</string>
 
+    <string name="prefs_four_probe">prefs_four_probe</string>
+
     <!-- PiFire Settings -->
     <string name="prefs_grill_probe">prefs_grill_probe</string>
     <string name="prefs_grill_probes">prefs_grill_probes</string>
