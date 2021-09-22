@@ -10,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.utils.FirebaseUtils;
 
@@ -44,7 +46,15 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        PreferenceCategory firebase = findPreference(getString(R.string.prefs_notif_firebase));
+
+        if (firebase != null) {
+            firebase.setVisible(AppConfig.USE_FIREBASE);
+        }
+
+        return view;
     }
 
     @Override

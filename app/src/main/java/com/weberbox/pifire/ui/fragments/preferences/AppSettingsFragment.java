@@ -183,6 +183,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (firebaseToken != null) {
+            firebaseToken.setVisible(AppConfig.USE_FIREBASE);
             firebaseToken.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {

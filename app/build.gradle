@@ -21,10 +21,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        nonfirebase {
+            dimension "version"
+            buildConfigField("boolean", "IS_FIREBASE", "false")
+        }
+        firebase {
+            dimension "version"
+            buildConfigField("boolean", "IS_FIREBASE", "true")
+            apply plugin: 'com.android.application'
+            apply plugin: 'com.google.gms.google-services'
+            apply plugin: 'com.google.firebase.crashlytics'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
     }
@@ -51,17 +68,13 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation "com.github.skydoves:powerspinner:1.1.9"
     testImplementation 'junit:junit:4.+'
-    implementation platform('com.google.firebase:firebase-bom:28.4.0')
-    implementation 'com.google.firebase:firebase-messaging'
-    implementation 'com.google.firebase:firebase-crashlytics'
-    implementation 'com.google.firebase:firebase-analytics'
+    firebaseImplementation platform('com.google.firebase:firebase-bom:28.4.0')
+    firebaseImplementation 'com.google.firebase:firebase-messaging'
+    firebaseImplementation 'com.google.firebase:firebase-crashlytics'
+    firebaseImplementation 'com.google.firebase:firebase-analytics'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation ('io.socket:socket.io-client:2.0.1') {
         exclude group: 'org.json', module: 'json'
     }
 }
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'

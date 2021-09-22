@@ -4,15 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.weberbox.pifire.utils.Log;
-
 public class MainViewModel extends ViewModel {
     public static final String TAG = MainViewModel.class.getSimpleName();
 
     private MutableLiveData<String> mDashData;
     private MutableLiveData<String> mEventsData;
     private MutableLiveData<String> mHistoryData;
-    private MutableLiveData<String> mSettingsData;
     private MutableLiveData<String> mPelletData;
     private MutableLiveData<Boolean> mServerConnected;
 
@@ -21,7 +18,6 @@ public class MainViewModel extends ViewModel {
         mDashData = new MutableLiveData<>();
         mEventsData = new MutableLiveData<>();
         mHistoryData = new MutableLiveData<>();
-        mSettingsData = new MutableLiveData<>();
         mPelletData = new MutableLiveData<>();
     }
 
@@ -47,14 +43,6 @@ public class MainViewModel extends ViewModel {
 
     public void setHistoryData(String historyData) {
         mHistoryData.postValue(historyData);
-    }
-
-    public LiveData<String> getSettingsData() {
-        return  mSettingsData;
-    }
-
-    public void setSettingsData(String settingsData) {
-        mSettingsData.postValue(settingsData);
     }
 
     public LiveData<String> getPelletData() {

@@ -66,7 +66,6 @@ public class Constants {
     public static final int FRAG_SAFETY_SETTINGS = 7;
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
-    public static final int FRAG_INFO_SETTINGS = 10;
 
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";

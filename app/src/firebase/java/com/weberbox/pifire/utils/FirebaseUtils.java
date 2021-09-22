@@ -6,12 +6,17 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.dialogs.FirebaseTokenDialog;
 
 public class FirebaseUtils {
-    private static final String TAG = FileUtils.class.getSimpleName();
+    private static final String TAG = FirebaseUtils.class.getSimpleName();
+
+    public static void disableCrashlytics() {
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false);
+    }
 
     public static void getFirebaseToken(Context context) {
         FirebaseMessaging.getInstance().getToken()

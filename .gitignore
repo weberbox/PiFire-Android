@@ -6,6 +6,8 @@
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
+/.idea/misc.xml
+/.idea/deploymentTargetDropDown.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
@@ -14,4 +16,5 @@
 .cxx
 local.properties
 /app/google-services.json
+/app/src/firebase/google-services.json
 *.log

@@ -27,6 +27,7 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainBinding;
@@ -144,8 +145,10 @@ public class MainActivity extends AppCompatActivity {
             divider.setVisibility(View.GONE);
         }
 
-        if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))) {
-            FirebaseUtils.subscribeFirebase();
+        if (AppConfig.USE_FIREBASE) {
+            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))) {
+                FirebaseUtils.subscribeFirebase();
+            }
         }
 
         mMainViewModel.getServerConnected().observe(this, new Observer<Boolean>() {

@@ -1,4 +1,4 @@
-package com.weberbox.pifire.service;
+package com.weberbox.pifire.services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

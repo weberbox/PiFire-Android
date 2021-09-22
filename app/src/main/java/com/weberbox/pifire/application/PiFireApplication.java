@@ -4,11 +4,11 @@ import android.app.Application;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.utils.FirebaseUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
@@ -44,7 +44,7 @@ public class PiFireApplication extends Application {
 
 
         if(AppConfig.DEBUG){
-            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(false);
+            FirebaseUtils.disableCrashlytics();
         }
     }
 
