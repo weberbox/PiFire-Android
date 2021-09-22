@@ -27,13 +27,12 @@ android {
         nonfirebase {
             dimension "version"
             buildConfigField("boolean", "IS_FIREBASE", "false")
+            ext.useGoogleGcm = false
         }
         firebase {
             dimension "version"
             buildConfigField("boolean", "IS_FIREBASE", "true")
-            apply plugin: 'com.android.application'
-            apply plugin: 'com.google.gms.google-services'
-            apply plugin: 'com.google.firebase.crashlytics'
+            ext.useGoogleGcm = true
         }
     }
 
@@ -76,5 +75,22 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation ('io.socket:socket.io-client:2.0.1') {
         exclude group: 'org.json', module: 'json'
+    }
+
+    apply plugin: 'com.android.application'
+    apply plugin: 'com.google.firebase.crashlytics'
+    apply plugin: 'com.google.gms.google-services'
+
+    afterEvaluate {
+        android.productFlavors.each { flavor ->
+            tasks.matching {
+                it.name.contains('GoogleServices') && it.name.contains(flavor.name.capitalize())
+            }*.enabled = flavor.ext.useGoogleGcm
+        }
+        android.productFlavors.each { flavor ->
+            tasks.matching {
+                it.name.contains('Crashlytics') && it.name.contains(flavor.name.capitalize())
+            }*.enabled = flavor.ext.useGoogleGcm
+        }
     }
 }

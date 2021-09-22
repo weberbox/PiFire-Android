@@ -15,7 +15,7 @@
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true" >
         <service
-            android:name=".services.FirebaseNotificationService"
+            android:name=".service.FirebaseNotificationService"
             android:exported="false"
             tools:node="merge" >
             <intent-filter>
