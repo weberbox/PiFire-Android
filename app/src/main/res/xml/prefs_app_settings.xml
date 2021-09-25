@@ -62,6 +62,30 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:title="@string/settings_cat_updates">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_app_updater_enabled"
+            app:key="@string/prefs_app_updater_enabled"
+            app:summary="@string/settings_update_enabled_summary"
+            app:title="@string/settings_update_enabled" />
+
+        <ListPreference
+            app:defaultValue="@string/def_app_updater_frequency"
+            app:key="@string/prefs_app_updater_frequency"
+            app:title="@string/settings_update_frequency"
+            app:summary="@string/settings_update_frequency_summary"
+            app:entries="@array/app_updater_frequency_names"
+            app:entryValues="@array/app_updater_frequency_values"/>
+
+        <Preference
+            app:key="@string/prefs_app_updater_check_now"
+            app:title="@string/settings_update_check_now"
+            app:summary="@string/settings_update_check_now_summary"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="@string/prefs_debug_cat"
         app:title="@string/settings_cat_debug">
 

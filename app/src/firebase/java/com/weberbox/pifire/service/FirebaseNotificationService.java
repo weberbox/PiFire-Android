@@ -47,7 +47,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
     public void showNotification(String title, String message) {
         Intent intent = new Intent(this, MainActivity.class);
-        String channel_id = Constants.NOTIFICATIONS_CHANNEL;
+        String channel_id = getString(R.string.notification_channel_id);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
@@ -72,8 +72,9 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
                 Context.NOTIFICATION_SERVICE);
 
         NotificationChannel notificationChannel = new NotificationChannel(
-                channel_id, Constants.NOTIFICATIONS_TOPIC,
+                channel_id, getString(R.string.notification_channel_grill_name),
                 NotificationManager.IMPORTANCE_HIGH);
+        notificationChannel.setDescription(getString(R.string.notification_desc_grill));
         notificationManager.createNotificationChannel(notificationChannel);
 
         notificationManager.notify(0, builder.build());

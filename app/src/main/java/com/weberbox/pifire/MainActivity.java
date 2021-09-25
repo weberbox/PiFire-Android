@@ -37,6 +37,9 @@ import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.BannerTransition;
+import com.weberbox.pifire.updater.AppUpdater;
+import com.weberbox.pifire.updater.enums.Display;
+import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.FirebaseUtils;
 import com.weberbox.pifire.utils.Log;
 
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private CardView mOfflineBanner;
     private ConstraintLayout mRootContainer;
     private Socket mSocket;
+    private AppUpdater mAppUpdater;
 
     private boolean mIsReady = false;
 
@@ -163,6 +167,16 @@ public class MainActivity extends AppCompatActivity {
 
         connectSocketListenData(mSocket);
 
+        mAppUpdater = new AppUpdater(this)
+                .setDisplay(Display.DIALOG)
+                .setButtonDoNotShowAgain(R.string.disable_button)
+                .setUpdateFrom(UpdateFrom.JSON)
+                .setUpdateJSON(getString(R.string.def_app_update_check_url))
+                .showEvery(Integer.parseInt(Prefs.getString(getString(
+                        R.string.prefs_app_updater_frequency),
+                        getString(R.string.def_app_updater_frequency))));
+        mAppUpdater.start();
+
 //        final View content = mBinding.getRoot();
 //        content.getViewTreeObserver().addOnPreDrawListener(
 //                new ViewTreeObserver.OnPreDrawListener() {
@@ -176,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-
     }
 
     @Override
@@ -213,6 +226,12 @@ public class MainActivity extends AppCompatActivity {
         if (mSocket != null) {
             mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAppUpdater.stop();
     }
 
     @Override

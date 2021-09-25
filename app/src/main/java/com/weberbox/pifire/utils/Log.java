@@ -11,6 +11,11 @@ public class Log {
             android.util.Log.e(tag, message);
     }
 
+    public static void e(String tag, String message, Exception e) {
+        if (Prefs.getBoolean(PiFireApplication.getRes().getString(R.string.prefs_debug_logging), false))
+            android.util.Log.e(tag, message,  e);
+    }
+
     public static void d(String tag, String message) {
         if (Prefs.getBoolean(PiFireApplication.getRes().getString(R.string.prefs_debug_logging), false))
             android.util.Log.d(tag, message);

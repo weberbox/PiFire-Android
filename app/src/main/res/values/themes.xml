@@ -16,6 +16,9 @@
         <item name="android:actionMenuTextAppearance">@style/Text18Aller</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
+        <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
+        <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
 
     </style>
 
@@ -44,6 +47,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="alertDialogTheme">@style/AlertDialogThemeMaterial</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
+        <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
+        <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
     </style>
 
     <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">

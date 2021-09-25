@@ -27,6 +27,9 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
+import com.weberbox.pifire.updater.AppUpdater;
+import com.weberbox.pifire.updater.enums.Display;
+import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.FirebaseUtils;
 
 public class AppSettingsFragment extends PreferenceFragmentCompat implements
@@ -34,6 +37,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     private static final String TAG = AppSettingsFragment.class.getSimpleName();
 
     private boolean mBasicAuthChanged = false;
+    private AppUpdater mAppUpdater;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -45,11 +49,12 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        Preference serverAddress = (Preference) findPreference(getString(R.string.prefs_server_address));
+        Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
         EditTextPreference authPass = findPreference(getString(R.string.prefs_server_basic_auth_password));
         EditTextPreference authUser = findPreference(getString(R.string.prefs_server_basic_auth_user));
         PreferenceCategory debugCat = findPreference(getString(R.string.prefs_debug_cat));
         Preference firebaseToken = findPreference(getString(R.string.prefs_firebase_token));
+        Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
 
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -195,6 +200,26 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
+        if (updateCheck != null) {
+            updateCheck.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    if (getActivity() != null) {
+                        mAppUpdater = new AppUpdater(getActivity())
+                                .setDisplay(Display.DIALOG)
+                                .setButtonDoNotShowAgain(false)
+                                .showAppUpToDate(true)
+                                .showAppUpdateError(true)
+                                .setView(view)
+                                .setUpdateFrom(UpdateFrom.JSON)
+                                .setUpdateJSON(getString(R.string.def_app_update_check_url));
+                        mAppUpdater.start();
+                    }
+                    return true;
+                }
+            });
+        }
+
         return view;
     }
 
@@ -208,6 +233,9 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStop() {
         super.onStop();
+        if (mAppUpdater != null) {
+            mAppUpdater.stop();
+        }
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }

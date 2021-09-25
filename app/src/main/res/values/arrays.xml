@@ -137,5 +137,31 @@
         <item>Walnut</item>
     </string-array>
 
+    <string-array name="app_updater_frequency_names">
+        <item>Every Launch</item>
+        <item>Every 2 Launches</item>
+        <item>Every 3 Launches</item>
+        <item>Every 4 Launches</item>
+        <item>Every 5 Launches</item>
+        <item>Every 6 Launches</item>
+        <item>Every 7 Launches</item>
+        <item>Every 8 Launches</item>
+        <item>Every 9 Launches</item>
+        <item>Every 10 Launches</item>
+    </string-array>
+
+    <string-array name="app_updater_frequency_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
 
 </resources>

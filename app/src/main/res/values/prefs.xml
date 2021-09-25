@@ -18,6 +18,11 @@
 
     <string name="prefs_event_amount">pref_event_amount</string>
 
+    <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
+    <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
+    <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>
+    <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
+
     <string name="prefs_debug_cat">prefs_debug_cat</string>
     <string name="prefs_firebase_token">prefs_firebase_token</string>
     <string name="prefs_debug_logging">prefs_debug_logging</string>
