@@ -4,7 +4,7 @@
 ***Warning:*** *The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
 
 ### Introduction
-This app was created to work with the PiFire smoker project. I wanted a native android app to control my smoker using the great PiFire project. For this app to work it requires a specific version of the PiFire server as of this writing. It is currently being tested and maybe someday will make it into the official release channel of PiFire. 
+This app was created to work with the PiFire smoker project. I wanted a native android app to control my smoker using the great PiFire project. For this app to work it requires a specific version of the PiFire server as of this writing. It is currently being tested and has been merged into the development branch of PiFire. 
 
 ### Screenshots
 
