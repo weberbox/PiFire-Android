@@ -66,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
 
         SplashScreen.installSplashScreen(this);
 
-        String serverURL = Prefs.getString(getString(R.string.prefs_server_address), null);
+        boolean firstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
 
-        if (serverURL == null) {
+        if (firstStart) {
             Intent i = new Intent(MainActivity.this, ServerSetupActivity.class);
             startActivity(i);
             finish();

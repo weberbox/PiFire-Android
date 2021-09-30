@@ -10,7 +10,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.MainActivity;
+import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupFinishBinding;
@@ -46,6 +48,7 @@ public class SetupFinishFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (getActivity() != null) {
+                    Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
                     startActivity(intent);

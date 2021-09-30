@@ -30,6 +30,8 @@
     <string name="prefs_acra_syslog_enable">acra.syslog.enable</string>
     <string name="prefs_acra_user_email">acra.user.email</string>
 
+    <string name="prefs_first_app_start">prefs_first_app_start</string>
+
     <string name="prefs_debug_cat">prefs_debug_cat</string>
     <string name="prefs_firebase_token">prefs_firebase_token</string>
     <string name="prefs_debug_logging">prefs_debug_logging</string>
