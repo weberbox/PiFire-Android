@@ -27,22 +27,16 @@ This app was created to work with the PiFire smoker project. I wanted a native a
 
 ## Documentation
 
-This is light for now. To run this app with PiFire it requires an updated version of the PiFire project. There are two versions of the server, one with the standard config and closest to the normal PiFire release and another version that adds the option for a second grill probe with the updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
+To run this app with PiFire it requires an updated version of the PiFire project. There are two versions of the server, one with the standard config and closest to the normal PiFire release and another version that adds the option for a second grill probe with the updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
 
-Normal version [here](https://github.com/weberbox/PiFire/tree/mobile-dev-redis-normal)
+Update: The development branch now supports the android app you can find it [here](https://github.com/nebhead/PiFire/tree/development)
 
 Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/mobile-dev-redis-grillprobes)
 
-Depending on which version is being used the app will need a config change before compile or it will have JSON parsing issues. In AppConfig the multi grill probe option must be set to true or false.
 
-```
-public static final boolean MULTI_GRILL_PROBES = true;
+The app also supports Firebase notifications if you choose to use them. You will need to sign up for your own Firebase project and place the google-services.json into the projects app folder or the compile flavor folder the before you build. You can find some more info about that [here](https://firebase.google.com/docs/cloud-messaging/android/client#register_your_app_with_firebase)
 
-```
-
-The app also supports Firebase notifications, analytics and Crashlytics if you choose to use them. You will need to sign up for your own Firebase project and place the google-services.json into the projects root folder before compile. You can find some more info about that [here](https://firebase.google.com/docs/cloud-messaging/android/client#register_your_app_with_firebase)
-
-If you want the Firebase messaging to work you will also need to get the Server Key from your Firebase project and save it to your PiFire server. More info [here](https://developer.clevertap.com/docs/find-your-fcm-sender-id-fcm-server-api-key#)
+If you want the Firebase messaging to work you will also need to get the Server Key from your Firebase project and save it to your PiFire server. More info on how to get the server key [here](https://developer.clevertap.com/docs/find-your-fcm-sender-id-fcm-server-api-key#)
 
 
 ### Future Ideas To Be (possibly) Implemented  
