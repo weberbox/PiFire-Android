@@ -19,7 +19,7 @@ public class PModeViewModel {
     }
 
     public void setPMode(@NonNull final String pMode) {
-        mPMode = pMode;
+        this.mPMode = pMode;
     }
 
     @NonNull
@@ -28,7 +28,7 @@ public class PModeViewModel {
     }
 
     public void setAugerOn(@NonNull final String augerOn) {
-        mAugerOn = augerOn;
+        this.mAugerOn = augerOn;
     }
 
     @NonNull
@@ -37,6 +37,6 @@ public class PModeViewModel {
     }
 
     public void setAugerOff(@NonNull final String augerOff) {
-        mAugerOff = augerOff;
+        this.mAugerOff = augerOff;
     }
 }

@@ -1,4 +1,4 @@
-package com.weberbox.pifire.ui.utils;
+package com.weberbox.pifire.ui.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

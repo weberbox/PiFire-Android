@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         app:title="@string/settings_cat_server_title">
@@ -21,19 +22,20 @@
             app:dependency="@string/prefs_server_basic_auth"
             app:key="@string/prefs_server_basic_auth_user"
             app:title="@string/settings_username"
-            app:useSimpleSummaryProvider="true" />
+            app:summary="@string/settings_username_summary" />
 
         <com.weberbox.pifire.ui.dialogs.PrefsPasswordDialog
             app:dependency="@string/prefs_server_basic_auth"
             app:key="@string/prefs_server_basic_auth_password"
-            app:title="@string/settings_password" />
+            app:title="@string/settings_password"
+            app:summary="@string/settings_password_summary"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_cat_history_refresh_title">
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_history_refresh_enabled_app"
+            app:defaultValue="@bool/def_history_refresh_enabled_app"
             app:key="@string/prefs_history_refresh_app"
             app:summary="@string/settings_history_refresh_summary"
             app:title="@string/settings_history_refresh_title" />
@@ -58,6 +60,16 @@
             app:key="@string/prefs_event_amount"
             app:summary="@string/settings_events_amount_summary"
             app:title="@string/settings_events_amount_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_app_safety">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_grill_swipe_start"
+            app:key="@string/prefs_grill_swipe_start"
+            app:title="@string/settings_app_safety_start"
+            app:summary="@string/settings_app_safety_start_summary" />
 
     </PreferenceCategory>
 
@@ -98,6 +110,31 @@
             app:key="@string/prefs_debug_logging"
             app:summary="@string/settings_debug_logging_summary"
             app:title="@string/settings_debug_logging" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="@string/prefs_acra_cat"
+        app:title="@string/settings_cat_acra">
+
+        <SwitchPreferenceCompat
+            android:key="@string/prefs_acra_enable"
+            android:title="@string/settings_enable_acra"
+            android:summary="@string/settings_acra_summary"
+            android:defaultValue="@bool/def_acra_enabled"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/prefs_acra_enable"
+            android:key="@string/prefs_acra_syslog_enable"
+            android:title="@string/settings_acra_syslog"
+            android:summary="@string/settings_acra_syslog_summary"
+            android:defaultValue="@bool/def_acra_syslog_enabled"/>
+
+        <EditTextPreference
+            app:dependency="@string/prefs_acra_enable"
+            android:key="@string/prefs_acra_user_email"
+            android:title="@string/settings_acra_email"
+            android:summary="@string/settings_acra_email_summary"/>
 
     </PreferenceCategory>
 

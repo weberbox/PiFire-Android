@@ -6,7 +6,7 @@
         app:title="@string/settings_cat_ifttt">
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_ifttt_enabled"
+            app:defaultValue="@bool/def_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_enabled"
             app:title="@string/enabled" />
@@ -25,7 +25,7 @@
         app:title="@string/settings_cat_pushover" >
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_pushover_enabled"
+            app:defaultValue="@bool/def_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_enabled"
             app:title="@string/enabled" />
@@ -58,7 +58,7 @@
         app:title="@string/settings_cat_pushbullet" >
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_pushbullet_enabled"
+            app:defaultValue="@bool/def_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_enabled"
             app:title="@string/enabled" />
@@ -85,7 +85,7 @@
         app:title="@string/settings_cat_firebase" >
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_firebase_enabled"
+            app:defaultValue="@bool/def_notif_firebase_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_firebase_enabled"
             app:title="@string/enabled" />

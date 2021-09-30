@@ -6,6 +6,8 @@ public class Update {
     private String mVersion;
     private Integer mVersionCode;
     private String mReleaseNotes;
+    private Boolean mForceUpdate;
+    private Integer mForceUpdateVersion;
     private URL mApk;
 
     public Update() {}
@@ -31,6 +33,21 @@ public class Update {
         mVersionCode = latestVersionCode;
     }
 
+    public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk,
+                  Boolean forceUpdate) {
+        this(latestVersion, releaseNotes, apk);
+        mVersionCode = latestVersionCode;
+        mForceUpdate = forceUpdate;
+    }
+
+    public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk,
+                  Boolean forceUpdate, Integer forceUpdateVersion) {
+        this(latestVersion, releaseNotes, apk);
+        mVersionCode = latestVersionCode;
+        mForceUpdate = forceUpdate;
+        mForceUpdateVersion = forceUpdateVersion;
+    }
+
     public String getLatestVersion() {
         return mVersion;
     }
@@ -53,6 +70,22 @@ public class Update {
 
     public void setReleaseNotes(String releaseNotes) {
         mReleaseNotes = releaseNotes;
+    }
+
+    public Boolean getForceUpdate() {
+        return mForceUpdate;
+    }
+
+    public void setForceUpdate(Boolean forceUpdate) {
+        mForceUpdate = forceUpdate;
+    }
+
+    public Integer getForceUpdateVersion() {
+        return mForceUpdateVersion;
+    }
+
+    public void setForceUpdateVersion(Integer forceUpdateVersion) {
+        mForceUpdateVersion = forceUpdateVersion;
     }
 
     public URL getUrlToDownload() {

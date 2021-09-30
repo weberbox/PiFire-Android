@@ -44,7 +44,7 @@
         app:title="@string/settings_cat_splus" >
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_splus_enabled"
+            app:defaultValue="@bool/def_splus_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_enabled"
             app:title="@string/settings_splus_enabled" />

@@ -7,13 +7,13 @@
         app:title="@string/settings_history">
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_history_auto"
+            app:defaultValue="bool/def_history_auto"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_auto"
             app:title="@string/settings_history_auto" />
 
         <SwitchPreferenceCompat
-            app:defaultValue="@string/def_history_clear"
+            app:defaultValue="@bool/def_history_clear"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_clear"
             app:title="@string/settings_history_clear" />

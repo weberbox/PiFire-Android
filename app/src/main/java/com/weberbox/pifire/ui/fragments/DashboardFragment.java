@@ -46,7 +46,6 @@ import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.TextTransition;
-import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
@@ -56,7 +55,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 
 public class DashboardFragment extends Fragment implements DashboardCallbackInterface {
@@ -99,6 +97,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private Boolean mSmokePlusEnabled = false;
 
     private String mCurrentMode = Constants.GRILL_CURRENT_STOP;
+    private boolean mIsLoading = false;
 
 
     public DashboardFragment() {
@@ -164,7 +163,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             @Override
             public void onRefresh() {
                 if (mSocket != null && mSocket.connected()) {
-                    mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
+                    requestForcedDashData();
                 } else {
                     mSwipeRefresh.setRefreshing(false);
                     AnimUtils.shakeOfflineBanner(getActivity());
@@ -202,7 +201,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         GrillControl.setSmokePlus(mSocket, !mSmokePlusEnabled);
                     } else {
                         if (getActivity() != null) {
-                            showSnackBarMessage(getActivity(), R.string.control_smoke_plus_disabled);
+                            showSnackBarMessage(getActivity(), R.string.control_smoke_plus_disabled, false);
                         }
                     }
                 } else {
@@ -215,7 +214,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             @Override
             public void onClick(View view) {
                 if (mSocket != null && mSocket.connected()) {
-                    // TODO Fix the clear button
                     int defaultTemp = Constants.DEFAULT_GRILL_TEMP_SET;
                     if (!mGrillSetText.getText().toString().equals(getString(R.string.placeholder_none))) {
                         String temp = mGrillSetText.getText().toString()
@@ -359,10 +357,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
             mMainViewModel.getDashData().observe(getViewLifecycleOwner(), new Observer<String>() {
                 @Override
-                public void onChanged(@Nullable String response_data) {
+                public void onChanged(@Nullable String dashData) {
+                    mIsLoading = false;
                     mSwipeRefresh.setRefreshing(false);
-                    if (response_data != null) {
-                        updateUIWithData(response_data);
+                    if (dashData != null) {
+                        updateUIWithData(dashData);
                     }
                 }
             });
@@ -371,7 +370,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 @Override
                 public void onChanged(@Nullable Boolean enabled) {
                     if (enabled != null && enabled) {
-                        checkStoredData();
+                        if (!mIsLoading) {
+                            mIsLoading = true;
+                            requestDataUpdate();
+                        }
                     } else {
                         toggleLoading(false);
                         setOfflineMode();
@@ -382,41 +384,46 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        requestDataUpdate();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        checkStoredData();
-    }
-
-    private void checkStoredData() {
-        if (mMainViewModel.getDashData().getValue() == null) {
-            toggleLoading(true);
-            requestDashData();
-        } else {
-            toggleLoading(false);
+    private void requestDataUpdate() {
+        if (mSocket != null && !mIsLoading) {
+            mIsLoading = true;
+            requestForcedDashData();
         }
     }
 
-    private void requestDashData() {
+    private void requestForcedDashData() {
+        toggleLoading(true);
         if (mSocket != null) {
-            mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
+            mSocket.emit(ServerConstants.REQUEST_GRILL_DATA, true);
         }
     }
 
     private void toggleLoading(boolean show) {
         if (show && mSocket != null) {
-            if (getActivity() != null &&  getActivity().findViewById(R.id.offline_banner)
-                    .getVisibility() == View.GONE) {
+            if (getBannerVisibility() == View.GONE) {
                 mLoadingBar.setVisibility(View.VISIBLE);
             }
         } else {
             mLoadingBar.setVisibility(View.GONE);
         }
+    }
+
+    private int getBannerVisibility() {
+        if (getActivity() != null && getActivity().findViewById(R.id.offline_banner) != null) {
+            return getActivity().findViewById(R.id.offline_banner).getVisibility();
+        }
+        return View.GONE;
     }
 
     @Override
@@ -701,14 +708,14 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 mTimerPaused = TimerPaused;
             }
 
-            toggleLoading(false);
-
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Log.e(TAG, "JSON Error " + e.getMessage());
             if (getActivity() != null) {
-                showSnackBarMessage(getActivity(), R.string.json_error_dash);
+                showSnackBarMessage(getActivity(), R.string.json_error_dash, true);
             }
         }
+
+        toggleLoading(false);
     }
 
     private void setOfflineMode() {
@@ -730,8 +737,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mPelletLevelText.setText(R.string.placeholder_percentage);
     }
 
-    private void showSnackBarMessage(Activity activity, int message) {
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+    private void showSnackBarMessage(Activity activity, int message, boolean error) {
+        if (error) {
+            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
+                    R.color.colorAccentRed)));
+        }
         mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
         mErrorSnack.setText(message);
         mErrorSnack.show();

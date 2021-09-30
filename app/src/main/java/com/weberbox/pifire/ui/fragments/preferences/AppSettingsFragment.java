@@ -26,6 +26,7 @@ import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
@@ -52,9 +53,10 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
         EditTextPreference authPass = findPreference(getString(R.string.prefs_server_basic_auth_password));
         EditTextPreference authUser = findPreference(getString(R.string.prefs_server_basic_auth_user));
-        PreferenceCategory debugCat = findPreference(getString(R.string.prefs_debug_cat));
         Preference firebaseToken = findPreference(getString(R.string.prefs_firebase_token));
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
+        PreferenceCategory acraCat = findPreference(getString(R.string.prefs_acra_cat));
+        SwitchPreferenceCompat acraEnabled = findPreference(getString(R.string.prefs_acra_enable));
 
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -113,19 +115,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
                     }
                 }
             });
-
-            authUser.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
-                @Override
-                public CharSequence provideSummary(EditTextPreference preference) {
-                    if (preference.getText().equals("Error")) {
-                        return getString(R.string.settings_username_encrypt_error);
-                    } else if (preference.getText().equals("")) {
-                        return getString(R.string.not_set);
-                    } else {
-                        return preference.getText();
-                    }
-                }
-            });
         }
 
         if (authPass != null) {
@@ -139,19 +128,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
                     } else {
                         mBasicAuthChanged = true;
                         return true;
-                    }
-                }
-            });
-
-            authPass.setSummaryProvider(new Preference.SummaryProvider<EditTextPreference>() {
-                @Override
-                public CharSequence provideSummary(EditTextPreference preference) {
-                    if (preference.getText().equals("Error")) {
-                        return getString(R.string.settings_password_encrypt_error);
-                    } else if (preference.getText().equals("")) {
-                        return getString(R.string.not_set);
-                    } else {
-                        return preference.getText().replaceAll(".", "*");
                     }
                 }
             });
@@ -183,10 +159,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
-        if (debugCat != null) {
-            debugCat.setVisible(AppConfig.DEBUG);
-        }
-
         if (firebaseToken != null) {
             firebaseToken.setVisible(AppConfig.USE_FIREBASE);
             firebaseToken.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -200,6 +172,13 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
+        if (acraCat != null && acraEnabled != null) {
+            if (SecureCore.getAcraUrl().isEmpty()) {
+                acraCat.setEnabled(false);
+                acraEnabled.setSummary(getString(R.string.settings_enable_acra_disabled));
+            }
+        }
+
         if (updateCheck != null) {
             updateCheck.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -210,6 +189,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
                                 .setButtonDoNotShowAgain(false)
                                 .showAppUpToDate(true)
                                 .showAppUpdateError(true)
+                                .setForceCheck(true)
                                 .setView(view)
                                 .setUpdateFrom(UpdateFrom.JSON)
                                 .setUpdateJSON(getString(R.string.def_app_update_check_url));

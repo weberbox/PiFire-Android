@@ -41,6 +41,7 @@ import com.weberbox.pifire.databinding.FragmentHistoryBinding;
 import com.weberbox.pifire.interfaces.HistoryCallbackInterface;
 import com.weberbox.pifire.model.HistoryModel;
 import com.weberbox.pifire.ui.dialogs.HistoryDeleteDialog;
+import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.LineChartXAxisValueFormatter;
@@ -71,6 +72,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
     private Socket mSocket;
 
     private boolean mStarted = false;
+    private boolean mIsLoading = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +104,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             @Override
             public void onRefresh() {
                 if (mSocket != null && mSocket.connected()) {
-                    requestListData();
+                    forceRefreshData();
                 } else {
                     mSwipeRefresh.setRefreshing(false);
                     AnimUtils.shakeOfflineBanner(getActivity());
@@ -164,15 +166,16 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
 
         if (getActivity() != null) {
             mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mMainViewModel.getHistoryData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            mMainViewModel.getHistoryData().observe(getViewLifecycleOwner(), new Observer<DataModel>() {
                 @Override
-                public void onChanged(@Nullable String response_data) {
+                public void onChanged(@Nullable DataModel historyData) {
                     mSwipeRefresh.setRefreshing(false);
-                    if (getActivity() != null) {
-                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_HISTORY, response_data);
-                    }
-                    if (response_data != null) {
-                        updateUIWithData(response_data);
+                    if (historyData != null && historyData.getLiveData() != null) {
+                        if (historyData.getIsNewData()) {
+                            FileUtils.saveJSONFile(getActivity(), Constants.JSON_HISTORY,
+                                    historyData.getLiveData());
+                        }
+                        updateUIWithData(historyData.getLiveData());
                     }
                 }
             });
@@ -180,11 +183,20 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                 @Override
                 public void onChanged(@Nullable Boolean enabled) {
-                    autoRefreshGraph();
+                    if (enabled != null && enabled) {
+                        if (!mIsLoading) {
+                            mIsLoading = true;
+                            if (mSocket != null && mSocket.connected()) {
+                                toggleLoading(true);
+                                requestDataUpdate();
+                            }
+                        }
+                    }
                 }
             });
         }
 
+        checkViewModelData();
     }
 
     @Override
@@ -206,60 +218,93 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
         }
     }
 
-    private void autoRefreshGraph() {
-        if (mSocket != null && mSocket.connected()) {
-            mLoadingBar.setVisibility(View.VISIBLE);
-            if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app), Boolean.parseBoolean(getString(R.string.def_history_refresh_enabled_app)))) {
-                if (!mStarted) {
-                    startRefresh();
-                }
-            } else {
-                checkStoredData();
-            }
+    private void checkViewModelData() {
+        if (mMainViewModel.getEventsData().getValue() == null) {
+            toggleLoading(true);
+            loadStoredDataRequestUpdate();
         } else {
-            if (getActivity() != null) {
-                String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_HISTORY);
-                if (jsonData != null && mMainViewModel != null) {
-                    mMainViewModel.setHistoryData(jsonData);
-                }
-            }
+            checkAutoRefreshGraph();
         }
     }
 
-    private void checkStoredData() {
-        if (mMainViewModel.getHistoryData().getValue() == null) {
-            requestListData();
-        } else {
-            mLoadingBar.setVisibility(View.GONE);
-        }
-    }
-
-    private void requestListData() {
+    private void requestDataUpdate() {
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setHistoryData(args[0].toString());
+            mIsLoading = true;
+            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (mMainViewModel != null) {
+                        mMainViewModel.setHistoryData(args[0].toString(), true);
+                        mIsLoading = false;
+                    }
                 }
             });
         }
     }
 
-    public void stopRefresh() {
+    private void loadStoredDataRequestUpdate() {
+        if (getActivity() != null) {
+            String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_HISTORY);
+            if (jsonData != null && mMainViewModel != null) {
+                mMainViewModel.setHistoryData(jsonData, false);
+            }
+        }
+        checkAutoRefreshGraph();
+    }
+
+    private void forceRefreshData() {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (mMainViewModel != null) {
+                        mMainViewModel.setHistoryData(args[0].toString(), true);
+                    }
+                }
+            });
+        }
+    }
+
+    private void checkAutoRefreshGraph() {
+        if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app),
+                getResources().getBoolean(R.bool.def_history_refresh_enabled_app))) {
+            if (!mStarted) {
+                if (!mIsLoading) {
+                    requestDataUpdate();
+                }
+                startRefresh();
+            }
+        }
+        if (!mIsLoading) {
+            requestDataUpdate();
+        }
+    }
+
+    private void toggleLoading(boolean show) {
+        if (show && mSocket != null && mSocket.connected()) {
+            mLoadingBar.setVisibility(View.VISIBLE);
+        } else {
+            mLoadingBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void stopRefresh() {
         mStarted = false;
         mHandler.removeCallbacks(runnable);
     }
 
-    public void startRefresh() {
+    private void startRefresh() {
         mStarted = true;
         int customAmount = Integer.parseInt(Prefs.getString(
-                getString(R.string.prefs_history_refresh_interval_app), "3000"));
+                getString(R.string.prefs_history_refresh_interval_app),
+                getString(R.string.def_history_refresh_time_app)));
         mHandler.postDelayed(runnable, customAmount);
     }
 
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            requestListData();
+            forceRefreshData();
             if (mStarted) {
                 startRefresh();
             }
@@ -267,7 +312,6 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
     };
 
     private void updateUIWithData(String response_data) {
-        mLoadingBar.setVisibility(View.GONE);
 
         try {
 
@@ -292,7 +336,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                     float seconds = (float) date.getTime() / 1000L;
                     time.add(seconds);
                 } catch (ParseException e) {
-                    Log.e(TAG, "Failed to parse time " + e.toString());
+                    Log.e(TAG, "Failed to parse time " + e.getMessage());
                     return;
                 }
             }
@@ -380,6 +424,8 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                 showSnackBarMessage(getActivity());
             }
         }
+
+        toggleLoading(false);
     }
 
     private final int[] colors = new int[]{

@@ -338,6 +338,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/brands_card_header">
 
+                <LinearLayout
+                    android:id="@+id/brands_placeholder_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_pellet_list_placeholder" />
+
+                    <include layout="@layout/item_pellet_list_placeholder" />
+
+                    <include layout="@layout/item_pellet_list_placeholder" />
+
+                    <include layout="@layout/item_pellet_list_placeholder" />
+
+                    <include layout="@layout/item_pellet_list_placeholder" />
+
+                </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/brands_recycler"
                     android:layout_width="match_parent"

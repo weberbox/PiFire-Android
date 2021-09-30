@@ -50,7 +50,7 @@ public class AppUpdaterUtils {
     }
 
     /**
-     * Set the source where the latest update can be found. Default: GOOGLE_PLAY.
+     * Set the source where the latest update can be found. Default: JSON.
      *
      * @param updateFrom source where the latest update is uploaded. If GITHUB is selected, 
      *                    .setGitHubAndRepo method is required.
@@ -117,7 +117,7 @@ public class AppUpdaterUtils {
      * Execute AppUpdaterUtils in background.
      */
     public void start() {
-        mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, true, mUpdateFrom, 
+        mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, true, mUpdateFrom,
                 mGitHub, mJSONUrl, new AppUpdater.LibraryListener() {
             @Override
             public void onSuccess(Update update) {

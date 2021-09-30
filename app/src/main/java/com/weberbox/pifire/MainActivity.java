@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private Socket mSocket;
     private AppUpdater mAppUpdater;
 
-    private boolean mIsReady = false;
+    private boolean mAppIsVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        PiFireApplication app = (PiFireApplication) getApplication();
-        mSocket = app.getSocket();
+        mSocket = getSocket();
 
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
@@ -158,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
         mMainViewModel.getServerConnected().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean enabled) {
-                mIsReady = true;
                 if (enabled != null) {
                     toggleOfflineMessage(enabled);
                 }
@@ -177,19 +175,6 @@ public class MainActivity extends AppCompatActivity {
                         getString(R.string.def_app_updater_frequency))));
         mAppUpdater.start();
 
-//        final View content = mBinding.getRoot();
-//        content.getViewTreeObserver().addOnPreDrawListener(
-//                new ViewTreeObserver.OnPreDrawListener() {
-//                    @Override
-//                    public boolean onPreDraw() {
-//                        if (mIsReady) {
-//                            content.getViewTreeObserver().removeOnPreDrawListener(this);
-//                            return true;
-//                        } else {
-//                            return false;
-//                        }
-//                    }
-//                });
     }
 
     @Override
@@ -223,15 +208,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mSocket != null) {
-            mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
-        }
+        mAppIsVisible = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mAppUpdater.stop();
+        mAppIsVisible = false;
     }
 
     @Override
@@ -243,7 +227,14 @@ public class MainActivity extends AppCompatActivity {
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
-        mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
+    }
+
+    private Socket getSocket() {
+        if (mSocket == null) {
+            PiFireApplication app = (PiFireApplication) getApplication();
+            mSocket = app.getSocket();
+        }
+        return mSocket;
     }
 
     public void connectSocketListenData(Socket socket) {
@@ -276,7 +267,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void call(Object... args) {
             Log.i(TAG, "Socket disconnected");
-            mMainViewModel.setServerConnected(false);
+            if (mAppIsVisible) {
+                mMainViewModel.setServerConnected(false);
+            }
         }
     };
 
@@ -284,7 +277,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void call(Object... args) {
             Log.i(TAG, "Error connecting socket");
-            mMainViewModel.setServerConnected(false);
+            if (mAppIsVisible) {
+                mMainViewModel.setServerConnected(false);
+            }
         }
     };
 

@@ -1,16 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/start_mode_sheet_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:alpha="1.0"
-    android:animateLayoutChanges="true"
     android:foreground="@android:color/transparent"
     android:padding="@dimen/default_spacing"
     android:stretchColumns="*"
     android:background="@drawable/bg_bottom_sheet_dialog">
 
-    <TableRow>
+    <com.weberbox.pifire.ui.views.SwipeButton
+        android:id="@+id/mode_swipe_start_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="29dp"
+        android:visibility="gone"
+        app:button_trail_enabled="false"
+        app:button_image_disabled="@drawable/ic_lock_closed"
+        app:button_image_enabled="@drawable/ic_lock_open"
+        app:button_background="@drawable/bg_swipe_shape_button"
+        app:button_bottom_padding="20dp"
+        app:button_left_padding="20dp"
+        app:button_right_padding="20dp"
+        app:button_top_padding="20dp"
+        app:initial_state="disabled"
+        app:inner_text="@string/swipe_to_start"
+        app:inner_text_background="@drawable/bg_swipe_shape_rounded"
+        app:inner_text_bottom_padding="18dp"
+        app:inner_text_color="@color/colorWhite"
+        app:inner_text_size="16sp"
+        app:inner_text_top_padding="18dp" />
+
+    <TableRow
+        android:id="@+id/dialog_start_button_table"
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/mode_start_button"

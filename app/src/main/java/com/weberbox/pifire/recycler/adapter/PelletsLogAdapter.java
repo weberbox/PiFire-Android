@@ -15,10 +15,10 @@ import java.util.List;
 
 public class PelletsLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<PelletLogViewModel> models;
+    private final List<PelletLogViewModel> mModels;
 
-    public PelletsLogAdapter(final List<PelletLogViewModel> viewModels) {
-        models = viewModels;
+    public PelletsLogAdapter(final List<PelletLogViewModel> viewModel) {
+        mModels = viewModel;
     }
 
     @NonNull
@@ -30,12 +30,12 @@ public class PelletsLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((PelletsLogViewHolder) holder).bindData(models.get(position));
+        ((PelletsLogViewHolder) holder).bindData(mModels.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModels.size();
     }
 
     @Override

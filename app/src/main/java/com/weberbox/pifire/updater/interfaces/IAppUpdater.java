@@ -228,6 +228,14 @@ public interface IAppUpdater {
     AppUpdater setButtonDoNotShowAgain(Boolean isShown);
 
     /**
+     * Enable or disable the Dismiss button, usually used for forcing updates
+     *
+     * @param isShown false to remove dismiss button true to show it
+     * @return this
+     */
+    AppUpdater setButtonDismissEnabled(Boolean isShown);
+
+    /**
      * Sets a custom click listener for the "Update" button when a new update is available.
      * In order to maintain the default functionality, extend {@link UpdateClickListener}
      *
@@ -268,6 +276,14 @@ public interface IAppUpdater {
      *  @return this
      */
     AppUpdater setCancelable(Boolean isCancelable);
+
+    /**
+     * Set the options to force the update check even if it is disabled
+     *
+     *  @param forceCheck true to force the update check
+     *  @return this
+     */
+    AppUpdater setForceCheck(Boolean forceCheck);
 
     /**
      * Execute AppUpdater in background.

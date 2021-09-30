@@ -2,16 +2,16 @@
 <resources>
 
     <!-- Dashboard items -->
-    <string name="prefs_dash_timer_start_time">pref_dash_timer_start_time</string>
+    <string name="prefs_dash_timer_start_time">prefs_dash_timer_start_time</string>
     <string name="prefs_dash_timer_end_time">prefs_dash_timer_end_time</string>
     <string name="prefs_dash_timer_pause_time">prefs_dash_timer_pause_time</string>
     <string name="prefs_dash_timer_onstop_time">prefs_dash_timer_onstop_time</string>
 
     <!-- App Settings -->
-    <string name="prefs_server_address">pref_server_url</string>
-    <string name="prefs_server_basic_auth">pref_basic_auth</string>
-    <string name="prefs_server_basic_auth_user">pref_basic_auth_user</string>
-    <string name="prefs_server_basic_auth_password">pref_basic_auth_password</string>
+    <string name="prefs_server_address">prefs_server_address</string>
+    <string name="prefs_server_basic_auth">prefs_server_basic_auth</string>
+    <string name="prefs_server_basic_auth_user">prefs_server_basic_auth_user</string>
+    <string name="prefs_server_basic_auth_password">prefs_server_basic_auth_password</string>
 
     <string name="prefs_history_refresh_app">prefs_history_refresh_app</string>
     <string name="prefs_history_refresh_interval_app">prefs_history_refresh_interval_app</string>
@@ -22,12 +22,21 @@
     <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
     <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>
     <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
+    <string name="prefs_app_updater_force_checks">prefs_app_updater_force_checks</string>
+    <string name="prefs_app_update_required">prefs_app_update_required</string>
+
+    <string name="prefs_acra_cat">prefs_acra_cat</string>
+    <string name="prefs_acra_enable">acra.enable</string>
+    <string name="prefs_acra_syslog_enable">acra.syslog.enable</string>
+    <string name="prefs_acra_user_email">acra.user.email</string>
 
     <string name="prefs_debug_cat">prefs_debug_cat</string>
     <string name="prefs_firebase_token">prefs_firebase_token</string>
     <string name="prefs_debug_logging">prefs_debug_logging</string>
 
     <string name="prefs_four_probe">prefs_four_probe</string>
+
+    <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
 
     <!-- PiFire Settings -->
     <string name="prefs_grill_probe">prefs_grill_probe</string>

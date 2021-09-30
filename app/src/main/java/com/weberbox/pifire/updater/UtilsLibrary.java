@@ -35,17 +35,17 @@ class UtilsLibrary {
     private static final String GITHUB_URL = "https://github.com/";
     private static final String GITHUB_TAG_RELEASE = "/tree/";
 
-    static String getAppName(Context context) {
+    public static String getAppName(Context context) {
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         int stringId = applicationInfo.labelRes;
         return stringId == 0 ? applicationInfo.nonLocalizedLabel.toString() : context.getString(stringId);
     }
 
-    static String getAppPackageName(Context context) {
+    public static String getAppPackageName(Context context) {
         return context.getPackageName();
     }
 
-    static String getAppInstalledVersion(Context context) {
+    public static String getAppInstalledVersion(Context context) {
         String version = "0.0.0.0";
 
         try {
@@ -60,7 +60,7 @@ class UtilsLibrary {
         return version;
     }
 
-    static Integer getAppInstalledVersionCode(Context context) {
+    public static Integer getAppInstalledVersionCode(Context context) {
         int versionCode = 0;
 
         try {
@@ -75,7 +75,7 @@ class UtilsLibrary {
         return versionCode;
     }
 
-    static Boolean isUpdateAvailable(Update installedVersion, Update latestVersion) {
+    public static Boolean isUpdateAvailable(Update installedVersion, Update latestVersion) {
         if (latestVersion.getLatestVersionCode() != null && latestVersion.getLatestVersionCode() > 0) {
             Log.d(TAG, "Latest Version: " + latestVersion.getLatestVersion());
             Log.d(TAG, "Latest VersionCode: " + latestVersion.getLatestVersionCode());
@@ -83,13 +83,11 @@ class UtilsLibrary {
         } else {
             if (!TextUtils.equals(installedVersion.getLatestVersion(), "0.0.0.0") &&
                     !TextUtils.equals(latestVersion.getLatestVersion(), "0.0.0.0")) {
-                try
-                {
+                try {
                     final Version installed = new Version(installedVersion.getLatestVersion());
                     final Version latest = new Version(latestVersion.getLatestVersion());
                     return installed.compareTo(latest) < 0;
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                     return false;
                 }
@@ -97,11 +95,11 @@ class UtilsLibrary {
         }
     }
 
-    static Boolean isStringAVersion(String version) {
+    public static Boolean isStringAVersion(String version) {
         return version.matches(".*\\d+.*");
     }
 
-    static Boolean isStringAnUrl(String s) {
+    public static Boolean isStringAnUrl(String s) {
         boolean res = false;
         try {
             new URL(s);
@@ -111,7 +109,7 @@ class UtilsLibrary {
         return res;
     }
 
-    static Boolean getDurationEnumToBoolean(Duration duration) {
+    public static Boolean getDurationEnumToBoolean(Duration duration) {
         return duration == Duration.INDEFINITE;
     }
 
@@ -198,25 +196,31 @@ class UtilsLibrary {
         return version;
     }
 
-    static Update getLatestAppVersion(UpdateFrom updateFrom, String url) {
+    public static Boolean getRequiredUpdate(Update update, Context context) {
+        return (update.getForceUpdate() && getAppInstalledVersionCode(context) <
+                update.getForceUpdateVersion());
+    }
+
+
+    public static Update getLatestAppVersion(UpdateFrom updateFrom, String url) {
         return new ParserJSON(url).parse();
     }
 
 
-    static Intent intentToUpdate(Context context, UpdateFrom updateFrom, URL url) {
+    public static Intent intentToUpdate(Context context, UpdateFrom updateFrom, URL url) {
         return new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()));
     }
 
-    static void goToUpdate(Context context, UpdateFrom updateFrom, URL url) {
+    public static void goToUpdate(Context context, UpdateFrom updateFrom, URL url) {
         Intent intent = intentToUpdate(context, updateFrom, url);
         context.startActivity(intent);
     }
 
-    static Boolean isAbleToShow(Integer successfulChecks, Integer showEvery) {
+    public static Boolean isAbleToShow(Integer successfulChecks, Integer showEvery) {
         return successfulChecks % showEvery == 0;
     }
 
-    static Boolean isNetworkAvailable(Context context) {
+    public static Boolean isNetworkAvailable(Context context) {
         boolean res = false;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE);

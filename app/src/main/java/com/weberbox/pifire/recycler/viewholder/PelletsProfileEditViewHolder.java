@@ -21,7 +21,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
-import com.weberbox.pifire.ui.utils.Rotate;
+import com.weberbox.pifire.ui.utils.RotateUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
 
@@ -165,7 +165,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
     private void toggleCardView() {
         boolean visibility = mEditCardView.getVisibility() == View.VISIBLE;
         mEditCardView.setVisibility(visibility ? View.GONE : View.VISIBLE);
-        TransitionManager.beginDelayedTransition(mCardView, new Rotate());
+        TransitionManager.beginDelayedTransition(mCardView, new RotateUtils());
         mExpandIcon.setRotation(visibility ? 0 : 180);
     }
 

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
@@ -19,6 +20,7 @@ import com.weberbox.pifire.updater.objects.Update;
 import com.weberbox.pifire.utils.Log;
 
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.view.View;
 
@@ -38,6 +40,7 @@ public class AppUpdater implements IAppUpdater {
     private Integer mShowEvery;
     private Boolean mShowAppUpToDate;
     private Boolean mBtnDisableShown;
+    private Boolean mBtnDismissShown;
     private Boolean mShowAppUpdateError;
     private String mTitleUpdate, mDescriptionUpdate, mBtnDismiss, mBtnUpdate, mBtnDisable; // Update available
     private String mTitleNoUpdate, mDescriptionNoUpdate; // Update not available
@@ -49,6 +52,7 @@ public class AppUpdater implements IAppUpdater {
     private AlertDialog mAlertDialog;
     private Snackbar mSnackbar;
     private Boolean mIsDialogCancelable;
+    private Boolean mShouldForceUpdateCheck;
 
     public AppUpdater(Context context) {
         mContext = context;
@@ -60,6 +64,7 @@ public class AppUpdater implements IAppUpdater {
         mShowAppUpToDate = false;
         mBtnDisableShown = true;
         mShowAppUpdateError = false;
+        mShouldForceUpdateCheck = false;
         mIconResId = R.drawable.ic_update;
 
         // Dialog
@@ -68,6 +73,7 @@ public class AppUpdater implements IAppUpdater {
         mBtnDismiss = context.getResources().getString(R.string.dismiss_button);
         mBtnDisable = context.getResources().getString(R.string.disable_button);
         mIsDialogCancelable = true;
+        mBtnDismissShown = true;
 
         // Notification
         mNotifTitleUpdate = context.getResources().getString(R.string.updater_update_available);
@@ -231,6 +237,12 @@ public class AppUpdater implements IAppUpdater {
     }
 
     @Override
+    public AppUpdater setButtonDismissEnabled(@NonNull Boolean isShown) {
+        mBtnDismissShown = isShown;
+        return this;
+    }
+
+    @Override
     public AppUpdater setButtonUpdateClickListener(final DialogInterface.OnClickListener clickListener) {
         mBtnUpdateClickListener = clickListener;
         return this;
@@ -261,55 +273,87 @@ public class AppUpdater implements IAppUpdater {
     }
 
     @Override
+    public AppUpdater setForceCheck(Boolean forceCheck) {
+        mShouldForceUpdateCheck = forceCheck;
+        return this;
+    }
+
+    @Override
     public void start() {
-        mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, false, mUpdateFrom,
-                mGitHub, mJsonUrl, new LibraryListener() {
+        Integer forceChecks = mLibraryPreferences.getForcedChecks();
+        if (!mLibraryPreferences.getAppUpdaterShow()) {
+            mLibraryPreferences.setForcedChecks(forceChecks + 1);
+            if (mLibraryPreferences.getUpdateRequired() | forceChecks % 25 == 0) {
+                mShouldForceUpdateCheck = true;
+            }
+        } else {
+            mShouldForceUpdateCheck = mLibraryPreferences.getAppUpdaterShow();
+        }
+
+        mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, mShouldForceUpdateCheck,
+                mUpdateFrom, mGitHub, mJsonUrl, new LibraryListener() {
             @Override
             public void onSuccess(Update update) {
                 if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
                     return;
                 }
 
-                Update installedUpdate = new Update(UtilsLibrary.getAppInstalledVersion(mContext),
+                Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(mContext),
                         UtilsLibrary.getAppInstalledVersionCode(mContext));
 
-                if (UtilsLibrary.isUpdateAvailable(installedUpdate, update)) {
+                if (UtilsLibrary.isUpdateAvailable(installedVersion, update)) {
                     Log.d(TAG, "Update Available");
                     Integer successfulChecks = mLibraryPreferences.getSuccessfulChecks();
-                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery)) {
-                        switch (mDisplay) {
-                            case DIALOG:
-                                final DialogInterface.OnClickListener updateClickListener =
-                                        mBtnUpdateClickListener == null ? new UpdateClickListener(
-                                                mContext, mUpdateFrom, update.getUrlToDownload()) :
-                                                mBtnUpdateClickListener;
+                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) |
+                            UtilsLibrary.getRequiredUpdate(update, mContext)) {
+                        if (mLibraryPreferences.getAppUpdaterShow() |
+                                UtilsLibrary.getRequiredUpdate(update, mContext)) {
+                            switch (mDisplay) {
+                                case DIALOG:
+                                    if (UtilsLibrary.getRequiredUpdate(update, mContext)) {
+                                        Log.d(TAG, "Force Update Requested");
+                                        mLibraryPreferences.setUpdateRequired(true);
+                                        mBtnUpdateClickListener = new ForceUpdateClickListener(mContext,
+                                                mUpdateFrom, update.getUrlToDownload());
+                                        mIsDialogCancelable = false;
+                                        mBtnDisableShown = false;
+                                        mBtnDismissShown = false;
+                                    } else {
+                                        mLibraryPreferences.setUpdateRequired(false);
+                                    }
 
-                                final DialogInterface.OnClickListener disableClickListener =
-                                        mBtnDisableClickListener == null ? new DisableClickListener(
-                                                mContext) : mBtnDisableClickListener;
+                                    final DialogInterface.OnClickListener updateClickListener =
+                                            mBtnUpdateClickListener == null ? new UpdateClickListener(
+                                                    mContext, mUpdateFrom, update.getUrlToDownload()) :
+                                                    mBtnUpdateClickListener;
 
-                                mAlertDialog = UtilsDisplay.showUpdateAvailableDialog(mContext,
-                                        getDialogTitleUpdate(mContext, update),
-                                        getDescriptionUpdate(mContext, update, Display.DIALOG),
-                                        mBtnDismiss, mBtnUpdate, mBtnDisable,
-                                        updateClickListener, mBtnDismissClickListener,
-                                        disableClickListener, mBtnDisableShown);
+                                    final DialogInterface.OnClickListener disableClickListener =
+                                            mBtnDisableClickListener == null ? new DisableClickListener(
+                                                    mContext) : mBtnDisableClickListener;
 
-                                mAlertDialog.setCancelable(mIsDialogCancelable);
-                                mAlertDialog.show();
-                                break;
-                            case SNACKBAR:
-                                mSnackbar = UtilsDisplay.showUpdateAvailableSnackbar(mView, mViewAnchor,
-                                        getDescriptionUpdate(mContext, update, Display.SNACKBAR),
-                                        UtilsLibrary.getDurationEnumToBoolean(mDuration), mUpdateFrom,
-                                        update.getUrlToDownload());
-                                mSnackbar.show();
-                                break;
-                            case NOTIFICATION:
-                                UtilsDisplay.showUpdateAvailableNotification(mContext, mNotifTitleUpdate,
-                                        getDescriptionUpdate(mContext, update, Display.NOTIFICATION),
-                                        mUpdateFrom, update.getUrlToDownload(), mIconResId);
-                                break;
+                                    mAlertDialog = UtilsDisplay.showUpdateAvailableDialog(mContext,
+                                            getDialogTitleUpdate(mContext, update),
+                                            getDescriptionUpdate(mContext, update, Display.DIALOG),
+                                            mBtnDismiss, mBtnUpdate, mBtnDisable,
+                                            updateClickListener, mBtnDismissClickListener,
+                                            disableClickListener, mBtnDisableShown, mBtnDismissShown);
+
+                                    mAlertDialog.setCancelable(mIsDialogCancelable);
+                                    mAlertDialog.show();
+                                    break;
+                                case SNACKBAR:
+                                    mSnackbar = UtilsDisplay.showUpdateAvailableSnackbar(mView, mViewAnchor,
+                                            getDescriptionUpdate(mContext, update, Display.SNACKBAR),
+                                            UtilsLibrary.getDurationEnumToBoolean(mDuration), mUpdateFrom,
+                                            update.getUrlToDownload());
+                                    mSnackbar.show();
+                                    break;
+                                case NOTIFICATION:
+                                    UtilsDisplay.showUpdateAvailableNotification(mContext, mNotifTitleUpdate,
+                                            getDescriptionUpdate(mContext, update, Display.NOTIFICATION),
+                                            mUpdateFrom, update.getUrlToDownload(), mIconResId);
+                                    break;
+                            }
                         }
                     }
                     mLibraryPreferences.setSuccessfulChecks(successfulChecks + 1);
@@ -354,6 +398,8 @@ public class AppUpdater implements IAppUpdater {
                     throw new IllegalArgumentException("JSON file is not valid!");
                 } else if (error == AppUpdaterError.JSON_ERROR) {
                     throw new IllegalArgumentException("JSON file error");
+                } else if (error == AppUpdaterError.NETWORK_NOT_AVAILABLE) {
+                    throw new IllegalArgumentException("Network Not Available");
                 }
             }
         });
@@ -413,20 +459,24 @@ public class AppUpdater implements IAppUpdater {
     }
 
     private String getDialogTitleUpdate(Context context, Update update) {
-        if (mDescriptionUpdate == null || TextUtils.isEmpty(mDescriptionUpdate)) {
-            if (update.getReleaseNotes() != null && !TextUtils.isEmpty(update.getReleaseNotes())) {
-                if (TextUtils.isEmpty(mTitleUpdate)) {
-                    return String.format(context.getResources().getString(
-                            R.string.updater_update_available_description_snackbar), update.getLatestVersion());
+        if (UtilsLibrary.getRequiredUpdate(update, mContext)) {
+            mTitleUpdate = context.getResources().getString(R.string.updater_update_required);
+        } else {
+            if (mTitleUpdate == null || TextUtils.isEmpty(mTitleUpdate)) {
+                if (update.getReleaseNotes() != null && !TextUtils.isEmpty(update.getReleaseNotes())) {
+                    if (TextUtils.isEmpty(mTitleUpdate)) {
+                        return String.format(context.getResources().getString(
+                                R.string.updater_update_available_description_snackbar), update.getLatestVersion());
+                    } else {
+                        return mTitleUpdate;
+                    }
                 } else {
-                    return mTitleUpdate;
+                    return context.getResources().getString(R.string.updater_update_available);
                 }
-            } else {
-                return context.getResources().getString(R.string.updater_update_available);
             }
         }
 
-        return mDescriptionUpdate;
+        return mTitleUpdate;
     }
 
     private String getDescriptionNoUpdate(Context context) {

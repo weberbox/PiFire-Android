@@ -26,7 +26,7 @@
 
                 <include
                     android:id="@+id/events_layout"
-                    layout="@layout/layout_event_list" />
+                    layout="@layout/layout_events" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

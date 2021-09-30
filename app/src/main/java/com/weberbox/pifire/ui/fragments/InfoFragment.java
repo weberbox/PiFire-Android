@@ -25,6 +25,7 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -34,6 +35,7 @@ import com.weberbox.pifire.interfaces.LicensesCallbackInterface;
 import com.weberbox.pifire.model.InfoResponseModel;
 import com.weberbox.pifire.recycler.adapter.LicensesListAdapter;
 import com.weberbox.pifire.recycler.viewmodel.LicensesViewModel;
+import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.InfoViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.FadeTransition;
@@ -73,6 +75,15 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
     private LicensesListAdapter mLicensesListAdapter;
     private ArrayList<LicensesViewModel> mLicenses;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getActivity() != null) {
+            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
+            mSocket = app.getSocket();
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mBinding = FragmentInfoBinding.inflate(inflater, container, false);
@@ -102,11 +113,21 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
 
         mLicenseInfo = mBinding.infoLicensesRecycler;
 
+        TextView appVersion = mBinding.appVersionText;
+        TextView appVersionCode = mBinding.appVersionCodeText;
+        TextView appBuildType = mBinding.appBuildTypeText;
+        TextView appBuildFlavor = mBinding.appBuildFlavorText;
+
+        appVersion.setText(BuildConfig.VERSION_NAME);
+        appVersionCode.setText(String.valueOf(BuildConfig.VERSION_CODE));
+        appBuildType.setText(BuildConfig.BUILD_TYPE);
+        appBuildFlavor.setText(BuildConfig.FLAVOR);
+
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if (mSocket != null && mSocket.connected()) {
-                    requestListData();
+                    forceRefreshData(mSocket);
                 } else {
                     mSwipeRefresh.setRefreshing(false);
                     AnimUtils.shakeOfflineBanner(getActivity());
@@ -116,19 +137,22 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
 
         if (getActivity() != null) {
             mInfoViewModel = new ViewModelProvider(getActivity()).get(InfoViewModel.class);
-            mInfoViewModel.getInfoData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            mInfoViewModel.getInfoData().observe(getViewLifecycleOwner(), new Observer<DataModel>() {
                 @Override
-                public void onChanged(@Nullable String response_data) {
+                public void onChanged(@Nullable DataModel infoData) {
                     mSwipeRefresh.setRefreshing(false);
-                    if (response_data != null) {
-                        if (getActivity() != null) {
-                            FileUtils.saveJSONFile(getActivity(), Constants.JSON_INFO, response_data);
+                    if (infoData != null && infoData.getLiveData() != null) {
+                        if (infoData.getIsNewData()) {
+                            FileUtils.saveJSONFile(getActivity(), Constants.JSON_INFO,
+                                    infoData.getLiveData());
                         }
-                        updateUIWithData(response_data);
+                        updateUIWithData(infoData.getLiveData());
                     }
                 }
             });
         }
+
+        loadStoredDataRequestUpdate();
     }
 
     @Override
@@ -137,30 +161,37 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
         mBinding = null;
     }
 
-    private void checkStoredData() {
-        if (mInfoViewModel.getInfoData().getValue() == null) {
-            requestListData();
-            toggleLoading(true);
-        } else {
-            toggleLoading(false);
+    private void requestDataUpdate() {
+        if (mSocket != null && mSocket.connected()) {
+            mSocket.emit(ServerConstants.REQUEST_INFO_DATA, new Ack() {
+                @Override
+                public void call(Object... args) {
+                    if (mInfoViewModel != null) {
+                        mInfoViewModel.setInfoData(args[0].toString(), true);
+                    }
+                }
+            });
         }
     }
 
-    private void requestListData() {
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_INFO_DATA, (Ack) args -> {
+    private void loadStoredDataRequestUpdate() {
+        toggleLoading(true);
+        String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_INFO);
+        if (jsonData != null && mInfoViewModel != null) {
+            mInfoViewModel.setInfoData(jsonData, false);
+        }
+        requestDataUpdate();
+    }
+
+    private void forceRefreshData(Socket socket) {
+        socket.emit(ServerConstants.REQUEST_INFO_DATA, new Ack() {
+            @Override
+            public void call(Object... args) {
                 if (mInfoViewModel != null) {
-                    mInfoViewModel.setInfoData(args[0].toString());
-                }
-            });
-        } else {
-            if (getActivity() != null) {
-                String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_INFO);
-                if (jsonData != null && mInfoViewModel != null) {
-                    mInfoViewModel.setInfoData(jsonData);
+                    mInfoViewModel.setInfoData(args[0].toString(), true);
                 }
             }
-        }
+        });
     }
 
     private void toggleLoading(boolean show) {
@@ -168,16 +199,6 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             mLoadingBar.setVisibility(View.VISIBLE);
         } else {
             mLoadingBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
-            checkStoredData();
         }
     }
 
@@ -246,14 +267,14 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
                 }
             }
 
-            toggleLoading(false);
-
         } catch (JSONException | IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Log.e(TAG, "JSON Error: " + e.getMessage());
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }
         }
+
+        toggleLoading(false);
     }
 
     private void showSnackBarMessage(Activity activity) {

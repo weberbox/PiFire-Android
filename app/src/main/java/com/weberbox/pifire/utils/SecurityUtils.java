@@ -12,11 +12,13 @@ import java.security.GeneralSecurityException;
 public class SecurityUtils {
     private static final String TAG = SecurityUtils.class.getSimpleName();
 
+    private static final String PREFS_NAME = "_encrypted_prefs";
+
     public static SharedPreferences getEncryptedSharedPreferences(Context context) throws GeneralSecurityException, IOException {
         SharedPreferences sharedPreferences = null;
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
         sharedPreferences = EncryptedSharedPreferences.create(
-                "secret_shared_prefs",
+                context.getPackageName() + PREFS_NAME,
                 masterKeyAlias,
                 context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -31,7 +33,7 @@ public class SecurityUtils {
         try {
             masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
             sharedPreferences = EncryptedSharedPreferences.create(
-                    "secret_shared_prefs",
+                    context.getPackageName() + PREFS_NAME,
                     masterKeyAlias,
                     context,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -39,7 +41,7 @@ public class SecurityUtils {
 
             sharedPreferences.edit().putString(context.getString(key), password).apply();
         } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "Error encrypting password: " + e.toString());
+            Log.e(TAG, "Error encrypting password: " + e.getMessage());
             return false;
         }
 
@@ -53,7 +55,7 @@ public class SecurityUtils {
         try {
             masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
             sharedPreferences = EncryptedSharedPreferences.create(
-                    "secret_shared_prefs",
+                    context.getPackageName() + PREFS_NAME,
                     masterKeyAlias,
                     context,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
@@ -61,7 +63,7 @@ public class SecurityUtils {
 
             decryptedPassword = sharedPreferences.getString(context.getString(key), "");
         } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "Error decrypting password: " + e.toString());
+            Log.e(TAG, "Error decrypting password: " + e.getMessage());
             decryptedPassword = "Error decrypting password";
         }
 

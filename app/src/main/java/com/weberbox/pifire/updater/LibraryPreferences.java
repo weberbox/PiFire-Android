@@ -29,4 +29,20 @@ class LibraryPreferences {
         Prefs.putInt(mContext.getString(R.string.prefs_app_updater_checks), checks);
     }
 
+    public void setForcedChecks(Integer checks) {
+        Prefs.putInt(mContext.getString(R.string.prefs_app_updater_force_checks), checks);
+    }
+
+    public Integer getForcedChecks() {
+        return Prefs.getInt(mContext.getString(R.string.prefs_app_updater_force_checks), 0);
+    }
+
+    public void setUpdateRequired(Boolean required) {
+        Prefs.putBoolean(mContext.getString(R.string.prefs_app_update_required), required);
+    }
+
+    public Boolean getUpdateRequired() {
+        return Prefs.getBoolean(mContext.getString(R.string.prefs_app_update_required), false);
+    }
+
 }

@@ -17,8 +17,8 @@ import java.util.List;
 public class PelletProfileEditAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final List<PelletProfileModel> mModel;
-    private final List<String> mBrands;
-    private final List<String> mWoods;
+    private final List<String> mBrandsList;
+    private final List<String> mWoodsList;
     private PelletsCallbackInterface mCallBack;
 
     public PelletProfileEditAdapter(final List<String> brands, List<String> woods,
@@ -26,15 +26,15 @@ public class PelletProfileEditAdapter extends RecyclerView.Adapter<RecyclerView.
                                     PelletsCallbackInterface callback) {
         mModel = viewModels;
         mCallBack = callback;
-        mBrands = brands;
-        mWoods = woods;
+        mBrandsList = brands;
+        mWoodsList = woods;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new PelletsProfileEditViewHolder(view, mCallBack, mBrands, mWoods);
+        return new PelletsProfileEditViewHolder(view, mCallBack, mBrandsList, mWoodsList);
     }
 
     @Override

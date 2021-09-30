@@ -28,6 +28,12 @@ public class AnimUtils {
         view.startAnimation(anim);
     }
 
+    public static void fadeView(View view, float start, float end, int duration) {
+        AlphaAnimation anim = new AlphaAnimation(start, end);
+        anim.setDuration(duration);
+        view.startAnimation(anim);
+    }
+
     public static void slideDownFromTop(ViewGroup view, int duration) {
         AnimationSet set = new AnimationSet(true);
         Animation animation = new AlphaAnimation(0.0f, 1.0f);

@@ -10,9 +10,15 @@
     <string name="notification_desc_grill">Shows regular grill alerts including timer, temp, etc</string>
     <string name="notification_desc_updates">Shows app update notifications</string>
 
+    <string name="acra_notification_title">App Crash</string>
+    <string name="acra_notification_message">Sorry the application crashed. Please send a report to the developers to help improve app stability</string>
+    <string name="acra_notification_comment">Comment</string>
+    <string name="acra_notification_comment_hint">You can add a comment here</string>
+
     <string name="regex_numbers">[^0-9]</string>
 
     <string name="updater_update_available">New update available!</string>
+    <string name="updater_update_required">Update Required!</string>
     <string name="updater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
     <string name="updater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
     <string name="updater_update_available_description_snackbar">Update %1$s is available!</string>
@@ -59,6 +65,7 @@
     <string name="close">Close</string>
     <string name="enabled">Enabled</string>
     <string name="not_set">Not set</string>
+    <string name="swipe_to_start">Swipe to start</string>
     <string name="continue_button">Continue</string>
     <string name="skip_button">Skip</string>
     <string name="disable_button">Disable</string>
@@ -169,14 +176,25 @@
     <string name="settings_update_check_now">Check Now</string>
     <string name="settings_update_check_now_summary">Check for updates now</string>
 
+    <string name="settings_cat_acra">Crash Reporting</string>
+    <string name="settings_enable_acra">Enable</string>
+    <string name="settings_enable_acra_disabled">Acra URL is not set. Option is disabled</string>
+    <string name="settings_acra_summary">Send error reports to developer if app crashes</string>
+    <string name="settings_acra_syslog">Syslog</string>
+    <string name="settings_acra_syslog_summary">Include or exclude the syslog in error reports</string>
+    <string name="settings_acra_email">Email</string>
+    <string name="settings_acra_email_summary">Include your email address with the error report</string>
+
     <string name="settings_cat_server_title">Server</string>
     <string name="settings_server_address">Server Address</string>
 
     <string name="settings_cat_basic_auth_title">Server Authentication</string>
     <string name="settings_basic_auth_summary">Use authentication if the server is behind a reverse proxy</string>
     <string name="settings_basic_auth_title">Use Basic Auth</string>
-    <string name="settings_password">Password</string>
     <string name="settings_username">Username</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_username_summary">Basic auth username</string>
+    <string name="settings_password_summary">Basic auth password</string>
     <string name="settings_password_blank_error">Password cannot be blank</string>
     <string name="settings_username_blank_error">Username cannot be blank</string>
     <string name="settings_username_encrypt_error">Error encrypting username</string>
@@ -200,7 +218,6 @@
     <string name="settings_grill_probe_type">Grill Probe Type</string>
     <string name="settings_probe_one_type">Probe 1 Type</string>
     <string name="settings_probe_two_type">Probe 2 Type</string>
-
 
     <string name="settings_cat_cycle">Startup / Smoke Mode Cycle Settings</string>
     <string name="settings_pmode_note">P-Mode is used for both Startup and Smoke modes, but not Hold mode. For more information about the P-Mode click here</string>
@@ -288,6 +305,10 @@
     <string name="settings_pellet_empty">Empty Distance (cm)</string>
     <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
 
+    <string name="settings_cat_app_safety">Safety</string>
+    <string name="settings_app_safety_start">Swipe to Start</string>
+    <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
+
     <string name="info_title">Information</string>
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Info</string>
@@ -303,8 +324,13 @@
     <string name="info_gpio_input_name">Input Name</string>
     <string name="info_gpio_input_pin">Input Pin</string>
     <string name="info_gpio_input_selector">Selector</string>
-    <string name="info_uptime">Uptime</string>
+    <string name="info_uptime">Server Uptime</string>
     <string name="info_credits">Credits and Licenses</string>
+    <string name="info_app_info">Android App Info</string>
+    <string name="info_app_version">App Version</string>
+    <string name="info_app_version_code">Version Code</string>
+    <string name="info_app_build_type">Build Type</string>
+    <string name="info_app_flavor">App Flavor</string>
     <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2020\n\nPiFire Android created by James Weber, &#169; 2021</string>
 
     <string name="pellets_current_load">Current</string>

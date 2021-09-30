@@ -15,17 +15,17 @@ class UtilsAsync {
     static class LatestAppVersion extends AsyncTask<Void, Void, Update> {
         private final WeakReference<Context> mContextRef;
         private final LibraryPreferences mLibraryPreferences;
-        private final Boolean mFromUtils;
+        private final Boolean mForceCheck;
         private final UpdateFrom mUpdateFrom;
         private final GitHub mGitHub;
         private final String mJsonUrl;
         private final AppUpdater.LibraryListener mListener;
 
-        public LatestAppVersion(Context context, Boolean fromUtils, UpdateFrom updateFrom, GitHub
-                gitHub, String jsonUrl, AppUpdater.LibraryListener listener) {
+        public LatestAppVersion(Context context, Boolean forceCheck, UpdateFrom updateFrom,
+                                GitHub gitHub, String jsonUrl, AppUpdater.LibraryListener listener) {
             mContextRef = new WeakReference<>(context);
             mLibraryPreferences = new LibraryPreferences(context);
-            mFromUtils = fromUtils;
+            mForceCheck = forceCheck;
             mUpdateFrom = updateFrom;
             mGitHub = gitHub;
             mJsonUrl = jsonUrl;
@@ -40,7 +40,7 @@ class UtilsAsync {
             if (context == null || mListener == null) {
                 cancel(true);
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
-                if (!mFromUtils && !mLibraryPreferences.getAppUpdaterShow()) {
+                if (!mForceCheck && !mLibraryPreferences.getAppUpdaterShow()) {
                     cancel(true);
                 } else {
                     if (mUpdateFrom == UpdateFrom.GITHUB && !GitHub.isGitHubValid(mGitHub)) {

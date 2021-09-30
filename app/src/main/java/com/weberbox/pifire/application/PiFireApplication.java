@@ -1,17 +1,20 @@
 package com.weberbox.pifire.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.utils.FirebaseUtils;
+import com.weberbox.pifire.secure.SecureCore;
+import com.weberbox.pifire.utils.AcraUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
+
+import org.acra.ACRA;
 
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -29,6 +32,18 @@ public class PiFireApplication extends Application {
     private Socket mSocket;
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        String url = SecureCore.getAcraUrl();
+        String login = SecureCore.getAcraLogin();
+        String auth = SecureCore.getAcraAuth();
+
+        if (!url.isEmpty() && !login.isEmpty() && !auth.isEmpty()) {
+            ACRA.init(this, AcraUtils.buildAcra(this, url, login, auth));
+        }
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
 
@@ -43,9 +58,6 @@ public class PiFireApplication extends Application {
                 .build();
 
 
-        if(AppConfig.DEBUG){
-            FirebaseUtils.disableCrashlytics();
-        }
     }
 
     public static PiFireApplication getInstance() {
@@ -56,8 +68,8 @@ public class PiFireApplication extends Application {
         return res;
     }
 
-    public Socket getSocket(){
-        if(mSocket == null) {
+    public Socket getSocket() {
+        if (mSocket == null) {
             startSocket();
         }
         return mSocket;

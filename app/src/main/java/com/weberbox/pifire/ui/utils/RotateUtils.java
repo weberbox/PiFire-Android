@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.transition.Transition;
 import androidx.transition.TransitionValues;
 
-public class Rotate extends Transition {
+public class RotateUtils extends Transition {
 
     private static final String PROPNAME_ROTATION = "android:rotate:rotation";
     private static final String[] sTransitionProperties = {PROPNAME_ROTATION};

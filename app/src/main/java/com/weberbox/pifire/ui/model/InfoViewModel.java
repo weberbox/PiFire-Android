@@ -5,19 +5,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class InfoViewModel extends ViewModel {
-    public static final String TAG = InfoViewModel.class.getSimpleName();
+    private static final String TAG = InfoViewModel.class.getSimpleName();
 
-    private MutableLiveData<String> mInfoData;
+    private MutableLiveData<DataModel> mInfoData;
 
     public InfoViewModel () {
         mInfoData = new MutableLiveData<>();
     }
 
-    public LiveData<String> getInfoData() {
+    public LiveData<DataModel> getInfoData() {
         return mInfoData;
     }
 
-    public void setInfoData(String infoData) {
-        mInfoData.postValue(infoData);
+    public void setInfoData(String infoData, boolean newData) {
+        mInfoData.postValue(new DataModel(infoData, newData));
     }
 }

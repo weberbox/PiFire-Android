@@ -11,18 +11,15 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.recycler.viewholder.PModeViewHolder;
 import com.weberbox.pifire.recycler.viewmodel.PModeViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class PModeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<PModeViewModel> models = new ArrayList<>();
+    private final List<PModeViewModel> mModel;
 
-    public PModeViewAdapter(final List<PModeViewModel> viewModels) {
-        if (viewModels != null) {
-            this.models.addAll(viewModels);
-        }
+    public PModeViewAdapter(final List<PModeViewModel> viewModel) {
+        mModel = viewModel;
     }
 
     @NonNull
@@ -34,12 +31,12 @@ public class PModeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((PModeViewHolder) holder).bindData(models.get(position));
+        ((PModeViewHolder) holder).bindData(mModel.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModel.size();
     }
 
     @Override

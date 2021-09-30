@@ -63,6 +63,10 @@ public class Constants {
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
 
+    // Fade Directions
+    public static final int FADE_OUT = 0;
+    public static final int FADE_IN = 1;
+
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";

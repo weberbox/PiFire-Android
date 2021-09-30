@@ -27,16 +27,19 @@ public class UtilsDisplay {
                                                         final DialogInterface.OnClickListener updateClickListener,
                                                         final DialogInterface.OnClickListener dismissClickListener,
                                                         final DialogInterface.OnClickListener disableClickListener,
-                                                        Boolean isShown) {
+                                                        Boolean isDisableShown, Boolean isDismissShown) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         builder.setTitle(title)
                 .setMessage(content)
-                .setPositiveButton(btnPositive, updateClickListener)
-                .setNegativeButton(btnNegative, dismissClickListener);
+                .setPositiveButton(btnPositive, updateClickListener);
 
-        if (isShown) {
+        if (isDisableShown) {
             builder.setNeutralButton(btnNeutral, disableClickListener);
+        }
+
+        if (isDismissShown) {
+            builder.setNegativeButton(btnNegative, dismissClickListener);
         }
 
         return builder.create();
