@@ -33,6 +33,7 @@ public class PrefsUsernameDialog extends EditTextPreference {
         return SecurityUtils.decrypt(mContext, R.string.prefs_server_basic_auth_user);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.setText(restoreValue ? getPersistedString(null) : (String) defaultValue);

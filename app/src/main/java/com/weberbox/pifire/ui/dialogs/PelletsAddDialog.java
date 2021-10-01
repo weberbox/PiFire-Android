@@ -1,12 +1,10 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -14,11 +12,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogInputTextBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 
 public class PelletsAddDialog {
     private static final String TAG = PelletsAddDialog.class.getSimpleName();
 
+    private DialogInputTextBinding mBinding;
     private final PelletsCallbackInterface mCallBack;
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
@@ -37,14 +37,13 @@ public class PelletsAddDialog {
     }
 
     public AlertDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View dialogView = mInflater.inflate(R.layout.dialog_input_text, null);
+        mBinding = DialogInputTextBinding.inflate(mInflater);
 
         mDialog.setTitle(mTitle);
 
-        final EditText input = (EditText) dialogView.findViewById(R.id.dialog_text_input);
+        final EditText input = mBinding.dialogTextInput;
 
-        mDialog.setView(dialogView);
+        mDialog.setView(mBinding.getRoot());
 
         mDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override

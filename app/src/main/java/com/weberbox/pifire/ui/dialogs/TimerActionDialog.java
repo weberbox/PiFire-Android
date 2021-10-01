@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -14,11 +13,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogTimerActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class TimerActionDialog {
     private static String TAG = TimerActionDialog.class.getSimpleName();
 
+    private DialogTimerActionBinding mBinding;
     private final BottomSheetDialog mTimerActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
@@ -32,14 +33,13 @@ public class TimerActionDialog {
         mPaused = paused;
     }
 
-    public BottomSheetDialog showDialog(){
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_timer_action, null);
+    public BottomSheetDialog showDialog() {
+        mBinding = DialogTimerActionBinding.inflate(mInflater);
 
-        LinearLayout timerLeftButton = sheetView.findViewById(R.id.timer_button_left);
-        LinearLayout timerRightButton = sheetView.findViewById(R.id.timer_button_right);
-        ImageView timerLeftButtonImage = sheetView.findViewById(R.id.timer_button_left_image);
-        TextView timerLeftButtonText = sheetView.findViewById(R.id.timer_button_left_text);
+        LinearLayout timerLeftButton = mBinding.timerButtonLeft;
+        LinearLayout timerRightButton = mBinding.timerButtonRight;
+        ImageView timerLeftButtonImage = mBinding.timerButtonLeftImage;
+        TextView timerLeftButtonText = mBinding.timerButtonLeftText;
 
         if(mPaused) {
             timerLeftButtonImage.setImageResource(R.drawable.ic_timer_start);
@@ -76,7 +76,7 @@ public class TimerActionDialog {
             }
         });
 
-        mTimerActionsBottomSheet.setContentView(sheetView);
+        mTimerActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mTimerActionsBottomSheet.show();
 

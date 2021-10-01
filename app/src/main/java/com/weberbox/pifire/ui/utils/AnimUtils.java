@@ -1,6 +1,9 @@
 package com.weberbox.pifire.ui.utils;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -60,5 +63,62 @@ public class AnimUtils {
 
         LayoutAnimationController controller = new LayoutAnimationController(set, 0.25f);
         view.setLayoutAnimation(controller);
+    }
+
+    public static void slideDown(final View view) {
+        if (view != null) {
+            view.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            layoutParams.height = 1;
+            view.setLayoutParams(layoutParams);
+
+            view.measure(View.MeasureSpec.makeMeasureSpec(Resources.getSystem().getDisplayMetrics().widthPixels,
+                    View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0,
+                            View.MeasureSpec.UNSPECIFIED));
+
+            final int height = view.getMeasuredHeight();
+            ValueAnimator valueAnimator = ObjectAnimator.ofInt(1, height);
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int value = (int) animation.getAnimatedValue();
+                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                    if (height > value) {
+                        layoutParams.height = value;
+                    } else {
+                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    }
+                    view.setLayoutParams(layoutParams);
+                }
+            });
+            valueAnimator.start();
+        }
+    }
+
+    public static void slideUp(final View view) {
+        if (view != null) {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    final int height = view.getHeight();
+                    ValueAnimator valueAnimator = ObjectAnimator.ofInt(height, 1);
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            int value = (int) animation.getAnimatedValue();
+                            if (value > 1) {
+                                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                                layoutParams.height = value;
+                                view.setLayoutParams(layoutParams);
+                            } else {
+                                view.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                    valueAnimator.start();
+                }
+            });
+        }
     }
 }

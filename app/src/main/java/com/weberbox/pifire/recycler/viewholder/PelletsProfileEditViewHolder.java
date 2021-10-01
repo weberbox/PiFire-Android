@@ -21,6 +21,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.RotateUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
@@ -38,6 +39,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
     private final PowerSpinnerView mPelletProfileRating;
     private final TextView mPelletProfileComments;
     private final ImageView mExpandIcon;
+    private final ImageView mDeleteIcon;
     private final CardView mCardView;
     private final LinearLayout mEditCardView;
 
@@ -48,7 +50,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
 
         mPelletProfile = itemView.findViewById(R.id.pellets_item);
         mPelletProfileId = itemView.findViewById(R.id.pellets_item_id);
-        ImageView pelletProfileDelete = itemView.findViewById(R.id.pellets_item_delete);
+        mDeleteIcon = itemView.findViewById(R.id.pellets_item_delete);
 
         View profileView = itemView.findViewById(R.id.pellet_edit_card_header);
         mPelletProfileBrand = itemView.findViewById(R.id.pellet_edit_brand_text);
@@ -61,7 +63,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         AppCompatButton deleteButton = itemView.findViewById(R.id.pellet_edit_delete);
         AppCompatButton saveButton = itemView.findViewById(R.id.pellet_edit_save);
 
-        pelletProfileDelete.setOnClickListener(new View.OnClickListener() {
+        mDeleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callback.onItemDelete(Constants.PELLET_PROFILE,
@@ -72,6 +74,8 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         profileView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fadeView(mDeleteIcon, mDeleteIcon.getVisibility() == View.VISIBLE ?
+                        Constants.FADE_OUT: Constants.FADE_IN);
                 toggleCardView();
             }
         });
@@ -127,6 +131,8 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                toggleCardView();
+                mDeleteIcon.setVisibility(View.VISIBLE);
                 if (mPelletProfileId.getText() != null) {
                     callback.onProfileDelete(mPelletProfileId.getText().toString(),
                             getAbsoluteAdapterPosition());
@@ -164,9 +170,30 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
 
     private void toggleCardView() {
         boolean visibility = mEditCardView.getVisibility() == View.VISIBLE;
-        mEditCardView.setVisibility(visibility ? View.GONE : View.VISIBLE);
+        if (visibility) {
+            AnimUtils.slideUp(mEditCardView);
+        } else {
+            AnimUtils.slideDown(mEditCardView);
+        }
         TransitionManager.beginDelayedTransition(mCardView, new RotateUtils());
         mExpandIcon.setRotation(visibility ? 0 : 180);
+    }
+
+    private void fadeView(View view, int direction) {
+        switch (direction) {
+            case Constants.FADE_OUT:
+                if (view.getVisibility() == View.VISIBLE) {
+                    AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
+                    view.setVisibility(View.GONE);
+                }
+                break;
+            case Constants.FADE_IN:
+                if (view.getVisibility() == View.GONE) {
+                    AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
+                    view.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
     }
 
     public void bindData(final PelletProfileModel viewModel) {

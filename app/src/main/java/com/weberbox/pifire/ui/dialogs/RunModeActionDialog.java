@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -14,11 +13,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogModeRunActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class RunModeActionDialog {
     private static String TAG = RunModeActionDialog.class.getSimpleName();
 
+    private DialogModeRunActionBinding mBinding;
     private final BottomSheetDialog mModeActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
@@ -33,15 +34,14 @@ public class RunModeActionDialog {
     }
 
     public BottomSheetDialog showDialog(){
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_mode_run_action, null);
+        mBinding = DialogModeRunActionBinding.inflate(mInflater);
 
-        LinearLayout smokeButton = sheetView.findViewById(R.id.mode_smoke_button);
-        LinearLayout holdButton = sheetView.findViewById(R.id.mode_hold_button);
-        LinearLayout rightButton = sheetView.findViewById(R.id.mode_shutdown_button);
+        LinearLayout smokeButton = mBinding.modeSmokeButton;
+        LinearLayout holdButton = mBinding.modeHoldButton;
+        LinearLayout rightButton = mBinding.modeShutdownButton;
 
-        ImageView rightButtonImg = sheetView.findViewById(R.id.mode_shutdown_button_img);
-        TextView rightButtonText = sheetView.findViewById(R.id.mode_shutdown_button_text);
+        ImageView rightButtonImg = mBinding.modeShutdownButtonImg;
+        TextView rightButtonText = mBinding.modeShutdownButtonText;
 
         if(mShutdown) {
             rightButtonImg.setImageResource(R.drawable.ic_timer_stop);
@@ -83,7 +83,7 @@ public class RunModeActionDialog {
             }
         });
 
-        mModeActionsBottomSheet.setContentView(sheetView);
+        mModeActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mModeActionsBottomSheet.show();
 

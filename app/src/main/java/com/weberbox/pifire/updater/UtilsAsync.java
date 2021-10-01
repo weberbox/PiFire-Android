@@ -21,6 +21,7 @@ class UtilsAsync {
         private final String mJsonUrl;
         private final AppUpdater.LibraryListener mListener;
 
+        @SuppressWarnings("deprecation")
         public LatestAppVersion(Context context, Boolean forceCheck, UpdateFrom updateFrom,
                                 GitHub gitHub, String jsonUrl, AppUpdater.LibraryListener listener) {
             mContextRef = new WeakReference<>(context);

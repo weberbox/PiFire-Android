@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -13,11 +12,13 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogProbeActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class ProbeToggleDialog {
     private static String TAG = ProbeToggleDialog.class.getSimpleName();
 
+    private DialogProbeActionBinding mBinding;
     private final BottomSheetDialog mProbeActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
@@ -34,13 +35,12 @@ public class ProbeToggleDialog {
     }
 
     public BottomSheetDialog showDialog(){
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_probe_action, null);
+        mBinding = DialogProbeActionBinding.inflate(mInflater);
 
-        LinearLayout actionLeftButton = sheetView.findViewById(R.id.probe_button_left);
-        LinearLayout actionRightButton = sheetView.findViewById(R.id.probe_button_right);
-        TextView actionRightText = sheetView.findViewById(R.id.probe_button_right_text);
-        ImageView actionRightImage = sheetView.findViewById(R.id.probe_button_right_image);
+        LinearLayout actionLeftButton = mBinding.probeButtonLeft;
+        LinearLayout actionRightButton = mBinding.probeButtonRight;
+        TextView actionRightText = mBinding.probeButtonRightText;
+        ImageView actionRightImage = mBinding.probeButtonRightImage;
 
         if(mEnabled) {
             actionRightImage.setImageResource(R.drawable.ic_probe_disable);
@@ -72,7 +72,7 @@ public class ProbeToggleDialog {
             }
         });
 
-        mProbeActionsBottomSheet.setContentView(sheetView);
+        mProbeActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mProbeActionsBottomSheet.show();
 

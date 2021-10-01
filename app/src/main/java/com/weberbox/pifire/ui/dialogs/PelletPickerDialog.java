@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogProfilePickerBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.model.PelletProfileModel;
@@ -27,6 +27,7 @@ import java.util.List;
 public class PelletPickerDialog {
     private static String TAG = PelletPickerDialog.class.getSimpleName();
 
+    private DialogProfilePickerBinding mBinding;
     private final BottomSheetDialog mPelletPickerBottomSheet;
     private final LayoutInflater mInflater;
     private final PelletsCallbackInterface mCallBack;
@@ -48,11 +49,10 @@ public class PelletPickerDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_profile_picker, null);
+        mBinding = DialogProfilePickerBinding.inflate(mInflater);
 
-        Button confirmButton = sheetView.findViewById(R.id.set_profile_load);
-        Button cancelButton = sheetView.findViewById(R.id.set_profile_cancel);
+        Button confirmButton = mBinding.setProfileLoad;
+        Button cancelButton = mBinding.setProfileCancel;
 
         PickerLayoutManager pelletPickerLayoutManager = new PickerLayoutManager(mContext,
                 PickerLayoutManager.VERTICAL, false);
@@ -60,7 +60,7 @@ public class PelletPickerDialog {
         pelletPickerLayoutManager.setScaleDownBy(0.99f);
         pelletPickerLayoutManager.setScaleDownDistance(1.2f);
 
-        mProfileList = sheetView.findViewById(R.id.profile_list);
+        mProfileList = mBinding.profileList;
 
         SnapHelper profileSnapHelper = new LinearSnapHelper();
         profileSnapHelper.attachToRecyclerView(mProfileList);
@@ -100,7 +100,7 @@ public class PelletPickerDialog {
             }
         });
 
-        mPelletPickerBottomSheet.setContentView(sheetView);
+        mPelletPickerBottomSheet.setContentView(mBinding.getRoot());
 
         mPelletPickerBottomSheet.show();
 

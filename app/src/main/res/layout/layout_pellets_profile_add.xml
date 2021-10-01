@@ -8,14 +8,14 @@
     android:paddingTop="@dimen/small_spacing">
 
     <LinearLayout
-        android:id="@+id/pellet_edit_upper_container"
+        android:id="@+id/pellet_add_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" >
 
         <include
             android:id="@+id/pellet_edit_container"
-            layout="@layout/layout_pellet_edit_card" />
+            layout="@layout/layout_pellets_edit_card" />
 
     </LinearLayout>
 
@@ -29,20 +29,20 @@
         android:paddingBottom="@dimen/default_spacing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pellet_edit_upper_container">
+        app:layout_constraintTop_toBottomOf="@+id/pellet_add_container">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/pellet_edit_delete"
+            android:id="@+id/pellet_add_load"
             style="@style/MainButtonAccent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_ripple_red_button"
-            android:text="@string/pellets_delete" />
+            android:background="@drawable/bg_table_item"
+            android:text="@string/pellets_dialog_save_load" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/pellet_edit_save"
+            android:id="@+id/pellet_add_save"
             style="@style/MainButtonAccent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

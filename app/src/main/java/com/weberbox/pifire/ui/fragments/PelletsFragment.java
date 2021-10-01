@@ -39,6 +39,8 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.databinding.FragmentPelletsBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsProfileAddBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
 import com.weberbox.pifire.model.PelletResponseModel;
@@ -54,6 +56,8 @@ import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.FadeTransition;
+import com.weberbox.pifire.ui.views.CardViewHeaderButton;
+import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
@@ -70,6 +74,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
     private MainViewModel mMainViewModel;
     private FragmentPelletsBinding mBinding;
+    private LayoutPelletsBinding mPelletsBinding;
     private RelativeLayout mRootContainer;
     private SwipeRefreshLayout mSwipeRefresh;
     private ProgressBar mLoadingBar;
@@ -90,8 +95,13 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private List<PelletProfileModel> mProfileEditList;
     private List<String> mBrandsList;
     private List<String> mWoodsList;
+    private LinearLayout mCurrentView;
     private LinearLayout mAddProfileCard;
+    private LinearLayout mCurrentPlaceholder;
     private LinearLayout mBrandsPlaceholder;
+    private LinearLayout mWoodsPlaceholder;
+    private LinearLayout mProfilePlaceholder;
+    private LinearLayout mLogsPlaceholder;
     private AppCompatButton mSaveLoadProfile;
     private AppCompatButton mSaveProfile;
     private PowerSpinnerView mPelletProfileBrand;
@@ -132,39 +142,51 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mProfileList = new ArrayList<>();
         mProfileEditList = new ArrayList<>();
 
-        mRootContainer = mBinding.pelletsLayout.pelletsRootContainer;
+        mPelletsBinding = mBinding.pelletsLayout;
+
+        mRootContainer = mPelletsBinding.pelletsRootContainer;
         mSwipeRefresh = mBinding.pelletsPullRefresh;
-        mLoadingBar = mBinding.pelletsLayout.loadingProgressbar;
-        mBrandsPlaceholder = mBinding.pelletsLayout.brandsPlaceholderContainer;
-        TextView loadNewPellets = mBinding.pelletsLayout.loadPelletsButton;
-        TextView addNewWood = mBinding.pelletsLayout.addWoodButton;
-        TextView addNewBrand = mBinding.pelletsLayout.addBrandsButton;
-        mAddNewProfile = mBinding.pelletsLayout.addProfileButton;
+        mLoadingBar = mPelletsBinding.loadingProgressbar;
+        mCurrentView = mPelletsBinding.currentView;
+        mCurrentPlaceholder = mPelletsBinding.currentHolder;
+        mProfilePlaceholder = mPelletsBinding.profileHolder;
+        mLogsPlaceholder = mPelletsBinding.logsHolder;;
+        mAddNewProfile = mPelletsBinding.addProfileButton;
 
-        mSaveProfile = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletAddSave;
-        mSaveLoadProfile = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletAddLoad;
-        mPelletProfileBrand = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletEditContainer.pelletEditBrandText;
-        mPelletProfileWood = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletEditContainer.pelletEditWoodText;
-        mPelletProfileRating = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletEditContainer.pelletEditRatingText;
-        mProfileAddComments = mBinding.pelletsLayout.pelletsAddProfileContainer.pelletEditContainer.pelletEditCommentsText;
+        CardViewHeaderButton currentHeader = mPelletsBinding.loadOutHeader;
+        PelletsCardViewRecycler brandsCardView = mPelletsBinding.brandsCardView;
+        PelletsCardViewRecycler woodsCardView = mPelletsBinding.woodsCardView;
+
+        mBrandsPlaceholder = brandsCardView.getHolderView();
+        mWoodsPlaceholder = woodsCardView.getHolderView();
+        TextView addNewBrand = brandsCardView.getHeaderButton();
+        TextView addNewWood = woodsCardView.getHeaderButton();
+
+        TextView loadNewPellets = currentHeader.getButton();
+
+        LayoutPelletsProfileAddBinding pelletsProfileAddBinding =
+                mPelletsBinding.pelletsAddProfileContainer;
+
+        mSaveProfile = pelletsProfileAddBinding.pelletAddSave;
+        mSaveLoadProfile = pelletsProfileAddBinding.pelletAddLoad;
+        mPelletProfileBrand = pelletsProfileAddBinding.pelletEditContainer.pelletEditBrandText;
+        mPelletProfileWood = pelletsProfileAddBinding.pelletEditContainer.pelletEditWoodText;
+        mPelletProfileRating = pelletsProfileAddBinding.pelletEditContainer.pelletEditRatingText;
+        mProfileAddComments = pelletsProfileAddBinding.pelletEditContainer.pelletEditCommentsText;
 
 
-        mPelletBrandsRecycler = mBinding.pelletsLayout.brandsRecycler;
-        mPelletWoodsRecycler = mBinding.pelletsLayout.woodsRecycler;
-        mPelletLogRecycler = mBinding.pelletsLayout.logsRecycler;
-        mPelletProfileEditRecycler = mBinding.pelletsLayout.editorRecycler;
-        mAddProfileCard = mBinding.pelletsLayout.pelletsAddProfile;
+        mPelletBrandsRecycler = brandsCardView.getRecycler();
+        mPelletWoodsRecycler = woodsCardView.getRecycler();
+        mPelletLogRecycler = mPelletsBinding.logsRecycler;
+        mPelletProfileEditRecycler = mPelletsBinding.editorRecycler;
+        mAddProfileCard = mPelletsBinding.pelletsAddProfile;
 
         mPelletBrandsAdapter = new PelletItemsAdapter(mBrandsEditList, this);
 
-        mPelletBrandsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        mPelletBrandsRecycler.setItemAnimator(new DefaultItemAnimator());
         mPelletBrandsRecycler.setAdapter(mPelletBrandsAdapter);
 
         mPelletWoodsAdapter = new PelletItemsAdapter(mWoodsEditList, this);
 
-        mPelletWoodsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        mPelletWoodsRecycler.setItemAnimator(new DefaultItemAnimator());
         mPelletWoodsRecycler.setAdapter(mPelletWoodsAdapter);
 
         mPelletsLogAdapter = new PelletsLogAdapter(mLogsList);
@@ -181,8 +203,6 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mPelletProfileEditRecycler.setAdapter(mPelletProfileEditAdapter);
 
         mPelletProfileEditRecycler.setNestedScrollingEnabled(false);
-        mPelletWoodsRecycler.setNestedScrollingEnabled(false);
-        mPelletBrandsRecycler.setNestedScrollingEnabled(false);
         mPelletLogRecycler.setNestedScrollingEnabled(false);
 
 
@@ -512,7 +532,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             mProfileList.addAll(profiles.values());
 
             if (current.getDateLoaded() != null) {
-                mBinding.pelletsLayout.currentDateLoadedText.setText(current.getDateLoaded());
+                mPelletsBinding.currentInclude.currentDateLoadedText.setText(current.getDateLoaded());
             }
 
             if (current.getPelletId() != null) {
@@ -522,10 +542,10 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             if (current.getPelletId() != null) {
                 PelletProfileModel currentProfile = profiles.get(current.getPelletId());
                 if (currentProfile != null) {
-                    mBinding.pelletsLayout.currentBrandText.setText(currentProfile.getBrand());
-                    mBinding.pelletsLayout.currentWoodText.setText(currentProfile.getWood());
-                    mBinding.pelletsLayout.currentCommentsText.setText(currentProfile.getComments());
-                    mBinding.pelletsLayout.currentRatingText.setText(StringUtils.getRatingText(
+                    mPelletsBinding.currentInclude.currentBrandText.setText(currentProfile.getBrand());
+                    mPelletsBinding.currentInclude.currentWoodText.setText(currentProfile.getWood());
+                    mPelletsBinding.currentInclude.currentCommentsText.setText(currentProfile.getComments());
+                    mPelletsBinding.currentInclude.currentRatingText.setText(StringUtils.getRatingText(
                             currentProfile.getRating()));
                 }
             }
@@ -539,7 +559,6 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             }
 
             mPelletBrandsAdapter.notifyDataSetChanged();
-            mBrandsPlaceholder.setVisibility(View.GONE);
 
 
             for (int i = 0; i < mWoodsList.size(); i++) {
@@ -601,12 +620,23 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             showSnackBarMessage(getActivity(), R.string.json_error_pellets);
         }
 
+        fadeView(mCurrentPlaceholder, Constants.FADE_OUT);
+        fadeView(mBrandsPlaceholder, Constants.FADE_OUT);
+        fadeView(mWoodsPlaceholder, Constants.FADE_OUT);
+        fadeView(mProfilePlaceholder, Constants.FADE_OUT);
+        fadeView(mLogsPlaceholder, Constants.FADE_OUT);
+        fadeView(mCurrentView, Constants.FADE_IN);
+
         toggleLoading(false);
     }
 
     private void toggleCardView() {
         boolean visibility = mAddProfileCard.getVisibility() == View.VISIBLE;
-        mAddProfileCard.setVisibility(visibility ? View.GONE : View.VISIBLE);
+        if (visibility) {
+            AnimUtils.slideUp(mAddProfileCard);
+        } else {
+            AnimUtils.slideDown(mAddProfileCard);
+        }
         mAddNewProfile.setText(visibility ? R.string.pellets_add : R.string.close);
     }
 
@@ -715,6 +745,23 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             }
         } else {
             AnimUtils.shakeOfflineBanner(getActivity());
+        }
+    }
+
+    private void fadeView(View view, int direction) {
+        switch (direction) {
+            case Constants.FADE_OUT:
+                if (view.getVisibility() == View.VISIBLE) {
+                    AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
+                    view.setVisibility(View.GONE);
+                }
+                break;
+            case Constants.FADE_IN:
+                if (view.getVisibility() == View.GONE) {
+                    AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
+                    view.setVisibility(View.VISIBLE);
+                }
+                break;
         }
     }
 

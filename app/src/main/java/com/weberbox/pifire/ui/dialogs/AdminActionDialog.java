@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogAdminActionBinding;
 import com.weberbox.pifire.interfaces.AdminCallbackInterface;
 
 public class AdminActionDialog {
     private static String TAG = AdminActionDialog.class.getSimpleName();
 
+    private DialogAdminActionBinding mBinding;
     private final BottomSheetDialog mAdminActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final AdminCallbackInterface mCallBack;
@@ -32,14 +33,13 @@ public class AdminActionDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_admin_action, null);
+        mBinding = DialogAdminActionBinding.inflate(mInflater);
 
-        LinearLayout actionLeftButton = sheetView.findViewById(R.id.admin_cancel_button);
-        LinearLayout actionRightButton = sheetView.findViewById(R.id.admin_positive_button);
-        TextView actionText = sheetView.findViewById(R.id.admin_dialog_text);
-        TextView rightButtonText = sheetView.findViewById(R.id.admin_positive_text);
-        ImageView rightButtonImage = sheetView.findViewById(R.id.admin_positive_image);
+        LinearLayout actionLeftButton = mBinding.adminCancelButton;
+        LinearLayout actionRightButton = mBinding.adminPositiveButton;
+        TextView actionText = mBinding.adminDialogText;
+        TextView rightButtonText = mBinding.adminPositiveText;
+        ImageView rightButtonImage = mBinding.adminPositiveImage;
 
         switch (mType) {
             case Constants.ACTION_ADMIN_HISTORY:
@@ -83,7 +83,7 @@ public class AdminActionDialog {
             }
         });
 
-        mAdminActionsBottomSheet.setContentView(sheetView);
+        mAdminActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mAdminActionsBottomSheet.show();
 

@@ -47,34 +47,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/system_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/system_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/system_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_system_info"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:gravity="center"
-                            android:text="@string/info_system_info"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/system_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/system_header_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
@@ -188,35 +168,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/gpio_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/gpio_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/gpio_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_gpio"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:text="@string/info_gpio"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/gpio_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/gpio_header_icon"
-                            app:layout_constraintTop_toTopOf="parent" />
-
 
                         <TableLayout
                             android:id="@+id/gpio_info"
@@ -353,7 +313,6 @@
                                 <FrameLayout android:layout_width="0dp">
 
                                     <LinearLayout
-
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:orientation="vertical">
@@ -428,34 +387,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/uptime_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/uptime_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/uptime_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_uptime"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:gravity="center"
-                            android:text="@string/info_uptime"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/uptime_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/uptime_header_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
@@ -503,33 +442,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/app_version_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/app_version_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/app_version_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_app_info"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:text="@string/info_app_info"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/app_version_header"
-                            app:layout_constraintStart_toEndOf="@+id/app_version_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
@@ -651,33 +571,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/licenses_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/licenses_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/licenses_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_credits"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:text="@string/info_credits"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/licenses_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/licenses_header_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout

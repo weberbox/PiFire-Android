@@ -25,21 +25,21 @@
         android:alpha="0.3"
         android:orientation="vertical">
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
-        <include layout="@layout/item_events_list_placeholder" />
+        <include layout="@layout/item_events_list_holder" />
 
     </LinearLayout>
 

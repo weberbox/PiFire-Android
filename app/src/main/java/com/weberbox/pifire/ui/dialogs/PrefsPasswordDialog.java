@@ -33,6 +33,7 @@ public class PrefsPasswordDialog extends EditTextPreference {
         return SecurityUtils.decrypt(mContext, R.string.prefs_server_basic_auth_password);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.setText(restoreValue ? getPersistedString(null) : (String) defaultValue);

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
@@ -32,6 +33,7 @@ import java.util.stream.IntStream;
 public class TimerPickerDialog {
     private static String TAG = TimerPickerDialog.class.getSimpleName();
 
+    private DialogTimerPickerBinding mBinding;
     private final BottomSheetDialog mTimePickerBottomSheet;
     private final DashboardCallbackInterface mCallBack;
     private RecyclerView mHoursList;
@@ -62,10 +64,9 @@ public class TimerPickerDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_timer_picker, null);
+        mBinding = DialogTimerPickerBinding.inflate(mInflater);
 
-        Button confirmButton = sheetView.findViewById(R.id.set_timer_confirm);
+        Button confirmButton = mBinding.setTimerConfirm;
 
         PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(mContext,
                 PickerLayoutManager.VERTICAL, false);
@@ -79,8 +80,8 @@ public class TimerPickerDialog {
         minsPickerLayoutManager.setScaleDownBy(0.96f);
         minsPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mHoursList = sheetView.findViewById(R.id.hours_list);
-        mMinutesList = sheetView.findViewById(R.id.minutes_list);
+        mHoursList = mBinding.hoursList;
+        mMinutesList = mBinding.minutesList;
 
         SnapHelper hoursSnapHelper = new LinearSnapHelper();
         SnapHelper minutesSnapHelper = new LinearSnapHelper();
@@ -131,7 +132,7 @@ public class TimerPickerDialog {
             }
         });
 
-        mTimePickerBottomSheet.setContentView(sheetView);
+        mTimePickerBottomSheet.setContentView(mBinding.getRoot());
 
         if(mScrollHours != 0 && mScrollMinutes != 0) {
             setCurrentHours(mScrollHours, false);

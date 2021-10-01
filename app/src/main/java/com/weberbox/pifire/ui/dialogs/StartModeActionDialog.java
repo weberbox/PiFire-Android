@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
@@ -16,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogModeStartActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 import com.weberbox.pifire.interfaces.OnStateChangeListener;
 import com.weberbox.pifire.interfaces.OnSwipeTouchListener;
@@ -25,6 +25,7 @@ import com.weberbox.pifire.ui.views.SwipeButton;
 public class StartModeActionDialog {
     private static String TAG = StartModeActionDialog.class.getSimpleName();
 
+    private DialogModeStartActionBinding mBinding;
     private final BottomSheetDialog mModeActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
@@ -43,15 +44,14 @@ public class StartModeActionDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_mode_start_action, null);
+        mBinding = DialogModeStartActionBinding.inflate(mInflater);
 
-        LinearLayout startButton = sheetView.findViewById(R.id.mode_start_button);
-        LinearLayout monitorButton = sheetView.findViewById(R.id.mode_monitor_button);
-        LinearLayout stopButton = sheetView.findViewById(R.id.mode_stop_button);
+        LinearLayout startButton = mBinding.modeStartButton;
+        LinearLayout monitorButton = mBinding.modeMonitorButton;
+        LinearLayout stopButton = mBinding.modeStopButton;
 
-        mSwipeButton = sheetView.findViewById(R.id.mode_swipe_start_button);
-        mButtonsTable = sheetView.findViewById(R.id.dialog_start_button_table);
+        mSwipeButton = mBinding.modeSwipeStartButton;
+        mButtonsTable = mBinding.dialogStartButtonTable;
 
         mSwipeButton.setCenterTextStyle(R.style.Text16Aller);
 
@@ -66,8 +66,6 @@ public class StartModeActionDialog {
                         startShowDelay();
                         fadeView(mButtonsTable, Constants.FADE_OUT);
                         fadeView(mSwipeButton, Constants.FADE_IN);
-                        mSwipeButton.setVisibility(View.VISIBLE);
-                        mButtonsTable.setVisibility(View.GONE);
                         mModeActionsBottomSheet.setCancelable(false);
                         mModeActionsBottomSheet.setCanceledOnTouchOutside(true);
                     }
@@ -126,7 +124,7 @@ public class StartModeActionDialog {
             }
         });
 
-        mModeActionsBottomSheet.setContentView(sheetView);
+        mModeActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mModeActionsBottomSheet.show();
 
@@ -137,9 +135,11 @@ public class StartModeActionDialog {
         switch (direction) {
             case Constants.FADE_OUT:
                 AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
+                view.setVisibility(View.GONE);
                 break;
             case Constants.FADE_IN:
                 AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
+                view.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -158,8 +158,6 @@ public class StartModeActionDialog {
             fadeView(mSwipeButton, Constants.FADE_OUT);
             fadeView(mButtonsTable, Constants.FADE_IN);
             mModeActionsBottomSheet.setCancelable(true);
-            mSwipeButton.setVisibility(View.GONE);
-            mButtonsTable.setVisibility(View.VISIBLE);
         }
     };
 }

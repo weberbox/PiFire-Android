@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,14 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogPelletsDeleteBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 
 
 public class PelletsDeleteDialog {
     private static final String TAG = PelletsDeleteDialog.class.getSimpleName();
 
+    private DialogPelletsDeleteBinding mBinding;
     private final BottomSheetDialog mPelletsActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final PelletsCallbackInterface mCallBack;
@@ -34,11 +35,10 @@ public class PelletsDeleteDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_pellets_delete, null);
+        mBinding = DialogPelletsDeleteBinding.inflate(mInflater);
 
-        LinearLayout actionLeftButton = sheetView.findViewById(R.id.pellets_cancel_button);
-        LinearLayout actionRightButton = sheetView.findViewById(R.id.pellets_positive_button);
+        LinearLayout actionLeftButton = mBinding.pelletsCancelButton;
+        LinearLayout actionRightButton = mBinding.pelletsPositiveButton;
 
         actionLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +55,7 @@ public class PelletsDeleteDialog {
             }
         });
 
-        mPelletsActionsBottomSheet.setContentView(sheetView);
+        mPelletsActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mPelletsActionsBottomSheet.show();
 

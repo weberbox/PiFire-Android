@@ -48,7 +48,12 @@ android {
         }
         dev {
             dimension "type"
-            apply from: '/src/dev/secrets.gradle'
+            try {
+                apply from: '/src/dev/secrets.gradle'
+            } catch (MissingResourceException ignored) {
+                logger.error('Dev Secrets file not found falling back to Compile Secrets')
+                apply from: '/src/compile/secrets.gradle'
+            }
             externalNativeBuild {
                 cmake {
                     cppFlags "-DACRA_URL=" + acraUrl
@@ -60,7 +65,12 @@ android {
         }
         github {
             dimension "type"
-            apply from: '/src/github/secrets.gradle'
+            try {
+                apply from: '/src/github/secrets.gradle'
+            } catch (MissingResourceException ignored) {
+                logger.error('Github Secrets file not found falling back to Compile Secrets')
+                apply from: '/src/compile/secrets.gradle'
+            }
             externalNativeBuild {
                 cmake {
                     cppFlags "-DACRA_URL=" + acraUrl

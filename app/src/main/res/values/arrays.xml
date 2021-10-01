@@ -74,6 +74,19 @@
         <item>9</item>
     </string-array>
 
+    <string-array name="pmode_times">
+        <item>45 Seconds</item>
+        <item>55 Seconds</item>
+        <item>65 Seconds</item>
+        <item>75 Seconds</item>
+        <item>85 Seconds</item>
+        <item>95 Seconds</item>
+        <item>105 Seconds</item>
+        <item>115 Seconds</item>
+        <item>125 Seconds</item>
+        <item>135 Seconds</item>
+    </string-array>
+
     <string-array name="pmode_setting_names">
         <item>Mode 0</item>
         <item>Mode 1</item>

@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,14 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogHistoryDeleteBinding;
 import com.weberbox.pifire.interfaces.HistoryCallbackInterface;
 
 
 public class HistoryDeleteDialog {
     private static String TAG = HistoryDeleteDialog.class.getSimpleName();
 
+    private DialogHistoryDeleteBinding mBinding;
     private final BottomSheetDialog mHistoryActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final HistoryCallbackInterface mCallBack;
@@ -28,11 +29,10 @@ public class HistoryDeleteDialog {
     }
 
     public BottomSheetDialog showDialog(){
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_history_delete, null);
+        mBinding = DialogHistoryDeleteBinding.inflate(mInflater);
 
-        LinearLayout actionLeftButton = sheetView.findViewById(R.id.history_cancel_button);
-        LinearLayout actionRightButton = sheetView.findViewById(R.id.history_delete_button);
+        LinearLayout actionLeftButton = mBinding.historyCancelButton;
+        LinearLayout actionRightButton = mBinding.historyDeleteButton;
 
         actionLeftButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +49,7 @@ public class HistoryDeleteDialog {
             }
         });
 
-        mHistoryActionsBottomSheet.setContentView(sheetView);
+        mHistoryActionsBottomSheet.setContentView(mBinding.getRoot());
 
         mHistoryActionsBottomSheet.show();
 

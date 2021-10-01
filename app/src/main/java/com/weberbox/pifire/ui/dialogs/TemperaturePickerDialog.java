@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.icu.text.DecimalFormat;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
@@ -33,6 +33,7 @@ import java.util.stream.IntStream;
 public class TemperaturePickerDialog {
     private static String TAG = TemperaturePickerDialog.class.getSimpleName();
 
+    private DialogTempPickerBinding mBinding;
     private final BottomSheetDialog mTempPickerBottomSheet;
     private RecyclerView mTempList;
     private String mSelectedTemp;
@@ -56,11 +57,10 @@ public class TemperaturePickerDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_temp_picker, null);
+        mBinding = DialogTempPickerBinding.inflate(mInflater);
 
-        Button confirmButton = sheetView.findViewById(R.id.set_temp_confirm);
-        Button clearButton = sheetView.findViewById(R.id.set_temp_clear);
+        Button confirmButton = mBinding.setTempConfirm;
+        Button clearButton = mBinding.setTempClear;
 
         PickerLayoutManager tempPickerLayoutManager = new PickerLayoutManager(mContext,
                 PickerLayoutManager.VERTICAL, false);
@@ -68,7 +68,7 @@ public class TemperaturePickerDialog {
         tempPickerLayoutManager.setScaleDownBy(0.99f);
         tempPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mTempList = sheetView.findViewById(R.id.temp_list);
+        mTempList = mBinding.tempList;
 
         SnapHelper tempSnapHelper = new LinearSnapHelper();
         tempSnapHelper.attachToRecyclerView(mTempList);
@@ -126,7 +126,7 @@ public class TemperaturePickerDialog {
             }
         });
 
-        mTempPickerBottomSheet.setContentView(sheetView);
+        mTempPickerBottomSheet.setContentView(mBinding.getRoot());
 
         if(mScrollTemp != 0) {
             if(mTempType == Constants.PICKER_TYPE_GRILL) {

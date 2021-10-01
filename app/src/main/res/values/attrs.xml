@@ -31,4 +31,19 @@
         </attr>
     </declare-styleable>
 
+    <declare-styleable name="CardViewHeaderButton">
+        <attr name="header_title" format="string" />
+        <attr name="button_text" format="string" />
+        <attr name="button_enabled" format="boolean"/>
+        <attr name="header_icon" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="PelletsCardViewRecycler">
+        <attr name="pellets_header_title" format="string" />
+        <attr name="pellets_button_text" format="string" />
+        <attr name="pellets_button_enabled" format="boolean"/>
+        <attr name="pellets_header_icon" format="reference"/>
+    </declare-styleable>
+
+
 </resources>

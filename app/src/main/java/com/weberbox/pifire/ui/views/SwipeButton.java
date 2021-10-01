@@ -6,7 +6,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.TextViewCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.interfaces.OnActiveListener;
@@ -81,7 +79,6 @@ public class SwipeButton extends RelativeLayout {
         init(context, attrs, defStyleAttr, -1);
     }
 
-    @TargetApi(21)
     public SwipeButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
