@@ -9,7 +9,6 @@ import io.socket.client.Socket;
 
 
 public class GrillControl {
-    private static String TAG = GrillControl.class.getSimpleName();
 
     // Start Grill
     public static void modeStartGrill(Socket socket) {

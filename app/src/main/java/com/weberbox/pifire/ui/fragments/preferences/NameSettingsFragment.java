@@ -20,7 +20,6 @@ import io.socket.client.Socket;
 
 public class NameSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = NameSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

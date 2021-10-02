@@ -40,7 +40,6 @@ import com.weberbox.pifire.model.SettingsResponseModel.Safety;
 import com.weberbox.pifire.model.SettingsResponseModel.SmokePlus;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.AnimUtils;
-import com.weberbox.pifire.utils.Log;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,9 +47,9 @@ import java.util.Map;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class SettingsFragment extends Fragment {
-    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     // TODO allow offline changes and sync to server once online. Use settings with newer timestamp.
     //  Timestamp added to server settings
@@ -304,7 +303,7 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_pellet_full), pellets.getFull());
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error " + e.getMessage());
+            Timber.w(e,"JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }

@@ -34,7 +34,6 @@ import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.FileUtils;
-import com.weberbox.pifire.utils.Log;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -46,9 +45,9 @@ import java.util.List;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class EventsFragment extends Fragment {
-    private static final String TAG = EventsFragment.class.getSimpleName();
 
     private FragmentEventsBinding mBinding;
     private MainViewModel mMainViewModel;
@@ -225,7 +224,7 @@ public class EventsFragment extends Fragment {
             mEventsPlaceholder.setVisibility(View.GONE);
 
         } catch (JSONException| IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error: " + e.getMessage());
+            Timber.e(e,"JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }

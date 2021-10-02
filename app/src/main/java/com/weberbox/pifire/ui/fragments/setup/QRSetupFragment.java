@@ -23,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class QRSetupFragment extends Fragment {
 
-    public static final String TAG = QRSetupFragment.class.getSimpleName();
-
     private FragmentSetupQrBinding mBinding;
     private Snackbar mCameraPermissionSnack;
 

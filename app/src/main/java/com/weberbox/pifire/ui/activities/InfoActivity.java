@@ -10,7 +10,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ActivityInfoBinding;
 
 public class InfoActivity extends AppCompatActivity {
-    private static final String TAG = InfoActivity.class.getSimpleName();
 
     private ActivityInfoBinding mBinding;
 

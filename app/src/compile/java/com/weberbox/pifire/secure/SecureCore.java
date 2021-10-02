@@ -2,8 +2,7 @@ package com.weberbox.pifire.secure;
 
 
 public final class SecureCore {
-    private static final String TAG = SecureCore.class.getSimpleName();
-
+    
     static {
         System.loadLibrary("pifire");
     }

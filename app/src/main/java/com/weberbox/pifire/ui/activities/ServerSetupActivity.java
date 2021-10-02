@@ -10,7 +10,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 
 public class ServerSetupActivity extends AppCompatActivity {
-    private static final String TAG = ServerSetupActivity.class.getSimpleName();
 
     private ActivityServerSetupBinding mBinding;
 

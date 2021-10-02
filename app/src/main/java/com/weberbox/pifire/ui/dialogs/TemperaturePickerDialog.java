@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TemperaturePickerDialog {
-    private static String TAG = TemperaturePickerDialog.class.getSimpleName();
 
     private DialogTempPickerBinding mBinding;
     private final BottomSheetDialog mTempPickerBottomSheet;

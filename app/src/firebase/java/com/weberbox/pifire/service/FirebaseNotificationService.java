@@ -15,16 +15,15 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.Log;
+
+import timber.log.Timber;
 
 public class FirebaseNotificationService extends FirebaseMessagingService {
-    private static final String TAG = FirebaseNotificationService.class.getSimpleName();
 
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.d(TAG, "Got new token: " + token);
+        Timber.d("Got new token: %s", token);
     }
 
     @Override

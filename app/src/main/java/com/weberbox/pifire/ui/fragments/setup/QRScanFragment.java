@@ -20,7 +20,6 @@ import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -36,9 +35,9 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import okhttp3.Credentials;
+import timber.log.Timber;
 
 public class QRScanFragment extends Fragment {
-
     public static final String TAG = QRScanFragment.class.getSimpleName();
 
     private FragmentSetupQrScanBinding mBinding;
@@ -170,7 +169,7 @@ public class QRScanFragment extends Fragment {
             try {
                 mSocket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
-                Log.e("Socket URI Error", e.toString());
+                Timber.w(e, "Socket URI Error");
                 if(!mErrorSnack.isShown() && getActivity() != null) {
                     showSnackBarMessage(getActivity(), R.string.setup_error);
                 }
@@ -179,7 +178,7 @@ public class QRScanFragment extends Fragment {
             try {
                 mSocket = IO.socket(serverURL);
             } catch (URISyntaxException e) {
-                Log.e("Socket URI Error", e.toString());
+                Timber.w(e,"Socket URI Error");
                 if(!mErrorSnack.isShown() && getActivity() != null) {
                     showSnackBarMessage(getActivity(), R.string.setup_error);
                 }
@@ -210,6 +209,7 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
+                    Timber.d("Successful connection address ok");
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
                     if(mErrorSnack.isShown()) {
@@ -226,7 +226,7 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Log.e(TAG, "Error connecting");
+                    Timber.d("Error connecting bad address");
                     mConnectProgress.setVisibility(View.GONE);
                     mSocket.disconnect();
                     mIsConnecting = false;

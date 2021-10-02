@@ -14,7 +14,6 @@ import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
 import com.weberbox.pifire.updater.objects.Version;
-import com.weberbox.pifire.utils.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -28,9 +27,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import timber.log.Timber;
 
 class UtilsLibrary {
-    private static final String TAG = UtilsLibrary.class.getSimpleName();
 
     private static final String GITHUB_URL = "https://github.com/";
     private static final String GITHUB_TAG_RELEASE = "/tree/";
@@ -55,7 +54,7 @@ class UtilsLibrary {
             e.printStackTrace();
         }
 
-        Log.d(TAG, "Installed App Version: " + version);
+        Timber.d("Installed App Version: %s", version);
 
         return version;
     }
@@ -70,15 +69,15 @@ class UtilsLibrary {
             e.printStackTrace();
         }
 
-        Log.d(TAG, "Installed App VersionCode: " + versionCode);
+        Timber.d("Installed App VersionCode: %s", versionCode);
 
         return versionCode;
     }
 
     public static Boolean isUpdateAvailable(Update installedVersion, Update latestVersion) {
         if (latestVersion.getLatestVersionCode() != null && latestVersion.getLatestVersionCode() > 0) {
-            Log.d(TAG, "Latest Version: " + latestVersion.getLatestVersion());
-            Log.d(TAG, "Latest VersionCode: " + latestVersion.getLatestVersionCode());
+            Timber.d("Latest Version: %s", latestVersion.getLatestVersion());
+            Timber.d("Latest VersionCode: %s", latestVersion.getLatestVersionCode());
             return latestVersion.getLatestVersionCode() > installedVersion.getLatestVersionCode();
         } else {
             if (!TextUtils.equals(installedVersion.getLatestVersion(), "0.0.0.0") &&
@@ -156,7 +155,7 @@ class UtilsLibrary {
             }
 
             if (str.length() == 0) {
-                Log.e(TAG, "Cannot retrieve latest version. Is it configured properly?");
+                Timber.d("Cannot retrieve latest version. Is it configured properly?");
             }
 
             if (response.body() != null) {
@@ -164,7 +163,7 @@ class UtilsLibrary {
             }
             source = str.toString();
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "App wasn't found in the provided source. Is it published?");
+            Timber.w(e, "App wasn't found in the provided source");
         } catch (IOException ignore) {
 
         } finally {

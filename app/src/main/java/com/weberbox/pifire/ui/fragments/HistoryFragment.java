@@ -46,7 +46,6 @@ import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.LineChartXAxisValueFormatter;
 import com.weberbox.pifire.utils.FileUtils;
-import com.weberbox.pifire.utils.Log;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -57,9 +56,9 @@ import java.util.List;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class HistoryFragment extends Fragment implements HistoryCallbackInterface {
-    private static final String TAG = HistoryFragment.class.getSimpleName();
 
     private FragmentHistoryBinding mBinding;
     private MainViewModel mMainViewModel;
@@ -336,7 +335,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                     float seconds = (float) date.getTime() / 1000L;
                     time.add(seconds);
                 } catch (ParseException e) {
-                    Log.e(TAG, "Failed to parse time " + e.getMessage());
+                    Timber.w(e, "Failed to parse time");
                     return;
                 }
             }
@@ -419,7 +418,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             mLineChart.invalidate();
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error " + e.getMessage());
+            Timber.w("JSON Error %s", e.getMessage());
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }

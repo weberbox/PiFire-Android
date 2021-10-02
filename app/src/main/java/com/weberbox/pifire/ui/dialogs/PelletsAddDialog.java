@@ -16,7 +16,6 @@ import com.weberbox.pifire.databinding.DialogInputTextBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 
 public class PelletsAddDialog {
-    private static final String TAG = PelletsAddDialog.class.getSimpleName();
 
     private DialogInputTextBinding mBinding;
     private final PelletsCallbackInterface mCallBack;

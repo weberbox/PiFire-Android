@@ -27,7 +27,6 @@ import io.socket.client.Socket;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference.OnBindEditTextListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = WorkSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

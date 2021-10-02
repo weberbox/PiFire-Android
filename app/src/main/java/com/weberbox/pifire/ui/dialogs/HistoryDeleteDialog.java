@@ -14,7 +14,6 @@ import com.weberbox.pifire.interfaces.HistoryCallbackInterface;
 
 
 public class HistoryDeleteDialog {
-    private static String TAG = HistoryDeleteDialog.class.getSimpleName();
 
     private DialogHistoryDeleteBinding mBinding;
     private final BottomSheetDialog mHistoryActionsBottomSheet;

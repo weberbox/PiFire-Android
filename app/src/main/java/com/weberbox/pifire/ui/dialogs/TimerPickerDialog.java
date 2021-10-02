@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.icu.text.DecimalFormat;
@@ -31,7 +30,6 @@ import java.util.stream.IntStream;
 
 
 public class TimerPickerDialog {
-    private static String TAG = TimerPickerDialog.class.getSimpleName();
 
     private DialogTimerPickerBinding mBinding;
     private final BottomSheetDialog mTimePickerBottomSheet;

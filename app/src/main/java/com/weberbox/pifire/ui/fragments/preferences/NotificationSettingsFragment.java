@@ -24,7 +24,6 @@ import io.socket.client.Socket;
 
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = NotificationSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

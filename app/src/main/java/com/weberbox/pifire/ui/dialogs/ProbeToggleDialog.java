@@ -16,7 +16,6 @@ import com.weberbox.pifire.databinding.DialogProbeActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class ProbeToggleDialog {
-    private static String TAG = ProbeToggleDialog.class.getSimpleName();
 
     private DialogProbeActionBinding mBinding;
     private final BottomSheetDialog mProbeActionsBottomSheet;

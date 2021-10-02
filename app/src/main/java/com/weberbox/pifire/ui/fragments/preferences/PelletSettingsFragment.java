@@ -24,7 +24,6 @@ import io.socket.client.Socket;
 
 public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = PelletSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

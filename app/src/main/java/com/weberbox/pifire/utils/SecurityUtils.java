@@ -9,8 +9,9 @@ import androidx.security.crypto.MasterKeys;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import timber.log.Timber;
+
 public class SecurityUtils {
-    private static final String TAG = SecurityUtils.class.getSimpleName();
 
     private static final String PREFS_NAME = "_encrypted_prefs";
 
@@ -41,7 +42,7 @@ public class SecurityUtils {
 
             sharedPreferences.edit().putString(context.getString(key), password).apply();
         } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "Error encrypting password: " + e.getMessage());
+            Timber.w(e,"Error encrypting password: %s", e.getMessage());
             return false;
         }
 
@@ -63,7 +64,7 @@ public class SecurityUtils {
 
             decryptedPassword = sharedPreferences.getString(context.getString(key), "");
         } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "Error decrypting password: " + e.getMessage());
+            Timber.w(e, "Error decrypting password: %s", e.getMessage());
             decryptedPassword = "Error decrypting password";
         }
 

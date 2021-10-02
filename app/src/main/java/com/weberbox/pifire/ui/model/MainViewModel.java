@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
-    public static final String TAG = MainViewModel.class.getSimpleName();
 
     private MutableLiveData<String> mDashData;
     private MutableLiveData<DataModel> mEventsData;

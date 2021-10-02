@@ -14,7 +14,6 @@ import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 
 
 public class PelletsDeleteDialog {
-    private static final String TAG = PelletsDeleteDialog.class.getSimpleName();
 
     private DialogPelletsDeleteBinding mBinding;
     private final BottomSheetDialog mPelletsActionsBottomSheet;

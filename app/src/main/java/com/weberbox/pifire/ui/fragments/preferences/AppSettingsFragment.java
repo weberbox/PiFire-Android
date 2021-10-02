@@ -35,7 +35,6 @@ import com.weberbox.pifire.utils.FirebaseUtils;
 
 public class AppSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = AppSettingsFragment.class.getSimpleName();
 
     private boolean mBasicAuthChanged = false;
     private AppUpdater mAppUpdater;

@@ -25,7 +25,6 @@ import io.socket.client.Socket;
 
 public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference.OnBindEditTextListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = SafetySettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

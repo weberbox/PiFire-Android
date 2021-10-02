@@ -21,7 +21,6 @@ import com.weberbox.pifire.ui.fragments.preferences.ShutdownSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.WorkSettingsFragment;
 
 public class PreferencesActivity extends AppCompatActivity {
-    private static final String TAG = PreferencesActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

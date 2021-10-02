@@ -17,7 +17,6 @@ import com.weberbox.pifire.databinding.DialogTimerActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class TimerActionDialog {
-    private static String TAG = TimerActionDialog.class.getSimpleName();
 
     private DialogTimerActionBinding mBinding;
     private final BottomSheetDialog mTimerActionsBottomSheet;

@@ -46,7 +46,6 @@ import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.TextTransition;
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 
@@ -56,9 +55,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class DashboardFragment extends Fragment implements DashboardCallbackInterface {
-    private static final String TAG = DashboardFragment.class.getSimpleName();
 
     private FragmentDashboardBinding mBinding;
     private MainViewModel mMainViewModel;
@@ -518,7 +517,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             long duration = TimeUnit.HOURS.toSeconds(Integer.parseInt(hours)) +
                     TimeUnit.MINUTES.toSeconds(Integer.parseInt(minutes));
             long endTime = currentTime + duration;
-            Log.i(TAG, "Timer End Time: " + new Date(endTime * 1000));
+            Timber.d("Timer End Time: %s", new Date(endTime * 1000));
 
             //Prefs.putLong(getString(R.string.prefs_dash_timer_start_time), endTime);
             //GrillControl.sendTimerEndTime(mSocket, endTime, currentTime, duration);
@@ -709,7 +708,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error " + e.getMessage());
+            Timber.w(e, "JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity(), R.string.json_error_dash, true);
             }

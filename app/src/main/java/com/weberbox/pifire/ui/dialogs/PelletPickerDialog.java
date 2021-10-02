@@ -25,7 +25,6 @@ import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import java.util.List;
 
 public class PelletPickerDialog {
-    private static String TAG = PelletPickerDialog.class.getSimpleName();
 
     private DialogProfilePickerBinding mBinding;
     private final BottomSheetDialog mPelletPickerBottomSheet;

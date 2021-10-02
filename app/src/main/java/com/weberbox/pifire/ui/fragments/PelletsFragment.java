@@ -59,7 +59,6 @@ import com.weberbox.pifire.ui.utils.FadeTransition;
 import com.weberbox.pifire.ui.views.CardViewHeaderButton;
 import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
 import com.weberbox.pifire.utils.FileUtils;
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -68,9 +67,9 @@ import java.util.Map;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class PelletsFragment extends Fragment implements PelletsCallbackInterface {
-    private static final String TAG = PelletsFragment.class.getSimpleName();
 
     private MainViewModel mMainViewModel;
     private FragmentPelletsBinding mBinding;
@@ -616,16 +615,15 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error: " + e.getMessage());
+            Timber.w(e,"JSON Error");
             showSnackBarMessage(getActivity(), R.string.json_error_pellets);
         }
 
-        fadeView(mCurrentPlaceholder, Constants.FADE_OUT);
-        fadeView(mBrandsPlaceholder, Constants.FADE_OUT);
-        fadeView(mWoodsPlaceholder, Constants.FADE_OUT);
-        fadeView(mProfilePlaceholder, Constants.FADE_OUT);
-        fadeView(mLogsPlaceholder, Constants.FADE_OUT);
-        fadeView(mCurrentView, Constants.FADE_IN);
+        mCurrentPlaceholder.setVisibility(View.GONE);
+        mBrandsPlaceholder.setVisibility(View.GONE);
+        mWoodsPlaceholder.setVisibility(View.GONE);
+        mProfilePlaceholder.setVisibility(View.GONE);
+        mLogsPlaceholder.setVisibility(View.GONE);
 
         toggleLoading(false);
     }
@@ -745,23 +743,6 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             }
         } else {
             AnimUtils.shakeOfflineBanner(getActivity());
-        }
-    }
-
-    private void fadeView(View view, int direction) {
-        switch (direction) {
-            case Constants.FADE_OUT:
-                if (view.getVisibility() == View.VISIBLE) {
-                    AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case Constants.FADE_IN:
-                if (view.getVisibility() == View.GONE) {
-                    AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
-                    view.setVisibility(View.VISIBLE);
-                }
-                break;
         }
     }
 

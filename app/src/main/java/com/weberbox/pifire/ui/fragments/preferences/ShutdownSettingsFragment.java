@@ -24,7 +24,6 @@ import io.socket.client.Socket;
 
 public class ShutdownSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = ShutdownSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

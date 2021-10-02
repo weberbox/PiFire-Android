@@ -10,8 +10,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.dialogs.FirebaseTokenDialog;
 
+import timber.log.Timber;
+
 public class FirebaseUtils {
-    private static final String TAG = FirebaseUtils.class.getSimpleName();
 
     public static void getFirebaseToken(Context context) {
         FirebaseMessaging.getInstance().getToken()
@@ -19,14 +20,12 @@ public class FirebaseUtils {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
-                            Log.w(TAG, "Fetching FCM registration token failed",
-                                    task.getException());
+                            Timber.w(task.getException(),"Fetching FCM registration token failed");
                             return;
                         }
                         String token = task.getResult();
                         FirebaseTokenDialog dialog = new FirebaseTokenDialog(context, token);
                         dialog.showDialog();
-                        Log.d(TAG, "Firebase Token: " + token);
                     }
                 });
     }
@@ -37,9 +36,11 @@ public class FirebaseUtils {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.d(TAG, task.isSuccessful() ?
-                                    "Firebase unsubscribe successful"
-                                    : "Firebase unsubscribe failed " + task.getException());
+                            if (!task.isSuccessful()) {
+                                Timber.w(task.getException(),"Firebase unsubscribe failed");
+                                return;
+                            }
+                            Timber.d("Firebase unsubscribe successful");
                         }
                     });
         } else {
@@ -52,9 +53,11 @@ public class FirebaseUtils {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.d(TAG, task.isSuccessful() ?
-                                "Firebase subscribe successful" :
-                                "Firebase subscribe failed " + task.getException());
+                        if (!task.isSuccessful()) {
+                            Timber.w(task.getException(),"Firebase subscribe failed");
+                            return;
+                        }
+                        Timber.d("Firebase subscribe successful");
                     }
                 });
     }

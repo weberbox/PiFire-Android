@@ -23,7 +23,6 @@ import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.views.SwipeButton;
 
 public class StartModeActionDialog {
-    private static String TAG = StartModeActionDialog.class.getSimpleName();
 
     private DialogModeStartActionBinding mBinding;
     private final BottomSheetDialog mModeActionsBottomSheet;

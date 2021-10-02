@@ -6,13 +6,15 @@ import android.content.ContextWrapper;
 import android.content.res.Resources;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.utils.AcraUtils;
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
+import com.weberbox.pifire.utils.log.CrashReportingTree;
+import com.weberbox.pifire.utils.log.DebugLogTree;
 
 import org.acra.ACRA;
 
@@ -22,10 +24,10 @@ import java.util.Collections;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import okhttp3.Credentials;
+import timber.log.Timber;
 
 
 public class PiFireApplication extends Application {
-    private static final String TAG = PiFireApplication.class.getSimpleName();
 
     private static PiFireApplication mInstance;
     private static Resources res;
@@ -57,6 +59,15 @@ public class PiFireApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
+        if(BuildConfig.DEBUG){
+            Timber.plant(new DebugLogTree());
+        } else {
+            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+        }
+
+        Timber.tag(getString(R.string.app_name));
+
+        Timber.d("Startup - Application Start");
 
     }
 
@@ -78,7 +89,7 @@ public class PiFireApplication extends Application {
     private void startSocket() {
         String serverURL = Prefs.getString(getString(R.string.prefs_server_address), ServerConstants.DEFAULT_SOCKET_URL);
 
-        Log.i(TAG, "Creating Socket connection to: " + serverURL);
+        Timber.i("Creating Socket connection to: %s", serverURL);
 
         IO.Options options = new IO.Options();
 
@@ -113,20 +124,20 @@ public class PiFireApplication extends Application {
             try {
                 mSocket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
-                Log.d("Socket URI Error", e.toString());
+                Timber.w(e, "Socket URI Error");
             }
         } else {
             try {
                 mSocket = IO.socket(serverURL);
             } catch (URISyntaxException e) {
-                Log.d("Socket URI Error", e.toString());
+                Timber.w(e,"Socket URI Error");
             }
         }
     }
 
     public void disconnectSocket() {
         if (mSocket != null) {
-            Log.d(TAG, "Closing Socket");
+            Timber.i("Closing Socket");
             mSocket.disconnect();
             mSocket.close();
             mSocket.off();

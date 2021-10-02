@@ -23,7 +23,6 @@ import io.socket.client.Socket;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener, AdminCallbackInterface {
-    private static final String TAG = AdminSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

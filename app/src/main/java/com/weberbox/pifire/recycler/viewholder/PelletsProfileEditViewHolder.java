@@ -23,14 +23,14 @@ import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.RotateUtils;
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 
 public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = PelletsProfileEditViewHolder.class.getSimpleName();
 
     private final TextView mPelletProfile;
     private final TextView mPelletProfileId;
@@ -106,7 +106,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onItemSelected(int oldIndex, @Nullable String oldItem,
                                                int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
+                        Timber.d("New Item %s", newItem);
                     }
                 });
 
@@ -115,7 +115,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onItemSelected(int oldIndex, @Nullable String oldItem,
                                                int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
+                        Timber.d("New Item %s", newItem);
                     }
                 });
 
@@ -124,7 +124,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
                     @Override
                     public void onItemSelected(int oldIndex, @Nullable String oldItem,
                                                int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
+                        Timber.d("New Item %s", newItem);
                     }
                 });
 
@@ -144,6 +144,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 toggleCardView();
+                mDeleteIcon.setVisibility(View.VISIBLE);
                 if (mPelletProfileId.getText() != null) {
                     callback.onProfileEdit(
                             new PelletProfileModel(

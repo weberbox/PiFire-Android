@@ -17,15 +17,15 @@ import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.interfaces.IAppUpdater;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
-import com.weberbox.pifire.utils.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
 import android.text.TextUtils;
 import android.view.View;
 
+import timber.log.Timber;
+
 public class AppUpdater implements IAppUpdater {
-    private static final String TAG = AppUpdater.class.getSimpleName();
 
     private View mView;
     private View mViewAnchor;
@@ -302,7 +302,7 @@ public class AppUpdater implements IAppUpdater {
                         UtilsLibrary.getAppInstalledVersionCode(mContext));
 
                 if (UtilsLibrary.isUpdateAvailable(installedVersion, update)) {
-                    Log.d(TAG, "Update Available");
+                    Timber.i("Update Available");
                     Integer successfulChecks = mLibraryPreferences.getSuccessfulChecks();
                     if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) |
                             UtilsLibrary.getRequiredUpdate(update, mContext)) {
@@ -311,7 +311,7 @@ public class AppUpdater implements IAppUpdater {
                             switch (mDisplay) {
                                 case DIALOG:
                                     if (UtilsLibrary.getRequiredUpdate(update, mContext)) {
-                                        Log.d(TAG, "Force Update Requested");
+                                        Timber.d("Force Update Requested");
                                         mLibraryPreferences.setUpdateRequired(true);
                                         mBtnUpdateClickListener = new ForceUpdateClickListener(mContext,
                                                 mUpdateFrom, update.getUrlToDownload());
@@ -358,7 +358,7 @@ public class AppUpdater implements IAppUpdater {
                     }
                     mLibraryPreferences.setSuccessfulChecks(successfulChecks + 1);
                 } else if (mShowAppUpToDate) {
-                    Log.d(TAG, "No Update Available");
+                    Timber.i("No Update Available");
 
                     switch (mDisplay) {
                         case DIALOG:
@@ -379,13 +379,13 @@ public class AppUpdater implements IAppUpdater {
                             break;
                     }
                 } else {
-                    Log.d(TAG, "No Update Available");
+                    Timber.i("No Update Available");
                 }
             }
 
             @Override
             public void onFailed(AppUpdaterError error) {
-                Log.d(TAG, "onFailed: " + error);
+                Timber.d("AppUpdater onFailed: %s", error);
                 if (mShowAppUpdateError) {
                     mSnackbar = UtilsDisplay.showUpdateFailedSnackbar(mView, null,
                             getDescriptionUpdateFailed(mContext),

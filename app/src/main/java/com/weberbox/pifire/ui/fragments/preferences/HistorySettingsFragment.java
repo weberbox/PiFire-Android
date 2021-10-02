@@ -25,7 +25,6 @@ import io.socket.client.Socket;
 
 public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = HistorySettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

@@ -9,7 +9,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 public class PrefsUsernameDialog extends EditTextPreference {
-    private static final String TAG = PrefsUsernameDialog.class.getSimpleName();
 
     private Context mContext;
 

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PModeTableDialog {
-    private static String TAG = PModeTableDialog.class.getSimpleName();
 
     private DialogPmodeTableBinding mBinding;
     private final BottomSheetDialog mPModeBottomSheet;

@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.model.GrillProbeModel;
 import com.weberbox.pifire.model.ProbeProfileModel;
@@ -30,7 +29,6 @@ import io.socket.client.Socket;
 
 public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = ProbeSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 

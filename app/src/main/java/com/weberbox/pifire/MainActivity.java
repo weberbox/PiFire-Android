@@ -41,14 +41,13 @@ import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.FirebaseUtils;
-import com.weberbox.pifire.utils.Log;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     private AppBarConfiguration mAppBarConfiguration;
     private MainViewModel mMainViewModel;
@@ -258,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
     private final Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Socket connected");
+            Timber.d("Socket connected");
             mMainViewModel.setServerConnected(true);
         }
     };
@@ -266,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
     private final Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Socket disconnected");
+            Timber.d("Socket disconnected");
             if (mAppIsVisible) {
                 mMainViewModel.setServerConnected(false);
             }
@@ -276,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Error connecting socket");
+            Timber.d("Error connecting socket");
             if (mAppIsVisible) {
                 mMainViewModel.setServerConnected(false);
             }

@@ -16,7 +16,6 @@ import com.weberbox.pifire.databinding.DialogAdminActionBinding;
 import com.weberbox.pifire.interfaces.AdminCallbackInterface;
 
 public class AdminActionDialog {
-    private static String TAG = AdminActionDialog.class.getSimpleName();
 
     private DialogAdminActionBinding mBinding;
     private final BottomSheetDialog mAdminActionsBottomSheet;

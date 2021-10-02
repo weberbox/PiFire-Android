@@ -1,7 +1,6 @@
 package com.weberbox.pifire.updater;
 
 import com.weberbox.pifire.updater.objects.Update;
-import com.weberbox.pifire.utils.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,10 +16,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-class ParserJSON {
-    private static final String TAG = ParserJSON.class.getSimpleName();
-    private final URL mJsonUrl;
+import timber.log.Timber;
 
+class ParserJSON {
+
+    private final URL mJsonUrl;
     private static final String KEY_LATEST_VERSION = "latestVersion";
     private static final String KEY_LATEST_VERSION_CODE = "latestVersionCode";
     private static final String KEY_RELEASE_NOTES = "releaseNotes";
@@ -60,13 +60,13 @@ class ParserJSON {
             update.setUrlToDownload(url);
             return update;
         } catch (ConnectException e) {
-            Log.e(TAG, "There was a Connection issue:  ", e);
+            Timber.w(e,"There was a Connection issue");
         } catch (IOException e) {
-            Log.e(TAG, "The server is down or there isn't an active Internet connection: ", e);
+            Timber.w(e,"The server is down or there isn't an active Internet connection");
         } catch (JSONException e) {
-            Log.e(TAG, "The JSON updater file is mal-formatted. AppUpdate can't check for updates: ");
+            Timber.w(e, "The JSON updater file is mal-formatted. AppUpdate can't check for updates");
         } catch (NullPointerException e) {
-            Log.e(TAG, "JSON NullPointerException: ", e);
+            Timber.w(e,"JSON NullPointerException");
         }
 
         return null;

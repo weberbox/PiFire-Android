@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class InfoViewModel extends ViewModel {
-    private static final String TAG = InfoViewModel.class.getSimpleName();
 
     private MutableLiveData<DataModel> mInfoData;
 

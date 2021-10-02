@@ -17,7 +17,6 @@ import com.weberbox.pifire.databinding.DialogModeRunActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 
 public class RunModeActionDialog {
-    private static String TAG = RunModeActionDialog.class.getSimpleName();
 
     private DialogModeRunActionBinding mBinding;
     private final BottomSheetDialog mModeActionsBottomSheet;

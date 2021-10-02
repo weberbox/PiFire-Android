@@ -11,7 +11,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTokenTextBinding;
 
 public class FirebaseTokenDialog {
-    private static final String TAG = FirebaseTokenDialog.class.getSimpleName();
 
     private DialogTokenTextBinding mBinding;
     private final LayoutInflater mInflater;
