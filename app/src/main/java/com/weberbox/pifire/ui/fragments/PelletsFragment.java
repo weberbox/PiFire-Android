@@ -608,10 +608,14 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             mBrandsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileBrand);
             mPelletProfileBrand.setSpinnerAdapter(mBrandsSpinnerAdapter);
             mPelletProfileBrand.setItems(mBrandsList);
+            mPelletProfileBrand.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+            setPowerSpinnerMaxHeight(mBrandsSpinnerAdapter, mPelletProfileBrand.getSpinnerRecyclerView());
 
             mWoodsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileWood);
             mPelletProfileWood.setSpinnerAdapter(mWoodsSpinnerAdapter);
             mPelletProfileWood.setItems(mWoodsList);
+            mPelletProfileWood.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+            setPowerSpinnerMaxHeight(mWoodsSpinnerAdapter, mPelletProfileWood.getSpinnerRecyclerView());
 
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
@@ -624,8 +628,19 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mWoodsPlaceholder.setVisibility(View.GONE);
         mProfilePlaceholder.setVisibility(View.GONE);
         mLogsPlaceholder.setVisibility(View.GONE);
+        mCurrentView.setVisibility(View.VISIBLE);
 
         toggleLoading(false);
+    }
+
+    private void setPowerSpinnerMaxHeight(DefaultSpinnerAdapter adapter, RecyclerView recyclerView) {
+        if (adapter != null) {
+            if (adapter.getItemCount() > 6) {
+                ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+                params.height = 780;
+                recyclerView.setLayoutParams(params);
+            }
+        }
     }
 
     private void toggleCardView() {

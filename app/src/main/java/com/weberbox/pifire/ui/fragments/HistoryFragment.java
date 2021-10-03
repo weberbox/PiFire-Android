@@ -195,19 +195,26 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             });
         }
 
-        checkViewModelData();
+        //checkViewModelData();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mBinding = null;
+        stopRefresh();
     }
 
     @Override
     public void onPause() {
         super.onPause();
         stopRefresh();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkViewModelData();
     }
 
     @Override

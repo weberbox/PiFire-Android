@@ -2,6 +2,7 @@ package com.weberbox.pifire.recycler.viewholder;
 
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -162,11 +163,25 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         DefaultSpinnerAdapter brandsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileBrand);
         mPelletProfileBrand.setSpinnerAdapter(brandsSpinnerAdapter);
         mPelletProfileBrand.setItems(brands);
+        mPelletProfileBrand.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(brandsSpinnerAdapter, mPelletProfileBrand.getSpinnerRecyclerView());
 
         DefaultSpinnerAdapter woodsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileWood);
         mPelletProfileWood.setSpinnerAdapter(woodsSpinnerAdapter);
         mPelletProfileWood.setItems(woods);
+        mPelletProfileWood.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(woodsSpinnerAdapter, mPelletProfileWood.getSpinnerRecyclerView());
 
+    }
+
+    private void setPowerSpinnerMaxHeight(DefaultSpinnerAdapter adapter, RecyclerView recyclerView) {
+        if (adapter != null) {
+            if (adapter.getItemCount() > 6) {
+                ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+                params.height = 780;
+                recyclerView.setLayoutParams(params);
+            }
+        }
     }
 
     private void toggleCardView() {

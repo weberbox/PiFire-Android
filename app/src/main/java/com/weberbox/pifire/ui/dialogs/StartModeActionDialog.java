@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
+import android.widget.TableLayout;
 
 import androidx.fragment.app.Fragment;
 
@@ -31,7 +31,7 @@ public class StartModeActionDialog {
     private final Context mContext;
 
     private SwipeButton mSwipeButton;
-    private TableRow mButtonsTable;
+    private TableLayout mButtonsTable;
     private Handler mHandler;
 
 
@@ -50,7 +50,7 @@ public class StartModeActionDialog {
         LinearLayout stopButton = mBinding.modeStopButton;
 
         mSwipeButton = mBinding.modeSwipeStartButton;
-        mButtonsTable = mBinding.dialogStartButtonTable;
+        mButtonsTable = mBinding.startModeSheetContainer;
 
         mSwipeButton.setCenterTextStyle(R.style.Text16Aller);
 
@@ -61,7 +61,7 @@ public class StartModeActionDialog {
             public void onClick(View v) {
                 if (Prefs.getBoolean(mContext.getString(R.string.prefs_grill_swipe_start),
                         mContext.getResources().getBoolean(R.bool.def_grill_swipe_start))) {
-                    if (mSwipeButton.getVisibility() == View.GONE) {
+                    if (mSwipeButton.getVisibility() == View.INVISIBLE) {
                         startShowDelay();
                         fadeView(mButtonsTable, Constants.FADE_OUT);
                         fadeView(mSwipeButton, Constants.FADE_IN);
@@ -134,7 +134,7 @@ public class StartModeActionDialog {
         switch (direction) {
             case Constants.FADE_OUT:
                 AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
-                view.setVisibility(View.GONE);
+                view.setVisibility(View.INVISIBLE);
                 break;
             case Constants.FADE_IN:
                 AnimUtils.fadeView(view, 0.0f, 1.0f, 300);

@@ -73,7 +73,8 @@
                     android:layout_height="55dp"
                     android:layout_marginTop="4dp"
                     android:text="@string/placeholder_mode"
-                    android:textSize="55sp" />
+                    android:textSize="55sp"
+                    android:autoSizeTextType="uniform" />
 
             </LinearLayout>
 
