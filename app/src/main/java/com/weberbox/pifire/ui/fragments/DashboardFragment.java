@@ -162,7 +162,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             @Override
             public void onRefresh() {
                 if (mSocket != null && mSocket.connected()) {
-                    requestForcedDashData();
+                    requestForcedDashData(false);
                 } else {
                     mSwipeRefresh.setRefreshing(false);
                     AnimUtils.shakeOfflineBanner(getActivity());
@@ -370,7 +370,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 public void onChanged(@Nullable Boolean enabled) {
                     if (enabled != null && enabled) {
                         if (!mIsLoading) {
-                            mIsLoading = true;
                             requestDataUpdate();
                         }
                     } else {
@@ -397,12 +396,12 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private void requestDataUpdate() {
         if (mSocket != null && !mIsLoading) {
             mIsLoading = true;
-            requestForcedDashData();
+            requestForcedDashData(true);
         }
     }
 
-    private void requestForcedDashData() {
-        toggleLoading(true);
+    private void requestForcedDashData(boolean showLoading) {
+        toggleLoading(showLoading);
         if (mSocket != null) {
             mSocket.emit(ServerConstants.REQUEST_GRILL_DATA, true);
         }

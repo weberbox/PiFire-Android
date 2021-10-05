@@ -31,6 +31,7 @@ public class RotateUtils extends Transition {
         transitionValues.values.put(PROPNAME_ROTATION, transitionValues.view.getRotation());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Nullable
     @Override
     public Animator createAnimator(@NonNull ViewGroup sceneRoot, @Nullable TransitionValues startValues,

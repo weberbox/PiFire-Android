@@ -77,6 +77,8 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mBinding.setCallback(this);
+
         mSwipeRefresh = mBinding.settingsPullRefresh;
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -86,101 +88,6 @@ public class SettingsFragment extends Fragment {
                     requestSettingsData();
                 } else {
                     mSwipeRefresh.setRefreshing(false);
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-            }
-        });
-
-        mBinding.settingsLayout.settingsProbe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsWork.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsPellet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsShutdown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsSafety.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsNotifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-                } else {
                     AnimUtils.shakeOfflineBanner(getActivity());
                 }
             }
@@ -197,6 +104,38 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         requestSettingsData();
+    }
+
+    public void settingsOnClick(String settings) {
+        switch (settings) {
+            case Constants.DB_SET_APP:
+                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
+                break;
+            case Constants.DB_SET_PROBE:
+                startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
+                break;
+            case Constants.DB_SET_NAME:
+                startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
+                break;
+            case Constants.DB_SET_WORK:
+                startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
+                break;
+            case Constants.DB_SET_PELLETS:
+                startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
+                break;
+            case Constants.DB_SET_SHUTDOWN:
+                startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
+                break;
+            case Constants.DB_SET_HISTORY:
+                startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
+                break;
+            case Constants.DB_SET_SAFETY:
+                startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
+                break;
+            case Constants.DB_SET_NOTIF:
+                startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
+                break;
+        }
     }
 
     private void startPreferenceActivity(int fragment) {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
@@ -33,6 +35,7 @@ import com.weberbox.pifire.recycler.viewmodel.EventViewModel;
 import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.ui.utils.FadeTransition;
 import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +54,7 @@ public class EventsFragment extends Fragment {
 
     private FragmentEventsBinding mBinding;
     private MainViewModel mMainViewModel;
-    private RecyclerView mEventsRecycler;
+    private FrameLayout mRootContainer;
     private EventsListAdapter mEventsListAdapter;
     private LinearLayout mEventsPlaceholder;
     private ProgressBar mLoadingBar;
@@ -82,16 +85,17 @@ public class EventsFragment extends Fragment {
 
         mEvents = new ArrayList<>();
 
+        mRootContainer = mBinding.eventsContainer;
         mEventsPlaceholder = mBinding.eventsLayout.eventsPlaceholderContainer;
-        mEventsRecycler = mBinding.eventsLayout.eventsList;
         mSwipeRefresh = mBinding.eventsPullRefresh;
         mLoadingBar = mBinding.eventsLayout.loadingProgressbar;
 
         mEventsListAdapter = new EventsListAdapter(mEvents);
 
-        mEventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mEventsRecycler.setItemAnimator(new DefaultItemAnimator());
-        mEventsRecycler.setAdapter(mEventsListAdapter);
+        RecyclerView eventsList = mBinding.eventsLayout.eventsList;
+        eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        eventsList.setItemAnimator(new DefaultItemAnimator());
+        eventsList.setAdapter(mEventsListAdapter);
 
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -220,6 +224,8 @@ public class EventsFragment extends Fragment {
             }
 
             mEventsListAdapter.notifyDataSetChanged();
+
+            TransitionManager.beginDelayedTransition(mRootContainer, new FadeTransition());
 
             mEventsPlaceholder.setVisibility(View.GONE);
 

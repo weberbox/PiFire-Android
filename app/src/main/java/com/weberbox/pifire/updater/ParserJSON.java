@@ -15,6 +15,7 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -25,7 +26,7 @@ class ParserJSON {
     private static final String KEY_LATEST_VERSION_CODE = "latestVersionCode";
     private static final String KEY_RELEASE_NOTES = "releaseNotes";
     private static final String KEY_FORCE_UPDATE = "forceUpdate";
-    private static final String KEY_FORCE_UPDATE_VERSIONS = "forceUpdateVersions";
+    private static final String KEY_FORCE_UPDATE_VERSION_CODES = "forceUpdateVersionCodes";
     private static final String KEY_URL = "url";
 
     public ParserJSON(String url) {
@@ -45,7 +46,14 @@ class ParserJSON {
             update.setLatestVersion(json.getString(KEY_LATEST_VERSION).trim());
             update.setLatestVersionCode(json.optInt(KEY_LATEST_VERSION_CODE));
             update.setForceUpdate(json.getBoolean(KEY_FORCE_UPDATE));
-            update.setForceUpdateVersion(json.getInt(KEY_FORCE_UPDATE_VERSIONS));
+            JSONArray forceUpdateArr = json.optJSONArray(KEY_FORCE_UPDATE_VERSION_CODES);
+            if (forceUpdateArr != null) {
+                ArrayList<Integer> forcedArray = new ArrayList<>();
+                for (int i = 0; i < forceUpdateArr.length(); ++i) {
+                    forcedArray.add(forceUpdateArr.getInt(i));
+                }
+                update.setForceUpdateVersionCodes(forcedArray);
+            }
             JSONArray releaseArr = json.optJSONArray(KEY_RELEASE_NOTES);
             if (releaseArr != null) {
                 StringBuilder builder = new StringBuilder();

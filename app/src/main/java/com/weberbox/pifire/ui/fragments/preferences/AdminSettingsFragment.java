@@ -1,10 +1,10 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +12,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -25,6 +26,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener, AdminCallbackInterface {
 
     private Socket mSocket;
+    private Snackbar mErrorSnack;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -42,17 +44,18 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        Preference historyDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_history));
-        Preference eventsDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_events));
-        Preference pelletsDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_pellets));
-        Preference pelletsLogDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_pellets_log));
-        Preference factoryReset = (Preference) findPreference(getString(R.string.prefs_admin_factory_reset));
-        Preference rebootSystem = (Preference) findPreference(getString(R.string.prefs_admin_reboot));
-        Preference shutdownSystem = (Preference) findPreference(getString(R.string.prefs_admin_shutdown));
+        mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
+
+        Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
+        Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
+        Preference pelletsDelete = findPreference(getString(R.string.prefs_admin_delete_pellets));
+        Preference pelletsLogDelete = findPreference(getString(R.string.prefs_admin_delete_pellets_log));
+        Preference factoryReset = findPreference(getString(R.string.prefs_admin_factory_reset));
+        Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
+        Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
         if (historyDelete != null) {
             historyDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -123,15 +126,6 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 }
             });
         }
-
-        return view;
-    }
-
-    private void showAdminDialog(int type) {
-        if (getActivity() != null) {
-            AdminActionDialog adminDialog = new AdminActionDialog(getActivity(), this, type);
-            adminDialog.showDialog();
-        }
     }
 
     @Override
@@ -191,5 +185,21 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                     break;
             }
         }
+    }
+
+    private void showAdminDialog(int type) {
+        if (getActivity() != null) {
+            if (mSocket != null && mSocket.connected()) {
+                AdminActionDialog adminDialog = new AdminActionDialog(getActivity(), this, type);
+                adminDialog.showDialog();
+            } else {
+                showSnackBarMessage(getActivity());
+            }
+        }
+    }
+
+    private void showSnackBarMessage(Activity activity) {
+        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+        mErrorSnack.show();
     }
 }

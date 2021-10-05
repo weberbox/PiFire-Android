@@ -38,6 +38,7 @@ public class AnimUtils {
         view.startAnimation(anim);
     }
 
+    @SuppressWarnings("unused")
     public static void fadeInAnimation(View view, int duration) {
         Animation fadeIn = new AlphaAnimation(0f, 1f);
         fadeIn.setInterpolator(new DecelerateInterpolator());
@@ -61,6 +62,7 @@ public class AnimUtils {
         view.startAnimation(animation);
     }
 
+    @SuppressWarnings("unused")
     public static void fadeOutAnimation(View view, int duration) {
         Animation fadeOut = new AlphaAnimation(1f, 0f);
         fadeOut.setInterpolator(new DecelerateInterpolator());
@@ -84,6 +86,7 @@ public class AnimUtils {
         view.startAnimation(animation);
     }
 
+    @SuppressWarnings("unused")
     public static void slideDownFromTop(ViewGroup view, int duration) {
         AnimationSet set = new AnimationSet(true);
         Animation animation = new AlphaAnimation(0.0f, 1.0f);
@@ -98,6 +101,7 @@ public class AnimUtils {
         view.setLayoutAnimation(controller);
     }
 
+    @SuppressWarnings("unused")
     public static void slideUpFromBottom(ViewGroup view, int duration) {
         AnimationSet set = new AnimationSet(true);
         Animation animation = new AlphaAnimation(0.0f, 1.0f);

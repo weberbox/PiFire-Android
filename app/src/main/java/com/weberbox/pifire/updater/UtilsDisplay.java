@@ -27,7 +27,8 @@ public class UtilsDisplay {
                                                         final DialogInterface.OnClickListener updateClickListener,
                                                         final DialogInterface.OnClickListener dismissClickListener,
                                                         final DialogInterface.OnClickListener disableClickListener,
-                                                        Boolean isDisableShown, Boolean isDismissShown) {
+                                                        Boolean isDisableShown, Boolean isDismissShown,
+                                                        Boolean forceUpdateFinish) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         builder.setTitle(title)
@@ -40,6 +41,10 @@ public class UtilsDisplay {
 
         if (isDismissShown) {
             builder.setNegativeButton(btnNegative, dismissClickListener);
+        }
+
+        if (forceUpdateFinish) {
+            builder.setOnKeyListener(new ForceUpdateKeyListener(context));
         }
 
         return builder.create();
@@ -71,7 +76,7 @@ public class UtilsDisplay {
         snackbar.setAction(context.getResources().getString(R.string.update_button), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilsLibrary.goToUpdate(context, updateFrom, apk);
+                UtilsLibrary.goToUpdate(context, apk);
             }
         });
 
@@ -105,8 +110,7 @@ public class UtilsDisplay {
     }
 
     public static void showUpdateAvailableNotification(Context context, String title, String content,
-                                                       UpdateFrom updateFrom, URL apk,
-                                                       int smallIconResourceId) {
+                                                       URL apk, int smallIconResourceId) {
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -118,7 +122,7 @@ public class UtilsDisplay {
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         PendingIntent pendingIntentUpdate = PendingIntent.getActivity(context, 0,
-                UtilsLibrary.intentToUpdate(context, updateFrom, apk),
+                UtilsLibrary.intentToUpdate(apk),
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = getBaseNotification(context, contentIntent, title,

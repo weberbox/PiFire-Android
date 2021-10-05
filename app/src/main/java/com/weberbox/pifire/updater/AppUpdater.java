@@ -298,23 +298,26 @@ public class AppUpdater implements IAppUpdater {
                     return;
                 }
 
+                Integer currentInstalledVersionCode = UtilsLibrary.getAppInstalledVersionCode(mContext);
+
                 Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(mContext),
-                        UtilsLibrary.getAppInstalledVersionCode(mContext));
+                        currentInstalledVersionCode);
+
+                boolean forceUpdateRequired =  UtilsLibrary.getRequiredUpdate(update,
+                        currentInstalledVersionCode);
 
                 if (UtilsLibrary.isUpdateAvailable(installedVersion, update)) {
                     Timber.i("Update Available");
                     Integer successfulChecks = mLibraryPreferences.getSuccessfulChecks();
-                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) |
-                            UtilsLibrary.getRequiredUpdate(update, mContext)) {
-                        if (mLibraryPreferences.getAppUpdaterShow() |
-                                UtilsLibrary.getRequiredUpdate(update, mContext)) {
+                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) | forceUpdateRequired) {
+                        if (mLibraryPreferences.getAppUpdaterShow() | forceUpdateRequired) {
                             switch (mDisplay) {
                                 case DIALOG:
-                                    if (UtilsLibrary.getRequiredUpdate(update, mContext)) {
+                                    if (forceUpdateRequired) {
                                         Timber.d("Force Update Requested");
                                         mLibraryPreferences.setUpdateRequired(true);
                                         mBtnUpdateClickListener = new ForceUpdateClickListener(mContext,
-                                                mUpdateFrom, update.getUrlToDownload());
+                                                update.getUrlToDownload());
                                         mIsDialogCancelable = false;
                                         mBtnDisableShown = false;
                                         mBtnDismissShown = false;
@@ -324,7 +327,7 @@ public class AppUpdater implements IAppUpdater {
 
                                     final DialogInterface.OnClickListener updateClickListener =
                                             mBtnUpdateClickListener == null ? new UpdateClickListener(
-                                                    mContext, mUpdateFrom, update.getUrlToDownload()) :
+                                                    mContext, update.getUrlToDownload()) :
                                                     mBtnUpdateClickListener;
 
                                     final DialogInterface.OnClickListener disableClickListener =
@@ -332,11 +335,12 @@ public class AppUpdater implements IAppUpdater {
                                                     mContext) : mBtnDisableClickListener;
 
                                     mAlertDialog = UtilsDisplay.showUpdateAvailableDialog(mContext,
-                                            getDialogTitleUpdate(mContext, update),
+                                            getDialogTitleUpdate(mContext, update, forceUpdateRequired),
                                             getDescriptionUpdate(mContext, update, Display.DIALOG),
                                             mBtnDismiss, mBtnUpdate, mBtnDisable,
                                             updateClickListener, mBtnDismissClickListener,
-                                            disableClickListener, mBtnDisableShown, mBtnDismissShown);
+                                            disableClickListener, mBtnDisableShown, mBtnDismissShown,
+                                            forceUpdateRequired);
 
                                     mAlertDialog.setCancelable(mIsDialogCancelable);
                                     mAlertDialog.show();
@@ -351,7 +355,7 @@ public class AppUpdater implements IAppUpdater {
                                 case NOTIFICATION:
                                     UtilsDisplay.showUpdateAvailableNotification(mContext, mNotifTitleUpdate,
                                             getDescriptionUpdate(mContext, update, Display.NOTIFICATION),
-                                            mUpdateFrom, update.getUrlToDownload(), mIconResId);
+                                            update.getUrlToDownload(), mIconResId);
                                     break;
                             }
                         }
@@ -458,8 +462,8 @@ public class AppUpdater implements IAppUpdater {
         return mDescriptionUpdate;
     }
 
-    private String getDialogTitleUpdate(Context context, Update update) {
-        if (UtilsLibrary.getRequiredUpdate(update, mContext)) {
+    private String getDialogTitleUpdate(Context context, Update update, boolean forceUpdate) {
+        if (forceUpdate) {
             mTitleUpdate = context.getResources().getString(R.string.updater_update_required);
         } else {
             if (mTitleUpdate == null || TextUtils.isEmpty(mTitleUpdate)) {

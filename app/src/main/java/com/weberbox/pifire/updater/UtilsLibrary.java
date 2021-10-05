@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.weberbox.pifire.updater.enums.Duration;
-import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
 import com.weberbox.pifire.updater.objects.Version;
@@ -22,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,7 +51,7 @@ class UtilsLibrary {
             version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
                     .versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Timber.w(e, "Error reading package version");
         }
 
         Timber.d("Installed App Version: %s", version);
@@ -112,7 +112,7 @@ class UtilsLibrary {
         return duration == Duration.INDEFINITE;
     }
 
-    private static URL getUpdateURL(Context context, UpdateFrom updateFrom, GitHub gitHub) {
+    private static URL getUpdateURL(GitHub gitHub) {
         String res = GITHUB_URL + gitHub.getGitHubUser() + "/" + gitHub.getGitHubRepo()
                 + "/releases/latest";
 
@@ -124,11 +124,11 @@ class UtilsLibrary {
 
     }
 
-    public static Update getLatestAppVersionHttp(Context context, UpdateFrom updateFrom, GitHub gitHub) {
+    public static Update getLatestAppVersionHttp(GitHub gitHub) {
         boolean isAvailable = false;
         String source = "";
         OkHttpClient client = new OkHttpClient();
-        URL url = getUpdateURL(context, updateFrom, gitHub);
+        URL url = getUpdateURL(gitHub);
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -172,13 +172,13 @@ class UtilsLibrary {
             }
         }
 
-        final String version = getVersion(updateFrom, isAvailable, source);
-        final URL updateUrl = getUpdateURL(context, updateFrom, gitHub);
+        final String version = getVersion(isAvailable, source);
+        final URL updateUrl = getUpdateURL(gitHub);
 
         return new Update(version, updateUrl);
     }
 
-    private static String getVersion(UpdateFrom updateFrom, Boolean isAvailable, String source) {
+    private static String getVersion(Boolean isAvailable, String source) {
         String version = "0.0.0.0";
         if (isAvailable) {
             String[] splitGitHub = source.split(GITHUB_TAG_RELEASE);
@@ -195,23 +195,30 @@ class UtilsLibrary {
         return version;
     }
 
-    public static Boolean getRequiredUpdate(Update update, Context context) {
-        return (update.getForceUpdate() && getAppInstalledVersionCode(context) <
-                update.getForceUpdateVersion());
+    public static Boolean getRequiredUpdate(Update update, Integer currentVersion) {
+        ArrayList<Integer> forcedVersions = update.getForceUpdateVersionCodes();
+        if (update.getForceUpdate()) {
+            if (forcedVersions != null) {
+                for (int i = 0; i < forcedVersions.size(); ++i) {
+                    if (currentVersion.equals(forcedVersions.get(i))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-
-    public static Update getLatestAppVersion(UpdateFrom updateFrom, String url) {
+    public static Update getLatestAppVersion(String url) {
         return new ParserJSON(url).parse();
     }
 
-
-    public static Intent intentToUpdate(Context context, UpdateFrom updateFrom, URL url) {
+    public static Intent intentToUpdate(URL url) {
         return new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()));
     }
 
-    public static void goToUpdate(Context context, UpdateFrom updateFrom, URL url) {
-        Intent intent = intentToUpdate(context, updateFrom, url);
+    public static void goToUpdate(Context context, URL url) {
+        Intent intent = intentToUpdate(url);
         context.startActivity(intent);
     }
 

@@ -110,13 +110,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!handled) {
                     int id = menuItem.getItemId();
                     if (id == R.id.nav_admin) {
-                        if (mSocket != null && mSocket.connected()) {
-                            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-                            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
-                            startActivity(intent);
-                        } else {
-                            AnimUtils.shakeOfflineBanner(MainActivity.this);
-                        }
+                        Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                        intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
+                        startActivity(intent);
                     } else if (id == R.id.nav_info) {
                         Intent intent = new Intent(MainActivity.this, InfoActivity.class);
                         startActivity(intent);

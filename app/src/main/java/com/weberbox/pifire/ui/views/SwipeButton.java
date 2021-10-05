@@ -79,6 +79,7 @@ public class SwipeButton extends RelativeLayout {
         init(context, attrs, defStyleAttr, -1);
     }
 
+    @SuppressWarnings("unused")
     public SwipeButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
 
@@ -97,10 +98,12 @@ public class SwipeButton extends RelativeLayout {
         mBackground.setBackground(drawable);
     }
 
+    @SuppressWarnings("unused")
     public void setSlidingButtonBackground(Drawable drawable) {
         mBackground.setBackground(drawable);
     }
 
+    @SuppressWarnings("unused")
     public void setDisabledDrawable(Drawable drawable) {
         mDisabledDrawable = drawable;
 
@@ -109,12 +112,14 @@ public class SwipeButton extends RelativeLayout {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setButtonBackground(Drawable buttonBackground) {
         if (buttonBackground != null) {
             mSwipeButtonInner.setBackground(buttonBackground);
         }
     }
 
+    @SuppressWarnings("unused")
     public void setEnabledDrawable(Drawable drawable) {
         mEnabledDrawable = drawable;
 
@@ -127,6 +132,7 @@ public class SwipeButton extends RelativeLayout {
         this.mOnStateChangeListener = onStateChangeListener;
     }
 
+    @SuppressWarnings("unused")
     public void setOnActiveListener(OnActiveListener onActiveListener) {
         this.mOnActiveListener = onActiveListener;
     }
@@ -135,14 +141,17 @@ public class SwipeButton extends RelativeLayout {
         this.mOnSwipeTouchListener = onSwipeTouchListener;
     }
 
+    @SuppressWarnings("unused")
     public void setInnerTextPadding(int left, int top, int right, int bottom) {
         mCenterText.setPadding(left, top, right, bottom);
     }
 
+    @SuppressWarnings("unused")
     public void setSwipeButtonPadding(int left, int top, int right, int bottom) {
         mSwipeButtonInner.setPadding(left, top, right, bottom);
     }
 
+    @SuppressWarnings("unused")
     public void setHasActivationState(boolean hasActivationState) {
         this.mHasActivationState = hasActivationState;
     }
@@ -476,6 +485,7 @@ public class SwipeButton extends RelativeLayout {
         animatorSet.start();
     }
 
+    @SuppressWarnings("unused")
     public void setEnabledStateNotAnimated() {
         mSwipeButtonInner.setX(0);
 
@@ -488,6 +498,7 @@ public class SwipeButton extends RelativeLayout {
         mCenterText.setAlpha(0);
     }
 
+    @SuppressWarnings("unused")
     public void setDisabledStateNotAnimated() {
         ViewGroup.LayoutParams params = mSwipeButtonInner.getLayoutParams();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -515,6 +526,7 @@ public class SwipeButton extends RelativeLayout {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setTrailBackground(@NonNull Drawable trailingDrawable) {
         if (mTrailEnabled) {
             mLayer.setBackground(trailingDrawable);
@@ -529,6 +541,7 @@ public class SwipeButton extends RelativeLayout {
         }
     }
 
+    @SuppressWarnings("unused")
     public void setCenterTextColor(Context context, int color) {
         mCenterText.setTextColor(ContextCompat.getColor(context, color));
     }

@@ -33,7 +33,7 @@ public interface IAppUpdater {
      *
      * @param duration duration of the Snackbar
      * @return this
-     * @see com.weberbox.pifire.updater.enums.Duration
+     *
      */
     AppUpdater setDuration(Duration duration);
 

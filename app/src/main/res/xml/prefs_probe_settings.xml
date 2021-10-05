@@ -5,7 +5,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_grill_probes">
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_selection"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_probe"
@@ -14,7 +14,7 @@
             app:entries="@array/grill_probe_selection_names"
             app:entryValues="@array/grill_probe_selection" />
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_one_type"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_probe_one_type"
@@ -23,7 +23,7 @@
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types" />
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_two_type"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_probe_two_type"
@@ -32,7 +32,7 @@
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types" />
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_type"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_probe_type"
@@ -47,7 +47,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_food_probes">
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_probe_one_type"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_probe_one_type"
@@ -56,7 +56,7 @@
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types" />
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_probe_two_type"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_probe_two_type"

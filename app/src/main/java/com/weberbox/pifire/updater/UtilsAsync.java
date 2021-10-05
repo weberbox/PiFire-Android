@@ -63,7 +63,7 @@ class UtilsAsync {
         protected Update doInBackground(Void... voids) {
             try {
                 if (mUpdateFrom == UpdateFrom.JSON) {
-                    Update update = UtilsLibrary.getLatestAppVersion(mUpdateFrom, mJsonUrl);
+                    Update update = UtilsLibrary.getLatestAppVersion(mJsonUrl);
                     if (update != null) {
                         return update;
                     } else {
@@ -78,7 +78,7 @@ class UtilsAsync {
                 } else {
                     Context context = mContextRef.get();
                     if (context != null) {
-                        return UtilsLibrary.getLatestAppVersionHttp(context, mUpdateFrom, mGitHub);
+                        return UtilsLibrary.getLatestAppVersionHttp(mGitHub);
                     } else {
                         cancel(true);
                         return null;

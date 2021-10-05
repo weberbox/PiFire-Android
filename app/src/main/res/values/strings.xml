@@ -99,6 +99,8 @@
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
 
+    <string name="prefs_not_connected">Currently Offline - Settings cannot be changed</string>
+
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_send_error">There was an error sending the request please try again</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>

@@ -92,4 +92,15 @@ public class Constants {
     public static final String PELLET_RATING_2 = "★ ★";
     public static final String PELLET_RATING_1 = "★";
 
+    // Data Binding
+    public static final String DB_SET_APP = "db_set_app";
+    public static final String DB_SET_PROBE = "db_set_probes";
+    public static final String DB_SET_NAME = "db_set_name";
+    public static final String DB_SET_WORK = "db_set_work";
+    public static final String DB_SET_PELLETS = "db_set_pellets";
+    public static final String DB_SET_SHUTDOWN = "db_set_shutdown";
+    public static final String DB_SET_HISTORY = "db_set_history";
+    public static final String DB_SET_SAFETY = "db_set_safety";
+    public static final String DB_SET_NOTIF = "db_set_notif";
+
 }

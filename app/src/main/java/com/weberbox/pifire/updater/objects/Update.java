@@ -1,13 +1,14 @@
 package com.weberbox.pifire.updater.objects;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class Update {
     private String mVersion;
     private Integer mVersionCode;
     private String mReleaseNotes;
     private Boolean mForceUpdate;
-    private Integer mForceUpdateVersion;
+    private ArrayList<Integer> mForceUpdateVersionCodes;
     private URL mApk;
 
     public Update() {}
@@ -41,11 +42,11 @@ public class Update {
     }
 
     public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk,
-                  Boolean forceUpdate, Integer forceUpdateVersion) {
+                  Boolean forceUpdate, ArrayList<Integer> forceUpdateVersionCodes) {
         this(latestVersion, releaseNotes, apk);
         mVersionCode = latestVersionCode;
         mForceUpdate = forceUpdate;
-        mForceUpdateVersion = forceUpdateVersion;
+        mForceUpdateVersionCodes = forceUpdateVersionCodes;
     }
 
     public String getLatestVersion() {
@@ -80,12 +81,12 @@ public class Update {
         mForceUpdate = forceUpdate;
     }
 
-    public Integer getForceUpdateVersion() {
-        return mForceUpdateVersion;
+    public ArrayList<Integer> getForceUpdateVersionCodes() {
+        return mForceUpdateVersionCodes;
     }
 
-    public void setForceUpdateVersion(Integer forceUpdateVersion) {
-        mForceUpdateVersion = forceUpdateVersion;
+    public void setForceUpdateVersionCodes(ArrayList<Integer> forceUpdateVersionCodes) {
+        mForceUpdateVersionCodes = forceUpdateVersionCodes;
     }
 
     public URL getUrlToDownload() {

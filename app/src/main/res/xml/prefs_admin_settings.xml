@@ -3,7 +3,7 @@
     <PreferenceCategory
         app:title="@string/settings_cat_admin">
 
-        <SwitchPreferenceCompat
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
             app:key="@string/prefs_admin_debug"
             app:summary="@string/settings_admin_debug_note"
             app:title="@string/settings_admin_debug" />
