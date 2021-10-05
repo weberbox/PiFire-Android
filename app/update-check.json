@@ -3,6 +3,7 @@
   "latestVersionCode": "3",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
+  "forceUpdateVersions": "1",
   "forceUpdateVersionCodes": [
     "1"
   ],
