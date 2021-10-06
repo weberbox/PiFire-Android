@@ -462,12 +462,12 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     @Override
-    public void onTempConfirmClicked(int type, String temp, boolean hold) {
+    public void onTempConfirmClicked(int type, String temp, boolean hold, boolean shutdown) {
         if (mSocket != null) {
             if (hold && type == Constants.PICKER_TYPE_GRILL) {
                 GrillControl.setGrillTemp(mSocket, temp);
             }
-            GrillControl.setProbeNotify(mSocket, type, temp);
+            GrillControl.setProbeNotify(mSocket, type, temp, shutdown);
         }
     }
 

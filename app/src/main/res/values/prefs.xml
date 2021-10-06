@@ -40,6 +40,8 @@
 
     <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
 
+    <string name="prefs_probe_shutdown">prefs_probe_shutdown</string>
+
     <!-- PiFire Settings -->
     <string name="prefs_grill_probe">prefs_grill_probe</string>
     <string name="prefs_grill_probes">prefs_grill_probes</string>

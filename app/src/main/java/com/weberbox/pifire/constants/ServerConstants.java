@@ -36,6 +36,8 @@ public class ServerConstants {
     public static final String NOTIFY_GRILL = "grillnotify";
     public static final String NOTIFY_PROBE1 = "probe1notify";
     public static final String NOTIFY_PROBE2 = "probe2notify";
+    public static final String NOTIFY_SHUTDOWN_P1 = "shutdownP1";
+    public static final String NOTIFY_SHUTDOWN_P2 = "shutdownP2";
 
     public static final String NOTIFY_TEMP_GRILL = "grilltempInputRange";
     public static final String NOTIFY_TEMP_PROBE1 = "probe1tempInputRange";

@@ -11,12 +11,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
@@ -33,10 +35,10 @@ import java.util.stream.IntStream;
 public class TemperaturePickerDialog {
 
     private DialogTempPickerBinding mBinding;
-    private final BottomSheetDialog mTempPickerBottomSheet;
     private RecyclerView mTempList;
     private String mSelectedTemp;
     private TempPickerAdapter mTempAdapter;
+    private final BottomSheetDialog mTempPickerBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
     private final Context mContext;
@@ -58,6 +60,8 @@ public class TemperaturePickerDialog {
     public BottomSheetDialog showDialog() {
         mBinding = DialogTempPickerBinding.inflate(mInflater);
 
+        RelativeLayout shutdownContainer = mBinding.probeShutdownContainer;
+        SwitchCompat shutdownSwitch = mBinding.probeShutdownSwitch;
         Button confirmButton = mBinding.setTempConfirm;
         Button clearButton = mBinding.setTempClear;
 
@@ -77,6 +81,10 @@ public class TemperaturePickerDialog {
             mTempAdapter = new TempPickerAdapter(
                     generateTemperatureList(Constants.MIN_GRILL_TEMP_SET, (Constants.MAX_GRILL_TEMP_SET + 1)));
         } else {
+            if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
+                    mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
+                shutdownContainer.setVisibility(View.VISIBLE);
+            }
             mSelectedTemp = String.valueOf(Constants.DEFAULT_PROBE_TEMP_SET);
             mTempAdapter = new TempPickerAdapter(
                     generateTemperatureList(Constants.MIN_PROBE_TEMP_SET, (Constants.MAX_PROBE_TEMP_SET + 1)));
@@ -105,7 +113,8 @@ public class TemperaturePickerDialog {
             @Override
             public void onClick(View v) {
                 mTempPickerBottomSheet.dismiss();
-                mCallBack.onTempConfirmClicked(mTempType, mSelectedTemp, mHoldMode);
+                mCallBack.onTempConfirmClicked(mTempType, mSelectedTemp, mHoldMode,
+                        shutdownSwitch.isChecked());
             }
         });
 

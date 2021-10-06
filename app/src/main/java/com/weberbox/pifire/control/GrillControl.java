@@ -83,7 +83,7 @@ public class GrillControl {
     }
 
     // Set Temp Notify Temp
-    public static void setProbeNotify(Socket socket, int probe, String temp) {
+    public static void setProbeNotify(Socket socket, int probe, String temp, boolean shutdown) {
         String payload = null;
         switch (probe) {
             case Constants.PICKER_TYPE_GRILL:
@@ -92,14 +92,28 @@ public class GrillControl {
                         ServerConstants.NOTIFY_TEMP_GRILL, temp);
                 break;
             case Constants.PICKER_TYPE_PROBE_ONE:
-                payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
-                        ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
-                        ServerConstants.NOTIFY_TEMP_PROBE1, temp);
+                if (shutdown) {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE1, temp,
+                            ServerConstants.NOTIFY_SHUTDOWN_P1, String.valueOf(true));
+                } else {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE1, temp);
+                }
                 break;
             case Constants.PICKER_TYPE_PROBE_TWO:
-                payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
-                        ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
-                        ServerConstants.NOTIFY_TEMP_PROBE2, temp);
+                if (shutdown) {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE2, temp,
+                            ServerConstants.NOTIFY_SHUTDOWN_P2, String.valueOf(true));
+                } else {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE2, temp);
+                }
                 break;
         }
         if(payload != null) {

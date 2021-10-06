@@ -90,6 +90,7 @@
     <string name="grill_state_pellet">Pellets</string>
     <string name="grill_state_remaining">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
+    <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
 
     <string name="probe_cancel">Cancel</string>
     <string name="probe_disable">Disable</string>
@@ -202,15 +203,23 @@
     <string name="settings_username_encrypt_error">Error encrypting username</string>
     <string name="settings_password_encrypt_error">Error encrypting password</string>
 
-    <string name="settings_cat_history_refresh_title">History Refresh</string>
-    <string name="settings_history_refresh_title">Auto History Refresh</string>
-    <string name="settings_history_refresh_summary">Enable auto refreshing on history page. \nNote this is only for the app not the server</string>
-    <string name="settings_history_refresh_interval_title">History Refresh Interval</string>
-    <string name="settings_history_refresh_interval_summary">How often the history will refresh in seconds</string>
+    <string name="settings_cat_app_history">History</string>
+    <string name="settings_app_history_refresh_title">Auto History Refresh</string>
+    <string name="settings_app_history_refresh_summary">Enable auto refreshing on history page. \nNote this is only for the app not the server</string>
+    <string name="settings_app_history_refresh_interval_title">History Refresh Interval</string>
+    <string name="settings_app_history_refresh_interval_summary">How often the history will refresh in seconds</string>
 
     <string name="settings_cat_events_title">Events</string>
-    <string name="settings_events_amount_title">Event List Amount</string>
-    <string name="settings_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
+    <string name="settings_app_events_amount_title">Event List Amount</string>
+    <string name="settings_app_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
+
+    <string name="settings_cat_app_safety">Safety</string>
+    <string name="settings_app_safety_start">Swipe to Start</string>
+    <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
+
+    <string name="settings_cat_app_shutdown">Shutdown</string>
+    <string name="settings_app_shutdown">Probe Temp Shutdown</string>
+    <string name="settings_app_shutdown_summary">Show option to shutdown the grill when set temp is achieved</string>
 
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>
@@ -306,10 +315,6 @@
     <string name="settings_pellet_full">Full Distance (cm)</string>
     <string name="settings_pellet_empty">Empty Distance (cm)</string>
     <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
-
-    <string name="settings_cat_app_safety">Safety</string>
-    <string name="settings_app_safety_start">Swipe to Start</string>
-    <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
 
     <string name="info_title">Information</string>
     <string name="info_system_info">System Information</string>

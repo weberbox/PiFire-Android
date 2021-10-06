@@ -10,10 +10,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
-<!-- Layout for a Preference in a PreferenceActivity. The
-     Preference is able to place a specific widget for its particular
-     type in the "widget_frame" layout. -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -81,7 +77,6 @@
 
     </LinearLayout>
 
-    <!-- Preference should place its actual preference widget here. -->
     <LinearLayout
         android:id="@android:id/widget_frame"
         android:layout_width="wrap_content"

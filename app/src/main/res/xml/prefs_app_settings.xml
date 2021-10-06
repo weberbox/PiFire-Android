@@ -32,13 +32,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_history_refresh_title">
+    <PreferenceCategory app:title="@string/settings_cat_app_history">
 
         <SwitchPreferenceCompat
             app:defaultValue="@bool/def_history_refresh_enabled_app"
             app:key="@string/prefs_history_refresh_app"
-            app:summary="@string/settings_history_refresh_summary"
-            app:title="@string/settings_history_refresh_title" />
+            app:summary="@string/settings_app_history_refresh_summary"
+            app:title="@string/settings_app_history_refresh_title" />
 
         <ListPreference
             app:defaultValue="@string/def_history_refresh_time_app"
@@ -46,8 +46,8 @@
             app:entries="@array/refresh_interval_names"
             app:entryValues="@array/refresh_interval"
             app:key="@string/prefs_history_refresh_interval_app"
-            app:summary="@string/settings_history_refresh_interval_summary"
-            app:title="@string/settings_history_refresh_interval_title" />
+            app:summary="@string/settings_app_history_refresh_interval_summary"
+            app:title="@string/settings_app_history_refresh_interval_title" />
 
     </PreferenceCategory>
 
@@ -58,8 +58,8 @@
             app:entries="@array/event_amounts_names"
             app:entryValues="@array/event_amounts"
             app:key="@string/prefs_event_amount"
-            app:summary="@string/settings_events_amount_summary"
-            app:title="@string/settings_events_amount_title" />
+            app:summary="@string/settings_app_events_amount_summary"
+            app:title="@string/settings_app_events_amount_title" />
 
     </PreferenceCategory>
 
@@ -70,6 +70,16 @@
             app:key="@string/prefs_grill_swipe_start"
             app:title="@string/settings_app_safety_start"
             app:summary="@string/settings_app_safety_start_summary" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_app_shutdown">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_probe_shutdown"
+            app:key="@string/prefs_probe_shutdown"
+            app:title="@string/settings_app_shutdown"
+            app:summary="@string/settings_app_shutdown_summary" />
 
     </PreferenceCategory>
 
