@@ -8,13 +8,21 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
+import com.pixplicity.easyprefs.library.Prefs;
+import com.weberbox.pifire.BuildConfig;
+import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.updater.enums.Duration;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
 import com.weberbox.pifire.updater.objects.Version;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,7 +59,7 @@ class UtilsLibrary {
             version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
                     .versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Timber.w(e, "Error reading package version");
+            Timber.w(e, "Error getting package version");
         }
 
         Timber.d("Installed App Version: %s", version);
@@ -66,7 +74,7 @@ class UtilsLibrary {
             versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
                     .versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Timber.w(e, "Error getting installed version");
         }
 
         Timber.d("Installed App VersionCode: %s", versionCode);
@@ -87,7 +95,7 @@ class UtilsLibrary {
                     final Version latest = new Version(latestVersion.getLatestVersion());
                     return installed.compareTo(latest) < 0;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.w(e, "Failed comparing versions");
                     return false;
                 }
             } else return false;
@@ -98,13 +106,14 @@ class UtilsLibrary {
         return version.matches(".*\\d+.*");
     }
 
-    public static Boolean isStringAnUrl(String s) {
+    public static Boolean isStringValidUrl(String s) {
         boolean res = false;
         try {
             new URL(s);
             res = true;
-        } catch (MalformedURLException ignored) {}
-
+        } catch (MalformedURLException e) {
+            Timber.w(e, "Url is not valid");
+        }
         return res;
     }
 
@@ -164,8 +173,8 @@ class UtilsLibrary {
             source = str.toString();
         } catch (FileNotFoundException e) {
             Timber.w(e, "App wasn't found in the provided source");
-        } catch (IOException ignore) {
-
+        } catch (IOException e) {
+            Timber.w(e, "Error reading response");
         } finally {
             if (body != null) {
                 body.close();
@@ -185,8 +194,7 @@ class UtilsLibrary {
             if (splitGitHub.length > 1) {
                 splitGitHub = splitGitHub[1].split("(\")");
                 version = splitGitHub[0].trim();
-                if (version.startsWith("v"))
-                { // Some repo uses vX.X.X
+                if (version.startsWith("v")) {
                     splitGitHub = version.split("(v)", 2);
                     version = splitGitHub[1].trim();
                 }
@@ -217,9 +225,20 @@ class UtilsLibrary {
         return new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()));
     }
 
-    public static void goToUpdate(Context context, URL url) {
-        Intent intent = intentToUpdate(url);
-        context.startActivity(intent);
+    public static void getAppUpdate(Context context, Update update) {
+        if (Prefs.getBoolean(context.getString(R.string.prefs_app_updater_download),
+                context.getResources().getBoolean(R.bool.def_app_updater_download))) {
+            new UtilsAsync.DownloadNewVersion(context, update, Constants.UPDATE_FILENAME,
+                    context.getString(R.string.def_github_api_url),
+                    error -> {
+                        Timber.d("App Download Error %s", error);
+                        Toast.makeText(context, R.string.updater_update_download_failed,
+                                Toast.LENGTH_LONG).show();
+                    }).execute();
+        } else {
+            Intent intent = intentToUpdate(update.getUrlToDownload());
+            context.startActivity(intent);
+        }
     }
 
     public static Boolean isAbleToShow(Integer successfulChecks, Integer showEvery) {
@@ -238,6 +257,21 @@ class UtilsLibrary {
         }
 
         return res;
+    }
+
+    public static void OpenDownloadedFile(Context context, String location, String filename) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(getUriFromFile(context, location, filename),
+                "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(intent);
+    }
+
+    private static Uri getUriFromFile(Context context, String location, String fileName) {
+        return FileProvider.getUriForFile(context,
+                BuildConfig.APPLICATION_ID + ".provider",
+                new File(location + "/" + fileName));
     }
 
 }

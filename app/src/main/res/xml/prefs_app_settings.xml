@@ -92,6 +92,12 @@
             app:summary="@string/settings_update_enabled_summary"
             app:title="@string/settings_update_enabled" />
 
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_app_updater_download"
+            app:key="@string/prefs_app_updater_download"
+            app:summary="@string/settings_update_download_summary"
+            app:title="@string/settings_update_download_title" />
+
         <ListPreference
             app:defaultValue="@string/def_app_updater_frequency"
             app:key="@string/prefs_app_updater_frequency"

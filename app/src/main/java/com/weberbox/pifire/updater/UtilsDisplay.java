@@ -15,22 +15,22 @@ import androidx.core.app.NotificationCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.updater.enums.UpdateFrom;
+import com.weberbox.pifire.updater.objects.Update;
 
 import java.net.URL;
 
 public class UtilsDisplay {
 
-    public static AlertDialog showUpdateAvailableDialog(final Context context, String title,
-                                                        String content, String btnNegative,
-                                                        String btnPositive, String btnNeutral,
-                                                        final DialogInterface.OnClickListener updateClickListener,
-                                                        final DialogInterface.OnClickListener dismissClickListener,
-                                                        final DialogInterface.OnClickListener disableClickListener,
-                                                        Boolean isDisableShown, Boolean isDismissShown,
-                                                        Boolean forceUpdateFinish) {
+    public static AlertDialog showUpdateAvailableDialog(
+            final Context context, String title, String content, String btnNegative,
+            String btnPositive, String btnNeutral,
+            final DialogInterface.OnClickListener updateClickListener,
+            final DialogInterface.OnClickListener dismissClickListener,
+            final DialogInterface.OnClickListener disableClickListener,
+            Boolean isDisableShown, Boolean isDismissShown, Boolean forceUpdateFinish) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context,
+                R.style.AlertDialogThemeMaterial);
         builder.setTitle(title)
                 .setMessage(content)
                 .setPositiveButton(btnPositive, updateClickListener);
@@ -50,8 +50,8 @@ public class UtilsDisplay {
         return builder.create();
     }
 
-    public static AlertDialog showUpdateNotAvailableDialog(final Context context, String title,
-                                                           String content) {
+    public static AlertDialog showUpdateNotAvailableDialog(
+            final Context context, String title, String content) {
         return new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial)
                 .setTitle(title)
                 .setMessage(content)
@@ -60,10 +60,8 @@ public class UtilsDisplay {
                 .create();
     }
 
-    public static Snackbar showUpdateAvailableSnackbar(View view, View anchor, String content,
-                                                       Boolean indefinite,
-                                                       final UpdateFrom updateFrom,
-                                                       final URL apk) {
+    public static Snackbar showUpdateAvailableSnackbar(
+            View view, View anchor, String content, Boolean indefinite, final Update update) {
 
         final Context context = view.getContext();
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
@@ -76,15 +74,15 @@ public class UtilsDisplay {
         snackbar.setAction(context.getResources().getString(R.string.update_button), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UtilsLibrary.goToUpdate(context, apk);
+                UtilsLibrary.getAppUpdate(context, update);
             }
         });
 
         return snackbar;
     }
 
-    public static Snackbar showUpdateNotAvailableSnackbar(View view, View anchor, String content,
-                                                          Boolean indefinite) {
+    public static Snackbar showUpdateNotAvailableSnackbar(
+            View view, View anchor, String content, Boolean indefinite) {
 
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
 
@@ -96,8 +94,8 @@ public class UtilsDisplay {
         return snackbar;
     }
 
-    public static Snackbar showUpdateFailedSnackbar(View view, View anchor, String content,
-                                                          Boolean indefinite) {
+    public static Snackbar showUpdateFailedSnackbar(
+            View view, View anchor, String content, Boolean indefinite) {
 
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
 
@@ -109,8 +107,8 @@ public class UtilsDisplay {
         return snackbar;
     }
 
-    public static void showUpdateAvailableNotification(Context context, String title, String content,
-                                                       URL apk, int smallIconResourceId) {
+    public static void showUpdateAvailableNotification(
+            Context context, String title, String content, URL apk, int smallIconResourceId) {
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -133,8 +131,8 @@ public class UtilsDisplay {
         notificationManager.notify(0, builder.build());
     }
 
-    public static void showUpdateNotAvailableNotification(Context context, String title,
-                                                          String content, int smallIconResourceId) {
+    public static void showUpdateNotAvailableNotification(
+            Context context, String title, String content, int smallIconResourceId) {
 
         Intent intent = new Intent(context, MainActivity.class);
 

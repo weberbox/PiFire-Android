@@ -26,6 +26,7 @@
     <string name="updater_update_not_available">No updates available</string>
     <string name="updater_update_not_available_description">You\'ve got the latest version available of %s!</string>
     <string name="updater_update_check_failed">Update check failed. Please try again later</string>
+    <string name="updater_update_download_failed">Error downloading update</string>
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_pellet_manager">Pellets</string>
@@ -71,6 +72,7 @@
     <string name="disable_button">Disable</string>
     <string name="update_button">Update</string>
     <string name="dismiss_button">Dismiss</string>
+    <string name="downloading">Downloading</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -178,6 +180,8 @@
     <string name="settings_update_frequency_summary">Set the frequency the app checks for updates</string>
     <string name="settings_update_check_now">Check Now</string>
     <string name="settings_update_check_now_summary">Check for updates now</string>
+    <string name="settings_update_download_title">Download Update</string>
+    <string name="settings_update_download_summary">Option to download and install update or redirect to Github</string>
 
     <string name="settings_cat_acra">Crash Reporting</string>
     <string name="settings_enable_acra">Enable</string>

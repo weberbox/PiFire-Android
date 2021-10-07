@@ -1,18 +1,33 @@
 package com.weberbox.pifire.updater;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.weberbox.pifire.ui.dialogs.ProgressBarDialog;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.net.URL;
 
-class UtilsAsync {
+import okhttp3.Call;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import timber.log.Timber;
 
-    static class LatestAppVersion extends AsyncTask<Void, Void, Update> {
+public class UtilsAsync {
+
+    public static class LatestAppVersion extends AsyncTask<Void, Void, Update> {
         private final WeakReference<Context> mContextRef;
         private final LibraryPreferences mLibraryPreferences;
         private final Boolean mForceCheck;
@@ -48,7 +63,7 @@ class UtilsAsync {
                         mListener.onFailed(AppUpdaterError.GITHUB_USER_REPO_INVALID);
                         cancel(true);
                     } else if (mUpdateFrom == UpdateFrom.JSON && (mJsonUrl == null ||
-                            !UtilsLibrary.isStringAnUrl(mJsonUrl))) {
+                            !UtilsLibrary.isStringValidUrl(mJsonUrl))) {
                         mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
                         cancel(true);
                     }
@@ -56,6 +71,20 @@ class UtilsAsync {
             } else {
                 mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
                 cancel(true);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Update update) {
+            super.onPostExecute(update);
+
+            if (mListener != null) {
+                if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
+                    mListener.onSuccess(update);
+                }
+                else {
+                    mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
+                }
             }
         }
 
@@ -89,20 +118,154 @@ class UtilsAsync {
                 return null;
             }
         }
+    }
+
+    @SuppressWarnings("deprecation")
+    public static class DownloadNewVersion extends AsyncTask<String, Long, Boolean> {
+        private final WeakReference<Context> mContextRef;
+        private final AppUpdater.DownloadListener mListener;
+        private final String mFileName;
+        private final String mApiUrl;
+        private final Update mUpdate;
+        private File mUpdateFile;
+        private ProgressBarDialog mProgressDialog;
+
+        public DownloadNewVersion(Context context, Update update, String fileName, String apiUrl,
+                                  AppUpdater.DownloadListener listener) {
+            mContextRef = new WeakReference<>(context);
+            mFileName = fileName;
+            mUpdate = update;
+            mListener = listener;
+            mApiUrl = apiUrl;
+        }
 
         @Override
-        protected void onPostExecute(Update update) {
-            super.onPostExecute(update);
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-            if (mListener != null) {
-                if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
-                    mListener.onSuccess(update);
-                }
-                else {
+            Context context = mContextRef.get();
+            if (context == null || mListener == null) {
+                cancel(true);
+            } else if (UtilsLibrary.isNetworkAvailable(context)) {
+                if (!UtilsLibrary.isStringValidUrl(mApiUrl)) {
                     mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
+                    cancel(true);
+                } else {
+                    if (mProgressDialog == null) {
+                        mProgressDialog = new ProgressBarDialog(context);
+                        mProgressDialog.showDialog();
+                        mProgressDialog.setCancelable(false);
+                    }
+                }
+            } else {
+                mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
+                cancel(true);
+            }
+        }
+
+        @SuppressLint("DefaultLocale")
+        protected void onProgressUpdate(Long... values) {
+            super.onProgressUpdate(values);
+
+            if (values[1] < 0) {
+                mProgressDialog.setIndeterminate(true);
+            } else {
+                mProgressDialog.setIndeterminate(false);
+                mProgressDialog.setMax(values[1].intValue());
+                mProgressDialog.setProgress(values[0].intValue());
+                mProgressDialog.setMessage(String.format("%d / %d ", values[0], values[1]));
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            if (mProgressDialog.isShowing() && mProgressDialog != null) {
+                mProgressDialog.dismiss();
+                mProgressDialog = null;
+            }
+
+            if (result != null && !result) {
+                mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+            } else {
+                if (mUpdateFile != null && mUpdateFile.exists()) {
+                    Context context = mContextRef.get();
+                    UtilsLibrary.OpenDownloadedFile(context, context.getCacheDir().getPath(),
+                            mFileName);
                 }
             }
         }
-    }
 
+        @Override
+        protected Boolean doInBackground(String... arg0) {
+            Context context = mContextRef.get();
+            OkHttpClient client = new OkHttpClient();
+
+            String downloadUrl = new ParserJSON(mApiUrl).parseGitHubJSON(mUpdate);
+
+            if (downloadUrl == null) {
+                mListener.onFailed(AppUpdaterError.URL_ERROR);
+                return null;
+            }
+
+            try {
+                URL url = new URL(downloadUrl);
+                Call call = client.newCall(new Request.Builder().url(url).get().build());
+                Response response = call.execute();
+                if (response.code() == 200 || response.code() == 201) {
+
+                    Headers responseHeaders = response.headers();
+                    for (int i = 0; i < responseHeaders.size(); i++) {
+                        Timber.d(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    }
+
+                    InputStream inputStream = null;
+                    try {
+                        assert response.body() != null;
+                        inputStream = response.body().byteStream();
+
+                        byte[] buff = new byte[1024 * 4];
+                        long downloaded = 0;
+                        long target = response.body().contentLength();
+                        mUpdateFile = new File(context.getCacheDir(), mFileName);
+                        OutputStream output = new FileOutputStream(mUpdateFile);
+
+                        publishProgress(0L, target);
+                        while (true) {
+                            int read = inputStream.read(buff);
+
+                            if (read == -1) {
+                                break;
+                            }
+                            output.write(buff, 0, read);
+                            //write buff
+                            downloaded += read;
+                            publishProgress(downloaded, target);
+                            if (isCancelled()) {
+                                return false;
+                            }
+                        }
+
+                        output.flush();
+                        output.close();
+
+                        return downloaded == target;
+                    } catch (IOException | NullPointerException e) {
+                        Timber.w(e, "Error Downloading");
+                        return false;
+                    } finally {
+                        if (inputStream != null) {
+                            inputStream.close();
+                        }
+                    }
+                } else {
+                    return false;
+                }
+            } catch (IOException e) {
+                Timber.w(e, "Error Downloading");
+                return false;
+            }
+        }
+    }
 }

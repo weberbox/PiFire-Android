@@ -19,7 +19,17 @@ public enum AppUpdaterError {
     /**
      * JSON file is invalid or is down
      */
-    JSON_ERROR
+    JSON_ERROR,
+
+    /**
+     * Update Download Error
+     */
+    DOWNLOAD_ERROR,
+
+    /**
+     * Update Download URL Error
+     */
+    URL_ERROR
 
 
 }

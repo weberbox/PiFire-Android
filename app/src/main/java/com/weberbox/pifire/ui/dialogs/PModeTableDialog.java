@@ -53,7 +53,8 @@ public class PModeTableDialog {
     private List<PModeViewModel> getPModeList() {
         List<PModeViewModel> pModeList = new ArrayList<>();
 
-        String augerOn = Prefs.getString(mContext.getString(R.string.prefs_work_auger_on), mContext.getString(R.string.def_pmode_auger_on));
+        String augerOn = Prefs.getString(mContext.getString(R.string.prefs_work_auger_on),
+                mContext.getString(R.string.def_pmode_auger_on));
 
         String[] pmodes = mContext.getResources().getStringArray(R.array.pmode_setting);
         String[] pmode_times = mContext.getResources().getStringArray(R.array.pmode_times);

@@ -305,4 +305,8 @@ public interface IAppUpdater {
 
         void onFailed(AppUpdaterError error);
     }
+
+    interface DownloadListener {
+        void onFailed(AppUpdaterError error);
+    }
 }

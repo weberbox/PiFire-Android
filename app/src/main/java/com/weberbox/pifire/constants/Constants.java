@@ -92,6 +92,9 @@ public class Constants {
     public static final String PELLET_RATING_2 = "★ ★";
     public static final String PELLET_RATING_1 = "★";
 
+    // Update
+    public static final String UPDATE_FILENAME = "app-update.apk";
+
     // Data Binding
     public static final String DB_SET_APP = "db_set_app";
     public static final String DB_SET_PROBE = "db_set_probes";

@@ -4,26 +4,29 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-feature android:name="android.permission.CAMERA"
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <uses-feature
+        android:name="android.permission.CAMERA"
         android:requiredFeature="false" />
 
     <application
+        android:name=".application.PiFireApplication"
         android:allowBackup="true"
         android:fullBackupOnly="true"
-        android:name=".application.PiFireApplication"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PiFire"
-        android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.PiFire.Starting"
-            android:launchMode="singleTask"
             android:exported="true"
-            android:label="${appName}">
+            android:label="${appName}"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.PiFire.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,24 +34,31 @@
         </activity>
         <activity
             android:name=".ui.activities.ServerSetupActivity"
-            android:theme="@style/Theme.PiFire.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.PiFire.NoActionBar" />
         <activity
             android:name=".ui.activities.PreferencesActivity"
-            android:theme="@style/Theme.PiFire.SettingsTheme">
-        </activity>
+            android:theme="@style/Theme.PiFire.SettingsTheme" />
         <activity
             android:name=".ui.activities.InfoActivity"
-            android:theme="@style/Theme.PiFire.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.PiFire.NoActionBar" />
 
-        <receiver android:name=".receiver.AppUpdateReceiver"
-            android:exported="false">
+        <receiver
+            android:name=".receiver.AppUpdateReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" android:path="${pathName}" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
     </application>
 

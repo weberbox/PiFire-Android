@@ -28,6 +28,10 @@ class ParserJSON {
     private static final String KEY_FORCE_UPDATE = "forceUpdate";
     private static final String KEY_FORCE_UPDATE_VERSION_CODES = "forceUpdateVersionCodes";
     private static final String KEY_URL = "url";
+    private static final String KEY_ASSETS = "assets";
+    private static final String KEY_TAG_NAME = "tag_name";
+    private static final String KEY_CONTENT_TYPE = "content_type";
+    private static final String KEY_BROWSER_DOWNLOAD_URL = "browser_download_url";
 
     public ParserJSON(String url) {
         try {
@@ -39,7 +43,6 @@ class ParserJSON {
     }
 
     public Update parse(){
-
         try {
             JSONObject json = readJsonFromUrl();
             Update update = new Update();
@@ -80,6 +83,48 @@ class ParserJSON {
         return null;
     }
 
+    public String parseGitHubJSON(Update update) {
+        String version;
+        String[] splitGitHub;
+        try {
+            JSONArray jsonArray = readJsonArrayFromUrl();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject json = jsonArray.getJSONObject(i);
+                JSONArray assets = json.optJSONArray(KEY_ASSETS);
+                String releaseTag = json.getString(KEY_TAG_NAME);
+                Timber.d("Release Tag %s", releaseTag);
+                if (releaseTag.startsWith("v")) {
+                    splitGitHub = releaseTag.split("(v)", 2);
+                    version = splitGitHub[1].trim();
+                } else {
+                    version = releaseTag;
+                }
+                if (version.equals(update.getLatestVersion())) {
+                    if (assets != null) {
+                        for (int j = 0; j < assets.length(); j++) {
+                            JSONObject asset = assets.getJSONObject(j);
+                            if (asset.getString(KEY_CONTENT_TYPE)
+                                    .equals("application/vnd.android.package-archive")) {
+                                String downloadURL = asset.getString(KEY_BROWSER_DOWNLOAD_URL).trim();
+                                Timber.d("Download URL %s", downloadURL);
+                                return downloadURL;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (ConnectException e) {
+            Timber.w(e,"There was a Connection issue");
+        } catch (IOException e) {
+            Timber.w(e,"The server is down or there isn't an active Internet connection");
+        } catch (JSONException e) {
+            Timber.w(e, "The JSON file is mal-formatted");
+        } catch (NullPointerException e) {
+            Timber.w(e,"JSON NullPointerException");
+        }
+        return null;
+    }
+
 
     private String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -95,6 +140,14 @@ class ParserJSON {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             return new JSONObject(jsonText);
+        }
+    }
+
+    private JSONArray readJsonArrayFromUrl() throws IOException, JSONException {
+        try (InputStream is = mJsonUrl.openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            String jsonText = readAll(rd);
+            return new JSONArray(jsonText);
         }
     }
 

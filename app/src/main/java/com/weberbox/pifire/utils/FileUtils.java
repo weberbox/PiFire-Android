@@ -57,7 +57,7 @@ public class FileUtils {
 
     private static String readJSONFile(Context context, String fileName) {
         try {
-            FileInputStream fis = context.openFileInput(fileName);
+            FileInputStream fis = new FileInputStream(new File(context.getCacheDir(), fileName));
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
@@ -73,7 +73,7 @@ public class FileUtils {
 
     private static boolean createJSONFile(Context context, String fileName, String jsonString){
         try {
-            FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            FileOutputStream fos = new FileOutputStream(new File(context.getCacheDir(), fileName));
             if (jsonString != null) {
                 fos.write(jsonString.getBytes());
             }
@@ -86,7 +86,7 @@ public class FileUtils {
     }
 
     private static boolean isFilePresent(Context context, String fileName) {
-        String path = context.getFilesDir().getAbsolutePath() + "/" + fileName;
+        String path = context.getCacheDir().getAbsolutePath() + "/" + fileName;
         File file = new File(path);
         return file.exists();
     }

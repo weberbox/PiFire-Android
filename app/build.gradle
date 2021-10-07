@@ -23,12 +23,12 @@ android {
 
     buildTypes {
         release {
-            manifestPlaceholders = [appName: "PiFire", pathName: "com.weberbox.pifire"]
+            manifestPlaceholders = [appName: "PiFire"]
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            manifestPlaceholders = [appName: "PiFire Debug", pathName: "com.weberbox.pifire.debug"]
+            manifestPlaceholders = [appName: "PiFire Debug"]
             applicationIdSuffix ".debug"
             debuggable true
         }

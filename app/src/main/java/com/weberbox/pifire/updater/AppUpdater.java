@@ -316,8 +316,8 @@ public class AppUpdater implements IAppUpdater {
                                     if (forceUpdateRequired) {
                                         Timber.d("Force Update Requested");
                                         mLibraryPreferences.setUpdateRequired(true);
-                                        mBtnUpdateClickListener = new ForceUpdateClickListener(mContext,
-                                                update.getUrlToDownload());
+                                        mBtnUpdateClickListener = new ForceUpdateClickListener(
+                                                mContext, update);
                                         mIsDialogCancelable = false;
                                         mBtnDisableShown = false;
                                         mBtnDismissShown = false;
@@ -327,8 +327,7 @@ public class AppUpdater implements IAppUpdater {
 
                                     final DialogInterface.OnClickListener updateClickListener =
                                             mBtnUpdateClickListener == null ? new UpdateClickListener(
-                                                    mContext, update.getUrlToDownload()) :
-                                                    mBtnUpdateClickListener;
+                                                    mContext, update) : mBtnUpdateClickListener;
 
                                     final DialogInterface.OnClickListener disableClickListener =
                                             mBtnDisableClickListener == null ? new DisableClickListener(
@@ -348,8 +347,7 @@ public class AppUpdater implements IAppUpdater {
                                 case SNACKBAR:
                                     mSnackbar = UtilsDisplay.showUpdateAvailableSnackbar(mView, mViewAnchor,
                                             getDescriptionUpdate(mContext, update, Display.SNACKBAR),
-                                            UtilsLibrary.getDurationEnumToBoolean(mDuration), mUpdateFrom,
-                                            update.getUrlToDownload());
+                                            UtilsLibrary.getDurationEnumToBoolean(mDuration), update);
                                     mSnackbar.show();
                                     break;
                                 case NOTIFICATION:

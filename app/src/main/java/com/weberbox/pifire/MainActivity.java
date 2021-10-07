@@ -35,7 +35,6 @@ import com.weberbox.pifire.ui.activities.InfoActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.model.MainViewModel;
-import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.BannerTransition;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;

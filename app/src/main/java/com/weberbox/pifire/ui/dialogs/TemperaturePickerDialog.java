@@ -79,7 +79,8 @@ public class TemperaturePickerDialog {
         if(mTempType == Constants.PICKER_TYPE_GRILL) {
             mSelectedTemp = String.valueOf(Constants.DEFAULT_GRILL_TEMP_SET);
             mTempAdapter = new TempPickerAdapter(
-                    generateTemperatureList(Constants.MIN_GRILL_TEMP_SET, (Constants.MAX_GRILL_TEMP_SET + 1)));
+                    generateTemperatureList(Constants.MIN_GRILL_TEMP_SET,
+                            (Constants.MAX_GRILL_TEMP_SET + 1)));
         } else {
             if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
                     mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
@@ -163,7 +164,7 @@ public class TemperaturePickerDialog {
         }
     }
 
-    public static List<TempPickerViewModel> generateTemperatureList(int start, int end) {
+    private static List<TempPickerViewModel> generateTemperatureList(int start, int end) {
         List<TempPickerViewModel> tempPickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");

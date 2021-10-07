@@ -4,22 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import java.net.URL;
+import com.weberbox.pifire.updater.objects.Update;
 
 public class ForceUpdateClickListener extends UpdateClickListener {
 
     private final Context mContext;
-    private final URL mApk;
+    private final Update mUpdate;
 
-    public ForceUpdateClickListener(Context context, URL apk) {
-        super(context, apk);
+    public ForceUpdateClickListener(Context context, Update update) {
+        super(context, update);
         mContext = context;
-        mApk = apk;
+        mUpdate = update;
     }
 
     @Override
     public void onClick(final DialogInterface dialog, final int which) {
-        UtilsLibrary.goToUpdate(mContext, mApk);
+        UtilsLibrary.getAppUpdate(mContext, mUpdate);
         if(mContext instanceof Activity) {
             ((Activity) mContext).finish();
         }

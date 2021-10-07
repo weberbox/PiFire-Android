@@ -209,7 +209,8 @@ public class EventsFragment extends Fragment {
             JSONObject rootObject = new JSONObject(response_data);
             JSONArray array = rootObject.getJSONArray(ServerConstants.EVENTS_LIST);
 
-            int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount), getString(R.string.def_event_amounts_app)));
+            int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount),
+                    getString(R.string.def_event_amounts_app)));
             int listAmount = Math.min(customAmount, array.length());
 
             for (int i = 0; i < listAmount; i++) {

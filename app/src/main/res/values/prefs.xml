@@ -23,6 +23,7 @@
     <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>
     <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
     <string name="prefs_app_updater_force_checks">prefs_app_updater_force_checks</string>
+    <string name="prefs_app_updater_download">prefs_app_updater_download</string>
     <string name="prefs_app_update_required">prefs_app_update_required</string>
 
     <string name="prefs_acra_cat">prefs_acra_cat</string>
