@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class GrillResponseModel {
 
     @SerializedName("cur_probe_temps")
@@ -169,40 +170,40 @@ public class GrillResponseModel {
     }
 
     public static class TimerInfo {
-        @SerializedName("timer_max")
-        @Expose
-        public Integer timerMax;
-        @SerializedName("timer_current")
-        @Expose
-        public Integer timerCurrent;
-        @SerializedName("timer_time")
-        @Expose
-        public String timerTime;
         @SerializedName("timer_paused")
         @Expose
         public Boolean timerPaused;
-        @SerializedName("timer_finished")
+        @SerializedName("timer_start_time")
         @Expose
-        public Boolean timerFinished;
-
-        public Integer getTimerMax() {
-            return timerMax;
-        }
-
-        public Integer getTimerCurrent() {
-            return timerCurrent;
-        }
-
-        public String getTimerTime() {
-            return timerTime;
-        }
+        public String timerStartTime;
+        @SerializedName("timer_end_time")
+        @Expose
+        public String timerEndTime;
+        @SerializedName("timer_paused_time")
+        @Expose
+        public String timerPausedTime;
+        @SerializedName("timer_active")
+        @Expose
+        public Boolean timerActive;
 
         public Boolean getTimerPaused() {
             return timerPaused;
         }
 
-        public Boolean getTimerFinished() {
-            return timerFinished;
+        public long getTimerStartTime() {
+            return Long.parseLong(timerStartTime);
+        }
+
+        public long getTimerEndTime() {
+            return Long.parseLong(timerEndTime);
+        }
+
+        public long getTimerPauseTime() {
+            return Long.parseLong(timerPausedTime);
+        }
+
+        public Boolean getTimerActive() {
+            return timerActive;
         }
     }
 

@@ -49,6 +49,9 @@ public class FileUtils {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
+            fis.close();
+            isr.close();
+            bufferedReader.close();
             return sb.toString();
         } catch (IOException e) {
             return null;
@@ -65,6 +68,9 @@ public class FileUtils {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
+            fis.close();
+            isr.close();
+            bufferedReader.close();
             return sb.toString();
         } catch (IOException e) {
             return null;

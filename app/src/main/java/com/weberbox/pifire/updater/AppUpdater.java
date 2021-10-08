@@ -53,6 +53,7 @@ public class AppUpdater implements IAppUpdater {
     private Snackbar mSnackbar;
     private Boolean mIsDialogCancelable;
     private Boolean mShouldForceUpdateCheck;
+    private Boolean mManualForceUpdateCheck;
 
     public AppUpdater(Context context) {
         mContext = context;
@@ -65,6 +66,7 @@ public class AppUpdater implements IAppUpdater {
         mBtnDisableShown = true;
         mShowAppUpdateError = false;
         mShouldForceUpdateCheck = false;
+        mManualForceUpdateCheck = false;
         mIconResId = R.drawable.ic_update;
 
         // Dialog
@@ -274,7 +276,7 @@ public class AppUpdater implements IAppUpdater {
 
     @Override
     public AppUpdater setForceCheck(Boolean forceCheck) {
-        mShouldForceUpdateCheck = forceCheck;
+        mManualForceUpdateCheck = forceCheck;
         return this;
     }
 
@@ -288,6 +290,10 @@ public class AppUpdater implements IAppUpdater {
             }
         } else {
             mShouldForceUpdateCheck = mLibraryPreferences.getAppUpdaterShow();
+        }
+
+        if (mManualForceUpdateCheck) {
+            mShouldForceUpdateCheck = true;
         }
 
         mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, mShouldForceUpdateCheck,
@@ -309,8 +315,10 @@ public class AppUpdater implements IAppUpdater {
                 if (UtilsLibrary.isUpdateAvailable(installedVersion, update)) {
                     Timber.i("Update Available");
                     Integer successfulChecks = mLibraryPreferences.getSuccessfulChecks();
-                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) | forceUpdateRequired) {
-                        if (mLibraryPreferences.getAppUpdaterShow() | forceUpdateRequired) {
+                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) |
+                            forceUpdateRequired | mManualForceUpdateCheck) {
+                        if (mLibraryPreferences.getAppUpdaterShow() | forceUpdateRequired |
+                                mManualForceUpdateCheck) {
                             switch (mDisplay) {
                                 case DIALOG:
                                     if (forceUpdateRequired) {

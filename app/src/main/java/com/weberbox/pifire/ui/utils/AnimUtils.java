@@ -38,52 +38,54 @@ public class AnimUtils {
         view.startAnimation(anim);
     }
 
-    @SuppressWarnings("unused")
     public static void fadeInAnimation(View view, int duration) {
-        Animation fadeIn = new AlphaAnimation(0f, 1f);
-        fadeIn.setInterpolator(new DecelerateInterpolator());
-        fadeIn.setDuration(duration);
-        AnimationSet animation = new AnimationSet(false);
-        animation.addAnimation(fadeIn);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
+        if (view.getVisibility() == View.GONE | view.getVisibility() == View.INVISIBLE) {
+            Animation fadeIn = new AlphaAnimation(0f, 1f);
+            fadeIn.setInterpolator(new DecelerateInterpolator());
+            fadeIn.setDuration(duration);
+            AnimationSet animation = new AnimationSet(false);
+            animation.addAnimation(fadeIn);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation arg0) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
+                @Override
+                public void onAnimationRepeat(Animation arg0) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setVisibility(View.VISIBLE);
-            }
-        });
-        view.startAnimation(animation);
+                @Override
+                public void onAnimationEnd(Animation arg0) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            });
+            view.startAnimation(animation);
+        }
     }
 
-    @SuppressWarnings("unused")
     public static void fadeOutAnimation(View view, int duration) {
-        Animation fadeOut = new AlphaAnimation(1f, 0f);
-        fadeOut.setInterpolator(new DecelerateInterpolator());
-        fadeOut.setDuration(duration);
-        AnimationSet animation = new AnimationSet(false);
-        animation.addAnimation(fadeOut);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
+        if (view.getVisibility() == View.VISIBLE) {
+            Animation fadeOut = new AlphaAnimation(1f, 0f);
+            fadeOut.setInterpolator(new DecelerateInterpolator());
+            fadeOut.setDuration(duration);
+            AnimationSet animation = new AnimationSet(false);
+            animation.addAnimation(fadeOut);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation arg0) {
+                }
 
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
+                @Override
+                public void onAnimationRepeat(Animation arg0) {
+                }
 
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setVisibility(View.GONE);
-            }
-        });
-        view.startAnimation(animation);
+                @Override
+                public void onAnimationEnd(Animation arg0) {
+                    view.setVisibility(View.GONE);
+                }
+            });
+            view.startAnimation(animation);
+        }
     }
 
     @SuppressWarnings("unused")
