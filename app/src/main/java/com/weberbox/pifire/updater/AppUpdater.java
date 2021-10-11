@@ -403,13 +403,13 @@ public class AppUpdater implements IAppUpdater {
                     mSnackbar.show();
                 }
                 if (error == AppUpdaterError.GITHUB_USER_REPO_INVALID) {
-                    throw new IllegalArgumentException("GitHub user or repo is empty!");
+                    Timber.w("GitHub user or repo is empty!");
                 } else if (error == AppUpdaterError.JSON_URL_MALFORMED) {
-                    throw new IllegalArgumentException("JSON file is not valid!");
+                    Timber.w("JSON file is not valid!");
                 } else if (error == AppUpdaterError.JSON_ERROR) {
-                    throw new IllegalArgumentException("JSON file error");
+                    Timber.w("JSON file error");
                 } else if (error == AppUpdaterError.NETWORK_NOT_AVAILABLE) {
-                    throw new IllegalArgumentException("Network Not Available");
+                    Timber.w("Network Not Available");
                 }
             }
         });

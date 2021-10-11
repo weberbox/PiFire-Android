@@ -499,9 +499,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     @Override
-    public void onTimerConfirmClicked(String hours, String minutes) {
+    public void onTimerConfirmClicked(String hours, String minutes, Boolean shutdown) {
         if (mSocket != null) {
-            GrillControl.setTimerTime(mSocket, hours, minutes);
+            GrillControl.setTimerTime(mSocket, hours, minutes, shutdown);
         }
     }
 
@@ -658,12 +658,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
             if (!NullUtils.isAnyObjectNull(timerActive, timerStartTime, timerEndTime,
                     timerPauseTime, timerPaused, mCountDownTimer)) {
-
                 if (timerActive) {
                     mCountDownTimer.startTimer(timerStartTime, timerEndTime, timerPauseTime);
-
                     toggleTimerPaused(timerPaused);
-
                     if (timerPaused) {
                         mCountDownTimer.pauseTimer();
                         mTimerCountDownText.setText(mCountDownTimer.formatTimeRemaining(

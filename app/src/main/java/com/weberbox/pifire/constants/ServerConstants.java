@@ -30,6 +30,7 @@ public class ServerConstants {
     public static final String TIMER_STOP = "stop";
     public static final String TIMER_HOURS = "hoursInputRange";
     public static final String TIMER_MINS = "minsInputRange";
+    public static final String TIMER_SHUTDOWN = "shutdownTimer";
 
     public static final String NOTIFY_ACTION = "notify";
     public static final String NOTIFY_SET = "setnotify";

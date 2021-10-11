@@ -93,6 +93,7 @@
     <string name="grill_state_remaining">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
+    <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
 
     <string name="probe_cancel">Cancel</string>
     <string name="probe_disable">Disable</string>
@@ -222,8 +223,10 @@
     <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
 
     <string name="settings_cat_app_shutdown">Shutdown</string>
-    <string name="settings_app_shutdown">Probe Temp Shutdown</string>
-    <string name="settings_app_shutdown_summary">Show option to shutdown the grill when set temp is achieved</string>
+    <string name="settings_app_probe_shutdown">Probe Temp Shutdown</string>
+    <string name="settings_app_probe_shutdown_summary">Show option to shutdown grill when set temp is achieved</string>
+    <string name="settings_app_timer_shutdown">Timer Shutdown</string>
+    <string name="settings_app_timer_shutdown_summary">Show option to shutdown grill when timer expires</string>
 
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>

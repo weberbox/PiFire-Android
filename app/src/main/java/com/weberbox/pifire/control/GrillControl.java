@@ -82,7 +82,7 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 
-    // Set Temp Notify Temp
+    // Set Temp Notify
     public static void setProbeNotify(Socket socket, int probe, String temp, boolean shutdown) {
         String payload = null;
         switch (probe) {
@@ -166,11 +166,20 @@ public class GrillControl {
     }
 
     // Timer Set Time
-    public static void setTimerTime(Socket socket, String hours, String minutes) {
-        String payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
-                ServerConstants.TIMER_START, String.valueOf(true),
-                ServerConstants.TIMER_HOURS, hours,
-                ServerConstants.TIMER_MINS, minutes);
+    public static void setTimerTime(Socket socket, String hours, String minutes, Boolean shutdown) {
+        String payload;
+        if (shutdown) {
+            payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
+                    ServerConstants.TIMER_START, String.valueOf(true),
+                    ServerConstants.TIMER_HOURS, hours,
+                    ServerConstants.TIMER_MINS, minutes,
+                    ServerConstants.TIMER_SHUTDOWN, String.valueOf(true));
+        } else {
+            payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
+                    ServerConstants.TIMER_START, String.valueOf(true),
+                    ServerConstants.TIMER_HOURS, hours,
+                    ServerConstants.TIMER_MINS, minutes);
+        }
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 

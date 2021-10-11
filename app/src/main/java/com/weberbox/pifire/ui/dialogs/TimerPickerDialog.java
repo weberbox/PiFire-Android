@@ -8,14 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
@@ -64,6 +67,8 @@ public class TimerPickerDialog {
     public BottomSheetDialog showDialog() {
         mBinding = DialogTimerPickerBinding.inflate(mInflater);
 
+        RelativeLayout shutdownContainer = mBinding.timerShutdownContainer;
+        SwitchCompat shutdownSwitch = mBinding.timerShutdownSwitch;
         Button confirmButton = mBinding.setTimerConfirm;
 
         PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(mContext,
@@ -95,6 +100,11 @@ public class TimerPickerDialog {
         mMinutesList.setLayoutManager(minsPickerLayoutManager);
         mMinutesList.setAdapter(minsAdapter);
 
+        if (Prefs.getBoolean(mContext.getString(R.string.prefs_timer_shutdown),
+                mContext.getResources().getBoolean(R.bool.def_timer_shutdown))) {
+            shutdownContainer.setVisibility(View.VISIBLE);
+        }
+
         hoursPickerLayoutManager.setOnScrollStopListener(
                 new OnScrollStopListener() {
                     @Override
@@ -119,7 +129,8 @@ public class TimerPickerDialog {
             @Override
             public void onClick(View v) {
                 mTimePickerBottomSheet.dismiss();
-                mCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected);
+                mCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
+                        shutdownSwitch.isChecked());
             }
         });
 

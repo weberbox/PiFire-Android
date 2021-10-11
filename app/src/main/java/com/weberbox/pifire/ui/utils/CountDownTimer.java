@@ -67,7 +67,7 @@ public abstract class CountDownTimer implements TimerTickListener {
         };
     }
 
-    public void startTimer() {
+    private void startTimer() {
         if (mIsRunning) {
             return;
         }
@@ -81,9 +81,14 @@ public abstract class CountDownTimer implements TimerTickListener {
     }
 
     public void stopTimer() {
+        if (!mIsActive) {
+            return;
+        }
+
         Timber.d("Stopping Timer");
         mIsRunning = false;
         mIsActive = false;
+        mIsPaused = false;
         mHandler.removeMessages(MSG);
         onFinished();
     }
@@ -101,6 +106,10 @@ public abstract class CountDownTimer implements TimerTickListener {
     }
 
     public void pauseTimer() {
+        if (!mIsRunning | mIsPaused) {
+            return;
+        }
+
         Timber.d("Pausing Timer");
         mIsPaused = true;
         mIsRunning = false;
@@ -108,10 +117,13 @@ public abstract class CountDownTimer implements TimerTickListener {
     }
 
     public void resumeTimer() {
-        Timber.d("Resuming Timer");
-        if (!mIsRunning) {
-            mHandler.sendMessage(mHandler.obtainMessage(MSG));
+        if (mIsRunning | !mIsPaused) {
+            return;
         }
+
+        Timber.d("Resuming Timer");
+        mHandler.sendMessage(mHandler.obtainMessage(MSG));
+        mIsRunning = true;
         mIsPaused = false;
     }
 
@@ -121,7 +133,7 @@ public abstract class CountDownTimer implements TimerTickListener {
         long pauseTime = TimeUnit.SECONDS.toMillis(pauseSeconds);
 
         if (mIsRunning) {
-            if (mStartTime != startTime && mEndTime != endTime) {
+            if (mEndTime != endTime) {
                 mIsRunning = false;
                 mHandler.removeMessages(MSG);
                 startTimer(startSeconds, endSeconds, pauseSeconds);
@@ -129,11 +141,15 @@ public abstract class CountDownTimer implements TimerTickListener {
             return;
         }
 
+        if (mIsPaused) {
+            return;
+        }
+
         Timber.d("Start Time %d", startTime);
         Timber.d("End Time %d", endTime);
         Timber.d("Pause Time %d", pauseTime);
 
-        if (endTime > System.currentTimeMillis()) {
+        if (endTime > System.currentTimeMillis() || pauseTime > 0) {
             long duration = endTime - System.currentTimeMillis();
 
             if (this.mTime <= 0) {

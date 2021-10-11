@@ -25,6 +25,7 @@
     <bool name="def_grill_swipe_start">true</bool>
 
     <bool name="def_probe_shutdown">true</bool>
+    <bool name="def_timer_shutdown">true</bool>
 
     <string name="def_app_updater_frequency">5</string>
 

@@ -49,10 +49,10 @@ android {
         dev {
             dimension "type"
             try {
-                apply from: '/src/dev/secrets.gradle'
+                apply from: 'src/dev/secrets.gradle'
             } catch (MissingResourceException ignored) {
                 logger.error('Dev Secrets file not found falling back to Compile Secrets')
-                apply from: '/src/compile/secrets.gradle'
+                apply from: 'src/compile/secrets.gradle'
             }
             externalNativeBuild {
                 cmake {
@@ -66,10 +66,10 @@ android {
         github {
             dimension "type"
             try {
-                apply from: '/src/github/secrets.gradle'
+                apply from: 'src/github/secrets.gradle'
             } catch (MissingResourceException ignored) {
                 logger.error('Github Secrets file not found falling back to Compile Secrets')
-                apply from: '/src/compile/secrets.gradle'
+                apply from: 'src/compile/secrets.gradle'
             }
             externalNativeBuild {
                 cmake {
@@ -82,7 +82,7 @@ android {
         }
         compile {
             dimension "type"
-            apply from: '/src/compile/secrets.gradle'
+            apply from: 'src/compile/secrets.gradle'
             externalNativeBuild {
                 cmake {
                     cppFlags "-DACRA_URL=" + acraUrl
@@ -138,6 +138,11 @@ android {
     if(project.hasProperty("pifire.signing")
             && new File(project.property("pifire.signing") + ".gradle").exists()) {
         apply from: project.property("pifire.signing") + ".gradle";
+    }
+
+    if(project.hasProperty("pifire.signing.linux")
+            && new File(project.property("pifire.signing.linux") + ".gradle").exists()) {
+        apply from: project.property("pifire.signing.linux") + ".gradle";
     }
 }
 
