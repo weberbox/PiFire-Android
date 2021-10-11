@@ -31,7 +31,7 @@ To run this app with PiFire it requires an updated version of the PiFire project
 
 Update: The development branch now supports the android app you can find it [here](https://github.com/nebhead/PiFire/tree/development)
 
-Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/mobile-dev-redis-grillprobes)
+Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/development-fourprobes)
 
 
 The app also supports Firebase notifications if you choose to use them. You will need to sign up for your own Firebase project and place the google-services.json into the projects app folder or the compile flavor folder the before you build. You can find some more info about that [here](https://firebase.google.com/docs/cloud-messaging/android/client#register_your_app_with_firebase)
