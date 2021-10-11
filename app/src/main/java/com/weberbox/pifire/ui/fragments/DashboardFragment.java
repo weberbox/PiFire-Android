@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -33,6 +34,7 @@ import com.weberbox.pifire.databinding.FragmentDashboardBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
 import com.weberbox.pifire.model.GrillResponseModel;
 import com.weberbox.pifire.model.GrillResponseModel.NotifyReq;
+import com.weberbox.pifire.model.GrillResponseModel.NotifyData;
 import com.weberbox.pifire.model.GrillResponseModel.ProbeTemps;
 import com.weberbox.pifire.model.GrillResponseModel.ProbesEnabled;
 import com.weberbox.pifire.model.GrillResponseModel.SetPoints;
@@ -72,6 +74,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private TextView mCurrentStatusText;
     private TextView mSmokePlusText;
     private TextView mGrillTargetText;
+    private ImageView mProbeOneShutdown;
+    private ImageView mProbeTwoShutdown;
+    private ImageView mTimerShutdown;
     private ProgressBar mGrillTempProgress;
     private ProgressBar mProbeOneProgress;
     private ProgressBar mProbeTwoProgress;
@@ -130,6 +135,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mTimerPausedLayout = mBinding.dashLayout.grillTimerPauseContainer;
         mTimerCountDownText = mBinding.dashLayout.grillTimerTime;
         mTimerProgress = mBinding.dashLayout.grillTimerProgress;
+
+        mProbeOneShutdown = mBinding.dashLayout.probeOneShutdown;
+        mProbeTwoShutdown = mBinding.dashLayout.probeTwoShutdown;
+        mTimerShutdown = mBinding.dashLayout.timerShutdown;
 
         mGrillTempText = mBinding.dashLayout.controlsGrillTemp;
         mProbeOneTempText = mBinding.dashLayout.controlsProbeOneTemp;
@@ -516,6 +525,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             ProbesEnabled probesEnabled = grillResponseModel.getProbesEnabled();
             SetPoints setPoints = grillResponseModel.getSetPoints();
             NotifyReq notifyReq = grillResponseModel.getNotifyReq();
+            NotifyData notifyData = grillResponseModel.getNotifyData();
             TimerInfo timerInfo = grillResponseModel.getTimerInfo();
 
 
@@ -539,6 +549,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             boolean smokePlus = grillResponseModel.getSmokePlus();
             boolean timerPaused = timerInfo.getTimerPaused();
             boolean timerActive = timerInfo.getTimerActive();
+            boolean probeOneShutdown = notifyData.getP1Shutdown();
+            boolean probeTwoShutdown = notifyData.getP2Shutdown();
+            boolean timerShutdown = notifyData.getTimerShutdown();
 
 
             TransitionManager.beginDelayedTransition(mRootContainer, new TextTransition());
@@ -672,6 +685,15 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 } else {
                     stopTimer();
                 }
+            }
+
+            if (!NullUtils.isAnyObjectNull(probeOneShutdown, probeTwoShutdown, timerShutdown)) {
+                AnimUtils.fadeAnimation(mProbeOneShutdown, 300, probeOneShutdown ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
+                AnimUtils.fadeAnimation(mProbeTwoShutdown, 300, probeTwoShutdown ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
+                AnimUtils.fadeAnimation(mTimerShutdown, 300, timerShutdown ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {

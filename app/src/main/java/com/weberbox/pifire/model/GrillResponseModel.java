@@ -20,6 +20,9 @@ public class GrillResponseModel {
     @SerializedName("notify_req")
     @Expose
     private NotifyReq notifyReq;
+    @SerializedName("notify_data")
+    @Expose
+    private NotifyData notifyData;
     @SerializedName("timer_info")
     @Expose
     private TimerInfo timerInfo;
@@ -59,6 +62,10 @@ public class GrillResponseModel {
 
     public NotifyReq getNotifyReq() {
         return notifyReq;
+    }
+
+    public NotifyData getNotifyData() {
+        return notifyData;
     }
 
     public TimerInfo getTimerInfo() {
@@ -166,6 +173,37 @@ public class GrillResponseModel {
 
         public Boolean getTimerNotify() {
             return timer;
+        }
+    }
+
+    public static class NotifyData {
+        @SerializedName("hopper_low")
+        @Expose
+        private Boolean hopperLow;
+        @SerializedName("p1_shutdown")
+        @Expose
+        private Boolean p1Shutdown;
+        @SerializedName("p2_shutdown")
+        @Expose
+        private Boolean p2Shutdown;
+        @SerializedName("timer_shutdown")
+        @Expose
+        private Boolean timerShutdown;
+
+        public Boolean getHopperLow() {
+            return hopperLow;
+        }
+
+        public Boolean getP1Shutdown() {
+            return p1Shutdown;
+        }
+
+        public Boolean getP2Shutdown() {
+            return p2Shutdown;
+        }
+
+        public Boolean getTimerShutdown() {
+            return timerShutdown;
         }
     }
 

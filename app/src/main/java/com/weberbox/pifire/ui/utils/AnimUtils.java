@@ -14,6 +14,7 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
 
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
 
 public class AnimUtils {
 
@@ -36,6 +37,17 @@ public class AnimUtils {
         AlphaAnimation anim = new AlphaAnimation(start, end);
         anim.setDuration(duration);
         view.startAnimation(anim);
+    }
+
+    public static void fadeAnimation(View view, int duration, int direction) {
+        switch (direction) {
+            case Constants.FADE_IN:
+                fadeInAnimation(view, duration);
+                break;
+            case Constants.FADE_OUT:
+                fadeOutAnimation(view, duration);
+                break;
+        }
     }
 
     public static void fadeInAnimation(View view, int duration) {
@@ -81,7 +93,7 @@ public class AnimUtils {
 
                 @Override
                 public void onAnimationEnd(Animation arg0) {
-                    view.setVisibility(View.GONE);
+                    view.setVisibility(View.INVISIBLE);
                 }
             });
             view.startAnimation(animation);

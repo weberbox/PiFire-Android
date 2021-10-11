@@ -148,14 +148,14 @@ public class StartModeActionDialog {
     }
 
     private void startShowDelay() {
-        mHandler.postDelayed(runnable, 5000);
+        mHandler.postDelayed(runnable, 3000);
     }
 
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            fadeView(mSwipeButton, Constants.FADE_OUT);
-            fadeView(mButtonsTable, Constants.FADE_IN);
+            AnimUtils.fadeAnimation(mSwipeButton, 300, Constants.FADE_OUT);
+            AnimUtils.fadeAnimation(mButtonsTable, 300, Constants.FADE_IN);
             mModeActionsBottomSheet.setCancelable(true);
         }
     };

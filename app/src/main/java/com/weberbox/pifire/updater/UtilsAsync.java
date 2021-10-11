@@ -205,8 +205,7 @@ public class UtilsAsync {
             String downloadUrl = new ParserJSON(mApiUrl).parseGitHubJSON(mUpdate);
 
             if (downloadUrl == null) {
-                mListener.onFailed(AppUpdaterError.URL_ERROR);
-                return null;
+                return false;
             }
 
             try {

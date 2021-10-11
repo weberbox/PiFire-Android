@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/grill_controls_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -258,11 +259,27 @@
                     android:text="@string/placeholder_none"
                     android:textSize="38sp" />
 
-                <TextView
-                    style="@style/Text16AllerAlpha"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/grill_state_target" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16AllerAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/grill_state_target" />
+
+                    <ImageView
+                        android:id="@+id/probe_one_shutdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_flag_shutdown"
+                        android:visibility="invisible"
+                        app:tint="@color/colorRedButton" />
+
+                </RelativeLayout>
             </LinearLayout>
         </FrameLayout>
 
@@ -330,11 +347,27 @@
                     android:text="@string/placeholder_none"
                     android:textSize="38sp" />
 
-                <TextView
-                    style="@style/Text16AllerAlpha"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/grill_state_target" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        style="@style/Text16AllerAlpha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/grill_state_target" />
+
+                    <ImageView
+                        android:id="@+id/probe_two_shutdown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:contentDescription="@string/placeholder_img"
+                        android:src="@drawable/ic_flag_shutdown"
+                        android:visibility="invisible"
+                        app:tint="@color/colorRedButton" />
+
+                </RelativeLayout>
             </LinearLayout>
         </FrameLayout>
     </TableRow>
@@ -390,7 +423,7 @@
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical">
@@ -403,11 +436,27 @@
                         android:text="@string/placeholder_time"
                         android:textSize="72sp" />
 
-                    <TextView
-                        style="@style/Text16AllerAlpha"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/grill_state_target" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/Text16AllerAlpha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/grill_state_target" />
+
+                        <ImageView
+                            android:id="@+id/timer_shutdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:contentDescription="@string/placeholder_img"
+                            android:src="@drawable/ic_flag_shutdown"
+                            android:visibility="invisible"
+                            app:tint="@color/colorRedButton" />
+
+                    </RelativeLayout>
                 </LinearLayout>
             </FrameLayout>
 

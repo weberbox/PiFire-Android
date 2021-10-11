@@ -75,8 +75,8 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         profileView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fadeView(mDeleteIcon, mDeleteIcon.getVisibility() == View.VISIBLE ?
-                        Constants.FADE_OUT: Constants.FADE_IN);
+                AnimUtils.fadeAnimation(mDeleteIcon, 300, mDeleteIcon.getVisibility() ==
+                        View.VISIBLE ? Constants.FADE_OUT : Constants.FADE_IN);
                 toggleCardView();
             }
         });
@@ -193,23 +193,6 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         }
         TransitionManager.beginDelayedTransition(mCardView, new RotateUtils());
         mExpandIcon.setRotation(visibility ? 0 : 180);
-    }
-
-    private void fadeView(View view, int direction) {
-        switch (direction) {
-            case Constants.FADE_OUT:
-                if (view.getVisibility() == View.VISIBLE) {
-                    AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case Constants.FADE_IN:
-                if (view.getVisibility() == View.GONE) {
-                    AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
-                    view.setVisibility(View.VISIBLE);
-                }
-                break;
-        }
     }
 
     public void bindData(final PelletProfileModel viewModel) {

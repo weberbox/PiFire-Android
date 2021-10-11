@@ -24,12 +24,6 @@ public enum AppUpdaterError {
     /**
      * Update Download Error
      */
-    DOWNLOAD_ERROR,
-
-    /**
-     * Update Download URL Error
-     */
-    URL_ERROR
-
+    DOWNLOAD_ERROR
 
 }

@@ -10,8 +10,8 @@ android {
         applicationId "com.weberbox.pifire"
         minSdk 26
         targetSdk 31
-        versionCode 3
-        versionName "1.1.0-rc2"
+        versionCode 4
+        versionName "1.2.0-rc1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {

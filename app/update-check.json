@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.1.0-rc2",
-  "latestVersionCode": "3",
+  "latestVersion": "1.2.0-rc1",
+  "latestVersionCode": "4",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
@@ -9,7 +9,9 @@
   "releaseNotes": [
     "- Release Candidate",
     "- Multiple Bug Fixes",
-    "- Added Swipe to Start",
-    "- Added Acra Crash Reporting"
+    "- Added Temp Shutdown",
+    "- Added Time Shutdown",
+    "- Update Timer Operation",
+    "- Requires Latest Server Dev Branch"
   ]
 }
