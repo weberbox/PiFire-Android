@@ -229,15 +229,24 @@ public class GrillResponseModel {
         }
 
         public long getTimerStartTime() {
-            return Long.parseLong(timerStartTime);
+            if (timerStartTime != null) {
+                return Long.parseLong(timerStartTime);
+            }
+            return 0;
         }
 
         public long getTimerEndTime() {
-            return Long.parseLong(timerEndTime);
+            if (timerEndTime != null) {
+                return Long.parseLong(timerEndTime);
+            }
+            return 0;
         }
 
         public long getTimerPauseTime() {
-            return Long.parseLong(timerPausedTime);
+            if (timerPausedTime != null) {
+                return Long.parseLong(timerPausedTime);
+            }
+            return 0;
         }
 
         public Boolean getTimerActive() {
