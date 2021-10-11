@@ -741,6 +741,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mProbeTwoTempText.setText(R.string.placeholder_temp);
         mTimerCountDownText.setText(R.string.placeholder_time);
         mPelletLevelText.setText(R.string.placeholder_percentage);
+        AnimUtils.fadeAnimation(mProbeOneShutdown, 300, Constants.FADE_OUT);
+        AnimUtils.fadeAnimation(mProbeTwoShutdown, 300, Constants.FADE_OUT);
+        AnimUtils.fadeAnimation(mTimerShutdown, 300, Constants.FADE_OUT);
     }
 
     private void showSnackBarMessage(Activity activity, int message, boolean error) {
