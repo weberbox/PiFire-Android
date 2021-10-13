@@ -6,11 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
 
-    private MutableLiveData<String> mDashData;
-    private MutableLiveData<DataModel> mEventsData;
-    private MutableLiveData<DataModel> mHistoryData;
-    private MutableLiveData<DataModel> mPelletData;
-    private MutableLiveData<Boolean> mServerConnected;
+    private final MutableLiveData<String> mDashData;
+    private final MutableLiveData<DataModel> mEventsData;
+    private final MutableLiveData<DataModel> mHistoryData;
+    private final MutableLiveData<DataModel> mPelletData;
+    private final MutableLiveData<Boolean> mServerConnected;
 
     public MainViewModel () {
         mServerConnected = new MutableLiveData<>();

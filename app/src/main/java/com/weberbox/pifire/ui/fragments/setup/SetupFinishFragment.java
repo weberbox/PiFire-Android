@@ -44,16 +44,13 @@ public class SetupFinishFragment extends Fragment {
         }
 
         Button finishSetup = mBinding.setupFinishButton;
-        finishSetup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity() != null) {
-                    Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
-                    startActivity(intent);
-                    getActivity().finish();
-                }
+        finishSetup.setOnClickListener(view1 -> {
+            if (getActivity() != null) {
+                Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
     }

@@ -46,7 +46,6 @@ public class URLSetupFragment extends Fragment {
     }
 
     private FragmentSetupUrlBinding mBinding;
-    private Button mContinueButton;
     private Button mSkipButton;
     private Snackbar mErrorSnack;
     private TextInputEditText mServerURL;
@@ -99,33 +98,27 @@ public class URLSetupFragment extends Fragment {
             }
         });
 
-        mContinueButton = mBinding.continueUrlButton;
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mErrorSnack.isShown()) {
-                    mErrorSnack.dismiss();
-                }
-                if(mServerURL.getText() != null && !mIsConnecting) {
-                    verifyURLAndTestConnect(mServerURL.getText().toString());
-                }
+        Button continueButton = mBinding.continueUrlButton;
+        continueButton.setOnClickListener(view1 -> {
+            if(mErrorSnack.isShown()) {
+                mErrorSnack.dismiss();
+            }
+            if(mServerURL.getText() != null && !mIsConnecting) {
+                verifyURLAndTestConnect(mServerURL.getText().toString());
             }
         });
 
         mSkipButton = mBinding.skipUrlButton;
-        mSkipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mErrorSnack.isShown()) {
-                    mErrorSnack.dismiss();
-                }
-                if(getActivity() != null) {
-                    SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
-                            .addToBackStack(null)
-                            .commit();
-                }
+        mSkipButton.setOnClickListener(view12 -> {
+            if(mErrorSnack.isShown()) {
+                mErrorSnack.dismiss();
+            }
+            if(getActivity() != null) {
+                SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
@@ -173,13 +166,13 @@ public class URLSetupFragment extends Fragment {
                         Collections.singletonList(credentials));
 
                 if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                    SSLSocketUtils.set(Url, options);
                 }
 
                 connectSocket(Url, options);
             } else {
                 if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                    SSLSocketUtils.set(Url, options);
                     connectSocket(Url, options);
                 } else {
                     connectSocket(Url, null);

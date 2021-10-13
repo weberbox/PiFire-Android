@@ -72,6 +72,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_app")}'
                         android:paddingStart="@dimen/settings_list_items"
                         android:paddingTop="20dp"
@@ -88,6 +89,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_probes")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_probe"
@@ -101,6 +103,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_name")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_grill_name"
@@ -114,6 +117,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_work")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_work"
@@ -127,6 +131,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_pellets")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_pellets"
@@ -140,6 +145,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_shutdown")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_shutdown"
@@ -153,6 +159,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_history")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_history"
@@ -166,6 +173,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_safety")}'
                         android:padding="@dimen/settings_list_items"
                         android:text="@string/settings_safety"
@@ -179,6 +187,7 @@
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
+                        android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_notif")}'
                         android:paddingStart="@dimen/settings_list_items"
                         android:paddingTop="@dimen/settings_list_items"

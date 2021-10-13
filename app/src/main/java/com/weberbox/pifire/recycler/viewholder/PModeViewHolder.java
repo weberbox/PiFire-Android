@@ -10,9 +10,9 @@ import com.weberbox.pifire.recycler.viewmodel.PModeViewModel;
 
 
 public class PModeViewHolder extends RecyclerView.ViewHolder {
-    private TextView mPMode;
-    private TextView mAugerOn;
-    private TextView mAugerOff;
+    private final TextView mPMode;
+    private final TextView mAugerOn;
+    private final TextView mAugerOff;
 
     public PModeViewHolder(View itemView) {
         super(itemView);

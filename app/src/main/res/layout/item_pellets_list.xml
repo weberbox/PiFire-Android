@@ -7,18 +7,20 @@
     android:padding="5dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="@color/colorPrimaryLight" >
+    android:background="@color/colorPrimaryLight"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/pellets_item"
         style="@style/Text15Aller"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginTop="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
         android:layout_marginBottom="@dimen/default_spacing"
-        android:gravity="center"
+        android:layout_toStartOf="@+id/pellets_item_delete"
+        android:layout_centerVertical="true"
         android:text="@string/placeholder_text_view"
         android:textColor="@android:color/white" />
 
@@ -36,7 +38,8 @@
         android:paddingEnd="30dp"
         android:paddingBottom="@dimen/default_spacing"
         android:src="@drawable/ic_delete"
-        app:tint="@color/colorAccentRed" />
+        app:tint="@color/colorAccentRed"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/pellets_item_id"

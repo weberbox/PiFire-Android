@@ -89,11 +89,6 @@ public class PreferencesActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     private void launchFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

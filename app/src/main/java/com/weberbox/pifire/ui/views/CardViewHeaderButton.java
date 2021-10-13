@@ -15,7 +15,6 @@ import com.weberbox.pifire.databinding.LayoutCardviewHeaderBinding;
 
 public class CardViewHeaderButton extends LinearLayout {
 
-    private LayoutCardviewHeaderBinding mBinding;
     private TextView mHeaderTitle;
     private TextView mButtonTitle;
     private ImageView mHeaderIcon;
@@ -36,13 +35,15 @@ public class CardViewHeaderButton extends LinearLayout {
         init(context, attrs);
     }
 
+    @SuppressWarnings("unused")
     public CardViewHeaderButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
-        mBinding = LayoutCardviewHeaderBinding.inflate(LayoutInflater.from(context), this, true);
+        LayoutCardviewHeaderBinding binding = LayoutCardviewHeaderBinding.inflate(
+                LayoutInflater.from(context), this, true);
 
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CardViewHeaderButton);
@@ -57,9 +58,9 @@ public class CardViewHeaderButton extends LinearLayout {
             headerText = headerText == null ? "" : headerText;
             buttonText = buttonText == null ? "" : buttonText;
 
-            mHeaderTitle = mBinding.cardHeaderTitle;
-            mButtonTitle = mBinding.cardHeaderButton;
-            mHeaderIcon = mBinding.cardHeaderIcon;
+            mHeaderTitle = binding.cardHeaderTitle;
+            mButtonTitle = binding.cardHeaderButton;
+            mHeaderIcon = binding.cardHeaderIcon;
 
             mHeaderTitle.setText(headerText);
             mButtonTitle.setText(buttonText);

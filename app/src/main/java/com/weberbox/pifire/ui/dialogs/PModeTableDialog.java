@@ -1,24 +1,26 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPmodeTableBinding;
 import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
 import com.weberbox.pifire.recycler.viewmodel.PModeViewModel;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PModeTableDialog {
 
-    private DialogPmodeTableBinding mBinding;
     private final BottomSheetDialog mPModeBottomSheet;
     private final LayoutInflater mInflater;
     private final Context mContext;
@@ -32,9 +34,9 @@ public class PModeTableDialog {
     }
 
     public BottomSheetDialog showDialog(){
-        mBinding = DialogPmodeTableBinding.inflate(mInflater);
+        DialogPmodeTableBinding binding = DialogPmodeTableBinding.inflate(mInflater);
 
-        RecyclerView recyclerView = mBinding.pmodeRecycler;
+        RecyclerView recyclerView = binding.pmodeRecycler;
 
         PModeViewAdapter adapter = new PModeViewAdapter(getPModeList());
 
@@ -43,9 +45,21 @@ public class PModeTableDialog {
 
         recyclerView.setAdapter(adapter);
 
-        mPModeBottomSheet.setContentView(mBinding.getRoot());
+        mPModeBottomSheet.setContentView(binding.getRoot());
+
+        mPModeBottomSheet.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
 
         mPModeBottomSheet.show();
+
+        Configuration configuration = mContext.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            mPModeBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        }
 
         return mPModeBottomSheet;
     }

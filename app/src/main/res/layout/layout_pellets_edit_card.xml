@@ -164,7 +164,9 @@
             android:gravity="center"
             android:hint="@string/pellets_comments_hint"
             android:padding="@dimen/small_spacing"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            android:inputType="text"
+            android:importantForAutofill="no" />
 
     </RelativeLayout>
 

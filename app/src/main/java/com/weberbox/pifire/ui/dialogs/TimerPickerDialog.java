@@ -1,7 +1,7 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.view.LayoutInflater;
@@ -17,15 +17,16 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
-import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.recycler.viewmodel.TimePickerViewModel;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,6 @@ import java.util.stream.IntStream;
 
 public class TimerPickerDialog {
 
-    private DialogTimerPickerBinding mBinding;
     private final BottomSheetDialog mTimePickerBottomSheet;
     private final DashboardCallbackInterface mCallBack;
     private RecyclerView mHoursList;
@@ -55,6 +55,7 @@ public class TimerPickerDialog {
         mScrollMinutes = 0;
     }
 
+    @SuppressWarnings("unused")
     public TimerPickerDialog(Context context, Fragment frag, int hours, int minutes) {
         mTimePickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
@@ -65,11 +66,11 @@ public class TimerPickerDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        mBinding = DialogTimerPickerBinding.inflate(mInflater);
+        DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(mInflater);
 
-        RelativeLayout shutdownContainer = mBinding.timerShutdownContainer;
-        SwitchCompat shutdownSwitch = mBinding.timerShutdownSwitch;
-        Button confirmButton = mBinding.setTimerConfirm;
+        RelativeLayout shutdownContainer = binding.timerShutdownContainer;
+        SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
+        Button confirmButton = binding.setTimerConfirm;
 
         PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(mContext,
                 PickerLayoutManager.VERTICAL, false);
@@ -83,8 +84,8 @@ public class TimerPickerDialog {
         minsPickerLayoutManager.setScaleDownBy(0.96f);
         minsPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mHoursList = mBinding.hoursList;
-        mMinutesList = mBinding.minutesList;
+        mHoursList = binding.hoursList;
+        mMinutesList = binding.minutesList;
 
         SnapHelper hoursSnapHelper = new LinearSnapHelper();
         SnapHelper minutesSnapHelper = new LinearSnapHelper();
@@ -106,49 +107,49 @@ public class TimerPickerDialog {
         }
 
         hoursPickerLayoutManager.setOnScrollStopListener(
-                new OnScrollStopListener() {
-                    @Override
-                    public void selectedView(View view) {
-                        LinearLayout parent = view.findViewById(R.id.timer_item_container);
-                        TextView text = parent.findViewById(R.id.timer_item_text_view);
-                        mHoursSelected =  text.getText().toString();
-                    }
+                view -> {
+                    LinearLayout parent = view.findViewById(R.id.timer_item_container);
+                    TextView text = parent.findViewById(R.id.timer_item_text_view);
+                    mHoursSelected =  text.getText().toString();
                 });
 
         minsPickerLayoutManager.setOnScrollStopListener(
-                new OnScrollStopListener() {
-                    @Override
-                    public void selectedView(View view) {
-                        LinearLayout parent = view.findViewById(R.id.timer_item_container);
-                        TextView text = parent.findViewById(R.id.timer_item_text_view);
-                        mMinutesSelected =  text.getText().toString();
-                    }
+                view -> {
+                    LinearLayout parent = view.findViewById(R.id.timer_item_container);
+                    TextView text = parent.findViewById(R.id.timer_item_text_view);
+                    mMinutesSelected =  text.getText().toString();
                 });
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTimePickerBottomSheet.dismiss();
-                mCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
-                        shutdownSwitch.isChecked());
-            }
+        confirmButton.setOnClickListener(v -> {
+            mTimePickerBottomSheet.dismiss();
+            mCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
+                    shutdownSwitch.isChecked());
         });
 
-        mTimePickerBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
+        mTimePickerBottomSheet.setOnDismissListener(dialogInterface -> {
 
-            }
         });
 
-        mTimePickerBottomSheet.setContentView(mBinding.getRoot());
+        mTimePickerBottomSheet.setContentView(binding.getRoot());
 
         if(mScrollHours != 0 && mScrollMinutes != 0) {
             setCurrentHours(mScrollHours, false);
             setCurrentMinutes(mScrollMinutes, false);
         }
 
+        mTimePickerBottomSheet.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
         mTimePickerBottomSheet.show();
+
+        Configuration configuration = mContext.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            mTimePickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        }
 
         return mTimePickerBottomSheet;
     }

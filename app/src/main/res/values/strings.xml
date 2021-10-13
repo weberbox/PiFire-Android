@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PiFire</string>
     <string name="nav_header_desc">Navigation header</string>
 
@@ -15,7 +15,7 @@
     <string name="acra_notification_comment">Comment</string>
     <string name="acra_notification_comment_hint">You can add a comment here</string>
 
-    <string name="regex_numbers">[^0-9]</string>
+    <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
 
     <string name="updater_update_available">New update available!</string>
     <string name="updater_update_required">Update Required!</string>
@@ -168,6 +168,9 @@
     <string name="settings_min_ten_error">Value must be greater than 10</string>
     <string name="settings_max_hundred_error">Value must be less than 100</string>
 
+    <string name="settings_server_settings_title">Server Settings</string>
+    <string name="settings_server_settings_summary">Setup server address, basic auth and security</string>
+
     <string name="settings_cat_debug">Debug</string>
     <string name="settings_firebase_token">Firebase Token</string>
     <string name="settings_firebase_token_summary">Show firebase token in dialog</string>
@@ -207,6 +210,10 @@
     <string name="settings_username_blank_error">Username cannot be blank</string>
     <string name="settings_username_encrypt_error">Error encrypting username</string>
     <string name="settings_password_encrypt_error">Error encrypting password</string>
+
+    <string name="settings_cat_security_title">Security</string>
+    <string name="settings_security_unsigned_cert_title">Self-Signed Certificate</string>
+    <string name="settings_security_unsigned_cert_summary">Allow the use of self signed certificates. This is not recommended and is not secure</string>
 
     <string name="settings_cat_app_history">History</string>
     <string name="settings_app_history_refresh_title">Auto History Refresh</string>
@@ -378,7 +385,7 @@
 
     <string name="pellets_brand_holder">Generic</string>
     <string name="pellets_wood_holder">Alder</string>
-    <string name="pellets_date_holder">2021-09-07 21:39:08</string>
+    <string name="pellets_date_holder" tools:ignore="TypographyDashes">2021-09-07 21:39:08</string>
     <string name="pellets_comments_holder">This is a placeholder profile. Alder is generic and used in almost all pellets, regardless of the wood type indicated on the packaging. It tends to burn consistently and produces a mild smoke.</string>
     <string name="pellets_comments_hint">Enter comments here</string>
 

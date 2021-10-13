@@ -1,14 +1,11 @@
 package com.weberbox.pifire.recycler.viewholder;
 
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +13,6 @@ import androidx.transition.TransitionManager;
 
 import com.skydoves.powerspinner.DefaultSpinnerAdapter;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
@@ -64,99 +60,58 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         AppCompatButton deleteButton = itemView.findViewById(R.id.pellet_edit_delete);
         AppCompatButton saveButton = itemView.findViewById(R.id.pellet_edit_save);
 
-        mDeleteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callback.onItemDelete(Constants.PELLET_PROFILE,
-                        mPelletProfileId.getText().toString(), getAbsoluteAdapterPosition());
-            }
+        mDeleteIcon.setOnClickListener(view -> callback.onItemDelete(Constants.PELLET_PROFILE,
+                mPelletProfileId.getText().toString(), getAbsoluteAdapterPosition()));
+
+        profileView.setOnClickListener(view -> {
+            AnimUtils.fadeAnimation(mDeleteIcon, 300, mDeleteIcon.getVisibility() ==
+                    View.VISIBLE ? Constants.FADE_OUT : Constants.FADE_IN);
+            toggleCardView();
         });
 
-        profileView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AnimUtils.fadeAnimation(mDeleteIcon, 300, mDeleteIcon.getVisibility() ==
-                        View.VISIBLE ? Constants.FADE_OUT : Constants.FADE_IN);
-                toggleCardView();
-            }
-        });
+        mPelletProfileBrand.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileBrand.dismiss());
 
-        mPelletProfileBrand.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileBrand.dismiss();
-            }
-        });
+        mPelletProfileWood.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileWood.dismiss());
 
-        mPelletProfileWood.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileWood.dismiss();
-            }
-        });
-
-        mPelletProfileRating.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileRating.dismiss();
-            }
-        });
+        mPelletProfileRating.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileRating.dismiss());
 
         mPelletProfileBrand.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Timber.d("New Item %s", newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
         mPelletProfileWood.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Timber.d("New Item %s", newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
         mPelletProfileRating.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Timber.d("New Item %s", newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleCardView();
-                mDeleteIcon.setVisibility(View.VISIBLE);
-                if (mPelletProfileId.getText() != null) {
-                    callback.onProfileDelete(mPelletProfileId.getText().toString(),
-                            getAbsoluteAdapterPosition());
-                }
+        deleteButton.setOnClickListener(view -> {
+            toggleCardView();
+            mDeleteIcon.setVisibility(View.VISIBLE);
+            if (mPelletProfileId.getText() != null) {
+                callback.onProfileDelete(mPelletProfileId.getText().toString(),
+                        getAbsoluteAdapterPosition());
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleCardView();
-                mDeleteIcon.setVisibility(View.VISIBLE);
-                if (mPelletProfileId.getText() != null) {
-                    callback.onProfileEdit(
-                            new PelletProfileModel(
-                                    mPelletProfileBrand.getText().toString(),
-                                    mPelletProfileWood.getText().toString(),
-                                    StringUtils.getRatingInt(mPelletProfileRating.getText().toString()),
-                                    mPelletProfileComments.getText().toString(),
-                                    mPelletProfileId.getText().toString()
-                            )
-                    );
-                }
+        saveButton.setOnClickListener(view -> {
+            toggleCardView();
+            mDeleteIcon.setVisibility(View.VISIBLE);
+            if (mPelletProfileId.getText() != null) {
+                callback.onProfileEdit(
+                        new PelletProfileModel(
+                                mPelletProfileBrand.getText().toString(),
+                                mPelletProfileWood.getText().toString(),
+                                StringUtils.getRatingInt(mPelletProfileRating.getText().toString()),
+                                mPelletProfileComments.getText().toString(),
+                                mPelletProfileId.getText().toString()
+                        )
+                );
             }
         });
 

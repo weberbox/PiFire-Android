@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +31,6 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentEventsBinding;
 import com.weberbox.pifire.recycler.adapter.EventsListAdapter;
 import com.weberbox.pifire.recycler.viewmodel.EventViewModel;
-import com.weberbox.pifire.ui.model.DataModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.FadeTransition;
@@ -97,44 +95,35 @@ public class EventsFragment extends Fragment {
         eventsList.setItemAnimator(new DefaultItemAnimator());
         eventsList.setAdapter(mEventsListAdapter);
 
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mSocket != null && mSocket.connected()) {
-                    forceRefreshData(mSocket);
-                } else {
-                    mSwipeRefresh.setRefreshing(false);
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            if (mSocket != null && mSocket.connected()) {
+                forceRefreshData(mSocket);
+            } else {
+                mSwipeRefresh.setRefreshing(false);
+                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         if (getActivity() != null) {
             mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mMainViewModel.getEventsData().observe(getViewLifecycleOwner(), new Observer<DataModel>() {
-                @Override
-                public void onChanged(@Nullable DataModel eventsData) {
-                    mSwipeRefresh.setRefreshing(false);
-                    if (eventsData != null && eventsData.getLiveData() != null) {
-                        if (eventsData.getIsNewData()) {
-                            FileUtils.saveJSONFile(getActivity(), Constants.JSON_EVENTS,
-                                    eventsData.getLiveData());
-                        }
-                        updateUIWithData(eventsData.getLiveData());
+            mMainViewModel.getEventsData().observe(getViewLifecycleOwner(), eventsData -> {
+                mSwipeRefresh.setRefreshing(false);
+                if (eventsData != null && eventsData.getLiveData() != null) {
+                    if (eventsData.getIsNewData()) {
+                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_EVENTS,
+                                eventsData.getLiveData());
                     }
+                    updateUIWithData(eventsData.getLiveData());
                 }
             });
 
-            mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                @Override
-                public void onChanged(@Nullable Boolean enabled) {
-                    if (enabled != null && enabled) {
-                        if (!mIsLoading) {
-                            mIsLoading = true;
-                            if (mSocket != null && mSocket.connected()) {
-                                toggleLoading(true);
-                                requestDataUpdate();
-                            }
+            mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+                if (enabled != null && enabled) {
+                    if (!mIsLoading) {
+                        mIsLoading = true;
+                        if (mSocket != null && mSocket.connected()) {
+                            toggleLoading(true);
+                            requestDataUpdate();
                         }
                     }
                 }
@@ -160,13 +149,10 @@ public class EventsFragment extends Fragment {
     private void requestDataUpdate() {
         if (mSocket != null && mSocket.connected()) {
             mIsLoading = true;
-            mSocket.emit(ServerConstants.REQUEST_EVENT_DATA, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (mMainViewModel != null) {
-                        mMainViewModel.setEventsData(args[0].toString(), true);
-                        mIsLoading = false;
-                    }
+            mSocket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
+                if (mMainViewModel != null) {
+                    mMainViewModel.setEventsData(args[0].toString(), true);
+                    mIsLoading = false;
                 }
             });
         }
@@ -183,12 +169,9 @@ public class EventsFragment extends Fragment {
     }
 
     private void forceRefreshData(Socket socket) {
-        socket.emit(ServerConstants.REQUEST_EVENT_DATA, new Ack() {
-            @Override
-            public void call(Object... args) {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setEventsData(args[0].toString(), true);
-                }
+        socket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
+            if (mMainViewModel != null) {
+                mMainViewModel.setEventsData(args[0].toString(), true);
             }
         });
     }

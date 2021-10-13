@@ -4,12 +4,10 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 
-public class ServerSetupActivity extends AppCompatActivity {
+public class ServerSetupActivity extends BaseActivity {
 
     private ActivityServerSetupBinding mBinding;
 

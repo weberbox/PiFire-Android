@@ -12,10 +12,10 @@ import com.weberbox.pifire.utils.TextUtils;
 
 public class EventsViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mEventIcon;
-    private TextView mEventDate;
-    private TextView mEventTime;
-    private TextView mEventText;
+    private final TextView mEventIcon;
+    private final TextView mEventDate;
+    private final TextView mEventTime;
+    private final TextView mEventText;
 
     public EventsViewHolder(final View itemView) {
         super(itemView);
@@ -24,16 +24,13 @@ public class EventsViewHolder extends RecyclerView.ViewHolder {
         mEventTime = itemView.findViewById(R.id.event_time_text_holder);
         mEventText = itemView.findViewById(R.id.event_text_holder);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.hasEllipsis(itemView, mEventText)) {
-                    mEventText.setMaxLines(2);
-                    mEventText.setEllipsize(null);
-                } else if (mEventText.getMaxLines() > 1) {
-                    mEventText.setMaxLines(1);
-                    mEventText.setEllipsize(android.text.TextUtils.TruncateAt.END);
-                }
+        itemView.setOnClickListener(view -> {
+            if (TextUtils.hasEllipsis(mEventText)) {
+                mEventText.setMaxLines(2);
+                mEventText.setEllipsize(null);
+            } else if (mEventText.getMaxLines() > 1) {
+                mEventText.setMaxLines(1);
+                mEventText.setEllipsize(android.text.TextUtils.TruncateAt.END);
             }
         });
 

@@ -40,33 +40,27 @@ public class QRSetupFragment extends Fragment {
                 Snackbar.LENGTH_LONG);
 
         Button haveQRCodeButton = mBinding.continueWithQrcode;
-        haveQRCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getActivity() != null && ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissionLauncher.launch(Manifest.permission.CAMERA);
-                } else {
-                    QRScanFragment qrScanFragment = QRScanFragment.getInstance();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .add(R.id.server_setup_fragment, qrScanFragment, QRScanFragment.TAG)
-                            .addToBackStack(null)
-                            .commit();
-                }
+        haveQRCodeButton.setOnClickListener(view1 -> {
+            if(getActivity() != null && ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA);
+            } else {
+                QRScanFragment qrScanFragment = QRScanFragment.getInstance();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.server_setup_fragment, qrScanFragment, QRScanFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         Button doNotHaveQRCodeButton = mBinding.continueWithoutQrcode;
-        doNotHaveQRCodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity() != null) {
-                    URLSetupFragment urlSetupFragment = URLSetupFragment.getInstance();
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .add(R.id.server_setup_fragment, urlSetupFragment, URLSetupFragment.TAG)
-                            .addToBackStack(null)
-                            .commit();
-                }
+        doNotHaveQRCodeButton.setOnClickListener(view12 -> {
+            if (getActivity() != null) {
+                URLSetupFragment urlSetupFragment = URLSetupFragment.getInstance();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .add(R.id.server_setup_fragment, urlSetupFragment, URLSetupFragment.TAG)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

@@ -18,6 +18,7 @@ public class PModeViewModel {
         return mPMode;
     }
 
+    @SuppressWarnings("unused")
     public void setPMode(@NonNull final String pMode) {
         this.mPMode = pMode;
     }
@@ -27,6 +28,7 @@ public class PModeViewModel {
         return mAugerOn;
     }
 
+    @SuppressWarnings("unused")
     public void setAugerOn(@NonNull final String augerOn) {
         this.mAugerOn = augerOn;
     }
@@ -36,6 +38,7 @@ public class PModeViewModel {
         return mAugerOff;
     }
 
+    @SuppressWarnings("unused")
     public void setAugerOff(@NonNull final String augerOff) {
         this.mAugerOff = augerOff;
     }

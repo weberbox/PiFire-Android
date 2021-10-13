@@ -1,34 +1,45 @@
 package com.weberbox.pifire.utils;
 
+import android.annotation.SuppressLint;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import io.socket.client.IO;
 import okhttp3.OkHttpClient;
+import timber.log.Timber;
 
 public class SSLSocketUtils {
 
-    public static OkHttpClient getOkHttpClient() {
+    @SuppressLint("CustomX509TrustManager")
+    @SuppressWarnings("unused")
+    public static OkHttpClient getOkHttpClient(String url) {
 
         try {
+
+            URI uri = new URI(url);
+            String serverHost = uri.getHost();
+
 
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, new TrustManager[]{new X509TrustManager() {
                 @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                @SuppressLint("TrustAllX509TrustManager")
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
 
                 }
 
                 @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                @SuppressLint("TrustAllX509TrustManager")
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
 
                 }
 
@@ -40,21 +51,18 @@ public class SSLSocketUtils {
 
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-            builder.hostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
+            builder.hostnameVerifier((hostname, session) -> serverHost.equalsIgnoreCase(hostname));
 
             builder.sslSocketFactory(sc.getSocketFactory(), new X509TrustManager() {
                 @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                @SuppressLint("TrustAllX509TrustManager")
+                public void checkClientTrusted(X509Certificate[] chain, String authType) {
 
                 }
 
                 @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                @SuppressLint("TrustAllX509TrustManager")
+                public void checkServerTrusted(X509Certificate[] chain, String authType) {
 
                 }
 
@@ -66,15 +74,15 @@ public class SSLSocketUtils {
 
             return builder.build();
 
-        } catch (NoSuchAlgorithmException | KeyManagementException ex) {
-            ex.printStackTrace();
+        } catch (NoSuchAlgorithmException | URISyntaxException | KeyManagementException e) {
+            Timber.w(e, "Certificate exception");
         }
 
         return null;
     }
 
-    public static void set(IO.Options options) {
-        OkHttpClient okHttpClient = getOkHttpClient();
+    public static void set(String hostname, IO.Options options) {
+        OkHttpClient okHttpClient = getOkHttpClient(hostname);
         IO.setDefaultOkHttpWebSocketFactory(okHttpClient);
         IO.setDefaultOkHttpCallFactory(okHttpClient);
         options.callFactory = okHttpClient;

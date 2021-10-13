@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="refresh_interval">
         <item>1000</item>
         <item>3000</item>
@@ -34,7 +34,7 @@
     </string-array>
 
     <string-array name="grill_probe_selection">
-        <item>grill_probe1</item>
+        <item tools:ignore="Typos" >grill_probe1</item>
         <item>grill_probe2</item>
     </string-array>
 
@@ -58,7 +58,7 @@
         <item>iGrill Heatermeter</item>
         <item>PT-1000-Grill-Probe-OEM</item>
         <item>PT-1000-Grill-Probe-PiFire</item>
-        <item>ET-73 Skyeperry1</item>
+        <item tools:ignore="Typos">ET-73 Skyeperry1</item>
     </string-array>
 
     <string-array name="pmode_setting">

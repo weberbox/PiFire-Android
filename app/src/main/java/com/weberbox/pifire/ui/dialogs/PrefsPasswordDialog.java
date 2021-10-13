@@ -10,18 +10,21 @@ import com.weberbox.pifire.utils.SecurityUtils;
 
 public class PrefsPasswordDialog extends EditTextPreference {
 
-    private Context mContext;
+    private final Context mContext;
 
+    @SuppressWarnings("unused")
     public PrefsPasswordDialog(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
     }
 
+    @SuppressWarnings("unused")
     public PrefsPasswordDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
     }
 
+    @SuppressWarnings("unused")
     public PrefsPasswordDialog(Context context) {
         super(context);
         mContext = context;

@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_ripple_table"
                 android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:paddingStart="@dimen/default_spacing"
                 android:paddingTop="@dimen/default_spacing"
@@ -36,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/grill_state_mode" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/controls_grill_mode"
                     style="@style/Text24Knockout"
                     android:layout_width="match_parent"
@@ -44,7 +45,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@string/placeholder_mode"
                     android:textSize="55sp"
-                    android:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform" />
 
             </LinearLayout>
 
@@ -57,6 +58,7 @@
                 android:background="@drawable/bg_ripple_smokep_disabled"
                 android:clickable="true"
                 android:enabled="false"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:padding="@dimen/default_spacing">
 
@@ -67,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/grill_smoke_plus" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/controls_smoke_plus"
                     style="@style/Text24Knockout"
                     android:layout_width="wrap_content"
@@ -75,7 +77,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@string/placeholder_mode"
                     android:textSize="55sp"
-                    android:autoSizeTextType="uniform" />
+                    app:autoSizeTextType="uniform" />
 
             </LinearLayout>
 
@@ -99,8 +101,9 @@
                 android:id="@+id/grill_temp_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:background="@drawable/bg_ripple_table_temp"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:padding="@dimen/default_spacing">
 
@@ -146,10 +149,11 @@
                     <TextView
                         android:id="@+id/controls_grill_set_temp"
                         style="@style/Text24Knockout"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="38dp"
                         android:layout_alignParentStart="true"
                         android:layout_marginTop="8dp"
+                        android:layout_toStartOf="@+id/controls_grill_target_temp"
                         android:text="@string/placeholder_none"
                         android:textSize="38sp" />
 
@@ -172,12 +176,14 @@
 
                     <TextView
                         style="@style/Text16AllerAlpha"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
+                        android:layout_toStartOf="@+id/controls_grill_target"
                         android:text="@string/grill_state_set" />
 
                     <TextView
+                        android:id="@+id/controls_grill_target"
                         style="@style/Text16AllerAlpha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -210,8 +216,9 @@
                 android:id="@+id/probe_one_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:background="@drawable/bg_ripple_table_temp"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:padding="@dimen/default_spacing">
 
@@ -298,8 +305,9 @@
                 android:id="@+id/probe_two_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:background="@drawable/bg_ripple_table_temp"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical"
                 android:padding="@dimen/default_spacing">
 
@@ -380,8 +388,9 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/default_spacing"
             android:background="@drawable/bg_table_item"
-            android:foreground="@drawable/bg_ripple_table_temp"
-            android:clickable="true">
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="@drawable/bg_ripple_table_temp">
 
             <ProgressBar
                 android:id="@+id/grill_timer_progress"
@@ -398,8 +407,8 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/default_spacing"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -482,6 +491,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_ripple_table"
             android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 

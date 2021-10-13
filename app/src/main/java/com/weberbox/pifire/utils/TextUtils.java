@@ -1,17 +1,16 @@
 package com.weberbox.pifire.utils;
 
 import android.text.Layout;
-import android.view.View;
 import android.widget.TextView;
 
 public class TextUtils {
 
-    public static boolean hasEllipsis(View view, TextView textView) {
-        if ((TextView) textView == null) {
+    public static boolean hasEllipsis(TextView textView) {
+        if (textView == null) {
             return false;
         }
         boolean hasLongContent = false;
-        Layout descriptionLayout = ((TextView) textView).getLayout();
+        Layout descriptionLayout = (textView).getLayout();
         if (descriptionLayout != null) {
             int lines = descriptionLayout.getLineCount();
             if (lines > 0) {

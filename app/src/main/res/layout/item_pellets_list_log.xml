@@ -1,47 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pellets_items_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@color/colorPrimaryLight"
     android:clickable="true"
-    android:background="@color/colorPrimaryLight">
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:padding="5dp">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/pellets_log_date"
+        style="@style/Text15Aller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_spacing"
         android:gravity="center"
         android:text="@string/placeholder_text_view"
-        android:autoSizeTextType="uniform"
         android:textColor="@android:color/white"
-        style="@style/Text15Aller" />
+        app:autoSizeTextType="uniform" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/pellets_log_name"
-        android:layout_width="wrap_content"
+        style="@style/Text15Aller"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="@dimen/default_spacing"
-        android:layout_marginEnd="@dimen/default_spacing"
+        android:layout_toStartOf="@+id/pellets_log_rating"
         android:layout_toEndOf="@+id/pellets_log_date"
         android:text="@string/placeholder_text_view"
-        android:autoSizeTextType="uniform"
         android:textColor="@android:color/white"
-        style="@style/Text15Aller" />
+        app:autoSizeTextType="uniform" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/pellets_log_rating"
+        style="@style/Text15Aller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/default_spacing"
         android:gravity="center"
-        android:layout_alignParentEnd="true"
         android:text="@string/placeholder_text_view"
-        android:autoSizeTextType="uniform"
         android:textColor="@color/colorAccent"
-        style="@style/Text15Aller" />
+        app:autoSizeTextType="uniform" />
 
 </RelativeLayout>

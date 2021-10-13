@@ -28,7 +28,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.interfaces.OnActiveListener;
 import com.weberbox.pifire.interfaces.OnStateChangeListener;
 import com.weberbox.pifire.interfaces.OnSwipeTouchListener;
-import com.weberbox.pifire.ui.utils.DimensionUtils;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.ui.utils.TouchUtils;
 
 public class SwipeButton extends RelativeLayout {
@@ -50,7 +50,6 @@ public class SwipeButton extends RelativeLayout {
     private OnActiveListener mOnActiveListener;
 
     private int mCollapsedWidth;
-    private int mCollapsedHeight;
 
     private LinearLayout mLayer;
     private boolean mTrailEnabled = false;
@@ -189,7 +188,7 @@ public class SwipeButton extends RelativeLayout {
 
             mCollapsedWidth = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_width,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            mCollapsedHeight = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_height,
+            int collapsedHeight = (int) typedArray.getDimension(R.styleable.SwipeButton_button_image_height,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             mTrailEnabled = typedArray.getBoolean(R.styleable.SwipeButton_button_trail_enabled,
                     false);
@@ -221,7 +220,7 @@ public class SwipeButton extends RelativeLayout {
             centerText.setTextColor(typedArray.getColor(R.styleable.SwipeButton_inner_text_color,
                     Color.WHITE));
 
-            float textSize = DimensionUtils.convertPixelsToSp(
+            float textSize = ViewUtils.convertPixelsToSp(
                     typedArray.getDimension(R.styleable.SwipeButton_inner_text_size, 0), context);
 
             if (textSize != 0) {
@@ -257,7 +256,7 @@ public class SwipeButton extends RelativeLayout {
 
                 mActive = true;
             } else {
-                LayoutParams layoutParamsButton = new LayoutParams(mCollapsedWidth, mCollapsedHeight);
+                LayoutParams layoutParamsButton = new LayoutParams(mCollapsedWidth, collapsedHeight);
 
                 layoutParamsButton.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
                 layoutParamsButton.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
@@ -300,73 +299,68 @@ public class SwipeButton extends RelativeLayout {
         setOnTouchListener(getButtonTouchListener());
     }
 
+    @SuppressWarnings("IntegerDivisionInFloatingPointContext")
+    @SuppressLint("ClickableViewAccessibility")
     private OnTouchListener getButtonTouchListener() {
-        return new OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (mOnSwipeTouchListener != null) {
-                    mOnSwipeTouchListener.onSwipeTouch(v, event);
-                }
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        return !TouchUtils.isTouchOutsideInitialPosition(event, mSwipeButtonInner);
-                    case MotionEvent.ACTION_MOVE:
-                        if (mInitialX == 0) {
-                            mInitialX = mSwipeButtonInner.getX();
-                        }
+        return (v, event) -> {
+            if (mOnSwipeTouchListener != null) {
+                mOnSwipeTouchListener.onSwipeTouch(v, event);
+            }
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    return !TouchUtils.isTouchOutsideInitialPosition(event, mSwipeButtonInner);
+                case MotionEvent.ACTION_MOVE:
+                    if (mInitialX == 0) {
+                        mInitialX = mSwipeButtonInner.getX();
+                    }
 
-                        if (event.getX() > mSwipeButtonInner.getWidth() / 2 &&
-                                event.getX() + mSwipeButtonInner.getWidth() / 2 < getWidth()) {
-                            mSwipeButtonInner.setX(event.getX() - mSwipeButtonInner.getWidth() / 2);
-                            mCenterText.setAlpha(1 - 1.3f * (mSwipeButtonInner.getX() +
-                                    mSwipeButtonInner.getWidth()) / getWidth());
-                            setTrailingEffect();
-                        }
+                    if (event.getX() > mSwipeButtonInner.getWidth() / 2 &&
+                            event.getX() + mSwipeButtonInner.getWidth() / 2 < getWidth()) {
+                        mSwipeButtonInner.setX(event.getX() - mSwipeButtonInner.getWidth() / 2);
+                        mCenterText.setAlpha(1 - 1.3f * (mSwipeButtonInner.getX() +
+                                mSwipeButtonInner.getWidth()) / getWidth());
+                        setTrailingEffect();
+                    }
 
-                        if (event.getX() + mSwipeButtonInner.getWidth() / 2 > getWidth() &&
-                                mSwipeButtonInner.getX() + mSwipeButtonInner.getWidth() / 2 < getWidth()) {
-                            mSwipeButtonInner.setX(getWidth() - mSwipeButtonInner.getWidth());
-                        }
+                    if (event.getX() + mSwipeButtonInner.getWidth() / 2 > getWidth() &&
+                            mSwipeButtonInner.getX() + mSwipeButtonInner.getWidth() / 2 < getWidth()) {
+                        mSwipeButtonInner.setX(getWidth() - mSwipeButtonInner.getWidth());
+                    }
 
-                        if (event.getX() < mSwipeButtonInner.getWidth() / 2) {
-                            mSwipeButtonInner.setX(0);
-                        }
+                    if (event.getX() < mSwipeButtonInner.getWidth() / 2) {
+                        mSwipeButtonInner.setX(0);
+                    }
 
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        if (mActive) {
-                            collapseButton();
-                        } else {
-                            if (mSwipeButtonInner.getX() + mSwipeButtonInner.getWidth() > getWidth() * 0.9) {
-                                if (mHasActivationState) {
-                                    expandButton();
-                                } else if (mOnActiveListener != null) {
-                                    mOnActiveListener.onActive();
-                                    moveButtonBack();
-                                }
-                            } else {
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    if (mActive) {
+                        collapseButton();
+                    } else {
+                        if (mSwipeButtonInner.getX() + mSwipeButtonInner.getWidth() > getWidth() * 0.9) {
+                            if (mHasActivationState) {
+                                expandButton();
+                            } else if (mOnActiveListener != null) {
+                                mOnActiveListener.onActive();
                                 moveButtonBack();
                             }
+                        } else {
+                            moveButtonBack();
                         }
+                    }
 
-                        return true;
-                }
-
-                return false;
+                    return true;
             }
+
+            return false;
         };
     }
 
     private void expandButton() {
         final ValueAnimator positionAnimator =
                 ValueAnimator.ofFloat(mSwipeButtonInner.getX(), 0);
-        positionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float x = (Float) positionAnimator.getAnimatedValue();
-                mSwipeButtonInner.setX(x);
-            }
+        positionAnimator.addUpdateListener(animation -> {
+            float x = (Float) positionAnimator.getAnimatedValue();
+            mSwipeButtonInner.setX(x);
         });
 
 
@@ -374,13 +368,10 @@ public class SwipeButton extends RelativeLayout {
                 mSwipeButtonInner.getWidth(),
                 getWidth());
 
-        widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ViewGroup.LayoutParams params = mSwipeButtonInner.getLayoutParams();
-                params.width = (Integer) widthAnimator.getAnimatedValue();
-                mSwipeButtonInner.setLayoutParams(params);
-            }
+        widthAnimator.addUpdateListener(animation -> {
+            ViewGroup.LayoutParams params = mSwipeButtonInner.getLayoutParams();
+            params.width = (Integer) widthAnimator.getAnimatedValue();
+            mSwipeButtonInner.setLayoutParams(params);
         });
 
 
@@ -411,13 +402,10 @@ public class SwipeButton extends RelativeLayout {
         final ValueAnimator positionAnimator =
                 ValueAnimator.ofFloat(mSwipeButtonInner.getX(), 0);
         positionAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-        positionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float x = (Float) positionAnimator.getAnimatedValue();
-                mSwipeButtonInner.setX(x);
-                setTrailingEffect();
-            }
+        positionAnimator.addUpdateListener(animation -> {
+            float x = (Float) positionAnimator.getAnimatedValue();
+            mSwipeButtonInner.setX(x);
+            setTrailingEffect();
         });
 
         positionAnimator.addListener(new AnimatorListenerAdapter() {
@@ -451,14 +439,11 @@ public class SwipeButton extends RelativeLayout {
 
         final ValueAnimator widthAnimator = ValueAnimator.ofInt(mSwipeButtonInner.getWidth(), finalWidth);
 
-        widthAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ViewGroup.LayoutParams params = mSwipeButtonInner.getLayoutParams();
-                params.width = (Integer) widthAnimator.getAnimatedValue();
-                mSwipeButtonInner.setLayoutParams(params);
-                setTrailingEffect();
-            }
+        widthAnimator.addUpdateListener(animation -> {
+            ViewGroup.LayoutParams params = mSwipeButtonInner.getLayoutParams();
+            params.width = (Integer) widthAnimator.getAnimatedValue();
+            mSwipeButtonInner.setLayoutParams(params);
+            setTrailingEffect();
         });
 
         widthAnimator.addListener(new AnimatorListenerAdapter() {

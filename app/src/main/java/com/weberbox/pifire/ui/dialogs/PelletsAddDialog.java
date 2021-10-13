@@ -1,7 +1,6 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 
 public class PelletsAddDialog {
 
-    private DialogInputTextBinding mBinding;
     private final PelletsCallbackInterface mCallBack;
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
@@ -36,31 +34,23 @@ public class PelletsAddDialog {
     }
 
     public AlertDialog showDialog() {
-        mBinding = DialogInputTextBinding.inflate(mInflater);
+        DialogInputTextBinding binding = DialogInputTextBinding.inflate(mInflater);
 
         mDialog.setTitle(mTitle);
 
-        final EditText input = mBinding.dialogTextInput;
+        final EditText input = binding.dialogTextInput;
 
-        mDialog.setView(mBinding.getRoot());
+        mDialog.setView(binding.getRoot());
 
-        mDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mString = input.getText().toString();
-                if (mString.length() != 0) {
-                    mCallBack.onItemAdded(mType, mString);
-                    dialog.dismiss();
-                }
+        mDialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            mString = input.getText().toString();
+            if (mString.length() != 0) {
+                mCallBack.onItemAdded(mType, mString);
+                dialog.dismiss();
             }
         });
 
-        mDialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        mDialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
 
         final AlertDialog alertDialog = mDialog.create();
 

@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/run_mode_sheet_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:alpha="1.0"
     android:animateLayoutChanges="true"
+    android:background="@drawable/bg_bottom_sheet_dialog"
     android:foreground="@android:color/transparent"
     android:padding="@dimen/default_spacing"
-    android:stretchColumns="*"
-    android:background="@drawable/bg_bottom_sheet_dialog">
+    android:stretchColumns="*">
 
-    <TableRow>
+    <TableRow tools:ignore="UselessParent">
 
         <LinearLayout
             android:id="@+id/mode_smoke_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:clickable="true"
             android:background="@drawable/bg_ripple_trans"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 
             <ImageView
@@ -28,16 +31,16 @@
                 android:contentDescription="@string/placeholder_img"
                 android:src="@drawable/ic_grill_smoke" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text24Knockout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:text="@string/grill_mode_smoke"
-                android:textSize="@dimen/action_dialog_text"
                 android:textAlignment="center"
-                android:autoSizeTextType="uniform"
-                style="@style/Text24Knockout"/>
+                android:textSize="@dimen/action_dialog_text"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
@@ -45,9 +48,10 @@
             android:id="@+id/mode_hold_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:clickable="true"
             android:background="@drawable/bg_ripple_trans"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 
             <ImageView
@@ -57,16 +61,16 @@
                 android:contentDescription="@string/placeholder_img"
                 android:src="@drawable/ic_grill_hold" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text24Knockout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:text="@string/grill_mode_hold"
-                android:textSize="@dimen/action_dialog_text"
                 android:textAlignment="center"
-                android:autoSizeTextType="uniform"
-                style="@style/Text24Knockout"/>
+                android:textSize="@dimen/action_dialog_text"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
@@ -74,9 +78,10 @@
             android:id="@+id/mode_shutdown_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:clickable="true"
             android:background="@drawable/bg_ripple_trans"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 
             <ImageView
@@ -87,17 +92,17 @@
                 android:contentDescription="@string/placeholder_img"
                 android:src="@drawable/ic_grill_shutdown" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/mode_shutdown_button_text"
+                style="@style/Text24Knockout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:textAlignment="center"
                 android:text="@string/grill_mode_shutdown"
+                android:textAlignment="center"
                 android:textSize="@dimen/action_dialog_text"
-                android:autoSizeTextType="uniform"
-                style="@style/Text24Knockout"/>
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
     </TableRow>

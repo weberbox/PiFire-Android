@@ -9,13 +9,13 @@ public class Version implements Comparable<Version> {
         return mVersion;
     }
 
-    public Version(@NonNull final String version) throws Exception
-    {
-        String trimmedVersion = version.replaceAll("[^0-9?!\\.]", "");
+    public Version(@NonNull final String version) throws Exception {
+        String trimmedVersion = version.replaceAll("[^0-9?!.]", "");
         // replace all empty version number-parts with zeros
         trimmedVersion = trimmedVersion.replaceAll("\\.(\\.|$)", "\\.0$1");
         if (!trimmedVersion.matches("[0-9]+(\\.[0-9]+)*"))
-            throw new Exception("Invalid version format. Original: `" + version + "` trimmed: `" + trimmedVersion + "`");
+            throw new Exception("Invalid version format. Original: `" + version + "` trimmed: `" +
+                    trimmedVersion + "`");
         mVersion = trimmedVersion;
     }
 

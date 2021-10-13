@@ -51,7 +51,8 @@
                 android:background="@drawable/bg_ripple_trans"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:padding="@dimen/default_spacing">
+                android:padding="@dimen/default_spacing"
+                android:focusable="true">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -75,11 +76,11 @@
                 android:id="@+id/mode_monitor_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:background="@drawable/bg_ripple_trans"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:padding="@dimen/default_spacing">
+                android:padding="@dimen/default_spacing"
+                android:focusable="true">
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -106,7 +107,8 @@
                 android:background="@drawable/bg_ripple_trans"
                 android:clickable="true"
                 android:orientation="vertical"
-                android:padding="@dimen/default_spacing">
+                android:padding="@dimen/default_spacing"
+                android:focusable="true">
 
                 <ImageView
                     android:layout_width="match_parent"

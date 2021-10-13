@@ -58,72 +58,51 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
         if (historyDelete != null) {
-            historyDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_HISTORY);
-                    return true;
-                }
+            historyDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_HISTORY);
+                return true;
             });
         }
 
         if (eventsDelete != null) {
-            eventsDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_EVENTS);
-                    return true;
-                }
+            eventsDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_EVENTS);
+                return true;
             });
         }
 
         if (pelletsLogDelete != null) {
-            pelletsLogDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_PELLET_LOG);
-                    return true;
-                }
+            pelletsLogDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_PELLET_LOG);
+                return true;
             });
         }
 
         if (pelletsDelete != null) {
-            pelletsDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_PELLET);
-                    return true;
-                }
+            pelletsDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_PELLET);
+                return true;
             });
         }
 
         if (factoryReset != null) {
-            factoryReset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_RESET);
-                    return true;
-                }
+            factoryReset.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_RESET);
+                return true;
             });
         }
 
         if (rebootSystem != null) {
-            rebootSystem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_REBOOT);
-                    return true;
-                }
+            rebootSystem.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_REBOOT);
+                return true;
             });
         }
 
         if (shutdownSystem != null) {
-            shutdownSystem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_SHUTDOWN);
-                    return true;
-                }
+            shutdownSystem.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_SHUTDOWN);
+                return true;
             });
         }
     }

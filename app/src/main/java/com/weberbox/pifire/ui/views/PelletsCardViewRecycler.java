@@ -20,7 +20,6 @@ import com.weberbox.pifire.databinding.LayoutPelletsListCardviewBinding;
 
 public class PelletsCardViewRecycler extends CardView {
 
-    private LayoutPelletsListCardviewBinding mBinding;
     private LinearLayout mHolderView;
     private TextView mHeaderTitle;
     private TextView mHeaderButton;
@@ -44,8 +43,8 @@ public class PelletsCardViewRecycler extends CardView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        mBinding = LayoutPelletsListCardviewBinding.inflate(LayoutInflater.from(context), this,
-                true);
+        LayoutPelletsListCardviewBinding binding = LayoutPelletsListCardviewBinding.inflate(
+                LayoutInflater.from(context), this, true);
 
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PelletsCardViewRecycler);
@@ -60,11 +59,11 @@ public class PelletsCardViewRecycler extends CardView {
             headerText = headerText == null ? "" : headerText;
             buttonText = buttonText == null ? "" : buttonText;
 
-            mHolderView = mBinding.pelletsCardviewHolder;
-            mHeaderTitle = mBinding.cardHeaderTitle;
-            mHeaderButton = mBinding.cardHeaderButton;
-            mHeaderIcon = mBinding.cardHeaderIcon;
-            mRecyclerView = mBinding.pelletsRecycler;
+            mHolderView = binding.pelletsCardviewHolder;
+            mHeaderTitle = binding.cardHeaderTitle;
+            mHeaderButton = binding.cardHeaderButton;
+            mHeaderIcon = binding.cardHeaderIcon;
+            mRecyclerView = binding.pelletsRecycler;
 
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());

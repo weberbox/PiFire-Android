@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PelletItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private PelletsCallbackInterface mCallback;
+    private final PelletsCallbackInterface mCallback;
     private final List<PelletItemViewModel> mModel;
 
     public PelletItemsAdapter(final List<PelletItemViewModel> viewModel, PelletsCallbackInterface callback) {

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/info_root_container"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:layout_height="match_parent">
 
     <ProgressBar
@@ -10,12 +12,12 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:max="100"
         android:layout_marginTop="-7dp"
-        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_in"
-        android:indeterminateTint="@color/colorAccent"/>
+        android:max="100"
+        android:visibility="gone" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/info_pull_refresh"
@@ -198,7 +200,8 @@
 
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="TooDeepLayout,UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -255,7 +258,8 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -315,7 +319,8 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -342,7 +347,8 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -413,10 +419,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
-                                android:autoSizeTextType="uniform"
                                 android:maxLines="2"
                                 android:textAlignment="center"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
                         </LinearLayout>
 
@@ -462,18 +468,18 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/app_version_header">
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/default_spacing"
                                 android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginTop="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:text="@string/info_app_version" />
+                                android:text="@string/info_app_version"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/app_version_text"
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
@@ -481,20 +487,20 @@
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:text="@string/info_app_version_code" />
+                                android:text="@string/info_app_version_code"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/app_version_code_text"
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
@@ -502,20 +508,20 @@
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:text="@string/info_app_build_type" />
+                                android:text="@string/info_app_build_type"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/app_build_type_text"
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
@@ -523,20 +529,20 @@
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:text="@string/info_app_flavor" />
+                                android:text="@string/info_app_flavor"
+                                app:autoSizeTextType="uniform" />
 
-                            <TextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/app_build_flavor_text"
                                 style="@style/Text15Aller"
                                 android:layout_width="wrap_content"
@@ -544,8 +550,8 @@
                                 android:layout_marginStart="@dimen/default_spacing"
                                 android:layout_marginEnd="@dimen/default_spacing"
                                 android:layout_marginBottom="@dimen/small_spacing"
-                                android:autoSizeTextType="uniform"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
                         </LinearLayout>
 

@@ -81,15 +81,12 @@ public class SettingsFragment extends Fragment {
 
         mSwipeRefresh = mBinding.settingsPullRefresh;
 
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mSocket != null && mSocket.connected()) {
-                    requestSettingsData();
-                } else {
-                    mSwipeRefresh.setRefreshing(false);
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            if (mSocket != null && mSocket.connected()) {
+                requestSettingsData();
+            } else {
+                mSwipeRefresh.setRefreshing(false);
+                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
     }
@@ -148,9 +145,8 @@ public class SettingsFragment extends Fragment {
 
     private void requestSettingsData() {
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args -> {
-                updateSettingsData(args[0].toString());
-            });
+            mSocket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args ->
+                    updateSettingsData(args[0].toString()));
         }
     }
 

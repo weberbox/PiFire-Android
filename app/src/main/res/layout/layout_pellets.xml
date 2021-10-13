@@ -178,7 +178,8 @@
                 android:text="@string/pellets_add"
                 app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="true" />
 
             <LinearLayout
                 android:id="@+id/pellets_add_profile"

@@ -141,13 +141,13 @@ public class QRScanFragment extends Fragment {
                         Collections.singletonList(credentials));
 
                 if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                    SSLSocketUtils.set(Url, options);
                 }
 
                 connectSocket(Url, options);
             } else {
                 if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                    SSLSocketUtils.set(Url, options);
                     connectSocket(Url, options);
                 } else {
                     connectSocket(Url, null);

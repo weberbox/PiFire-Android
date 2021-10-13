@@ -12,7 +12,6 @@ import com.weberbox.pifire.databinding.DialogProgressBarBinding;
 
 public class ProgressBarDialog {
 
-    private DialogProgressBarBinding mBinding;
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
     private AlertDialog mAlertDialog;
@@ -25,14 +24,14 @@ public class ProgressBarDialog {
     }
 
     public AlertDialog.Builder showDialog() {
-        mBinding = DialogProgressBarBinding.inflate(mInflater);
+        DialogProgressBarBinding binding = DialogProgressBarBinding.inflate(mInflater);
 
         mDialog.setTitle(R.string.downloading);
 
-        mProgress = mBinding.progressBar;
-        mProgressText = mBinding.progressBarText;
+        mProgress = binding.progressBar;
+        mProgressText = binding.progressBarText;
 
-        mDialog.setView(mBinding.getRoot());
+        mDialog.setView(binding.getRoot());
 
         mAlertDialog = mDialog.create();
 

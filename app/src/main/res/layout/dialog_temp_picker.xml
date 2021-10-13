@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet_dialog"
@@ -45,18 +46,18 @@
         android:layout_marginBottom="@dimen/small_spacing"
         android:visibility="gone">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/probe_shutdown_text"
             style="@style/Text15Aller"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/small_spacing"
-            android:autoSizeTextType="uniform"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/grill_shutdown_temp"
             android:textAlignment="center"
             android:textSize="13sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            app:autoSizeTextType="uniform" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/probe_shutdown_switch"

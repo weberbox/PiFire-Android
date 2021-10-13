@@ -10,8 +10,8 @@ import com.weberbox.pifire.model.PelletProfileModel;
 
 public class PelletsProfileViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mPelletProfile;
-    private TextView mPelletProfileId;
+    private final TextView mPelletProfile;
+    private final TextView mPelletProfileId;
 
     public PelletsProfileViewHolder(final View itemView) {
         super(itemView);

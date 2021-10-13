@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:name="com.weberbox.pifire.ui.fragments.setup.QRSetupFragment"
         android:label="@string/setup_label"
-        tools:layout="@layout/fragment_setup_qr" />
+        tools:layout="@layout/fragment_setup_qr"
+        tools:ignore="FragmentTagUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

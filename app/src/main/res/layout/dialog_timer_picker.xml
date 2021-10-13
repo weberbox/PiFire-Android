@@ -98,18 +98,18 @@
         android:layout_marginBottom="@dimen/small_spacing"
         android:visibility="gone">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timer_shutdown_text"
             style="@style/Text15Aller"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/small_spacing"
-            android:autoSizeTextType="uniform"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/grill_shutdown_timer"
             android:textAlignment="center"
             android:textSize="13sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            app:autoSizeTextType="uniform" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/timer_shutdown_switch"

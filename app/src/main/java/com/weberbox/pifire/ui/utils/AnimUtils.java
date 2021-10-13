@@ -144,18 +144,15 @@ public class AnimUtils {
 
             final int height = view.getMeasuredHeight();
             ValueAnimator valueAnimator = ObjectAnimator.ofInt(1, height);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int value = (int) animation.getAnimatedValue();
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    if (height > value) {
-                        layoutParams.height = value;
-                    } else {
-                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    }
-                    view.setLayoutParams(layoutParams);
+            valueAnimator.addUpdateListener(animation -> {
+                int value = (int) animation.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams1 = view.getLayoutParams();
+                if (height > value) {
+                    layoutParams1.height = value;
+                } else {
+                    layoutParams1.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 }
+                view.setLayoutParams(layoutParams1);
             });
             valueAnimator.start();
         }
@@ -163,26 +160,20 @@ public class AnimUtils {
 
     public static void slideUp(final View view) {
         if (view != null) {
-            view.post(new Runnable() {
-                @Override
-                public void run() {
-                    final int height = view.getHeight();
-                    ValueAnimator valueAnimator = ObjectAnimator.ofInt(height, 1);
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            int value = (int) animation.getAnimatedValue();
-                            if (value > 1) {
-                                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                                layoutParams.height = value;
-                                view.setLayoutParams(layoutParams);
-                            } else {
-                                view.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-                    valueAnimator.start();
-                }
+            view.post(() -> {
+                final int height = view.getHeight();
+                ValueAnimator valueAnimator = ObjectAnimator.ofInt(height, 1);
+                valueAnimator.addUpdateListener(animation -> {
+                    int value = (int) animation.getAnimatedValue();
+                    if (value > 1) {
+                        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                        layoutParams.height = value;
+                        view.setLayoutParams(layoutParams);
+                    } else {
+                        view.setVisibility(View.GONE);
+                    }
+                });
+                valueAnimator.start();
             });
         }
     }

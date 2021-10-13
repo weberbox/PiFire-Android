@@ -48,9 +48,9 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference minStartTemp = (EditTextPreference) findPreference(getString(R.string.prefs_safety_min_start));
-        EditTextPreference maxStartTemp = (EditTextPreference) findPreference(getString(R.string.prefs_safety_max_start));
-        EditTextPreference maxGrillTemp = (EditTextPreference) findPreference(getString(R.string.prefs_safety_max_temp));
+        EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
+        EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
+        EditTextPreference maxGrillTemp = findPreference(getString(R.string.prefs_safety_max_temp));
 
         if (minStartTemp != null) {
             minStartTemp.setOnBindEditTextListener(this);

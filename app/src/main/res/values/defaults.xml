@@ -27,6 +27,8 @@
     <bool name="def_probe_shutdown">true</bool>
     <bool name="def_timer_shutdown">true</bool>
 
+    <bool name="def_security_unsigned_cert">false</bool>
+
     <string name="def_app_updater_frequency">5</string>
 
     <string name="def_history_refresh_time_app">3000</string>

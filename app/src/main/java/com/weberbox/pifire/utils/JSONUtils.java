@@ -11,6 +11,7 @@ public class JSONUtils {
 
     private static String gsonJSON(Object object) {
         Gson gson = new Gson();
+        @SuppressWarnings("rawtypes")
         Type gsonType = new TypeToken<HashMap>(){}.getType();
         return gson.toJson(object, gsonType);
     }

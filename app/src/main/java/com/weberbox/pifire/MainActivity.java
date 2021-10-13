@@ -3,20 +3,16 @@ package com.weberbox.pifire;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,6 +27,7 @@ import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainBinding;
+import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.InfoActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
@@ -46,7 +43,7 @@ import io.socket.emitter.Emitter;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private MainViewModel mMainViewModel;
@@ -101,25 +98,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
 
-                if (!handled) {
-                    int id = menuItem.getItemId();
-                    if (id == R.id.nav_admin) {
-                        Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-                        intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
-                        startActivity(intent);
-                    } else if (id == R.id.nav_info) {
-                        Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                        startActivity(intent);
-                    }
+            if (!handled) {
+                int id = menuItem.getItemId();
+                if (id == R.id.nav_admin) {
+                    Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                    intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
+                    startActivity(intent);
+                } else if (id == R.id.nav_info) {
+                    Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                    startActivity(intent);
                 }
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
             }
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         });
 
 
@@ -148,12 +142,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        mMainViewModel.getServerConnected().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean enabled) {
-                if (enabled != null) {
-                    toggleOfflineMessage(enabled);
-                }
+        mMainViewModel.getServerConnected().observe(this, enabled -> {
+            if (enabled != null) {
+                toggleOfflineMessage(enabled);
             }
         });
 

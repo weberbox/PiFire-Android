@@ -1,26 +1,28 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogAdminActionBinding;
 import com.weberbox.pifire.interfaces.AdminCallbackInterface;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class AdminActionDialog {
 
-    private DialogAdminActionBinding mBinding;
     private final BottomSheetDialog mAdminActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final AdminCallbackInterface mCallBack;
+    private final Context mContext;
     private final int mType;
 
 
@@ -29,16 +31,16 @@ public class AdminActionDialog {
         mInflater = LayoutInflater.from(context);
         mCallBack = (AdminCallbackInterface) fragment;
         mType = type;
+        mContext = context;
     }
 
     public BottomSheetDialog showDialog() {
-        mBinding = DialogAdminActionBinding.inflate(mInflater);
+        DialogAdminActionBinding binding = DialogAdminActionBinding.inflate(mInflater);
 
-        LinearLayout actionLeftButton = mBinding.adminCancelButton;
-        LinearLayout actionRightButton = mBinding.adminPositiveButton;
-        TextView actionText = mBinding.adminDialogText;
-        TextView rightButtonText = mBinding.adminPositiveText;
-        ImageView rightButtonImage = mBinding.adminPositiveImage;
+        LinearLayout actionLeftButton = binding.adminCancelButton;
+        LinearLayout actionRightButton = binding.adminPositiveButton;
+        TextView actionText = binding.adminDialogText;
+        ImageView rightButtonImage = binding.adminPositiveImage;
 
         switch (mType) {
             case Constants.ACTION_ADMIN_HISTORY:
@@ -67,24 +69,28 @@ public class AdminActionDialog {
                 break;
         }
 
-        actionLeftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdminActionsBottomSheet.dismiss();
-            }
+        actionLeftButton.setOnClickListener(v -> mAdminActionsBottomSheet.dismiss());
+
+        actionRightButton.setOnClickListener(v -> {
+            mAdminActionsBottomSheet.dismiss();
+            mCallBack.onDialogPositive(mType);
         });
 
-        actionRightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAdminActionsBottomSheet.dismiss();
-                mCallBack.onDialogPositive(mType);
-            }
-        });
+        mAdminActionsBottomSheet.setContentView(binding.getRoot());
 
-        mAdminActionsBottomSheet.setContentView(mBinding.getRoot());
+        mAdminActionsBottomSheet.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
 
         mAdminActionsBottomSheet.show();
+
+        Configuration configuration = mContext.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            mAdminActionsBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        }
 
         return mAdminActionsBottomSheet;
     }

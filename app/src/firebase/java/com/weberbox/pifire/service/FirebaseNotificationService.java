@@ -35,6 +35,7 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         }
     }
 
+    @SuppressWarnings("unused")
     private RemoteViews getCustomDesign(String title, String message) {
         RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),
                 R.layout.layout_notification);
@@ -70,12 +71,18 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
 
-        NotificationChannel notificationChannel = new NotificationChannel(
-                channel_id, getString(R.string.notification_channel_grill_name),
-                NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.setDescription(getString(R.string.notification_desc_grill));
-        notificationManager.createNotificationChannel(notificationChannel);
+        initNotificationChannel(notificationManager, channel_id);
 
         notificationManager.notify(0, builder.build());
+    }
+
+    private void initNotificationChannel(NotificationManager notificationManager, String channel_id) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    channel_id, getString(R.string.notification_channel_grill_name),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription(getString(R.string.notification_desc_grill));
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 }

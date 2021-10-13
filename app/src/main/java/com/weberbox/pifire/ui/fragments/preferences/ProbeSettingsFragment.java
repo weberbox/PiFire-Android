@@ -53,22 +53,22 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        ListPreference grillProbe = (ListPreference) findPreference(getString(
+        ListPreference grillProbe = findPreference(getString(
                 R.string.prefs_grill_probe));
 
-        ListPreference grillProbe1Type = (ListPreference) findPreference(getString(
+        ListPreference grillProbe1Type = findPreference(getString(
                 R.string.prefs_grill_probe_one_type));
 
-        ListPreference grillProbe2Type = (ListPreference) findPreference(getString(
+        ListPreference grillProbe2Type = findPreference(getString(
                 R.string.prefs_grill_probe_two_type));
 
-        ListPreference grillProbeType = (ListPreference) findPreference(getString(
+        ListPreference grillProbeType = findPreference(getString(
                 R.string.prefs_grill_probe_type));
 
-        ListPreference probeOneType = (ListPreference) findPreference(getString(
+        ListPreference probeOneType = findPreference(getString(
                 R.string.prefs_probe_one_type));
 
-        ListPreference probeTwoType = (ListPreference) findPreference(getString(
+        ListPreference probeTwoType = findPreference(getString(
                 R.string.prefs_probe_two_type));
 
         Map<String, ProbeProfileModel> profilesHash = getProbeProfilesHash();

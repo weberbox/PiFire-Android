@@ -26,7 +26,6 @@ import io.socket.client.Socket;
 import okhttp3.Credentials;
 import timber.log.Timber;
 
-
 public class PiFireApplication extends Application {
 
     private static PiFireApplication mInstance;
@@ -89,6 +88,9 @@ public class PiFireApplication extends Application {
     private void startSocket() {
         String serverURL = Prefs.getString(getString(R.string.prefs_server_address), ServerConstants.DEFAULT_SOCKET_URL);
 
+        boolean allowSelfSignedCerts = Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert),
+                getResources().getBoolean(R.bool.def_security_unsigned_cert));
+
         Timber.i("Creating Socket connection to: %s", serverURL);
 
         IO.Options options = new IO.Options();
@@ -103,15 +105,15 @@ public class PiFireApplication extends Application {
             options.extraHeaders = Collections.singletonMap("Authorization",
                     Collections.singletonList(credentials));
 
-            if (serverURL.startsWith("https://")) {
-                SSLSocketUtils.set(options);
+            if (serverURL.startsWith("https://") && allowSelfSignedCerts) {
+                SSLSocketUtils.set(serverURL, options);
             }
 
             connectSocket(serverURL, options);
 
         } else {
-            if (serverURL.startsWith("https://")) {
-                SSLSocketUtils.set(options);
+            if (serverURL.startsWith("https://") && allowSelfSignedCerts) {
+                SSLSocketUtils.set(serverURL, options);
                 connectSocket(serverURL, options);
             } else {
                 connectSocket(serverURL, null);

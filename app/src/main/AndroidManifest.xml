@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.weberbox.pifire">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,7 +9,8 @@
 
     <uses-feature
         android:name="android.permission.CAMERA"
-        android:requiredFeature="false" />
+        android:requiredFeature="false"
+        tools:targetApi="o" />
 
     <application
         android:name=".application.PiFireApplication"
@@ -26,7 +28,8 @@
             android:exported="true"
             android:label="${appName}"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.PiFire.Starting">
+            android:theme="@style/Theme.PiFire.Starting"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

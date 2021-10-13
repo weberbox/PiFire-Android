@@ -5,30 +5,9 @@
         app:title="@string/settings_cat_server_title">
 
         <Preference
-            app:key="@string/prefs_server_address"
-            app:title="@string/settings_server_address" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:title="@string/settings_cat_basic_auth_title">
-
-        <SwitchPreferenceCompat
-            app:key="@string/prefs_server_basic_auth"
-            app:summary="@string/settings_basic_auth_summary"
-            app:title="@string/settings_basic_auth_title" />
-
-        <com.weberbox.pifire.ui.dialogs.PrefsUsernameDialog
-            app:dependency="@string/prefs_server_basic_auth"
-            app:key="@string/prefs_server_basic_auth_user"
-            app:title="@string/settings_username"
-            app:summary="@string/settings_username_summary" />
-
-        <com.weberbox.pifire.ui.dialogs.PrefsPasswordDialog
-            app:dependency="@string/prefs_server_basic_auth"
-            app:key="@string/prefs_server_basic_auth_password"
-            app:title="@string/settings_password"
-            app:summary="@string/settings_password_summary"/>
+            app:key="@string/prefs_server_settings"
+            app:summary="@string/settings_server_settings_summary"
+            app:title="@string/settings_server_settings_title" />
 
     </PreferenceCategory>
 

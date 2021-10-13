@@ -59,7 +59,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/offline_banner_container"
-        app:navGraph="@navigation/nav_controller_graph" />
+        app:navGraph="@navigation/nav_controller_graph"
+        tools:ignore="FragmentTagUsage" />
 
     <!--<View
         android:layout_width="match_parent"

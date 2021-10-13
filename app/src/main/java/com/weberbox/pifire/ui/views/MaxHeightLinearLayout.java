@@ -34,8 +34,10 @@ public class MaxHeightLinearLayout extends LinearLayout {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             @SuppressLint("CustomViewStyleable")
-            TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightLinearLayout);
-            mMaxHeight = styledAttrs.getDimensionPixelSize(R.styleable.MaxHeightLinearLayout_maxHeight, mDefaultHeight);
+            TypedArray styledAttrs = context.obtainStyledAttributes(attrs,
+                    R.styleable.MaxHeightLinearLayout);
+            mMaxHeight = styledAttrs.getDimensionPixelSize(
+                    R.styleable.MaxHeightLinearLayout_maxHeight, mDefaultHeight);
 
             styledAttrs.recycle();
         }

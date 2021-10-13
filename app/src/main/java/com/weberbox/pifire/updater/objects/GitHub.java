@@ -1,5 +1,6 @@
 package com.weberbox.pifire.updater.objects;
 
+@SuppressWarnings("unused")
 public class GitHub {
     private String mGitHubUser;
     private String mGitHubRepo;

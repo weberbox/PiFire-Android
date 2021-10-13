@@ -50,117 +50,105 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        Preference pModeTable = (Preference) findPreference(getString(R.string.prefs_work_pmode_table));
-        EditTextPreference augerOnTime = (EditTextPreference) findPreference(getString(R.string.prefs_work_auger_on));
-        EditTextPreference fanCycleTime = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_fan));
-        EditTextPreference minSmokeTemp = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_min));
-        EditTextPreference maxSmokeTemp = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_max));
-        EditTextPreference pidCycle = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_cycle));
-        EditTextPreference pidPB = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_pb));
-        EditTextPreference pidTi = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_ti));
-        EditTextPreference pidTd = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_td));
+        Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
+        EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
+        EditTextPreference fanCycleTime = findPreference(getString(R.string.prefs_work_splus_fan));
+        EditTextPreference minSmokeTemp = findPreference(getString(R.string.prefs_work_splus_min));
+        EditTextPreference maxSmokeTemp = findPreference(getString(R.string.prefs_work_splus_max));
+        EditTextPreference pidCycle = findPreference(getString(R.string.prefs_work_pid_cycle));
+        EditTextPreference pidPB = findPreference(getString(R.string.prefs_work_pid_pb));
+        EditTextPreference pidTi = findPreference(getString(R.string.prefs_work_pid_ti));
+        EditTextPreference pidTd = findPreference(getString(R.string.prefs_work_pid_td));
 
 
         if (pModeTable != null) {
-            pModeTable.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (getActivity() != null) {
-                        PModeTableDialog pModeTableDialog = new PModeTableDialog(getActivity());
-                        pModeTableDialog.showDialog();
-                    }
-                    return true;
+            pModeTable.setOnPreferenceClickListener(preference -> {
+                if (getActivity() != null) {
+                    PModeTableDialog pModeTableDialog = new PModeTableDialog(getActivity());
+                    pModeTableDialog.showDialog();
                 }
+                return true;
             });
         }
 
         if (pidPB != null) {
-            pidPB.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            pidPB.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 
         if (pidTi != null) {
-            pidTi.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            pidTi.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 
         if (pidTd != null) {
-            pidTd.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            pidTd.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 

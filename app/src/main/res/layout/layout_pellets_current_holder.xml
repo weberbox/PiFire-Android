@@ -8,13 +8,13 @@
         android:background="@color/colorPrimaryLight">
 
         <LinearLayout
-            android:id="@+id/current_brand_placeholder"
+            android:id="@+id/current_brand_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
             android:background="@color/colorPrimaryLight"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/current_wood"
+            app:layout_constraintBottom_toTopOf="@+id/current_wood_holder"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -37,7 +37,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/current_wood"
+            android:id="@+id/current_wood_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
@@ -45,7 +45,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_brand_placeholder">
+            app:layout_constraintTop_toBottomOf="@+id/current_brand_holder">
 
             <View
                 android:layout_width="70dp"
@@ -66,7 +66,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/current_rating_placeholder"
+            android:id="@+id/current_rating_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
@@ -74,7 +74,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_wood">
+            app:layout_constraintTop_toBottomOf="@+id/current_wood_holder">
 
             <TextView
                 android:layout_width="50dp"
@@ -95,7 +95,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/current_date_loaded_placeholder"
+            android:id="@+id/current_date_loaded_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
@@ -103,7 +103,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_rating_placeholder">
+            app:layout_constraintTop_toBottomOf="@+id/current_rating_holder">
 
             <View
                 android:layout_width="90dp"
@@ -124,7 +124,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/current_comments_placeholder"
+            android:id="@+id/current_comments_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.5"
@@ -132,7 +132,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_date_loaded_placeholder">
+            app:layout_constraintTop_toBottomOf="@+id/current_date_loaded_holder">
 
             <View
                 android:layout_width="90dp"

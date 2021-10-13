@@ -71,12 +71,7 @@ public class UtilsDisplay {
             snackbar.setAnchorView(anchor);
         }
 
-        snackbar.setAction(context.getResources().getString(R.string.update_button), new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UtilsLibrary.getAppUpdate(context, update);
-            }
-        });
+        snackbar.setAction(context.getResources().getString(R.string.update_button), view1 -> UtilsLibrary.getAppUpdate(context, update));
 
         return snackbar;
     }
@@ -165,12 +160,14 @@ public class UtilsDisplay {
     }
 
     private static void initNotificationChannel(Context context, NotificationManager notificationManager) {
-        NotificationChannel notificationChannel = new NotificationChannel(
-                context.getString(R.string.notification_channel_id),
-                context.getString(R.string.notification_channel_updates_name),
-                NotificationManager.IMPORTANCE_HIGH);
-        notificationChannel.setDescription(context.getString(R.string.notification_desc_updates));
-        notificationManager.createNotificationChannel(notificationChannel);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    context.getString(R.string.notification_channel_id),
+                    context.getString(R.string.notification_channel_updates_name),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription(context.getString(R.string.notification_desc_updates));
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
 }

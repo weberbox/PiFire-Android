@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,66 +48,60 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference historyDisplay = (EditTextPreference) findPreference(getString(R.string.prefs_history_display));
-        EditTextPreference historyPoints = (EditTextPreference) findPreference(getString(R.string.prefs_history_points));
+        EditTextPreference historyDisplay = findPreference(getString(R.string.prefs_history_display));
+        EditTextPreference historyPoints = findPreference(getString(R.string.prefs_history_points));
 
         if (historyDisplay != null) {
-            historyDisplay.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            historyDisplay.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 
         if (historyPoints != null) {
-            historyPoints.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            historyPoints.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (Integer.parseInt(s.toString()) < 10) {
+                            editText.setError(getString(R.string.settings_min_ten_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (Integer.parseInt(s.toString()) < 10) {
-                                editText.setError(getString(R.string.settings_min_ten_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 

@@ -34,7 +34,8 @@
                 android:paddingEnd="30dp"
                 android:paddingBottom="@dimen/default_spacing"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/placeholderColor" />
+                app:tint="@color/placeholderColor"
+                android:focusable="true" />
 
         </RelativeLayout>
 
@@ -64,7 +65,8 @@
                 android:paddingEnd="30dp"
                 android:paddingBottom="@dimen/default_spacing"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/placeholderColor" />
+                app:tint="@color/placeholderColor"
+                android:focusable="true" />
 
         </RelativeLayout>
 
@@ -95,7 +97,8 @@
                 android:paddingEnd="30dp"
                 android:paddingBottom="@dimen/default_spacing"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/placeholderColor" />
+                app:tint="@color/placeholderColor"
+                android:focusable="true" />
 
         </RelativeLayout>
 
@@ -125,7 +128,8 @@
                 android:paddingEnd="30dp"
                 android:paddingBottom="@dimen/default_spacing"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/placeholderColor" />
+                app:tint="@color/placeholderColor"
+                android:focusable="true" />
 
         </RelativeLayout>
 
@@ -155,7 +159,8 @@
                 android:paddingEnd="30dp"
                 android:paddingBottom="@dimen/default_spacing"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/placeholderColor" />
+                app:tint="@color/placeholderColor"
+                android:focusable="true" />
 
         </RelativeLayout>
     </LinearLayout>

@@ -16,6 +16,7 @@ import com.weberbox.pifire.updater.enums.Duration;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.Update;
 
+@SuppressWarnings("unused")
 public interface IAppUpdater {
     AppUpdater setDisplay(Display display);
 

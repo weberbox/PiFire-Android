@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.weberbox.pifire"
-        minSdk 26
+        minSdk 24
         targetSdk 31
         versionCode 4
         versionName "1.2.0-rc1"
@@ -102,6 +102,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -137,18 +138,19 @@ android {
 
     if(project.hasProperty("pifire.signing")
             && new File(project.property("pifire.signing") + ".gradle").exists()) {
-        apply from: project.property("pifire.signing") + ".gradle";
+        apply from: project.property("pifire.signing") + ".gradle"
     }
 
     if(project.hasProperty("pifire.signing.linux")
             && new File(project.property("pifire.signing.linux") + ".gradle").exists()) {
-        apply from: project.property("pifire.signing.linux") + ".gradle";
+        apply from: project.property("pifire.signing.linux") + ".gradle"
     }
 }
 
 dependencies {
     def acraVersion = '5.8.4'
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
