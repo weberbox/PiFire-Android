@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.interfaces.OnActiveListener;
+import com.weberbox.pifire.interfaces.OnSwipeActiveListener;
 import com.weberbox.pifire.interfaces.OnStateChangeListener;
 import com.weberbox.pifire.interfaces.OnSwipeTouchListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
@@ -47,7 +47,7 @@ public class SwipeButton extends RelativeLayout {
 
     private OnStateChangeListener mOnStateChangeListener;
     private OnSwipeTouchListener mOnSwipeTouchListener;
-    private OnActiveListener mOnActiveListener;
+    private OnSwipeActiveListener mOnSwipeActiveListener;
 
     private int mCollapsedWidth;
 
@@ -132,8 +132,8 @@ public class SwipeButton extends RelativeLayout {
     }
 
     @SuppressWarnings("unused")
-    public void setOnActiveListener(OnActiveListener onActiveListener) {
-        this.mOnActiveListener = onActiveListener;
+    public void setOnActiveListener(OnSwipeActiveListener onSwipeActiveListener) {
+        this.mOnSwipeActiveListener = onSwipeActiveListener;
     }
 
     public void setOnSwipeTouchListener(OnSwipeTouchListener onSwipeTouchListener) {
@@ -339,8 +339,8 @@ public class SwipeButton extends RelativeLayout {
                         if (mSwipeButtonInner.getX() + mSwipeButtonInner.getWidth() > getWidth() * 0.9) {
                             if (mHasActivationState) {
                                 expandButton();
-                            } else if (mOnActiveListener != null) {
-                                mOnActiveListener.onActive();
+                            } else if (mOnSwipeActiveListener != null) {
+                                mOnSwipeActiveListener.onActive();
                                 moveButtonBack();
                             }
                         } else {
@@ -388,8 +388,8 @@ public class SwipeButton extends RelativeLayout {
                     mOnStateChangeListener.onStateChange(mActive);
                 }
 
-                if (mOnActiveListener != null) {
-                    mOnActiveListener.onActive();
+                if (mOnSwipeActiveListener != null) {
+                    mOnSwipeActiveListener.onActive();
                 }
             }
         });

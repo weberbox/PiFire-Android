@@ -156,17 +156,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pellets_edit_comments"
-            android:minHeight="90dp"
             android:layout_marginStart="@dimen/default_spacing"
             android:layout_marginTop="@dimen/small_spacing"
             android:layout_marginEnd="@dimen/default_spacing"
             android:background="@drawable/bg_grey_button"
-            android:gravity="center"
             android:hint="@string/pellets_comments_hint"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences|textMultiLine"
+            android:textAlignment="center"
+            android:minHeight="90dp"
             android:padding="@dimen/small_spacing"
-            android:textStyle="normal"
-            android:inputType="text"
-            android:importantForAutofill="no" />
+            android:textStyle="normal" />
 
     </RelativeLayout>
 

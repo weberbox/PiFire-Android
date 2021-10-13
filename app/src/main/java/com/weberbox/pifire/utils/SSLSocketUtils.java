@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.SSLContext;
@@ -20,7 +19,6 @@ import timber.log.Timber;
 public class SSLSocketUtils {
 
     @SuppressLint("CustomX509TrustManager")
-    @SuppressWarnings("unused")
     public static OkHttpClient getOkHttpClient(String url) {
 
         try {

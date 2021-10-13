@@ -12,80 +12,9 @@
 
     <TableRow>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:layout_marginBottom="@dimen/default_spacing">
-
-            <LinearLayout
-                android:id="@+id/grill_status_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_ripple_table"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="vertical"
-                android:paddingStart="@dimen/default_spacing"
-                android:paddingTop="@dimen/default_spacing"
-                android:paddingEnd="@dimen/default_spacing"
-                android:paddingBottom="@dimen/small_spacing">
-
-                <TextView
-                    style="@style/Text16Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/grill_state_mode" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/controls_grill_mode"
-                    style="@style/Text24Knockout"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/placeholder_mode"
-                    android:textSize="55sp"
-                    app:autoSizeTextType="uniform" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/smoke_plus_status_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/grill_status_container"
-                android:layout_marginTop="@dimen/small_spacing"
-                android:background="@drawable/bg_ripple_smokep_disabled"
-                android:clickable="true"
-                android:enabled="false"
-                android:focusable="true"
-                android:orientation="vertical"
-                android:padding="@dimen/default_spacing">
-
-
-                <TextView
-                    style="@style/Text16Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/grill_smoke_plus" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/controls_smoke_plus"
-                    style="@style/Text24Knockout"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="4dp"
-                    android:text="@string/placeholder_mode"
-                    android:textSize="55sp"
-                    app:autoSizeTextType="uniform" />
-
-            </LinearLayout>
-
-        </RelativeLayout>
-
-
         <FrameLayout
             android:layout_width="0dp"
+            android:layout_marginEnd="@dimen/default_spacing"
             android:layout_marginBottom="@dimen/default_spacing">
 
             <ProgressBar
@@ -194,9 +123,6 @@
                 </RelativeLayout>
             </LinearLayout>
         </FrameLayout>
-    </TableRow>
-
-    <TableRow>
 
         <FrameLayout
             android:layout_width="0dp"
@@ -489,6 +415,7 @@
             android:id="@+id/controls_pellet_level_container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_spacing"
             android:background="@drawable/bg_ripple_table"
             android:clickable="true"
             android:focusable="true"
@@ -537,5 +464,78 @@
                     android:text="@string/grill_state_remaining" />
             </LinearLayout>
         </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/grill_status_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/medium_spacing"
+                android:background="@drawable/bg_ripple_table"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/smoke_plus_status_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    style="@style/Text16Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_state_mode" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/controls_grill_mode"
+                    style="@style/Text24Knockout"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/placeholder_mode"
+                    android:textSize="55sp"
+                    app:autoSizeTextType="uniform" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/smoke_plus_status_container"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_ripple_smokep_disabled"
+                android:clickable="true"
+                android:enabled="false"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="@dimen/default_spacing"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/grill_status_container"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <TextView
+                    style="@style/Text16Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/grill_smoke_plus" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/controls_smoke_plus"
+                    style="@style/Text24Knockout"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/placeholder_mode"
+                    android:textSize="55sp"
+                    app:autoSizeTextType="uniform" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </TableRow>
 </TableLayout>

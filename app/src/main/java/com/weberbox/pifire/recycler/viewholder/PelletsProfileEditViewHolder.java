@@ -69,6 +69,8 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
             toggleCardView();
         });
 
+        mPelletProfileRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+
         mPelletProfileBrand.setSpinnerOutsideTouchListener((view, motionEvent) ->
                 mPelletProfileBrand.dismiss());
 

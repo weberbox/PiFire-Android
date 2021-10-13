@@ -136,12 +136,6 @@ public class MainActivity extends BaseActivity {
             divider.setVisibility(View.GONE);
         }
 
-        if (AppConfig.USE_FIREBASE) {
-            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))) {
-                FirebaseUtils.subscribeFirebase();
-            }
-        }
-
         mMainViewModel.getServerConnected().observe(this, enabled -> {
             if (enabled != null) {
                 toggleOfflineMessage(enabled);

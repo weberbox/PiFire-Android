@@ -8,9 +8,11 @@ import android.content.res.Resources;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.utils.AcraUtils;
+import com.weberbox.pifire.utils.FirebaseUtils;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.log.CrashReportingTree;
@@ -68,6 +70,12 @@ public class PiFireApplication extends Application {
 
         Timber.d("Startup - Application Start");
 
+        if (AppConfig.USE_FIREBASE) {
+            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), true)) {
+                FirebaseUtils.initNotificationChannels(this);
+                FirebaseUtils.subscribeFirebase();
+            }
+        }
     }
 
     public static PiFireApplication getInstance() {

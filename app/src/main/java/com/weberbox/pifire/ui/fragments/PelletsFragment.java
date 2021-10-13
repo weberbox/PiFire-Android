@@ -160,6 +160,8 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mPelletProfileWood = pelletsProfileAddBinding.pelletEditContainer.pelletEditWoodText;
         mPelletProfileRating = pelletsProfileAddBinding.pelletEditContainer.pelletEditRatingText;
         mProfileAddComments = pelletsProfileAddBinding.pelletEditContainer.pelletEditCommentsText;
+        PowerSpinnerView pelletsRating = pelletsProfileAddBinding.pelletEditContainer.pelletEditRatingText;
+        pelletsRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
 
 
         RecyclerView brandsCardViewRecycler = brandsCardView.getRecycler();

@@ -96,7 +96,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void setActionBarTitle(int title) {
+    public void setActionBarTitle(int title) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }

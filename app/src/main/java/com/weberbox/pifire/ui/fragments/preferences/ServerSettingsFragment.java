@@ -24,6 +24,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
@@ -137,6 +138,9 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_server);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

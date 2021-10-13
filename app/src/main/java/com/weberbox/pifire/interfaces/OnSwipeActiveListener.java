@@ -1,5 +1,5 @@
 package com.weberbox.pifire.interfaces;
 
-public interface OnActiveListener {
+public interface OnSwipeActiveListener {
     void onActive();
 }

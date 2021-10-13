@@ -16,6 +16,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.secure.SecureCore;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
@@ -92,6 +93,14 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         }
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_app);
+        }
     }
 
     @Override

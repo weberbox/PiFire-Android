@@ -51,8 +51,7 @@ import timber.log.Timber;
 
 public class SettingsFragment extends Fragment {
 
-    // TODO allow offline changes and sync to server once online. Use settings with newer timestamp.
-    //  Timestamp added to server settings
+    // TODO allow offline changes and sync to server once online.
 
     private FragmentSettingsBinding mBinding;
     private SwipeRefreshLayout mSwipeRefresh;

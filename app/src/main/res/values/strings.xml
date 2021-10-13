@@ -2,12 +2,25 @@
     <string name="app_name">PiFire</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="notification_channel_id">pifire_notification_channel</string>
-    <string name="notification_channel_grill_name">Grill Alerts</string>
-    <string name="notification_channel_reports_name">Crash Reports</string>
+    <string name="notification_group_grill">pifire_grill_group</string>
+    <string name="notification_group_grill_name">Grill Alerts</string>
+    <string name="notification_channel_base">pifire_base_alerts</string>
+    <string name="notification_channel_temp">pifire_temp_alerts</string>
+    <string name="notification_channel_timer">pifire_timer_alerts</string>
+    <string name="notification_channel_error">pifire_error_alerts</string>
+    <string name="notification_channel_crash">pifire_crash_alerts</string>
+    <string name="notification_channel_updates">pifire_update_alerts</string>
+    <string name="notification_channel_base_name">General Alerts</string>
+    <string name="notification_channel_temp_name">Temp Alerts</string>
+    <string name="notification_channel_timer_name">Timer Alerts</string>
+    <string name="notification_channel_error_name">Error Alerts</string>
+    <string name="notification_channel_crash_name">Crash Reports</string>
     <string name="notification_channel_updates_name">Update Alerts</string>
-    <string name="notification_desc_reports">Shows crash report notifications</string>
-    <string name="notification_desc_grill">Shows regular grill alerts including timer, temp, etc</string>
+    <string name="notification_desc_base">Shows general grill alerts</string>
+    <string name="notification_desc_temp">Shows grill temp alerts</string>
+    <string name="notification_desc_timer">Shows grill timer alerts</string>
+    <string name="notification_desc_error">Shows grill error alerts</string>
+    <string name="notification_desc_crash">Shows crash report notifications</string>
     <string name="notification_desc_updates">Shows app update notifications</string>
 
     <string name="acra_notification_title">App Crash</string>
@@ -149,6 +162,7 @@
     <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
 
     <string name="settings_config">Configuration</string>
+    <string name="settings_server">Server Settings</string>
     <string name="settings_app">App Settings</string>
     <string name="settings_probe">Probe Settings</string>
     <string name="settings_grill_name">Grill Name</string>

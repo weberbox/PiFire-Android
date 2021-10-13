@@ -5,7 +5,6 @@ import android.content.Context;
 import timber.log.Timber;
 
 public class FirebaseUtils {
-    private static final String TAG = FirebaseUtils.class.getSimpleName();
 
     public static void getFirebaseToken(Context context) {
         Timber.d("Non Firebase Build");
@@ -16,6 +15,10 @@ public class FirebaseUtils {
     }
 
     public static void subscribeFirebase() {
+        Timber.d("Non Firebase Build");
+    }
+
+    public static void initNotificationChannels(Context context) {
         Timber.d("Non Firebase Build");
     }
 }

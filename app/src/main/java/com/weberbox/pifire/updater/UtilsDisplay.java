@@ -1,5 +1,6 @@
 package com.weberbox.pifire.updater;
 
+import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -147,7 +148,8 @@ public class UtilsDisplay {
 
     private static NotificationCompat.Builder getBaseNotification(Context context, PendingIntent
             contentIntent, String title, String content, int smallIconResourceId) {
-        return new NotificationCompat.Builder(context, context.getString(R.string.notification_channel_id))
+        return new NotificationCompat.Builder(context, context.getString(
+                R.string.notification_channel_updates))
                 .setContentIntent(contentIntent)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -159,10 +161,11 @@ public class UtilsDisplay {
 
     }
 
+    @TargetApi(26)
     private static void initNotificationChannel(Context context, NotificationManager notificationManager) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(
-                    context.getString(R.string.notification_channel_id),
+                    context.getString(R.string.notification_channel_updates),
                     context.getString(R.string.notification_channel_updates_name),
                     NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setDescription(context.getString(R.string.notification_desc_updates));
