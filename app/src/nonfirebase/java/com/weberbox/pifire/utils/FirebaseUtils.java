@@ -6,6 +6,10 @@ import timber.log.Timber;
 
 public class FirebaseUtils {
 
+    public static void initFirebase(Context context) {
+        Timber.d("Non Firebase Build");
+    }
+
     public static void getFirebaseToken(Context context) {
         Timber.d("Non Firebase Build");
     }

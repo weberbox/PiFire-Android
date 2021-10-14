@@ -11,6 +11,7 @@ import android.net.Uri;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
@@ -20,6 +21,10 @@ import com.weberbox.pifire.ui.dialogs.FirebaseTokenDialog;
 import timber.log.Timber;
 
 public class FirebaseUtils {
+
+    public static void initFirebase(Context context) {
+        FirebaseApp.initializeApp(context);
+    }
 
     public static void getFirebaseToken(Context context) {
         FirebaseMessaging.getInstance().getToken()

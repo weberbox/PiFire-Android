@@ -2,7 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true" >
 
     <RelativeLayout
         android:id="@+id/pellet_edit_brand"
@@ -163,9 +166,10 @@
             android:hint="@string/pellets_comments_hint"
             android:importantForAutofill="no"
             android:inputType="textCapSentences|textMultiLine"
-            android:textAlignment="center"
+            android:imeOptions="actionDone"
             android:minHeight="90dp"
             android:padding="@dimen/small_spacing"
+            android:textAlignment="center"
             android:textStyle="normal" />
 
     </RelativeLayout>

@@ -1,16 +1,19 @@
 package com.weberbox.pifire;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +26,6 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainBinding;
@@ -36,7 +38,6 @@ import com.weberbox.pifire.ui.utils.BannerTransition;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
-import com.weberbox.pifire.utils.FirebaseUtils;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -52,14 +53,13 @@ public class MainActivity extends BaseActivity {
     private ConstraintLayout mRootContainer;
     private Socket mSocket;
     private AppUpdater mAppUpdater;
+    private int mDownX;
 
     private boolean mAppIsVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SplashScreen.installSplashScreen(this);
 
         boolean firstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
 
@@ -144,16 +144,17 @@ public class MainActivity extends BaseActivity {
 
         connectSocketListenData(mSocket);
 
-        mAppUpdater = new AppUpdater(this)
-                .setDisplay(Display.DIALOG)
-                .setButtonDoNotShowAgain(R.string.disable_button)
-                .setUpdateFrom(UpdateFrom.JSON)
-                .setUpdateJSON(getString(R.string.def_app_update_check_url))
-                .showEvery(Integer.parseInt(Prefs.getString(getString(
-                        R.string.prefs_app_updater_frequency),
-                        getString(R.string.def_app_updater_frequency))));
-        mAppUpdater.start();
-
+        if (savedInstanceState == null) {
+            mAppUpdater = new AppUpdater(this)
+                    .setDisplay(Display.DIALOG)
+                    .setButtonDoNotShowAgain(R.string.disable_button)
+                    .setUpdateFrom(UpdateFrom.JSON)
+                    .setUpdateJSON(getString(R.string.def_app_update_check_url))
+                    .showEvery(Integer.parseInt(Prefs.getString(getString(
+                            R.string.prefs_app_updater_frequency),
+                            getString(R.string.def_app_updater_frequency))));
+            mAppUpdater.start();
+        }
     }
 
     @Override
@@ -172,12 +173,6 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -193,7 +188,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mAppUpdater.stop();
+        if (mAppUpdater != null) {
+            mAppUpdater.stop();
+        }
         mAppIsVisible = false;
     }
 
@@ -206,6 +203,49 @@ public class MainActivity extends BaseActivity {
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownX = (int) event.getRawX();
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
+                if (Math.abs(mDownX - x) > 5) {
+                    return super.dispatchTouchEvent(event);
+                }
+                final int reducePx = 25;
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                outRect.inset(reducePx, reducePx);
+                if (!outRect.contains(x, y)) {
+                    v.clearFocus();
+                    boolean touchTargetIsEditText = false;
+                    for (View vi : v.getRootView().getTouchables()) {
+                        if (vi instanceof EditText) {
+                            Rect clickedViewRect = new Rect();
+                            vi.getGlobalVisibleRect(clickedViewRect);
+                            clickedViewRect.inset(reducePx, reducePx);
+                            if (clickedViewRect.contains(x, y)) {
+                                touchTargetIsEditText = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!touchTargetIsEditText) {
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     private Socket getSocket() {

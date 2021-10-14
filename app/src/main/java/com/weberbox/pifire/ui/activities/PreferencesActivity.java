@@ -4,7 +4,6 @@ package com.weberbox.pifire.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
@@ -20,7 +19,7 @@ import com.weberbox.pifire.ui.fragments.preferences.SafetySettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.ShutdownSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.WorkSettingsFragment;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class PreferencesActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

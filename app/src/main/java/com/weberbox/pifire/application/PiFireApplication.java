@@ -31,7 +31,7 @@ import timber.log.Timber;
 public class PiFireApplication extends Application {
 
     private static PiFireApplication mInstance;
-    private static Resources res;
+    private static Resources mRes;
     private Socket mSocket;
 
     @Override
@@ -51,7 +51,7 @@ public class PiFireApplication extends Application {
         super.onCreate();
 
         mInstance = this;
-        res = getResources();
+        mRes = getResources();
 
         new Prefs.Builder()
                 .setContext(this)
@@ -71,6 +71,9 @@ public class PiFireApplication extends Application {
         Timber.d("Startup - Application Start");
 
         if (AppConfig.USE_FIREBASE) {
+            Timber.d("Init Firebase");
+
+            FirebaseUtils.initFirebase(this);
             if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), true)) {
                 FirebaseUtils.initNotificationChannels(this);
                 FirebaseUtils.subscribeFirebase();
@@ -83,7 +86,7 @@ public class PiFireApplication extends Application {
     }
 
     public static Resources getRes() {
-        return res;
+        return mRes;
     }
 
     public Socket getSocket() {
@@ -113,14 +116,14 @@ public class PiFireApplication extends Application {
             options.extraHeaders = Collections.singletonMap("Authorization",
                     Collections.singletonList(credentials));
 
-            if (serverURL.startsWith("https://") && allowSelfSignedCerts) {
+            if (serverURL.startsWith(getString(R.string.https_scheme)) && allowSelfSignedCerts) {
                 SSLSocketUtils.set(serverURL, options);
             }
 
             connectSocket(serverURL, options);
 
         } else {
-            if (serverURL.startsWith("https://") && allowSelfSignedCerts) {
+            if (serverURL.startsWith(getString(R.string.https_scheme)) && allowSelfSignedCerts) {
                 SSLSocketUtils.set(serverURL, options);
                 connectSocket(serverURL, options);
             } else {

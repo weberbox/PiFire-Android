@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,6 +58,41 @@
             android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/self_signed_note_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:paddingTop="@dimen/default_spacing"
+            android:visibility="invisible">
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/setup_enable_self_signed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/self_signed_note"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/self_signed_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/aller_regular"
+                android:text="@string/settings_security_unsigned_cert_summary"
+                android:textAlignment="textStart"
+                android:textColor="@color/colorWhite"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/setup_enable_self_signed"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ProgressBar
             android:id="@+id/qr_code_scan_progressbar"
             android:layout_width="64dp"
@@ -62,6 +100,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:indeterminateTint="@color/colorAccent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
 </FrameLayout>
