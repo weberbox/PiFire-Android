@@ -16,11 +16,11 @@ import java.util.List;
 
 public class PelletItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private PelletsCallbackInterface mCallback;
-    private final List<PelletItemViewModel> models;
+    private final PelletsCallbackInterface mCallback;
+    private final List<PelletItemViewModel> mModel;
 
-    public PelletItemsAdapter(final List<PelletItemViewModel> viewModels, PelletsCallbackInterface callback) {
-        models = viewModels;
+    public PelletItemsAdapter(final List<PelletItemViewModel> viewModel, PelletsCallbackInterface callback) {
+        mModel = viewModel;
         mCallback = callback;
     }
 
@@ -33,12 +33,12 @@ public class PelletItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((PelletsItemViewHolder) holder).bindData(models.get(position));
+        ((PelletsItemViewHolder) holder).bindData(mModel.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModel.size();
     }
 
     @Override

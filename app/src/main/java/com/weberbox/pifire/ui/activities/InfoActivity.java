@@ -4,13 +4,10 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ActivityInfoBinding;
 
-public class InfoActivity extends AppCompatActivity {
-    private static final String TAG = InfoActivity.class.getSimpleName();
+public class InfoActivity extends BaseActivity {
 
     private ActivityInfoBinding mBinding;
 

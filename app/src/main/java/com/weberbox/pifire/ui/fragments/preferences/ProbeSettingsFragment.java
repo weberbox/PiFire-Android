@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.model.GrillProbeModel;
 import com.weberbox.pifire.model.ProbeProfileModel;
@@ -30,7 +29,6 @@ import io.socket.client.Socket;
 
 public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = ProbeSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 
@@ -55,22 +53,22 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        ListPreference grillProbe = (ListPreference) findPreference(getString(
+        ListPreference grillProbe = findPreference(getString(
                 R.string.prefs_grill_probe));
 
-        ListPreference grillProbe1Type = (ListPreference) findPreference(getString(
+        ListPreference grillProbe1Type = findPreference(getString(
                 R.string.prefs_grill_probe_one_type));
 
-        ListPreference grillProbe2Type = (ListPreference) findPreference(getString(
+        ListPreference grillProbe2Type = findPreference(getString(
                 R.string.prefs_grill_probe_two_type));
 
-        ListPreference grillProbeType = (ListPreference) findPreference(getString(
+        ListPreference grillProbeType = findPreference(getString(
                 R.string.prefs_grill_probe_type));
 
-        ListPreference probeOneType = (ListPreference) findPreference(getString(
+        ListPreference probeOneType = findPreference(getString(
                 R.string.prefs_probe_one_type));
 
-        ListPreference probeTwoType = (ListPreference) findPreference(getString(
+        ListPreference probeTwoType = findPreference(getString(
                 R.string.prefs_probe_two_type));
 
         Map<String, ProbeProfileModel> profilesHash = getProbeProfilesHash();
@@ -79,7 +77,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
 
         ArrayList<String> profileEntryNames = new ArrayList<>();
 
-        for (ProbeProfileModel p:profilesHash.values()) {
+        for (ProbeProfileModel p : profilesHash.values()) {
             profileEntryNames.add(p.getName());
         }
 
@@ -103,7 +101,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
 
                 ArrayList<String> grillProbeEntryNames = new ArrayList<>();
 
-                for (GrillProbeModel gp:grillProbeHash.values()) {
+                for (GrillProbeModel gp : grillProbeHash.values()) {
                     grillProbeEntryNames.add(gp.getName());
                 }
 
@@ -168,27 +166,33 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                 if (mSocket != null) {
                     if (preference.getContext().getString(R.string.prefs_grill_probe)
                             .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setGrillProbe(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                     if (preference.getContext().getString(R.string.prefs_grill_probe_type)
                             .equals(preference.getKey())) {
-                        GrillControl.setGrillProbeType(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setGrillProbeType(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                     if (preference.getContext().getString(R.string.prefs_grill_probe_one_type)
                             .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe1Type(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setGrillProbe1Type(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                     if (preference.getContext().getString(R.string.prefs_grill_probe_two_type)
                             .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe2Type(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setGrillProbe2Type(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                     if (preference.getContext().getString(R.string.prefs_probe_one_type)
                             .equals(preference.getKey())) {
-                        GrillControl.setProbe1Type(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setProbe1Type(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                     if (preference.getContext().getString(R.string.prefs_probe_two_type)
                             .equals(preference.getKey())) {
-                        GrillControl.setProbe2Type(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setProbe2Type(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                 }
             }
@@ -198,14 +202,18 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     private HashMap<String, ProbeProfileModel> getProbeProfilesHash() {
         String defValue = new Gson().toJson(new HashMap<String, ProbeProfileModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_probe_profiles), defValue);
-        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<HashMap<String, ProbeProfileModel>>() {};
+        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<HashMap<String,
+                ProbeProfileModel>>() {
+        };
         return new Gson().fromJson(jsonProfiles, token.getType());
     }
 
     private HashMap<String, GrillProbeModel> getGrillProbeHash() {
         String defValue = new Gson().toJson(new HashMap<String, GrillProbeModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_grill_probes), defValue);
-        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<HashMap<String, GrillProbeModel>>() {};
+        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<HashMap<String,
+                GrillProbeModel>>() {
+        };
         return new Gson().fromJson(jsonProfiles, token.getType());
     }
 }

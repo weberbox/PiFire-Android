@@ -10,8 +10,8 @@ import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
 
 public class TempPickerViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView tempTextView;
-    private TextView unitTextView;
+    private final TextView tempTextView;
+    private final TextView unitTextView;
 
     public TempPickerViewHolder(final View itemView) {
         super(itemView);

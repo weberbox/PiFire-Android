@@ -5,14 +5,14 @@ import android.icu.text.SimpleDateFormat;
 
 import androidx.annotation.NonNull;
 
-import com.weberbox.pifire.utils.Log;
 import com.weberbox.pifire.utils.StringUtils;
 
 import java.text.ParseException;
 import java.util.Date;
 
+import timber.log.Timber;
+
 public class PelletLogViewModel {
-    private static final String TAG = PelletLogViewModel.class.getSimpleName();
 
     private String mPelletDate;
     private String mPelletName;
@@ -29,7 +29,7 @@ public class PelletLogViewModel {
             formatter.applyPattern("MM/dd");
             setPelletDate(formatter.format(date));
         } catch (ParseException e) {
-            Log.e(TAG, "Error parsing date " + e.getMessage());
+            Timber.w(e, "Error parsing date %s", e.getMessage());
             setPelletDate(pelletDate);
         }
 

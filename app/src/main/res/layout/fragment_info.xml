@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/info_root_container"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:layout_height="match_parent">
 
     <ProgressBar
@@ -10,12 +12,12 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:max="100"
         android:layout_marginTop="-7dp"
-        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_in"
-        android:indeterminateTint="@color/colorAccent"/>
+        android:max="100"
+        android:visibility="gone" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/info_pull_refresh"
@@ -47,38 +49,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
                             android:id="@+id/system_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/system_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/system_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_system_info"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:gravity="center"
-                            android:text="@string/info_system_info"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/system_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/system_header_icon"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <LinearLayout
-                            android:id="@+id/current_comments"
+                            android:id="@+id/cpu_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/colorPrimaryLight"
@@ -115,7 +97,7 @@
                             android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/current_comments">
+                            app:layout_constraintTop_toBottomOf="@+id/cpu_info">
 
                             <TextView
                                 style="@style/Text15Aller"
@@ -170,7 +152,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/brands_card_view"
+                    android:id="@+id/gpio_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/system_card_view"
@@ -184,39 +166,19 @@
                     app:contentPadding="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/brands_inner"
+                        android:id="@+id/gpio_inner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
-                            android:id="@+id/brands_card_header"
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                            android:id="@+id/gpio_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/brands_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/brands_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_gpio"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:text="@string/info_gpio"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/brands_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/brands_header_icon"
-                            app:layout_constraintTop_toTopOf="parent" />
-
 
                         <TableLayout
                             android:id="@+id/gpio_info"
@@ -228,7 +190,7 @@
                             android:stretchColumns="*"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/brands_card_header">
+                            app:layout_constraintTop_toBottomOf="@+id/gpio_card_header">
 
                             <TableRow>
 
@@ -238,7 +200,8 @@
 
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="TooDeepLayout,UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -295,7 +258,8 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -353,10 +317,10 @@
                                 <FrameLayout android:layout_width="0dp">
 
                                     <LinearLayout
-
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -383,7 +347,8 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        tools:ignore="UselessParent">
 
                                         <TextView
                                             style="@style/Text15Aller"
@@ -410,10 +375,10 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/woods_card_view"
+                    android:id="@+id/uptime_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/brands_card_view"
+                    android:layout_below="@+id/gpio_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing"
@@ -424,38 +389,18 @@
                     app:contentPadding="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/woods_inner"
+                        android:id="@+id/uptime_inner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
-                            android:id="@+id/woods_card_header"
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                            android:id="@+id/uptime_card_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/woods_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/woods_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_uptime"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:gravity="center"
-                            android:text="@string/info_uptime"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/woods_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/woods_header_icon"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <LinearLayout
@@ -466,7 +411,7 @@
                             android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/woods_card_header">
+                            app:layout_constraintTop_toBottomOf="@+id/uptime_card_header">
 
                             <TextView
                                 android:id="@+id/uptime_info_text"
@@ -474,10 +419,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
-                                android:autoSizeTextType="uniform"
                                 android:maxLines="2"
                                 android:textAlignment="center"
-                                android:textStyle="normal" />
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
 
                         </LinearLayout>
 
@@ -485,10 +430,10 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/editor_card_view"
+                    android:id="@+id/app_version_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/woods_card_view"
+                    android:layout_below="@+id/uptime_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing"
@@ -499,48 +444,159 @@
                     app:contentPadding="0dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/editor_inner"
+                        android:id="@+id/app_version_inner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <View
-                            android:id="@+id/editor_card_header"
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                            android:id="@+id/app_version_header"
                             android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:background="@drawable/bg_card_view_header"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/editor_header_icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:contentDescription="@string/placeholder_img"
-                            android:src="@drawable/ic_menu_about"
-                            app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_app_info"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            style="@style/Text18AllerNormal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_margin="@dimen/default_spacing"
-                            android:text="@string/info_credits"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
-                            app:layout_constraintStart_toEndOf="@+id/editor_header_icon"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                         <LinearLayout
-                            android:id="@+id/credits_info"
+                            android:id="@+id/app_version_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/colorPrimaryLight"
                             android:orientation="vertical"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/editor_card_header">
+                            app:layout_constraintTop_toBottomOf="@+id/app_version_header">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginTop="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_app_version"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/app_version_text"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_app_version_code"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/app_version_code_text"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_app_build_type"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/app_build_type_text"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_app_flavor"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/app_build_flavor_text"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/licenses_card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/app_version_card_view"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="10dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:contentPadding="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/licenses_inner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                            android:id="@+id/licenses_card_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_credits"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/licenses_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimaryLight"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/licenses_card_header">
 
                             <TextView
                                 style="@style/Text15Aller"

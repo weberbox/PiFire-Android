@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +23,6 @@ import io.socket.client.Socket;
 
 public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = PelletSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 
@@ -48,68 +46,62 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        EditTextPreference pelletsFull = (EditTextPreference) findPreference(getString(R.string.prefs_pellet_full));
-        EditTextPreference pelletsEmpty = (EditTextPreference) findPreference(getString(R.string.prefs_pellet_empty));
+        EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
+        EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
 
         if (pelletsFull != null) {
-            pelletsFull.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            pelletsFull.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (Integer.parseInt(s.toString()) > 100) {
+                            editText.setError(getString(R.string.settings_max_hundred_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (Integer.parseInt(s.toString()) > 100) {
-                                editText.setError(getString(R.string.settings_max_hundred_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 
         if (pelletsEmpty != null) {
-            pelletsEmpty.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
+            pelletsEmpty.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else if (Integer.parseInt(s.toString()) > 100) {
+                            editText.setError(getString(R.string.settings_max_hundred_error));
+                        } else {
+                            editText.setError(null);
                         }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else if (Integer.parseInt(s.toString()) > 100) {
-                                editText.setError(getString(R.string.settings_max_hundred_error));
-                            } else {
-                                editText.setError(null);
-                            }
-
-                        }
-                    });
-                }
+                    }
+                });
             });
         }
 
@@ -145,11 +137,13 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_pellet_empty)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsEmpty(mSocket, ((EditTextPreference) preference).getText());
+                    GrillControl.setPelletsEmpty(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
                 if (preference.getContext().getString(R.string.prefs_pellet_full)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsFull(mSocket, ((EditTextPreference) preference).getText());
+                    GrillControl.setPelletsFull(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
             }
         }

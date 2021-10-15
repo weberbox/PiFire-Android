@@ -5,13 +5,13 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_ifttt">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_ifttt_enabled"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_enabled"
             app:title="@string/enabled" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_api"
@@ -22,29 +22,29 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_pushover" >
+        app:title="@string/settings_cat_pushover">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_pushover_enabled"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_enabled"
             app:title="@string/enabled" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_api"
             app:title="@string/settings_pushover_api"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_keys"
-            app:title="@string/settings_pushover_keys"
-            app:summary="@string/settings_pushover_note" />
+            app:summary="@string/settings_pushover_note"
+            app:title="@string/settings_pushover_keys" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_url"
@@ -55,22 +55,22 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_pushbullet" >
+        app:title="@string/settings_cat_pushbullet">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_pushbullet_enabled"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_enabled"
             app:title="@string/enabled" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_api"
             app:title="@string/settings_pushbullet_api"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_url"
@@ -80,17 +80,17 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:key="@string/prefs_notif_firebase"
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_firebase" >
+        app:key="@string/prefs_notif_firebase"
+        app:title="@string/settings_cat_firebase">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_notif_firebase_enabled"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_firebase_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_firebase_enabled"
             app:title="@string/enabled" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_firebase_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_firebase_serverkey"

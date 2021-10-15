@@ -30,12 +30,15 @@ public class ServerConstants {
     public static final String TIMER_STOP = "stop";
     public static final String TIMER_HOURS = "hoursInputRange";
     public static final String TIMER_MINS = "minsInputRange";
+    public static final String TIMER_SHUTDOWN = "shutdownTimer";
 
     public static final String NOTIFY_ACTION = "notify";
     public static final String NOTIFY_SET = "setnotify";
     public static final String NOTIFY_GRILL = "grillnotify";
     public static final String NOTIFY_PROBE1 = "probe1notify";
     public static final String NOTIFY_PROBE2 = "probe2notify";
+    public static final String NOTIFY_SHUTDOWN_P1 = "shutdownP1";
+    public static final String NOTIFY_SHUTDOWN_P2 = "shutdownP2";
 
     public static final String NOTIFY_TEMP_GRILL = "grilltempInputRange";
     public static final String NOTIFY_TEMP_PROBE1 = "probe1tempInputRange";
@@ -83,6 +86,8 @@ public class ServerConstants {
     public static final String CYCLE_PROP_BAND = "propband";
     public static final String CYCLE_INTEGRAL_TIME = "integraltime";
     public static final String CYCLE_DERIV_TIME = "derivtime";
+    public static final String CYCLE_U_MAX= "u_max";
+    public static final String CYCLE_U_MIN = "u_min";
     public static final String CYCLE_SP_CYCLE = "sp_cycle";
     public static final String CYCLE_MIN_SP_TEMP = "minsptemp";
     public static final String CYCLE_MAX_SP_TEMP = "maxsptemp";

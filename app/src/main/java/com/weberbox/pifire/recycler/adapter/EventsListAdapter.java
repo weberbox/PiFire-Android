@@ -11,17 +11,14 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.recycler.viewholder.EventsViewHolder;
 import com.weberbox.pifire.recycler.viewmodel.EventViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<EventViewModel> models = new ArrayList<>();
+    private final List<EventViewModel> mModel;
 
-    public EventsListAdapter(final List<EventViewModel> viewModels) {
-        if (viewModels != null) {
-            this.models.addAll(viewModels);
-        }
+    public EventsListAdapter(final List<EventViewModel> viewModel) {
+        mModel = viewModel;
     }
 
     @NonNull
@@ -33,12 +30,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((EventsViewHolder) holder).bindData(models.get(position));
+        ((EventsViewHolder) holder).bindData(mModel.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModel.size();
     }
 
     @Override

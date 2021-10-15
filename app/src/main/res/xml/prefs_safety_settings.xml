@@ -6,30 +6,30 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_safety">
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_min_start"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_min_start"
             app:title="@string/settings_safety_min_start"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_start"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_start"
             app:title="@string/settings_safety_max_start"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_safety_retries"
+            app:entries="@array/reignite_retries"
+            app:entryValues="@array/reignite_retries"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_retries"
             app:title="@string/settings_safety_retries"
-            app:useSimpleSummaryProvider="true"
-            app:entries="@array/reignite_retries"
-            app:entryValues="@array/reignite_retries"/>
+            app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_temp"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_temp"
@@ -38,15 +38,15 @@
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_safety_note" />
+            app:summary="@string/settings_safety_note"
+            app:title="@string/settings_note" />
 
         <Preference
             android:layout="@layout/preference_category_warning"
-            app:title="@string/settings_warning"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_safety_warning" />
+            app:summary="@string/settings_safety_warning"
+            app:title="@string/settings_warning" />
 
     </PreferenceCategory>
 </PreferenceScreen>

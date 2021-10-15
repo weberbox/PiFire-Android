@@ -90,12 +90,44 @@
         </LinearLayout>
     </FrameLayout>
 
+    <RelativeLayout
+        android:id="@+id/timer_shutdown_container"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/timer_list_container"
+        android:layout_marginBottom="@dimen/small_spacing"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timer_shutdown_text"
+            style="@style/Text15Aller"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/small_spacing"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/grill_shutdown_timer"
+            android:textAlignment="center"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:autoSizeTextType="uniform" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/timer_shutdown_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toEndOf="@+id/timer_shutdown_text"
+            android:checked="false" />
+
+    </RelativeLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/set_timer_confirm"
         style="@style/MainButtonAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timer_list_container"
+        android:layout_below="@id/timer_shutdown_container"
         android:background="@drawable/bg_ripple_grey_button"
         android:text="@string/confirm" />
 </RelativeLayout>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/grill_controls_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,67 +10,76 @@
     android:foreground="@android:color/transparent"
     android:stretchColumns="*">
 
-    <TableRow>
+    <TableRow tools:ignore="UselessParent">
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="-2dp"
             android:layout_marginTop="-2dp"
+            android:layout_marginEnd="-2dp"
             android:background="@drawable/bg_table_content_cell">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/pmode_item_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:padding="8dp"
-                    android:text="0"
                     android:maxLines="1"
-                    android:autoSizeTextType="uniform"
-                    android:textColor="@color/colorWhite" />
+                    android:padding="8dp"
+                    android:text="@string/placeholder_number"
+                    android:textColor="@color/colorWhite"
+                    app:autoSizeTextType="uniform" />
             </RelativeLayout>
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="-2dp"
             android:background="@drawable/bg_table_content_cell">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/pmode_item_aon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:padding="8dp"
-                    android:text="15"
-                    android:autoSizeTextType="uniform"
                     android:maxLines="1"
-                    android:textColor="@color/colorWhite" />
+                    android:padding="8dp"
+                    android:text="@string/placeholder_number"
+                    android:textColor="@color/colorWhite"
+                    app:autoSizeTextType="uniform" />
             </RelativeLayout>
         </FrameLayout>
+
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="-2dp"
             android:layout_marginTop="-2dp"
             android:background="@drawable/bg_table_content_cell">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <TextView
+
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/pmode_item_aoff"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:padding="8dp"
-                    android:text="45 Seconds"
-                    android:autoSizeTextType="uniform"
                     android:maxLines="1"
-                    android:textColor="@color/colorWhite" />
+                    android:padding="8dp"
+                    android:text="@string/placeholder_number"
+                    android:textColor="@color/colorWhite"
+                    app:autoSizeTextType="uniform" />
             </RelativeLayout>
         </FrameLayout>
     </TableRow>

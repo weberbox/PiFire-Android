@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 public class TimePickerViewModel {
 
-    private String timeText;
+    private String mTimeText;
 
     public TimePickerViewModel(@NonNull final String timeText) {
         seTimeText(timeText);
@@ -12,10 +12,10 @@ public class TimePickerViewModel {
 
     @NonNull
     public String getTimeText() {
-        return timeText;
+        return mTimeText;
     }
 
     public void seTimeText(@NonNull final String timeText) {
-        this.timeText = timeText;
+        this.mTimeText = timeText;
     }
 }

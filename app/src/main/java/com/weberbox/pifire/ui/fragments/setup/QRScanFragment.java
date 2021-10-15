@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -19,8 +21,9 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
-import com.weberbox.pifire.utils.Log;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -36,17 +39,20 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import okhttp3.Credentials;
+import timber.log.Timber;
 
 public class QRScanFragment extends Fragment {
-
     public static final String TAG = QRScanFragment.class.getSimpleName();
 
     private FragmentSetupQrScanBinding mBinding;
     private CompoundBarcodeView mBarcodeView;
     private ProgressBar mConnectProgress;
     private Snackbar mErrorSnack;
+    private ConstraintLayout mSelfSignedNote;
     private Socket mSocket;
     private String mValidURL;
+    private String mSecure;
+    private String mUnSecure;
     private Boolean mIsConnecting = false;
 
     public static QRScanFragment getInstance(){
@@ -71,6 +77,17 @@ public class QRScanFragment extends Fragment {
         mBarcodeView.getBarcodeView().getCameraSettings().setContinuousFocusEnabled(true);
         mBarcodeView.setStatusText(null);
         mBarcodeView.decodeContinuous(mBarCodeCallback);
+
+        mSelfSignedNote = mBinding.selfSignedNoteContainer;
+        AppCompatCheckBox allowSelfSigned = mBinding.setupEnableSelfSigned;
+
+        allowSelfSigned.setChecked(Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert)));
+
+        mSecure = getString(R.string.https_scheme);
+        mUnSecure = getString(R.string.http_scheme);
+
+        allowSelfSigned.setOnCheckedChangeListener((buttonView, isChecked) ->
+                Prefs.putBoolean(getString(R.string.prefs_server_unsigned_cert), isChecked));
 
     }
 
@@ -115,10 +132,10 @@ public class QRScanFragment extends Fragment {
 
     private void verifyURLAndTestConnect(String url) {
         if(url.length() !=0 && isValidUrl(url)) {
-            if(url.startsWith("http://") || url.startsWith("https://")) {
+            if(url.startsWith(mUnSecure) || url.startsWith(mSecure)) {
                 testConnection(url);
             } else {
-                testConnection("http://" + url);
+                testConnection(mUnSecure + url);
             }
         } else {
             mConnectProgress.setVisibility(View.GONE);
@@ -132,6 +149,9 @@ public class QRScanFragment extends Fragment {
         if(!mIsConnecting) {
             IO.Options options = new IO.Options();
 
+            boolean allowSelfSignedCerts = Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert),
+                    getResources().getBoolean(R.bool.def_security_unsigned_cert));
+
             if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
                 String username = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_user);
                 String password = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_password);
@@ -141,14 +161,14 @@ public class QRScanFragment extends Fragment {
                 options.extraHeaders = Collections.singletonMap("Authorization",
                         Collections.singletonList(credentials));
 
-                if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                if (Url.startsWith(mSecure) && allowSelfSignedCerts) {
+                    SSLSocketUtils.set(Url, options);
                 }
 
                 connectSocket(Url, options);
             } else {
-                if (Url.startsWith("https://")) {
-                    SSLSocketUtils.set(options);
+                if (Url.startsWith(mSecure) && allowSelfSignedCerts) {
+                    SSLSocketUtils.set(Url, options);
                     connectSocket(Url, options);
                 } else {
                     connectSocket(Url, null);
@@ -170,7 +190,7 @@ public class QRScanFragment extends Fragment {
             try {
                 mSocket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
-                Log.e("Socket URI Error", e.toString());
+                Timber.w(e, "Socket URI Error");
                 if(!mErrorSnack.isShown() && getActivity() != null) {
                     showSnackBarMessage(getActivity(), R.string.setup_error);
                 }
@@ -179,7 +199,7 @@ public class QRScanFragment extends Fragment {
             try {
                 mSocket = IO.socket(serverURL);
             } catch (URISyntaxException e) {
-                Log.e("Socket URI Error", e.toString());
+                Timber.w(e,"Socket URI Error");
                 if(!mErrorSnack.isShown() && getActivity() != null) {
                     showSnackBarMessage(getActivity(), R.string.setup_error);
                 }
@@ -210,6 +230,7 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
+                    Timber.d("Successful connection address ok");
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
                     if(mErrorSnack.isShown()) {
@@ -226,9 +247,10 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Log.e(TAG, "Error connecting");
+                    Timber.d("Error connecting bad address");
                     mConnectProgress.setVisibility(View.GONE);
                     mSocket.disconnect();
+                    mSocket.close();
                     mIsConnecting = false;
                     if(!mErrorSnack.isShown()) {
                         showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
@@ -239,6 +261,7 @@ public class QRScanFragment extends Fragment {
     };
 
     private void showSnackBarMessage(Activity activity, int message) {
+        AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
         mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
         mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
         mErrorSnack.setText(message);

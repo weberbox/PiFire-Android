@@ -11,17 +11,14 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.recycler.viewholder.TempPickerViewHolder;
 import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TempPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<TempPickerViewModel> models = new ArrayList<>();
+    private final List<TempPickerViewModel> mModel;
 
-    public TempPickerAdapter(final List<TempPickerViewModel> viewModels) {
-        if (viewModels != null) {
-            this.models.addAll(viewModels);
-        }
+    public TempPickerAdapter(final List<TempPickerViewModel> viewModel) {
+        mModel = viewModel;
     }
 
     @NonNull
@@ -33,12 +30,12 @@ public class TempPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((TempPickerViewHolder) holder).bindData(models.get(position));
+        ((TempPickerViewHolder) holder).bindData(mModel.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModel.size();
     }
 
     @Override

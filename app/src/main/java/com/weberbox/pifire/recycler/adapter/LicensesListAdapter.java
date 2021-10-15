@@ -12,18 +12,15 @@ import com.weberbox.pifire.interfaces.LicensesCallbackInterface;
 import com.weberbox.pifire.recycler.viewholder.LicensesViewHolder;
 import com.weberbox.pifire.recycler.viewmodel.LicensesViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final List<LicensesViewModel> models = new ArrayList<>();
+    private final List<LicensesViewModel> mModel;
     private final LicensesCallbackInterface mCallBack;
 
-    public LicensesListAdapter(final List<LicensesViewModel> viewModels, LicensesCallbackInterface callback) {
-        if (viewModels != null) {
-            this.models.addAll(viewModels);
-        }
+    public LicensesListAdapter(final List<LicensesViewModel> viewModel, LicensesCallbackInterface callback) {
+        mModel = viewModel;
         mCallBack = callback;
     }
 
@@ -36,12 +33,12 @@ public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((LicensesViewHolder) holder).bindData(models.get(position));
+        ((LicensesViewHolder) holder).bindData(mModel.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return models.size();
+        return mModel.size();
     }
 
     @Override

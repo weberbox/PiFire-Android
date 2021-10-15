@@ -1,22 +1,21 @@
 package com.weberbox.pifire;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,25 +26,25 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainBinding;
+import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.InfoActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.model.MainViewModel;
-import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.BannerTransition;
-import com.weberbox.pifire.utils.FirebaseUtils;
-import com.weberbox.pifire.utils.Log;
+import com.weberbox.pifire.updater.AppUpdater;
+import com.weberbox.pifire.updater.enums.Display;
+import com.weberbox.pifire.updater.enums.UpdateFrom;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class MainActivity extends BaseActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private MainViewModel mMainViewModel;
@@ -53,25 +52,24 @@ public class MainActivity extends AppCompatActivity {
     private CardView mOfflineBanner;
     private ConstraintLayout mRootContainer;
     private Socket mSocket;
+    private AppUpdater mAppUpdater;
+    private int mDownX;
 
-    private boolean mIsReady = false;
+    private boolean mAppIsVisible = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SplashScreen.installSplashScreen(this);
+        boolean firstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
 
-        String serverURL = Prefs.getString(getString(R.string.prefs_server_address), null);
-
-        if (serverURL == null) {
+        if (firstStart) {
             Intent i = new Intent(MainActivity.this, ServerSetupActivity.class);
             startActivity(i);
             finish();
         }
 
-        PiFireApplication app = (PiFireApplication) getApplication();
-        mSocket = app.getSocket();
+        mSocket = getSocket();
 
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
@@ -100,29 +98,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
+        navigationView.setNavigationItemSelectedListener(menuItem -> {
+            boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
 
-                if (!handled) {
-                    int id = menuItem.getItemId();
-                    if (id == R.id.nav_admin) {
-                        if (mSocket != null && mSocket.connected()) {
-                            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-                            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
-                            startActivity(intent);
-                        } else {
-                            AnimUtils.shakeOfflineBanner(MainActivity.this);
-                        }
-                    } else if (id == R.id.nav_info) {
-                        Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                        startActivity(intent);
-                    }
+            if (!handled) {
+                int id = menuItem.getItemId();
+                if (id == R.id.nav_admin) {
+                    Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                    intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
+                    startActivity(intent);
+                } else if (id == R.id.nav_info) {
+                    Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                    startActivity(intent);
                 }
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
             }
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         });
 
 
@@ -145,38 +136,25 @@ public class MainActivity extends AppCompatActivity {
             divider.setVisibility(View.GONE);
         }
 
-        if (AppConfig.USE_FIREBASE) {
-            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))) {
-                FirebaseUtils.subscribeFirebase();
-            }
-        }
-
-        mMainViewModel.getServerConnected().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean enabled) {
-                mIsReady = true;
-                if (enabled != null) {
-                    toggleOfflineMessage(enabled);
-                }
+        mMainViewModel.getServerConnected().observe(this, enabled -> {
+            if (enabled != null) {
+                toggleOfflineMessage(enabled);
             }
         });
 
         connectSocketListenData(mSocket);
 
-//        final View content = mBinding.getRoot();
-//        content.getViewTreeObserver().addOnPreDrawListener(
-//                new ViewTreeObserver.OnPreDrawListener() {
-//                    @Override
-//                    public boolean onPreDraw() {
-//                        if (mIsReady) {
-//                            content.getViewTreeObserver().removeOnPreDrawListener(this);
-//                            return true;
-//                        } else {
-//                            return false;
-//                        }
-//                    }
-//                });
-
+        if (savedInstanceState == null) {
+            mAppUpdater = new AppUpdater(this)
+                    .setDisplay(Display.DIALOG)
+                    .setButtonDoNotShowAgain(R.string.disable_button)
+                    .setUpdateFrom(UpdateFrom.JSON)
+                    .setUpdateJSON(getString(R.string.def_app_update_check_url))
+                    .showEvery(Integer.parseInt(Prefs.getString(getString(
+                            R.string.prefs_app_updater_frequency),
+                            getString(R.string.def_app_updater_frequency))));
+            mAppUpdater.start();
+        }
     }
 
     @Override
@@ -195,12 +173,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
@@ -210,9 +182,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (mSocket != null) {
-            mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
+        mAppIsVisible = true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAppUpdater != null) {
+            mAppUpdater.stop();
         }
+        mAppIsVisible = false;
     }
 
     @Override
@@ -224,7 +203,57 @@ public class MainActivity extends AppCompatActivity {
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
-        mSocket.emit(ServerConstants.REQUEST_GRILL_DATA);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownX = (int) event.getRawX();
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
+                if (Math.abs(mDownX - x) > 5) {
+                    return super.dispatchTouchEvent(event);
+                }
+                final int reducePx = 25;
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                outRect.inset(reducePx, reducePx);
+                if (!outRect.contains(x, y)) {
+                    v.clearFocus();
+                    boolean touchTargetIsEditText = false;
+                    for (View vi : v.getRootView().getTouchables()) {
+                        if (vi instanceof EditText) {
+                            Rect clickedViewRect = new Rect();
+                            vi.getGlobalVisibleRect(clickedViewRect);
+                            clickedViewRect.inset(reducePx, reducePx);
+                            if (clickedViewRect.contains(x, y)) {
+                                touchTargetIsEditText = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!touchTargetIsEditText) {
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    private Socket getSocket() {
+        if (mSocket == null) {
+            PiFireApplication app = (PiFireApplication) getApplication();
+            mSocket = app.getSocket();
+        }
+        return mSocket;
     }
 
     public void connectSocketListenData(Socket socket) {
@@ -248,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
     private final Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Socket connected");
+            Timber.d("Socket connected");
             mMainViewModel.setServerConnected(true);
         }
     };
@@ -256,16 +285,20 @@ public class MainActivity extends AppCompatActivity {
     private final Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Socket disconnected");
-            mMainViewModel.setServerConnected(false);
+            Timber.d("Socket disconnected");
+            if (mAppIsVisible) {
+                mMainViewModel.setServerConnected(false);
+            }
         }
     };
 
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            Log.i(TAG, "Error connecting socket");
-            mMainViewModel.setServerConnected(false);
+            Timber.d("Error connecting socket");
+            if (mAppIsVisible) {
+                mMainViewModel.setServerConnected(false);
+            }
         }
     };
 

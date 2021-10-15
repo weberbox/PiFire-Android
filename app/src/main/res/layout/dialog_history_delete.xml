@@ -5,28 +5,27 @@
     android:layout_height="wrap_content"
     android:alpha="1.0"
     android:animateLayoutChanges="true"
+    android:background="@drawable/bg_bottom_sheet_dialog"
     android:foreground="@android:color/transparent"
     android:padding="@dimen/default_spacing"
-    android:stretchColumns="*"
-    android:background="@drawable/bg_bottom_sheet_dialog">
+    android:stretchColumns="*">
 
     <TextView
+        style="@style/Text18AllerNormal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:clickable="true"
-        android:textSize="18sp"
         android:text="@string/history_delete_content"
-        style="@style/Text18AllerNormal" />
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="30dp"
-        android:background="@color/colorWhite"/>
+        android:layout_marginBottom="12dp"
+        android:background="@color/colorWhite" />
 
     <TableRow>
 
@@ -35,9 +34,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/default_spacing"
-            android:orientation="vertical"
             android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:focusable="true"
+            android:foreground="@drawable/bg_ripple_trans"
+            android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 
             <ImageView
@@ -48,15 +48,15 @@
                 android:src="@drawable/ic_probe_cancel" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text24Knockout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
                 android:text="@string/history_delete_negative"
-                android:textSize="@dimen/action_dialog_text"
                 android:textAlignment="center"
-                android:autoSizeTextType="uniform"
-                style="@style/Text24Knockout"/>
+                android:textSize="@dimen/action_dialog_text"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
 
@@ -64,9 +64,10 @@
             android:id="@+id/history_delete_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:focusable="true"
+            android:foreground="@drawable/bg_ripple_trans"
+            android:orientation="vertical"
             android:padding="@dimen/default_spacing">
 
             <ImageView
@@ -78,16 +79,16 @@
                 app:tint="@color/colorAccentRed" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text24Knockout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:textAlignment="center"
-                android:autoSizeTextType="uniform"
                 android:text="@string/history_delete_positive"
-                android:textSize="@dimen/action_dialog_text"
+                android:textAlignment="center"
                 android:textColor="@color/colorAccentRed"
-                style="@style/Text24Knockout"/>
+                android:textSize="@dimen/action_dialog_text"
+                app:autoSizeTextType="uniform" />
 
         </LinearLayout>
     </TableRow>

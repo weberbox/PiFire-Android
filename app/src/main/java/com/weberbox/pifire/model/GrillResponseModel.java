@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class GrillResponseModel {
 
     @SerializedName("cur_probe_temps")
@@ -19,6 +20,9 @@ public class GrillResponseModel {
     @SerializedName("notify_req")
     @Expose
     private NotifyReq notifyReq;
+    @SerializedName("notify_data")
+    @Expose
+    private NotifyData notifyData;
     @SerializedName("timer_info")
     @Expose
     private TimerInfo timerInfo;
@@ -58,6 +62,10 @@ public class GrillResponseModel {
 
     public NotifyReq getNotifyReq() {
         return notifyReq;
+    }
+
+    public NotifyData getNotifyData() {
+        return notifyData;
     }
 
     public TimerInfo getTimerInfo() {
@@ -168,41 +176,81 @@ public class GrillResponseModel {
         }
     }
 
+    public static class NotifyData {
+        @SerializedName("hopper_low")
+        @Expose
+        private Boolean hopperLow;
+        @SerializedName("p1_shutdown")
+        @Expose
+        private Boolean p1Shutdown;
+        @SerializedName("p2_shutdown")
+        @Expose
+        private Boolean p2Shutdown;
+        @SerializedName("timer_shutdown")
+        @Expose
+        private Boolean timerShutdown;
+
+        public Boolean getHopperLow() {
+            return hopperLow;
+        }
+
+        public Boolean getP1Shutdown() {
+            return p1Shutdown;
+        }
+
+        public Boolean getP2Shutdown() {
+            return p2Shutdown;
+        }
+
+        public Boolean getTimerShutdown() {
+            return timerShutdown;
+        }
+    }
+
     public static class TimerInfo {
-        @SerializedName("timer_max")
-        @Expose
-        public Integer timerMax;
-        @SerializedName("timer_current")
-        @Expose
-        public Integer timerCurrent;
-        @SerializedName("timer_time")
-        @Expose
-        public String timerTime;
         @SerializedName("timer_paused")
         @Expose
         public Boolean timerPaused;
-        @SerializedName("timer_finished")
+        @SerializedName("timer_start_time")
         @Expose
-        public Boolean timerFinished;
-
-        public Integer getTimerMax() {
-            return timerMax;
-        }
-
-        public Integer getTimerCurrent() {
-            return timerCurrent;
-        }
-
-        public String getTimerTime() {
-            return timerTime;
-        }
+        public String timerStartTime;
+        @SerializedName("timer_end_time")
+        @Expose
+        public String timerEndTime;
+        @SerializedName("timer_paused_time")
+        @Expose
+        public String timerPausedTime;
+        @SerializedName("timer_active")
+        @Expose
+        public Boolean timerActive;
 
         public Boolean getTimerPaused() {
             return timerPaused;
         }
 
-        public Boolean getTimerFinished() {
-            return timerFinished;
+        public long getTimerStartTime() {
+            if (timerStartTime != null) {
+                return Long.parseLong(timerStartTime);
+            }
+            return 0;
+        }
+
+        public long getTimerEndTime() {
+            if (timerEndTime != null) {
+                return Long.parseLong(timerEndTime);
+            }
+            return 0;
+        }
+
+        public long getTimerPauseTime() {
+            if (timerPausedTime != null) {
+                return Long.parseLong(timerPausedTime);
+            }
+            return 0;
+        }
+
+        public Boolean getTimerActive() {
+            return timerActive;
         }
     }
 

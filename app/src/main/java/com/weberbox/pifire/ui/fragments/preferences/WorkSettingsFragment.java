@@ -2,13 +2,10 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,12 +19,12 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
+import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
-        EditTextPreference.OnBindEditTextListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = WorkSettingsFragment.class.getSimpleName();
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private Socket mSocket;
 
@@ -51,167 +48,133 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        Preference pModeTable = (Preference) findPreference(getString(R.string.prefs_work_pmode_table));
-        EditTextPreference augerOnTime = (EditTextPreference) findPreference(getString(R.string.prefs_work_auger_on));
-        EditTextPreference fanCycleTime = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_fan));
-        EditTextPreference minSmokeTemp = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_min));
-        EditTextPreference maxSmokeTemp = (EditTextPreference) findPreference(getString(R.string.prefs_work_splus_max));
-        EditTextPreference pidCycle = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_cycle));
-        EditTextPreference pidPB = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_pb));
-        EditTextPreference pidTi = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_ti));
-        EditTextPreference pidTd = (EditTextPreference) findPreference(getString(R.string.prefs_work_pid_td));
+        Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
+        EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
+        EditTextPreference fanCycleTime = findPreference(getString(R.string.prefs_work_splus_fan));
+        EditTextPreference minSmokeTemp = findPreference(getString(R.string.prefs_work_splus_min));
+        EditTextPreference maxSmokeTemp = findPreference(getString(R.string.prefs_work_splus_max));
+        EditTextPreference pidCycle = findPreference(getString(R.string.prefs_work_pid_cycle));
+        EditTextPreference pidPB = findPreference(getString(R.string.prefs_work_pid_pb));
+        EditTextPreference pidTi = findPreference(getString(R.string.prefs_work_pid_ti));
+        EditTextPreference pidTd = findPreference(getString(R.string.prefs_work_pid_td));
+        EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_pid_u_max));
+        EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_pid_u_min));
 
+        if (getActivity() != null) {
 
-        if (pModeTable != null) {
-            pModeTable.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    if (getActivity() != null) {
-                        PModeTableDialog pModeTableDialog = new PModeTableDialog(getActivity());
-                        pModeTableDialog.showDialog();
-                    }
+            if (pModeTable != null) {
+                pModeTable.setOnPreferenceClickListener(preference -> {
+                    PModeTableDialog pModeTableDialog = new PModeTableDialog(getActivity());
+                    pModeTableDialog.showDialog();
                     return true;
-                }
-            });
-        }
+                });
+            }
 
-        if (pidPB != null) {
-            pidPB.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
+            if (pidPB != null) {
+                pidPB.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
+            if (pidTi != null) {
+                pidTi.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
+            if (pidTd != null) {
+                pidTd.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        }
-                    });
-                }
-            });
-        }
+            if (pidTd != null) {
+                pidTd.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-        if (pidTi != null) {
-            pidTi.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
+            if (pidTd != null) {
+                pidTd.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
+            if (augerOnTime != null) {
+                augerOnTime.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
+            if (fanCycleTime != null) {
+                fanCycleTime.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        }
-                    });
-                }
-            });
-        }
+            if (minSmokeTemp != null) {
+                minSmokeTemp.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-        if (pidTd != null) {
-            pidTd.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
+            if (maxSmokeTemp != null) {
+                maxSmokeTemp.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
+            if (pidCycle != null) {
+                pidCycle.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_blank_error));
-                            } else if (s.toString().equals("0")) {
-                                editText.setError(getString(R.string.settings_zero_error));
-                            } else {
-                                editText.setError(null);
-                            }
+            if (pidUMax != null) {
+                pidUMax.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
 
-                        }
-                    });
-                }
-            });
-        }
-
-        if (augerOnTime != null) {
-            augerOnTime.setOnBindEditTextListener(this);
-        }
-
-        if (fanCycleTime != null) {
-            fanCycleTime.setOnBindEditTextListener(this);
-        }
-
-        if (minSmokeTemp != null) {
-            minSmokeTemp.setOnBindEditTextListener(this);
-        }
-
-        if (maxSmokeTemp != null) {
-            maxSmokeTemp.setOnBindEditTextListener(this);
-        }
-
-        if (pidCycle != null) {
-            pidCycle.setOnBindEditTextListener(this);
+            if (pidUMin != null) {
+                pidUMin.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(getActivity(), editText));
+                });
+            }
         }
 
         return view;
-    }
-
-    @Override
-    public void onBindEditText(@NonNull EditText editText) {
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    editText.setError(getString(R.string.settings_blank_error));
-                } else if (s.toString().equals("0")) {
-                    editText.setError(getString(R.string.settings_zero_error));
-                } else {
-                    editText.setError(null);
-                }
-
-            }
-        });
     }
 
     @Override
@@ -249,41 +212,60 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference instanceof EditTextPreference) {
                     if (preference.getContext().getString(R.string.prefs_work_auger_on)
                             .equals(preference.getKey())) {
-                        GrillControl.setAugerTime(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setAugerTime(mSocket, (
+                                (EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_splus_fan)
                             .equals(preference.getKey())) {
-                        GrillControl.setSmokeFan(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setSmokeFan(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_splus_min)
                             .equals(preference.getKey())) {
-                        GrillControl.setSmokeMinTemp(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setSmokeMinTemp(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_splus_max)
                             .equals(preference.getKey())) {
-                        GrillControl.setSmokeMaxTemp(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setSmokeMaxTemp(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_pid_cycle)
                             .equals(preference.getKey())) {
-                        GrillControl.setPIDTime(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPIDTime(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_pid_pb)
                             .equals(preference.getKey())) {
-                        GrillControl.setPIDPB(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPIDPB(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_pid_ti)
                             .equals(preference.getKey())) {
-                        GrillControl.setPIDTi(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPIDTi(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_work_pid_td)
                             .equals(preference.getKey())) {
-                        GrillControl.setPIDTd(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPIDTd(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
+                    if (preference.getContext().getString(R.string.prefs_work_pid_u_max)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPIDuMax(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
+                    if (preference.getContext().getString(R.string.prefs_work_pid_u_min)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPIDuMin(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                 }
                 if (preference instanceof SwitchPreferenceCompat) {
                     if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setSmokePlusDefault(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setSmokePlusDefault(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                 }
             }

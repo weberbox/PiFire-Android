@@ -1,18 +1,15 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.databinding.DialogTokenTextBinding;
 
 public class FirebaseTokenDialog {
-    private static final String TAG = FirebaseTokenDialog.class.getSimpleName();
 
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
@@ -25,23 +22,17 @@ public class FirebaseTokenDialog {
     }
 
     public AlertDialog.Builder showDialog() {
-        @SuppressLint("InflateParams")
-        View dialogView = mInflater.inflate(R.layout.dialog_token_text, null);
+        DialogTokenTextBinding binding = DialogTokenTextBinding.inflate(mInflater);
 
         mDialog.setTitle(R.string.settings_firebase_token);
 
-        final EditText input = (EditText) dialogView.findViewById(R.id.dialog_text_input);
+        final EditText input = binding.dialogTextInput;
 
         input.setText(mToken);
 
-        mDialog.setView(dialogView);
+        mDialog.setView(binding.getRoot());
 
-        mDialog.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        mDialog.setNegativeButton(android.R.string.ok, (dialog, which) -> dialog.cancel());
 
         mDialog.show();
 

@@ -1,10 +1,10 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +12,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -23,9 +24,9 @@ import io.socket.client.Socket;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener, AdminCallbackInterface {
-    private static final String TAG = AdminSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
+    private Snackbar mErrorSnack;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -43,95 +44,66 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        Preference historyDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_history));
-        Preference eventsDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_events));
-        Preference pelletsDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_pellets));
-        Preference pelletsLogDelete = (Preference) findPreference(getString(R.string.prefs_admin_delete_pellets_log));
-        Preference factoryReset = (Preference) findPreference(getString(R.string.prefs_admin_factory_reset));
-        Preference rebootSystem = (Preference) findPreference(getString(R.string.prefs_admin_reboot));
-        Preference shutdownSystem = (Preference) findPreference(getString(R.string.prefs_admin_shutdown));
+        mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
+
+        Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
+        Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
+        Preference pelletsDelete = findPreference(getString(R.string.prefs_admin_delete_pellets));
+        Preference pelletsLogDelete = findPreference(getString(R.string.prefs_admin_delete_pellets_log));
+        Preference factoryReset = findPreference(getString(R.string.prefs_admin_factory_reset));
+        Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
+        Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
         if (historyDelete != null) {
-            historyDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_HISTORY);
-                    return true;
-                }
+            historyDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_HISTORY);
+                return true;
             });
         }
 
         if (eventsDelete != null) {
-            eventsDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_EVENTS);
-                    return true;
-                }
+            eventsDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_EVENTS);
+                return true;
             });
         }
 
         if (pelletsLogDelete != null) {
-            pelletsLogDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_PELLET_LOG);
-                    return true;
-                }
+            pelletsLogDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_PELLET_LOG);
+                return true;
             });
         }
 
         if (pelletsDelete != null) {
-            pelletsDelete.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_PELLET);
-                    return true;
-                }
+            pelletsDelete.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_PELLET);
+                return true;
             });
         }
 
         if (factoryReset != null) {
-            factoryReset.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_RESET);
-                    return true;
-                }
+            factoryReset.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_RESET);
+                return true;
             });
         }
 
         if (rebootSystem != null) {
-            rebootSystem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_REBOOT);
-                    return true;
-                }
+            rebootSystem.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_REBOOT);
+                return true;
             });
         }
 
         if (shutdownSystem != null) {
-            shutdownSystem.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showAdminDialog(Constants.ACTION_ADMIN_SHUTDOWN);
-                    return true;
-                }
+            shutdownSystem.setOnPreferenceClickListener(preference -> {
+                showAdminDialog(Constants.ACTION_ADMIN_SHUTDOWN);
+                return true;
             });
-        }
-
-        return view;
-    }
-
-    private void showAdminDialog(int type) {
-        if (getActivity() != null) {
-            AdminActionDialog adminDialog = new AdminActionDialog(getActivity(), this, type);
-            adminDialog.showDialog();
         }
     }
 
@@ -158,7 +130,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_admin_debug)
                         .equals(preference.getKey())) {
                     if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setDebugMode(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setDebugMode(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                 }
             }
@@ -192,5 +165,23 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                     break;
             }
         }
+    }
+
+    private void showAdminDialog(int type) {
+        if (getActivity() != null) {
+            if (mSocket != null && mSocket.connected()) {
+                AdminActionDialog adminDialog = new AdminActionDialog(getActivity(),
+                        this, type);
+                adminDialog.showDialog();
+            } else {
+                showSnackBarMessage(getActivity());
+            }
+        }
+    }
+
+    private void showSnackBarMessage(Activity activity) {
+        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
+                R.color.colorAccentRed)));
+        mErrorSnack.show();
     }
 }

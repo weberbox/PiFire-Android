@@ -10,7 +10,7 @@ import com.weberbox.pifire.recycler.viewmodel.TimePickerViewModel;
 
 public class TimerPickerViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView simpleTextView;
+    private final TextView simpleTextView;
 
     public TimerPickerViewHolder(final View itemView) {
         super(itemView);

@@ -17,8 +17,8 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private final List<PelletProfileModel> mModel;
 
-    public PelletProfileAdapter(final List<PelletProfileModel> viewModels) {
-        mModel = viewModels;
+    public PelletProfileAdapter(final List<PelletProfileModel> viewModel) {
+        mModel = viewModel;
     }
 
     @NonNull

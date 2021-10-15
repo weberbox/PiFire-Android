@@ -5,13 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class MainViewModel extends ViewModel {
-    public static final String TAG = MainViewModel.class.getSimpleName();
 
-    private MutableLiveData<String> mDashData;
-    private MutableLiveData<String> mEventsData;
-    private MutableLiveData<String> mHistoryData;
-    private MutableLiveData<String> mPelletData;
-    private MutableLiveData<Boolean> mServerConnected;
+    private final MutableLiveData<String> mDashData;
+    private final MutableLiveData<DataModel> mEventsData;
+    private final MutableLiveData<DataModel> mHistoryData;
+    private final MutableLiveData<DataModel> mPelletData;
+    private final MutableLiveData<Boolean> mServerConnected;
 
     public MainViewModel () {
         mServerConnected = new MutableLiveData<>();
@@ -29,28 +28,28 @@ public class MainViewModel extends ViewModel {
         mDashData.postValue(dashData);
     }
 
-    public LiveData<String> getEventsData() {
+    public LiveData<DataModel> getEventsData() {
         return mEventsData;
     }
 
-    public void setEventsData(String eventsData) {
-        mEventsData.postValue(eventsData);
+    public void setEventsData(String eventsData, boolean newData) {
+        mEventsData.postValue(new DataModel(eventsData, newData));
     }
 
-    public LiveData<String> getHistoryData() {
+    public LiveData<DataModel> getHistoryData() {
         return mHistoryData;
     }
 
-    public void setHistoryData(String historyData) {
-        mHistoryData.postValue(historyData);
+    public void setHistoryData(String historyData, boolean newData) {
+        mHistoryData.postValue(new DataModel(historyData, newData));
     }
 
-    public LiveData<String> getPelletData() {
+    public LiveData<DataModel> getPelletData() {
         return mPelletData;
     }
 
-    public void setPelletData(String pelletData) {
-        mPelletData.postValue(pelletData);
+    public void setPelletData(String pelletData, boolean newData) {
+        mPelletData.postValue(new DataModel(pelletData, newData));
     }
 
     public LiveData<Boolean> getServerConnected() {

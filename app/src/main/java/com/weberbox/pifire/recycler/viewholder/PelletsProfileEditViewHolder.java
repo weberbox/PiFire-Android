@@ -1,13 +1,11 @@
 package com.weberbox.pifire.recycler.viewholder;
 
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,21 +13,21 @@ import androidx.transition.TransitionManager;
 
 import com.skydoves.powerspinner.DefaultSpinnerAdapter;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
-import com.weberbox.pifire.ui.utils.Rotate;
-import com.weberbox.pifire.utils.Log;
+import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.ui.utils.RotateUtils;
 import com.weberbox.pifire.utils.StringUtils;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 
 public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = PelletsProfileEditViewHolder.class.getSimpleName();
 
     private final TextView mPelletProfile;
     private final TextView mPelletProfileId;
@@ -38,6 +36,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
     private final PowerSpinnerView mPelletProfileRating;
     private final TextView mPelletProfileComments;
     private final ImageView mExpandIcon;
+    private final ImageView mDeleteIcon;
     private final CardView mCardView;
     private final LinearLayout mEditCardView;
 
@@ -48,7 +47,7 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
 
         mPelletProfile = itemView.findViewById(R.id.pellets_item);
         mPelletProfileId = itemView.findViewById(R.id.pellets_item_id);
-        ImageView pelletProfileDelete = itemView.findViewById(R.id.pellets_item_delete);
+        mDeleteIcon = itemView.findViewById(R.id.pellets_item_delete);
 
         View profileView = itemView.findViewById(R.id.pellet_edit_card_header);
         mPelletProfileBrand = itemView.findViewById(R.id.pellet_edit_brand_text);
@@ -61,111 +60,95 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
         AppCompatButton deleteButton = itemView.findViewById(R.id.pellet_edit_delete);
         AppCompatButton saveButton = itemView.findViewById(R.id.pellet_edit_save);
 
-        pelletProfileDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callback.onItemDelete(Constants.PELLET_PROFILE,
-                        mPelletProfileId.getText().toString(), getAbsoluteAdapterPosition());
-            }
+        mDeleteIcon.setOnClickListener(view -> callback.onItemDelete(Constants.PELLET_PROFILE,
+                mPelletProfileId.getText().toString(), getAbsoluteAdapterPosition()));
+
+        profileView.setOnClickListener(view -> {
+            AnimUtils.fadeAnimation(mDeleteIcon, 300, mDeleteIcon.getVisibility() ==
+                    View.VISIBLE ? Constants.FADE_OUT : Constants.FADE_IN);
+            toggleCardView();
         });
 
-        profileView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleCardView();
-            }
-        });
+        mPelletProfileRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
 
-        mPelletProfileBrand.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileBrand.dismiss();
-            }
-        });
+        mPelletProfileBrand.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileBrand.dismiss());
 
-        mPelletProfileWood.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileWood.dismiss();
-            }
-        });
+        mPelletProfileWood.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileWood.dismiss());
 
-        mPelletProfileRating.setSpinnerOutsideTouchListener(new OnSpinnerOutsideTouchListener() {
-            @Override
-            public void onSpinnerOutsideTouch(@NonNull View view, @NonNull MotionEvent motionEvent) {
-                mPelletProfileRating.dismiss();
-            }
-        });
+        mPelletProfileRating.setSpinnerOutsideTouchListener((view, motionEvent) ->
+                mPelletProfileRating.dismiss());
 
         mPelletProfileBrand.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
         mPelletProfileWood.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
         mPelletProfileRating.setOnSpinnerItemSelectedListener(
-                new OnSpinnerItemSelectedListener<String>() {
-                    @Override
-                    public void onItemSelected(int oldIndex, @Nullable String oldItem,
-                                               int newIndex, String newItem) {
-                        Log.d(TAG, "New Item " + newItem);
-                    }
-                });
+                (OnSpinnerItemSelectedListener<String>) (oldIndex, oldItem, newIndex, newItem) ->
+                        Timber.d("New Item %s", newItem));
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPelletProfileId.getText() != null) {
-                    callback.onProfileDelete(mPelletProfileId.getText().toString(),
-                            getAbsoluteAdapterPosition());
-                }
+        deleteButton.setOnClickListener(view -> {
+            toggleCardView();
+            mDeleteIcon.setVisibility(View.VISIBLE);
+            if (mPelletProfileId.getText() != null) {
+                callback.onProfileDelete(mPelletProfileId.getText().toString(),
+                        getAbsoluteAdapterPosition());
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggleCardView();
-                if (mPelletProfileId.getText() != null) {
-                    callback.onProfileEdit(
-                            new PelletProfileModel(
-                                    mPelletProfileBrand.getText().toString(),
-                                    mPelletProfileWood.getText().toString(),
-                                    StringUtils.getRatingInt(mPelletProfileRating.getText().toString()),
-                                    mPelletProfileComments.getText().toString(),
-                                    mPelletProfileId.getText().toString()
-                            )
-                    );
-                }
+        saveButton.setOnClickListener(view -> {
+            toggleCardView();
+            mDeleteIcon.setVisibility(View.VISIBLE);
+            if (mPelletProfileId.getText() != null) {
+                callback.onProfileEdit(
+                        new PelletProfileModel(
+                                mPelletProfileBrand.getText().toString(),
+                                mPelletProfileWood.getText().toString(),
+                                StringUtils.getRatingInt(mPelletProfileRating.getText().toString()),
+                                mPelletProfileComments.getText().toString(),
+                                mPelletProfileId.getText().toString()
+                        )
+                );
             }
         });
 
         DefaultSpinnerAdapter brandsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileBrand);
         mPelletProfileBrand.setSpinnerAdapter(brandsSpinnerAdapter);
         mPelletProfileBrand.setItems(brands);
+        mPelletProfileBrand.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(brandsSpinnerAdapter, mPelletProfileBrand.getSpinnerRecyclerView());
 
         DefaultSpinnerAdapter woodsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileWood);
         mPelletProfileWood.setSpinnerAdapter(woodsSpinnerAdapter);
         mPelletProfileWood.setItems(woods);
+        mPelletProfileWood.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(woodsSpinnerAdapter, mPelletProfileWood.getSpinnerRecyclerView());
 
+    }
+
+    private void setPowerSpinnerMaxHeight(DefaultSpinnerAdapter adapter, RecyclerView recyclerView) {
+        if (adapter != null) {
+            if (adapter.getItemCount() > 6) {
+                ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+                params.height = 780;
+                recyclerView.setLayoutParams(params);
+            }
+        }
     }
 
     private void toggleCardView() {
         boolean visibility = mEditCardView.getVisibility() == View.VISIBLE;
-        mEditCardView.setVisibility(visibility ? View.GONE : View.VISIBLE);
-        TransitionManager.beginDelayedTransition(mCardView, new Rotate());
+        if (visibility) {
+            AnimUtils.slideUp(mEditCardView);
+        } else {
+            AnimUtils.slideDown(mEditCardView);
+        }
+        TransitionManager.beginDelayedTransition(mCardView, new RotateUtils());
         mExpandIcon.setRotation(visibility ? 0 : 180);
     }
 

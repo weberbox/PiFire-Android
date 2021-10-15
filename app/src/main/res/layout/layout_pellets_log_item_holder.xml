@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/logs_holder_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:contentDescription="@string/placeholder_text_view"
+                android:gravity="center"
+                android:text="@string/pellets_rating_4"
+                app:autoSizeTextType="uniform"
+                app:tint="@color/placeholderColor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:background="@color/colorPrimaryLight"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <TextView
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:contentDescription="@string/placeholder_text_view"
+                android:gravity="center"
+                android:text="@string/pellets_rating_4"
+                app:autoSizeTextType="uniform"
+                app:tint="@color/placeholderColor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:contentDescription="@string/placeholder_text_view"
+                android:gravity="center"
+                android:text="@string/pellets_rating_4"
+                app:autoSizeTextType="uniform"
+                app:tint="@color/placeholderColor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:contentDescription="@string/placeholder_text_view"
+                android:gravity="center"
+                android:text="@string/pellets_rating_4"
+                app:autoSizeTextType="uniform"
+                app:tint="@color/placeholderColor" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <View
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing"
+                android:background="@drawable/bg_event_placeholder" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_spacing"
+                android:contentDescription="@string/placeholder_text_view"
+                android:gravity="center"
+                android:text="@string/pellets_rating_4"
+                app:autoSizeTextType="uniform"
+                app:tint="@color/placeholderColor" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</merge>

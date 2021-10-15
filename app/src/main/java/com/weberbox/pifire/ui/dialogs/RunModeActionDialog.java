@@ -1,27 +1,28 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogModeRunActionBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class RunModeActionDialog {
-    private static String TAG = RunModeActionDialog.class.getSimpleName();
 
     private final BottomSheetDialog mModeActionsBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
+    private final Context mContext;
     private final boolean mShutdown;
 
 
@@ -30,62 +31,58 @@ public class RunModeActionDialog {
         mInflater = LayoutInflater.from(context);
         mCallBack = (DashboardCallbackInterface) fragment;
         mShutdown = shutdown;
+        mContext = context;
     }
 
     public BottomSheetDialog showDialog(){
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_mode_run_action, null);
+        DialogModeRunActionBinding binding = DialogModeRunActionBinding.inflate(mInflater);
 
-        LinearLayout smokeButton = sheetView.findViewById(R.id.mode_smoke_button);
-        LinearLayout holdButton = sheetView.findViewById(R.id.mode_hold_button);
-        LinearLayout rightButton = sheetView.findViewById(R.id.mode_shutdown_button);
+        LinearLayout smokeButton = binding.modeSmokeButton;
+        LinearLayout holdButton = binding.modeHoldButton;
+        LinearLayout rightButton = binding.modeShutdownButton;
 
-        ImageView rightButtonImg = sheetView.findViewById(R.id.mode_shutdown_button_img);
-        TextView rightButtonText = sheetView.findViewById(R.id.mode_shutdown_button_text);
+        ImageView rightButtonImg = binding.modeShutdownButtonImg;
+        TextView rightButtonText = binding.modeShutdownButtonText;
 
         if(mShutdown) {
             rightButtonImg.setImageResource(R.drawable.ic_timer_stop);
             rightButtonText.setText(R.string.timer_stop);
         }
 
-        smokeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModeActionsBottomSheet.dismiss();
-                mCallBack.onModeActionClicked(Constants.ACTION_MODE_SMOKE);
+        smokeButton.setOnClickListener(v -> {
+            mModeActionsBottomSheet.dismiss();
+            mCallBack.onModeActionClicked(Constants.ACTION_MODE_SMOKE);
+        });
+
+        holdButton.setOnClickListener(v -> {
+            mModeActionsBottomSheet.dismiss();
+            mCallBack.onModeActionClicked(Constants.ACTION_MODE_HOLD);
+        });
+
+        rightButton.setOnClickListener(v -> {
+            mModeActionsBottomSheet.dismiss();
+            if(mShutdown) {
+                mCallBack.onModeActionClicked(Constants.ACTION_MODE_STOP);
+            } else {
+                mCallBack.onModeActionClicked(Constants.ACTION_MODE_SHUTDOWN);
             }
         });
 
-        holdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModeActionsBottomSheet.dismiss();
-                mCallBack.onModeActionClicked(Constants.ACTION_MODE_HOLD);
-            }
+        mModeActionsBottomSheet.setContentView(binding.getRoot());
+
+        mModeActionsBottomSheet.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
-
-        rightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModeActionsBottomSheet.dismiss();
-                if(mShutdown) {
-                    mCallBack.onModeActionClicked(Constants.ACTION_MODE_STOP);
-                } else {
-                    mCallBack.onModeActionClicked(Constants.ACTION_MODE_SHUTDOWN);
-                }
-            }
-        });
-
-        mModeActionsBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-
-            }
-        });
-
-        mModeActionsBottomSheet.setContentView(sheetView);
 
         mModeActionsBottomSheet.show();
+
+        Configuration configuration = mContext.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            mModeActionsBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        }
 
         return mModeActionsBottomSheet;
     }

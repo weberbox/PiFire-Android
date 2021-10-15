@@ -40,7 +40,6 @@ import com.weberbox.pifire.model.SettingsResponseModel.Safety;
 import com.weberbox.pifire.model.SettingsResponseModel.SmokePlus;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.AnimUtils;
-import com.weberbox.pifire.utils.Log;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,12 +47,11 @@ import java.util.Map;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class SettingsFragment extends Fragment {
-    private static final String TAG = SettingsFragment.class.getSimpleName();
 
-    // TODO allow offline changes and sync to server once online. Use settings with newer timestamp.
-    //  Timestamp added to server settings
+    // TODO allow offline changes and sync to server once online.
 
     private FragmentSettingsBinding mBinding;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -78,112 +76,16 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mBinding.setCallback(this);
+
         mSwipeRefresh = mBinding.settingsPullRefresh;
 
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mSocket != null && mSocket.connected()) {
-                    requestSettingsData();
-                } else {
-                    mSwipeRefresh.setRefreshing(false);
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-            }
-        });
-
-        mBinding.settingsLayout.settingsProbe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsWork.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsPellet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsShutdown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsSafety.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
-            }
-        });
-
-        mBinding.settingsLayout.settingsNotifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mSocket.connected()) {
-                    startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            if (mSocket != null && mSocket.connected()) {
+                requestSettingsData();
+            } else {
+                mSwipeRefresh.setRefreshing(false);
+                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
     }
@@ -200,6 +102,38 @@ public class SettingsFragment extends Fragment {
         requestSettingsData();
     }
 
+    public void settingsOnClick(String settings) {
+        switch (settings) {
+            case Constants.DB_SET_APP:
+                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
+                break;
+            case Constants.DB_SET_PROBE:
+                startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
+                break;
+            case Constants.DB_SET_NAME:
+                startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
+                break;
+            case Constants.DB_SET_WORK:
+                startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
+                break;
+            case Constants.DB_SET_PELLETS:
+                startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
+                break;
+            case Constants.DB_SET_SHUTDOWN:
+                startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
+                break;
+            case Constants.DB_SET_HISTORY:
+                startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
+                break;
+            case Constants.DB_SET_SAFETY:
+                startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
+                break;
+            case Constants.DB_SET_NOTIF:
+                startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
+                break;
+        }
+    }
+
     private void startPreferenceActivity(int fragment) {
         if(getActivity() != null) {
             Intent intent = new Intent(getActivity(), PreferencesActivity.class);
@@ -210,9 +144,8 @@ public class SettingsFragment extends Fragment {
 
     private void requestSettingsData() {
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args -> {
-                updateSettingsData(args[0].toString());
-            });
+            mSocket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args ->
+                    updateSettingsData(args[0].toString()));
         }
     }
 
@@ -289,6 +222,8 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
             Prefs.putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
             Prefs.putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
+            Prefs.putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
+            Prefs.putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
 
             Prefs.putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
             Prefs.putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());
@@ -304,7 +239,7 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_pellet_full), pellets.getFull());
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error " + e.getMessage());
+            Timber.w(e,"JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }

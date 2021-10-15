@@ -9,20 +9,22 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 public class PrefsUsernameDialog extends EditTextPreference {
-    private static final String TAG = PrefsUsernameDialog.class.getSimpleName();
 
-    private Context mContext;
+    private final Context mContext;
 
+    @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
     }
 
+    @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
     }
 
+    @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context) {
         super(context);
         mContext = context;
@@ -33,6 +35,7 @@ public class PrefsUsernameDialog extends EditTextPreference {
         return SecurityUtils.decrypt(mContext, R.string.prefs_server_basic_auth_user);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         super.setText(restoreValue ? getPersistedString(null) : (String) defaultValue);

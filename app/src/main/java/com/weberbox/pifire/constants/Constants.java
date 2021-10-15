@@ -5,10 +5,6 @@ public class Constants {
     // Firebase topics
     public static final String FIREBASE_TOPIC_GRILL = "GrillAlerts";
 
-    // Notifications Channel
-    public static final String NOTIFICATIONS_CHANNEL = "notification_channel";
-    public static final String NOTIFICATIONS_TOPIC = "Grill Alerts";
-
     // Grill Modes
     public static final String GRILL_CURRENT_STOP = "Stop";
     public static final String GRILL_CURRENT_STARTUP = "Startup";
@@ -67,6 +63,10 @@ public class Constants {
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
 
+    // Fade Directions
+    public static final int FADE_OUT = 0;
+    public static final int FADE_IN = 1;
+
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";
@@ -91,5 +91,19 @@ public class Constants {
     public static final String PELLET_RATING_3 = "★ ★ ★";
     public static final String PELLET_RATING_2 = "★ ★";
     public static final String PELLET_RATING_1 = "★";
+
+    // Update
+    public static final String UPDATE_FILENAME = "app-update.apk";
+
+    // Data Binding
+    public static final String DB_SET_APP = "db_set_app";
+    public static final String DB_SET_PROBE = "db_set_probes";
+    public static final String DB_SET_NAME = "db_set_name";
+    public static final String DB_SET_WORK = "db_set_work";
+    public static final String DB_SET_PELLETS = "db_set_pellets";
+    public static final String DB_SET_SHUTDOWN = "db_set_shutdown";
+    public static final String DB_SET_HISTORY = "db_set_history";
+    public static final String DB_SET_SAFETY = "db_set_safety";
+    public static final String DB_SET_NOTIF = "db_set_notif";
 
 }

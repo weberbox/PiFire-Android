@@ -1,6 +1,5 @@
 package com.weberbox.pifire.service;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,16 +14,15 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.Log;
+
+import timber.log.Timber;
 
 public class FirebaseNotificationService extends FirebaseMessagingService {
-    private static final String TAG = FirebaseNotificationService.class.getSimpleName();
 
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        Log.d(TAG, "Got new token: " + token);
+        Timber.d("Got new token: %s", token);
     }
 
     @Override
@@ -32,10 +30,12 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
     onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
             showNotification(remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody());
+                    remoteMessage.getNotification().getBody(),
+                    remoteMessage.getNotification().getChannelId());
         }
     }
 
+    @SuppressWarnings("unused")
     private RemoteViews getCustomDesign(String title, String message) {
         RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(),
                 R.layout.layout_notification);
@@ -45,10 +45,16 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
         return remoteViews;
     }
 
-    public void showNotification(String title, String message) {
+    public void showNotification(String title, String message, String channelId) {
         Intent intent = new Intent(this, MainActivity.class);
-        String channel_id = Constants.NOTIFICATIONS_CHANNEL;
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        String channel_id;
+        if (channelId != null) {
+            channel_id = channelId;
+        } else {
+            channel_id = getString(R.string.notification_channel_base);
+        }
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
@@ -61,7 +67,8 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setOnlyAlertOnce(true)
+                .setOnlyAlertOnce(false)
+                .setWhen(System.currentTimeMillis())
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pendingIntent);
@@ -70,11 +77,6 @@ public class FirebaseNotificationService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(
                 Context.NOTIFICATION_SERVICE);
-
-        NotificationChannel notificationChannel = new NotificationChannel(
-                channel_id, Constants.NOTIFICATIONS_TOPIC,
-                NotificationManager.IMPORTANCE_HIGH);
-        notificationManager.createNotificationChannel(notificationChannel);
 
         notificationManager.notify(0, builder.build());
     }

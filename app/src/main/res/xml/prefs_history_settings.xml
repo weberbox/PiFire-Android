@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/settings_history">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_history_auto"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="bool/def_history_auto"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_auto"
             app:title="@string/settings_history_auto" />
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_history_clear"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_history_clear"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_clear"
             app:title="@string/settings_history_clear" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_display"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_display"
             app:title="@string/settings_history_display"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_points"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_points"

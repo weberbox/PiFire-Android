@@ -1,8 +1,14 @@
 package com.weberbox.pifire.ui.activities;
 
 import android.app.FragmentManager;
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,9 +16,9 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 
 public class ServerSetupActivity extends AppCompatActivity {
-    private static final String TAG = ServerSetupActivity.class.getSimpleName();
 
     private ActivityServerSetupBinding mBinding;
+    private int mDownX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,49 @@ public class ServerSetupActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            mDownX = (int) event.getRawX();
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
+                if (Math.abs(mDownX - x) > 5) {
+                    return super.dispatchTouchEvent(event);
+                }
+                final int reducePx = 25;
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                outRect.inset(reducePx, reducePx);
+                if (!outRect.contains(x, y)) {
+                    v.clearFocus();
+                    boolean touchTargetIsEditText = false;
+                    for (View vi : v.getRootView().getTouchables()) {
+                        if (vi instanceof EditText) {
+                            Rect clickedViewRect = new Rect();
+                            vi.getGlobalVisibleRect(clickedViewRect);
+                            clickedViewRect.inset(reducePx, reducePx);
+                            if (clickedViewRect.contains(x, y)) {
+                                touchTargetIsEditText = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!touchTargetIsEditText) {
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 }
 

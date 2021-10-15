@@ -100,6 +100,7 @@
         <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyleMaterial</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyleMaterial</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyleMaterial</item>
     </style>
 
     <style name="NegativeButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -110,9 +111,31 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="NeutralButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="TextInputLayoutFilledBox" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxStrokeColor">@color/selector_stroke_color</item>
     </style>
+
+    <style name="SnackbarThemeMaterial" parent="Widget.MaterialComponents.Snackbar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <style name="SnackbarButtonThemeMaterial" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="SnackbarTextThemeMaterial" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorOnSurface">@color/colorPrimaryLighter</item>
+    </style>
+
 
     <style name="Theme.PiFire.Slide">
         <item name="android:windowEnterAnimation">@anim/slide_up</item>

@@ -12,9 +12,9 @@ import com.weberbox.pifire.recycler.viewmodel.LicensesViewModel;
 
 public class LicensesViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mProjectIcon;
-    private TextView mProjectText;
-    private TextView mProjectLicense;
+    private final TextView mProjectIcon;
+    private final TextView mProjectText;
+    private final TextView mProjectLicense;
 
     public LicensesViewHolder(final View itemView, LicensesCallbackInterface callback) {
         super(itemView);
@@ -22,12 +22,7 @@ public class LicensesViewHolder extends RecyclerView.ViewHolder {
         mProjectText = itemView.findViewById(R.id.license_project_name);
         mProjectLicense = itemView.findViewById(R.id.license_text_holder);
 
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callback.licenseClick(mProjectLicense.getText().toString());
-            }
-        });
+        itemView.setOnClickListener(v -> callback.licenseClick(mProjectLicense.getText().toString()));
     }
 
     public void bindData(final LicensesViewModel viewModel) {

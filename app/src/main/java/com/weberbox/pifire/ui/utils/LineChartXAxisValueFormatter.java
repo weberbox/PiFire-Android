@@ -13,7 +13,7 @@ public class LineChartXAxisValueFormatter extends IndexAxisValueFormatter {
         // Show time in local version
         LocalTime localTime = LocalTime.ofSecondOfDay((long) value);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss");
 
         return formatter.format(localTime);
     }

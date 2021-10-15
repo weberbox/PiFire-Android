@@ -1,8 +1,7 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.view.LayoutInflater;
@@ -12,31 +11,33 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
-import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TemperaturePickerDialog {
-    private static String TAG = TemperaturePickerDialog.class.getSimpleName();
 
-    private final BottomSheetDialog mTempPickerBottomSheet;
     private RecyclerView mTempList;
     private String mSelectedTemp;
-    private TempPickerAdapter mTempAdapter;
+    private final BottomSheetDialog mTempPickerBottomSheet;
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
     private final Context mContext;
@@ -56,11 +57,12 @@ public class TemperaturePickerDialog {
     }
 
     public BottomSheetDialog showDialog() {
-        @SuppressLint("InflateParams")
-        View sheetView = mInflater.inflate(R.layout.dialog_temp_picker, null);
+        DialogTempPickerBinding binding = DialogTempPickerBinding.inflate(mInflater);
 
-        Button confirmButton = sheetView.findViewById(R.id.set_temp_confirm);
-        Button clearButton = sheetView.findViewById(R.id.set_temp_clear);
+        RelativeLayout shutdownContainer = binding.probeShutdownContainer;
+        SwitchCompat shutdownSwitch = binding.probeShutdownSwitch;
+        Button confirmButton = binding.setTempConfirm;
+        Button clearButton = binding.setTempClear;
 
         PickerLayoutManager tempPickerLayoutManager = new PickerLayoutManager(mContext,
                 PickerLayoutManager.VERTICAL, false);
@@ -68,18 +70,25 @@ public class TemperaturePickerDialog {
         tempPickerLayoutManager.setScaleDownBy(0.99f);
         tempPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mTempList = sheetView.findViewById(R.id.temp_list);
+        mTempList = binding.tempList;
 
         SnapHelper tempSnapHelper = new LinearSnapHelper();
         tempSnapHelper.attachToRecyclerView(mTempList);
 
+        TempPickerAdapter tempPickerAdapter;
+
         if(mTempType == Constants.PICKER_TYPE_GRILL) {
             mSelectedTemp = String.valueOf(Constants.DEFAULT_GRILL_TEMP_SET);
-            mTempAdapter = new TempPickerAdapter(
-                    generateTemperatureList(Constants.MIN_GRILL_TEMP_SET, (Constants.MAX_GRILL_TEMP_SET + 1)));
+            tempPickerAdapter = new TempPickerAdapter(
+                    generateTemperatureList(Constants.MIN_GRILL_TEMP_SET,
+                            (Constants.MAX_GRILL_TEMP_SET + 1)));
         } else {
+            if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
+                    mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
+                shutdownContainer.setVisibility(View.VISIBLE);
+            }
             mSelectedTemp = String.valueOf(Constants.DEFAULT_PROBE_TEMP_SET);
-            mTempAdapter = new TempPickerAdapter(
+            tempPickerAdapter = new TempPickerAdapter(
                     generateTemperatureList(Constants.MIN_PROBE_TEMP_SET, (Constants.MAX_PROBE_TEMP_SET + 1)));
         }
 
@@ -88,45 +97,34 @@ public class TemperaturePickerDialog {
         }
 
         mTempList.setLayoutManager(tempPickerLayoutManager);
-        mTempList.setAdapter(mTempAdapter);
+        mTempList.setAdapter(tempPickerAdapter);
         
 
         tempPickerLayoutManager.setOnScrollStopListener(
-                new OnScrollStopListener() {
-                    @Override
-                    public void selectedView(View view) {
-                        LinearLayout parent = view.findViewById(R.id.temp_item_container);
-                        RelativeLayout parent_two = parent.findViewById(R.id.temp_item_container_two);
-                        TextView text = parent_two.findViewById(R.id.temp_item_text_view);
-                        mSelectedTemp = text.getText().toString();
-                    }
+                view -> {
+                    LinearLayout parent = view.findViewById(R.id.temp_item_container);
+                    RelativeLayout parent_two = parent.findViewById(R.id.temp_item_container_two);
+                    TextView text = parent_two.findViewById(R.id.temp_item_text_view);
+                    mSelectedTemp = text.getText().toString();
                 });
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPickerBottomSheet.dismiss();
-                mCallBack.onTempConfirmClicked(mTempType, mSelectedTemp, mHoldMode);
-            }
+        confirmButton.setOnClickListener(v -> {
+            mTempPickerBottomSheet.dismiss();
+            mCallBack.onTempConfirmClicked(mTempType, mSelectedTemp, mHoldMode,
+                    shutdownSwitch.isChecked());
         });
 
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTempPickerBottomSheet.dismiss();
-                mCallBack.onTempClearClicked(mTempType);
-            }
+        clearButton.setOnClickListener(v -> {
+            mTempPickerBottomSheet.dismiss();
+            mCallBack.onTempClearClicked(mTempType);
         });
 
 
-        mTempPickerBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
+        mTempPickerBottomSheet.setOnDismissListener(dialogInterface -> {
 
-            }
         });
 
-        mTempPickerBottomSheet.setContentView(sheetView);
+        mTempPickerBottomSheet.setContentView(binding.getRoot());
 
         if(mScrollTemp != 0) {
             if(mTempType == Constants.PICKER_TYPE_GRILL) {
@@ -142,7 +140,19 @@ public class TemperaturePickerDialog {
             clearButton.setVisibility(View.VISIBLE);
         }
 
+        mTempPickerBottomSheet.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
         mTempPickerBottomSheet.show();
+
+        Configuration configuration = mContext.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            mTempPickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        }
 
         return mTempPickerBottomSheet;
     }
@@ -155,7 +165,7 @@ public class TemperaturePickerDialog {
         }
     }
 
-    public static List<TempPickerViewModel> generateTemperatureList(int start, int end) {
+    private static List<TempPickerViewModel> generateTemperatureList(int start, int end) {
         List<TempPickerViewModel> tempPickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");

@@ -11,8 +11,9 @@
         android:id="@+id/server_setup_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.weberbox.pifire.ui.fragments.setup.QRSetupFragment"
+        android:name="com.weberbox.pifire.ui.fragments.setup.SetupBeginFragment"
         android:label="@string/setup_label"
-        tools:layout="@layout/fragment_setup_qr" />
+        tools:layout="@layout/fragment_setup_begin"
+        tools:ignore="FragmentTagUsage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

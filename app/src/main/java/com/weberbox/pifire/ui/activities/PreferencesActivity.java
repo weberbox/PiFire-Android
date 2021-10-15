@@ -4,7 +4,6 @@ package com.weberbox.pifire.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
@@ -20,8 +19,7 @@ import com.weberbox.pifire.ui.fragments.preferences.SafetySettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.ShutdownSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.WorkSettingsFragment;
 
-public class PreferencesActivity extends AppCompatActivity {
-    private static final String TAG = PreferencesActivity.class.getSimpleName();
+public class PreferencesActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +88,6 @@ public class PreferencesActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     private void launchFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -102,7 +95,7 @@ public class PreferencesActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private void setActionBarTitle(int title) {
+    public void setActionBarTitle(int title) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
         }

@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_cycle">
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pmode_auger_on"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_auger_on"
@@ -15,15 +15,15 @@
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_pmode_note">
+            app:summary="@string/settings_pmode_note"
+            app:title="@string/settings_note">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/def_pmode_link" />
         </Preference>
 
-        <ListPreference
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_pmode_mode"
             app:entries="@array/pmode_setting_names"
             app:entryValues="@array/pmode_setting"
@@ -34,42 +34,42 @@
 
         <Preference
             app:key="@string/prefs_work_pmode_table"
-            app:title="@string/settings_pmode_table"
-            app:summary="@string/settings_pmode_summary" />
+            app:summary="@string/settings_pmode_summary"
+            app:title="@string/settings_pmode_table" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_splus" >
+        app:title="@string/settings_cat_splus">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@string/def_splus_enabled"
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_splus_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_enabled"
             app:title="@string/settings_splus_enabled" />
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_splus_note"/>
+            app:summary="@string/settings_splus_note"
+            app:title="@string/settings_note" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_fan"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_fan"
             app:title="@string/settings_splus_fan"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_min"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_min"
             app:title="@string/settings_splus_min"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_max"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_max"
@@ -80,44 +80,58 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_pid" >
+        app:title="@string/settings_cat_pid">
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_cycle"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_cycle"
             app:title="@string/settings_pid_cycle"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_pb"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_pb"
             app:title="@string/settings_pid_pb"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_ti"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_ti"
             app:title="@string/settings_pid_ti"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_td"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_td"
             app:title="@string/settings_pid_td"
             app:useSimpleSummaryProvider="true" />
 
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pid_u_min"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_u_min"
+            app:title="@string/settings_pid_u_min"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pid_u_max"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_u_max"
+            app:title="@string/settings_pid_u_max"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_pid_note" >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="@string/def_pid_link" />
+            app:summary="@string/settings_pid_note"
+            app:title="@string/settings_note">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/def_pid_link" />
         </Preference>
 
     </PreferenceCategory>

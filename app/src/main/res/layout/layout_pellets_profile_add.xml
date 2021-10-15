@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pellet_edit_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorLighterGrey"
+    android:paddingTop="@dimen/small_spacing">
+
+    <LinearLayout
+        android:id="@+id/pellet_add_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <include
+            android:id="@+id/pellet_edit_container"
+            layout="@layout/layout_pellets_edit_card" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/default_spacing"
+        android:paddingTop="@dimen/small_spacing"
+        android:paddingEnd="@dimen/default_spacing"
+        android:paddingBottom="@dimen/default_spacing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pellet_add_container">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pellet_add_load"
+            style="@style/MainButtonAccent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_table_item"
+            android:text="@string/pellets_dialog_save_load" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pellet_add_save"
+            style="@style/MainButtonAccent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_table_item"
+            android:text="@string/pellets_dialog_save" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

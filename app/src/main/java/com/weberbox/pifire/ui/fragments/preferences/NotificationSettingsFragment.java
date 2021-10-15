@@ -24,7 +24,6 @@ import io.socket.client.Socket;
 
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
-    private static final String TAG = NotificationSettingsFragment.class.getSimpleName();
 
     private Socket mSocket;
 
@@ -43,6 +42,7 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,54 +87,67 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                 if (preference instanceof EditTextPreference) {
                     if (preference.getContext().getString(R.string.prefs_notif_ifttt_api)
                             .equals(preference.getKey())) {
-                        GrillControl.setIFTTTAPIKey(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setIFTTTAPIKey(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushover_api)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushOverAPIKey(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushOverAPIKey(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushover_keys)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushOverUserKeys(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushOverUserKeys(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushover_url)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushOverURL(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushOverURL(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushbullet_api)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushBulletAPIKey(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushBulletAPIKey(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushbullet_channel)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushBulletChannel(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushBulletChannel(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushbullet_url)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushBulletURL(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setPushBulletURL(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_firebase_serverkey)
                             .equals(preference.getKey())) {
-                        GrillControl.setFirebaseServerKey(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setFirebaseServerKey(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                 }
                 if (preference instanceof SwitchPreferenceCompat) {
                     if (preference.getContext().getString(R.string.prefs_notif_ifttt_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setIFTTTEnabled(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setIFTTTEnabled(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushover_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushOverEnabled(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setPushOverEnabled(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_pushbullet_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setPushBulletEnabled(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setPushBulletEnabled(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_firebase_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setFirebaseEnabled(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
-                        FirebaseUtils.toggleFirebaseSubscription(((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setFirebaseEnabled(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
+                        FirebaseUtils.toggleFirebaseSubscription(
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                 }
             }

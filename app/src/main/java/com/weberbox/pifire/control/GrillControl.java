@@ -9,7 +9,6 @@ import io.socket.client.Socket;
 
 
 public class GrillControl {
-    private static String TAG = GrillControl.class.getSimpleName();
 
     // Start Grill
     public static void modeStartGrill(Socket socket) {
@@ -46,14 +45,6 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 
-    // Mode Hold
-    public static void modeHoldGrill(Socket socket, String temp) {
-        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_ACTION,
-                ServerConstants.MODE_HOLD, String.valueOf(true),
-                ServerConstants.MODE_TEMP_INPUT_RANGE, temp);
-        socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
-    }
-
     // Probe One Enable/Disable
     public static void probeOneToggle(Socket socket, boolean enabled) {
         String payload = JSONUtils.encodeJSON(ServerConstants.PROBES_ACTION,
@@ -83,8 +74,8 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 
-    // Set Temp Notify Temp
-    public static void setProbeNotify(Socket socket, int probe, String temp) {
+    // Set Temp Notify
+    public static void setProbeNotify(Socket socket, int probe, String temp, boolean shutdown) {
         String payload = null;
         switch (probe) {
             case Constants.PICKER_TYPE_GRILL:
@@ -93,14 +84,28 @@ public class GrillControl {
                         ServerConstants.NOTIFY_TEMP_GRILL, temp);
                 break;
             case Constants.PICKER_TYPE_PROBE_ONE:
-                payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
-                        ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
-                        ServerConstants.NOTIFY_TEMP_PROBE1, temp);
+                if (shutdown) {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE1, temp,
+                            ServerConstants.NOTIFY_SHUTDOWN_P1, String.valueOf(true));
+                } else {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE1, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE1, temp);
+                }
                 break;
             case Constants.PICKER_TYPE_PROBE_TWO:
-                payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
-                        ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
-                        ServerConstants.NOTIFY_TEMP_PROBE2, temp);
+                if (shutdown) {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE2, temp,
+                            ServerConstants.NOTIFY_SHUTDOWN_P2, String.valueOf(true));
+                } else {
+                    payload = JSONUtils.encodeJSON(ServerConstants.NOTIFY_ACTION,
+                            ServerConstants.NOTIFY_PROBE2, String.valueOf(true),
+                            ServerConstants.NOTIFY_TEMP_PROBE2, temp);
+                }
                 break;
         }
         if(payload != null) {
@@ -153,11 +158,20 @@ public class GrillControl {
     }
 
     // Timer Set Time
-    public static void setTimerTime(Socket socket, String hours, String minutes) {
-        String payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
-                ServerConstants.TIMER_START, String.valueOf(true),
-                ServerConstants.TIMER_HOURS, hours,
-                ServerConstants.TIMER_MINS, minutes);
+    public static void setTimerTime(Socket socket, String hours, String minutes, Boolean shutdown) {
+        String payload;
+        if (shutdown) {
+            payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
+                    ServerConstants.TIMER_START, String.valueOf(true),
+                    ServerConstants.TIMER_HOURS, hours,
+                    ServerConstants.TIMER_MINS, minutes,
+                    ServerConstants.TIMER_SHUTDOWN, String.valueOf(true));
+        } else {
+            payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
+                    ServerConstants.TIMER_START, String.valueOf(true),
+                    ServerConstants.TIMER_HOURS, hours,
+                    ServerConstants.TIMER_MINS, minutes);
+        }
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 
@@ -431,6 +445,20 @@ public class GrillControl {
     public static void setPIDTd(Socket socket, String td) {
         String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
                 ServerConstants.CYCLE_DERIV_TIME, td);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Set PID U Min
+    public static void setPIDuMin(Socket socket, String uMin) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
+                ServerConstants.CYCLE_U_MIN, uMin);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Set PID U Max
+    public static void setPIDuMax(Socket socket, String uMax) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
+                ServerConstants.CYCLE_U_MAX, uMax);
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 

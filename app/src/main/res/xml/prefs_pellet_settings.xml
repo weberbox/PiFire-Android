@@ -6,14 +6,14 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pellets">
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_full"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_full"
             app:title="@string/settings_pellet_full"
             app:useSimpleSummaryProvider="true" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_empty"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_empty"
@@ -22,9 +22,9 @@
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_pellet_note" />
+            app:summary="@string/settings_pellet_note"
+            app:title="@string/settings_note" />
 
     </PreferenceCategory>
 </PreferenceScreen>

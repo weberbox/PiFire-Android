@@ -8,14 +8,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class InfoResponseModel {
 
     @SerializedName("cpuinfo")
     @Expose
-    private List<String> cpuinfo = new ArrayList<String>();
+    private List<String> cpuinfo = new ArrayList<>();
     @SerializedName("ifconfig")
     @Expose
-    private List<String> ifconfig = new ArrayList<String>();
+    private List<String> ifconfig = new ArrayList<>();
     @SerializedName("temp")
     @Expose
     private String temp;
@@ -77,7 +78,7 @@ public class InfoResponseModel {
         this.uptime = uptime;
     }
 
-    public class OutPins {
+    public static class OutPins {
 
         @SerializedName("auger")
         @Expose
@@ -126,7 +127,7 @@ public class InfoResponseModel {
 
     }
 
-    public class InPins {
+    public static class InPins {
 
         @SerializedName("selector")
         @Expose

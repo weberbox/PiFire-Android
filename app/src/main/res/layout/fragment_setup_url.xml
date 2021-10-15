@@ -4,7 +4,10 @@
     android:id="@+id/setup_url_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <ProgressBar
         android:id="@+id/connect_progressbar"
@@ -46,7 +49,7 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="64dp"
+                    android:layout_marginTop="50dp"
                     android:contentDescription="@string/placeholder_img"
                     android:src="@drawable/ic_grill" />
 
@@ -76,32 +79,110 @@
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/server_address_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="25dp"
                     android:layout_marginTop="40dp"
-                    android:layout_marginEnd="25dp"
-                    android:hint="@string/setup_http_address"
-                    android:textColorHint="@color/colorWhite"
-                    android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-                    app:boxBackgroundColor="@color/colorPrimaryLight"
-                    app:boxStrokeColor="@color/selector_stroke_color"
-                    app:errorEnabled="true"
-                    app:hintTextColor="@color/colorGreyHint">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/server_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="72dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/server_address_scheme"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="@dimen/small_spacing"
+                        android:hint="@string/scheme"
+                        android:labelFor="@+id/server_address_scheme_tv"
+                        android:paddingBottom="20dp"
+                        android:textColorHint="@color/colorWhite"
+                        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                        app:boxBackgroundColor="@color/colorPrimaryLight"
+                        app:boxStrokeColor="@color/selector_stroke_color"
+                        app:endIconTint="@color/colorWhite"
+                        app:hintTextColor="@color/colorGreyHint"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/server_address_layout"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/server_address_scheme_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/aller_regular"
+                            android:inputType="none"
+                            android:text="@string/http_scheme" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/server_address_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="15dp"
+                        android:hint="@string/setup_server_address"
+                        android:textColorHint="@color/colorWhite"
+                        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                        app:boxBackgroundColor="@color/colorPrimaryLight"
+                        app:boxStrokeColor="@color/selector_stroke_color"
+                        app:errorEnabled="true"
+                        app:hintTextColor="@color/colorGreyHint"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/server_address_scheme"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/server_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="72dp"
+                            android:fontFamily="@font/aller_regular"
+                            android:imeOptions="actionDone"
+                            android:inputType="textUri"
+                            android:singleLine="true"
+                            android:textColor="@color/colorWhite" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/self_signed_note_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/setup_enable_self_signed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/self_signed_note"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/self_signed_note"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
                         android:fontFamily="@font/aller_regular"
-                        android:singleLine="true"
+                        android:text="@string/settings_security_unsigned_cert_summary"
+                        android:textAlignment="textStart"
                         android:textColor="@color/colorWhite"
-                        android:imeOptions="actionDone" />
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/setup_enable_self_signed"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
         </ScrollView>
@@ -113,22 +194,6 @@
             android:layout_alignParentBottom="true"
             android:gravity="bottom|center"
             android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/continue_url_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_ripple_blue_button"
-                android:fontFamily="@font/knockout_regular"
-                android:text="@string/continue_button"
-                android:textAllCaps="true"
-                android:textColor="@color/colorWhite"
-                android:textSize="24sp"
-                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/skip_url_button"
@@ -146,6 +211,22 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/continue_url_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_ripple_blue_button"
+                android:fontFamily="@font/knockout_regular"
+                android:text="@string/continue_button"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

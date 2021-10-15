@@ -10,9 +10,9 @@ import com.weberbox.pifire.recycler.viewmodel.PelletLogViewModel;
 
 public class PelletsLogViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mPelletDate;
-    private TextView mPelletName;
-    private TextView mPelletRating;
+    private final TextView mPelletDate;
+    private final TextView mPelletName;
+    private final TextView mPelletRating;
 
     public PelletsLogViewHolder(final View itemView) {
         super(itemView);

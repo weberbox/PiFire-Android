@@ -1,3 +1,6 @@
 /build
-src/firebase/google-services.json
+src/dev/google-services.json
+src/github/
+src/dev/
+src/debug/
 *.log

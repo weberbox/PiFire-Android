@@ -1,23 +1,26 @@
 package com.weberbox.pifire.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.Fade;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
@@ -32,7 +35,6 @@ import com.weberbox.pifire.recycler.viewmodel.EventViewModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.FileUtils;
-import com.weberbox.pifire.utils.Log;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -44,19 +46,21 @@ import java.util.List;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class EventsFragment extends Fragment {
-    private static final String TAG = EventsFragment.class.getSimpleName();
 
     private FragmentEventsBinding mBinding;
     private MainViewModel mMainViewModel;
-    private RecyclerView mEventsRecycler;
+    private FrameLayout mRootContainer;
     private EventsListAdapter mEventsListAdapter;
     private LinearLayout mEventsPlaceholder;
     private ProgressBar mLoadingBar;
     private SwipeRefreshLayout mSwipeRefresh;
     private List<EventViewModel> mEvents;
     private Socket mSocket;
+
+    private boolean mIsLoading = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,45 +83,54 @@ public class EventsFragment extends Fragment {
 
         mEvents = new ArrayList<>();
 
+        mRootContainer = mBinding.eventsContainer;
         mEventsPlaceholder = mBinding.eventsLayout.eventsPlaceholderContainer;
-        mEventsRecycler = mBinding.eventsLayout.eventsList;
         mSwipeRefresh = mBinding.eventsPullRefresh;
         mLoadingBar = mBinding.eventsLayout.loadingProgressbar;
 
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mSocket != null && mSocket.connected()) {
-                    requestListData();
-                } else {
-                    mSwipeRefresh.setRefreshing(false);
-                    AnimUtils.shakeOfflineBanner(getActivity());
-                }
+        mEventsListAdapter = new EventsListAdapter(mEvents);
+
+        RecyclerView eventsList = mBinding.eventsLayout.eventsList;
+        eventsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        eventsList.setItemAnimator(new DefaultItemAnimator());
+        eventsList.setAdapter(mEventsListAdapter);
+
+        mSwipeRefresh.setOnRefreshListener(() -> {
+            if (mSocket != null && mSocket.connected()) {
+                forceRefreshData(mSocket);
+            } else {
+                mSwipeRefresh.setRefreshing(false);
+                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         if (getActivity() != null) {
             mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mMainViewModel.getEventsData().observe(getViewLifecycleOwner(), new Observer<String>() {
-                @Override
-                public void onChanged(@Nullable String response_data) {
-                    mSwipeRefresh.setRefreshing(false);
-                    if (response_data != null) {
-                        if (getActivity() != null) {
-                            FileUtils.saveJSONFile(getActivity(), Constants.JSON_EVENTS, response_data);
-                        }
-                        updateUIWithData(response_data);
+            mMainViewModel.getEventsData().observe(getViewLifecycleOwner(), eventsData -> {
+                mSwipeRefresh.setRefreshing(false);
+                if (eventsData != null && eventsData.getLiveData() != null) {
+                    if (eventsData.getIsNewData()) {
+                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_EVENTS,
+                                eventsData.getLiveData());
                     }
+                    updateUIWithData(eventsData.getLiveData());
                 }
             });
 
-            mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-                @Override
-                public void onChanged(@Nullable Boolean enabled) {
-                    checkStoredData();
+            mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+                if (enabled != null && enabled) {
+                    if (!mIsLoading) {
+                        mIsLoading = true;
+                        if (mSocket != null && mSocket.connected()) {
+                            toggleLoading(true);
+                            requestDataUpdate();
+                        }
+                    }
                 }
             });
         }
+
+        checkViewModelData();
     }
 
     @Override
@@ -126,33 +139,41 @@ public class EventsFragment extends Fragment {
         mBinding = null;
     }
 
-    private void checkStoredData() {
+    private void checkViewModelData() {
         if (mMainViewModel.getEventsData().getValue() == null) {
             toggleLoading(true);
-            requestListData();
-        } else {
-            toggleLoading(false);
+            loadStoredDataRequestUpdate();
         }
     }
 
-    private void requestListData() {
+    private void requestDataUpdate() {
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_EVENT_DATA, new Ack() {
-                @Override
-                public void call(Object... args) {
-                    if (mMainViewModel != null) {
-                        mMainViewModel.setEventsData(args[0].toString());
-                    }
+            mIsLoading = true;
+            mSocket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
+                if (mMainViewModel != null) {
+                    mMainViewModel.setEventsData(args[0].toString(), true);
+                    mIsLoading = false;
                 }
             });
-        } else {
-            if (getActivity() != null) {
-                String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_EVENTS);
-                if (jsonData != null && mMainViewModel != null) {
-                    mMainViewModel.setEventsData(jsonData);
-                }
-            }
         }
+    }
+
+    private void loadStoredDataRequestUpdate() {
+        String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_EVENTS);
+        if (jsonData != null && mMainViewModel != null) {
+            mMainViewModel.setEventsData(jsonData, false);
+        }
+        if (!mIsLoading) {
+            requestDataUpdate();
+        }
+    }
+
+    private void forceRefreshData(Socket socket) {
+        socket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
+            if (mMainViewModel != null) {
+                mMainViewModel.setEventsData(args[0].toString(), true);
+            }
+        });
     }
 
     private void toggleLoading(boolean show) {
@@ -163,6 +184,7 @@ public class EventsFragment extends Fragment {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void updateUIWithData(String response_data) {
         mEvents.clear();
 
@@ -170,7 +192,8 @@ public class EventsFragment extends Fragment {
             JSONObject rootObject = new JSONObject(response_data);
             JSONArray array = rootObject.getJSONArray(ServerConstants.EVENTS_LIST);
 
-            int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount), getString(R.string.def_event_amounts_app)));
+            int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount),
+                    getString(R.string.def_event_amounts_app)));
             int listAmount = Math.min(customAmount, array.length());
 
             for (int i = 0; i < listAmount; i++) {
@@ -184,16 +207,14 @@ public class EventsFragment extends Fragment {
                 mEvents.add(events);
             }
 
-            mEventsListAdapter = new EventsListAdapter(mEvents);
+            TransitionManager.beginDelayedTransition(mRootContainer, new Fade(Fade.IN));
 
-            mEventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mEventsRecycler.setItemAnimator(new DefaultItemAnimator());
-            mEventsRecycler.setAdapter(mEventsListAdapter);
+            mEventsListAdapter.notifyDataSetChanged();
 
             mEventsPlaceholder.setVisibility(View.GONE);
 
         } catch (JSONException| IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Log.e(TAG, "JSON Error: " + e.getMessage());
+            Timber.e(e,"JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }
