@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +38,7 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.databinding.FragmentPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsProfileAddBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
@@ -51,7 +53,6 @@ import com.weberbox.pifire.ui.dialogs.PelletsAddDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsDeleteDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
-import com.weberbox.pifire.ui.utils.FadeTransition;
 import com.weberbox.pifire.ui.views.CardViewHeaderButton;
 import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
 import com.weberbox.pifire.utils.FileUtils;
@@ -69,7 +70,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
     private MainViewModel mMainViewModel;
     private FragmentPelletsBinding mBinding;
-    private LayoutPelletsBinding mPelletsBinding;
+    private LayoutPelletsCurrentBinding mPelletsCurrentBinding;
     private RelativeLayout mRootContainer;
     private SwipeRefreshLayout mSwipeRefresh;
     private ProgressBar mLoadingBar;
@@ -129,20 +130,21 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mProfileList = new ArrayList<>();
         mProfileEditList = new ArrayList<>();
 
-        mPelletsBinding = mBinding.pelletsLayout;
+        LayoutPelletsBinding pelletsBinding = mBinding.pelletsLayout;
+        mPelletsCurrentBinding = pelletsBinding.currentInclude;
 
-        mRootContainer = mPelletsBinding.pelletsRootContainer;
+        mRootContainer = pelletsBinding.pelletsRootContainer;
         mSwipeRefresh = mBinding.pelletsPullRefresh;
-        mLoadingBar = mPelletsBinding.loadingProgressbar;
-        mCurrentView = mPelletsBinding.currentView;
-        mCurrentPlaceholder = mPelletsBinding.currentHolder;
-        mProfilePlaceholder = mPelletsBinding.profileHolder;
-        mLogsPlaceholder = mPelletsBinding.logsHolder;
-        mAddNewProfile = mPelletsBinding.addProfileButton;
+        mLoadingBar = pelletsBinding.loadingProgressbar;
+        mCurrentView = pelletsBinding.currentView;
+        mCurrentPlaceholder = pelletsBinding.currentHolder;
+        mProfilePlaceholder = pelletsBinding.profileHolder;
+        mLogsPlaceholder = pelletsBinding.logsHolder;
+        mAddNewProfile = pelletsBinding.addProfileButton;
 
-        CardViewHeaderButton currentHeader = mPelletsBinding.loadOutHeader;
-        PelletsCardViewRecycler brandsCardView = mPelletsBinding.brandsCardView;
-        PelletsCardViewRecycler woodsCardView = mPelletsBinding.woodsCardView;
+        CardViewHeaderButton currentHeader = pelletsBinding.loadOutHeader;
+        PelletsCardViewRecycler brandsCardView = pelletsBinding.brandsCardView;
+        PelletsCardViewRecycler woodsCardView = pelletsBinding.woodsCardView;
 
         mBrandsPlaceholder = brandsCardView.getHolderView();
         mWoodsPlaceholder = woodsCardView.getHolderView();
@@ -152,7 +154,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         TextView loadNewPellets = currentHeader.getButton();
 
         LayoutPelletsProfileAddBinding pelletsProfileAddBinding =
-                mPelletsBinding.pelletsAddProfileContainer;
+                pelletsBinding.pelletsAddProfileContainer;
 
         AppCompatButton pelletAddSave = pelletsProfileAddBinding.pelletAddSave;
         AppCompatButton pelletAddLoad = pelletsProfileAddBinding.pelletAddLoad;
@@ -166,9 +168,9 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
         RecyclerView brandsCardViewRecycler = brandsCardView.getRecycler();
         RecyclerView woodsCardViewRecycler = woodsCardView.getRecycler();
-        RecyclerView logsRecycler = mPelletsBinding.logsRecycler;
-        RecyclerView editorRecycler = mPelletsBinding.editorRecycler;
-        mAddProfileCard = mPelletsBinding.pelletsAddProfile;
+        RecyclerView logsRecycler = pelletsBinding.logsRecycler;
+        RecyclerView editorRecycler = pelletsBinding.editorRecycler;
+        mAddProfileCard = pelletsBinding.pelletsAddProfile;
 
         mPelletBrandsAdapter = new PelletItemsAdapter(mBrandsEditList, this);
 
@@ -471,12 +473,12 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             Map<String, String> logs = pelletResponseModel.getLogs();
             Map<String, PelletProfileModel> profiles = pelletResponseModel.getProfiles();
 
-            TransitionManager.beginDelayedTransition(mRootContainer, new FadeTransition());
+            TransitionManager.beginDelayedTransition(mRootContainer, new Fade(Fade.IN));
 
             mProfileList.addAll(profiles.values());
 
             if (current.getDateLoaded() != null) {
-                mPelletsBinding.currentInclude.currentDateLoadedText.setText(current.getDateLoaded());
+                mPelletsCurrentBinding.currentDateLoadedText.setText(current.getDateLoaded());
             }
 
             if (current.getPelletId() != null) {
@@ -486,10 +488,10 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             if (current.getPelletId() != null) {
                 PelletProfileModel currentProfile = profiles.get(current.getPelletId());
                 if (currentProfile != null) {
-                    mPelletsBinding.currentInclude.currentBrandText.setText(currentProfile.getBrand());
-                    mPelletsBinding.currentInclude.currentWoodText.setText(currentProfile.getWood());
-                    mPelletsBinding.currentInclude.currentCommentsText.setText(currentProfile.getComments());
-                    mPelletsBinding.currentInclude.currentRatingText.setText(StringUtils.getRatingText(
+                    mPelletsCurrentBinding.currentBrandText.setText(currentProfile.getBrand());
+                    mPelletsCurrentBinding.currentWoodText.setText(currentProfile.getWood());
+                    mPelletsCurrentBinding.currentCommentsText.setText(currentProfile.getComments());
+                    mPelletsCurrentBinding.currentRatingText.setText(StringUtils.getRatingText(
                             currentProfile.getRating()));
                 }
             }

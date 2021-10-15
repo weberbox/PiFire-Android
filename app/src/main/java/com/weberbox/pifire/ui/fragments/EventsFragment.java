@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -33,7 +34,6 @@ import com.weberbox.pifire.recycler.adapter.EventsListAdapter;
 import com.weberbox.pifire.recycler.viewmodel.EventViewModel;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
-import com.weberbox.pifire.ui.utils.FadeTransition;
 import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -207,9 +207,9 @@ public class EventsFragment extends Fragment {
                 mEvents.add(events);
             }
 
-            mEventsListAdapter.notifyDataSetChanged();
+            TransitionManager.beginDelayedTransition(mRootContainer, new Fade(Fade.IN));
 
-            TransitionManager.beginDelayedTransition(mRootContainer, new FadeTransition());
+            mEventsListAdapter.notifyDataSetChanged();
 
             mEventsPlaceholder.setVisibility(View.GONE);
 
