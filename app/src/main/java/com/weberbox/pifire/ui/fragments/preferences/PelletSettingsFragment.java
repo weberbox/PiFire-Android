@@ -137,11 +137,13 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_pellet_empty)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsEmpty(mSocket, ((EditTextPreference) preference).getText());
+                    GrillControl.setPelletsEmpty(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
                 if (preference.getContext().getString(R.string.prefs_pellet_full)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsFull(mSocket, ((EditTextPreference) preference).getText());
+                    GrillControl.setPelletsFull(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
             }
         }

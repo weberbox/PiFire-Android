@@ -130,7 +130,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_admin_debug)
                         .equals(preference.getKey())) {
                     if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setDebugMode(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setDebugMode(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                 }
             }
@@ -169,7 +170,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     private void showAdminDialog(int type) {
         if (getActivity() != null) {
             if (mSocket != null && mSocket.connected()) {
-                AdminActionDialog adminDialog = new AdminActionDialog(getActivity(), this, type);
+                AdminActionDialog adminDialog = new AdminActionDialog(getActivity(),
+                        this, type);
                 adminDialog.showDialog();
             } else {
                 showSnackBarMessage(getActivity());
@@ -178,7 +180,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     private void showSnackBarMessage(Activity activity) {
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
+                R.color.colorAccentRed)));
         mErrorSnack.show();
     }
 }

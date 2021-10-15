@@ -86,6 +86,8 @@ public class ServerConstants {
     public static final String CYCLE_PROP_BAND = "propband";
     public static final String CYCLE_INTEGRAL_TIME = "integraltime";
     public static final String CYCLE_DERIV_TIME = "derivtime";
+    public static final String CYCLE_U_MAX= "u_max";
+    public static final String CYCLE_U_MIN = "u_min";
     public static final String CYCLE_SP_CYCLE = "sp_cycle";
     public static final String CYCLE_MIN_SP_TEMP = "minsptemp";
     public static final String CYCLE_MAX_SP_TEMP = "maxsptemp";

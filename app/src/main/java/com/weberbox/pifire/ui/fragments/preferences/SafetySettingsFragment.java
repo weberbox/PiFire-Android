@@ -2,9 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
 
@@ -88,27 +87,8 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onBindEditText(@NonNull EditText editText) {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    editText.setError(getString(R.string.settings_blank_error));
-                } else if (s.toString().equals("0")) {
-                    editText.setError(getString(R.string.settings_zero_error));
-                } else {
-                    editText.setError(null);
-                }
-
-            }
-        });
+        editText.addTextChangedListener(
+                new EmptyTextListener(getActivity(), editText));
     }
 
 
@@ -121,21 +101,25 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
                 if (preference instanceof EditTextPreference) {
                     if (preference.getContext().getString(R.string.prefs_safety_min_start)
                             .equals(preference.getKey())) {
-                        GrillControl.setMinStartTemp(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setMinStartTemp(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_safety_max_start)
                             .equals(preference.getKey())) {
-                        GrillControl.setMaxStartTemp(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setMaxStartTemp(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_safety_max_temp)
                             .equals(preference.getKey())) {
-                        GrillControl.setMaxGrillTemp(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setMaxGrillTemp(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                 }
                 if (preference instanceof ListPreference) {
                     if (preference.getContext().getString(R.string.prefs_safety_retries)
                             .equals(preference.getKey())) {
-                        GrillControl.setReigniteRetries(mSocket, ((ListPreference) preference).getValue());
+                        GrillControl.setReigniteRetries(mSocket,
+                                ((ListPreference) preference).getValue());
                     }
                 }
             }

@@ -45,14 +45,6 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
     }
 
-    // Mode Hold
-    public static void modeHoldGrill(Socket socket, String temp) {
-        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_ACTION,
-                ServerConstants.MODE_HOLD, String.valueOf(true),
-                ServerConstants.MODE_TEMP_INPUT_RANGE, temp);
-        socket.emit(ServerConstants.UPDATE_CONTROL_DATA, payload);
-    }
-
     // Probe One Enable/Disable
     public static void probeOneToggle(Socket socket, boolean enabled) {
         String payload = JSONUtils.encodeJSON(ServerConstants.PROBES_ACTION,
@@ -453,6 +445,20 @@ public class GrillControl {
     public static void setPIDTd(Socket socket, String td) {
         String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
                 ServerConstants.CYCLE_DERIV_TIME, td);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Set PID U Min
+    public static void setPIDuMin(Socket socket, String uMin) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
+                ServerConstants.CYCLE_U_MIN, uMin);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Set PID U Max
+    public static void setPIDuMax(Socket socket, String uMax) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
+                ServerConstants.CYCLE_U_MAX, uMax);
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 

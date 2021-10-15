@@ -67,6 +67,8 @@
     <string name="prefs_work_pid_pb">prefs_work_pid_pb</string>
     <string name="prefs_work_pid_ti">prefs_work_pid_ti</string>
     <string name="prefs_work_pid_td">prefs_work_pid_td</string>
+    <string name="prefs_work_pid_u_min">prefs_work_pid_u_min</string>
+    <string name="prefs_work_pid_u_max">prefs_work_pid_u_max</string>
 
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
 

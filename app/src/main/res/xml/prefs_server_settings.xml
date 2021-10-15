@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto" >
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory
-        app:title="@string/settings_cat_server_title">
+    <PreferenceCategory app:title="@string/settings_cat_server_title">
 
         <Preference
             app:key="@string/prefs_server_address"
@@ -10,8 +9,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="@string/settings_cat_basic_auth_title">
+    <PreferenceCategory app:title="@string/settings_cat_basic_auth_title">
 
         <SwitchPreferenceCompat
             app:key="@string/prefs_server_basic_auth"
@@ -21,19 +19,18 @@
         <com.weberbox.pifire.ui.dialogs.PrefsUsernameDialog
             app:dependency="@string/prefs_server_basic_auth"
             app:key="@string/prefs_server_basic_auth_user"
-            app:title="@string/settings_username"
-            app:summary="@string/settings_username_summary" />
+            app:summary="@string/settings_username_summary"
+            app:title="@string/settings_username" />
 
         <com.weberbox.pifire.ui.dialogs.PrefsPasswordDialog
             app:dependency="@string/prefs_server_basic_auth"
             app:key="@string/prefs_server_basic_auth_password"
-            app:title="@string/settings_password"
-            app:summary="@string/settings_password_summary"/>
+            app:summary="@string/settings_password_summary"
+            app:title="@string/settings_password" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:title="@string/settings_cat_security_title">
+    <PreferenceCategory app:title="@string/settings_cat_security_title">
 
         <SwitchPreferenceCompat
             app:defaultValue="@bool/def_security_unsigned_cert"

@@ -22,9 +22,9 @@
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_pellet_note" />
+            app:summary="@string/settings_pellet_note"
+            app:title="@string/settings_note" />
 
     </PreferenceCategory>
 </PreferenceScreen>

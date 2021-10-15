@@ -74,7 +74,8 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference instanceof EditTextPreference) {
                     if (preference.getContext().getString(R.string.prefs_grill_name)
                             .equals(preference.getKey())) {
-                        GrillControl.setGrillName(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setGrillName(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                 }
             }

@@ -19,6 +19,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
 
@@ -51,30 +52,11 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference historyDisplay = findPreference(getString(R.string.prefs_history_display));
         EditTextPreference historyPoints = findPreference(getString(R.string.prefs_history_points));
 
-        if (historyDisplay != null) {
+        if (historyDisplay != null && getActivity() != null) {
             historyDisplay.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(getActivity(), editText));
             });
         }
 
@@ -138,21 +120,25 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
                 if (preference instanceof EditTextPreference) {
                     if (preference.getContext().getString(R.string.prefs_history_display)
                             .equals(preference.getKey())) {
-                        GrillControl.setHistoryMins(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setHistoryMins(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                     if (preference.getContext().getString(R.string.prefs_history_points)
                             .equals(preference.getKey())) {
-                        GrillControl.setHistoryPoints(mSocket, ((EditTextPreference) preference).getText());
+                        GrillControl.setHistoryPoints(mSocket,
+                                ((EditTextPreference) preference).getText());
                     }
                 }
                 if (preference instanceof SwitchPreferenceCompat) {
                     if (preference.getContext().getString(R.string.prefs_history_auto)
                             .equals(preference.getKey())) {
-                        GrillControl.setHistoryRefresh(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setHistoryRefresh(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                     if (preference.getContext().getString(R.string.prefs_history_clear)
                             .equals(preference.getKey())) {
-                        GrillControl.setHistoryClear(mSocket, ((SwitchPreferenceCompat) preference).isChecked());
+                        GrillControl.setHistoryClear(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
                     }
                 }
             }

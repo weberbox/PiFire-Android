@@ -50,6 +50,8 @@
     <string name="def_pid_pb">60.0</string>
     <string name="def_pid_ti">180.0</string>
     <string name="def_pid_td">45.0</string>
+    <string name="def_pid_u_min">0.15</string>
+    <string name="def_pid_u_max">1.0</string>
 
     <string name="def_shutdown_time">60</string>
 

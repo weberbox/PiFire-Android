@@ -33,6 +33,19 @@ public class AnimUtils {
         view.startAnimation(anim);
     }
 
+    public static void fadeView(View view, int duration, int direction) {
+        switch (direction) {
+            case Constants.FADE_IN:
+                fadeView(view, 0.0f, 1.0f, duration);
+                view.setVisibility(View.VISIBLE);
+                break;
+            case Constants.FADE_OUT:
+                fadeView(view, 1.0f, 0.0f, duration);
+                view.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
     public static void fadeView(View view, float start, float end, int duration) {
         AlphaAnimation anim = new AlphaAnimation(start, end);
         anim.setDuration(duration);

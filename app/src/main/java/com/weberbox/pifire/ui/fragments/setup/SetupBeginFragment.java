@@ -17,18 +17,18 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.databinding.FragmentSetupQrBinding;
+import com.weberbox.pifire.databinding.FragmentSetupBeginBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class QRSetupFragment extends Fragment {
+public class SetupBeginFragment extends Fragment {
 
-    private FragmentSetupQrBinding mBinding;
+    private FragmentSetupBeginBinding mBinding;
     private Snackbar mCameraPermissionSnack;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentSetupQrBinding.inflate(inflater, container, false);
+        mBinding = FragmentSetupBeginBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
     }
 

@@ -23,7 +23,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.JsonSyntaxException;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -41,7 +40,6 @@ import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -143,6 +141,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
         }
 
         loadStoredDataRequestUpdate();
+        loadCredits();
     }
 
     @Override
@@ -187,7 +186,6 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
     }
 
     private void updateUIWithData(String response_data) {
-        mLicenses.clear();
 
         try {
 
@@ -204,12 +202,12 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             String selector = infoResponseModel.getInPins().getSelector();
 
             StringBuilder cpuString = new StringBuilder();
-            for(String cpu: cpuInfo) {
+            for (String cpu : cpuInfo) {
                 cpuString.append(cpu).append("\n");
             }
 
             StringBuilder networkString = new StringBuilder();
-            for(String network: networkInfo) {
+            for (String network : networkInfo) {
                 networkString.append(network.trim()).append("\n");
             }
 
@@ -224,6 +222,21 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             mGPIOOutIgniter.setText(igniter);
             mGPIOOutPower.setText(power);
             mGPIOInSelector.setText(selector);
+
+        } catch (NullPointerException e) {
+            Timber.w(e, "Response Error");
+            if (getActivity() != null) {
+                showSnackBarMessage(getActivity());
+            }
+        }
+
+        toggleLoading(false);
+    }
+
+    private void loadCredits() {
+        mLicenses.clear();
+
+        try {
 
             if (getActivity() != null) {
                 String json = FileUtils.readRawJSONFile(getActivity(), R.raw.licences);
@@ -242,7 +255,8 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
                         mLicenses.add(project);
                     }
 
-                    LicensesListAdapter licensesListAdapter = new LicensesListAdapter(mLicenses, this);
+                    LicensesListAdapter licensesListAdapter =
+                            new LicensesListAdapter(mLicenses, this);
 
                     mLicenseInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
                     mLicenseInfo.setItemAnimator(new DefaultItemAnimator());
@@ -251,18 +265,16 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
                 }
             }
 
-        } catch (JSONException | IllegalStateException | JsonSyntaxException | NullPointerException e) {
+        } catch (Exception e) {
             Timber.w(e, "JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }
         }
-
-        toggleLoading(false);
     }
 
     private void showSnackBarMessage(Activity activity) {
-        Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_events, Snackbar.LENGTH_LONG);
+        Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_info, Snackbar.LENGTH_LONG);
         snack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
         snack.setTextColor(activity.getColor(R.color.colorWhite));
         snack.show();

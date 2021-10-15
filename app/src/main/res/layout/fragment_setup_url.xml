@@ -49,7 +49,7 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="64dp"
+                    android:layout_marginTop="50dp"
                     android:contentDescription="@string/placeholder_img"
                     android:src="@drawable/ic_grill" />
 
@@ -102,7 +102,6 @@
                         app:boxBackgroundColor="@color/colorPrimaryLight"
                         app:boxStrokeColor="@color/selector_stroke_color"
                         app:endIconTint="@color/colorWhite"
-                        app:errorEnabled="true"
                         app:hintTextColor="@color/colorGreyHint"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/server_address_layout"
@@ -111,7 +110,7 @@
 
                         <AutoCompleteTextView
                             android:id="@+id/server_address_scheme_tv"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/aller_regular"
                             android:inputType="none"
@@ -155,7 +154,7 @@
                     android:id="@+id/self_signed_note_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible">
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/setup_enable_self_signed"
@@ -211,7 +210,7 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/continue_url_button"

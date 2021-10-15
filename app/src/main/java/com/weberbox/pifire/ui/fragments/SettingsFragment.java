@@ -222,6 +222,8 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
             Prefs.putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
             Prefs.putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
+            Prefs.putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
+            Prefs.putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
 
             Prefs.putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
             Prefs.putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());

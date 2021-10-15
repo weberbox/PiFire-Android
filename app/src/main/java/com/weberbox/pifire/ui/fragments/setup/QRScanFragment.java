@@ -261,7 +261,7 @@ public class QRScanFragment extends Fragment {
     };
 
     private void showSnackBarMessage(Activity activity, int message) {
-        AnimUtils.fadeAnimation(mSelfSignedNote, 300, Constants.FADE_IN);
+        AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
         mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
         mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
         mErrorSnack.setText(message);

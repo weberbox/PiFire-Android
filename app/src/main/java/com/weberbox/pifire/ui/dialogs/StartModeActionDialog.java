@@ -60,8 +60,8 @@ public class StartModeActionDialog {
                     mContext.getResources().getBoolean(R.bool.def_grill_swipe_start))) {
                 if (mSwipeButton.getVisibility() == View.INVISIBLE) {
                     startShowDelay();
-                    fadeView(mButtonsTable, Constants.FADE_OUT);
-                    fadeView(mSwipeButton, Constants.FADE_IN);
+                    AnimUtils.fadeView(mButtonsTable, 300, Constants.FADE_OUT);
+                    AnimUtils.fadeView(mSwipeButton, 300, Constants.FADE_IN);
                     mModeActionsBottomSheet.setCancelable(false);
                     mModeActionsBottomSheet.setCanceledOnTouchOutside(true);
                 }
@@ -122,19 +122,6 @@ public class StartModeActionDialog {
         }
 
         return mModeActionsBottomSheet;
-    }
-
-    private void fadeView(View view, int direction) {
-        switch (direction) {
-            case Constants.FADE_OUT:
-                AnimUtils.fadeView(view, 1.0f, 0.0f, 300);
-                view.setVisibility(View.INVISIBLE);
-                break;
-            case Constants.FADE_IN:
-                AnimUtils.fadeView(view, 0.0f, 1.0f, 300);
-                view.setVisibility(View.VISIBLE);
-                break;
-        }
     }
 
     private void stopShowDelay() {

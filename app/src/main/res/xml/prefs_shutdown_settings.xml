@@ -4,7 +4,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_shutdown" >
+        app:title="@string/settings_shutdown">
 
         <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_shutdown_time"
@@ -15,9 +15,9 @@
 
         <Preference
             android:layout="@layout/preference_category_note"
-            app:title="@string/settings_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_shutdown_note" />
+            app:summary="@string/settings_shutdown_note"
+            app:title="@string/settings_note" />
 
     </PreferenceCategory>
 </PreferenceScreen>

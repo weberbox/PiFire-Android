@@ -70,6 +70,7 @@
     <string name="json_error_history">JSON Parsing Error - History not updated</string>
     <string name="json_error_pellets">JSON Parsing Error - Pellets not updated</string>
     <string name="json_error_dash">JSON Parsing Error - Dashboard not updated</string>
+    <string name="json_error_info">JSON Parsing Error - Info not updated</string>
 
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -281,6 +282,8 @@
     <string name="settings_pid_pb">Proportional Band (PB)</string>
     <string name="settings_pid_ti">Integral Time (Ti)</string>
     <string name="settings_pid_td">Derivative Time (Td)</string>
+    <string name="settings_pid_u_min">Minimum Cycle Ratio</string>
+    <string name="settings_pid_u_max">Maximum Cycle Ratio</string>
     <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
 
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>

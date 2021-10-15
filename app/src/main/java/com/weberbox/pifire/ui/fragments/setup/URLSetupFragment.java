@@ -293,8 +293,6 @@ public class URLSetupFragment extends Fragment {
                     if(!mErrorSnack.isShown() && getActivity() != null) {
                         showSnackBarMessage(getActivity(), R.string.setup_cannot_connect);
                     }
-                    AnimUtils.fadeAnimation(mSkipButton, 300, Constants.FADE_IN);
-                    AnimUtils.fadeAnimation(mSelfSignedNote, 300, Constants.FADE_IN);
                 });
             }
         }
@@ -310,6 +308,8 @@ public class URLSetupFragment extends Fragment {
     }
 
     private void showSnackBarMessage(Activity activity, int message) {
+        AnimUtils.fadeView(mSkipButton, 300, Constants.FADE_IN);
+        AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
         mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
         mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
         mErrorSnack.setText(message);

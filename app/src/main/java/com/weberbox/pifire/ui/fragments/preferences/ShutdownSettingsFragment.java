@@ -2,9 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
 
@@ -48,30 +47,11 @@ public class ShutdownSettingsFragment extends PreferenceFragmentCompat implement
 
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
 
-        if (shutdownTime != null) {
+        if (shutdownTime != null && getActivity() != null) {
             shutdownTime.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(getActivity(), editText));
             });
         }
 
@@ -107,7 +87,8 @@ public class ShutdownSettingsFragment extends PreferenceFragmentCompat implement
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_shutdown_time)
                         .equals(preference.getKey())) {
-                    GrillControl.setShutdownTime(mSocket, ((EditTextPreference) preference).getText());
+                    GrillControl.setShutdownTime(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
             }
         }
