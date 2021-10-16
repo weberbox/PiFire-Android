@@ -15,6 +15,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.pixplicity.easyprefs.library.Prefs;
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
@@ -47,6 +49,9 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        boolean featureSupported = Prefs.getInt(getString(R.string.prefs_android_version),
+                0) >= BuildConfig.VERSION_CODE;
 
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
@@ -156,21 +161,29 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             }
 
             if (pidUMax != null) {
-                pidUMax.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
+                if (featureSupported) {
+                    pidUMax.setOnBindEditTextListener(editText -> {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        editText.addTextChangedListener(
+                                new EmptyTextListener(getActivity(), editText));
+                    });
+                } else {
+                    pidUMax.setVisible(false);
+                }
             }
 
             if (pidUMin != null) {
-                pidUMin.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
+                if (featureSupported) {
+                    pidUMin.setOnBindEditTextListener(editText -> {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        editText.addTextChangedListener(
+                                new EmptyTextListener(getActivity(), editText));
+                    });
+                } else {
+                    pidUMin.setVisible(false);
+                }
             }
         }
 

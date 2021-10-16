@@ -43,6 +43,9 @@
     <string name="prefs_timer_shutdown">prefs_timer_shutdown</string>
 
     <!-- PiFire Settings -->
+    <string name="prefs_android_version">prefs_android_version</string>
+    <string name="prefs_server_version">prefs_server_version</string>
+
     <string name="prefs_grill_probe">prefs_grill_probe</string>
     <string name="prefs_grill_probes">prefs_grill_probes</string>
     <string name="prefs_grill_probe_one_type">prefs_grill_probe_one_type</string>
