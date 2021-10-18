@@ -4,6 +4,8 @@
     <!-- App Settings -->
     <string name="prefs_server_settings">prefs_server_settings</string>
 
+    <string name="prefs_keep_screen_on">prefs_keep_screen_on</string>
+
     <string name="prefs_server_address">prefs_server_address</string>
     <string name="prefs_server_basic_auth">prefs_server_basic_auth</string>
     <string name="prefs_server_basic_auth_user">prefs_server_basic_auth_user</string>

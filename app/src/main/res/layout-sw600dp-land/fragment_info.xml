@@ -565,6 +565,27 @@
                                 android:textStyle="normal"
                                 app:autoSizeTextType="uniform" />
 
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_app_build_date"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/app_build_date"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
                         </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

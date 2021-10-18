@@ -10,6 +10,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/settings_cat_app_screen">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_keep_screen_on"
+            app:key="@string/prefs_keep_screen_on"
+            app:summary="@string/settings_app_screen_on_summary"
+            app:title="@string/settings_app_screen_on_title" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/settings_cat_app_history">
 
         <SwitchPreferenceCompat

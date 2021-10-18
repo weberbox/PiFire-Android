@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryLight"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/default_spacing"
+    android:paddingTop="@dimen/default_spacing"
+    android:paddingEnd="@dimen/default_spacing"
+    android:paddingBottom="@dimen/default_spacing">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        style="?attr/linearProgressIndicatorStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:padding="8dp"
+        app:indicatorColor="@color/placeholderColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:trackCornerRadius="15dp"
+        app:trackThickness="30dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

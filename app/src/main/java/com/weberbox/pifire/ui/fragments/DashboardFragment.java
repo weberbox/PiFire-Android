@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,13 +17,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -305,10 +305,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         });
 
         pelletLevelBox.setOnClickListener(view18 -> {
-            if (getActivity() != null) {
-                NavController nav = Navigation.findNavController(getActivity(),
-                        R.id.nav_host_fragment_content_main);
-                nav.navigate(R.id.action_nav_dashboard_to_nav_pellet_manager);
+            if (mSocket != null && mSocket.connected()) {
+                GrillControl.setCheckHopperLevel(mSocket);
+                requestForcedDashData(true);
+            } else {
+                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
@@ -364,12 +365,14 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     public void onResume() {
         super.onResume();
         requestDataUpdate();
+        checkForceScreenOn();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         stopTimer();
+        clearForceScreenOn();
         mBinding = null;
     }
 
@@ -402,6 +405,21 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             return getActivity().findViewById(R.id.offline_banner).getVisibility();
         }
         return View.GONE;
+    }
+
+    private void checkForceScreenOn() {
+        if (getActivity() != null) {
+            if (Prefs.getBoolean(getString(R.string.prefs_keep_screen_on),
+                    getResources().getBoolean(R.bool.def_keep_screen_on))){
+                getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            }
+        }
+    }
+
+    private void clearForceScreenOn() {
+        if (getActivity() != null) {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     @Override
@@ -473,7 +491,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     public void updateUIWithData(String response_data) {
-        StringUtils stringUtils = new StringUtils();
 
         GrillResponseModel grillResponseModel;
         try {
@@ -543,7 +560,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
                 if (currentMode.equals(Constants.GRILL_CURRENT_HOLD)) {
                     if (grillTarget > 0) {
-                        mGrillSetText.setText(stringUtils.formatTemp(grillTarget));
+                        mGrillSetText.setText(StringUtils.formatTemp(grillTarget));
                     } else {
                         mGrillSetText.setText(R.string.placeholder_none);
                     }
@@ -552,7 +569,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 }
 
                 if (hopperLevel > 0) {
-                    mPelletLevelText.setText(stringUtils.formatPercentage(hopperLevel));
+                    mPelletLevelText.setText(StringUtils.formatPercentage(hopperLevel));
                 } else {
                     mPelletLevelText.setText(R.string.placeholder_percentage);
                 }
@@ -562,7 +579,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 if (grillEnabled) {
                     if (grillNotify && grillTarget > 0) {
                         mGrillTempProgress.setMax(grillTarget);
-                        mGrillTargetText.setText(stringUtils.formatTemp(grillTarget));
+                        mGrillTargetText.setText(StringUtils.formatTemp(grillTarget));
                     } else {
                         mGrillTempProgress.setMax(Constants.MAX_GRILL_TEMP_SET);
                         mGrillTargetText.setText(R.string.placeholder_none);
@@ -570,7 +587,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
                     if (grillTemp > 0) {
                         mGrillTempProgress.setProgress(grillTemp);
-                        mGrillTempText.setText(stringUtils.formatTemp(grillTemp));
+                        mGrillTempText.setText(StringUtils.formatTemp(grillTemp));
                     } else {
                         mGrillTempText.setText(R.string.placeholder_temp);
                     }
@@ -586,7 +603,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 if (probeOneEnabled) {
                     if (probeOneNotify && probeOneTarget > 0) {
                         mProbeOneProgress.setMax(probeOneTarget);
-                        mProbeOneTargetText.setText(stringUtils.formatTemp(probeOneTarget));
+                        mProbeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget));
                     } else {
                         mProbeOneProgress.setMax(Constants.MAX_PROBE_TEMP_SET);
                         mProbeOneTargetText.setText(R.string.placeholder_none);
@@ -594,7 +611,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
                     if (probeOneTemp > 0) {
                         mProbeOneProgress.setProgress(probeOneTemp);
-                        mProbeOneTempText.setText(stringUtils.formatTemp(probeOneTemp));
+                        mProbeOneTempText.setText(StringUtils.formatTemp(probeOneTemp));
                     } else {
                         mProbeOneTempText.setText(R.string.placeholder_temp);
                     }
@@ -610,7 +627,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 if (probeTwoEnabled) {
                     if (probeTwoNotify && probeTwoTarget > 0) {
                         mProbeTwoProgress.setMax(probeTwoTarget);
-                        mProbeTwoTargetText.setText(stringUtils.formatTemp(probeTwoTarget));
+                        mProbeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget));
                     } else {
                         mProbeTwoProgress.setMax(Constants.MAX_PROBE_TEMP_SET);
                         mProbeTwoTargetText.setText(R.string.placeholder_none);
@@ -618,7 +635,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
                     if (probeTwoTemp > 0) {
                         mProbeTwoProgress.setProgress(probeTwoTemp);
-                        mProbeTwoTempText.setText(stringUtils.formatTemp(probeTwoTemp));
+                        mProbeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp));
                     } else {
                         mProbeTwoTempText.setText(R.string.placeholder_temp);
                     }

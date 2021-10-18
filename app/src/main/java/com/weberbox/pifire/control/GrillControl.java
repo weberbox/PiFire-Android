@@ -605,4 +605,11 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_PELLET_DATA, payload);
     }
 
+    // Check Hopper Level
+    public static void setCheckHopperLevel(Socket socket) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_HOPPER_CHECK,
+                ServerConstants.PELLETS_HOPPER_LEVEL, String.valueOf(true));
+        socket.emit(ServerConstants.UPDATE_PELLET_DATA, payload);
+    }
+
 }

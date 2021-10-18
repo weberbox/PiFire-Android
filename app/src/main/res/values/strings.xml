@@ -90,6 +90,7 @@
     <string name="http_scheme">http://</string>
     <string name="https_scheme">https://</string>
     <string name="scheme">Scheme</string>
+    <string name="refresh">Refresh</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -253,6 +254,10 @@
     <string name="settings_app_timer_shutdown">Timer Shutdown</string>
     <string name="settings_app_timer_shutdown_summary">Show option to shutdown grill when timer expires</string>
 
+    <string name="settings_cat_app_screen">Screen</string>
+    <string name="settings_app_screen_on_title">Keep Screen On</string>
+    <string name="settings_app_screen_on_summary">Force the screen to remain on when viewing the dashboard.</string>
+
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>
     <string name="settings_grill_probe_selection">Grill Probe Selection</string>
@@ -372,8 +377,10 @@
     <string name="info_app_version_code">Version Code</string>
     <string name="info_app_build_type">Build Type</string>
     <string name="info_app_flavor">App Flavor</string>
+    <string name="info_app_build_date">Build Date</string>
     <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2020\n\nPiFire Android created by James Weber, &#169; 2021</string>
 
+    <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_current_load">Current</string>
     <string name="pellets_current_band">Brand:</string>
     <string name="pellets_current_wood">Wood:</string>

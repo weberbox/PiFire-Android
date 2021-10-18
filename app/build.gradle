@@ -26,11 +26,13 @@ android {
             manifestPlaceholders = [appName: "PiFire"]
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
         }
         debug {
             manifestPlaceholders = [appName: "PiFire Debug"]
             applicationIdSuffix ".debug"
             debuggable true
+            buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
         }
     }
 
