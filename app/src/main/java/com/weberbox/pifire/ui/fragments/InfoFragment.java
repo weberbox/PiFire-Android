@@ -37,6 +37,7 @@ import com.weberbox.pifire.recycler.viewmodel.LicensesViewModel;
 import com.weberbox.pifire.ui.model.InfoViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.FileUtils;
+import com.weberbox.pifire.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -111,11 +112,15 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
         TextView appVersionCode = mBinding.appVersionCodeText;
         TextView appBuildType = mBinding.appBuildTypeText;
         TextView appBuildFlavor = mBinding.appBuildFlavorText;
+        TextView appBuildDate = mBinding.appBuildDate;
 
         appVersion.setText(BuildConfig.VERSION_NAME);
         appVersionCode.setText(String.valueOf(BuildConfig.VERSION_CODE));
         appBuildType.setText(BuildConfig.BUILD_TYPE);
         appBuildFlavor.setText(BuildConfig.FLAVOR);
+
+        appBuildDate.setText(StringUtils.formatDate(
+                BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm"));
 
         mSwipeRefresh.setOnRefreshListener(() -> {
             if (mSocket != null && mSocket.connected()) {

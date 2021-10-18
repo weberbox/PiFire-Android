@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
 import com.skydoves.powerspinner.DefaultSpinnerAdapter;
@@ -85,6 +87,9 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private List<PelletProfileModel> mProfileEditList;
     private List<String> mBrandsList;
     private List<String> mWoodsList;
+    private LinearProgressIndicator mHopperLevel;
+    private LinearLayout mHopperView;
+    private LinearLayout mHopperPlaceholder;
     private LinearLayout mCurrentView;
     private LinearLayout mAddProfileCard;
     private LinearLayout mCurrentPlaceholder;
@@ -97,8 +102,10 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private PowerSpinnerView mPelletProfileRating;
     private EditText mProfileAddComments;
     private TextView mAddNewProfile;
+    private TextView mHopperLevelText;
     private String mCurrentPelletId;
     private Socket mSocket;
+    private Handler mHandler;
 
     private boolean mIsLoading = false;
 
@@ -130,17 +137,25 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mProfileList = new ArrayList<>();
         mProfileEditList = new ArrayList<>();
 
+        mHandler = new Handler();
+
         LayoutPelletsBinding pelletsBinding = mBinding.pelletsLayout;
         mPelletsCurrentBinding = pelletsBinding.currentInclude;
 
         mRootContainer = pelletsBinding.pelletsRootContainer;
         mSwipeRefresh = mBinding.pelletsPullRefresh;
         mLoadingBar = pelletsBinding.loadingProgressbar;
+        mHopperLevel = pelletsBinding.hopperInclude.hopperLevel;
+        mHopperLevelText = pelletsBinding.hopperInclude.hopperLevelText;
+        mHopperView = pelletsBinding.hopperView;
+        mHopperPlaceholder = pelletsBinding.hopperHolder;
         mCurrentView = pelletsBinding.currentView;
         mCurrentPlaceholder = pelletsBinding.currentHolder;
         mProfilePlaceholder = pelletsBinding.profileHolder;
         mLogsPlaceholder = pelletsBinding.logsHolder;
         mAddNewProfile = pelletsBinding.addProfileButton;
+
+        CardViewHeaderButton hopperHeader = pelletsBinding.hopperLevelHeader;
 
         CardViewHeaderButton currentHeader = pelletsBinding.loadOutHeader;
         PelletsCardViewRecycler brandsCardView = pelletsBinding.brandsCardView;
@@ -151,6 +166,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         TextView addNewBrand = brandsCardView.getHeaderButton();
         TextView addNewWood = woodsCardView.getHeaderButton();
 
+        TextView refreshPellets = hopperHeader.getButton();
         TextView loadNewPellets = currentHeader.getButton();
 
         LayoutPelletsProfileAddBinding pelletsProfileAddBinding =
@@ -206,7 +222,17 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             }
         });
 
-        loadNewPellets.setOnClickListener(view1 -> {
+        refreshPellets.setOnClickListener(v -> {
+            if (mSocket != null && mSocket.connected()) {
+                GrillControl.setCheckHopperLevel(mSocket);
+                toggleLoading(true);
+                startDelayedRefresh();
+            } else {
+                AnimUtils.shakeOfflineBanner(getActivity());
+            }
+        });
+
+        loadNewPellets.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 if (mProfileList != null && mCurrentPelletId != null) {
                     PelletPickerDialog pelletPickerDialog = new PelletPickerDialog(getActivity(),
@@ -218,7 +244,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             }
         });
 
-        addNewBrand.setOnClickListener(view12 -> {
+        addNewBrand.setOnClickListener(v -> {
             if (getActivity() != null) {
                 if (mSocket != null && mSocket.connected()) {
                     PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
@@ -402,8 +428,19 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        stopDelayedRefresh();
         mBinding = null;
     }
+
+    private void stopDelayedRefresh() {
+        mHandler.removeCallbacks(runnable);
+    }
+
+    private void startDelayedRefresh() {
+        mHandler.postDelayed(runnable, 1500);
+    }
+
+    private final Runnable runnable = this::forceRefreshData;
 
     private void checkViewModelData() {
         if (mMainViewModel.getEventsData().getValue() == null) {
@@ -464,6 +501,13 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
         try {
             PelletResponseModel pelletResponseModel = PelletResponseModel.parseJSON(response_data);
+
+            Integer pelletLevel = pelletResponseModel.getCurrent().getHopperLevel();
+
+            if (pelletLevel != null) {
+                mHopperLevel.setProgress(pelletLevel);
+                mHopperLevelText.setText(StringUtils.formatPercentage(pelletLevel));
+            }
 
             PelletResponseModel.Current current =  pelletResponseModel.getCurrent();
 
@@ -570,11 +614,13 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             showSnackBarMessage(getActivity(), R.string.json_error_pellets);
         }
 
+        mHopperPlaceholder.setVisibility(View.GONE);
         mCurrentPlaceholder.setVisibility(View.GONE);
         mBrandsPlaceholder.setVisibility(View.GONE);
         mWoodsPlaceholder.setVisibility(View.GONE);
         mProfilePlaceholder.setVisibility(View.GONE);
         mLogsPlaceholder.setVisibility(View.GONE);
+        mHopperView.setVisibility(View.VISIBLE);
         mCurrentView.setVisibility(View.VISIBLE);
 
         toggleLoading(false);

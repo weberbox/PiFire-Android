@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -28,6 +29,7 @@ import com.weberbox.pifire.model.SettingsResponseModel;
 import com.weberbox.pifire.model.SettingsResponseModel.CycleData;
 import com.weberbox.pifire.model.SettingsResponseModel.Firebase;
 import com.weberbox.pifire.model.SettingsResponseModel.Globals;
+import com.weberbox.pifire.model.SettingsResponseModel.Versions;
 import com.weberbox.pifire.model.SettingsResponseModel.GrillProbeSettings;
 import com.weberbox.pifire.model.SettingsResponseModel.HistoryPage;
 import com.weberbox.pifire.model.SettingsResponseModel.Ifttt;
@@ -159,6 +161,7 @@ public class SettingsFragment extends Fragment {
             HistoryPage historyPage = settingsResponse.getHistoryPage();
             ProbeSettings probesSettings = settingsResponse.getProbeSettings();
             Globals globals = settingsResponse.getGlobals();
+            Versions versions = settingsResponse.getVersions();
             Ifttt ifttt = settingsResponse.getIfttt();
             PushBullet pushBullet = settingsResponse.getPushBullet();
             Pushover pushOver = settingsResponse.getPushover();
@@ -170,6 +173,15 @@ public class SettingsFragment extends Fragment {
             PelletLevel pellets  = settingsResponse.getPellets();
 
             Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
+
+            if (versions != null) {
+                if (versions.getServerVersion() != null && versions.getAndroidVersion() != null) {
+                    Prefs.putInt(getString(R.string.prefs_server_version),
+                            versions.getServerVersion());
+                    Prefs.putInt(getString(R.string.prefs_android_version),
+                            versions.getAndroidVersion());
+                }
+            }
 
             Prefs.putString(getString(R.string.prefs_probe_profiles), new Gson().toJson(probes));
 
@@ -222,8 +234,12 @@ public class SettingsFragment extends Fragment {
             Prefs.putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
             Prefs.putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
             Prefs.putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
-            Prefs.putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
-            Prefs.putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
+
+            if (Prefs.getInt(getString(R.string.prefs_android_version), 0) >=
+                    BuildConfig.VERSION_CODE) {
+                Prefs.putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
+                Prefs.putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
+            }
 
             Prefs.putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
             Prefs.putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());

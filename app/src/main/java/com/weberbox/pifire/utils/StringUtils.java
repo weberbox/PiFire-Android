@@ -1,16 +1,22 @@
 package com.weberbox.pifire.utils;
 
+import android.text.format.DateFormat;
+
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 
 public class StringUtils {
 
-    public String formatTemp(Integer temp) {
+    public static String formatTemp(Integer temp) {
         return temp + "\u00B0";
     }
 
-    public String formatPercentage(Integer percent) {
+    public static String formatPercentage(Integer percent) {
         return percent + "\u0025";
+    }
+
+    public static String formatDate(String dateInMilliseconds, String dateFormat) {
+        return DateFormat.format(dateFormat, Long.parseLong(dateInMilliseconds)).toString();
     }
 
     public static int getRatingText(Integer rating) {

@@ -142,6 +142,8 @@ public class ServerConstants {
     public static final String PELLETS_WOOD_NEW = "newWood";
     public static final String PELLETS_BRAND_DELETE = "delBrand";
     public static final String PELLETS_BRAND_NEW = "newBrand";
+    public static final String PELLETS_HOPPER_CHECK = "hoppercheck";
+    public static final String PELLETS_HOPPER_LEVEL = "hopperlevel";
 
 
 }

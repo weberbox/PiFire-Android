@@ -12,6 +12,9 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class SettingsResponseModel {
 
+    @SerializedName("versions")
+    @Expose
+    private Versions versions;
     @SerializedName("history_page")
     @Expose
     private HistoryPage historyPage;
@@ -52,6 +55,13 @@ public class SettingsResponseModel {
     @Expose
     private PelletLevel pelletLevel;
 
+    public Versions getVersions() {
+        return versions;
+    }
+
+    public void setVersions(Versions versions) {
+        this.versions = versions;
+    }
 
     public HistoryPage getHistoryPage() {
         return historyPage;
@@ -246,6 +256,33 @@ public class SettingsResponseModel {
 
         public void setuMax(String uMax) {
             this.uMax = uMax;
+        }
+
+    }
+
+    public static class Versions {
+
+        @SerializedName("android")
+        @Expose
+        private Integer android;
+        @SerializedName("server")
+        @Expose
+        private Integer server;
+
+        public Integer getAndroidVersion() {
+            return android;
+        }
+
+        public void setAndroidVersion(Integer android) {
+            this.android = android;
+        }
+
+        public Integer getServerVersion() {
+            return server;
+        }
+
+        public void setServerVersion(Integer server) {
+            this.server = server;
         }
 
     }

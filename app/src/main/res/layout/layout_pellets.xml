@@ -18,10 +18,74 @@
         android:visibility="gone" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/load_out_card_view"
+        android:id="@+id/pellets_hopper_level"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_spacing"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                android:id="@+id/hopper_level_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_view_header"
+                app:button_enabled="true"
+                app:button_text="@string/refresh"
+                app:header_icon="@drawable/ic_grill_pellets"
+                app:header_title="@string/pellets_hopper_level"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/hopper_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hopper_level_header">
+
+                <include
+                    android:id="@+id/hopper_include"
+                    layout="@layout/layout_pellets_level" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hopper_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hopper_level_header">
+
+                <include layout="@layout/layout_pellets_level_holder" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/load_out_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pellets_hopper_level"
+        android:layout_marginStart="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        android:layout_marginBottom="@dimen/default_spacing"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="2dp"
         app:cardElevation="10dp"
@@ -49,9 +113,9 @@
                 android:id="@+id/current_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:visibility="invisible"
-                android:animateLayoutChanges="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/load_out_header">
@@ -173,13 +237,13 @@
                 android:layout_margin="@dimen/default_spacing"
                 android:background="@drawable/bg_ripple_grey_button"
                 android:clickable="true"
+                android:focusable="true"
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="@string/pellets_add"
                 app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/pellets_add_profile"
@@ -302,7 +366,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logs_card_header" >
+                app:layout_constraintTop_toBottomOf="@+id/logs_card_header">
 
                 <include layout="@layout/layout_pellets_log_item_holder" />
 
