@@ -379,7 +379,7 @@
                             style="@style/Text16AllerAlpha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/grill_state_target" />
+                            android:text="@string/grill_state_remaining" />
 
                         <ImageView
                             android:id="@+id/timer_shutdown"

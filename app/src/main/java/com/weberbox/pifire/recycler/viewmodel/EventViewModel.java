@@ -35,6 +35,9 @@ public class EventViewModel {
         } else if(eventText.toUpperCase().contains("WARNING")) {
             setEventIcon("W");
             setEventIconColor(Color.rgb(249, 196, 116)); // table-warning
+        } else if(eventText.toLowerCase().startsWith("*")) {
+            setEventIcon("D");
+            setEventIconColor(Color.rgb(47, 126, 245)); // debug
         } else {
             setEventIcon("I");
             setEventIconColor(Color.GRAY);
