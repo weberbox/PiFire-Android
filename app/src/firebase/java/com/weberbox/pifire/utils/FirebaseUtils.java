@@ -30,7 +30,7 @@ public class FirebaseUtils {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        Timber.w(task.getException(),"Fetching FCM registration token failed");
+                        Timber.w(task.getException(), "Fetching FCM registration token failed");
                         return;
                     }
                     String token = task.getResult();
@@ -41,10 +41,12 @@ public class FirebaseUtils {
 
     public static void toggleFirebaseSubscription(boolean subscribe) {
         if (!subscribe) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(Constants.FIREBASE_TOPIC_GRILL)
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(BuildConfig.DEBUG ?
+                    Constants.FIREBASE_TOPIC_GRILL_DEBUG :
+                    Constants.FIREBASE_TOPIC_GRILL)
                     .addOnCompleteListener(task -> {
                         if (!task.isSuccessful()) {
-                            Timber.w(task.getException(),"Firebase unsubscribe failed");
+                            Timber.w(task.getException(), "Firebase unsubscribe failed");
                             return;
                         }
                         Timber.d("Firebase unsubscribe successful");
@@ -55,10 +57,12 @@ public class FirebaseUtils {
     }
 
     public static void subscribeFirebase() {
-        FirebaseMessaging.getInstance().subscribeToTopic(Constants.FIREBASE_TOPIC_GRILL)
+        FirebaseMessaging.getInstance().subscribeToTopic(BuildConfig.DEBUG ?
+                Constants.FIREBASE_TOPIC_GRILL_DEBUG :
+                Constants.FIREBASE_TOPIC_GRILL)
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        Timber.w(task.getException(),"Firebase subscribe failed");
+                        Timber.w(task.getException(), "Firebase subscribe failed");
                         return;
                     }
                     Timber.d("Firebase subscribe successful");

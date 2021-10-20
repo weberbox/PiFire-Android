@@ -4,6 +4,7 @@ public class Constants {
 
     // Firebase topics
     public static final String FIREBASE_TOPIC_GRILL = "GrillAlerts";
+    public static final String FIREBASE_TOPIC_GRILL_DEBUG = "GrillAlertsDebug";
 
     // Grill Modes
     public static final String GRILL_CURRENT_STOP = "Stop";

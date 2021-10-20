@@ -11,7 +11,11 @@
     "- Multiple Bug Fixes",
     "- Added Temp Shutdown",
     "- Added Time Shutdown",
+    "- Added Pellet Level Check",
+    "- Added Tablet Layouts",
+    "- Added Keep Screen on Function",
     "- Update Timer Operation",
+    "- Lowered min Api to 24",
     "- Requires Latest Server Dev Branch"
   ]
 }
