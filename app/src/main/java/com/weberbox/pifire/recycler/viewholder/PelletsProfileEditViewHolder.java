@@ -1,5 +1,8 @@
 package com.weberbox.pifire.recycler.viewholder;
 
+import android.app.Activity;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -39,11 +42,15 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
     private final ImageView mDeleteIcon;
     private final CardView mCardView;
     private final LinearLayout mEditCardView;
+    private final Activity mActivity;
 
 
-    public PelletsProfileEditViewHolder(final View itemView, PelletsCallbackInterface callback,
+    public PelletsProfileEditViewHolder(Activity activity, final View itemView,
+                                        PelletsCallbackInterface callback,
                                         List<String> brands, List<String> woods) {
         super(itemView);
+
+        mActivity = activity;
 
         mPelletProfile = itemView.findViewById(R.id.pellets_item);
         mPelletProfileId = itemView.findViewById(R.id.pellets_item_id);
@@ -134,8 +141,11 @@ public class PelletsProfileEditViewHolder extends RecyclerView.ViewHolder {
     private void setPowerSpinnerMaxHeight(DefaultSpinnerAdapter adapter, RecyclerView recyclerView) {
         if (adapter != null) {
             if (adapter.getItemCount() > 6) {
+                Display display = mActivity.getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
                 ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-                params.height = 780;
+                params.height = size.y / 4;
                 recyclerView.setLayoutParams(params);
             }
         }

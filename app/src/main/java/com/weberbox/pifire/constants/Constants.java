@@ -15,6 +15,9 @@ public class Constants {
     public static final String GRILL_CURRENT_SHUTDOWN = "Shutdown";
     public static final String GRILL_CURRENT_MONITOR = "Monitor";
 
+    // Pellet Warning
+    public static final int LOW_PELLET_WARNING = 40;
+
     // Temp Selector Temps
     public static final int MIN_GRILL_TEMP_SET = 160;
     public static final int MAX_GRILL_TEMP_SET = 500;
