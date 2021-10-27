@@ -92,7 +92,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
         mHandler = new Handler();
 
         mLineChart = mBinding.historyLayout.historyLinechart;
-        mLoadingBar = mBinding.historyLayout.loadingProgressbar;
+        mLoadingBar = mBinding.loadingProgressbar;
         mSwipeRefresh = mBinding.historyPullRefresh;
 
 
@@ -105,7 +105,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             }
         });
 
-        mRefreshButton = mBinding.historyLayout.historyRefreshButton;
+        mRefreshButton = mBinding.historyRefreshButton;
         if (getActivity() != null) {
             if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app), true)) {
                 mRefreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
@@ -138,7 +138,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             }
         });
 
-        ImageView deleteButton = mBinding.historyLayout.historyDeleteButton;
+        ImageView deleteButton = mBinding.historyDeleteButton;
         deleteButton.setOnClickListener(view12 -> {
             if (mSocket.connected()) {
                 if (getActivity() != null) {

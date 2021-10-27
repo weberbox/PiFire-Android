@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -44,6 +45,10 @@ import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.databinding.FragmentPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsEditCardBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsEditorBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsHopperBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsLogsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsProfileAddBinding;
 import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
 import com.weberbox.pifire.model.PelletProfileModel;
@@ -91,11 +96,11 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private List<String> mBrandsList;
     private List<String> mWoodsList;
     private LinearProgressIndicator mHopperLevel;
-    private LinearLayout mHopperView;
-    private LinearLayout mHopperPlaceholder;
-    private LinearLayout mCurrentView;
+    private ConstraintLayout mHopperView;
+    private ConstraintLayout mHopperPlaceholder;
+    private ConstraintLayout mCurrentPlaceholder;
+    private ConstraintLayout mCurrentView;
     private LinearLayout mAddProfileCard;
-    private LinearLayout mCurrentPlaceholder;
     private LinearLayout mBrandsPlaceholder;
     private LinearLayout mWoodsPlaceholder;
     private LinearLayout mProfilePlaceholder;
@@ -143,24 +148,28 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mHandler = new Handler();
 
         LayoutPelletsBinding pelletsBinding = mBinding.pelletsLayout;
-        mPelletsCurrentBinding = pelletsBinding.currentInclude;
+        LayoutPelletsEditorBinding editorBinding = pelletsBinding.editorCardView;
+        LayoutPelletsCurrentBinding currentBinding = pelletsBinding.loadOutCardView;
+        LayoutPelletsLogsBinding logsBinding = pelletsBinding.logsCardView;
+        LayoutPelletsHopperBinding hopperBinding = pelletsBinding.pelletsHopperLevel;
+        mPelletsCurrentBinding = pelletsBinding.loadOutCardView;
 
-        mRootContainer = pelletsBinding.pelletsRootContainer;
+        mRootContainer = mBinding.pelletsRootContainer;
         mSwipeRefresh = mBinding.pelletsPullRefresh;
-        mLoadingBar = pelletsBinding.loadingProgressbar;
-        mHopperLevel = pelletsBinding.hopperInclude.hopperLevel;
-        mHopperLevelText = pelletsBinding.hopperInclude.hopperLevelText;
-        mHopperView = pelletsBinding.hopperView;
-        mHopperPlaceholder = pelletsBinding.hopperHolder;
-        mCurrentView = pelletsBinding.currentView;
-        mCurrentPlaceholder = pelletsBinding.currentHolder;
-        mProfilePlaceholder = pelletsBinding.profileHolder;
-        mLogsPlaceholder = pelletsBinding.logsHolder;
-        mAddNewProfile = pelletsBinding.addProfileButton;
+        mLoadingBar = mBinding.loadingProgressbar;
+        mHopperLevel = hopperBinding.hopperLevel;
+        mHopperLevelText = hopperBinding.hopperLevelText;
+        mHopperView = hopperBinding.hopperView;
+        mHopperPlaceholder = hopperBinding.hopperHolder;
+        mCurrentView = currentBinding.currentView;
+        mCurrentPlaceholder = currentBinding.currentHolder;
+        mLogsPlaceholder = logsBinding.logsHolder;
+        mProfilePlaceholder = editorBinding.profileHolder;
+        mAddNewProfile = editorBinding.addProfileButton;
 
-        CardViewHeaderButton hopperHeader = pelletsBinding.hopperLevelHeader;
+        CardViewHeaderButton hopperHeader = hopperBinding.hopperLevelHeader;
 
-        CardViewHeaderButton currentHeader = pelletsBinding.loadOutHeader;
+        CardViewHeaderButton currentHeader = currentBinding.loadOutHeader;
         PelletsCardViewRecycler brandsCardView = pelletsBinding.brandsCardView;
         PelletsCardViewRecycler woodsCardView = pelletsBinding.woodsCardView;
 
@@ -173,23 +182,25 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         TextView loadNewPellets = currentHeader.getButton();
 
         LayoutPelletsProfileAddBinding pelletsProfileAddBinding =
-                pelletsBinding.pelletsAddProfileContainer;
+                editorBinding.pelletsAddProfileContainer;
+        LayoutPelletsEditCardBinding editCardBinding =
+                pelletsProfileAddBinding.pelletEditContainer;
 
         AppCompatButton pelletAddSave = pelletsProfileAddBinding.pelletAddSave;
         AppCompatButton pelletAddLoad = pelletsProfileAddBinding.pelletAddLoad;
-        mPelletProfileBrand = pelletsProfileAddBinding.pelletEditContainer.pelletEditBrandText;
-        mPelletProfileWood = pelletsProfileAddBinding.pelletEditContainer.pelletEditWoodText;
-        mPelletProfileRating = pelletsProfileAddBinding.pelletEditContainer.pelletEditRatingText;
-        mProfileAddComments = pelletsProfileAddBinding.pelletEditContainer.pelletEditCommentsText;
-        PowerSpinnerView pelletsRating = pelletsProfileAddBinding.pelletEditContainer.pelletEditRatingText;
+        mPelletProfileBrand = editCardBinding.pelletEditBrandText;
+        mPelletProfileWood = editCardBinding.pelletEditWoodText;
+        mPelletProfileRating = editCardBinding.pelletEditRatingText;
+        mProfileAddComments = editCardBinding.pelletEditCommentsText;
+        PowerSpinnerView pelletsRating = editCardBinding.pelletEditRatingText;
         pelletsRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
 
 
         RecyclerView brandsCardViewRecycler = brandsCardView.getRecycler();
         RecyclerView woodsCardViewRecycler = woodsCardView.getRecycler();
-        RecyclerView logsRecycler = pelletsBinding.logsRecycler;
-        RecyclerView editorRecycler = pelletsBinding.editorRecycler;
-        mAddProfileCard = pelletsBinding.pelletsAddProfile;
+        RecyclerView logsRecycler = logsBinding.logsRecycler;
+        RecyclerView editorRecycler = editorBinding.editorRecycler;
+        mAddProfileCard = editorBinding.pelletsAddProfile;
 
         mPelletBrandsAdapter = new PelletItemsAdapter(mBrandsEditList, this);
 

@@ -14,11 +14,7 @@ public class FirebaseUtils {
         Timber.d("Non Firebase Build");
     }
 
-    public static void toggleFirebaseSubscription(boolean subscribe) {
-        Timber.d("Non Firebase Build");
-    }
-
-    public static void subscribeFirebase() {
+    public static void toggleFirebaseSubscription(boolean subscribe, String uuid) {
         Timber.d("Non Firebase Build");
     }
 

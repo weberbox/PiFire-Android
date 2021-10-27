@@ -3,6 +3,34 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def getGitRevCount = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', '--count', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return 0.toString()
+    }
+}
+
+def getGitBranch = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return 'Unknown'
+    }
+}
+
 android {
     compileSdk 31
 
@@ -27,12 +55,16 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
+            buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
+            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount + "\""
         }
         debug {
             manifestPlaceholders = [appName: "PiFire Debug"]
             applicationIdSuffix ".debug"
             debuggable true
             buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
+            buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
+            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount() + "\""
         }
     }
 
