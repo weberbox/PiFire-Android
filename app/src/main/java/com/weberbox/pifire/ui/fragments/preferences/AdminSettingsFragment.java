@@ -8,16 +8,21 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.interfaces.AdminCallbackInterface;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.AdminActionDialog;
 
 import io.socket.client.Socket;
@@ -36,7 +41,6 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
             mSocket = app.getSocket();
@@ -49,6 +53,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
+        PreferenceCategory manualModeCat = findPreference(getString(R.string.prefs_manual_mode_cat));
+        Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
         Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
         Preference pelletsDelete = findPreference(getString(R.string.prefs_admin_delete_pellets));
@@ -56,6 +62,24 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference factoryReset = findPreference(getString(R.string.prefs_admin_factory_reset));
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
+
+        if (manualModeCat != null) {
+            manualModeCat.setVisible(AppConfig.IS_DEV_BUILD);
+        }
+
+        if (manualMode != null) {
+            manualMode.setOnPreferenceClickListener(preference -> {
+                if (getActivity() != null) {
+                    final FragmentManager fm = getActivity().getSupportFragmentManager();
+                    final FragmentTransaction ft = fm.beginTransaction();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .replace(android.R.id.content, new ManualSettingsFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return true;
+            });
+        }
 
         if (historyDelete != null) {
             historyDelete.setOnPreferenceClickListener(preference -> {
@@ -110,6 +134,9 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_admin);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

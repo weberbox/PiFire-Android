@@ -8,7 +8,6 @@ public class ServerConstants {
     // Socket Strings
     public static final String REQUEST_GRILL_DATA = "request_grill_data";
     public static final String LISTEN_GRILL_DATA = "grill_control_data";
-    public static final String LISTEN_SETTINGS_DATA = "settings_control_data";
     public static final String REQUEST_PELLET_DATA = "request_pellet_data";
     public static final String REQUEST_HISTORY_DATA = "request_history_data";
     public static final String REQUEST_EVENT_DATA = "request_event_data";
@@ -20,9 +19,9 @@ public class ServerConstants {
     public static final String UPDATE_SETTINGS_DATA = "update_settings_data";
     public static final String UPDATE_PELLET_DATA = "update_pellet_data";
     public static final String UPDATE_ADMIN_DATA = "update_admin_data";
+    public static final String UPDATE_MANUAL_DATA = "update_manual_data";
 
     public static final String EVENTS_LIST = "events_list";
-    public static final String INFO_LIST = "info_list";
 
     public static final String TIMER_ACTION = "timer";
     public static final String TIMER_START = "start";
@@ -53,9 +52,9 @@ public class ServerConstants {
     public static final String MODE_STOP = "setmodestop";
     public static final String MODE_SMOKE_PLUS = "setmodesmokeplus";
     public static final String MODE_TEMP_INPUT_RANGE = "tempInputRange";
+    public static final String MODE_MANUAL = "manual";
 
     public static final String PROBES_ACTION = "probes";
-    public static final String PROBES_GRILL_ENABLE = "grill0enable";
     public static final String PROBES_ONE_ENABLE = "probe1enable";
     public static final String PROBES_TWO_ENABLE = "probe2enable";
     public static final String PROBES_GRILL_PROBE = "grill_probes";
@@ -77,7 +76,7 @@ public class ServerConstants {
     public static final String NOTIF_PUSHBULLET_CHANNEL = "pushbullet_channel";
     public static final String NOTIF_PUSHBULLET_URL = "pushbullet_publicurl";
     public static final String NOTIF_FIREBASE_ENABLED = "firebase_enabled";
-    public static final String NOTIF_FIREBASE_SERVERKEY = "firebase_serverkey";
+    public static final String NOTIF_FIREBASE_SERVERURL = "firebase_serverurl";
 
     public static final String CYCLE_ACTION = "cycle";
     public static final String CYCLE_PMODE = "pmode";
@@ -133,6 +132,7 @@ public class ServerConstants {
     public static final String PELLETS_ADD_PROFILE_LOAD = "addprofileload";
     public static final String PELLETS_EDIT_PROFILE = "editprofile";
     public static final String PELLETS_DELETE_PROFILE = "deleteprofile";
+    public static final String PELLETS_DELETE_LOG = "deletelog";
     public static final String PELLETS_PROFILE = "profile";
     public static final String PELLETS_BRAND_NAME = "brand_name";
     public static final String PELLETS_WOOD_TYPE = "wood_type";
@@ -142,8 +142,16 @@ public class ServerConstants {
     public static final String PELLETS_WOOD_NEW = "newWood";
     public static final String PELLETS_BRAND_DELETE = "delBrand";
     public static final String PELLETS_BRAND_NEW = "newBrand";
+    public static final String PELLETS_LOG_DELETE = "delLog";
     public static final String PELLETS_HOPPER_CHECK = "hoppercheck";
     public static final String PELLETS_HOPPER_LEVEL = "hopperlevel";
+    public static final String PELLETS_WARNING_ENABLED = "pelletwarning";
+    public static final String PELLETS_WARNING_LEVEL = "warninglevel";
 
+    public static final String MANUAL_SET_MODE = "setmode";
+    public static final String MANUAL_OUTPUT_FAN = "change_output_fan";
+    public static final String MANUAL_OUTPUT_AUGER = "change_output_auger";
+    public static final String MANUAL_OUTPUT_IGNITER = "change_output_igniter";
+    public static final String MANUAL_OUTPUT_POWER = "change_output_power";
 
 }

@@ -172,16 +172,20 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         currentModeBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                if (mCurrentMode.equals(Constants.GRILL_CURRENT_STOP) ||
-                        mCurrentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
-                    StartModeActionDialog startModeActionDialog = new StartModeActionDialog(getActivity(),
-                            DashboardFragment.this);
-                    startModeActionDialog.showDialog();
+                if (!mCurrentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
+                    if (mCurrentMode.equals(Constants.GRILL_CURRENT_STOP) ||
+                            mCurrentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
+                        StartModeActionDialog startModeActionDialog = new StartModeActionDialog(getActivity(),
+                                DashboardFragment.this);
+                        startModeActionDialog.showDialog();
+                    } else {
+                        RunModeActionDialog runModeActionDialog = new RunModeActionDialog(getActivity(),
+                                DashboardFragment.this,
+                                mCurrentMode.equals(Constants.GRILL_CURRENT_SHUTDOWN));
+                        runModeActionDialog.showDialog();
+                    }
                 } else {
-                    RunModeActionDialog runModeActionDialog = new RunModeActionDialog(getActivity(),
-                            DashboardFragment.this,
-                            mCurrentMode.equals(Constants.GRILL_CURRENT_SHUTDOWN));
-                    runModeActionDialog.showDialog();
+                    showSnackBarMessage(getActivity(), R.string.control_manual_mode, true);
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());

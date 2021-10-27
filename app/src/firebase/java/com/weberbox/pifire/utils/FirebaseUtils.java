@@ -39,11 +39,9 @@ public class FirebaseUtils {
                 });
     }
 
-    public static void toggleFirebaseSubscription(boolean subscribe) {
+    public static void toggleFirebaseSubscription(boolean subscribe, String uuid) {
         if (!subscribe) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(BuildConfig.DEBUG ?
-                    Constants.FIREBASE_TOPIC_GRILL_DEBUG :
-                    Constants.FIREBASE_TOPIC_GRILL)
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(uuid)
                     .addOnCompleteListener(task -> {
                         if (!task.isSuccessful()) {
                             Timber.w(task.getException(), "Firebase unsubscribe failed");
@@ -52,14 +50,12 @@ public class FirebaseUtils {
                         Timber.d("Firebase unsubscribe successful");
                     });
         } else {
-            subscribeFirebase();
+            subscribeFirebase(uuid);
         }
     }
 
-    public static void subscribeFirebase() {
-        FirebaseMessaging.getInstance().subscribeToTopic(BuildConfig.DEBUG ?
-                Constants.FIREBASE_TOPIC_GRILL_DEBUG :
-                Constants.FIREBASE_TOPIC_GRILL)
+    private static void subscribeFirebase(String uuid) {
+        FirebaseMessaging.getInstance().subscribeToTopic(uuid)
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Timber.w(task.getException(), "Firebase subscribe failed");
@@ -159,6 +155,28 @@ public class FirebaseUtils {
                     .build());
             errorAlerts.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
             notificationManager.createNotificationChannel(errorAlerts);
+
+            String channelIdPellets = context.getString(R.string.notification_channel_pellets);
+            CharSequence namePellets = context.getString(R.string.notification_channel_pellets_name);
+            String descriptionPellets = context.getString(R.string.notification_desc_pellets);
+            final Uri pelletsAlertUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                    "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.pellet_alarm);
+            int importancePellets = NotificationManager.IMPORTANCE_HIGH;
+
+            NotificationChannel pelletAlerts = new NotificationChannel(channelIdPellets, namePellets,
+                    importancePellets);
+            pelletAlerts.setDescription(descriptionPellets);
+            pelletAlerts.enableLights(true);
+            pelletAlerts.setShowBadge(true);
+            pelletAlerts.enableVibration(true);
+            pelletAlerts.setGroup(groupId);
+            pelletAlerts.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+            pelletAlerts.setSound(pelletsAlertUri, new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
+            pelletAlerts.setLockscreenVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+            notificationManager.createNotificationChannel(pelletAlerts);
 
         }
     }

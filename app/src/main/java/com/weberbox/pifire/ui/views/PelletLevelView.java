@@ -133,9 +133,6 @@ public class PelletLevelView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Timber.d("onMeasure w %s", MeasureSpec.toString(widthMeasureSpec));
-        Timber.d("onMeasure h %s", MeasureSpec.toString(heightMeasureSpec));
-
         int desiredWidth = getSuggestedMinimumWidth() + getPaddingLeft() + getPaddingRight();
         int desiredHeight = getSuggestedMinimumHeight() + getPaddingTop() + getPaddingBottom();
 

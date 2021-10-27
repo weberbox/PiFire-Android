@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PiFire</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -8,18 +9,21 @@
     <string name="notification_channel_temp">pifire_temp_alerts</string>
     <string name="notification_channel_timer">pifire_timer_alerts</string>
     <string name="notification_channel_error">pifire_error_alerts</string>
+    <string name="notification_channel_pellets">pifire_pellet_alerts</string>
     <string name="notification_channel_crash">pifire_crash_alerts</string>
     <string name="notification_channel_updates">pifire_update_alerts</string>
     <string name="notification_channel_base_name">General Alerts</string>
     <string name="notification_channel_temp_name">Temp Alerts</string>
     <string name="notification_channel_timer_name">Timer Alerts</string>
     <string name="notification_channel_error_name">Error Alerts</string>
+    <string name="notification_channel_pellets_name">Pellet Alerts</string>
     <string name="notification_channel_crash_name">Crash Reports</string>
     <string name="notification_channel_updates_name">Update Alerts</string>
     <string name="notification_desc_base">Shows general grill alerts</string>
     <string name="notification_desc_temp">Shows grill temp alerts</string>
     <string name="notification_desc_timer">Shows grill timer alerts</string>
     <string name="notification_desc_error">Shows grill error alerts</string>
+    <string name="notification_desc_pellets">Shows grill pellet alerts</string>
     <string name="notification_desc_crash">Shows crash report notifications</string>
     <string name="notification_desc_updates">Shows app update notifications</string>
 
@@ -126,6 +130,7 @@
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_send_error">There was an error sending the request please try again</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
+    <string name="control_manual_mode">Please disable manual mode in WebUI</string>
 
     <string name="history_temp_graph">Temp Graph</string>
     <string name="history_grill_temp">Grill Temp</string>
@@ -178,6 +183,7 @@
     <string name="settings_notifications">Notifications</string>
     <string name="settings_admin">Admin Settings</string>
     <string name="settings_pellets">Pellet Settings</string>
+    <string name="settings_manual">Manual Mode</string>
 
     <!-- Settings Preferences -->
     <string name="settings_note">Note:</string>
@@ -320,7 +326,7 @@
     <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
     <string name="settings_pushbullet_api">API Key</string>
     <string name="settings_pushbullet_url">Public URL</string>
-    <string name="settings_firebase_serverkey">Server Key</string>
+    <string name="settings_firebase_disabled">Server is not reporting UUID please check server configuration</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>
@@ -350,10 +356,22 @@
     <string name="settings_admin_shutdown">Shutdown System</string>
     <string name="settings_admin_shutdown_text">Are you sure that you want to shutdown the system</string>
 
-    <string name="settings_cat_pellets">Pellet Level</string>
+    <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
+    <string name="settings_pellet_warning_level">Warning Level (%)</string>
+    <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications every 20 minutes during a cook</string>
+
+    <string name="settings_cat_pellets">Pellet Level Sensor</string>
     <string name="settings_pellet_full">Full Distance (cm)</string>
     <string name="settings_pellet_empty">Empty Distance (cm)</string>
     <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
+
+    <string name="settings_cat_manual_mode">Manual Mode</string>
+    <string name="settings_cat_manual_functions">Manual Functions</string>
+    <string name="settings_manual_mode_summary">Manually control the Auger, Fan, Igniter and Power</string>
+    <string name="settings_manual_fan">Toggle Fan</string>
+    <string name="settings_manual_auger">Toggle Auger</string>
+    <string name="settings_manual_igniter">Toggle Igniter</string>
+    <string name="settings_manual_power">Toggle Power</string>
 
     <string name="info_title">Information</string>
     <string name="info_system_info">System Information</string>

@@ -50,8 +50,8 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        boolean featureSupported = Prefs.getInt(getString(R.string.prefs_android_version),
-                0) >= BuildConfig.VERSION_CODE;
+        boolean featureSupported = Integer.parseInt(Prefs.getString(
+                getString(R.string.prefs_android_version),"0")) >= BuildConfig.VERSION_CODE;
 
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));

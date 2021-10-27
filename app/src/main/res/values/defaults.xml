@@ -31,6 +31,10 @@
 
     <bool name="def_keep_screen_on">false</bool>
 
+    <bool name="def_pellet_warning_enabled">true</bool>
+
+    <string name="def_pellet_warning_level">25</string>
+
     <string name="def_app_updater_frequency">5</string>
 
     <string name="def_history_refresh_time_app">3000</string>

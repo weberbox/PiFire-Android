@@ -264,24 +264,24 @@ public class SettingsResponseModel {
 
         @SerializedName("android")
         @Expose
-        private Integer android;
+        private String android;
         @SerializedName("server")
         @Expose
-        private Integer server;
+        private String server;
 
-        public Integer getAndroidVersion() {
+        public String getAndroidVersion() {
             return android;
         }
 
-        public void setAndroidVersion(Integer android) {
+        public void setAndroidVersion(String android) {
             this.android = android;
         }
 
-        public Integer getServerVersion() {
+        public String getServerVersion() {
             return server;
         }
 
-        public void setServerVersion(Integer server) {
+        public void setServerVersion(String server) {
             this.server = server;
         }
 
@@ -431,12 +431,34 @@ public class SettingsResponseModel {
 
     public static class PelletLevel {
 
+        @SerializedName("warning_enabled")
+        @Expose
+        private Boolean warningEnabled;
+        @SerializedName("warning_level")
+        @Expose
+        private String warningLevel;
         @SerializedName("empty")
         @Expose
         private String empty;
         @SerializedName("full")
         @Expose
         private String full;
+
+        public Boolean getWarningEnabled() {
+            return warningEnabled;
+        }
+
+        public void setWarningEnabled(Boolean enabled) {
+            this.warningEnabled = enabled;
+        }
+
+        public String getWarningLevel() {
+            return warningLevel;
+        }
+
+        public void setWarningLevel(String level) {
+            this.warningLevel = level;
+        }
 
         public String getEmpty() {
             return empty;
@@ -548,9 +570,12 @@ public class SettingsResponseModel {
         @SerializedName("enabled")
         @Expose
         private Boolean enabled;
-        @SerializedName("ServerKey")
+        @SerializedName("ServerUrl")
         @Expose
-        private String serverKey;
+        private String serverUrl;
+        @SerializedName("uuid")
+        @Expose
+        private String uuid;
 
         public Boolean getEnabled() {
             return enabled;
@@ -560,12 +585,20 @@ public class SettingsResponseModel {
             this.enabled = enabled;
         }
 
-        public String getServerKey() {
-            return serverKey;
+        public String getServerUrl() {
+            return serverUrl;
         }
 
-        public void setServerKey(String serverKey) {
-            this.serverKey = serverKey;
+        public void setServerUrl(String serverUrl) {
+            this.serverUrl = serverUrl;
+        }
+
+        public String getServerUUID() {
+            return uuid;
+        }
+
+        public void setServerUUID(String uuid) {
+            this.uuid = uuid;
         }
 
     }

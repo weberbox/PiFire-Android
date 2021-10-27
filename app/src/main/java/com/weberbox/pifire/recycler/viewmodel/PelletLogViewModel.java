@@ -14,11 +14,13 @@ import timber.log.Timber;
 
 public class PelletLogViewModel {
 
+    private String mPelletID;
     private String mPelletDate;
     private String mPelletName;
     private int mPelletRating;
 
     public PelletLogViewModel(@NonNull final String pelletDate, @NonNull final String pelletName, @NonNull final Integer pelletRating) {
+        setPelletID(pelletDate);
         setPelletName(pelletName);
         setPelletRating(StringUtils.getRatingText(pelletRating));
 
@@ -33,6 +35,15 @@ public class PelletLogViewModel {
             setPelletDate(pelletDate);
         }
 
+    }
+
+    @NonNull
+    public String getPelletID() {
+        return mPelletID;
+    }
+
+    public void setPelletID(@NonNull final String pelletID) {
+        this.mPelletID = pelletID;
     }
 
     @NonNull

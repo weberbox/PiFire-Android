@@ -308,10 +308,10 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
-    // Set Firebase ServerKey
-    public static void setFirebaseServerKey(Socket socket, String serverKey) {
+    // Set Firebase ServerUrl
+    public static void setFirebaseServerUrl(Socket socket, String serverUrl) {
         String payload = JSONUtils.encodeJSON(ServerConstants.NOTIF_ACTION,
-                ServerConstants.NOTIF_FIREBASE_SERVERKEY, serverKey);
+                ServerConstants.NOTIF_FIREBASE_SERVERURL, serverUrl);
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
@@ -462,6 +462,20 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
+    // Set Pellets Warning Enabled
+    public static void setPelletWarningEnabled(Socket socket, Boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_ACTION,
+                ServerConstants.PELLETS_WARNING_ENABLED, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Set Pellets Warning Level
+    public static void setPelletWarningLevel(Socket socket, String level) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_ACTION,
+                ServerConstants.PELLETS_WARNING_LEVEL, level);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
     // Set Pellets Full
     public static void setPelletsFull(Socket socket, String full) {
         String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_ACTION,
@@ -605,11 +619,53 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_PELLET_DATA, payload);
     }
 
+    // Delete Pellet Log
+    public static void setDeletePelletLog(Socket socket, String log) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_DELETE_LOG,
+                ServerConstants.PELLETS_LOG_DELETE, log);
+        socket.emit(ServerConstants.UPDATE_PELLET_DATA, payload);
+    }
+
     // Check Hopper Level
     public static void setCheckHopperLevel(Socket socket) {
         String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_HOPPER_CHECK,
                 ServerConstants.PELLETS_HOPPER_LEVEL, String.valueOf(true));
         socket.emit(ServerConstants.UPDATE_PELLET_DATA, payload);
+    }
+
+    // Set Manual Mode
+    public static void setManualMode(Socket socket, boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_MANUAL,
+                ServerConstants.MANUAL_SET_MODE, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
+    }
+
+    // Set Manual Fan Output
+    public static void setManualFanOutput(Socket socket, boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_MANUAL,
+                ServerConstants.MANUAL_OUTPUT_FAN, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
+    }
+
+    // Set Manual Auger Output
+    public static void setManualAugerOutput(Socket socket, boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_MANUAL,
+                ServerConstants.MANUAL_OUTPUT_AUGER, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
+    }
+
+    // Set Manual Igniter Output
+    public static void setManualIgniterOutput(Socket socket, boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_MANUAL,
+                ServerConstants.MANUAL_OUTPUT_IGNITER, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
+    }
+
+    // Set Manual Power Output
+    public static void setManualPowerOutput(Socket socket, boolean enabled) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.MODE_MANUAL,
+                ServerConstants.MANUAL_OUTPUT_POWER, String.valueOf(enabled));
+        socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
     }
 
 }
