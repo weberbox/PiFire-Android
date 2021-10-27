@@ -2,7 +2,8 @@
 
     <PreferenceCategory
         app:key="@string/prefs_manual_mode_cat"
-        app:title="@string/settings_cat_manual_functions">
+        app:title="@string/settings_cat_manual_functions"
+        app:isPreferenceVisible="false">
 
         <Preference
             app:key="@string/prefs_manual_mode_frag"

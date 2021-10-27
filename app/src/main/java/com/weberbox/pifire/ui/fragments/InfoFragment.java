@@ -56,6 +56,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
     private InfoViewModel mInfoViewModel;
     private Socket mSocket;
     private RelativeLayout mRootContainer;
+    private TextView mServerVersion;
     private TextView mCPUInfo;
     private TextView mTempInfo;
     private TextView mNetworkInfo;
@@ -107,6 +108,8 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
         mGPIOInSelector = mBinding.gpioInputSelector;
 
         mLicenseInfo = mBinding.infoLicensesRecycler;
+
+        mServerVersion = mBinding.serverVersionText;
 
         TextView appVersion = mBinding.appVersionText;
         TextView appVersionCode = mBinding.appVersionCodeText;
@@ -205,6 +208,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             String igniter = infoResponseModel.getOutPins().getIgniter();
             String power = infoResponseModel.getOutPins().getPower();
             String selector = infoResponseModel.getInPins().getSelector();
+            String version = infoResponseModel.getServerVersion();
 
             StringBuilder cpuString = new StringBuilder();
             for (String cpu : cpuInfo) {
@@ -227,6 +231,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             mGPIOOutIgniter.setText(igniter);
             mGPIOOutPower.setText(power);
             mGPIOInSelector.setText(selector);
+            mServerVersion.setText(version);
 
         } catch (NullPointerException e) {
             Timber.w(e, "Response Error");

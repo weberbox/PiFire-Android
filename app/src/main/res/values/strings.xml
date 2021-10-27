@@ -390,6 +390,8 @@
     <string name="info_gpio_input_selector">Selector</string>
     <string name="info_uptime">Server Uptime</string>
     <string name="info_credits">Credits and Licenses</string>
+    <string name="info_server_info">Server Info</string>
+    <string name="info_server_version">PiFire Version</string>
     <string name="info_app_info">Android App Info</string>
     <string name="info_app_version">App Version</string>
     <string name="info_app_version_code">Version Code</string>

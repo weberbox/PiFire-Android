@@ -430,10 +430,76 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/app_version_card_view"
+                    android:id="@+id/server_version_card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/uptime_card_view"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="10dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:contentPadding="0dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/server_version_inner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+                            android:id="@+id/server_version_header"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:header_icon="@drawable/ic_menu_about"
+                            app:header_title="@string/info_server_info"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <LinearLayout
+                            android:id="@+id/server_version_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimaryLight"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/server_version_header">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginTop="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:text="@string/info_server_version"
+                                app:autoSizeTextType="uniform" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/server_version_text"
+                                style="@style/Text15Aller"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/default_spacing"
+                                android:layout_marginEnd="@dimen/default_spacing"
+                                android:layout_marginBottom="@dimen/small_spacing"
+                                android:textStyle="normal"
+                                app:autoSizeTextType="uniform" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/app_version_card_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/server_version_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing"
