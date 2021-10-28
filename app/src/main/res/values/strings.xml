@@ -326,7 +326,7 @@
     <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
     <string name="settings_pushbullet_api">API Key</string>
     <string name="settings_pushbullet_url">Public URL</string>
-    <string name="settings_firebase_disabled">Server is not reporting UUID please check server configuration</string>
+    <string name="settings_firebase_disabled">Firebase is not configured on the Server and or Client.</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>

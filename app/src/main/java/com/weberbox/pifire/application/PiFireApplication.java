@@ -80,10 +80,6 @@ public class PiFireApplication extends Application {
             FirebaseUtils.initNotificationChannels(this);
             String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid), "");
 
-            if (uuid.equals("")) {
-                GrillControl.setFirebaseServerUrl(getSocket(), serverUrl);
-            }
-
             if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), false)
                     && !uuid.equals("")) {
                 FirebaseUtils.toggleFirebaseSubscription(true, uuid);
