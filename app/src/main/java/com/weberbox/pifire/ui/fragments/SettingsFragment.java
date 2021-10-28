@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -172,93 +171,128 @@ public class SettingsFragment extends Fragment {
             Safety safety  = settingsResponse.getSafety();
             PelletLevel pellets  = settingsResponse.getPellets();
 
-            Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
+            if (probesSettings != null) {
+                Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
+                putString(getString(R.string.prefs_probe_profiles), new Gson().toJson(probes));
+            }
 
             if (versions != null) {
-                if (versions.getServerVersion() != null && versions.getAndroidVersion() != null) {
-                    Prefs.putInt(getString(R.string.prefs_server_version),
-                            versions.getServerVersion());
-                    Prefs.putInt(getString(R.string.prefs_android_version),
-                            versions.getAndroidVersion());
+                putString(getString(R.string.prefs_server_version), versions.getServerVersion());
+                putString(getString(R.string.prefs_android_version), versions.getAndroidVersion());
+            }
+
+            if (historyPage != null) {
+                putString(getString(R.string.prefs_history_display), historyPage.getMinutes());
+                putBoolean(getString(R.string.prefs_history_clear), historyPage.getClearHistoryOnStart());
+                putBoolean(getString(R.string.prefs_history_auto), historyPage.getAutoRefresh().equals("on"));
+                putString(getString(R.string.prefs_history_points), historyPage.getDataPoints());
+            }
+
+            if (globals != null) {
+                putString(getString(R.string.prefs_grill_name), globals.getGrillName());
+                putBoolean(getString(R.string.prefs_admin_debug), globals.getDebugMode());
+                putString(getString(R.string.prefs_shutdown_time), globals.getShutdownTimer());
+                putBoolean(getString(R.string.prefs_four_probe), globals.getFourProbes());
+                putString(getString(R.string.prefs_grill_units), globals.getUnits());
+
+                if (globals.getFourProbes() != null && globals.getFourProbes()) {
+                    GrillProbeSettings grillProbeSettings = settingsResponse.getGrillProbeSettings();
+
+                    Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();
+
+                    putString(getString(R.string.prefs_grill_probes), new Gson().toJson(grillProbes));
+                    putString(getString(R.string.prefs_grill_probe), grillProbeSettings.getGrillProbe());
+
+                    putString(getString(R.string.prefs_grill_probe_one_type), probeTypes.getGrill1type());
+                    putString(getString(R.string.prefs_grill_probe_two_type), probeTypes.getGrill2type());
+                } else {
+                    putString(getString(R.string.prefs_grill_probe_type), probeTypes.getGrill0type());
                 }
             }
 
-            Prefs.putString(getString(R.string.prefs_probe_profiles), new Gson().toJson(probes));
-
-            Prefs.putString(getString(R.string.prefs_history_display), historyPage.getMinutes());
-            Prefs.putBoolean(getString(R.string.prefs_history_clear), historyPage.getClearHistoryOnStart());
-            Prefs.putBoolean(getString(R.string.prefs_history_auto), historyPage.getAutoRefresh().equals("on"));
-            Prefs.putString(getString(R.string.prefs_history_points), historyPage.getDataPoints());
-
-            Prefs.putString(getString(R.string.prefs_grill_name), globals.getGrillName());
-            Prefs.putBoolean(getString(R.string.prefs_admin_debug), globals.getDebugMode());
-            Prefs.putString(getString(R.string.prefs_shutdown_time), globals.getShutdownTimer());
-            Prefs.putBoolean(getString(R.string.prefs_four_probe), globals.getFourProbes());
-            Prefs.putString(getString(R.string.prefs_grill_units), globals.getUnits());
-
-            Prefs.putBoolean(getString(R.string.prefs_notif_ifttt_enabled), ifttt.getEnabled());
-            Prefs.putString(getString(R.string.prefs_notif_ifttt_api), ifttt.getAPIKey());
-
-            Prefs.putBoolean(getString(R.string.prefs_notif_pushbullet_enabled), pushBullet.getEnabled());
-            Prefs.putString(getString(R.string.prefs_notif_pushbullet_api), pushBullet.getAPIKey());
-            Prefs.putString(getString(R.string.prefs_notif_pushbullet_url), pushBullet.getPublicURL());
-
-            Prefs.putBoolean(getString(R.string.prefs_notif_pushover_enabled), pushOver.getEnabled());
-            Prefs.putString(getString(R.string.prefs_notif_pushover_api), pushOver.getAPIKey());
-            Prefs.putString(getString(R.string.prefs_notif_pushover_keys), pushOver.getUserKeys());
-            Prefs.putString(getString(R.string.prefs_notif_pushover_url), pushOver.getPublicURL());
-
-            Prefs.putBoolean(getString(R.string.prefs_notif_firebase_enabled), fireBase.getEnabled());
-            Prefs.putString(getString(R.string.prefs_notif_firebase_serverkey), fireBase.getServerKey());
-
-            if (globals.getFourProbes() != null && globals.getFourProbes()) {
-                GrillProbeSettings grillProbeSettings = settingsResponse.getGrillProbeSettings();
-
-                Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();
-
-                Prefs.putString(getString(R.string.prefs_grill_probes), new Gson().toJson(grillProbes));
-                Prefs.putString(getString(R.string.prefs_grill_probe), grillProbeSettings.getGrillProbe());
-
-                Prefs.putString(getString(R.string.prefs_grill_probe_one_type), probeTypes.getGrill1type());
-                Prefs.putString(getString(R.string.prefs_grill_probe_two_type), probeTypes.getGrill2type());
-            } else {
-                Prefs.putString(getString(R.string.prefs_grill_probe_type), probeTypes.getGrill0type());
+            if (ifttt != null) {
+                putBoolean(getString(R.string.prefs_notif_ifttt_enabled), ifttt.getEnabled());
+                putString(getString(R.string.prefs_notif_ifttt_api), ifttt.getAPIKey());
             }
 
-            Prefs.putString(getString(R.string.prefs_probe_one_type), probeTypes.getProbe1type());
-            Prefs.putString(getString(R.string.prefs_probe_two_type), probeTypes.getProbe2type());
-
-            Prefs.putString(getString(R.string.prefs_work_pid_pb), cycleData.getPb());
-            Prefs.putString(getString(R.string.prefs_work_pid_ti), cycleData.getTi());
-            Prefs.putString(getString(R.string.prefs_work_pid_td), cycleData.getTd());
-            Prefs.putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
-            Prefs.putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
-            Prefs.putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
-
-            if (Prefs.getInt(getString(R.string.prefs_android_version), 0) >=
-                    BuildConfig.VERSION_CODE) {
-                Prefs.putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
-                Prefs.putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
+            if (pushBullet != null) {
+                putBoolean(getString(R.string.prefs_notif_pushbullet_enabled), pushBullet.getEnabled());
+                putString(getString(R.string.prefs_notif_pushbullet_api), pushBullet.getAPIKey());
+                putString(getString(R.string.prefs_notif_pushbullet_url), pushBullet.getPublicURL());
             }
 
-            Prefs.putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
-            Prefs.putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());
-            Prefs.putString(getString(R.string.prefs_work_splus_max), smokePlus.getMaxTemp());
-            Prefs.putString(getString(R.string.prefs_work_splus_fan), smokePlus.getCycle());
+            if (pushOver != null) {
+                putBoolean(getString(R.string.prefs_notif_pushover_enabled), pushOver.getEnabled());
+                putString(getString(R.string.prefs_notif_pushover_api), pushOver.getAPIKey());
+                putString(getString(R.string.prefs_notif_pushover_keys), pushOver.getUserKeys());
+                putString(getString(R.string.prefs_notif_pushover_url), pushOver.getPublicURL());
+            }
 
-            Prefs.putString(getString(R.string.prefs_safety_min_start), safety.getMinStartupTemp());
-            Prefs.putString(getString(R.string.prefs_safety_max_start), safety.getMaxStartupTemp());
-            Prefs.putString(getString(R.string.prefs_safety_max_temp), safety.getMaxTemp());
-            Prefs.putString(getString(R.string.prefs_safety_retries), safety.getReigniteRetries());
+            if (fireBase != null) {
+                putBoolean(getString(R.string.prefs_notif_firebase_enabled), fireBase.getEnabled());
+                putString(getString(R.string.prefs_notif_firebase_serveruuid), fireBase.getServerUUID());
+            }
 
-            Prefs.putString(getString(R.string.prefs_pellet_empty), pellets.getEmpty());
-            Prefs.putString(getString(R.string.prefs_pellet_full), pellets.getFull());
+            if (probeTypes != null) {
+                putString(getString(R.string.prefs_probe_one_type), probeTypes.getProbe1type());
+                putString(getString(R.string.prefs_probe_two_type), probeTypes.getProbe2type());
+            }
+
+            if (cycleData != null) {
+                putString(getString(R.string.prefs_work_pid_pb), cycleData.getPb());
+                putString(getString(R.string.prefs_work_pid_ti), cycleData.getTi());
+                putString(getString(R.string.prefs_work_pid_td), cycleData.getTd());
+                putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
+                putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
+                putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
+                putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
+                putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
+            }
+
+            if (pellets != null) {
+                putString(getString(R.string.prefs_pellet_empty), pellets.getEmpty());
+                putString(getString(R.string.prefs_pellet_full), pellets.getFull());
+                putBoolean(getString(R.string.prefs_pellet_warning_enabled), pellets.getWarningEnabled());
+                putString(getString(R.string.prefs_pellet_warning_level), pellets.getWarningLevel());
+            }
+
+            if (smokePlus != null) {
+                putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
+                putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());
+                putString(getString(R.string.prefs_work_splus_max), smokePlus.getMaxTemp());
+                putString(getString(R.string.prefs_work_splus_fan), smokePlus.getCycle());
+            }
+
+            if (safety != null) {
+                putString(getString(R.string.prefs_safety_min_start), safety.getMinStartupTemp());
+                putString(getString(R.string.prefs_safety_max_start), safety.getMaxStartupTemp());
+                putString(getString(R.string.prefs_safety_max_temp), safety.getMaxTemp());
+                putString(getString(R.string.prefs_safety_retries), safety.getReigniteRetries());
+            }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.w(e,"JSON Error");
             if (getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }
+        }
+    }
+
+    private void putString(String key, String value) {
+        if (value != null) {
+            Prefs.putString(key, value);
+        }
+    }
+
+    private void putBoolean(String key, Boolean value) {
+        if (value != null) {
+            Prefs.putBoolean(key, value);
+        }
+    }
+
+    private void putInt(String key, Integer value) {
+        if (value != null) {
+            Prefs.putInt(key, value);
         }
     }
 

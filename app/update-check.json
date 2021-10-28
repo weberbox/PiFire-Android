@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.2.0-rc1",
-  "latestVersionCode": "4",
+  "latestVersion": "1.3.0",
+  "latestVersionCode": "5",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
@@ -16,6 +16,8 @@
     "- Added Keep Screen on Function",
     "- Update Timer Operation",
     "- Lowered min Api to 24",
+    "- Added option to delete pellet logs",
+    "- Added pellet warning notifications",
     "- Requires Latest Server Dev Branch"
   ]
 }

@@ -9,4 +9,5 @@ public interface PelletsCallbackInterface {
     void onProfileSelected(String profileName, String profileId);
     void onProfileEdit(PelletProfileModel model);
     void onProfileDelete(String profileId, int position);
+    void onLogLongClick(String logDate, int position);
 }

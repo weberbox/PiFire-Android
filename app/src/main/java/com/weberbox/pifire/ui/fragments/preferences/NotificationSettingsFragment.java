@@ -14,6 +14,7 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
@@ -35,7 +36,6 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
             mSocket = app.getSocket();
@@ -49,9 +49,16 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         PreferenceCategory firebase = findPreference(getString(R.string.prefs_notif_firebase));
+        SwitchPreferenceCompat firebaseEnable = findPreference(getString(R.string.prefs_notif_firebase_enabled));
 
-        if (firebase != null) {
+        if (firebase != null && firebaseEnable != null) {
             firebase.setVisible(AppConfig.USE_FIREBASE);
+            if (Prefs.getString(
+                    getString(R.string.prefs_notif_firebase_serveruuid), "").equals("") ||
+                    getString(R.string.def_firebase_server_url).equals("")) {
+                firebase.setEnabled(false);
+                firebaseEnable.setSummary(R.string.settings_firebase_disabled);
+            }
         }
 
         return view;
@@ -120,11 +127,6 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                         GrillControl.setPushBulletURL(mSocket,
                                 ((EditTextPreference) preference).getText());
                     }
-                    if (preference.getContext().getString(R.string.prefs_notif_firebase_serverkey)
-                            .equals(preference.getKey())) {
-                        GrillControl.setFirebaseServerKey(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
                 }
                 if (preference instanceof SwitchPreferenceCompat) {
                     if (preference.getContext().getString(R.string.prefs_notif_ifttt_enabled)
@@ -144,10 +146,14 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                     }
                     if (preference.getContext().getString(R.string.prefs_notif_firebase_enabled)
                             .equals(preference.getKey())) {
-                        GrillControl.setFirebaseEnabled(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
-                        FirebaseUtils.toggleFirebaseSubscription(
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                        boolean enabled = ((SwitchPreferenceCompat) preference).isChecked();
+                        if (enabled) {
+                            GrillControl.setFirebaseServerUrl(mSocket,
+                                    getString(R.string.def_firebase_server_url));
+                        }
+                        GrillControl.setFirebaseEnabled(mSocket, enabled);
+                        FirebaseUtils.toggleFirebaseSubscription(enabled, sharedPreferences
+                                .getString(getString(R.string.prefs_notif_firebase_serveruuid), ""));
                     }
                 }
             }

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="PelletLevelView">
+        <attr name="primary_color" format="color"/>
+        <attr name="secondary_color" format="color"/>
+        <attr name="initial_value" format="integer"/>
+        <attr name="dot_radius" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="MaxHeightLinearLayout">
-        <attr name="maxHeight" format="dimension" />
+        <attr name="max_height" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="SwipeButton">

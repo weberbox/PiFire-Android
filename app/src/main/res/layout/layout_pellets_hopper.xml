@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+    app:contentPadding="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+            android:id="@+id/hopper_level_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_view_header"
+            app:button_enabled="true"
+            app:button_text="@string/refresh"
+            app:header_icon="@drawable/ic_grill_pellets"
+            app:header_title="@string/pellets_hopper_level"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hopper_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/default_spacing"
+            android:paddingTop="@dimen/default_spacing"
+            android:paddingEnd="@dimen/default_spacing"
+            android:paddingBottom="@dimen/default_spacing"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hopper_level_header">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/hopper_level"
+                style="?attr/linearProgressIndicatorStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:indeterminate="false"
+                android:padding="8dp"
+                app:indicatorColor="@color/colorAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackCornerRadius="15dp"
+                app:trackThickness="30dp" />
+
+            <TextView
+                android:id="@+id/hopper_level_text"
+                style="@style/Text15Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/hopper_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/default_spacing"
+            android:paddingTop="@dimen/default_spacing"
+            android:paddingEnd="@dimen/default_spacing"
+            android:paddingBottom="@dimen/default_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hopper_level_header">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                style="?attr/linearProgressIndicatorStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:padding="8dp"
+                app:indicatorColor="@color/placeholderColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:trackCornerRadius="15dp"
+                app:trackThickness="30dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

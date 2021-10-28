@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentInfoBinding;
@@ -56,6 +58,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
     private InfoViewModel mInfoViewModel;
     private Socket mSocket;
     private RelativeLayout mRootContainer;
+    private TextView mServerVersion;
     private TextView mCPUInfo;
     private TextView mTempInfo;
     private TextView mNetworkInfo;
@@ -95,24 +98,30 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
         mSwipeRefresh = mBinding.infoPullRefresh;
         mLoadingBar = mBinding.loadingProgressbar;
 
-        mCPUInfo = mBinding.cpuInfoText;
-        mTempInfo = mBinding.tempInfoText;
-        mNetworkInfo = mBinding.networkInfoText;
-        mUptimeInfo = mBinding.uptimeInfoText;
+        mCPUInfo = mBinding.systemCardView.cpuInfoText;
+        mTempInfo = mBinding.systemCardView.tempInfoText;
+        mNetworkInfo = mBinding.systemCardView.networkInfoText;
 
-        mGPIOOutAuger = mBinding.gpioOutputAuger;
-        mGPIOOutFan = mBinding.gpioOutputFan;
-        mGPIOOutIgniter = mBinding.gpioOutputIgniter;
-        mGPIOOutPower = mBinding.gpioOutputPower;
-        mGPIOInSelector = mBinding.gpioInputSelector;
+        mUptimeInfo = mBinding.uptimeCardView.uptimeInfoText;
 
-        mLicenseInfo = mBinding.infoLicensesRecycler;
+        mGPIOOutAuger = mBinding.gpioCardView.gpioOutputAuger;
+        mGPIOOutFan = mBinding.gpioCardView.gpioOutputFan;
+        mGPIOOutIgniter = mBinding.gpioCardView.gpioOutputIgniter;
+        mGPIOOutPower = mBinding.gpioCardView.gpioOutputPower;
+        mGPIOInSelector = mBinding.gpioCardView.gpioInputSelector;
 
-        TextView appVersion = mBinding.appVersionText;
-        TextView appVersionCode = mBinding.appVersionCodeText;
-        TextView appBuildType = mBinding.appBuildTypeText;
-        TextView appBuildFlavor = mBinding.appBuildFlavorText;
-        TextView appBuildDate = mBinding.appBuildDate;
+        mLicenseInfo = mBinding.licensesCardView.infoLicensesRecycler;
+
+        mServerVersion = mBinding.serverVersionCardView.serverVersionText;
+
+        LinearLayout appGitContainer = mBinding.appVersionCardView.appBuildGitContainer;
+        TextView appVersion = mBinding.appVersionCardView.appVersionText;
+        TextView appVersionCode = mBinding.appVersionCardView.appVersionCodeText;
+        TextView appBuildType = mBinding.appVersionCardView.appBuildTypeText;
+        TextView appBuildFlavor = mBinding.appVersionCardView.appBuildFlavorText;
+        TextView appBuildDate = mBinding.appVersionCardView.appBuildDate;
+        TextView appGitBranch = mBinding.appVersionCardView.appBuildGitBranch;
+        TextView appGitRev = mBinding.appVersionCardView.appBuildGitRev;
 
         appVersion.setText(BuildConfig.VERSION_NAME);
         appVersionCode.setText(String.valueOf(BuildConfig.VERSION_CODE));
@@ -121,6 +130,12 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
 
         appBuildDate.setText(StringUtils.formatDate(
                 BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm"));
+
+        if (AppConfig.IS_DEV_BUILD) {
+            appGitContainer.setVisibility(View.VISIBLE);
+            appGitBranch.setText(BuildConfig.GIT_BRANCH);
+            appGitRev.setText(BuildConfig.GIT_REV);
+        }
 
         mSwipeRefresh.setOnRefreshListener(() -> {
             if (mSocket != null && mSocket.connected()) {
@@ -205,6 +220,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             String igniter = infoResponseModel.getOutPins().getIgniter();
             String power = infoResponseModel.getOutPins().getPower();
             String selector = infoResponseModel.getInPins().getSelector();
+            String version = infoResponseModel.getServerVersion();
 
             StringBuilder cpuString = new StringBuilder();
             for (String cpu : cpuInfo) {
@@ -227,6 +243,7 @@ public class InfoFragment extends Fragment implements LicensesCallbackInterface 
             mGPIOOutIgniter.setText(igniter);
             mGPIOOutPower.setText(power);
             mGPIOInSelector.setText(selector);
+            mServerVersion.setText(version);
 
         } catch (NullPointerException e) {
             Timber.w(e, "Response Error");

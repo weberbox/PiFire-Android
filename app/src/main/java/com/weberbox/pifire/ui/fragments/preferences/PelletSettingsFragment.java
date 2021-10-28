@@ -13,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
@@ -34,7 +37,6 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
             mSocket = app.getSocket();
@@ -46,8 +48,45 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
+        PreferenceCategory pelletWarnings = findPreference(getString(R.string.prefs_pellet_warning_cat));
+        EditTextPreference pelletWarningLevel = findPreference(getString(R.string.prefs_pellet_warning_level));
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
+
+        if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
+                "").equals("")) {
+            pelletWarnings.setVisible(false);
+        }
+
+        if (pelletWarningLevel != null) {
+            pelletWarningLevel.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 0) {
+                            editText.setError(getString(R.string.settings_blank_error));
+                        } else if (s.toString().equals("0")) {
+                            editText.setError(getString(R.string.settings_zero_error));
+                        } else if (Integer.parseInt(s.toString()) > 100) {
+                            editText.setError(getString(R.string.settings_max_hundred_error));
+                        } else {
+                            editText.setError(null);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+            });
+        }
 
         if (pelletsFull != null) {
             pelletsFull.setOnBindEditTextListener(editText -> {
@@ -134,16 +173,30 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         Preference preference = findPreference(key);
 
         if (preference != null) {
-            if (preference instanceof EditTextPreference) {
-                if (preference.getContext().getString(R.string.prefs_pellet_empty)
-                        .equals(preference.getKey())) {
-                    GrillControl.setPelletsEmpty(mSocket,
-                            ((EditTextPreference) preference).getText());
+            if (mSocket != null) {
+                if (preference instanceof SwitchPreferenceCompat) {
+                    if (preference.getContext().getString(R.string.prefs_pellet_warning_enabled)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPelletWarningEnabled(mSocket,
+                                ((SwitchPreferenceCompat) preference).isChecked());
+                    }
                 }
-                if (preference.getContext().getString(R.string.prefs_pellet_full)
-                        .equals(preference.getKey())) {
-                    GrillControl.setPelletsFull(mSocket,
-                            ((EditTextPreference) preference).getText());
+                if (preference instanceof EditTextPreference) {
+                    if (preference.getContext().getString(R.string.prefs_pellet_warning_level)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPelletWarningLevel(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
+                    if (preference.getContext().getString(R.string.prefs_pellet_empty)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPelletsEmpty(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
+                    if (preference.getContext().getString(R.string.prefs_pellet_full)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPelletsFull(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
                 }
             }
         }

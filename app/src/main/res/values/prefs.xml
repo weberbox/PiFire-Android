@@ -101,7 +101,7 @@
     <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
     <string name="prefs_notif_firebase">prefs_notif_firebase</string>
     <string name="prefs_notif_firebase_enabled">prefs_notif_firebase_enabled</string>
-    <string name="prefs_notif_firebase_serverkey">prefs_notif_firebase_serverkey</string>
+    <string name="prefs_notif_firebase_serveruuid">prefs_notif_firebase_serveruuid</string>
 
     <string name="prefs_admin_debug">prefs_admin_debug</string>
     <string name="prefs_admin_manual">prefs_admin_manual</string>
@@ -113,9 +113,20 @@
     <string name="prefs_admin_reboot">prefs_admin_reboot</string>
     <string name="prefs_admin_shutdown">prefs_admin_shutdown</string>
 
+    <string name="prefs_pellet_warning_cat">prefs_pellet_warning_cat</string>
+    <string name="prefs_pellet_warning_enabled">prefs_pellet_warning_enabled</string>
+    <string name="prefs_pellet_warning_level">prefs_pellet_warning_level</string>
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
 
     <string name="prefs_settings_update_time">prefs_settings_update_time</string>
+
+    <string name="prefs_manual_mode_cat">prefs_manual_mode_cat</string>
+    <string name="prefs_manual_mode_frag">prefs_manual_mode_frag</string>
+    <string name="prefs_manual_mode">prefs_manual_mode</string>
+    <string name="prefs_manual_mode_fan">prefs_manual_mode_fan</string>
+    <string name="prefs_manual_mode_auger">prefs_manual_mode_auger</string>
+    <string name="prefs_manual_mode_igniter">prefs_manual_mode_igniter</string>
+    <string name="prefs_manual_mode_power">prefs_manual_mode_power</string>
 
 </resources>

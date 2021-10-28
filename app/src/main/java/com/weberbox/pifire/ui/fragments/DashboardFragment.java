@@ -15,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -46,6 +47,7 @@ import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.TextTransition;
+import com.weberbox.pifire.ui.views.PelletLevelView;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
@@ -86,6 +88,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private TableLayout mRootContainer;
     private Snackbar mErrorSnack;
     private CountDownTimer mCountDownTimer;
+    private PelletLevelView mPelletLevelIndicator;
     private Socket mSocket;
 
     private Boolean mSmokePlusEnabled = false;
@@ -154,6 +157,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         LinearLayout probeTwoTempBox = mBinding.dashLayout.probeTwoContainer;
         FrameLayout timerBox = mBinding.dashLayout.grillTimerContainer;
         FrameLayout pelletLevelBox = mBinding.dashLayout.controlsPelletLevelContainer;
+        mPelletLevelIndicator = mBinding.dashLayout.pelletLevelIndicator;
 
         mSwipeRefresh = mBinding.dashPullRefresh;
 
@@ -168,23 +172,27 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         currentModeBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                if (mCurrentMode.equals(Constants.GRILL_CURRENT_STOP) ||
-                        mCurrentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
-                    StartModeActionDialog startModeActionDialog = new StartModeActionDialog(getActivity(),
-                            DashboardFragment.this);
-                    startModeActionDialog.showDialog();
+                if (!mCurrentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
+                    if (mCurrentMode.equals(Constants.GRILL_CURRENT_STOP) ||
+                            mCurrentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
+                        StartModeActionDialog startModeActionDialog = new StartModeActionDialog(getActivity(),
+                                DashboardFragment.this);
+                        startModeActionDialog.showDialog();
+                    } else {
+                        RunModeActionDialog runModeActionDialog = new RunModeActionDialog(getActivity(),
+                                DashboardFragment.this,
+                                mCurrentMode.equals(Constants.GRILL_CURRENT_SHUTDOWN));
+                        runModeActionDialog.showDialog();
+                    }
                 } else {
-                    RunModeActionDialog runModeActionDialog = new RunModeActionDialog(getActivity(),
-                            DashboardFragment.this,
-                            mCurrentMode.equals(Constants.GRILL_CURRENT_SHUTDOWN));
-                    runModeActionDialog.showDialog();
+                    showSnackBarMessage(getActivity(), R.string.control_manual_mode, true);
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
-        mSmokePlusBox.setOnClickListener(view1 -> {
+        mSmokePlusBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 if (mCurrentMode.equals(Constants.GRILL_CURRENT_HOLD)
                         || mCurrentMode.equals(Constants.GRILL_CURRENT_SMOKE)) {
@@ -200,7 +208,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
         });
 
-        grillTempBox.setOnClickListener(view12 -> {
+        grillTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 int defaultTemp = Constants.DEFAULT_GRILL_TEMP_SET;
                 if (!mGrillSetText.getText().toString().equals(getString(
@@ -224,7 +232,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
         });
 
-        probeOneTempBox.setOnClickListener(view13 -> {
+        probeOneTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 int defaultTemp = Constants.DEFAULT_PROBE_TEMP_SET;
 
@@ -245,7 +253,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
         });
 
-        probeOneTempBox.setOnLongClickListener(view14 -> {
+        probeOneTempBox.setOnLongClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 ProbeToggleDialog probeToggleDialog = new ProbeToggleDialog(getActivity(),
                         DashboardFragment.this, Constants.ACTION_MODE_PROBE_ONE,
@@ -257,7 +265,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             return true;
         });
 
-        probeTwoTempBox.setOnClickListener(view15 -> {
+        probeTwoTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 int defaultTemp = Constants.DEFAULT_PROBE_TEMP_SET;
                 if (!mProbeTwoTempText.getText().toString().equals(getString(R.string.off))) {
@@ -276,7 +284,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
         });
 
-        probeTwoTempBox.setOnLongClickListener(view16 -> {
+        probeTwoTempBox.setOnLongClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 ProbeToggleDialog probeToggleDialog = new ProbeToggleDialog(getActivity(),
                         DashboardFragment.this, Constants.ACTION_MODE_PROBE_TWO,
@@ -288,7 +296,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             return true;
         });
 
-        timerBox.setOnClickListener(view17 -> {
+        timerBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 if (mCountDownTimer != null && mCountDownTimer.isActive()) {
                     TimerActionDialog timerActionDialog = new TimerActionDialog(getActivity(),
@@ -304,7 +312,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             }
         });
 
-        pelletLevelBox.setOnClickListener(view18 -> {
+        pelletLevelBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
                 GrillControl.setCheckHopperLevel(mSocket);
                 requestForcedDashData(true);
@@ -491,8 +499,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     public void updateUIWithData(String response_data) {
-
         GrillResponseModel grillResponseModel;
+
         try {
             grillResponseModel = GrillResponseModel.parseJSON(response_data);
 
@@ -502,7 +510,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             NotifyReq notifyReq = grillResponseModel.getNotifyReq();
             NotifyData notifyData = grillResponseModel.getNotifyData();
             TimerInfo timerInfo = grillResponseModel.getTimerInfo();
-
 
             String currentMode = grillResponseModel.getCurrentMode();
             long timerStartTime = timerInfo.getTimerStartTime();
@@ -543,33 +550,30 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 }
 
                 if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) |
-                        currentMode.equals(Constants.GRILL_CURRENT_SMOKE)) {
-                    if (smokePlus) {
-                        mSmokePlusEnabled = true;
-                        mSmokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_enabled);
-                        mSmokePlusText.setText(R.string.on);
-                    } else {
-                        mSmokePlusEnabled = false;
-                        mSmokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
-                        mSmokePlusText.setText(R.string.off);
-                    }
+                        currentMode.equals(Constants.GRILL_CURRENT_SMOKE) && smokePlus) {
+                    mSmokePlusEnabled = true;
+                    mSmokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_enabled);
+                    mSmokePlusText.setText(R.string.on);
                 } else {
+                    mSmokePlusEnabled = false;
                     mSmokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
                     mSmokePlusText.setText(R.string.off);
                 }
 
-                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD)) {
-                    if (grillTarget > 0) {
-                        mGrillSetText.setText(StringUtils.formatTemp(grillTarget));
-                    } else {
-                        mGrillSetText.setText(R.string.placeholder_none);
-                    }
+                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && grillTarget > 0) {
+                    mGrillSetText.setText(StringUtils.formatTemp(grillTarget));
                 } else {
                     mGrillSetText.setText(R.string.placeholder_none);
                 }
 
                 if (hopperLevel > 0) {
+                    mPelletLevelIndicator.setLevel(hopperLevel);
                     mPelletLevelText.setText(StringUtils.formatPercentage(hopperLevel));
+                    if (getActivity() != null) {
+                        int color = hopperLevel < Constants.LOW_PELLET_WARNING ?
+                                R.color.colorPelletDanger : R.color.colorWhite;
+                        mPelletLevelText.setTextColor(ContextCompat.getColor(getActivity(), color));
+                    }
                 } else {
                     mPelletLevelText.setText(R.string.placeholder_percentage);
                 }

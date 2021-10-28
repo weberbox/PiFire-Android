@@ -29,6 +29,9 @@ public class InfoResponseModel {
     @SerializedName("inpins")
     @Expose
     private InPins inpins;
+    @SerializedName("server_version")
+    @Expose
+    private String serverVersion;
 
     public List<String> getCpuInfo() {
         return cpuinfo;
@@ -76,6 +79,14 @@ public class InfoResponseModel {
 
     public void setUpTime(String uptime) {
         this.uptime = uptime;
+    }
+
+    public String getServerVersion() {
+        return serverVersion;
+    }
+
+    public void setServerVersion(String serverVersion) {
+        this.serverVersion = serverVersion;
     }
 
     public static class OutPins {

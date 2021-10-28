@@ -10,6 +10,7 @@ import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.utils.AcraUtils;
 import com.weberbox.pifire.utils.FirebaseUtils;
@@ -70,13 +71,18 @@ public class PiFireApplication extends Application {
 
         Timber.d("Startup - Application Start");
 
-        if (AppConfig.USE_FIREBASE) {
+        String serverUrl = getString(R.string.def_firebase_server_url);
+
+        if (AppConfig.USE_FIREBASE && !serverUrl.equals("")) {
             Timber.d("Init Firebase");
 
             FirebaseUtils.initFirebase(this);
-            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), true)) {
-                FirebaseUtils.initNotificationChannels(this);
-                FirebaseUtils.subscribeFirebase();
+            FirebaseUtils.initNotificationChannels(this);
+            String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid), "");
+
+            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), false)
+                    && !uuid.equals("")) {
+                FirebaseUtils.toggleFirebaseSubscription(true, uuid);
             }
         }
     }

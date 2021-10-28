@@ -1,5 +1,6 @@
 package com.weberbox.pifire.recycler.adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +21,23 @@ public class PelletProfileEditAdapter extends RecyclerView.Adapter<RecyclerView.
     private final List<String> mBrandsList;
     private final List<String> mWoodsList;
     private final PelletsCallbackInterface mCallBack;
+    private final Activity mActivity;
 
-    public PelletProfileEditAdapter(final List<String> brands, List<String> woods,
+    public PelletProfileEditAdapter(Activity activity, final List<String> brands, List<String> woods,
                                     final List<PelletProfileModel> viewModels,
                                     PelletsCallbackInterface callback) {
         mModel = viewModels;
         mCallBack = callback;
         mBrandsList = brands;
         mWoodsList = woods;
+        mActivity = activity;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new PelletsProfileEditViewHolder(view, mCallBack, mBrandsList, mWoodsList);
+        return new PelletsProfileEditViewHolder(mActivity, view, mCallBack, mBrandsList, mWoodsList);
     }
 
     @Override

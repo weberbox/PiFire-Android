@@ -2,10 +2,6 @@ package com.weberbox.pifire.constants;
 
 public class Constants {
 
-    // Firebase topics
-    public static final String FIREBASE_TOPIC_GRILL = "GrillAlerts";
-    public static final String FIREBASE_TOPIC_GRILL_DEBUG = "GrillAlertsDebug";
-
     // Grill Modes
     public static final String GRILL_CURRENT_STOP = "Stop";
     public static final String GRILL_CURRENT_STARTUP = "Startup";
@@ -14,6 +10,10 @@ public class Constants {
     public static final String GRILL_CURRENT_HOLD = "Hold";
     public static final String GRILL_CURRENT_SHUTDOWN = "Shutdown";
     public static final String GRILL_CURRENT_MONITOR = "Monitor";
+    public static final String GRILL_CURRENT_MANUAL = "Manual";
+
+    // Pellet Warning
+    public static final int LOW_PELLET_WARNING = 40;
 
     // Temp Selector Temps
     public static final int MIN_GRILL_TEMP_SET = 160;
@@ -86,6 +86,7 @@ public class Constants {
     public static final String PELLET_WOOD = "woods";
     public static final String PELLET_BRAND = "brand";
     public static final String PELLET_PROFILE = "profile";
+    public static final String PELLET_LOG = "log";
 
     public static final String PELLET_RATING_5 = "★ ★ ★ ★ ★";
     public static final String PELLET_RATING_4 = "★ ★ ★ ★";

@@ -3,6 +3,19 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/prefs_notif_firebase"
+        app:title="@string/settings_cat_firebase">
+
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_firebase_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_firebase_enabled"
+            app:title="@string/enabled" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/settings_cat_ifttt">
 
         <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
@@ -75,26 +88,6 @@
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_url"
             app:title="@string/settings_pushbullet_url"
-            app:useSimpleSummaryProvider="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:key="@string/prefs_notif_firebase"
-        app:title="@string/settings_cat_firebase">
-
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
-            app:defaultValue="@bool/def_notif_firebase_enabled"
-            app:iconSpaceReserved="false"
-            app:key="@string/prefs_notif_firebase_enabled"
-            app:title="@string/enabled" />
-
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
-            app:dependency="@string/prefs_notif_firebase_enabled"
-            app:iconSpaceReserved="false"
-            app:key="@string/prefs_notif_firebase_serverkey"
-            app:title="@string/settings_firebase_serverkey"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
