@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
 
         String grillName = Prefs.getString(getString(R.string.prefs_grill_name), "");
 
-        if (!grillName.equals("")) {
+        if (!grillName.isEmpty()) {
             navGrillName.setVisibility(View.VISIBLE);
             divider.setVisibility(View.VISIBLE);
             navGrillName.setText(grillName);
@@ -144,12 +144,14 @@ public class MainActivity extends BaseActivity {
 
         connectSocketListenData(mSocket);
 
-        if (savedInstanceState == null) {
+        String updaterUrl = getString(R.string.def_app_update_check_url);
+
+        if (savedInstanceState == null && !updaterUrl.isEmpty()) {
             mAppUpdater = new AppUpdater(this)
                     .setDisplay(Display.DIALOG)
                     .setButtonDoNotShowAgain(R.string.disable_button)
                     .setUpdateFrom(UpdateFrom.JSON)
-                    .setUpdateJSON(getString(R.string.def_app_update_check_url))
+                    .setUpdateJSON(updaterUrl)
                     .showEvery(Integer.parseInt(Prefs.getString(getString(
                             R.string.prefs_app_updater_frequency),
                             getString(R.string.def_app_updater_frequency))));

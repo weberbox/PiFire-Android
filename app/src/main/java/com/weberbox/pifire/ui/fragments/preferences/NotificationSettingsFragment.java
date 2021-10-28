@@ -54,8 +54,8 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         if (firebase != null && firebaseEnable != null) {
             firebase.setVisible(AppConfig.USE_FIREBASE);
             if (Prefs.getString(
-                    getString(R.string.prefs_notif_firebase_serveruuid), "").equals("") ||
-                    getString(R.string.def_firebase_server_url).equals("")) {
+                    getString(R.string.prefs_notif_firebase_serveruuid), "").isEmpty() ||
+                    getString(R.string.def_firebase_server_url).isEmpty()) {
                 firebase.setEnabled(false);
                 firebaseEnable.setSummary(R.string.settings_firebase_disabled);
             }

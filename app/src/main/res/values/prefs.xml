@@ -18,6 +18,7 @@
 
     <string name="prefs_event_amount">pref_event_amount</string>
 
+    <string name="prefs_app_updater_cat">prefs_app_updater_cat</string>
     <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
     <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
     <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>

@@ -73,7 +73,7 @@ public class PiFireApplication extends Application {
 
         String serverUrl = getString(R.string.def_firebase_server_url);
 
-        if (AppConfig.USE_FIREBASE && !serverUrl.equals("")) {
+        if (AppConfig.USE_FIREBASE && !serverUrl.isEmpty()) {
             Timber.d("Init Firebase");
 
             FirebaseUtils.initFirebase(this);
@@ -81,7 +81,7 @@ public class PiFireApplication extends Application {
             String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid), "");
 
             if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), false)
-                    && !uuid.equals("")) {
+                    && !uuid.isEmpty()) {
                 FirebaseUtils.toggleFirebaseSubscription(true, uuid);
             }
         }

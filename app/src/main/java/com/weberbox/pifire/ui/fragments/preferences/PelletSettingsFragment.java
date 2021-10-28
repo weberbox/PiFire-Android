@@ -54,7 +54,7 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
 
         if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
-                "").equals("")) {
+                "").isEmpty()) {
             pelletWarnings.setVisible(false);
         }
 
