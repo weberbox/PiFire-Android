@@ -1,5 +1,6 @@
 package com.weberbox.pifire.updater;
 
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.updater.objects.Update;
 
 import org.json.JSONArray;
@@ -31,6 +32,7 @@ class ParserJSON {
     private static final String KEY_ASSETS = "assets";
     private static final String KEY_TAG_NAME = "tag_name";
     private static final String KEY_CONTENT_TYPE = "content_type";
+    private static final String KEY_NAME = "name";
     private static final String KEY_BROWSER_DOWNLOAD_URL = "browser_download_url";
 
     public ParserJSON(String url) {
@@ -92,7 +94,7 @@ class ParserJSON {
                 JSONObject json = jsonArray.getJSONObject(i);
                 JSONArray assets = json.optJSONArray(KEY_ASSETS);
                 String releaseTag = json.getString(KEY_TAG_NAME);
-                Timber.d("Release Tag %s", releaseTag);
+                Timber.d("Release Tag: %s", releaseTag);
                 if (releaseTag.startsWith("v")) {
                     splitGitHub = releaseTag.split("(v)", 2);
                     version = splitGitHub[1].trim();
@@ -105,9 +107,15 @@ class ParserJSON {
                             JSONObject asset = assets.getJSONObject(j);
                             if (asset.getString(KEY_CONTENT_TYPE)
                                     .equals("application/vnd.android.package-archive")) {
-                                String downloadURL = asset.getString(KEY_BROWSER_DOWNLOAD_URL).trim();
-                                Timber.d("Download URL %s", downloadURL);
-                                return downloadURL;
+                                String[] flavor = asset.getString(KEY_NAME).split("-");
+                                Timber.d("Flavor Type: %s", flavor[1]);
+                                Timber.d("Flavor Version: %s", flavor[2]);
+                                if (flavor[1].equalsIgnoreCase(BuildConfig.FLAVOR_type) &&
+                                        flavor[2].equalsIgnoreCase(BuildConfig.FLAVOR_version)) {
+                                    String downloadURL = asset.getString(KEY_BROWSER_DOWNLOAD_URL).trim();
+                                    Timber.d("Download URL: %s", downloadURL);
+                                    return downloadURL;
+                                }
                             }
                         }
                     }
