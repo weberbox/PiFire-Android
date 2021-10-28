@@ -42,6 +42,8 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         PreferenceCategory acraCat = findPreference(getString(R.string.prefs_acra_cat));
         SwitchPreferenceCompat acraEnabled = findPreference(getString(R.string.prefs_acra_enable));
         Preference serverSettings = findPreference(getString(R.string.prefs_server_settings));
+        PreferenceCategory updaterCat = findPreference(getString(R.string.prefs_app_updater_cat));
+        SwitchPreferenceCompat updaterEnabled = findPreference(getString(R.string.prefs_app_updater_enabled));
 
         if (serverSettings != null) {
             serverSettings.setOnPreferenceClickListener(preference -> {
@@ -70,8 +72,16 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         if (acraCat != null && acraEnabled != null) {
             if (SecureCore.getAcraUrl().isEmpty()) {
                 acraCat.setEnabled(false);
+                acraEnabled.setChecked(false);
                 acraEnabled.setSummary(getString(R.string.settings_enable_acra_disabled));
             }
+        }
+
+        if (updaterCat != null && updaterEnabled != null) {
+            String updaterUrl = getString(R.string.def_app_update_check_url);
+            updaterCat.setEnabled(!updaterUrl.isEmpty());
+            updaterEnabled.setChecked(!updaterUrl.isEmpty());
+            updaterEnabled.setSummary(getString(R.string.updater_update_disabled));
         }
 
         if (updateCheck != null) {

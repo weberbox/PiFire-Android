@@ -36,6 +36,7 @@
 
     <string name="updater_update_available">New update available!</string>
     <string name="updater_update_required">Update Required!</string>
+    <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
     <string name="updater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
     <string name="updater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
     <string name="updater_update_available_description_snackbar">Update %1$s is available!</string>

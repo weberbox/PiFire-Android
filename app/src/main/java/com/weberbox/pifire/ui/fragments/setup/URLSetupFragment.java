@@ -105,7 +105,7 @@ public class URLSetupFragment extends Fragment {
         }
 
         String storedURL = Prefs.getString(getString(R.string.prefs_server_address), "");
-        if (!storedURL.equals("")) {
+        if (!storedURL.isEmpty()) {
             try {
                 URI uri = new URI(storedURL);
                 mServerAddress.setText(uri.getHost());
