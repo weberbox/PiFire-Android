@@ -32,7 +32,7 @@ class ParserJSON {
     private static final String KEY_ASSETS = "assets";
     private static final String KEY_TAG_NAME = "tag_name";
     private static final String KEY_CONTENT_TYPE = "content_type";
-    private static final String KEY_NAME = "name";
+    private static final String KEY_NAME_ASSETS = "name";
     private static final String KEY_BROWSER_DOWNLOAD_URL = "browser_download_url";
 
     public ParserJSON(String url) {
@@ -107,7 +107,7 @@ class ParserJSON {
                             JSONObject asset = assets.getJSONObject(j);
                             if (asset.getString(KEY_CONTENT_TYPE)
                                     .equals("application/vnd.android.package-archive")) {
-                                String[] flavor = asset.getString(KEY_NAME).split("-");
+                                String[] flavor = asset.getString(KEY_NAME_ASSETS).split("-");
                                 Timber.d("Flavor Type: %s", flavor[1]);
                                 Timber.d("Flavor Version: %s", flavor[2]);
                                 if (flavor[1].equalsIgnoreCase(BuildConfig.FLAVOR_type) &&

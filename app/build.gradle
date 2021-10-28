@@ -56,7 +56,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
             buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
-            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount + "\""
+            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount() + "\""
         }
         debug {
             manifestPlaceholders = [appName: "PiFire Debug"]
