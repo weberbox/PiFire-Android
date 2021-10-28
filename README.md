@@ -4,10 +4,9 @@
 ***Warning:*** *The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
 
 ### Introduction
-This app was created to work with the PiFire smoker project. I wanted a native android app to control my smoker using the great PiFire project. For this app to work it requires a specific version of the PiFire server as of this writing. It is currently being tested and maybe someday will make it into the official release channel of PiFire. 
+This app was created to work with the PiFire smoker project. I wanted a native android app to control my smoker using the great PiFire project. For this app to work it requires a specific version of the PiFire server as of this writing. 
 
 ### Screenshots
-
 
 ![Dashboard](docs/screenshots/dashboard.png)
 
@@ -29,13 +28,9 @@ This app was created to work with the PiFire smoker project. I wanted a native a
 
 To run this app with PiFire it requires an updated version of the PiFire project. There are two versions of the server, one with the standard config and closest to the normal PiFire release and another version that adds the option for a second grill probe with the updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
 
-Update: The development branch now supports the android app you can find it [here](https://github.com/nebhead/PiFire/tree/development)
+The development branch now supports the android app you can find it [here](https://github.com/nebhead/PiFire/tree/development)
 
 Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/development-fourprobes)
-
-The app also supports Firebase notifications. You will need to sign up for your own Firebase project and place the google-services.json into the projects root folder before compile. You can find some more info about that [here](https://firebase.google.com/docs/cloud-messaging/android/client#register_your_app_with_firebase)
-
-If you want the Firebase messaging to work you will also need to get the Server Key from your Firebase project and save it to your PiFire server. More info [here](https://developer.clevertap.com/docs/find-your-fcm-sender-id-fcm-server-api-key#)
 
 
 ### Future Ideas To Be (possibly) Implemented  
@@ -64,11 +59,11 @@ Ideas
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021. The main PiFire project is created and manager by nebhead at [github](https://github.com/nebhead).
+Android Application created by James Weber, copyright 2021. The main PiFire project is created and manager by nebhead at [github](https://github.com/nebhead/PiFire).
 
 Of course, none of this project would be available without the wonderful and amazing folks below 
 
-* **PiFire** - The core project that this app works with. An amazing project to manage and control your pellet smoker with a Raspberry pi [github](https://github.com/nebhead)
+* **PiFire** - The core project that this app works with. An amazing project to manage and control your pellet smoker with a Raspberry pi [github](https://github.com/nebhead/PiFire)
 
 * **Socket.IO** - [github](https://github.com/socketio/socket.io-client-java)
 
