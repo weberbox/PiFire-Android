@@ -317,7 +317,7 @@
     <string name="settings_cat_ifttt">IFTTT WebHooks</string>
     <string name="settings_cat_pushover">PushOver</string>
     <string name="settings_cat_pushbullet">PushBullet</string>
-    <string name="settings_cat_firebase">FireBase</string>
+    <string name="settings_cat_firebase">Firebase</string>
 
     <string name="settings_ifttt_api">API Key</string>
     <string name="settings_pushover_api">API Key</string>
