@@ -11,6 +11,8 @@ import com.weberbox.pifire.R;
 public class MaxHeightLinearLayout extends LinearLayout {
 
     private int mMaxHeight;
+
+    @SuppressWarnings("FieldCanBeLocal")
     private final int mDefaultHeight = 200;
 
     public MaxHeightLinearLayout(Context context) {

@@ -106,6 +106,7 @@ public class PelletPickerDialog {
         return mPelletPickerBottomSheet;
     }
 
+    @SuppressWarnings("unused")
     private void setDefaultProfile(int position, boolean smooth){
         if (smooth) {
             mProfileList.smoothScrollToPosition(position);

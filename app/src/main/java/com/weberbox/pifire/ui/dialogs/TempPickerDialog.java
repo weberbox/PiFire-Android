@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
@@ -33,8 +34,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TemperaturePickerDialog {
+public class TempPickerDialog {
 
+    private RecyclerViewFastScroller mFastScroll;
     private RecyclerView mTempList;
     private String mSelectedTemp;
     private final BottomSheetDialog mTempPickerBottomSheet;
@@ -45,8 +47,8 @@ public class TemperaturePickerDialog {
     private final int mScrollTemp;
     private final boolean mHoldMode;
 
-    public TemperaturePickerDialog(Context context, Fragment fragment, int tempType, int defaultTemp,
-                                   boolean hold) {
+    public TempPickerDialog(Context context, Fragment fragment, int tempType, int defaultTemp,
+                            boolean hold) {
         mTempPickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
         mCallBack = (DashboardCallbackInterface) fragment;
@@ -89,7 +91,8 @@ public class TemperaturePickerDialog {
             }
             mSelectedTemp = String.valueOf(Constants.DEFAULT_PROBE_TEMP_SET);
             tempPickerAdapter = new TempPickerAdapter(
-                    generateTemperatureList(Constants.MIN_PROBE_TEMP_SET, (Constants.MAX_PROBE_TEMP_SET + 1)));
+                    generateTemperatureList(Constants.MIN_PROBE_TEMP_SET,
+                            (Constants.MAX_PROBE_TEMP_SET + 1)));
         }
 
         if(mScrollTemp > 0) {
@@ -107,6 +110,24 @@ public class TemperaturePickerDialog {
                     TextView text = parent_two.findViewById(R.id.temp_item_text_view);
                     mSelectedTemp = text.getText().toString();
                 });
+
+        mFastScroll = binding.tempFastScroll;
+        mFastScroll.setHandleStateListener(new RecyclerViewFastScroller.HandleStateListener() {
+            @Override
+            public void onEngaged() {
+
+            }
+
+            @Override
+            public void onDragged(float v, int position) {
+                mSelectedTemp = String.valueOf(tempPickerAdapter.onChange(position));
+            }
+
+            @Override
+            public void onReleased() {
+
+            }
+        });
 
         confirmButton.setOnClickListener(v -> {
             mTempPickerBottomSheet.dismiss();
@@ -157,6 +178,7 @@ public class TemperaturePickerDialog {
         return mTempPickerBottomSheet;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setDefaultTemp(int position, boolean smooth){
         if (smooth) {
             mTempList.smoothScrollToPosition(position);

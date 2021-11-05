@@ -41,7 +41,7 @@ import com.weberbox.pifire.model.GrillResponseModel.TimerInfo;
 import com.weberbox.pifire.ui.dialogs.ProbeToggleDialog;
 import com.weberbox.pifire.ui.dialogs.RunModeActionDialog;
 import com.weberbox.pifire.ui.dialogs.StartModeActionDialog;
-import com.weberbox.pifire.ui.dialogs.TemperaturePickerDialog;
+import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
 import com.weberbox.pifire.ui.dialogs.TimerActionDialog;
 import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
@@ -83,7 +83,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private ProgressBar mLoadingBar;
     private LinearLayout mSmokePlusBox;
     private SwipeRefreshLayout mSwipeRefresh;
-    private TemperaturePickerDialog mTemperaturePickerDialog;
+    private TempPickerDialog mTempPickerDialog;
     private FrameLayout mTimerPausedLayout;
     private TableLayout mRootContainer;
     private Snackbar mErrorSnack;
@@ -223,10 +223,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                             .replaceAll(getString(R.string.regex_numbers), "");
                     defaultTemp = Integer.parseInt(temp);
                 }
-                mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                mTempPickerDialog = new TempPickerDialog(getActivity(),
                         DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
                         defaultTemp, false);
-                mTemperaturePickerDialog.showDialog();
+                mTempPickerDialog.showDialog();
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
             }
@@ -243,10 +243,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                                 .replaceAll(getString(R.string.regex_numbers), "");
                         defaultTemp = Integer.parseInt(temp);
                     }
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_ONE,
                             defaultTemp, false);
-                    mTemperaturePickerDialog.showDialog();
+                    mTempPickerDialog.showDialog();
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
@@ -274,10 +274,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                                 .replaceAll(getString(R.string.regex_numbers), "");
                         defaultTemp = Integer.parseInt(temp);
                     }
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_TWO,
                             defaultTemp, false);
-                    mTemperaturePickerDialog.showDialog();
+                    mTempPickerDialog.showDialog();
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
@@ -447,10 +447,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     GrillControl.modeSmokeGrill(mSocket);
                     break;
                 case Constants.ACTION_MODE_HOLD:
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
                             Constants.DEFAULT_GRILL_TEMP_SET, true);
-                    mTemperaturePickerDialog.showDialog();
+                    mTempPickerDialog.showDialog();
                     break;
                 case Constants.ACTION_MODE_SHUTDOWN:
                     GrillControl.modeShutdownGrill(mSocket);

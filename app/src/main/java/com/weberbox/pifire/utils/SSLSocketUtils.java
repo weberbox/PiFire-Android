@@ -18,6 +18,8 @@ import timber.log.Timber;
 
 public class SSLSocketUtils {
 
+    // TODO This is really unsecure and makes https nearly useless when using a self signed cert.
+    //  Need to use keystore? or allow user to import trusted cert
     @SuppressLint("CustomX509TrustManager")
     public static OkHttpClient getOkHttpClient(String url) {
 

@@ -55,6 +55,10 @@
         <item name="android:textColor">#a6ffffff</item>
     </style>
 
+    <style name="TextTransparent" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@android:color/transparent</item>
+    </style>
+
     <style name="RoundProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:progressBarStyle">?android:progressBarStyleHorizontal</item>
         <item name="android:indeterminate">false</item>

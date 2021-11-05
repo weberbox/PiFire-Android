@@ -154,6 +154,7 @@ public class TimerPickerDialog {
         return mTimePickerBottomSheet;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setCurrentHours(int position, boolean smooth){
         if(smooth) {
             mHoursList.smoothScrollToPosition(position);
@@ -162,6 +163,7 @@ public class TimerPickerDialog {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void setCurrentMinutes(int position, boolean smooth){
         if(smooth) {
             mMinutesList.smoothScrollToPosition(position);
@@ -170,6 +172,7 @@ public class TimerPickerDialog {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     private List<TimePickerViewModel> generateTimeList(int start, int end) {
         List<TimePickerViewModel> timePickerViewModelList;
 

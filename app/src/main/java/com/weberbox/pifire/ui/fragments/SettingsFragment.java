@@ -290,6 +290,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    @SuppressWarnings("unused")
     private void putInt(String key, Integer value) {
         if (value != null) {
             Prefs.putInt(key, value);

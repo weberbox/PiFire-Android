@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.recycler.viewholder.TempPickerViewHolder;
 import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
 
 import java.util.List;
 
-public class TempPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TempPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements
+        RecyclerViewFastScroller.OnPopupTextUpdate{
 
     private final List<TempPickerViewModel> mModel;
 
@@ -41,5 +43,15 @@ public class TempPickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public int getItemViewType(final int position) {
         return R.layout.item_picker_temp;
+    }
+
+    @NonNull
+    @Override
+    public CharSequence onChange(int position) {
+        if (position < mModel.size()) {
+            return mModel.get(position).getTempText();
+        } else {
+            return mModel.get(position - 1).getTempText();
+        }
     }
 }
