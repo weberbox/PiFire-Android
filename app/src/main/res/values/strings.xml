@@ -195,7 +195,7 @@
     <string name="settings_max_hundred_error">Value must be less than 100</string>
 
     <string name="settings_server_settings_title">Server Settings</string>
-    <string name="settings_server_settings_summary">Setup server address, basic auth and security</string>
+    <string name="settings_server_settings_summary">Setup server address and basic auth</string>
 
     <string name="settings_cat_debug">Debug</string>
     <string name="settings_firebase_token">Firebase Token</string>
@@ -237,9 +237,7 @@
     <string name="settings_username_encrypt_error">Error encrypting username</string>
     <string name="settings_password_encrypt_error">Error encrypting password</string>
 
-    <string name="settings_cat_security_title">Security</string>
-    <string name="settings_security_unsigned_cert_title">Self-Signed Certificate</string>
-    <string name="settings_security_unsigned_cert_summary">Allow the use of self signed certificates. This is not recommended and is not secure</string>
+    <string name="settings_self_signed_cert_summary">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect.</string>
 
     <string name="settings_cat_app_history">History</string>
     <string name="settings_app_history_refresh_title">Auto History Refresh</string>

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -24,7 +23,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
 import com.weberbox.pifire.ui.utils.AnimUtils;
-import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -79,15 +77,9 @@ public class QRScanFragment extends Fragment {
         mBarcodeView.decodeContinuous(mBarCodeCallback);
 
         mSelfSignedNote = mBinding.selfSignedNoteContainer;
-        AppCompatCheckBox allowSelfSigned = mBinding.setupEnableSelfSigned;
-
-        allowSelfSigned.setChecked(Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert)));
 
         mSecure = getString(R.string.https_scheme);
         mUnSecure = getString(R.string.http_scheme);
-
-        allowSelfSigned.setOnCheckedChangeListener((buttonView, isChecked) ->
-                Prefs.putBoolean(getString(R.string.prefs_server_unsigned_cert), isChecked));
 
     }
 
@@ -149,9 +141,6 @@ public class QRScanFragment extends Fragment {
         if(!mIsConnecting) {
             IO.Options options = new IO.Options();
 
-            boolean allowSelfSignedCerts = Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert),
-                    getResources().getBoolean(R.bool.def_security_unsigned_cert));
-
             if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
                 String username = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_user);
                 String password = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_password);
@@ -161,18 +150,9 @@ public class QRScanFragment extends Fragment {
                 options.extraHeaders = Collections.singletonMap("Authorization",
                         Collections.singletonList(credentials));
 
-                if (Url.startsWith(mSecure) && allowSelfSignedCerts) {
-                    SSLSocketUtils.set(Url, options);
-                }
-
                 connectSocket(Url, options);
             } else {
-                if (Url.startsWith(mSecure) && allowSelfSignedCerts) {
-                    SSLSocketUtils.set(Url, options);
-                    connectSocket(Url, options);
-                } else {
-                    connectSocket(Url, null);
-                }
+                connectSocket(Url, null);
             }
 
             mConnectProgress.setVisibility(View.VISIBLE);
@@ -261,7 +241,9 @@ public class QRScanFragment extends Fragment {
     };
 
     private void showSnackBarMessage(Activity activity, int message) {
-        AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
+        if (mValidURL.startsWith(mSecure)) {
+            AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
+        }
         mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
         mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
         mErrorSnack.setText(message);

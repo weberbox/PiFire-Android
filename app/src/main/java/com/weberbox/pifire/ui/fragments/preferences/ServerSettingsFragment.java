@@ -187,10 +187,6 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                         .equals(preference.getKey())) {
                     mReloadRequired = true;
                 }
-                if (preference.getContext().getString(R.string.prefs_server_unsigned_cert)
-                        .equals(preference.getKey())) {
-                    mReloadRequired = true;
-                }
             }
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_server_basic_auth_password)
