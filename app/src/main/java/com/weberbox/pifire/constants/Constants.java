@@ -16,10 +16,10 @@ public class Constants {
     public static final int LOW_PELLET_WARNING = 40;
 
     // Temp Selector Temps
-    public static final int MIN_GRILL_TEMP_SET = 160;
+    public static final int MIN_GRILL_TEMP_SET = 125;
     public static final int MAX_GRILL_TEMP_SET = 500;
     public static final int DEFAULT_GRILL_TEMP_SET = 225;
-    public static final int MIN_PROBE_TEMP_SET = 80;
+    public static final int MIN_PROBE_TEMP_SET = 30;
     public static final int MAX_PROBE_TEMP_SET = 300;
     public static final int DEFAULT_PROBE_TEMP_SET = 135;
 
