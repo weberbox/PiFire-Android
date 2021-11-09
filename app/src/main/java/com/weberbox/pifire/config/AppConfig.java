@@ -7,4 +7,15 @@ public class AppConfig {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean USE_FIREBASE = BuildConfig.IS_FIREBASE;
     public static final boolean IS_DEV_BUILD = BuildConfig.FLAVOR_type.equalsIgnoreCase("dev");
+
+    // Pellet Warning
+    public static final int LOW_PELLET_WARNING = 40;
+
+    // Temp Selector Temps
+    public static final int MIN_GRILL_TEMP_SET = 125;
+    public static final int MAX_GRILL_TEMP_SET = 500;
+    public static final int DEFAULT_GRILL_TEMP_SET = 225;
+    public static final int MIN_PROBE_TEMP_SET = 30;
+    public static final int MAX_PROBE_TEMP_SET = 300;
+    public static final int DEFAULT_PROBE_TEMP_SET = 135;
 }

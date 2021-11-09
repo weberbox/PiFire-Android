@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
@@ -36,7 +37,6 @@ import java.util.stream.IntStream;
 
 public class TempPickerDialog {
 
-    private RecyclerViewFastScroller mFastScroll;
     private RecyclerView mTempList;
     private String mSelectedTemp;
     private final BottomSheetDialog mTempPickerBottomSheet;
@@ -80,19 +80,19 @@ public class TempPickerDialog {
         TempPickerAdapter tempPickerAdapter;
 
         if(mTempType == Constants.PICKER_TYPE_GRILL) {
-            mSelectedTemp = String.valueOf(Constants.DEFAULT_GRILL_TEMP_SET);
+            mSelectedTemp = String.valueOf(AppConfig.DEFAULT_GRILL_TEMP_SET);
             tempPickerAdapter = new TempPickerAdapter(
-                    generateTemperatureList(Constants.MIN_GRILL_TEMP_SET,
-                            (Constants.MAX_GRILL_TEMP_SET + 1)));
+                    generateTemperatureList(AppConfig.MIN_GRILL_TEMP_SET,
+                            (AppConfig.MAX_GRILL_TEMP_SET + 1)));
         } else {
             if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
                     mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
                 shutdownContainer.setVisibility(View.VISIBLE);
             }
-            mSelectedTemp = String.valueOf(Constants.DEFAULT_PROBE_TEMP_SET);
+            mSelectedTemp = String.valueOf(AppConfig.DEFAULT_PROBE_TEMP_SET);
             tempPickerAdapter = new TempPickerAdapter(
-                    generateTemperatureList(Constants.MIN_PROBE_TEMP_SET,
-                            (Constants.MAX_PROBE_TEMP_SET + 1)));
+                    generateTemperatureList(AppConfig.MIN_PROBE_TEMP_SET,
+                            (AppConfig.MAX_PROBE_TEMP_SET + 1)));
         }
 
         if(mScrollTemp > 0) {
@@ -111,8 +111,8 @@ public class TempPickerDialog {
                     mSelectedTemp = text.getText().toString();
                 });
 
-        mFastScroll = binding.tempFastScroll;
-        mFastScroll.setHandleStateListener(new RecyclerViewFastScroller.HandleStateListener() {
+        RecyclerViewFastScroller fastScroll = binding.tempFastScroll;
+        fastScroll.setHandleStateListener(new RecyclerViewFastScroller.HandleStateListener() {
             @Override
             public void onEngaged() {
 
@@ -149,9 +149,9 @@ public class TempPickerDialog {
 
         if(mScrollTemp != 0) {
             if(mTempType == Constants.PICKER_TYPE_GRILL) {
-                setDefaultTemp(mScrollTemp - Constants.MIN_GRILL_TEMP_SET, false);
+                setDefaultTemp(mScrollTemp - AppConfig.MIN_GRILL_TEMP_SET, false);
             } else {
-                setDefaultTemp(mScrollTemp - Constants.MIN_PROBE_TEMP_SET, false);
+                setDefaultTemp(mScrollTemp - AppConfig.MIN_PROBE_TEMP_SET, false);
             }
         }
 

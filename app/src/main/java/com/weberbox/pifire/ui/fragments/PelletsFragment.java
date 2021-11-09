@@ -39,6 +39,7 @@ import com.skydoves.powerspinner.DefaultSpinnerAdapter;
 import com.skydoves.powerspinner.PowerSpinnerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
@@ -522,7 +523,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                 mHopperLevel.setProgress(pelletLevel);
                 mHopperLevelText.setText(StringUtils.formatPercentage(pelletLevel));
                 if (getActivity() != null) {
-                    if (pelletLevel < Constants.LOW_PELLET_WARNING) {
+                    if (pelletLevel < AppConfig.LOW_PELLET_WARNING) {
                         mHopperLevel.setIndicatorColor(ContextCompat.getColor(getActivity(),
                                 R.color.colorPelletDanger));
                         mHopperLevel.setTrackColor(ContextCompat.getColor(getActivity(),
