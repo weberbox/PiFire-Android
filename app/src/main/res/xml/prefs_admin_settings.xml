@@ -2,12 +2,11 @@
 
     <PreferenceCategory
         app:key="@string/prefs_manual_mode_cat"
-        app:title="@string/settings_cat_manual_functions"
-        app:isPreferenceVisible="false">
+        app:title="@string/settings_cat_manual_functions">
 
         <Preference
             app:key="@string/prefs_manual_mode_frag"
-            app:summary="@string/settings_manual_mode_summary"
+            app:summary="@string/settings_admin_manual_summary"
             app:title="@string/settings_manual" />
 
     </PreferenceCategory>

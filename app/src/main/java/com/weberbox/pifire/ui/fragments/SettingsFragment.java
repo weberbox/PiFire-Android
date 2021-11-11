@@ -178,7 +178,6 @@ public class SettingsFragment extends Fragment {
 
             if (versions != null) {
                 putString(getString(R.string.prefs_server_version), versions.getServerVersion());
-                putString(getString(R.string.prefs_android_version), versions.getAndroidVersion());
             }
 
             if (historyPage != null) {

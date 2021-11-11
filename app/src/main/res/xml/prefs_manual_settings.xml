@@ -6,6 +6,7 @@
         app:title="@string/settings_cat_manual_mode">
 
         <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:enabled="false"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode"

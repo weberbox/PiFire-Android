@@ -262,20 +262,9 @@ public class SettingsResponseModel {
 
     public static class Versions {
 
-        @SerializedName("android")
-        @Expose
-        private String android;
         @SerializedName("server")
         @Expose
         private String server;
-
-        public String getAndroidVersion() {
-            return android;
-        }
-
-        public void setAndroidVersion(String android) {
-            this.android = android;
-        }
 
         public String getServerVersion() {
             return server;

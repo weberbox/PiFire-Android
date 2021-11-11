@@ -77,6 +77,8 @@
     <string name="json_error_dash">JSON Parsing Error - Dashboard not updated</string>
     <string name="json_error_info">JSON Parsing Error - Info not updated</string>
 
+    <string name="disabled_option_settings">Setting is disabled due to server version not supporting feature</string>
+
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="colon">:</string>
@@ -131,7 +133,7 @@
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_send_error">There was an error sending the request please try again</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
-    <string name="control_manual_mode">Please disable manual mode in WebUI</string>
+    <string name="control_manual_mode">Manual mode must be controlled from Admin Settings</string>
 
     <string name="history_temp_graph">Temp Graph</string>
     <string name="history_grill_temp">Grill Temp</string>
@@ -261,7 +263,7 @@
 
     <string name="settings_cat_app_screen">Screen</string>
     <string name="settings_app_screen_on_title">Keep Screen On</string>
-    <string name="settings_app_screen_on_summary">Force the screen to remain on when viewing the dashboard.</string>
+    <string name="settings_app_screen_on_summary">Force the screen to remain on while viewing the dashboard.</string>
 
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>
@@ -329,9 +331,9 @@
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>
-    <string name="settings_admin_debug_note">This mode enables server verbose debug logging. Will impact performance</string>
+    <string name="settings_admin_debug_note">This mode enables server verbose debug logging. May impact performance</string>
     <string name="settings_admin_manual">Manual Controls</string>
-    <string name="settings_admin_manual_note">This mode allows you to control the Auger, Fan, Igniter and Power outputs</string>
+    <string name="settings_admin_manual_summary">Allows manual control of the Auger, Fan, Igniter and Power outputs</string>
 
     <string name="settings_cat_reset">Reset Data</string>
     <string name="settings_admin_delete_history">History Log</string>
@@ -366,7 +368,6 @@
 
     <string name="settings_cat_manual_mode">Manual Mode</string>
     <string name="settings_cat_manual_functions">Manual Functions</string>
-    <string name="settings_manual_mode_summary">Manually control the Auger, Fan, Igniter and Power</string>
     <string name="settings_manual_fan">Toggle Fan</string>
     <string name="settings_manual_auger">Toggle Auger</string>
     <string name="settings_manual_igniter">Toggle Igniter</string>
