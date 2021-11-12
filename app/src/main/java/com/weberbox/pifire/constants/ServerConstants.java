@@ -1,5 +1,6 @@
 package com.weberbox.pifire.constants;
 
+@SuppressWarnings("unused")
 public class ServerConstants {
 
     // Default String
@@ -13,6 +14,7 @@ public class ServerConstants {
     public static final String REQUEST_EVENT_DATA = "request_event_data";
     public static final String REQUEST_SETTINGS_DATA = "request_settings_data";
     public static final String REQUEST_INFO_DATA = "request_info_data";
+    public static final String REQUEST_MANUAL_DATA = "request_manual_data";
 
     // Socket Updating
     public static final String UPDATE_CONTROL_DATA = "update_control_data";

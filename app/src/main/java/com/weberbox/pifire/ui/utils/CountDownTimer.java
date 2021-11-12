@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public abstract class CountDownTimer implements TimerTickListener {
 
     private static final int INTERVAL = 1000;

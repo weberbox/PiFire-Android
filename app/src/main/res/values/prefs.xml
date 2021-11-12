@@ -11,8 +11,6 @@
     <string name="prefs_server_basic_auth_user">prefs_server_basic_auth_user</string>
     <string name="prefs_server_basic_auth_password">prefs_server_basic_auth_password</string>
 
-    <string name="prefs_server_unsigned_cert">prefs_server_unsigned_cert</string>
-
     <string name="prefs_history_refresh_app">prefs_history_refresh_app</string>
     <string name="prefs_history_refresh_interval_app">prefs_history_refresh_interval_app</string>
 
@@ -46,7 +44,6 @@
     <string name="prefs_timer_shutdown">prefs_timer_shutdown</string>
 
     <!-- PiFire Settings -->
-    <string name="prefs_android_version">prefs_android_version</string>
     <string name="prefs_server_version">prefs_server_version</string>
 
     <string name="prefs_grill_probe">prefs_grill_probe</string>

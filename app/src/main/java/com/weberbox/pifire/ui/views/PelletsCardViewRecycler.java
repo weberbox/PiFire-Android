@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.LayoutPelletsListCardviewBinding;
 
+@SuppressWarnings("unused")
 public class PelletsCardViewRecycler extends CardView {
 
     private LinearLayout mHolderView;
@@ -83,37 +84,30 @@ public class PelletsCardViewRecycler extends CardView {
         }
     }
 
-    @SuppressWarnings("unused")
     public String getHeaderTitle() {
         return mHeaderTitle.getText().toString();
     }
 
-    @SuppressWarnings("unused")
     public void setHeaderTitle(String text) {
         mHeaderTitle.setText(text);
     }
 
-    @SuppressWarnings("unused")
     public String getButtonTitle() {
         return mHeaderButton.getText().toString();
     }
 
-    @SuppressWarnings("unused")
     public void setButtonTitle(String text) {
         mHeaderButton.setText(text);
     }
 
-    @SuppressWarnings("unused")
     public boolean getButtonEnabled() {
         return mButtonEnabled;
     }
 
-    @SuppressWarnings("unused")
     public void setButtonEnabled(boolean buttonEnabled) {
         mButtonEnabled = buttonEnabled;
     }
 
-    @SuppressWarnings("unused")
     public void setHeaderIcon(int icon) {
         mHeaderIcon.setImageResource(icon);
     }

@@ -16,12 +16,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.pixplicity.easyprefs.library.Prefs;
-import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
 import com.weberbox.pifire.ui.preferences.EmptyTextListener;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -50,8 +50,8 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        boolean featureSupported = Integer.parseInt(Prefs.getString(
-                getString(R.string.prefs_android_version),"0")) >= BuildConfig.VERSION_CODE;
+        boolean featureSupported = VersionUtils.isFeatureSupported(
+                Prefs.getString(getString(R.string.prefs_server_version), "1.0.0"), "1.2.0");
 
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));

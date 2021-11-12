@@ -16,14 +16,15 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.interfaces.AdminCallbackInterface;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.AdminActionDialog;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -53,7 +54,10 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
-        PreferenceCategory manualModeCat = findPreference(getString(R.string.prefs_manual_mode_cat));
+        boolean featureSupported = VersionUtils.isFeatureSupported(
+                Prefs.getString(getString(R.string.prefs_server_version), "1.0.0"), "1.2.1");
+
+        PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
         Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
@@ -63,8 +67,11 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
-        if (manualModeCat != null) {
-            manualModeCat.setVisible(AppConfig.IS_DEV_BUILD);
+        if (manualCat != null && manualMode != null) {
+            if (!featureSupported) {
+                manualCat.setEnabled(false);
+                manualMode.setSummary(getString(R.string.disabled_option_settings));
+            }
         }
 
         if (manualMode != null) {

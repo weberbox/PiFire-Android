@@ -10,11 +10,9 @@ import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.utils.AcraUtils;
 import com.weberbox.pifire.utils.FirebaseUtils;
-import com.weberbox.pifire.utils.SSLSocketUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.log.CrashReportingTree;
 import com.weberbox.pifire.utils.log.DebugLogTree;
@@ -105,9 +103,6 @@ public class PiFireApplication extends Application {
     private void startSocket() {
         String serverURL = Prefs.getString(getString(R.string.prefs_server_address), ServerConstants.DEFAULT_SOCKET_URL);
 
-        boolean allowSelfSignedCerts = Prefs.getBoolean(getString(R.string.prefs_server_unsigned_cert),
-                getResources().getBoolean(R.bool.def_security_unsigned_cert));
-
         Timber.i("Creating Socket connection to: %s", serverURL);
 
         IO.Options options = new IO.Options();
@@ -122,19 +117,10 @@ public class PiFireApplication extends Application {
             options.extraHeaders = Collections.singletonMap("Authorization",
                     Collections.singletonList(credentials));
 
-            if (serverURL.startsWith(getString(R.string.https_scheme)) && allowSelfSignedCerts) {
-                SSLSocketUtils.set(serverURL, options);
-            }
-
             connectSocket(serverURL, options);
 
         } else {
-            if (serverURL.startsWith(getString(R.string.https_scheme)) && allowSelfSignedCerts) {
-                SSLSocketUtils.set(serverURL, options);
-                connectSocket(serverURL, options);
-            } else {
-                connectSocket(serverURL, null);
-            }
+            connectSocket(serverURL, null);
         }
     }
 

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.LayoutCardviewHeaderBinding;
 
+@SuppressWarnings("unused")
 public class CardViewHeaderButton extends LinearLayout {
 
     private TextView mHeaderTitle;
@@ -35,7 +36,6 @@ public class CardViewHeaderButton extends LinearLayout {
         init(context, attrs);
     }
 
-    @SuppressWarnings("unused")
     public CardViewHeaderButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
@@ -76,42 +76,34 @@ public class CardViewHeaderButton extends LinearLayout {
         }
     }
 
-    @SuppressWarnings("unused")
     public void setHeaderTitle(String text) {
         mHeaderTitle.setText(text);
     }
 
-    @SuppressWarnings("unused")
     public void setButtonTitle(String text) {
         mButtonTitle.setText(text);
     }
 
-    @SuppressWarnings("unused")
     public TextView getButton() {
         return mButtonTitle;
     }
 
-    @SuppressWarnings("unused")
     public String getHeaderTitle() {
         return mHeaderTitle.getText().toString();
     }
 
-    @SuppressWarnings("unused")
     public String getButtonTitle() {
         return mButtonTitle.getText().toString();
     }
 
-    @SuppressWarnings("unused")
     public void setHeaderIcon(int icon) {
         mHeaderIcon.setImageResource(icon);
     }
 
-    @SuppressWarnings("unused")
     public boolean getButtonEnabled() {
         return mButtonEnabled;
     }
 
-    @SuppressWarnings("unused")
     public void setButtonEnabled(boolean buttonEnabled) {
         mButtonEnabled = buttonEnabled;
     }

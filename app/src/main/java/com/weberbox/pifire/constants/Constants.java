@@ -12,17 +12,6 @@ public class Constants {
     public static final String GRILL_CURRENT_MONITOR = "Monitor";
     public static final String GRILL_CURRENT_MANUAL = "Manual";
 
-    // Pellet Warning
-    public static final int LOW_PELLET_WARNING = 40;
-
-    // Temp Selector Temps
-    public static final int MIN_GRILL_TEMP_SET = 160;
-    public static final int MAX_GRILL_TEMP_SET = 500;
-    public static final int DEFAULT_GRILL_TEMP_SET = 225;
-    public static final int MIN_PROBE_TEMP_SET = 80;
-    public static final int MAX_PROBE_TEMP_SET = 300;
-    public static final int DEFAULT_PROBE_TEMP_SET = 135;
-
     // Callback Probe/Grill Types
     public static final int PICKER_TYPE_GRILL = 0;
     public static final int PICKER_TYPE_PROBE_ONE = 1;

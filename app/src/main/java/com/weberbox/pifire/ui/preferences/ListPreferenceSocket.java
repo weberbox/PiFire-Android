@@ -14,31 +14,28 @@ import com.weberbox.pifire.application.PiFireApplication;
 
 import io.socket.client.Socket;
 
+@SuppressWarnings("unused")
 public class ListPreferenceSocket extends ListPreference {
 
     private Socket mSocket;
     private Context mContext;
     private View mView;
 
-    @SuppressWarnings("unused")
     public ListPreferenceSocket(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
-    @SuppressWarnings("unused")
     public ListPreferenceSocket(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    @SuppressWarnings("unused")
     public ListPreferenceSocket(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    @SuppressWarnings("unused")
     public ListPreferenceSocket(Context context) {
         super(context);
         init(context);

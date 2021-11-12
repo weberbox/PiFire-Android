@@ -29,15 +29,4 @@
             app:title="@string/settings_password" />
 
     </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/settings_cat_security_title">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_security_unsigned_cert"
-            app:key="@string/prefs_server_unsigned_cert"
-            app:summary="@string/settings_security_unsigned_cert_summary"
-            app:title="@string/settings_security_unsigned_cert_title" />
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

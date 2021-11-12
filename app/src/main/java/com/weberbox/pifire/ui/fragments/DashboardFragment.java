@@ -26,6 +26,7 @@ import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
@@ -41,7 +42,7 @@ import com.weberbox.pifire.model.GrillResponseModel.TimerInfo;
 import com.weberbox.pifire.ui.dialogs.ProbeToggleDialog;
 import com.weberbox.pifire.ui.dialogs.RunModeActionDialog;
 import com.weberbox.pifire.ui.dialogs.StartModeActionDialog;
-import com.weberbox.pifire.ui.dialogs.TemperaturePickerDialog;
+import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
 import com.weberbox.pifire.ui.dialogs.TimerActionDialog;
 import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.ui.model.MainViewModel;
@@ -83,7 +84,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private ProgressBar mLoadingBar;
     private LinearLayout mSmokePlusBox;
     private SwipeRefreshLayout mSwipeRefresh;
-    private TemperaturePickerDialog mTemperaturePickerDialog;
+    private TempPickerDialog mTempPickerDialog;
     private FrameLayout mTimerPausedLayout;
     private TableLayout mRootContainer;
     private Snackbar mErrorSnack;
@@ -210,7 +211,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         grillTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = Constants.DEFAULT_GRILL_TEMP_SET;
+                int defaultTemp = AppConfig.DEFAULT_GRILL_TEMP_SET;
                 if (!mGrillSetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
                     String temp = mGrillSetText.getText().toString()
@@ -223,10 +224,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                             .replaceAll(getString(R.string.regex_numbers), "");
                     defaultTemp = Integer.parseInt(temp);
                 }
-                mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                mTempPickerDialog = new TempPickerDialog(getActivity(),
                         DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
                         defaultTemp, false);
-                mTemperaturePickerDialog.showDialog();
+                mTempPickerDialog.showDialog();
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
             }
@@ -234,7 +235,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         probeOneTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = Constants.DEFAULT_PROBE_TEMP_SET;
+                int defaultTemp = AppConfig.DEFAULT_PROBE_TEMP_SET;
 
                 if (!mProbeOneTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeOneTargetText.getText().toString().equals(
@@ -243,10 +244,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                                 .replaceAll(getString(R.string.regex_numbers), "");
                         defaultTemp = Integer.parseInt(temp);
                     }
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_ONE,
                             defaultTemp, false);
-                    mTemperaturePickerDialog.showDialog();
+                    mTempPickerDialog.showDialog();
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
@@ -267,17 +268,17 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         probeTwoTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = Constants.DEFAULT_PROBE_TEMP_SET;
+                int defaultTemp = AppConfig.DEFAULT_PROBE_TEMP_SET;
                 if (!mProbeTwoTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeTwoTargetText.getText().toString().equals("--")) {
                         String temp = mProbeTwoTargetText.getText().toString()
                                 .replaceAll(getString(R.string.regex_numbers), "");
                         defaultTemp = Integer.parseInt(temp);
                     }
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_TWO,
                             defaultTemp, false);
-                    mTemperaturePickerDialog.showDialog();
+                    mTempPickerDialog.showDialog();
                 }
             } else {
                 AnimUtils.shakeOfflineBanner(getActivity());
@@ -447,10 +448,10 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     GrillControl.modeSmokeGrill(mSocket);
                     break;
                 case Constants.ACTION_MODE_HOLD:
-                    mTemperaturePickerDialog = new TemperaturePickerDialog(getActivity(),
+                    mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                            Constants.DEFAULT_GRILL_TEMP_SET, true);
-                    mTemperaturePickerDialog.showDialog();
+                            AppConfig.DEFAULT_GRILL_TEMP_SET, true);
+                    mTempPickerDialog.showDialog();
                     break;
                 case Constants.ACTION_MODE_SHUTDOWN:
                     GrillControl.modeShutdownGrill(mSocket);
@@ -566,11 +567,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     mGrillSetText.setText(R.string.placeholder_none);
                 }
 
-                if (hopperLevel > 0) {
+                if (hopperLevel >= 0) {
                     mPelletLevelIndicator.setLevel(hopperLevel);
                     mPelletLevelText.setText(StringUtils.formatPercentage(hopperLevel));
                     if (getActivity() != null) {
-                        int color = hopperLevel < Constants.LOW_PELLET_WARNING ?
+                        int color = hopperLevel < AppConfig.LOW_PELLET_WARNING ?
                                 R.color.colorPelletDanger : R.color.colorWhite;
                         mPelletLevelText.setTextColor(ContextCompat.getColor(getActivity(), color));
                     }
@@ -585,7 +586,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mGrillTempProgress.setMax(grillTarget);
                         mGrillTargetText.setText(StringUtils.formatTemp(grillTarget));
                     } else {
-                        mGrillTempProgress.setMax(Constants.MAX_GRILL_TEMP_SET);
+                        mGrillTempProgress.setMax(AppConfig.MAX_GRILL_TEMP_SET);
                         mGrillTargetText.setText(R.string.placeholder_none);
                     }
 
@@ -609,7 +610,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mProbeOneProgress.setMax(probeOneTarget);
                         mProbeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget));
                     } else {
-                        mProbeOneProgress.setMax(Constants.MAX_PROBE_TEMP_SET);
+                        mProbeOneProgress.setMax(AppConfig.MAX_PROBE_TEMP_SET);
                         mProbeOneTargetText.setText(R.string.placeholder_none);
                     }
 
@@ -633,7 +634,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mProbeTwoProgress.setMax(probeTwoTarget);
                         mProbeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget));
                     } else {
-                        mProbeTwoProgress.setMax(Constants.MAX_PROBE_TEMP_SET);
+                        mProbeTwoProgress.setMax(AppConfig.MAX_PROBE_TEMP_SET);
                         mProbeTwoTargetText.setText(R.string.placeholder_none);
                     }
 
@@ -722,6 +723,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mProbeTwoTempText.setText(R.string.placeholder_temp);
         mTimerCountDownText.setText(R.string.placeholder_time);
         mPelletLevelText.setText(R.string.placeholder_percentage);
+        if (getActivity() != null) {
+            mPelletLevelText.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
+        }
         AnimUtils.fadeAnimation(mProbeOneShutdown, 300, Constants.FADE_OUT);
         AnimUtils.fadeAnimation(mProbeTwoShutdown, 300, Constants.FADE_OUT);
         AnimUtils.fadeAnimation(mTimerShutdown, 300, Constants.FADE_OUT);

@@ -13,28 +13,45 @@
         android:layout_marginBottom="12dp"
         android:background="@drawable/bg_gray_rounded_alpha">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/temp_list"
-            android:layout_width="180dp"
+        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+            android:id="@+id/temp_fast_scroll"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:clipToPadding="false"
-            android:paddingLeft="@dimen/default_spacing"
-            android:paddingTop="@dimen/picker_top_bottom_padding"
-            android:paddingRight="@dimen/default_spacing"
-            android:paddingBottom="@dimen/picker_top_bottom_padding" />
+            android:paddingStart="0dp"
+            android:paddingEnd="30dp"
+            app:handleDrawable="@drawable/bg_thumb_view"
+            app:handleHeight="10dp"
+            app:handleVisibilityDuration="600"
+            app:handleWidth="40dp"
+            app:trackMarginEnd="30dp"
+            app:trackMarginStart="30dp"
+            app:popupDrawable="@android:color/transparent"
+            app:popupTextStyle="@style/TextTransparent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/temp_list"
+                android:layout_width="180dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:clipToPadding="false"
+                android:paddingLeft="@dimen/default_spacing"
+                android:paddingTop="@dimen/picker_top_bottom_padding"
+                android:paddingRight="@dimen/default_spacing"
+                android:paddingBottom="@dimen/picker_top_bottom_padding" />
+
+        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
 
         <View
             android:layout_width="16dp"
             android:layout_height="2dp"
             android:layout_gravity="start|center"
-            android:background="@color/colorAccent" />
+            android:background="?attr/colorAccent" />
 
         <View
             android:layout_width="16dp"
             android:layout_height="2dp"
             android:layout_gravity="end|center"
-            android:background="@color/colorAccent" />
+            android:background="?attr/colorAccent" />
 
     </FrameLayout>
 

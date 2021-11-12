@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.interfaces.OnScrollStopListener;
 
+@SuppressWarnings("unused")
 public class PickerLayoutManager extends LinearLayoutManager {
 
     private float mScaleDownBy = 0.66f;
@@ -52,6 +53,7 @@ public class PickerLayoutManager extends LinearLayoutManager {
         } else return 0;
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void scaleDownViewHorizontal() {
         float mid = getWidth() / 2.0f;
         float unitScaleDownDist = mScaleDownDistance * mid;
@@ -67,6 +69,7 @@ public class PickerLayoutManager extends LinearLayoutManager {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void scaleDownViewVertical() {
         float mid = getHeight() / 2.0f;
         float unitScaleDownDist = mScaleDownDistance * mid;
@@ -82,6 +85,7 @@ public class PickerLayoutManager extends LinearLayoutManager {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
@@ -116,7 +120,7 @@ public class PickerLayoutManager extends LinearLayoutManager {
         this.mScaleDownDistance = mScaleDownDistance;
     }
 
-    public boolean ismChangeAlpha() {
+    public boolean isChangeAlpha() {
         return mChangeAlpha;
     }
 
