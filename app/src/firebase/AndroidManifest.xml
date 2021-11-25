@@ -4,16 +4,8 @@
     package="com.weberbox.pifire">
 
     <application
-        android:allowBackup="true"
-        android:fullBackupOnly="true"
         android:name="com.weberbox.pifire.application.PiFireApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="${appName}"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.PiFire"
-        android:hardwareAccelerated="true"
-        android:usesCleartextTraffic="true" >
+        tools:ignore="AllowBackup,MissingApplicationIcon">
         <service
             android:name=".service.FirebaseNotificationService"
             android:exported="false"

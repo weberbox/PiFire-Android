@@ -50,9 +50,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        boolean featureSupported = VersionUtils.isFeatureSupported(
-                Prefs.getString(getString(R.string.prefs_server_version), "1.0.0"), "1.2.0");
-
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
         EditTextPreference fanCycleTime = findPreference(getString(R.string.prefs_work_splus_fan));
@@ -161,7 +158,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             }
 
             if (pidUMax != null) {
-                if (featureSupported) {
+                if (VersionUtils.isSupported("1.2.0")) {
                     pidUMax.setOnBindEditTextListener(editText -> {
                         editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -169,12 +166,14 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                                 new EmptyTextListener(getActivity(), editText));
                     });
                 } else {
-                    pidUMax.setVisible(false);
+                    pidUMax.setEnabled(false);
+                    pidUMax.setSummaryProvider(null);
+                    pidUMax.setSummary(getString(R.string.disabled_option_settings, "1.2.0"));
                 }
             }
 
             if (pidUMin != null) {
-                if (featureSupported) {
+                if (VersionUtils.isSupported("1.2.0")) {
                     pidUMin.setOnBindEditTextListener(editText -> {
                         editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -182,7 +181,9 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                                 new EmptyTextListener(getActivity(), editText));
                     });
                 } else {
-                    pidUMin.setVisible(false);
+                    pidUMin.setEnabled(false);
+                    pidUMin.setSummaryProvider(null);
+                    pidUMin.setSummary(getString(R.string.disabled_option_settings, "1.2.0"));
                 }
             }
         }

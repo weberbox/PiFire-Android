@@ -2,10 +2,11 @@
 <resources>
 
     <bool name="def_app_updater_enabled">false</bool>
-    <bool name="def_acra_enabled">false</bool>
+    <bool name="def_crash_enabled">false</bool>
 
-    <string name="def_firebase_server_url"></string>
-    <string name="def_app_update_check_url"></string>
-    <string name="def_github_api_url"></string>
+    <string name="def_firebase_server_url"/>
+    <string name="def_app_update_check_url"/>
+    <string name="def_github_api_url"/>
+    <string name="def_sentry_io_dsn"/>
 
 </resources>

@@ -20,7 +20,12 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_reset">
+    <PreferenceCategory app:title="@string/settings_cat_data_manage">
+
+        <Preference
+            app:key="@string/prefs_admin_backup_restore"
+            app:summary="@string/settings_admin_backup_restore_note"
+            app:title="@string/settings_admin_backup_restore" />
 
         <Preference
             app:key="@string/prefs_admin_delete_history"

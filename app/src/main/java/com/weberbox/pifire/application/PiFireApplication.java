@@ -1,23 +1,19 @@
 package com.weberbox.pifire.application;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.res.Resources;
+import android.os.StrictMode;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.secure.SecureCore;
-import com.weberbox.pifire.utils.AcraUtils;
+import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.FirebaseUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.log.CrashReportingTree;
 import com.weberbox.pifire.utils.log.DebugLogTree;
-
-import org.acra.ACRA;
 
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -29,28 +25,11 @@ import timber.log.Timber;
 
 public class PiFireApplication extends Application {
 
-    private static PiFireApplication mInstance;
-    private static Resources mRes;
     private Socket mSocket;
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        String url = SecureCore.getAcraUrl();
-        String login = SecureCore.getAcraLogin();
-        String auth = SecureCore.getAcraAuth();
-
-        if (!url.isEmpty() && !login.isEmpty() && !auth.isEmpty()) {
-            ACRA.init(this, AcraUtils.buildAcra(this, url, login, auth));
-        }
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        mInstance = this;
-        mRes = getResources();
 
         new Prefs.Builder()
                 .setContext(this)
@@ -59,10 +38,13 @@ public class PiFireApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
-        if(BuildConfig.DEBUG){
-            Timber.plant(new DebugLogTree());
-        } else {
+        if (!AppConfig.DEBUG) {
             Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+            CrashUtils.initCrashReporting(this,
+                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
+            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+        } else {
+            Timber.plant(new DebugLogTree());
         }
 
         Timber.tag(getString(R.string.app_name));
@@ -76,21 +58,13 @@ public class PiFireApplication extends Application {
 
             FirebaseUtils.initFirebase(this);
             FirebaseUtils.initNotificationChannels(this);
-            String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid), "");
+            String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid));
 
-            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled), false)
+            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))
                     && !uuid.isEmpty()) {
                 FirebaseUtils.toggleFirebaseSubscription(true, uuid);
             }
         }
-    }
-
-    public static PiFireApplication getInstance() {
-        return mInstance;
-    }
-
-    public static Resources getRes() {
-        return mRes;
     }
 
     public Socket getSocket() {
@@ -107,7 +81,7 @@ public class PiFireApplication extends Application {
 
         IO.Options options = new IO.Options();
 
-        if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
+        if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth))) {
 
             String username = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_user);
             String password = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_password);
@@ -147,6 +121,15 @@ public class PiFireApplication extends Application {
             mSocket.close();
             mSocket.off();
             mSocket = null;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private void strictMode() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                    new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
     }
 }

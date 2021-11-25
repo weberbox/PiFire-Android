@@ -19,9 +19,9 @@ public class FileUtils {
         if (activity != null) {
             boolean isFileCreated = FileUtils.createJSONFile(activity,
                     filename, jsonString);
-            if(!isFileCreated && mRetries < 3) {
+            if (!isFileCreated && mRetries < 3) {
                 // Try 3 times
-                mRetries ++;
+                mRetries++;
                 saveJSONFile(activity, jsonString, filename);
             } else {
                 mRetries = 0;
@@ -32,7 +32,7 @@ public class FileUtils {
     public static String loadJSONFile(Activity activity, String filename) {
         if (activity != null) {
             boolean isFilePresent = FileUtils.isFilePresent(activity, filename);
-            if(isFilePresent) {
+            if (isFilePresent) {
                 return FileUtils.readJSONFile(activity, filename);
             }
         }
@@ -77,7 +77,7 @@ public class FileUtils {
         }
     }
 
-    private static boolean createJSONFile(Context context, String fileName, String jsonString){
+    private static boolean createJSONFile(Context context, String fileName, String jsonString) {
         try {
             FileOutputStream fos = new FileOutputStream(new File(context.getCacheDir(), fileName));
             if (jsonString != null) {
@@ -88,7 +88,6 @@ public class FileUtils {
         } catch (IOException fileNotFound) {
             return false;
         }
-
     }
 
     private static boolean isFilePresent(Context context, String fileName) {

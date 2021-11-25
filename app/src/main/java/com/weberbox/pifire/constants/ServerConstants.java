@@ -15,6 +15,8 @@ public class ServerConstants {
     public static final String REQUEST_SETTINGS_DATA = "request_settings_data";
     public static final String REQUEST_INFO_DATA = "request_info_data";
     public static final String REQUEST_MANUAL_DATA = "request_manual_data";
+    public static final String REQUEST_BACKUP_DATA = "request_backup_data";
+    public static final String REQUEST_BACKUP_LIST = "request_backup_list";
 
     // Socket Updating
     public static final String UPDATE_CONTROL_DATA = "update_control_data";
@@ -22,6 +24,7 @@ public class ServerConstants {
     public static final String UPDATE_PELLET_DATA = "update_pellet_data";
     public static final String UPDATE_ADMIN_DATA = "update_admin_data";
     public static final String UPDATE_MANUAL_DATA = "update_manual_data";
+    public static final String UPDATE_RESTORE_DATA = "update_restore_data";
 
     public static final String EVENTS_LIST = "events_list";
 

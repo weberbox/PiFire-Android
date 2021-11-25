@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
@@ -11,6 +12,12 @@
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode"
             app:title="@string/enabled" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_admin_manual_note"
+            app:title="@string/settings_note" />
 
     </PreferenceCategory>
     <PreferenceCategory

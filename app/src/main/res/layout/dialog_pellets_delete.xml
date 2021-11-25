@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="@string/history_delete_negative"
+                android:text="@string/cancel"
                 android:textAlignment="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
@@ -87,7 +87,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"
-                android:text="@string/history_delete_positive"
+                android:text="@string/im_sure"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccentRed"
                 android:textSize="@dimen/action_dialog_text"

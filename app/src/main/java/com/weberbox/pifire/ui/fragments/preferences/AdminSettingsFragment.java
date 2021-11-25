@@ -16,7 +16,6 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
@@ -54,11 +53,9 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
-        boolean featureSupported = VersionUtils.isFeatureSupported(
-                Prefs.getString(getString(R.string.prefs_server_version), "1.0.0"), "1.2.1");
-
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
+        Preference backupRestore = findPreference(getString(R.string.prefs_admin_backup_restore));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
         Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
         Preference pelletsDelete = findPreference(getString(R.string.prefs_admin_delete_pellets));
@@ -67,25 +64,42 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
-        if (manualCat != null && manualMode != null) {
-            if (!featureSupported) {
-                manualCat.setEnabled(false);
-                manualMode.setSummary(getString(R.string.disabled_option_settings));
+        if (backupRestore != null) {
+            if (VersionUtils.isSupported("1.2.2")) {
+                backupRestore.setOnPreferenceClickListener(preference -> {
+                    if (getActivity() != null) {
+                        final FragmentManager fm = getActivity().getSupportFragmentManager();
+                        final FragmentTransaction ft = fm.beginTransaction();
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(android.R.id.content, new BackupRestoreFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    return true;
+                });
+            } else {
+                backupRestore.setEnabled(false);
+                backupRestore.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
             }
         }
 
-        if (manualMode != null) {
-            manualMode.setOnPreferenceClickListener(preference -> {
-                if (getActivity() != null) {
-                    final FragmentManager fm = getActivity().getSupportFragmentManager();
-                    final FragmentTransaction ft = fm.beginTransaction();
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .replace(android.R.id.content, new ManualSettingsFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
-                return true;
-            });
+        if (manualCat != null && manualMode != null) {
+            if (VersionUtils.isSupported("1.2.1")) {
+                manualMode.setOnPreferenceClickListener(preference -> {
+                    if (getActivity() != null) {
+                        final FragmentManager fm = getActivity().getSupportFragmentManager();
+                        final FragmentTransaction ft = fm.beginTransaction();
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(android.R.id.content, new ManualSettingsFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    return true;
+                });
+            } else {
+                manualCat.setEnabled(false);
+                manualMode.setSummary(getString(R.string.disabled_option_settings, "1.2.1"));
+            }
         }
 
         if (historyDelete != null) {

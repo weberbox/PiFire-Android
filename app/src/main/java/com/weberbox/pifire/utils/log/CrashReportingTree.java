@@ -51,7 +51,7 @@ public class CrashReportingTree extends Timber.Tree {
             case Log.VERBOSE:
                 break;
             case Log.DEBUG:
-                if (Prefs.getBoolean("prefs_debug_logging", false)) {
+                if (Prefs.getBoolean("prefs_debug_logging")) {
                     Log.d(TAG, getTag() + " / " + message);
                 }
                 break;

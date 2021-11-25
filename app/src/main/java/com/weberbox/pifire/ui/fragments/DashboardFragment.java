@@ -732,12 +732,15 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     }
 
     private void showSnackBarMessage(Activity activity, int message, boolean error) {
-        if (error) {
-            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
-                    R.color.colorAccentRed)));
+        if (!mErrorSnack.isShown()) {
+            int color = R.color.colorPrimary;
+            if (error) {
+                color = R.color.colorAccentRed;
+            }
+            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(color)));
+            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
+            mErrorSnack.setText(message);
+            mErrorSnack.show();
         }
-        mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-        mErrorSnack.setText(message);
-        mErrorSnack.show();
     }
 }

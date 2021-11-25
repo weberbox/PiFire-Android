@@ -1,10 +1,8 @@
 # ![Dashboard](app/src/main/res/mipmap-hdpi/ic_launcher.png) PiFire Android
 ## A native Android app for the PiFire smoker project
 
-***Warning:*** *The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
-
 ### Introduction
-This app was created to work with the PiFire smoker project. I wanted a native android app to control my smoker using the great PiFire project. For this app to work it requires a specific version of the PiFire server as of this writing. 
+This app was created to work with the PiFire smoker project. I wanted a native Android app to control my smoker using the awesome PiFire project so I created this.
 
 ### Screenshots
 
@@ -26,44 +24,34 @@ This app was created to work with the PiFire smoker project. I wanted a native a
 
 ## Documentation
 
-To run this app with PiFire it requires an updated version of the PiFire project. There are two versions of the server, one with the standard config and closest to the normal PiFire release and another version that adds the option for a second grill probe with the updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
+This application supports two versions of the PiFire server, the main PiFire project and another version that adds the option for a second grill probe with an updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
 
-The development branch now supports the android app you can find it [here](https://github.com/nebhead/PiFire/tree/development)
+The main PiFire branch now supports the Android app you can find it [here](https://github.com/nebhead/PiFire)
 
 Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/development-fourprobes)
 
 
-### Future Ideas To Be (possibly) Implemented  
+There are currently two Android versions that can be downloaded
 
-In this section, I'm going to keep a running list of ideas for possible upgrades in the future.  No guarantees that these will be implemented. 
+Github Firebase – This supports push notifications directly to the application from PiFire. It was redesigned so it no longer requires custom compiling the Android source and signing up for Firebase etc. You can enable Firebase notifications from the app once you have connected to a PiFire server. This version requires the device to have Google play services installed.
 
-```
-Ideas
-	Settings
-		Allow offline changes that will sync to PiFire once connected. Timestamp added to server which would be used to determine which settings are the newest version
+Github NonFirebase – This version does not support mobile push notifications in the Android app. Pushbullet, Pushover, IFTTT, etc are still supported by the server but PiFire Android will not receive push notifications directly. This version does not require Google play services installed.
 
-	Pellet DB
-		Allow offline changes that will sync to PiFire once connected. Timestamp added to server which would be used to determine which settings are the newest version
+Self Compile Option
 
-	Manual Control
-		Implement a manual control section
+There is also another version version that can be self compiled. This is pretty straight forward like any other Android project, just download the source code from here and import the project to Android Studio. There usually will be a few prompts to download any required SDK's or dependencies. Once everything has downloaded you will need to open the Build Variants menu usually located in the lower left corner of Android Studio and change to Compile Non Firebase
 
-	Probe editing
-		Implement probe editing secton
+If you want to self compile and use Firebase you would need to setup a Google Firebase account and download the google-services.json file as well as host an app server instance somewhere to communicate with Google Firebase. The scope of this project will not cover how to do this but it is possible if you desire. You can also utilize the Sentry crash reporting if you sign up for an account and enter your own dsn in defaults.xml
 
-```
+### Warnings
 
-### Updates
-
-* 9/2021 Initial Release
+The creator of this project takes no responsibility for any damage that you may do to your personal property including modifications to your smoker grill if you choose to use this project.  The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.*  ***This project is provided for educational purposes, and should be attempted only by individuals who wish to assume all risks involved.***
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021. The main PiFire project is created and manager by nebhead at [github](https://github.com/nebhead/PiFire).
+Android Application created by James Weber, copyright 2021.
 
-Of course, none of this project would be available without the wonderful and amazing folks below 
-
-* **PiFire** - The core project that this app works with. An amazing project to manage and control your pellet smoker with a Raspberry pi [github](https://github.com/nebhead/PiFire)
+* **PiFire** - The core project that this app works with. An awesome project to manage and control your pellet smoker with a Raspberry pi [github](https://github.com/nebhead/PiFire)
 
 * **Socket.IO** - [github](https://github.com/socketio/socket.io-client-java)
 
@@ -81,9 +69,11 @@ Of course, none of this project would be available without the wonderful and ama
 
 * **AppUpdater** - [github](https://github.com/javiersantos/AppUpdater)
 
-* **ACRA** - [github](https://github.com/ACRA/acra)
+* **Sentry** - [github](https://github.com/getsentry/sentry-java)
 
 * **Timber** - [github](https://github.com/JakeWharton/timber)
+
+* **RecyclerViewFastScroller** - [github](https://github.com/quiph/RecyclerView-FastScroller)
 
 ### Licensing
 

@@ -15,7 +15,6 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.secure.SecureCore;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
@@ -39,8 +38,8 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
         Preference firebaseToken = findPreference(getString(R.string.prefs_firebase_token));
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
-        PreferenceCategory acraCat = findPreference(getString(R.string.prefs_acra_cat));
-        SwitchPreferenceCompat acraEnabled = findPreference(getString(R.string.prefs_acra_enable));
+        PreferenceCategory crashCat = findPreference(getString(R.string.prefs_crash_cat));
+        SwitchPreferenceCompat crashEnabled = findPreference(getString(R.string.prefs_crash_enable));
         Preference serverSettings = findPreference(getString(R.string.prefs_server_settings));
         PreferenceCategory updaterCat = findPreference(getString(R.string.prefs_app_updater_cat));
         SwitchPreferenceCompat updaterEnabled = findPreference(getString(R.string.prefs_app_updater_enabled));
@@ -69,19 +68,20 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
             });
         }
 
-        if (acraCat != null && acraEnabled != null) {
-            if (SecureCore.getAcraUrl().isEmpty()) {
-                acraCat.setEnabled(false);
-                acraEnabled.setChecked(false);
-                acraEnabled.setSummary(getString(R.string.settings_enable_acra_disabled));
+        if (crashCat != null && crashEnabled != null) {
+            if (getString(R.string.def_sentry_io_dsn).isEmpty()) {
+                crashCat.setEnabled(false);
+                crashEnabled.setChecked(false);
+                crashEnabled.setSummary(getString(R.string.settings_enable_crash_disabled));
             }
         }
 
         if (updaterCat != null && updaterEnabled != null) {
-            String updaterUrl = getString(R.string.def_app_update_check_url);
-            updaterCat.setEnabled(!updaterUrl.isEmpty());
-            updaterEnabled.setChecked(!updaterUrl.isEmpty());
-            updaterEnabled.setSummary(getString(R.string.updater_update_disabled));
+            if (getString(R.string.def_app_update_check_url).isEmpty()) {
+                updaterCat.setEnabled(false);
+                updaterEnabled.setChecked(false);
+                updaterEnabled.setSummary(getString(R.string.updater_update_disabled));
+            }
         }
 
         if (updateCheck != null) {

@@ -80,7 +80,7 @@ public class SetupBeginFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
                 } else {
-                    if(!mCameraPermissionSnack.isShown() && getActivity() != null) {
+                    if (!mCameraPermissionSnack.isShown() && getActivity() != null) {
                         mCameraPermissionSnack.setBackgroundTintList(ColorStateList.valueOf(
                                 getActivity().getColor(R.color.colorAccentRed)));
                         mCameraPermissionSnack.setTextColor(getActivity().getColor(R.color.colorWhite));

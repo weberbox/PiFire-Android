@@ -25,10 +25,9 @@
     <string name="prefs_app_updater_download">prefs_app_updater_download</string>
     <string name="prefs_app_update_required">prefs_app_update_required</string>
 
-    <string name="prefs_acra_cat">prefs_acra_cat</string>
-    <string name="prefs_acra_enable">acra.enable</string>
-    <string name="prefs_acra_syslog_enable">acra.syslog.enable</string>
-    <string name="prefs_acra_user_email">acra.user.email</string>
+    <string name="prefs_crash_cat">prefs_crash_cat</string>
+    <string name="prefs_crash_enable">prefs_crash_enable</string>
+    <string name="prefs_crash_user_email">prefs_crash_user_email</string>
 
     <string name="prefs_first_app_start">prefs_first_app_start</string>
 
@@ -103,6 +102,11 @@
 
     <string name="prefs_admin_debug">prefs_admin_debug</string>
     <string name="prefs_admin_manual">prefs_admin_manual</string>
+    <string name="prefs_admin_backup_restore">prefs_admin_backup_restore</string>
+    <string name="prefs_admin_backup_settings">prefs_admin_backup_settings</string>
+    <string name="prefs_admin_restore_settings">prefs_admin_restore_settings</string>
+    <string name="prefs_admin_backup_pelletdb">prefs_admin_backup_pelletdb</string>
+    <string name="prefs_admin_restore_pelletdb">prefs_admin_restore_pelletdb</string>
     <string name="prefs_admin_delete_history">prefs_admin_delete_history</string>
     <string name="prefs_admin_delete_events">prefs_admin_delete_events</string>
     <string name="prefs_admin_delete_pellets">prefs_admin_delete_pellets</string>

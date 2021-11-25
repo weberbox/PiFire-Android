@@ -54,6 +54,18 @@ public class SettingsResponseModel {
     @SerializedName("pelletlevel")
     @Expose
     private PelletLevel pelletLevel;
+    @SerializedName("lastupdated")
+    @Expose
+    private LastUpdated lastUpdated;
+    @SerializedName("inpins")
+    @Expose
+    private InPins inPins;
+    @SerializedName("outpins")
+    @Expose
+    private OutPins outPins;
+    @SerializedName("modules")
+    @Expose
+    private Modules modules;
 
     public Versions getVersions() {
         return versions;
@@ -165,6 +177,38 @@ public class SettingsResponseModel {
 
     public void PelletLevel(PelletLevel pelletLevel) {
         this.pelletLevel = pelletLevel;
+    }
+
+    public InPins getInPins() {
+        return inPins;
+    }
+
+    public void InPins(InPins inPins) {
+        this.inPins = inPins;
+    }
+
+    public OutPins getOutPins() {
+        return outPins;
+    }
+
+    public void OutPins(OutPins outPins) {
+        this.outPins = outPins;
+    }
+
+    public Modules getModules() {
+        return modules;
+    }
+
+    public void Modules(Modules modules) {
+        this.modules = modules;
+    }
+
+    public LastUpdated getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void LastUpdated(LastUpdated lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public static class CycleData {
@@ -860,6 +904,136 @@ public class SettingsResponseModel {
 
         public void setDutyCycle(String dutyCycle) {
             this.dutyCycle = dutyCycle;
+        }
+
+    }
+
+    public static class OutPins {
+
+        @SerializedName("auger")
+        @Expose
+        private String auger;
+        @SerializedName("fan")
+        @Expose
+        private String fan;
+        @SerializedName("igniter")
+        @Expose
+        private String igniter;
+        @SerializedName("power")
+        @Expose
+        private String power;
+
+        public String getAuger() {
+            return auger;
+        }
+
+        public void setAuger(String auger) {
+            this.auger = auger;
+        }
+
+        public String getFan() {
+            return fan;
+        }
+
+        public void setFan(String fan) {
+            this.fan = fan;
+        }
+
+        public String getIgniter() {
+            return igniter;
+        }
+
+        public void setIgniter(String igniter) {
+            this.igniter = igniter;
+        }
+
+        public String getPower() {
+            return power;
+        }
+
+        public void setPower(String power) {
+            this.power = power;
+        }
+
+    }
+
+    public static class InPins {
+
+        @SerializedName("selector")
+        @Expose
+        private String selector;
+
+        public String getSelector() {
+            return selector;
+        }
+
+        public void setSelector(String selector) {
+            this.selector = selector;
+        }
+
+    }
+
+    public static class LastUpdated {
+
+        @SerializedName("time")
+        @Expose
+        private String time;
+
+        public String getTime() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time = time;
+        }
+
+    }
+
+    public static class Modules {
+
+        @SerializedName("adc")
+        @Expose
+        private String adc;
+        @SerializedName("display")
+        @Expose
+        private String display;
+        @SerializedName("dist")
+        @Expose
+        private String dist;
+        @SerializedName("grillplat")
+        @Expose
+        private String grillplat;
+
+        public String getAdc() {
+            return adc;
+        }
+
+        public void setAdc(String adc) {
+            this.adc = adc;
+        }
+
+        public String getDisplay() {
+            return display;
+        }
+
+        public void setDisplay(String display) {
+            this.display = display;
+        }
+
+        public String getDist() {
+            return dist;
+        }
+
+        public void setDist(String dist) {
+            this.dist = dist;
+        }
+
+        public String getGrillPlat() {
+            return grillplat;
+        }
+
+        public void setGrillPlat(String grillplat) {
+            this.grillplat = grillplat;
         }
 
     }

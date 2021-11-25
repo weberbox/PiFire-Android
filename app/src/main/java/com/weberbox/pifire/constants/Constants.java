@@ -41,6 +41,12 @@ public class Constants {
     public static final int ACTION_ADMIN_REBOOT = 5;
     public static final int ACTION_ADMIN_SHUTDOWN = 6;
 
+    // Callback Backup/Restore Type
+    public static final int ACTION_BACKUP_SETTINGS = 0;
+    public static final int ACTION_BACKUP_PELLETDB = 1;
+    public static final int ACTION_RESTORE_SETTINGS = 2;
+    public static final int ACTION_RESTORE_PELLETDB = 3;
+
     // Settings Fragment
     public static final int FRAG_APP_SETTINGS = 0;
     public static final int FRAG_PROBE_SETTINGS = 1;
@@ -96,5 +102,11 @@ public class Constants {
     public static final String DB_SET_HISTORY = "db_set_history";
     public static final String DB_SET_SAFETY = "db_set_safety";
     public static final String DB_SET_NOTIF = "db_set_notif";
+
+    // Backup
+    public static final String BACKUP_SETTINGS = "settings";
+    public static final String BACKUP_PELLETDB = "pelletdb";
+    public static final String BACKUP_SETTINGS_FILENAME = "PiFire_";
+    public static final String BACKUP_PELLETDB_FILENAME = "PelletDB_";
 
 }

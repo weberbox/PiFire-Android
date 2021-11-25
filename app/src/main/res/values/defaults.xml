@@ -9,8 +9,7 @@
     <bool name="def_app_updater_enabled">true</bool>
     <bool name="def_app_updater_download">true</bool>
 
-    <bool name="def_acra_enabled">true</bool>
-    <bool name="def_acra_syslog_enabled">true</bool>
+    <bool name="def_crash_enabled">true</bool>
 
     <bool name="def_splus_enabled">false</bool>
     <bool name="def_history_refresh_enabled_app">true</bool>
