@@ -305,6 +305,7 @@
     <string name="settings_pid_td">Derivative Time (Td)</string>
     <string name="settings_pid_u_min">Minimum Cycle Ratio</string>
     <string name="settings_pid_u_max">Maximum Cycle Ratio</string>
+    <string name="settings_pid_center">Center Ratio</string>
     <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
 
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>

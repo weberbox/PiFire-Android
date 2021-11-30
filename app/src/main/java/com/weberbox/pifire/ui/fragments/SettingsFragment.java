@@ -246,6 +246,7 @@ public class SettingsFragment extends Fragment {
                 putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
                 putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
                 putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
+                putString(getString(R.string.prefs_work_pid_center), cycleData.getCenter());
             }
 
             if (pellets != null) {

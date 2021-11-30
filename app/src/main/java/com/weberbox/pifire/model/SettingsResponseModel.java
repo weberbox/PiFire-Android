@@ -237,6 +237,9 @@ public class SettingsResponseModel {
         @SerializedName("u_max")
         @Expose
         private String uMax;
+        @SerializedName("center")
+        @Expose
+        private String center;
 
         public String getPb() {
             return pb;
@@ -300,6 +303,14 @@ public class SettingsResponseModel {
 
         public void setuMax(String uMax) {
             this.uMax = uMax;
+        }
+
+        public String getCenter() {
+            return center;
+        }
+
+        public void setCenter(String center) {
+            this.center = center;
         }
 
     }

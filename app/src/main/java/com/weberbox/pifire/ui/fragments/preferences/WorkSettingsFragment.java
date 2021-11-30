@@ -61,6 +61,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pidTd = findPreference(getString(R.string.prefs_work_pid_td));
         EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_pid_u_max));
         EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_pid_u_min));
+        EditTextPreference pidCenter = findPreference(getString(R.string.prefs_work_pid_center));
 
         if (getActivity() != null) {
 
@@ -83,24 +84,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
 
             if (pidTi != null) {
                 pidTi.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (pidTd != null) {
-                pidTd.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (pidTd != null) {
-                pidTd.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                             InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editText.addTextChangedListener(
@@ -184,6 +167,21 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     pidUMin.setEnabled(false);
                     pidUMin.setSummaryProvider(null);
                     pidUMin.setSummary(getString(R.string.disabled_option_settings, "1.2.0"));
+                }
+            }
+
+            if (pidCenter != null) {
+                if (VersionUtils.isSupported("1.2.2")) {
+                    pidCenter.setOnBindEditTextListener(editText -> {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        editText.addTextChangedListener(
+                                new EmptyTextListener(getActivity(), editText));
+                    });
+                } else {
+                    pidCenter.setEnabled(false);
+                    pidCenter.setSummaryProvider(null);
+                    pidCenter.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
                 }
             }
         }
@@ -272,6 +270,11 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     if (preference.getContext().getString(R.string.prefs_work_pid_u_min)
                             .equals(preference.getKey())) {
                         GrillControl.setPIDuMin(mSocket,
+                                ((EditTextPreference) preference).getText());
+                    }
+                    if (preference.getContext().getString(R.string.prefs_work_pid_center)
+                            .equals(preference.getKey())) {
+                        GrillControl.setPIDCenter(mSocket,
                                 ((EditTextPreference) preference).getText());
                     }
                 }

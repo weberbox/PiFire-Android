@@ -458,7 +458,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private final Runnable runnable = this::forceRefreshData;
 
     private void checkViewModelData() {
-        if (mMainViewModel.getEventsData().getValue() == null) {
+        if (mMainViewModel.getPelletData().getValue() == null) {
             toggleLoading(true);
             loadStoredDataRequestUpdate();
         }

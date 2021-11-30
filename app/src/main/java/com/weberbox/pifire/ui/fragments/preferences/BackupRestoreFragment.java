@@ -306,7 +306,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
 
     private final ActivityResultLauncher<String> requestReadExternalStorage =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted && getActivity() != null) {
+                if (isGranted) {
                     openFileBrowser();
                 } else {
                     showSnackBarMessage(getActivity(), R.string.file_permission_denied, true);
@@ -362,7 +362,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
             });
 
     private void showSnackBarMessage(Activity activity, int message, boolean error) {
-        if (!mSnackBar.isShown()) {
+        if (!mSnackBar.isShown() && activity != null) {
             int color = R.color.colorPrimaryLight;
             if (error) {
                 color = R.color.colorAccentRed;

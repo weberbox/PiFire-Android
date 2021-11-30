@@ -3,7 +3,6 @@
     <style name="Theme.PiFire.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimaryDark</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/bg_splash</item>
-        <item name="windowSplashScreenAnimationDuration">200</item>
         <item name="postSplashScreenTheme">@style/Theme.PiFire.NoActionBar</item>
     </style>
 

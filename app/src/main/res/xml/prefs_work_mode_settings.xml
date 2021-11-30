@@ -124,6 +124,13 @@
             app:title="@string/settings_pid_u_max"
             app:useSimpleSummaryProvider="true" />
 
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pid_center"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_pid_center"
+            app:title="@string/settings_pid_center"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             android:layout="@layout/preference_category_note"
             app:iconSpaceReserved="false"

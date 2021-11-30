@@ -462,6 +462,13 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
+    // Set PID Center Ratio
+    public static void setPIDCenter(Socket socket, String cycleTime) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.CYCLE_ACTION,
+                ServerConstants.CYCLE_CENTER_RATIO, cycleTime);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
     // Set Pellets Warning Enabled
     public static void setPelletWarningEnabled(Socket socket, Boolean enabled) {
         String payload = JSONUtils.encodeJSON(ServerConstants.PELLETS_ACTION,
