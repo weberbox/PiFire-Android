@@ -103,7 +103,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
+        if (preference != null && mSocket != null) {
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_manual_mode)
                         .equals(preference.getKey())) {

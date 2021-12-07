@@ -69,14 +69,12 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
-            if (mSocket != null) {
-                if (preference instanceof EditTextPreference) {
-                    if (preference.getContext().getString(R.string.prefs_grill_name)
-                            .equals(preference.getKey())) {
-                        GrillControl.setGrillName(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
+        if (preference != null && mSocket != null) {
+            if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_grill_name)
+                        .equals(preference.getKey())) {
+                    GrillControl.setGrillName(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
             }
         }

@@ -274,6 +274,9 @@
     <string name="settings_app_screen_on_title">Keep Screen On</string>
     <string name="settings_app_screen_on_summary">Force the screen to remain on while viewing the dashboard.</string>
 
+    <string name="settings_cat_temp_units">Temp Units</string>
+    <string name="settings_grill_temp_units">Displayed Units</string>
+
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>
     <string name="settings_grill_probe_selection">Grill Probe Selection</string>

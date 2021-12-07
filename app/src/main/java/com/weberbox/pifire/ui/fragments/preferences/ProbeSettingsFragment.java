@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.model.GrillProbeModel;
 import com.weberbox.pifire.model.ProbeProfileModel;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,28 +55,16 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        ListPreference grillProbe = findPreference(getString(
-                R.string.prefs_grill_probe));
-
-        ListPreference grillProbe1Type = findPreference(getString(
-                R.string.prefs_grill_probe_one_type));
-
-        ListPreference grillProbe2Type = findPreference(getString(
-                R.string.prefs_grill_probe_two_type));
-
-        ListPreference grillProbeType = findPreference(getString(
-                R.string.prefs_grill_probe_type));
-
-        ListPreference probeOneType = findPreference(getString(
-                R.string.prefs_probe_one_type));
-
-        ListPreference probeTwoType = findPreference(getString(
-                R.string.prefs_probe_two_type));
+        ListPreference tempUnits = findPreference(getString(R.string.prefs_grill_units));
+        ListPreference grillProbe = findPreference(getString(R.string.prefs_grill_probe));
+        ListPreference grillProbe1Type = findPreference(getString(R.string.prefs_grill_probe_one_type));
+        ListPreference grillProbe2Type = findPreference(getString(R.string.prefs_grill_probe_two_type));
+        ListPreference grillProbeType = findPreference(getString(R.string.prefs_grill_probe_type));
+        ListPreference probeOneType = findPreference(getString(R.string.prefs_probe_one_type));
+        ListPreference probeTwoType = findPreference(getString(R.string.prefs_probe_two_type));
 
         Map<String, ProbeProfileModel> profilesHash = getProbeProfilesHash();
-
         String[] probeEntryValues = profilesHash.keySet().toArray(new String[0]);
-
         ArrayList<String> profileEntryNames = new ArrayList<>();
 
         for (ProbeProfileModel p : profilesHash.values()) {
@@ -96,9 +86,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                 }
 
                 Map<String, GrillProbeModel> grillProbeHash = getGrillProbeHash();
-
                 String[] grillProbeEntryValues = grillProbeHash.keySet().toArray(new String[0]);
-
                 ArrayList<String> grillProbeEntryNames = new ArrayList<>();
 
                 for (GrillProbeModel gp : grillProbeHash.values()) {
@@ -133,6 +121,14 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
             }
         }
 
+        if (tempUnits != null) {
+            if (!VersionUtils.isSupported("1.2.2")) {
+                tempUnits.setEnabled(false);
+                tempUnits.setSummaryProvider(null);
+                tempUnits.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
+            }
+        }
+
         return view;
     }
 
@@ -161,39 +157,42 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
+        if (preference != null && mSocket != null) {
             if (preference instanceof ListPreference) {
-                if (mSocket != null) {
-                    if (preference.getContext().getString(R.string.prefs_grill_probe)
-                            .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_grill_probe_type)
-                            .equals(preference.getKey())) {
-                        GrillControl.setGrillProbeType(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_grill_probe_one_type)
-                            .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe1Type(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_grill_probe_two_type)
-                            .equals(preference.getKey())) {
-                        GrillControl.setGrillProbe2Type(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_probe_one_type)
-                            .equals(preference.getKey())) {
-                        GrillControl.setProbe1Type(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_probe_two_type)
-                            .equals(preference.getKey())) {
-                        GrillControl.setProbe2Type(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
+                if (preference.getContext().getString(R.string.prefs_grill_units)
+                        .equals(preference.getKey())) {
+                    GrillControl.setTempUnits(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_grill_probe)
+                        .equals(preference.getKey())) {
+                    GrillControl.setGrillProbe(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_grill_probe_type)
+                        .equals(preference.getKey())) {
+                    GrillControl.setGrillProbeType(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_grill_probe_one_type)
+                        .equals(preference.getKey())) {
+                    GrillControl.setGrillProbe1Type(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_grill_probe_two_type)
+                        .equals(preference.getKey())) {
+                    GrillControl.setGrillProbe2Type(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_probe_one_type)
+                        .equals(preference.getKey())) {
+                    GrillControl.setProbe1Type(mSocket,
+                            ((ListPreference) preference).getValue());
+                }
+                if (preference.getContext().getString(R.string.prefs_probe_two_type)
+                        .equals(preference.getKey())) {
+                    GrillControl.setProbe2Type(mSocket,
+                            ((ListPreference) preference).getValue());
                 }
             }
         }

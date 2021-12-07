@@ -96,31 +96,29 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
-            if (mSocket != null) {
-                if (preference instanceof EditTextPreference) {
-                    if (preference.getContext().getString(R.string.prefs_safety_min_start)
-                            .equals(preference.getKey())) {
-                        GrillControl.setMinStartTemp(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_safety_max_start)
-                            .equals(preference.getKey())) {
-                        GrillControl.setMaxStartTemp(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_safety_max_temp)
-                            .equals(preference.getKey())) {
-                        GrillControl.setMaxGrillTemp(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
+        if (preference != null && mSocket != null) {
+            if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_safety_min_start)
+                        .equals(preference.getKey())) {
+                    GrillControl.setMinStartTemp(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
-                if (preference instanceof ListPreference) {
-                    if (preference.getContext().getString(R.string.prefs_safety_retries)
-                            .equals(preference.getKey())) {
-                        GrillControl.setReigniteRetries(mSocket,
-                                ((ListPreference) preference).getValue());
-                    }
+                if (preference.getContext().getString(R.string.prefs_safety_max_start)
+                        .equals(preference.getKey())) {
+                    GrillControl.setMaxStartTemp(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_safety_max_temp)
+                        .equals(preference.getKey())) {
+                    GrillControl.setMaxGrillTemp(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+            }
+            if (preference instanceof ListPreference) {
+                if (preference.getContext().getString(R.string.prefs_safety_retries)
+                        .equals(preference.getKey())) {
+                    GrillControl.setReigniteRetries(mSocket,
+                            ((ListPreference) preference).getValue());
                 }
             }
         }

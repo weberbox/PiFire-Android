@@ -22,7 +22,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
@@ -30,6 +29,7 @@ import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+import com.weberbox.pifire.utils.TempUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +43,7 @@ public class TempPickerDialog {
     private final LayoutInflater mInflater;
     private final DashboardCallbackInterface mCallBack;
     private final Context mContext;
+    private final String mTempUnit;
     private final int mTempType;
     private final int mScrollTemp;
     private final boolean mHoldMode;
@@ -56,6 +57,7 @@ public class TempPickerDialog {
         mTempType = tempType;
         mScrollTemp = defaultTemp;
         mHoldMode = hold;
+        mTempUnit = TempUtils.getTempUnit(context);
     }
 
     public BottomSheetDialog showDialog() {
@@ -79,20 +81,20 @@ public class TempPickerDialog {
 
         TempPickerAdapter tempPickerAdapter;
 
+        TempUtils tempUtils = new TempUtils(mContext);
+
         if(mTempType == Constants.PICKER_TYPE_GRILL) {
-            mSelectedTemp = String.valueOf(AppConfig.DEFAULT_GRILL_TEMP_SET);
-            tempPickerAdapter = new TempPickerAdapter(
-                    generateTemperatureList(AppConfig.MIN_GRILL_TEMP_SET,
-                            (AppConfig.MAX_GRILL_TEMP_SET + 1)));
+            mSelectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
+            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(mTempUnit,
+                    tempUtils.getMinGrillTemp(), (tempUtils.getMaxGrillTemp() + 1)));
         } else {
             if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
                     mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
                 shutdownContainer.setVisibility(View.VISIBLE);
             }
-            mSelectedTemp = String.valueOf(AppConfig.DEFAULT_PROBE_TEMP_SET);
-            tempPickerAdapter = new TempPickerAdapter(
-                    generateTemperatureList(AppConfig.MIN_PROBE_TEMP_SET,
-                            (AppConfig.MAX_PROBE_TEMP_SET + 1)));
+            mSelectedTemp = String.valueOf(tempUtils.getDefaultProbeTemp());
+            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(mTempUnit,
+                    tempUtils.getMinProbeTemp(), (tempUtils.getMaxProbeTemp() + 1)));
         }
 
         if(mScrollTemp > 0) {
@@ -149,9 +151,9 @@ public class TempPickerDialog {
 
         if(mScrollTemp != 0) {
             if(mTempType == Constants.PICKER_TYPE_GRILL) {
-                setDefaultTemp(mScrollTemp - AppConfig.MIN_GRILL_TEMP_SET, false);
+                setDefaultTemp(mScrollTemp - tempUtils.getMinGrillTemp(), false);
             } else {
-                setDefaultTemp(mScrollTemp - AppConfig.MIN_PROBE_TEMP_SET, false);
+                setDefaultTemp(mScrollTemp - tempUtils.getMinProbeTemp(), false);
             }
         }
 
@@ -187,12 +189,13 @@ public class TempPickerDialog {
         }
     }
 
-    private static List<TempPickerViewModel> generateTemperatureList(int start, int end) {
+    private static List<TempPickerViewModel> generateTemperatureList(
+            String tempUnit, int start, int end) {
         List<TempPickerViewModel> tempPickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");
         tempPickerViewModelList = IntStream.range(start, end).mapToObj(i ->
-                new TempPickerViewModel(formatter.format(i), "f")).collect(Collectors.toList());
+                new TempPickerViewModel(formatter.format(i), tempUnit)).collect(Collectors.toList());
 
         return tempPickerViewModelList;
     }

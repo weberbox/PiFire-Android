@@ -172,31 +172,29 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
-            if (mSocket != null) {
-                if (preference instanceof SwitchPreferenceCompat) {
-                    if (preference.getContext().getString(R.string.prefs_pellet_warning_enabled)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPelletWarningEnabled(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
-                    }
+        if (preference != null && mSocket != null) {
+            if (preference instanceof SwitchPreferenceCompat) {
+                if (preference.getContext().getString(R.string.prefs_pellet_warning_enabled)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPelletWarningEnabled(mSocket,
+                            ((SwitchPreferenceCompat) preference).isChecked());
                 }
-                if (preference instanceof EditTextPreference) {
-                    if (preference.getContext().getString(R.string.prefs_pellet_warning_level)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPelletWarningLevel(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_pellet_empty)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPelletsEmpty(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_pellet_full)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPelletsFull(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
+            }
+            if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_pellet_warning_level)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPelletWarningLevel(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_pellet_empty)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPelletsEmpty(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_pellet_full)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPelletsFull(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
             }
         }

@@ -15,7 +15,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
@@ -213,77 +212,75 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
-            if (mSocket != null) {
-                if (preference instanceof ListPreference) {
-                    if (preference.getContext().getString(R.string.prefs_work_pmode_mode)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPMode(mSocket, ((ListPreference) preference).getValue());
-                    }
+        if (preference != null && mSocket != null) {
+            if (preference instanceof ListPreference) {
+                if (preference.getContext().getString(R.string.prefs_work_pmode_mode)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPMode(mSocket, ((ListPreference) preference).getValue());
                 }
-                if (preference instanceof EditTextPreference) {
-                    if (preference.getContext().getString(R.string.prefs_work_auger_on)
-                            .equals(preference.getKey())) {
-                        GrillControl.setAugerTime(mSocket, (
-                                (EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_splus_fan)
-                            .equals(preference.getKey())) {
-                        GrillControl.setSmokeFan(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_splus_min)
-                            .equals(preference.getKey())) {
-                        GrillControl.setSmokeMinTemp(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_splus_max)
-                            .equals(preference.getKey())) {
-                        GrillControl.setSmokeMaxTemp(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_cycle)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDTime(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_pb)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDPB(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_ti)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDTi(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_td)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDTd(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_u_max)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDuMax(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_u_min)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDuMin(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_work_pid_center)
-                            .equals(preference.getKey())) {
-                        GrillControl.setPIDCenter(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
+            }
+            if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_work_auger_on)
+                        .equals(preference.getKey())) {
+                    GrillControl.setAugerTime(mSocket, (
+                            (EditTextPreference) preference).getText());
                 }
-                if (preference instanceof SwitchPreferenceCompat) {
-                    if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
-                            .equals(preference.getKey())) {
-                        GrillControl.setSmokePlusDefault(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
-                    }
+                if (preference.getContext().getString(R.string.prefs_work_splus_fan)
+                        .equals(preference.getKey())) {
+                    GrillControl.setSmokeFan(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_splus_min)
+                        .equals(preference.getKey())) {
+                    GrillControl.setSmokeMinTemp(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_splus_max)
+                        .equals(preference.getKey())) {
+                    GrillControl.setSmokeMaxTemp(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_cycle)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDTime(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_pb)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDPB(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_ti)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDTi(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_td)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDTd(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_u_max)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDuMax(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_u_min)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDuMin(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+                if (preference.getContext().getString(R.string.prefs_work_pid_center)
+                        .equals(preference.getKey())) {
+                    GrillControl.setPIDCenter(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+            }
+            if (preference instanceof SwitchPreferenceCompat) {
+                if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
+                        .equals(preference.getKey())) {
+                    GrillControl.setSmokePlusDefault(mSocket,
+                            ((SwitchPreferenceCompat) preference).isChecked());
                 }
             }
         }

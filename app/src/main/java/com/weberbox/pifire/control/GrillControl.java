@@ -675,4 +675,11 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_MANUAL_DATA, payload);
     }
 
+    // Grill Temp Units
+    public static void setTempUnits(Socket socket, String units) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.UNITS_ACTION,
+                ServerConstants.GRILL_TEMP_UNITS, units);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
 }

@@ -115,31 +115,29 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
-            if (mSocket != null) {
-                if (preference instanceof EditTextPreference) {
-                    if (preference.getContext().getString(R.string.prefs_history_display)
-                            .equals(preference.getKey())) {
-                        GrillControl.setHistoryMins(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_history_points)
-                            .equals(preference.getKey())) {
-                        GrillControl.setHistoryPoints(mSocket,
-                                ((EditTextPreference) preference).getText());
-                    }
+        if (preference != null && mSocket != null) {
+            if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_history_display)
+                        .equals(preference.getKey())) {
+                    GrillControl.setHistoryMins(mSocket,
+                            ((EditTextPreference) preference).getText());
                 }
-                if (preference instanceof SwitchPreferenceCompat) {
-                    if (preference.getContext().getString(R.string.prefs_history_auto)
-                            .equals(preference.getKey())) {
-                        GrillControl.setHistoryRefresh(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
-                    }
-                    if (preference.getContext().getString(R.string.prefs_history_clear)
-                            .equals(preference.getKey())) {
-                        GrillControl.setHistoryClear(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
-                    }
+                if (preference.getContext().getString(R.string.prefs_history_points)
+                        .equals(preference.getKey())) {
+                    GrillControl.setHistoryPoints(mSocket,
+                            ((EditTextPreference) preference).getText());
+                }
+            }
+            if (preference instanceof SwitchPreferenceCompat) {
+                if (preference.getContext().getString(R.string.prefs_history_auto)
+                        .equals(preference.getKey())) {
+                    GrillControl.setHistoryRefresh(mSocket,
+                            ((SwitchPreferenceCompat) preference).isChecked());
+                }
+                if (preference.getContext().getString(R.string.prefs_history_clear)
+                        .equals(preference.getKey())) {
+                    GrillControl.setHistoryClear(mSocket,
+                            ((SwitchPreferenceCompat) preference).isChecked());
                 }
             }
         }

@@ -59,6 +59,9 @@ public class ServerConstants {
     public static final String MODE_TEMP_INPUT_RANGE = "tempInputRange";
     public static final String MODE_MANUAL = "manual";
 
+    public static final String UNITS_ACTION = "units";
+    public static final String GRILL_TEMP_UNITS = "grillTempUnits";
+
     public static final String PROBES_ACTION = "probes";
     public static final String PROBES_ONE_ENABLE = "probe1enable";
     public static final String PROBES_TWO_ENABLE = "probe2enable";

@@ -83,7 +83,7 @@ public class ShutdownSettingsFragment extends PreferenceFragmentCompat implement
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null) {
+        if (preference != null && mSocket != null) {
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_shutdown_time)
                         .equals(preference.getKey())) {

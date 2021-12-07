@@ -127,13 +127,13 @@ public class MainActivity extends BaseActivity {
 
         String grillName = Prefs.getString(getString(R.string.prefs_grill_name), "");
 
-        if (!grillName.isEmpty()) {
+        if (grillName.isEmpty()) {
+            navGrillName.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
+        } else {
             navGrillName.setVisibility(View.VISIBLE);
             divider.setVisibility(View.VISIBLE);
             navGrillName.setText(grillName);
-        } else {
-            navGrillName.setVisibility(View.GONE);
-            divider.setVisibility(View.GONE);
         }
 
         mMainViewModel.getServerConnected().observe(this, enabled -> {

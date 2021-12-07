@@ -11,11 +11,19 @@ public class AppConfig {
     // Pellet Warning
     public static final int LOW_PELLET_WARNING = 40;
 
-    // Temp Selector Temps
-    public static final int MIN_GRILL_TEMP_SET = 125;
-    public static final int MAX_GRILL_TEMP_SET = 500;
-    public static final int DEFAULT_GRILL_TEMP_SET = 225;
-    public static final int MIN_PROBE_TEMP_SET = 30;
-    public static final int MAX_PROBE_TEMP_SET = 300;
-    public static final int DEFAULT_PROBE_TEMP_SET = 135;
+    // Temp Selector Temps F
+    public static final int MIN_GRILL_TEMP_SET_F = 125;
+    public static final int MAX_GRILL_TEMP_SET_F = 500;
+    public static final int DEFAULT_GRILL_TEMP_SET_F = 225;
+    public static final int MIN_PROBE_TEMP_SET_F = 40;
+    public static final int MAX_PROBE_TEMP_SET_F = 300;
+    public static final int DEFAULT_PROBE_TEMP_SET_F = 135;
+
+    // Temp Selector Temps C
+    public static final int MIN_GRILL_TEMP_SET_C = 51;
+    public static final int MAX_GRILL_TEMP_SET_C = 260;
+    public static final int DEFAULT_GRILL_TEMP_SET_C = 107;
+    public static final int MIN_PROBE_TEMP_SET_C = 4;
+    public static final int MAX_PROBE_TEMP_SET_C = 148;
+    public static final int DEFAULT_PROBE_TEMP_SET_C = 57;
 }

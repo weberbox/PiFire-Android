@@ -52,6 +52,7 @@ import com.weberbox.pifire.ui.views.PelletLevelView;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
+import com.weberbox.pifire.utils.TempUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -91,6 +92,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private CountDownTimer mCountDownTimer;
     private PelletLevelView mPelletLevelIndicator;
     private Socket mSocket;
+    private TempUtils mTempUtils;
 
     private Boolean mSmokePlusEnabled = false;
 
@@ -162,6 +164,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         mSwipeRefresh = mBinding.dashPullRefresh;
 
+        mTempUtils = new TempUtils(getContext());
+
         mSwipeRefresh.setOnRefreshListener(() -> {
             if (mSocket != null && mSocket.connected()) {
                 requestForcedDashData(false);
@@ -211,7 +215,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         grillTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = AppConfig.DEFAULT_GRILL_TEMP_SET;
+                int defaultTemp = mTempUtils.getDefaultGrillTemp();
                 if (!mGrillSetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
                     String temp = mGrillSetText.getText().toString()
@@ -235,8 +239,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         probeOneTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = AppConfig.DEFAULT_PROBE_TEMP_SET;
-
+                int defaultTemp = mTempUtils.getDefaultProbeTemp();
                 if (!mProbeOneTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeOneTargetText.getText().toString().equals(
                             getString(R.string.placeholder_none))) {
@@ -268,7 +271,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         probeTwoTempBox.setOnClickListener(v -> {
             if (mSocket != null && mSocket.connected()) {
-                int defaultTemp = AppConfig.DEFAULT_PROBE_TEMP_SET;
+                int defaultTemp = mTempUtils.getDefaultProbeTemp();
                 if (!mProbeTwoTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeTwoTargetText.getText().toString().equals("--")) {
                         String temp = mProbeTwoTargetText.getText().toString()
@@ -450,7 +453,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                 case Constants.ACTION_MODE_HOLD:
                     mTempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                            AppConfig.DEFAULT_GRILL_TEMP_SET, true);
+                            mTempUtils.getDefaultGrillTemp(), true);
                     mTempPickerDialog.showDialog();
                     break;
                 case Constants.ACTION_MODE_SHUTDOWN:
@@ -586,7 +589,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mGrillTempProgress.setMax(grillTarget);
                         mGrillTargetText.setText(StringUtils.formatTemp(grillTarget));
                     } else {
-                        mGrillTempProgress.setMax(AppConfig.MAX_GRILL_TEMP_SET);
+                        mGrillTempProgress.setMax(mTempUtils.getMaxGrillTemp());
                         mGrillTargetText.setText(R.string.placeholder_none);
                     }
 
@@ -610,7 +613,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mProbeOneProgress.setMax(probeOneTarget);
                         mProbeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget));
                     } else {
-                        mProbeOneProgress.setMax(AppConfig.MAX_PROBE_TEMP_SET);
+                        mProbeOneProgress.setMax(mTempUtils.getMaxProbeTemp());
                         mProbeOneTargetText.setText(R.string.placeholder_none);
                     }
 
@@ -634,7 +637,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         mProbeTwoProgress.setMax(probeTwoTarget);
                         mProbeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget));
                     } else {
-                        mProbeTwoProgress.setMax(AppConfig.MAX_PROBE_TEMP_SET);
+                        mProbeTwoProgress.setMax(mTempUtils.getMaxProbeTemp());
                         mProbeTwoTargetText.setText(R.string.placeholder_none);
                     }
 

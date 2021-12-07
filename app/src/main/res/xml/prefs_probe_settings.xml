@@ -3,6 +3,21 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_temp_units">
+
+        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_grill_temp_unit"
+            app:entries="@array/grill_temp_unit_entries"
+            app:entryValues="@array/grill_temp_unit_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_grill_units"
+            app:title="@string/settings_grill_temp_units"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/settings_cat_grill_probes">
 
         <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
