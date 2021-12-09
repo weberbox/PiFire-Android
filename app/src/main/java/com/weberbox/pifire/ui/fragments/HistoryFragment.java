@@ -297,12 +297,12 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             HistoryModel historyModel = HistoryModel.parseJSON(response_data);
 
             List<String> timeList = historyModel.getLabelTimeList();
-            List<Integer> grillSetTemp = historyModel.getGrillSetTempList();
-            List<Integer> grillTemp = historyModel.getGrillTempList();
-            List<Integer> probe1SetTemp = historyModel.getProbe1SetTempList();
-            List<Integer> probe2SetTemp = historyModel.getProbe2SetTempList();
-            List<Integer> probe1Temp = historyModel.getProbe1TempList();
-            List<Integer> probe2Temp = historyModel.getProbe2TempList();
+            List<Double> grillSetTemp = historyModel.getGrillSetTempList();
+            List<Double> grillTemp = historyModel.getGrillTempList();
+            List<Double> probe1SetTemp = historyModel.getProbe1SetTempList();
+            List<Double> probe2SetTemp = historyModel.getProbe2SetTempList();
+            List<Double> probe1Temp = historyModel.getProbe1TempList();
+            List<Double> probe2Temp = historyModel.getProbe2TempList();
 
             ArrayList<Float> time = new ArrayList<>();
 
@@ -331,9 +331,9 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                 grillSTArray.add(new Entry(time.get(i), grillSetTemp.get(i).floatValue()));
                 grillTArray.add(new Entry(time.get(i), grillTemp.get(i).floatValue()));
                 probe1STArray.add(new Entry(time.get(i), probe1SetTemp.get(i).floatValue()));
-                probe1TArray.add(new Entry(time.get(i), probe1Temp.get(i)));
-                probe2STArray.add(new Entry(time.get(i), probe2SetTemp.get(i)));
-                probe2TArray.add(new Entry(time.get(i), probe2Temp.get(i)));
+                probe1TArray.add(new Entry(time.get(i), probe1Temp.get(i).floatValue()));
+                probe2STArray.add(new Entry(time.get(i), probe2SetTemp.get(i).floatValue()));
+                probe2TArray.add(new Entry(time.get(i), probe2Temp.get(i).floatValue()));
             }
 
             ArrayList<ILineDataSet> dataSets = new ArrayList<>();

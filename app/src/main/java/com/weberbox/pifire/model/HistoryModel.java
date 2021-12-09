@@ -12,39 +12,39 @@ public class HistoryModel {
 
     @SerializedName("grill_settemp_list")
     @Expose
-    private List<Integer> grillSetTempList = null;
+    private List<Double> grillSetTempList = null;
     @SerializedName("grill_temp_list")
     @Expose
-    private List<Integer> grillTempList = null;
+    private List<Double> grillTempList = null;
     @SerializedName("label_time_list")
     @Expose
     private List<String> labelTimeList = null;
     @SerializedName("probe1_settemp_list")
     @Expose
-    private List<Integer> probe1SetTempList = null;
+    private List<Double> probe1SetTempList = null;
     @SerializedName("probe1_temp_list")
     @Expose
-    private List<Integer> probe1TempList = null;
+    private List<Double> probe1TempList = null;
     @SerializedName("probe2_settemp_list")
     @Expose
-    private List<Integer> probe2SetTempList = null;
+    private List<Double> probe2SetTempList = null;
     @SerializedName("probe2_temp_list")
     @Expose
-    private List<Integer> probe2TempList = null;
+    private List<Double> probe2TempList = null;
 
-    public List<Integer> getGrillSetTempList() {
+    public List<Double> getGrillSetTempList() {
         return grillSetTempList;
     }
 
-    public void setGrillSetTempList(List<Integer> grillSetTempList) {
+    public void setGrillSetTempList(List<Double> grillSetTempList) {
         this.grillSetTempList = grillSetTempList;
     }
 
-    public List<Integer> getGrillTempList() {
+    public List<Double> getGrillTempList() {
         return grillTempList;
     }
 
-    public void setGrillTempList(List<Integer> grillTempList) {
+    public void setGrillTempList(List<Double> grillTempList) {
         this.grillTempList = grillTempList;
     }
 
@@ -56,35 +56,35 @@ public class HistoryModel {
         this.labelTimeList = labelTimeList;
     }
 
-    public List<Integer> getProbe1SetTempList() {
+    public List<Double> getProbe1SetTempList() {
         return probe1SetTempList;
     }
 
-    public void setProbe1SetTempList(List<Integer> probe1SetTempList) {
+    public void setProbe1SetTempList(List<Double> probe1SetTempList) {
         this.probe1SetTempList = probe1SetTempList;
     }
 
-    public List<Integer> getProbe1TempList() {
+    public List<Double> getProbe1TempList() {
         return probe1TempList;
     }
 
-    public void setProbe1TempList(List<Integer> probe1TempList) {
+    public void setProbe1TempList(List<Double> probe1TempList) {
         this.probe1TempList = probe1TempList;
     }
 
-    public List<Integer> getProbe2SetTempList() {
+    public List<Double> getProbe2SetTempList() {
         return probe2SetTempList;
     }
 
-    public void setProbe2SetTempList(List<Integer> probe2SetTempList) {
+    public void setProbe2SetTempList(List<Double> probe2SetTempList) {
         this.probe2SetTempList = probe2SetTempList;
     }
 
-    public List<Integer> getProbe2TempList() {
+    public List<Double> getProbe2TempList() {
         return probe2TempList;
     }
 
-    public void setProbe2TempList(List<Integer> probe2TempList) {
+    public void setProbe2TempList(List<Double> probe2TempList) {
         this.probe2TempList = probe2TempList;
     }
 

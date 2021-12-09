@@ -299,8 +299,8 @@
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
     <string name="settings_splus_note">Fan cycling will only occur between the below min/max temperatures.</string>
     <string name="settings_splus_fan">Fan Cycle Time (s)</string>
-    <string name="settings_splus_min">Min Operational Temp (F)</string>
-    <string name="settings_splus_max">Max Operational Temp (F)</string>
+    <string name="settings_splus_min">Min Operational Temp</string>
+    <string name="settings_splus_max">Max Operational Temp</string>
 
     <string name="settings_cat_pid">PID Settings (HOLD Mode)</string>
     <string name="settings_pid_cycle">Cycle Time</string>
@@ -322,10 +322,10 @@
     <string name="settings_history_clear">Clear History on Startup</string>
     <string name="settings_history_auto">History Auto-Refresh</string>
 
-    <string name="settings_safety_min_start">Min Startup Temp (F)</string>
-    <string name="settings_safety_max_start">Max Startup Temp (F)</string>
+    <string name="settings_safety_min_start">Min Startup Temp</string>
+    <string name="settings_safety_max_start">Max Startup Temp</string>
     <string name="settings_safety_retries">Reignite Retries</string>
-    <string name="settings_safety_max_temp">Max Operational Temp (F)</string>
+    <string name="settings_safety_max_temp">Max Operational Temp</string>
     <string name="settings_safety_note">In an error condition (temp too low, temp too high) the grill will immediately shutdown and log the error in the events log. Notifications of an error will be sent if enabled. The Max Temp safety setting is also enabled in Monitor mode.</string>
     <string name="settings_safety_warning">Safety features are not infallible and may not prevent safety issues with your grill in all cases. As with any grill, it is the operator\'s responsibility to monitor their equipment to ensure proper operational safety.</string>
 
