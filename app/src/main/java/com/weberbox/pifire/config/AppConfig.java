@@ -20,10 +20,10 @@ public class AppConfig {
     public static final int DEFAULT_PROBE_TEMP_SET_F = 135;
 
     // Temp Selector Temps C
-    public static final int MIN_GRILL_TEMP_SET_C = 51;
+    public static final int MIN_GRILL_TEMP_SET_C = 50;
     public static final int MAX_GRILL_TEMP_SET_C = 260;
-    public static final int DEFAULT_GRILL_TEMP_SET_C = 107;
+    public static final int DEFAULT_GRILL_TEMP_SET_C = 100;
     public static final int MIN_PROBE_TEMP_SET_C = 4;
-    public static final int MAX_PROBE_TEMP_SET_C = 148;
-    public static final int DEFAULT_PROBE_TEMP_SET_C = 57;
+    public static final int MAX_PROBE_TEMP_SET_C = 150;
+    public static final int DEFAULT_PROBE_TEMP_SET_C = 55;
 }

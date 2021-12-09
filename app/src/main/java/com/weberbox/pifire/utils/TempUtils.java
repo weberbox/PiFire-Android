@@ -12,7 +12,6 @@ public class TempUtils {
 
     public TempUtils(Context context) {
         mContext = context;
-
     }
 
     public static String getTempUnit(Context context) {
@@ -20,37 +19,37 @@ public class TempUtils {
     }
 
     public int getDefaultGrillTemp() {
-        return isCelsius(mContext) ? AppConfig.DEFAULT_GRILL_TEMP_SET_C :
-                AppConfig.DEFAULT_GRILL_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.DEFAULT_GRILL_TEMP_SET_F :
+                AppConfig.DEFAULT_GRILL_TEMP_SET_C;
     }
 
     public int getMinGrillTemp() {
-        return isCelsius(mContext) ? AppConfig.MIN_GRILL_TEMP_SET_C :
-                AppConfig.MIN_GRILL_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.MIN_GRILL_TEMP_SET_F :
+                AppConfig.MIN_GRILL_TEMP_SET_C;
     }
 
     public int getMaxGrillTemp() {
-        return isCelsius(mContext) ? AppConfig.MAX_GRILL_TEMP_SET_C :
-                AppConfig.MAX_GRILL_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.MAX_GRILL_TEMP_SET_F :
+                AppConfig.MAX_GRILL_TEMP_SET_C;
     }
 
     public int getDefaultProbeTemp() {
-        return isCelsius(mContext) ? AppConfig.DEFAULT_PROBE_TEMP_SET_C :
-                AppConfig.DEFAULT_PROBE_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.DEFAULT_PROBE_TEMP_SET_F :
+                AppConfig.DEFAULT_PROBE_TEMP_SET_C;
     }
 
     public int getMinProbeTemp() {
-        return isCelsius(mContext) ? AppConfig.MIN_PROBE_TEMP_SET_C :
-                AppConfig.MIN_PROBE_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.MIN_PROBE_TEMP_SET_F :
+                AppConfig.MIN_PROBE_TEMP_SET_C;
     }
 
     public int getMaxProbeTemp() {
-        return isCelsius(mContext) ? AppConfig.MAX_PROBE_TEMP_SET_C :
-                AppConfig.MAX_PROBE_TEMP_SET_F;
+        return isFahrenheit() ? AppConfig.MAX_PROBE_TEMP_SET_F :
+                AppConfig.MAX_PROBE_TEMP_SET_C;
     }
 
-    private boolean isCelsius(Context context) {
-        return Prefs.getString(context.getString(R.string.prefs_grill_units), "F")
-                .equalsIgnoreCase("C");
+    public boolean isFahrenheit() {
+        return Prefs.getString(mContext.getString(R.string.prefs_grill_units), "F")
+                .equalsIgnoreCase("F");
     }
 }

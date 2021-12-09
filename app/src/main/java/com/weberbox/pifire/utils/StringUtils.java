@@ -17,6 +17,14 @@ public class StringUtils {
         return temp + "\u00B0";
     }
 
+    public static String formatTemp(double temp, boolean fahrenheit) {
+        if (fahrenheit) {
+            return (int) temp + "\u00B0";
+        } else {
+            return temp + "\u00B0";
+        }
+    }
+
     public static String formatPercentage(Integer percent) {
         return percent + "\u0025";
     }

@@ -93,11 +93,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private PelletLevelView mPelletLevelIndicator;
     private Socket mSocket;
     private TempUtils mTempUtils;
-
-    private Boolean mSmokePlusEnabled = false;
+    private boolean mIsFahrenheit;
+    private boolean mSmokePlusEnabled = false;
+    private boolean mIsLoading = false;
 
     private String mCurrentMode = Constants.GRILL_CURRENT_STOP;
-    private boolean mIsLoading = false;
 
 
     public DashboardFragment() {
@@ -165,6 +165,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mSwipeRefresh = mBinding.dashPullRefresh;
 
         mTempUtils = new TempUtils(getContext());
+
+        mIsFahrenheit = mTempUtils.isFahrenheit();
 
         mSwipeRefresh.setOnRefreshListener(() -> {
             if (mSocket != null && mSocket.connected()) {
@@ -519,9 +521,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             long timerStartTime = timerInfo.getTimerStartTime();
             long timerEndTime = timerInfo.getTimerEndTime();
             long timerPauseTime = timerInfo.getTimerPauseTime();
-            int grillTemp = probeTemps.getGrillTemp();
-            int probeOneTemp = probeTemps.getProbeOneTemp();
-            int probeTwoTemp = probeTemps.getProbeTwoTemp();
+            double grillTemp = Double.parseDouble(probeTemps.getGrillTemp());
+            double probeOneTemp = Double.parseDouble(probeTemps.getProbeOneTemp());
+            double probeTwoTemp = Double.parseDouble(probeTemps.getProbeTwoTemp());
             int grillTarget = setPoints.getGrillTarget();
             int probeOneTarget = setPoints.getProbeOneTarget();
             int probeTwoTarget = setPoints.getProbeTwoTarget();
@@ -538,7 +540,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             boolean probeOneShutdown = notifyData.getP1Shutdown();
             boolean probeTwoShutdown = notifyData.getP2Shutdown();
             boolean timerShutdown = notifyData.getTimerShutdown();
-
 
             TransitionManager.beginDelayedTransition(mRootContainer, new TextTransition());
 
@@ -594,8 +595,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     }
 
                     if (grillTemp > 0) {
-                        mGrillTempProgress.setProgress(grillTemp);
-                        mGrillTempText.setText(StringUtils.formatTemp(grillTemp));
+                        mGrillTempProgress.setProgress((int) grillTemp);
+                        mGrillTempText.setText(StringUtils.formatTemp(grillTemp, mIsFahrenheit));
                     } else {
                         mGrillTempText.setText(R.string.placeholder_temp);
                     }
@@ -618,8 +619,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     }
 
                     if (probeOneTemp > 0) {
-                        mProbeOneProgress.setProgress(probeOneTemp);
-                        mProbeOneTempText.setText(StringUtils.formatTemp(probeOneTemp));
+                        mProbeOneProgress.setProgress((int) probeOneTemp);
+                        mProbeOneTempText.setText(StringUtils.formatTemp(probeOneTemp, mIsFahrenheit));
                     } else {
                         mProbeOneTempText.setText(R.string.placeholder_temp);
                     }
@@ -642,8 +643,8 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                     }
 
                     if (probeTwoTemp > 0) {
-                        mProbeTwoProgress.setProgress(probeTwoTemp);
-                        mProbeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp));
+                        mProbeTwoProgress.setProgress((int) probeTwoTemp);
+                        mProbeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp, mIsFahrenheit));
                     } else {
                         mProbeTwoTempText.setText(R.string.placeholder_temp);
                     }

@@ -60,7 +60,7 @@ public class ServerConstants {
     public static final String MODE_MANUAL = "manual";
 
     public static final String UNITS_ACTION = "units";
-    public static final String GRILL_TEMP_UNITS = "grillTempUnits";
+    public static final String TEMP_UNITS = "temp_units";
 
     public static final String PROBES_ACTION = "probes";
     public static final String PROBES_ONE_ENABLE = "probe1enable";

@@ -276,6 +276,7 @@
 
     <string name="settings_cat_temp_units">Temp Units</string>
     <string name="settings_grill_temp_units">Displayed Units</string>
+    <string name="settings_units_note">Changing the scale/units will restart the grill controller (stopping any currently running modes) and automatically erase history.</string>
 
     <string name="settings_cat_grill_probes">Grill Probes</string>
     <string name="settings_cat_food_probes">Food Probes</string>

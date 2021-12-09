@@ -76,23 +76,23 @@ public class GrillResponseModel {
     public static class ProbeTemps {
         @SerializedName("grill_temp")
         @Expose
-        private Integer grillTemp;
+        private String grillTemp;
         @SerializedName("probe1_temp")
         @Expose
-        private Integer probe1Temp;
+        private String probe1Temp;
         @SerializedName("probe2_temp")
         @Expose
-        private Integer probe2Temp;
+        private String probe2Temp;
 
-        public Integer getGrillTemp() {
+        public String getGrillTemp() {
             return grillTemp;
         }
 
-        public Integer getProbeOneTemp() {
+        public String getProbeOneTemp() {
             return probe1Temp;
         }
 
-        public Integer getProbeTwoTemp() {
+        public String getProbeTwoTemp() {
             return probe2Temp;
         }
     }
