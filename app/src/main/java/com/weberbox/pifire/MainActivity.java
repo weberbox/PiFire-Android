@@ -29,6 +29,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainBinding;
+import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.InfoActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -38,6 +39,7 @@ import com.weberbox.pifire.ui.utils.BannerTransition;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
+import com.weberbox.pifire.utils.SettingsUtils;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -53,6 +55,7 @@ public class MainActivity extends BaseActivity {
     private ConstraintLayout mRootContainer;
     private Socket mSocket;
     private AppUpdater mAppUpdater;
+    private SettingsUtils mSettingsUtils;
     private int mDownX;
 
     private boolean mAppIsVisible = false;
@@ -70,6 +73,8 @@ public class MainActivity extends BaseActivity {
         }
 
         mSocket = getSocket();
+
+        mSettingsUtils = new SettingsUtils(this, settingsCallback);
 
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
@@ -207,6 +212,10 @@ public class MainActivity extends BaseActivity {
         mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
     }
 
+    private final SettingsCallback settingsCallback = result -> {
+        if (!result) Timber.d("Update Settings Failed");
+    };
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -281,6 +290,7 @@ public class MainActivity extends BaseActivity {
         public void call(Object... args) {
             Timber.d("Socket connected");
             mMainViewModel.setServerConnected(true);
+            mSettingsUtils.requestSettingsData(mSocket);
         }
     };
 

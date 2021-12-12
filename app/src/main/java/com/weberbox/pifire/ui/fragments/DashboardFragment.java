@@ -521,9 +521,9 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
             long timerStartTime = timerInfo.getTimerStartTime();
             long timerEndTime = timerInfo.getTimerEndTime();
             long timerPauseTime = timerInfo.getTimerPauseTime();
-            double grillTemp = Double.parseDouble(probeTemps.getGrillTemp());
-            double probeOneTemp = Double.parseDouble(probeTemps.getProbeOneTemp());
-            double probeTwoTemp = Double.parseDouble(probeTemps.getProbeTwoTemp());
+            double grillTemp = probeTemps.getGrillTemp();
+            double probeOneTemp = probeTemps.getProbeOneTemp();
+            double probeTwoTemp = probeTemps.getProbeTwoTemp();
             int grillTarget = setPoints.getGrillTarget();
             int probeOneTarget = setPoints.getProbeOneTarget();
             int probeTwoTarget = setPoints.getProbeTwoTarget();

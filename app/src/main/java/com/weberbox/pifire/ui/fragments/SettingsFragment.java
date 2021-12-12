@@ -14,41 +14,18 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSettingsBinding;
-import com.weberbox.pifire.model.GrillProbeModel;
-import com.weberbox.pifire.model.ProbeProfileModel;
-import com.weberbox.pifire.model.SettingsResponseModel;
-import com.weberbox.pifire.model.SettingsResponseModel.CycleData;
-import com.weberbox.pifire.model.SettingsResponseModel.Firebase;
-import com.weberbox.pifire.model.SettingsResponseModel.Globals;
-import com.weberbox.pifire.model.SettingsResponseModel.Versions;
-import com.weberbox.pifire.model.SettingsResponseModel.GrillProbeSettings;
-import com.weberbox.pifire.model.SettingsResponseModel.HistoryPage;
-import com.weberbox.pifire.model.SettingsResponseModel.Ifttt;
-import com.weberbox.pifire.model.SettingsResponseModel.PelletLevel;
-import com.weberbox.pifire.model.SettingsResponseModel.ProbeSettings;
-import com.weberbox.pifire.model.SettingsResponseModel.ProbeTypes;
-import com.weberbox.pifire.model.SettingsResponseModel.PushBullet;
-import com.weberbox.pifire.model.SettingsResponseModel.Pushover;
-import com.weberbox.pifire.model.SettingsResponseModel.Safety;
-import com.weberbox.pifire.model.SettingsResponseModel.SmokePlus;
+import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.utils.SettingsUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
-import io.socket.client.Ack;
 import io.socket.client.Socket;
-import timber.log.Timber;
 
 public class SettingsFragment extends Fragment {
 
@@ -56,6 +33,7 @@ public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding mBinding;
     private SwipeRefreshLayout mSwipeRefresh;
+    private SettingsUtils mSettingsUtils;
     private Socket mSocket;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,6 +46,8 @@ public class SettingsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
+            mSettingsUtils = new SettingsUtils(getActivity(), settingsCallback);
+
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
             mSocket = app.getSocket();
         }
@@ -144,158 +124,18 @@ public class SettingsFragment extends Fragment {
     }
 
     private void requestSettingsData() {
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args ->
-                    updateSettingsData(args[0].toString()));
-        }
+        mSettingsUtils.requestSettingsData(mSocket);
     }
 
-    private void updateSettingsData(String response_data) {
-        mSwipeRefresh.setRefreshing(false);
-
-        try {
-
-            SettingsResponseModel settingsResponse = SettingsResponseModel.parseJSON(response_data);
-
-            HistoryPage historyPage = settingsResponse.getHistoryPage();
-            ProbeSettings probesSettings = settingsResponse.getProbeSettings();
-            Globals globals = settingsResponse.getGlobals();
-            Versions versions = settingsResponse.getVersions();
-            Ifttt ifttt = settingsResponse.getIfttt();
-            PushBullet pushBullet = settingsResponse.getPushBullet();
-            Pushover pushOver = settingsResponse.getPushover();
-            Firebase fireBase = settingsResponse.getFirebase();
-            ProbeTypes probeTypes = settingsResponse.getProbeTypes();
-            CycleData cycleData = settingsResponse.getCycleData();
-            SmokePlus smokePlus = settingsResponse.getSmokePlus();
-            Safety safety  = settingsResponse.getSafety();
-            PelletLevel pellets  = settingsResponse.getPellets();
-
-            if (probesSettings != null) {
-                Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
-                putString(getString(R.string.prefs_probe_profiles), new Gson().toJson(probes));
-            }
-
-            if (versions != null) {
-                putString(getString(R.string.prefs_server_version), versions.getServerVersion());
-            }
-
-            if (historyPage != null) {
-                putString(getString(R.string.prefs_history_display), historyPage.getMinutes());
-                putBoolean(getString(R.string.prefs_history_clear), historyPage.getClearHistoryOnStart());
-                putBoolean(getString(R.string.prefs_history_auto), historyPage.getAutoRefresh().equals("on"));
-                putString(getString(R.string.prefs_history_points), historyPage.getDataPoints());
-            }
-
-            if (globals != null) {
-                putString(getString(R.string.prefs_grill_name), globals.getGrillName());
-                putBoolean(getString(R.string.prefs_admin_debug), globals.getDebugMode());
-                putString(getString(R.string.prefs_shutdown_time), globals.getShutdownTimer());
-                putBoolean(getString(R.string.prefs_four_probe), globals.getFourProbes());
-                putString(getString(R.string.prefs_grill_units), globals.getUnits());
-
-                if (globals.getFourProbes() != null && globals.getFourProbes()) {
-                    GrillProbeSettings grillProbeSettings = settingsResponse.getGrillProbeSettings();
-
-                    Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();
-
-                    putString(getString(R.string.prefs_grill_probes), new Gson().toJson(grillProbes));
-                    putString(getString(R.string.prefs_grill_probe), grillProbeSettings.getGrillProbe());
-
-                    putString(getString(R.string.prefs_grill_probe_one_type), probeTypes.getGrill1type());
-                    putString(getString(R.string.prefs_grill_probe_two_type), probeTypes.getGrill2type());
-                } else {
-                    putString(getString(R.string.prefs_grill_probe_type), probeTypes.getGrill0type());
-                }
-            }
-
-            if (ifttt != null) {
-                putBoolean(getString(R.string.prefs_notif_ifttt_enabled), ifttt.getEnabled());
-                putString(getString(R.string.prefs_notif_ifttt_api), ifttt.getAPIKey());
-            }
-
-            if (pushBullet != null) {
-                putBoolean(getString(R.string.prefs_notif_pushbullet_enabled), pushBullet.getEnabled());
-                putString(getString(R.string.prefs_notif_pushbullet_api), pushBullet.getAPIKey());
-                putString(getString(R.string.prefs_notif_pushbullet_url), pushBullet.getPublicURL());
-            }
-
-            if (pushOver != null) {
-                putBoolean(getString(R.string.prefs_notif_pushover_enabled), pushOver.getEnabled());
-                putString(getString(R.string.prefs_notif_pushover_api), pushOver.getAPIKey());
-                putString(getString(R.string.prefs_notif_pushover_keys), pushOver.getUserKeys());
-                putString(getString(R.string.prefs_notif_pushover_url), pushOver.getPublicURL());
-            }
-
-            if (fireBase != null) {
-                putBoolean(getString(R.string.prefs_notif_firebase_enabled), fireBase.getEnabled());
-                putString(getString(R.string.prefs_notif_firebase_serveruuid), fireBase.getServerUUID());
-            }
-
-            if (probeTypes != null) {
-                putString(getString(R.string.prefs_probe_one_type), probeTypes.getProbe1type());
-                putString(getString(R.string.prefs_probe_two_type), probeTypes.getProbe2type());
-            }
-
-            if (cycleData != null) {
-                putString(getString(R.string.prefs_work_pid_pb), cycleData.getPb());
-                putString(getString(R.string.prefs_work_pid_ti), cycleData.getTi());
-                putString(getString(R.string.prefs_work_pid_td), cycleData.getTd());
-                putString(getString(R.string.prefs_work_pid_cycle), cycleData.getHoldCycleTime());
-                putString(getString(R.string.prefs_work_auger_on), cycleData.getSmokeCycleTime());
-                putString(getString(R.string.prefs_work_pmode_mode), cycleData.getPMode());
-                putString(getString(R.string.prefs_work_pid_u_max), cycleData.getuMax());
-                putString(getString(R.string.prefs_work_pid_u_min), cycleData.getuMin());
-                putString(getString(R.string.prefs_work_pid_center), cycleData.getCenter());
-            }
-
-            if (pellets != null) {
-                putString(getString(R.string.prefs_pellet_empty), pellets.getEmpty());
-                putString(getString(R.string.prefs_pellet_full), pellets.getFull());
-                putBoolean(getString(R.string.prefs_pellet_warning_enabled), pellets.getWarningEnabled());
-                putString(getString(R.string.prefs_pellet_warning_level), pellets.getWarningLevel());
-            }
-
-            if (smokePlus != null) {
-                putBoolean(getString(R.string.prefs_work_splus_enabled), smokePlus.getEnabled());
-                putString(getString(R.string.prefs_work_splus_min), smokePlus.getMinTemp());
-                putString(getString(R.string.prefs_work_splus_max), smokePlus.getMaxTemp());
-                putString(getString(R.string.prefs_work_splus_fan), smokePlus.getCycle());
-            }
-
-            if (safety != null) {
-                putString(getString(R.string.prefs_safety_min_start), safety.getMinStartupTemp());
-                putString(getString(R.string.prefs_safety_max_start), safety.getMaxStartupTemp());
-                putString(getString(R.string.prefs_safety_max_temp), safety.getMaxTemp());
-                putString(getString(R.string.prefs_safety_retries), safety.getReigniteRetries());
-            }
-
-        } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w(e,"JSON Error");
-            if (getActivity() != null) {
+    private final SettingsCallback settingsCallback = new SettingsCallback() {
+        @Override
+        public void onSettingsResult(boolean result) {
+            mSwipeRefresh.setRefreshing(false);
+            if (!result && getActivity() != null) {
                 showSnackBarMessage(getActivity());
             }
         }
-    }
-
-    private void putString(String key, String value) {
-        if (value != null) {
-            Prefs.putString(key, value);
-        }
-    }
-
-    private void putBoolean(String key, Boolean value) {
-        if (value != null) {
-            Prefs.putBoolean(key, value);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private void putInt(String key, Integer value) {
-        if (value != null) {
-            Prefs.putInt(key, value);
-        }
-    }
+    };
 
     private void showSnackBarMessage(Activity activity) {
         Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_settings, Snackbar.LENGTH_LONG);
