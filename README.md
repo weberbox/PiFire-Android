@@ -4,10 +4,14 @@
 ### Introduction
 This app was created to work with the PiFire smoker project. I wanted a native Android app to control my smoker using the awesome PiFire project so I created this.
 
-### Screenshots
-Dashboard | History | Event Log | Pellet Manager | Settings | Work Mode | Admin | Drawer
-----------|---------|-----------|----------------|----------|-----------|-------|-------
-![Dashboard](docs/screenshots/dashboard.png) | ![History](docs/screenshots/history.png) | ![Event Log](docs/screenshots/eventlog.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png) | ![Settings](docs/screenshots/settings.png) | ![Settings / Work Mode](docs/screenshots/workmode.png) | ![Admin](docs/screenshots/admin.png) | ![Drawer](docs/screenshots/drawer.png)
+## Screenshots
+Dashboard | History | Event Log | Pellet Manager
+----------|---------|-----------|----------------
+![Dashboard](docs/screenshots/dashboard.png) | ![History](docs/screenshots/history.png) | ![Event Log](docs/screenshots/eventlog.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png)
+
+Settings | Work Mode | Admin | Drawer
+---------|-----------|-------|--------
+![Settings](docs/screenshots/settings.png) | ![Settings / Work Mode](docs/screenshots/workmode.png) | ![Admin](docs/screenshots/admin.png) | ![Drawer](docs/screenshots/drawer.png)
 
 ## Documentation
 
