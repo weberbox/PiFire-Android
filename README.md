@@ -28,7 +28,7 @@ This application supports two versions of the PiFire server, the main PiFire pro
 
 The main PiFire branch now supports the Android app you can find it [here](https://github.com/nebhead/PiFire)
 
-Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/development-fourprobes)
+Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/fourprobes)
 
 
 There are currently two Android versions that can be downloaded
