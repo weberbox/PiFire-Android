@@ -24,10 +24,10 @@ import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.recycler.viewmodel.TempPickerViewModel;
+import com.weberbox.pifire.model.local.TempPickerModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.TempUtils;
 
@@ -41,7 +41,7 @@ public class TempPickerDialog {
     private String mSelectedTemp;
     private final BottomSheetDialog mTempPickerBottomSheet;
     private final LayoutInflater mInflater;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mCallBack;
     private final Context mContext;
     private final String mTempUnit;
     private final int mTempType;
@@ -52,7 +52,7 @@ public class TempPickerDialog {
                             boolean hold) {
         mTempPickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mCallBack = (DashboardCallback) fragment;
         mContext = context;
         mTempType = tempType;
         mScrollTemp = defaultTemp;
@@ -189,13 +189,13 @@ public class TempPickerDialog {
         }
     }
 
-    private static List<TempPickerViewModel> generateTemperatureList(
+    private static List<TempPickerModel> generateTemperatureList(
             String tempUnit, int start, int end) {
-        List<TempPickerViewModel> tempPickerViewModelList;
+        List<TempPickerModel> tempPickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");
         tempPickerViewModelList = IntStream.range(start, end).mapToObj(i ->
-                new TempPickerViewModel(formatter.format(i), tempUnit)).collect(Collectors.toList());
+                new TempPickerModel(formatter.format(i), tempUnit)).collect(Collectors.toList());
 
         return tempPickerViewModelList;
     }

@@ -3,8 +3,6 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,18 +14,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import com.google.android.material.snackbar.Snackbar;
+
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.interfaces.BackupRestoreCallbackInterface;
+import com.weberbox.pifire.interfaces.BackupRestoreCallback;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BackupRestoreDialog;
 import com.weberbox.pifire.ui.dialogs.RestoreListDialog;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 
@@ -38,16 +38,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class BackupRestoreFragment extends PreferenceFragmentCompat implements
-        BackupRestoreCallbackInterface {
+        BackupRestoreCallback {
 
     private Socket mSocket;
-    private Snackbar mSnackBar;
     private String mJsonData;
     private String mType;
 
@@ -68,8 +68,6 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mSnackBar = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
         Preference backupSettings = findPreference(getString(R.string.prefs_admin_backup_settings));
         Preference restoreSettings = findPreference(getString(R.string.prefs_admin_restore_settings));
@@ -138,7 +136,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                 }
                 backupRestore.showDialog();
             } else {
-                showSnackBarMessage(getActivity(), R.string.prefs_not_connected,true);
+                AlertUtils.createErrorAlert(getActivity(), R.string.prefs_not_connected, false);
             }
         }
     }
@@ -196,9 +194,11 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                     getActivity().runOnUiThread(() -> {
                         if (args[0] != null) {
                             if (args[0].toString().equalsIgnoreCase("success")) {
-                                showSnackBarMessage(getActivity(), R.string.restore_success,false);
+                                AlertUtils.createAlert(getActivity(), R.string.restore_success,
+                                        1000);
                             } else {
-                                showSnackBarMessage(getActivity(), R.string.restore_failed,true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
+                                        false);
                             }
                         }
                     });
@@ -216,11 +216,11 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                                 getActivity().runOnUiThread(() -> {
                                     if (args[0] != null) {
                                         if (args[0].toString().equalsIgnoreCase("success")) {
-                                            showSnackBarMessage(getActivity(),
-                                                    R.string.restore_success,false);
+                                            AlertUtils.createAlert(getActivity(),
+                                                    R.string.restore_success, 1000);
                                         } else {
-                                            showSnackBarMessage(getActivity(),
-                                                    R.string.restore_failed,true);
+                                            AlertUtils.createErrorAlert(getActivity(),
+                                                    R.string.restore_failed, false);
                                         }
                                     }
                                 });
@@ -234,7 +234,8 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         socket.emit(ServerConstants.REQUEST_BACKUP_DATA, backupType, (Ack) args -> {
             if (getActivity() != null && args[0] != null) {
                 mJsonData = args[0].toString();
-                String currentTime = TimeUtils.getCurrentTime("MM-dd-yy_hhmmss");
+                String currentTime = TimeUtils.getFormattedDate(System.currentTimeMillis(),
+                        "MM-dd-yy_hhmmss");
                 switch (backupType) {
                     case Constants.BACKUP_SETTINGS:
                         createFile(Constants.BACKUP_SETTINGS_FILENAME + currentTime);
@@ -266,20 +267,29 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                     } catch (JSONException e) {
                         Timber.w(e, "Failed to create file list");
                         restoreDialog.dismiss();
-                        showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                        AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed, false);
                     }
                 });
             }
         });
     }
 
-    private void requestPermissionAndBrowseFile()  {
-        if(getActivity() != null && ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestReadExternalStorage.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-        } else {
-            openFileBrowser();
-        }
+    private void requestPermissionAndBrowseFile() {
+        TedPermission.create()
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        openFileBrowser();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(List<String> deniedPermissions) {
+                        AlertUtils.createErrorAlert(getActivity(), R.string.file_permission_denied,
+                                false);
+                    }
+                })
+                .check();
     }
 
     private void openFileBrowser()  {
@@ -304,15 +314,6 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         createFileResultLauncher.launch(intent);
     }
 
-    private final ActivityResultLauncher<String> requestReadExternalStorage =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    openFileBrowser();
-                } else {
-                    showSnackBarMessage(getActivity(), R.string.file_permission_denied, true);
-                }
-            });
-
     private final ActivityResultLauncher<Intent> pickerResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -330,7 +331,8 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                                 }
                             } catch (IOException e) {
                                 Timber.w(e, "Failed to restore backup file");
-                                showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
+                                        false);
                             }
                         }
                     }
@@ -351,26 +353,15 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                                     os.write(mJsonData.getBytes());
                                     os.close();
                                 }
-                                showSnackBarMessage(getActivity(), R.string.backup_success, false);
+                                AlertUtils.createAlert(getActivity(), R.string.backup_success,
+                                        1000);
                             } catch (IOException e) {
                                 Timber.w(e, "Failed to write backup file");
-                                showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed,
+                                        false);
                             }
                         }
                     }
                 }
             });
-
-    private void showSnackBarMessage(Activity activity, int message, boolean error) {
-        if (!mSnackBar.isShown() && activity != null) {
-            int color = R.color.colorPrimaryLight;
-            if (error) {
-                color = R.color.colorAccentRed;
-            }
-            mSnackBar.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(color)));
-            mSnackBar.setTextColor(activity.getColor(R.color.colorWhite));
-            mSnackBar.setText(message);
-            mSnackBar.show();
-        }
-    }
 }

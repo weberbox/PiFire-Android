@@ -55,6 +55,7 @@
     <string name="def_pid_center">0.5</string>
 
     <string name="def_shutdown_time">60</string>
+    <string name="def_startup_time">240</string>
 
     <string name="def_history_display">60</string>
     <string name="def_history_points">60</string>
@@ -66,6 +67,9 @@
 
     <string name="def_pellet_empty">22</string>
     <string name="def_pellet_full">4</string>
+
+    <string name="def_recipe_time">0 min</string>
+    <string name="def_recipe_diff">Easy</string>
 
 
 </resources>

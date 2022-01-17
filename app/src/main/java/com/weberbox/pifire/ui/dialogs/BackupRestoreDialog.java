@@ -16,14 +16,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogBackupRestoreBinding;
-import com.weberbox.pifire.interfaces.BackupRestoreCallbackInterface;
+import com.weberbox.pifire.interfaces.BackupRestoreCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class BackupRestoreDialog {
 
     private final BottomSheetDialog mBackupRestoreBottomSheet;
     private final LayoutInflater mInflater;
-    private final BackupRestoreCallbackInterface mCallBack;
+    private final BackupRestoreCallback mCallBack;
     private final Context mContext;
     private final int mType;
     private int mLeftIcon;
@@ -36,7 +36,7 @@ public class BackupRestoreDialog {
         mBackupRestoreBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
         mContext = context;
-        mCallBack = (BackupRestoreCallbackInterface) fragment;
+        mCallBack = (BackupRestoreCallback) fragment;
         mType = type;
         mDialogMessage = null;
         mLeftAction = mContext.getString(R.string.cancel);

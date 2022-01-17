@@ -4,28 +4,28 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.databinding.LayoutPelletsListCardviewBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsCardviewBinding;
 
 @SuppressWarnings("unused")
 public class PelletsCardViewRecycler extends CardView {
 
-    private LinearLayout mHolderView;
+    private VeilRecyclerFrameView mRecyclerView;
     private TextView mHeaderTitle;
     private TextView mHeaderButton;
     private ImageView mHeaderIcon;
-    private RecyclerView mRecyclerView;
+    private View mGradient;
+    private TextView mViewAllButton;
     private boolean mButtonEnabled;
 
     public PelletsCardViewRecycler(@NonNull Context context) {
@@ -44,7 +44,7 @@ public class PelletsCardViewRecycler extends CardView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        LayoutPelletsListCardviewBinding binding = LayoutPelletsListCardviewBinding.inflate(
+        LayoutPelletsCardviewBinding binding = LayoutPelletsCardviewBinding.inflate(
                 LayoutInflater.from(context), this, true);
 
         if (attrs != null) {
@@ -60,16 +60,16 @@ public class PelletsCardViewRecycler extends CardView {
             headerText = headerText == null ? "" : headerText;
             buttonText = buttonText == null ? "" : buttonText;
 
-            mHolderView = binding.pelletsCardviewHolder;
             mHeaderTitle = binding.cardHeaderTitle;
             mHeaderButton = binding.cardHeaderButton;
             mHeaderIcon = binding.cardHeaderIcon;
             mRecyclerView = binding.pelletsRecycler;
+            mGradient = binding.pelletsViewAllShadow;
+            mViewAllButton = binding.pelletsViewAll;
 
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
             mRecyclerView.setNestedScrollingEnabled(false);
+            mRecyclerView.addVeiledItems(3);
 
             mHeaderTitle.setText(headerText);
             mHeaderIcon.setImageResource(headerIcon);
@@ -116,12 +116,17 @@ public class PelletsCardViewRecycler extends CardView {
         return mHeaderButton;
     }
 
-    public LinearLayout getHolderView() {
-        return mHolderView;
+    public VeilRecyclerFrameView getRecycler() {
+        return mRecyclerView;
     }
 
-    public RecyclerView getRecycler() {
-        return mRecyclerView;
+    public void setViewAll(boolean shown) {
+        mGradient.setVisibility(shown ? VISIBLE : GONE);
+        mViewAllButton.setVisibility(shown ? VISIBLE : GONE);
+    }
+
+    public TextView getViewAllButton() {
+        return mViewAllButton;
     }
 
 }

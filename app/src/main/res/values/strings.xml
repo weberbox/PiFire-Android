@@ -3,40 +3,8 @@
     <string name="app_name">PiFire</string>
     <string name="nav_header_desc">Navigation header</string>
 
-    <string name="notification_group_grill">pifire_grill_group</string>
-    <string name="notification_group_grill_name">Grill Alerts</string>
-    <string name="notification_channel_base">pifire_base_alerts</string>
-    <string name="notification_channel_temp">pifire_temp_alerts</string>
-    <string name="notification_channel_timer">pifire_timer_alerts</string>
-    <string name="notification_channel_error">pifire_error_alerts</string>
-    <string name="notification_channel_pellets">pifire_pellet_alerts</string>
-    <string name="notification_channel_updates">pifire_update_alerts</string>
-    <string name="notification_channel_base_name">General Alerts</string>
-    <string name="notification_channel_temp_name">Temp Alerts</string>
-    <string name="notification_channel_timer_name">Timer Alerts</string>
-    <string name="notification_channel_error_name">Error Alerts</string>
-    <string name="notification_channel_pellets_name">Pellet Alerts</string>
-    <string name="notification_channel_updates_name">Update Alerts</string>
-    <string name="notification_desc_base">Shows general grill alerts</string>
-    <string name="notification_desc_temp">Shows grill temp alerts</string>
-    <string name="notification_desc_timer">Shows grill timer alerts</string>
-    <string name="notification_desc_error">Shows grill error alerts</string>
-    <string name="notification_desc_pellets">Shows grill pellet alerts</string>
-    <string name="notification_desc_updates">Shows app update notifications</string>
-
-    <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
-
-    <string name="updater_update_available">New update available!</string>
-    <string name="updater_update_required">Update Required!</string>
-    <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
-    <string name="updater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
-    <string name="updater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
-    <string name="updater_update_available_description_snackbar">Update %1$s is available!</string>
-    <string name="updater_update_available_description_notification">Update %1$s of %2$s is available to download</string>
-    <string name="updater_update_not_available">No updates available</string>
-    <string name="updater_update_not_available_description">You\'ve got the latest version available of %s!</string>
-    <string name="updater_update_check_failed">Update check failed. Please try again later</string>
-    <string name="updater_update_download_failed">Error downloading update</string>
+    <string name="action_item_selected">%1$s Selected</string>
+    <string name="action_offline">Currently Offline</string>
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_pellet_manager">Pellets</string>
@@ -44,13 +12,15 @@
     <string name="menu_events">Events</string>
     <string name="menu_setting">Settings</string>
     <string name="menu_info">Info</string>
+    <string name="menu_recipes">Recipes</string>
 
-    <string name="drawer_dashboard">Dashboard</string>
-    <string name="drawer_pellet_manager">Pellet Manager</string>
-    <string name="drawer_history">History</string>
-    <string name="drawer_events">Event Log</string>
-    <string name="drawer_setting">Settings</string>
-    <string name="drawer_admin">Admin</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_pellet_manager">Pellet Manager</string>
+    <string name="nav_history">History</string>
+    <string name="nav_events">Event Log</string>
+    <string name="nav_setting">Settings</string>
+    <string name="nav_admin">Admin</string>
+    <string name="nav_recipes">Recipes</string>
 
     <string name="placeholder_img">placeholder_img</string>
     <string name="placeholder_temp">0°</string>
@@ -79,8 +49,11 @@
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
     <string name="im_sure">I\'m Sure</string>
+    <string name="view_all">View All</string>
     <string name="enabled">Enabled</string>
     <string name="not_set">Not set</string>
+    <string name="search">Search</string>
+    <string name="undo">Undo</string>
     <string name="swipe_to_start">Swipe to start</string>
     <string name="continue_button">Continue</string>
     <string name="skip_button">Skip</string>
@@ -94,6 +67,11 @@
     <string name="refresh">Refresh</string>
     <string name="backup">Backup</string>
     <string name="restore">Restore</string>
+    <string name="delete">Delete</string>
+    <string name="drag">Drag</string>
+    <string name="save">Save</string>
+    <string name="exporting">Exporting</string>
+    <string name="importing">Importing</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -124,6 +102,9 @@
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
 
+    <string name="dialog_camera">Camera</string>
+    <string name="dialog_gallery">Gallery</string>
+
     <string name="dialog_backup_message">Are you sure you want to backup the %1$s</string>
     <string name="dialog_remote">Remote</string>
     <string name="dialog_local">Local</string>
@@ -139,12 +120,12 @@
     <string name="file_picker_text">Choose a file</string>
     <string name="backups_not_found">No Remote Backups Found</string>
 
-    <string name="file_permission_denied">File permissions are requited to use this feature</string>
+    <string name="file_permission_denied">File permissions are required to use this feature</string>
+    <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
 
     <string name="prefs_not_connected">Currently Offline - Settings cannot be changed</string>
 
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
-    <string name="control_send_error">There was an error sending the request please try again</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
     <string name="control_manual_mode">Manual mode must be controlled from Admin Settings</string>
 
@@ -159,11 +140,47 @@
 
     <string name="event_type_info">I</string>
 
+    <string name="recipes_unsaved_title">Unsaved Changes</string>
+    <string name="recipes_unsaved_message">This recipe has unsaved changes.What would you like to do?</string>
+    <string name="recipes_unsaved_discard">Discard</string>
+    <string name="recipes_unsaved_cancel">Keep Editing</string>
+    <string name="recipes_load_error">There was an error loading the requested recipe!</string>
+    <string name="recipes_add">Add Recipe</string>
+    <string name="recipes_title_hint">Recipe title</string>
+    <string name="recipes_notes_hint">Notes</string>
+    <string name="recipes_removed">Recipe removed from the list</string>
+    <string name="recipes_level_beginner">Beginner</string>
+    <string name="recipes_level_easy">Easy</string>
+    <string name="recipes_level_mod">Moderate</string>
+    <string name="recipes_level_hard">Hard</string>
+    <string name="recipes_level_v_hard">Challenging</string>
+    <string name="recipes_cooking_time">Cooking time</string>
+    <string name="recipes_difficulty_level">Difficulty level</string>
+    <string name="recipes_created">Date created</string>
+    <string name="recipes_modified">Last modified</string>
+    <string name="recipes_ingredients">Ingredients</string>
+    <string name="recipes_instructions">Instructions</string>
+    <string name="recipes_notes">Notes</string>
+    <string name="recipes_action_title">Recipe View</string>
+    <string name="recipes_item_section">Section</string>
+    <string name="recipes_item_step">Step</string>
+    <string name="recipes_add_step">Add Step</string>
+    <string name="recipes_add_section">Add Section</string>
+    <string name="recipes_add_item">Add Ingredient</string>
+    <string name="recipes_untitled">Untitled Recipe</string>
+    <string name="recipes_item_value"><font size="30">Item</font></string>
+    <string name="recipes_item_unit"><font size="30">Unit</font></string>
+    <string name="recipes_item_qty"><font size="30">Qty</font></string>
+
+    <string name="image_picker_no_intent">Image picker option is missing</string>
+    <string name="image_picker_toolbar_title">Crop Image</string>
+    <string name="image_picker_result_error">There was an error retrieving the image</string>
+    <string name="image_picker_cancelled">Operation Cancelled</string>
+
     <string name="setup_label">Server Setup</string>
     <string name="setup_one">1</string>
     <string name="setup_two">2</string>
     <string name="setup_three">3</string>
-    <string name="setup_terms">Terms</string>
     <string name="setup_connect">Connect</string>
     <string name="setup_address">Address</string>
     <string name="setup_finish">Finish</string>
@@ -184,6 +201,10 @@
     <string name="setup_qr_camera_denied">Camera permission is required to use QR feature. Continue manually or grant permission</string>
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
+    <string name="setup_server_connect_error">Failed to connect. HTTP Code: %1$s - Message: %2$s</string>
+    <string name="setup_server_auth_required">Authentication Required</string>
+    <string name="setup_server_self_signed_title">Certificate Error</string>
+    <string name="setup_server_self_signed">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
 
     <string name="settings_config">Configuration</string>
     <string name="settings_server">Server Settings</string>
@@ -191,7 +212,7 @@
     <string name="settings_probe">Probe Settings</string>
     <string name="settings_grill_name">Grill Name</string>
     <string name="settings_work">Work Mode</string>
-    <string name="settings_shutdown">Shutdown Settings</string>
+    <string name="settings_timers">Startup &amp; Shutdown</string>
     <string name="settings_history">History Settings</string>
     <string name="settings_safety">Safety Settings</string>
     <string name="settings_notifications">Notifications</string>
@@ -211,8 +232,6 @@
     <string name="settings_server_settings_summary">Setup server address and basic auth</string>
 
     <string name="settings_cat_debug">Debug</string>
-    <string name="settings_firebase_token">Firebase Token</string>
-    <string name="settings_firebase_token_summary">Show firebase token in dialog</string>
     <string name="settings_debug_logging">Debug Logging</string>
     <string name="settings_debug_logging_summary">This enables debug logging. May impact performance</string>
 
@@ -247,8 +266,6 @@
     <string name="settings_username_blank_error">Username cannot be blank</string>
     <string name="settings_username_encrypt_error">Error encrypting username</string>
     <string name="settings_password_encrypt_error">Error encrypting password</string>
-
-    <string name="settings_self_signed_cert_summary">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect.</string>
 
     <string name="settings_cat_app_history">History</string>
     <string name="settings_app_history_refresh_title">Auto History Refresh</string>
@@ -314,6 +331,8 @@
 
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
+    <string name="settings_startup_time">Startup Timer (seconds)</string>
+    <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
 
     <string name="settings_cat_grill_name">Grill Naming</string>
 
@@ -346,7 +365,6 @@
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>
     <string name="settings_admin_debug_note">This mode enables server verbose debug logging. May impact performance</string>
-    <string name="settings_admin_manual">Manual Controls</string>
     <string name="settings_admin_manual_summary">Allows manual control of the Auger, Fan, Igniter and Power outputs</string>
     <string name="settings_admin_manual_note">If enabled this will cancel the current mode</string>
 
@@ -397,7 +415,18 @@
     <string name="settings_manual_igniter">Toggle Igniter</string>
     <string name="settings_manual_power">Toggle Power</string>
 
-    <string name="info_title">Information</string>
+    <string name="settings_cat_app_recipes">Recipes</string>
+    <string name="settings_recipe_db_backup">Export recipes database</string>
+    <string name="settings_recipe_db_backup_title">Backup</string>
+    <string name="settings_recipe_db_restore">Import recipes database</string>
+    <string name="settings_recipe_db_restore_title">Restore</string>
+    <string name="settings_recipe_db_clear">Clear recipes database</string>
+    <string name="settings_recipe_db_clear_title">Delete</string>
+    <string name="settings_recipe_db_cleared">Recipe database cleared</string>
+    <string name="settings_recipe_db_clear_failed">Failed to clear the recipe database!</string>
+    <string name="settings_recipe_db_not_exist">Recipe database already cleared</string>
+    <string name="settings_recipe_db_clear_message">Are you sure you want to clear the recipe database? This action cannot be undone</string>
+
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Info</string>
     <string name="info_cpu_temp">CPU Temperature</string>
@@ -424,7 +453,7 @@
     <string name="info_app_build_date">Build Date</string>
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
-    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2020\n\nPiFire Android created by James Weber, &#169; 2021</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2021\n\nPiFire Android created by James Weber, &#169; 2021</string>
 
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_current_load">Current</string>
@@ -434,26 +463,16 @@
     <string name="pellets_current_date">Date Loaded:</string>
     <string name="pellets_current_comments">Comments:</string>
 
-    <string name="pellets_rating_error">Unknown</string>
-    <string name="pellets_rating_5">★ ★ ★ ★ ★</string>
-    <string name="pellets_rating_4">★ ★ ★ ★</string>
-    <string name="pellets_rating_3">★ ★ ★</string>
-    <string name="pellets_rating_2">★ ★</string>
-    <string name="pellets_rating_1">★</string>
-
     <string name="pellets_add">Add New</string>
     <string name="pellets_brands">Brands</string>
     <string name="pellets_woods">Wood Types</string>
     <string name="pellets_editor">Pellet Profiles Editor</string>
     <string name="pellets_log">Pellet Log</string>
     <string name="pellets_load_new">Load New</string>
-    <string name="pellets_load">Load</string>
-    <string name="pellets_delete">Delete</string>
     <string name="pellets_delete_content">Are you sure that you want to permanently delete this item?</string>
     <string name="pellets_cannot_delete_profile">Error cannot delete current profile</string>
     <string name="pellets_add_brand">Add New Brand</string>
     <string name="pellets_add_woods">Add New Wood</string>
-    <string name="pellets_dialog_save">Save</string>
     <string name="pellets_dialog_save_load">Save &amp; Load</string>
 
     <string name="pellets_brand_holder">Generic</string>
@@ -461,6 +480,48 @@
     <string name="pellets_date_holder" tools:ignore="TypographyDashes">2021-09-07 21:39:08</string>
     <string name="pellets_comments_holder">This is a placeholder profile. Alder is generic and used in almost all pellets, regardless of the wood type indicated on the packaging. It tends to burn consistently and produces a mild smoke.</string>
     <string name="pellets_comments_hint">Enter comments here</string>
+
+    <string name="item_rating_error">Unknown</string>
+    <string name="item_rating_5">★ ★ ★ ★ ★</string>
+    <string name="item_rating_4">★ ★ ★ ★</string>
+    <string name="item_rating_3">★ ★ ★</string>
+    <string name="item_rating_2">★ ★</string>
+    <string name="item_rating_1">★</string>
+
+    <string name="notification_group_grill">pifire_grill_group</string>
+    <string name="notification_group_grill_name">Grill Alerts</string>
+    <string name="notification_channel_base">pifire_base_alerts</string>
+    <string name="notification_channel_temp">pifire_temp_alerts</string>
+    <string name="notification_channel_timer">pifire_timer_alerts</string>
+    <string name="notification_channel_error">pifire_error_alerts</string>
+    <string name="notification_channel_pellets">pifire_pellet_alerts</string>
+    <string name="notification_channel_updates">pifire_update_alerts</string>
+    <string name="notification_channel_base_name">General Alerts</string>
+    <string name="notification_channel_temp_name">Temp Alerts</string>
+    <string name="notification_channel_timer_name">Timer Alerts</string>
+    <string name="notification_channel_error_name">Error Alerts</string>
+    <string name="notification_channel_pellets_name">Pellet Alerts</string>
+    <string name="notification_channel_updates_name">Update Alerts</string>
+    <string name="notification_desc_base">Shows general grill alerts</string>
+    <string name="notification_desc_temp">Shows grill temp alerts</string>
+    <string name="notification_desc_timer">Shows grill timer alerts</string>
+    <string name="notification_desc_error">Shows grill error alerts</string>
+    <string name="notification_desc_pellets">Shows grill pellet alerts</string>
+    <string name="notification_desc_updates">Shows app update notifications</string>
+
+    <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
+
+    <string name="updater_update_available">New update available!</string>
+    <string name="updater_update_required">Update Required!</string>
+    <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
+    <string name="updater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
+    <string name="updater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
+    <string name="updater_update_available_description_snackbar">Update %1$s is available!</string>
+    <string name="updater_update_available_description_notification">Update %1$s of %2$s is available to download</string>
+    <string name="updater_update_not_available">No updates available</string>
+    <string name="updater_update_not_available_description">You\'ve got the latest version available of %s!</string>
+    <string name="updater_update_check_failed">Update check failed. Please try again later</string>
+    <string name="updater_update_download_failed">Error downloading update</string>
 
 
 </resources>

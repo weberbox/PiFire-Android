@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.fragments.recipes.RecipeEditFragment">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_save_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/save"
+        android:src="@drawable/ic_save"
+        app:backgroundTint="@color/colorAccent"
+        app:borderWidth="0dp"
+
+        app:tint="@color/colorWhite" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/re_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/re_image_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/medium_spacing"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/re_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_recipe_placeholder"
+                    android:contentDescription="@string/placeholder_img" />
+
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/re_name"
+                style="@style/TextInputLayoutFilledBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium_spacing"
+                android:layout_marginTop="@dimen/large_spacing"
+                android:layout_marginEnd="@dimen/medium_spacing"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/re_image_container">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/re_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/aller_regular"
+                    android:hint="@string/recipes_title_hint"
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHighlight="@color/colorAccent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/re_time"
+                style="@style/TextInputLayoutFilledBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium_spacing"
+                android:layout_marginEnd="@dimen/small_spacing"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintEnd_toStartOf="@+id/re_difficulty"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/re_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/re_time_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:focusable="false"
+                    android:fontFamily="@font/aller_regular"
+                    android:hint="@string/recipes_cooking_time"
+                    android:maxLines="1"
+                    android:text="@string/def_recipe_time"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHighlight="@color/colorAccent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/re_difficulty"
+                style="@style/TextInputLayoutFilledBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/small_spacing"
+                android:layout_marginEnd="@dimen/medium_spacing"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/re_time"
+                app:layout_constraintTop_toBottomOf="@+id/re_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/re_difficulty_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:focusable="false"
+                    android:fontFamily="@font/aller_regular"
+                    android:hint="@string/recipes_difficulty_level"
+                    android:maxLines="1"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    android:text="@string/def_recipe_diff"
+                    android:textColor="@color/colorWhite"
+                    android:textColorHighlight="@color/colorAccent" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_ingredients_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/re_time">
+
+                <TextView
+                    android:id="@+id/re_ingredients_title"
+                    style="@style/Text15Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/medium_spacing"
+                    android:text="@string/recipes_ingredients"
+                    android:textSize="22sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/re_ingredients_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/re_ingredients_title"
+                    android:paddingTop="20dp" />
+
+                <TextView
+                    android:id="@+id/re_ingredients_add_item"
+                    style="@style/Text18Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/re_ingredients_recycler"
+                    android:layout_marginStart="@dimen/medium_spacing"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:text="@string/recipes_add_item"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/re_ingredients_add_section"
+                    style="@style/Text18Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/re_ingredients_recycler"
+                    android:layout_toEndOf="@+id/re_ingredients_add_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    android:text="@string/recipes_add_section"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/re_instructions_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/re_ingredients_container">
+
+                <TextView
+                    android:id="@+id/re_instructions_title"
+                    style="@style/Text15Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/medium_spacing"
+                    android:text="@string/recipes_instructions"
+                    android:textSize="22sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/re_instructions_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/re_instructions_title"
+                    android:paddingTop="20dp" />
+
+                <TextView
+                    android:id="@+id/re_instructions_add_step"
+                    style="@style/Text18Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/re_instructions_recycler"
+                    android:layout_marginStart="@dimen/medium_spacing"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:text="@string/recipes_add_step"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/re_instructions_add_section"
+                    style="@style/Text18Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/re_instructions_recycler"
+                    android:layout_toEndOf="@+id/re_instructions_add_step"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="15dp"
+                    android:text="@string/recipes_add_section"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/re_notes_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium_spacing"
+                android:layout_marginEnd="@dimen/medium_spacing"
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                android:paddingBottom="@dimen/medium_spacing"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/re_instructions_container">
+
+                <TextView
+                    style="@style/Text15Aller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/re_notes_edit_text"
+                    android:text="@string/recipes_notes"
+                    android:textSize="22sp" />
+
+                <EditText
+                    android:id="@+id/re_notes_edit_text"
+                    style="@style/Text15Aller"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|start"
+                    android:layout_marginTop="@dimen/medium_spacing"
+                    android:background="@drawable/bg_table_item"
+                    android:gravity="top"
+                    android:importantForAutofill="no"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minHeight="150dp"
+                    android:padding="10dp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

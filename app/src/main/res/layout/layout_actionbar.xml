@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize"
+    android:background="@color/colorPrimary">
+
+    <ImageButton
+        android:id="@+id/action_bar_button"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:actionBarSize"
+        android:layout_centerVertical="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/nav_app_bar_open_drawer_description"
+        android:padding="15dp"
+        android:src="@drawable/ic_nav_burger" />
+
+    <TextView
+        android:id="@+id/action_bar_text"
+        style="@style/Text18Aller"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/action_bar_button"
+        android:gravity="center|start"
+        android:padding="15dp"
+        android:text="@string/placeholder_text_view"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/action_bar_offline"
+        style="@style/Text18Aller"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:actionBarSize"
+        android:layout_alignParentEnd="true"
+        android:drawablePadding="@dimen/default_spacing"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/action_offline"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:drawableEndCompat="@drawable/ic_grill_disconnected"
+        tools:ignore="RelativeOverlap" />
+
+</RelativeLayout>

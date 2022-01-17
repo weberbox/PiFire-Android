@@ -124,12 +124,12 @@
         <item>10</item>
     </string-array>
 
-    <string-array name="pellet_rating">
-        <item>@string/pellets_rating_1</item>
-        <item>@string/pellets_rating_2</item>
-        <item>@string/pellets_rating_3</item>
-        <item>@string/pellets_rating_4</item>
-        <item>@string/pellets_rating_5</item>
+    <string-array name="items_rating">
+        <item>@string/item_rating_1</item>
+        <item>@string/item_rating_2</item>
+        <item>@string/item_rating_3</item>
+        <item>@string/item_rating_4</item>
+        <item>@string/item_rating_5</item>
     </string-array>
 
     <string-array name="pellet_profiles">
@@ -184,6 +184,14 @@
         <item>8</item>
         <item>9</item>
         <item>10</item>
+    </string-array>
+
+    <string-array name="recipe_difficulties">
+        <item>@string/recipes_level_beginner</item>
+        <item>@string/recipes_level_easy</item>
+        <item>@string/recipes_level_mod</item>
+        <item>@string/recipes_level_hard</item>
+        <item>@string/recipes_level_v_hard</item>
     </string-array>
 
 </resources>

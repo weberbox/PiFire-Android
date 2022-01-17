@@ -28,6 +28,14 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="Text14Aller" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/aller_font_family</item>
+        <item name="fontFamily">@font/aller_font_family</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="Text15Aller" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
@@ -70,12 +78,6 @@
         <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
-    <style name="BannerMessageTextAppearance">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
     <style name="MainButtonPrimary" parent="@style/TextAppearance.AppCompat.Widget.Button">
         <item name="android:textSize">24.0sp</item>
         <item name="android:textColor">@color/colorWhite</item>
@@ -92,9 +94,17 @@
 
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
+<!--        <item name="android:navigationBarColor">@color/colorPrimary</item>-->
+<!--        <item name="android:windowIsFloating">false</item>-->
     </style>
 
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="AlertDialogImageView" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
@@ -108,19 +118,25 @@
     </style>
 
     <style name="NegativeButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/dialog_button_color</item>
     </style>
 
     <style name="PositiveButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/dialog_button_color</item>
     </style>
 
     <style name="NeutralButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/dialog_button_color</item>
     </style>
 
     <style name="TextInputLayoutFilledBox" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxStrokeColor">@color/selector_stroke_color</item>
+    </style>
+
+    <style name="AlerterButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAppearance">@style/Text16Aller</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="SnackbarThemeMaterial" parent="Widget.MaterialComponents.Snackbar">
@@ -140,7 +156,6 @@
         <item name="colorOnSurface">@color/colorPrimaryLighter</item>
     </style>
 
-
     <style name="Theme.PiFire.Slide">
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>
@@ -154,6 +169,14 @@
         <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
         <item name="titleTextStyle">@style/Text18Aller</item>
+    </style>
+
+    <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
+        <item name="background">@color/colorAccent</item>
+    </style>
+
+    <style name="RecipesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
+        <item name="background">@color/colorPrimary</item>
     </style>
 
 </resources>

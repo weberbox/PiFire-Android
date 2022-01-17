@@ -2,7 +2,7 @@ package com.weberbox.pifire.control;
 
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.model.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletProfileModel;
 import com.weberbox.pifire.utils.JSONUtils;
 
 import io.socket.client.Socket;
@@ -182,10 +182,24 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
-    // Shutdown Timer
-    public static void setShutdownTime(Socket socket, String shutDownTime) {
+    // Shutdown Timer Depreciated
+    public static void setShutdownTimeDep(Socket socket, String shutDownTime) {
         String payload = JSONUtils.encodeJSON(ServerConstants.SHUTDOWN_ACTION,
                 ServerConstants.SHUTDOWN_TIMER, shutDownTime);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Shutdown Timer
+    public static void setShutdownTime(Socket socket, String shutDownTime) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.TIMERS_ACTION,
+                ServerConstants.SHUTDOWN_TIMER, shutDownTime);
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
+    }
+
+    // Startup Timer
+    public static void setStartupTime(Socket socket, String startUpTime) {
+        String payload = JSONUtils.encodeJSON(ServerConstants.TIMERS_ACTION,
+                ServerConstants.STARTUP_TIMER, startUpTime);
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 

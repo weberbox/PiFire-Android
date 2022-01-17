@@ -16,7 +16,8 @@ public class SecurityUtils {
     private static final String PREFS_NAME = "_encrypted_prefs";
 
     @SuppressWarnings("unused")
-    public static SharedPreferences getEncryptedSharedPreferences(Context context) throws GeneralSecurityException, IOException {
+    public static SharedPreferences getEncryptedSharedPreferences(Context context)
+            throws GeneralSecurityException, IOException {
         SharedPreferences sharedPreferences;
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
         sharedPreferences = EncryptedSharedPreferences.create(

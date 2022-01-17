@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogInputTextBinding;
-import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
+import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 
 public class PelletsAddDialog {
 
-    private final PelletsCallbackInterface mCallBack;
+    private final PelletsProfileCallback mCallBack;
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
     private final Context mContext;
@@ -28,7 +28,7 @@ public class PelletsAddDialog {
         mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mCallBack = (PelletsCallbackInterface) fragment;
+        mCallBack = (PelletsProfileCallback) fragment;
         mType = type;
         mTitle = title;
     }

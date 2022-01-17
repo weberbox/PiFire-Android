@@ -7,5 +7,24 @@
             <corners android:radius="10dp" />
         </shape>
     </item>
-    <item android:drawable="@drawable/bg_smoke_plus_disabled" />
+    <item>
+        <layer-list>
+            <item android:id="@android:id/background">
+                <layer-list>
+                    <item>
+                        <shape>
+                            <solid android:color="@color/probeProgressBgColor" />
+                            <corners android:radius="@dimen/table_corner_radius" />
+                        </shape>
+                    </item>
+                    <item android:right="4dp">
+                        <shape>
+                            <solid android:color="@color/colorPrimary" />
+                            <corners android:radius="@dimen/table_corner_radius" />
+                        </shape>
+                    </item>
+                </layer-list>
+            </item>
+        </layer-list>
+    </item>
 </ripple>

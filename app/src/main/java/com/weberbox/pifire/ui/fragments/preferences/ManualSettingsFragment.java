@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,13 +10,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.model.ManualResponseModel;
+import com.weberbox.pifire.model.remote.ManualResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Ack;
 import io.socket.client.Socket;
@@ -32,7 +30,6 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     private SwitchPreferenceCompat mAugerEnable;
     private SwitchPreferenceCompat mIgniterEnable;
     private SwitchPreferenceCompat mPowerEnable;
-    private Snackbar mErrorSnack;
     private Socket mSocket;
 
     @Override
@@ -52,8 +49,6 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mErrorSnack = Snackbar.make(view, R.string.json_error_settings, Snackbar.LENGTH_LONG);
 
         mManualMode = findPreference(getString(R.string.prefs_manual_mode));
         mFanEnable = findPreference(getString(R.string.prefs_manual_mode_fan));
@@ -178,16 +173,8 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             }
 
         } catch (NullPointerException e) {
-            Timber.w(e, "Response Error");
-            if (getActivity() != null) {
-                showSnackBarMessage(getActivity());
-            }
+            Timber.w(e, "Manual JSON Response Error");
+            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_settings, false);
         }
-    }
-
-    private void showSnackBarMessage(Activity activity) {
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
-                R.color.colorAccentRed)));
-        mErrorSnack.show();
     }
 }

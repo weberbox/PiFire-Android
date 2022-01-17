@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_item_view_step_holder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="@dimen/medium_spacing">
+
+    <TextView
+        android:id="@+id/recipe_item_view_step"
+        style="@style/Text18Aller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:layout_centerInParent="true"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="1"
+
+        android:textColor="@color/colorWhite"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/recipe_item_view_step_text"
+        style="@style/Text15Aller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center"
+        android:layout_centerInParent="true"
+        android:paddingStart="35dp"
+        android:paddingEnd="5dp"
+        android:text="@string/placeholder_text_view"
+        android:textColor="@color/colorWhite"
+        android:textStyle="normal" />
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/recipe_item_view_step_holder"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:padding="@dimen/medium_spacing">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/recipe_item_view_step"-->
+<!--            style="@style/Text18Aller"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="start|center"-->
+<!--            android:paddingStart="5dp"-->
+<!--            android:paddingEnd="5dp"-->
+<!--            android:text="1"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            tools:ignore="HardcodedText" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/recipe_item_view_step_text"-->
+<!--            style="@style/Text15Aller"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="start|center"-->
+<!--            android:paddingStart="35dp"-->
+<!--            android:paddingEnd="5dp"-->
+<!--            android:text="@string/placeholder_text_view"-->
+<!--            android:textColor="@color/colorWhite"-->
+<!--            android:textStyle="normal" />-->
+
+<!--    </FrameLayout>-->
+</RelativeLayout>

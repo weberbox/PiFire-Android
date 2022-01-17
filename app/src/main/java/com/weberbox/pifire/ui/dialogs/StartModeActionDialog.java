@@ -17,7 +17,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogModeStartActionBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.ui.views.SwipeButton;
@@ -26,7 +26,7 @@ public class StartModeActionDialog {
 
     private final BottomSheetDialog mModeActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mCallBack;
     private final Context mContext;
 
     private SwipeButton mSwipeButton;
@@ -38,7 +38,7 @@ public class StartModeActionDialog {
         mModeActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
         mContext = context;
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mCallBack = (DashboardCallback) fragment;
     }
 
     public BottomSheetDialog showDialog() {

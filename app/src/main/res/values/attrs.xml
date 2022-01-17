@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="AppTheme">
+        <attr name="colorOfflineStatus" format="color" />
+    </declare-styleable>
+
     <declare-styleable name="PelletLevelView">
         <attr name="primary_color" format="color"/>
         <attr name="secondary_color" format="color"/>
@@ -50,6 +54,18 @@
         <attr name="pellets_button_text" format="string" />
         <attr name="pellets_button_enabled" format="boolean"/>
         <attr name="pellets_header_icon" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="PelletsLogsRecycler">
+        <attr name="logs_header_title" format="string" />
+        <attr name="logs_header_icon" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="PelletsEditorRecycler">
+        <attr name="editor_header_title" format="string" />
+        <attr name="editor_button_text" format="string" />
+        <attr name="editor_button_enabled" format="boolean"/>
+        <attr name="editor_header_icon" format="reference"/>
     </declare-styleable>
 
 

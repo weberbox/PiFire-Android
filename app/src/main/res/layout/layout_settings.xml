@@ -148,7 +148,7 @@
                         android:focusable="true"
                         android:onClick='@{() -> callback.settingsOnClick("db_set_shutdown")}'
                         android:padding="@dimen/settings_list_items"
-                        android:text="@string/settings_shutdown"
+                        android:text="@string/settings_timers"
                         app:drawableStartCompat="@drawable/ic_grill_shutdown" />
 
                     <TextView

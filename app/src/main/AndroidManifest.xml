@@ -13,6 +13,15 @@
         android:requiredFeature="false"
         tools:targetApi="o" />
 
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".application.PiFireApplication"
         android:allowBackup="true"
@@ -45,7 +54,16 @@
             android:name=".ui.activities.PreferencesActivity"
             android:theme="@style/Theme.PiFire.SettingsTheme" />
         <activity
-            android:name=".ui.activities.InfoActivity"
+            android:name=".ui.activities.RecipeActivity"
+            android:theme="@style/Theme.PiFire.Recipes" />
+        <activity
+            android:name=".ui.activities.ImagePickerActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            tools:ignore="LockedOrientationActivity"
+            tools:replace="android:theme"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.PiFire.NoActionBar" />
 
         <receiver

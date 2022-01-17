@@ -19,6 +19,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.FirebaseUtils;
 
 import io.socket.client.Socket;
@@ -73,6 +74,9 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_notifications);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

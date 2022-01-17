@@ -14,14 +14,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogAdminActionBinding;
-import com.weberbox.pifire.interfaces.AdminCallbackInterface;
+import com.weberbox.pifire.interfaces.AdminCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class AdminActionDialog {
 
     private final BottomSheetDialog mAdminActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final AdminCallbackInterface mCallBack;
+    private final AdminCallback mCallBack;
     private final Context mContext;
     private final int mType;
 
@@ -29,7 +29,7 @@ public class AdminActionDialog {
     public AdminActionDialog(Context context, Fragment fragment, int type) {
         mAdminActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (AdminCallbackInterface) fragment;
+        mCallBack = (AdminCallback) fragment;
         mType = type;
         mContext = context;
     }

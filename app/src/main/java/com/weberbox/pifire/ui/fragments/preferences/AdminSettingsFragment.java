@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,23 +13,22 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.interfaces.AdminCallbackInterface;
+import com.weberbox.pifire.interfaces.AdminCallback;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.AdminActionDialog;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
-        SharedPreferences.OnSharedPreferenceChangeListener, AdminCallbackInterface {
+        SharedPreferences.OnSharedPreferenceChangeListener, AdminCallback {
 
     private Socket mSocket;
-    private Snackbar mErrorSnack;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -50,8 +47,6 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mErrorSnack = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
@@ -222,14 +217,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                         this, type);
                 adminDialog.showDialog();
             } else {
-                showSnackBarMessage(getActivity());
+                AlertUtils.createErrorAlert(getActivity(), R.string.prefs_not_connected, false);
             }
         }
-    }
-
-    private void showSnackBarMessage(Activity activity) {
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
-                R.color.colorAccentRed)));
-        mErrorSnack.show();
     }
 }

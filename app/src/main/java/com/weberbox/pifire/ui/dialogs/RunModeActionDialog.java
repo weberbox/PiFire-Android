@@ -14,14 +14,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogModeRunActionBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class RunModeActionDialog {
 
     private final BottomSheetDialog mModeActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mCallBack;
     private final Context mContext;
     private final boolean mShutdown;
 
@@ -29,7 +29,7 @@ public class RunModeActionDialog {
     public RunModeActionDialog(Context context, Fragment fragment, boolean shutdown) {
         mModeActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mCallBack = (DashboardCallback) fragment;
         mShutdown = shutdown;
         mContext = context;
     }

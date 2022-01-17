@@ -14,14 +14,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogTimerActionBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class TimerActionDialog {
 
     private final BottomSheetDialog mTimerActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mCallBack;
     private final Boolean mPaused;
     private final Context mContext;
 
@@ -29,7 +29,7 @@ public class TimerActionDialog {
     public TimerActionDialog(Context context, Fragment fragment, Boolean paused) {
         mTimerActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mCallBack = (DashboardCallback) fragment;
         mPaused = paused;
         mContext = context;
     }

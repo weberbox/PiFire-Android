@@ -20,7 +20,6 @@ import com.weberbox.pifire.databinding.FragmentSetupFinishBinding;
 import org.jetbrains.annotations.NotNull;
 
 public class SetupFinishFragment extends Fragment {
-    public static final String TAG = SetupFinishFragment.class.getSimpleName();
 
     private FragmentSetupFinishBinding mBinding;
 

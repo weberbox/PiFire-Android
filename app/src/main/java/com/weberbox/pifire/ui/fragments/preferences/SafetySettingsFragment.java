@@ -18,6 +18,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
@@ -73,6 +74,9 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_safety);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

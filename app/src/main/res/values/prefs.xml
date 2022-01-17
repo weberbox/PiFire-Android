@@ -32,7 +32,6 @@
     <string name="prefs_first_app_start">prefs_first_app_start</string>
 
     <string name="prefs_debug_cat">prefs_debug_cat</string>
-    <string name="prefs_firebase_token">prefs_firebase_token</string>
     <string name="prefs_debug_logging">prefs_debug_logging</string>
 
     <string name="prefs_four_probe">prefs_four_probe</string>
@@ -74,6 +73,7 @@
     <string name="prefs_work_pid_center">prefs_work_pid_center</string>
 
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
+    <string name="prefs_startup_time">prefs_startup_time</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
 
@@ -102,7 +102,6 @@
     <string name="prefs_notif_firebase_serveruuid">prefs_notif_firebase_serveruuid</string>
 
     <string name="prefs_admin_debug">prefs_admin_debug</string>
-    <string name="prefs_admin_manual">prefs_admin_manual</string>
     <string name="prefs_admin_backup_restore">prefs_admin_backup_restore</string>
     <string name="prefs_admin_backup_settings">prefs_admin_backup_settings</string>
     <string name="prefs_admin_restore_settings">prefs_admin_restore_settings</string>
@@ -122,8 +121,6 @@
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
 
-    <string name="prefs_settings_update_time">prefs_settings_update_time</string>
-
     <string name="prefs_manual_mode_cat">prefs_manual_mode_cat</string>
     <string name="prefs_manual_mode_frag">prefs_manual_mode_frag</string>
     <string name="prefs_manual_mode">prefs_manual_mode</string>
@@ -131,5 +128,9 @@
     <string name="prefs_manual_mode_auger">prefs_manual_mode_auger</string>
     <string name="prefs_manual_mode_igniter">prefs_manual_mode_igniter</string>
     <string name="prefs_manual_mode_power">prefs_manual_mode_power</string>
+
+    <string name="prefs_recipe_db_backup">prefs_recipe_db_backup</string>
+    <string name="prefs_recipe_db_restore">prefs_recipe_db_restore</string>
+    <string name="prefs_recipe_db_clear">prefs_recipe_db_clear</string>
 
 </resources>

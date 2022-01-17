@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.gson.Gson;
@@ -19,8 +18,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.model.GrillProbeModel;
-import com.weberbox.pifire.model.ProbeProfileModel;
+import com.weberbox.pifire.model.remote.GrillProbeModel;
+import com.weberbox.pifire.model.remote.ProbeProfileModel;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs_probe_settings, rootKey);
-
     }
 
     @Override
@@ -141,6 +140,9 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_probe);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }
@@ -201,8 +203,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     private HashMap<String, ProbeProfileModel> getProbeProfilesHash() {
         String defValue = new Gson().toJson(new HashMap<String, ProbeProfileModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_probe_profiles), defValue);
-        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<HashMap<String,
-                ProbeProfileModel>>() {
+        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<>() {
         };
         return new Gson().fromJson(jsonProfiles, token.getType());
     }
@@ -210,8 +211,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     private HashMap<String, GrillProbeModel> getGrillProbeHash() {
         String defValue = new Gson().toJson(new HashMap<String, GrillProbeModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_grill_probes), defValue);
-        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<HashMap<String,
-                GrillProbeModel>>() {
+        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<>() {
         };
         return new Gson().fromJson(jsonProfiles, token.getType());
     }

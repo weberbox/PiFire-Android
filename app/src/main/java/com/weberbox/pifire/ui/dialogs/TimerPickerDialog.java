@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -22,21 +21,22 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
+import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.recycler.viewmodel.TimePickerViewModel;
+import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 public class TimerPickerDialog {
 
     private final BottomSheetDialog mTimePickerBottomSheet;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mDashCallBack;
+    private final RecipeEditCallback mRecipeCallback;
     private RecyclerView mHoursList;
     private RecyclerView mMinutesList;
     private String mHoursSelected = "00";
@@ -46,23 +46,24 @@ public class TimerPickerDialog {
     private final int mScrollHours;
     private final int mScrollMinutes;
 
-    public TimerPickerDialog(Context context, Fragment fragment) {
+    public TimerPickerDialog(Context context, DashboardCallback callback) {
         mTimePickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mDashCallBack = callback;
+        mRecipeCallback = null;
         mContext = context;
         mScrollHours = 0;
         mScrollMinutes = 0;
     }
 
-    @SuppressWarnings("unused")
-    public TimerPickerDialog(Context context, Fragment frag, int hours, int minutes) {
+    public TimerPickerDialog(Context context, RecipeEditCallback callback) {
         mTimePickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) frag;
+        mRecipeCallback = callback;
+        mDashCallBack = null;
         mContext = context;
-        mScrollHours = hours;
-        mScrollMinutes = minutes;
+        mScrollHours = 0;
+        mScrollMinutes = 0;
     }
 
     public BottomSheetDialog showDialog() {
@@ -101,9 +102,11 @@ public class TimerPickerDialog {
         mMinutesList.setLayoutManager(minsPickerLayoutManager);
         mMinutesList.setAdapter(minsAdapter);
 
-        if (Prefs.getBoolean(mContext.getString(R.string.prefs_timer_shutdown),
-                mContext.getResources().getBoolean(R.bool.def_timer_shutdown))) {
-            shutdownContainer.setVisibility(View.VISIBLE);
+        if (mDashCallBack != null) {
+            if (Prefs.getBoolean(mContext.getString(R.string.prefs_timer_shutdown),
+                    mContext.getResources().getBoolean(R.bool.def_timer_shutdown))) {
+                shutdownContainer.setVisibility(View.VISIBLE);
+            }
         }
 
         hoursPickerLayoutManager.setOnScrollStopListener(
@@ -122,8 +125,12 @@ public class TimerPickerDialog {
 
         confirmButton.setOnClickListener(v -> {
             mTimePickerBottomSheet.dismiss();
-            mCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
-                    shutdownSwitch.isChecked());
+            if (mDashCallBack != null) {
+                mDashCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
+                        shutdownSwitch.isChecked());
+            } else {
+                mRecipeCallback.onRecipeTime(mHoursSelected, mMinutesSelected);
+            }
         });
 
         mTimePickerBottomSheet.setOnDismissListener(dialogInterface -> {
@@ -173,12 +180,12 @@ public class TimerPickerDialog {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private List<TimePickerViewModel> generateTimeList(int start, int end) {
-        List<TimePickerViewModel> timePickerViewModelList;
+    private List<TimePickerModel> generateTimeList(int start, int end) {
+        List<TimePickerModel> timePickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");
         timePickerViewModelList = IntStream.range(start, end).mapToObj(i ->
-                new TimePickerViewModel(formatter.format(i))).collect(Collectors.toList());
+                new TimePickerModel(formatter.format(i))).collect(Collectors.toList());
 
         return timePickerViewModelList;
     }

@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,20 +19,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
+import com.skydoves.androidveil.VeilLayout;
+import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.skydoves.powerspinner.DefaultSpinnerAdapter;
 import com.skydoves.powerspinner.PowerSpinnerView;
 import com.weberbox.pifire.R;
@@ -47,25 +43,26 @@ import com.weberbox.pifire.databinding.FragmentPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsEditCardBinding;
-import com.weberbox.pifire.databinding.LayoutPelletsEditorBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsHopperBinding;
-import com.weberbox.pifire.databinding.LayoutPelletsLogsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsProfileAddBinding;
-import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
-import com.weberbox.pifire.model.PelletProfileModel;
-import com.weberbox.pifire.model.PelletResponseModel;
+import com.weberbox.pifire.interfaces.PelletsProfileCallback;
+import com.weberbox.pifire.model.local.PelletItemModel;
+import com.weberbox.pifire.model.local.PelletLogModel;
+import com.weberbox.pifire.model.remote.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletResponseModel;
+import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.PelletItemsAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletProfileEditAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletsLogAdapter;
-import com.weberbox.pifire.recycler.viewmodel.PelletItemViewModel;
-import com.weberbox.pifire.recycler.viewmodel.PelletLogViewModel;
-import com.weberbox.pifire.ui.dialogs.PelletPickerDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsAddDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsDeleteDialog;
-import com.weberbox.pifire.ui.model.MainViewModel;
+import com.weberbox.pifire.ui.dialogs.ProfilePickerDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.views.CardViewHeaderButton;
 import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
+import com.weberbox.pifire.ui.views.PelletsEditorRecycler;
+import com.weberbox.pifire.ui.views.PelletsLogsRecycler;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.StringUtils;
 
@@ -77,7 +74,7 @@ import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class PelletsFragment extends Fragment implements PelletsCallbackInterface {
+public class PelletsFragment extends Fragment implements PelletsProfileCallback {
 
     private MainViewModel mMainViewModel;
     private FragmentPelletsBinding mBinding;
@@ -85,38 +82,24 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     private RelativeLayout mRootContainer;
     private SwipeRefreshLayout mSwipeRefresh;
     private ProgressBar mLoadingBar;
-    private PelletItemsAdapter mPelletBrandsAdapter;
-    private PelletItemsAdapter mPelletWoodsAdapter;
+    private PelletItemsAdapter mPelletBrandsAdapter, mPelletWoodsAdapter;
     private PelletsLogAdapter mPelletsLogAdapter;
     private PelletProfileEditAdapter mPelletProfileEditAdapter;
-    private List<PelletItemViewModel> mBrandsEditList;
-    private List<PelletItemViewModel> mWoodsEditList;
-    private List<PelletLogViewModel> mLogsList;
-    private List<PelletProfileModel> mProfileList;
-    private List<PelletProfileModel> mProfileEditList;
-    private List<String> mBrandsList;
-    private List<String> mWoodsList;
+    private List<PelletItemModel> mBrandsEditList, mWoodsEditList;
+    private List<PelletLogModel> mLogsList;
+    private List<PelletProfileModel> mProfileList, mProfileEditList;
+    private List<String> mBrandsList, mWoodsList;
     private LinearProgressIndicator mHopperLevel;
-    private ConstraintLayout mHopperView;
-    private ConstraintLayout mHopperPlaceholder;
-    private ConstraintLayout mCurrentPlaceholder;
-    private ConstraintLayout mCurrentView;
+    private VeilLayout mHopperPlaceholder, mCurrentPlaceholder;
+    private VeilRecyclerFrameView mBrandsCardViewRecycler, mWoodsCardViewRecycler;
+    private VeilRecyclerFrameView mEditorRecycler, mLogsRecycler;
     private LinearLayout mAddProfileCard;
-    private LinearLayout mBrandsPlaceholder;
-    private LinearLayout mWoodsPlaceholder;
-    private LinearLayout mProfilePlaceholder;
-    private LinearLayout mLogsPlaceholder;
-    private PowerSpinnerView mPelletProfileBrand;
-    private PowerSpinnerView mPelletProfileWood;
-    private PowerSpinnerView mPelletProfileRating;
+    private PowerSpinnerView mPelletProfileBrand, mPelletProfileWood, mPelletProfileRating;
     private EditText mProfileAddComments;
-    private TextView mAddNewProfile;
-    private TextView mHopperLevelText;
+    private TextView mAddNewProfile, mHopperLevelText;
     private String mCurrentPelletId;
     private Socket mSocket;
     private Handler mHandler;
-
-    private boolean mIsLoading = false;
 
 
     @Override
@@ -134,6 +117,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         return mBinding.getRoot();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -149,9 +133,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mHandler = new Handler();
 
         LayoutPelletsBinding pelletsBinding = mBinding.pelletsLayout;
-        LayoutPelletsEditorBinding editorBinding = pelletsBinding.editorCardView;
         LayoutPelletsCurrentBinding currentBinding = pelletsBinding.loadOutCardView;
-        LayoutPelletsLogsBinding logsBinding = pelletsBinding.logsCardView;
         LayoutPelletsHopperBinding hopperBinding = pelletsBinding.pelletsHopperLevel;
         mPelletsCurrentBinding = pelletsBinding.loadOutCardView;
 
@@ -160,30 +142,30 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mLoadingBar = mBinding.loadingProgressbar;
         mHopperLevel = hopperBinding.hopperLevel;
         mHopperLevelText = hopperBinding.hopperLevelText;
-        mHopperView = hopperBinding.hopperView;
         mHopperPlaceholder = hopperBinding.hopperHolder;
-        mCurrentView = currentBinding.currentView;
         mCurrentPlaceholder = currentBinding.currentHolder;
-        mLogsPlaceholder = logsBinding.logsHolder;
-        mProfilePlaceholder = editorBinding.profileHolder;
-        mAddNewProfile = editorBinding.addProfileButton;
 
         CardViewHeaderButton hopperHeader = hopperBinding.hopperLevelHeader;
 
         CardViewHeaderButton currentHeader = currentBinding.loadOutHeader;
         PelletsCardViewRecycler brandsCardView = pelletsBinding.brandsCardView;
         PelletsCardViewRecycler woodsCardView = pelletsBinding.woodsCardView;
+        PelletsLogsRecycler logsCardView = pelletsBinding.logsCardView;
+        PelletsEditorRecycler editorCardView = pelletsBinding.editorCardView;
 
-        mBrandsPlaceholder = brandsCardView.getHolderView();
-        mWoodsPlaceholder = woodsCardView.getHolderView();
+        mAddNewProfile = editorCardView.getHeaderButton();
         TextView addNewBrand = brandsCardView.getHeaderButton();
         TextView addNewWood = woodsCardView.getHeaderButton();
+        TextView brandsViewAll = brandsCardView.getViewAllButton();
+        TextView woodsViewAll = woodsCardView.getViewAllButton();
+        TextView logsViewAll = logsCardView.getViewAllButton();
+        TextView profilesViewAll = editorCardView.getViewAllButton();
 
         TextView refreshPellets = hopperHeader.getButton();
         TextView loadNewPellets = currentHeader.getButton();
 
         LayoutPelletsProfileAddBinding pelletsProfileAddBinding =
-                editorBinding.pelletsAddProfileContainer;
+                editorCardView.getAddProfileContainer();
         LayoutPelletsEditCardBinding editCardBinding =
                 pelletsProfileAddBinding.pelletEditContainer;
 
@@ -197,97 +179,79 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         pelletsRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
 
 
-        RecyclerView brandsCardViewRecycler = brandsCardView.getRecycler();
-        RecyclerView woodsCardViewRecycler = woodsCardView.getRecycler();
-        RecyclerView logsRecycler = logsBinding.logsRecycler;
-        RecyclerView editorRecycler = editorBinding.editorRecycler;
-        mAddProfileCard = editorBinding.pelletsAddProfile;
+        mAddProfileCard = editorCardView.getAddProfileView();
 
-        mPelletBrandsAdapter = new PelletItemsAdapter(mBrandsEditList, this);
+        mPelletBrandsAdapter = new PelletItemsAdapter(mBrandsEditList, this, true);
 
-        brandsCardViewRecycler.setAdapter(mPelletBrandsAdapter);
+        mBrandsCardViewRecycler = brandsCardView.getRecycler();
+        mBrandsCardViewRecycler.setAdapter(mPelletBrandsAdapter);
 
-        mPelletWoodsAdapter = new PelletItemsAdapter(mWoodsEditList, this);
+        mPelletWoodsAdapter = new PelletItemsAdapter(mWoodsEditList, this, true);
 
-        woodsCardViewRecycler.setAdapter(mPelletWoodsAdapter);
+        mWoodsCardViewRecycler = woodsCardView.getRecycler();
+        mWoodsCardViewRecycler.setAdapter(mPelletWoodsAdapter);
 
-        mPelletsLogAdapter = new PelletsLogAdapter(mLogsList, this);
+        mPelletsLogAdapter = new PelletsLogAdapter(mLogsList, this, true);
 
-        logsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        logsRecycler.setItemAnimator(new DefaultItemAnimator());
-        logsRecycler.setAdapter(mPelletsLogAdapter);
+        mLogsRecycler = logsCardView.getRecycler();
+        mLogsRecycler.setAdapter(mPelletsLogAdapter);
 
         mPelletProfileEditAdapter = new PelletProfileEditAdapter(requireActivity(), mBrandsList,
-                mWoodsList, mProfileEditList, this);
+                mWoodsList, mProfileEditList, this, true);
 
-        editorRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        editorRecycler.setItemAnimator(new DefaultItemAnimator());
-        editorRecycler.setAdapter(mPelletProfileEditAdapter);
-
-        editorRecycler.setNestedScrollingEnabled(false);
-        logsRecycler.setNestedScrollingEnabled(false);
+        mEditorRecycler = editorCardView.getRecycler();
+        mEditorRecycler.setAdapter(mPelletProfileEditAdapter);
 
 
         mSwipeRefresh.setOnRefreshListener(() -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 forceRefreshData();
             } else {
                 mSwipeRefresh.setRefreshing(false);
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         refreshPellets.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 GrillControl.setCheckHopperLevel(mSocket);
                 toggleLoading(true);
                 startDelayedRefresh();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         loadNewPellets.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 if (mProfileList != null && mCurrentPelletId != null) {
-                    PelletPickerDialog pelletPickerDialog = new PelletPickerDialog(getActivity(),
+                    ProfilePickerDialog profilePickerDialog = new ProfilePickerDialog(getActivity(),
                             PelletsFragment.this, mProfileList, mCurrentPelletId);
-                    pelletPickerDialog.showDialog();
+                    profilePickerDialog.showDialog();
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         addNewBrand.setOnClickListener(v -> {
             if (getActivity() != null) {
-                if (mSocket != null && mSocket.connected()) {
+                if (socketConnected()) {
                     PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
                             PelletsFragment.this, Constants.PELLET_BRAND,
                             getString(R.string.pellets_add_brand));
                     pelletsAddDialog.showDialog();
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
                 }
             }
         });
 
         addNewWood.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
                         PelletsFragment.this, Constants.PELLET_WOOD,
                         getString(R.string.pellets_add_woods));
                 pelletsAddDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         mAddNewProfile.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 toggleCardView();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
@@ -301,7 +265,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             } else {
                 mAddProfileCard.setVisibility(View.GONE);
                 mAddNewProfile.setText(R.string.pellets_add);
-                if (mSocket != null && mSocket.connected()) {
+                if (socketConnected()) {
                     GrillControl.setAddPelletProfile(mSocket,
                             new PelletProfileModel(
                                     mPelletProfileBrand.getText().toString(),
@@ -311,8 +275,6 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                                     "None"
                             ));
                     forceRefreshData();
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
                 }
             }
         });
@@ -327,7 +289,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             } else {
                 mAddProfileCard.setVisibility(View.GONE);
                 mAddNewProfile.setText(R.string.pellets_add);
-                if (mSocket != null && mSocket.connected()) {
+                if (socketConnected()) {
                     GrillControl.setAddPelletProfileLoad(mSocket,
                             new PelletProfileModel(
                                     mPelletProfileBrand.getText().toString(),
@@ -337,10 +299,32 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                                     "None"
                             ));
                     forceRefreshData();
-                } else {
-                    AnimUtils.shakeOfflineBanner(getActivity());
                 }
             }
+        });
+
+        brandsViewAll.setOnClickListener(v -> {
+            setBrandsViewLimited(false);
+            mPelletBrandsAdapter.setLimitEnabled(false);
+            mPelletBrandsAdapter.notifyDataSetChanged();
+        });
+
+        woodsViewAll.setOnClickListener(v -> {
+            setWoodsViewLimited(false);
+            mPelletWoodsAdapter.setLimitEnabled(false);
+            mPelletWoodsAdapter.notifyDataSetChanged();
+        });
+
+        logsViewAll.setOnClickListener(v -> {
+            setLogsViewLimited(false);
+            mPelletsLogAdapter.setLimitEnabled(false);
+            mPelletsLogAdapter.notifyDataSetChanged();
+        });
+
+        profilesViewAll.setOnClickListener(v -> {
+            setProfilesViewLimited(false);
+            mPelletProfileEditAdapter.setLimitEnabled(false);
+            mPelletProfileEditAdapter.notifyDataSetChanged();
         });
 
         mPelletProfileBrand.addTextChangedListener(new TextWatcher() {
@@ -403,13 +387,22 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         mPelletProfileBrand.setSpinnerOutsideTouchListener((v, motionEvent) ->
                 mPelletProfileBrand.dismiss());
 
-
         mPelletProfileWood.setSpinnerOutsideTouchListener((v, motionEvent) ->
                 mPelletProfileWood.dismiss());
 
-
         mPelletProfileRating.setSpinnerOutsideTouchListener((v, motionEvent) ->
                 mPelletProfileRating.dismiss());
+
+        DefaultSpinnerAdapter brandsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileBrand);
+        mPelletProfileBrand.setSpinnerAdapter(brandsSpinnerAdapter);
+        mPelletProfileBrand.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(brandsSpinnerAdapter, mPelletProfileBrand.getSpinnerRecyclerView());
+
+        DefaultSpinnerAdapter woodsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileWood);
+        mPelletProfileWood.setSpinnerAdapter(woodsSpinnerAdapter);
+        mPelletProfileWood.setItems(mWoodsList);
+        mPelletProfileWood.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
+        setPowerSpinnerMaxHeight(woodsSpinnerAdapter, mPelletProfileWood.getSpinnerRecyclerView());
 
         if (getActivity() != null) {
             mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
@@ -417,7 +410,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                 mSwipeRefresh.setRefreshing(false);
                 if (pelletData != null && pelletData.getLiveData() != null) {
                     if (pelletData.getIsNewData()) {
-                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_PELLETS,
+                        FileUtils.executorSaveJSON(getActivity(), Constants.JSON_PELLETS,
                                 pelletData.getLiveData());
                     }
                     updateUIWithData(pelletData.getLiveData());
@@ -425,19 +418,10 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
             });
 
             mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-                if (enabled != null && enabled) {
-                    if (!mIsLoading) {
-                        mIsLoading = true;
-                        if (mSocket != null && mSocket.connected()) {
-                            toggleLoading(true);
-                            requestDataUpdate();
-                        }
-                    }
-                }
+                toggleLoading(true);
+                requestDataUpdate();
             });
         }
-
-        checkViewModelData();
     }
 
     @Override
@@ -445,6 +429,21 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
         super.onDestroyView();
         stopDelayedRefresh();
         mBinding = null;
+    }
+
+    private void showOfflineAlert() {
+        if (getActivity() != null) {
+            AlertUtils.createOfflineAlert(getActivity());
+        }
+    }
+
+    private boolean socketConnected() {
+        if (mSocket != null && mSocket.connected()) {
+            return true;
+        } else {
+            showOfflineAlert();
+            return false;
+        }
     }
 
     private void stopDelayedRefresh() {
@@ -457,33 +456,22 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
     private final Runnable runnable = this::forceRefreshData;
 
-    private void checkViewModelData() {
-        if (mMainViewModel.getPelletData().getValue() == null) {
-            toggleLoading(true);
-            loadStoredDataRequestUpdate();
-        }
-    }
-
     private void requestDataUpdate() {
         if (mSocket != null && mSocket.connected()) {
-            mIsLoading = true;
-            mSocket.emit(ServerConstants.REQUEST_PELLET_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setPelletData(args[0].toString(), true);
-                    mIsLoading = false;
-                }
-            });
+            forceRefreshData();
+        } else {
+            loadStoredData();
         }
     }
 
-    private void loadStoredDataRequestUpdate() {
-        String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_PELLETS);
-        if (jsonData != null && mMainViewModel != null) {
-            mMainViewModel.setPelletData(jsonData, false);
-        }
-        if (!mIsLoading) {
-            requestDataUpdate();
-        }
+    private void loadStoredData() {
+        FileUtils.executorLoadJSON(getActivity(), Constants.JSON_PELLETS, jsonString -> {
+            if (jsonString != null && mMainViewModel != null) {
+                mMainViewModel.setPelletData(jsonString, false);
+            } else {
+                toggleLoading(false);
+            }
+        });
     }
 
     private void forceRefreshData() {
@@ -563,13 +551,12 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                     mPelletsCurrentBinding.currentBrandText.setText(currentProfile.getBrand());
                     mPelletsCurrentBinding.currentWoodText.setText(currentProfile.getWood());
                     mPelletsCurrentBinding.currentCommentsText.setText(currentProfile.getComments());
-                    mPelletsCurrentBinding.currentRatingText.setText(StringUtils.getRatingText(
-                            currentProfile.getRating()));
+                    mPelletsCurrentBinding.currentRatingText.setRating(currentProfile.getRating());
                 }
             }
 
             for (int i = 0; i < mBrandsList.size(); i++) {
-                PelletItemViewModel brandsList = new PelletItemViewModel(
+                PelletItemModel brandsList = new PelletItemModel(
                         mBrandsList.get(i),
                         Constants.PELLET_BRAND
                 );
@@ -578,9 +565,8 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
             mPelletBrandsAdapter.notifyDataSetChanged();
 
-
             for (int i = 0; i < mWoodsList.size(); i++) {
-                PelletItemViewModel woodsList = new PelletItemViewModel(
+                PelletItemModel woodsList = new PelletItemModel(
                         mWoodsList.get(i),
                         Constants.PELLET_WOOD
                 );
@@ -611,7 +597,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                 PelletProfileModel pelletProfile = profiles.get(logPelletId);
 
                 if (pelletProfile != null) {
-                    PelletLogViewModel logList = new PelletLogViewModel(
+                    PelletLogModel logList = new PelletLogModel(
                             date,
                             pelletProfile.getBrand() + " " + pelletProfile.getWood(),
                             pelletProfile.getRating()
@@ -622,34 +608,51 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
             mPelletsLogAdapter.notifyDataSetChanged();
 
-            DefaultSpinnerAdapter brandsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileBrand);
-            mPelletProfileBrand.setSpinnerAdapter(brandsSpinnerAdapter);
+            setBrandsViewLimited(true);
+            setWoodsViewLimited(true);
+            setLogsViewLimited(true);
+            setProfilesViewLimited(true);
+
             mPelletProfileBrand.setItems(mBrandsList);
-            mPelletProfileBrand.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
-            setPowerSpinnerMaxHeight(brandsSpinnerAdapter, mPelletProfileBrand.getSpinnerRecyclerView());
-
-            DefaultSpinnerAdapter woodsSpinnerAdapter = new DefaultSpinnerAdapter(mPelletProfileWood);
-            mPelletProfileWood.setSpinnerAdapter(woodsSpinnerAdapter);
             mPelletProfileWood.setItems(mWoodsList);
-            mPelletProfileWood.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
-            setPowerSpinnerMaxHeight(woodsSpinnerAdapter, mPelletProfileWood.getSpinnerRecyclerView());
 
+            mHopperPlaceholder.unVeil();
+            mCurrentPlaceholder.unVeil();
+            mBrandsCardViewRecycler.unVeil();
+            mWoodsCardViewRecycler.unVeil();
+            mEditorRecycler.unVeil();
+            mLogsRecycler.unVeil();
+
+            toggleLoading(false);
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w(e,"JSON Error");
-            showSnackBarMessage(getActivity(), R.string.json_error_pellets);
+            Timber.w(e,"Pellets JSON Error");
+            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_pellets, false);
         }
+    }
 
-        mHopperPlaceholder.setVisibility(View.GONE);
-        mCurrentPlaceholder.setVisibility(View.GONE);
-        mBrandsPlaceholder.setVisibility(View.GONE);
-        mWoodsPlaceholder.setVisibility(View.GONE);
-        mProfilePlaceholder.setVisibility(View.GONE);
-        mLogsPlaceholder.setVisibility(View.GONE);
-        mHopperView.setVisibility(View.VISIBLE);
-        mCurrentView.setVisibility(View.VISIBLE);
+    private void setWoodsViewLimited(boolean limited) {
+        if (mPelletWoodsAdapter.getLimitEnabled()){
+            mBinding.pelletsLayout.woodsCardView.setViewAll(limited && mWoodsList.size() > 3);
+        }
+    }
 
-        toggleLoading(false);
+    private void setBrandsViewLimited(boolean limited) {
+        if (mPelletBrandsAdapter.getLimitEnabled()) {
+            mBinding.pelletsLayout.brandsCardView.setViewAll(limited && mWoodsList.size() > 3);
+        }
+    }
+
+    private void setLogsViewLimited(boolean limited) {
+        if (mPelletsLogAdapter.getLimitEnabled()) {
+            mBinding.pelletsLayout.logsCardView.setViewAll(limited && mLogsList.size() > 3);
+        }
+    }
+
+    private void setProfilesViewLimited(boolean limited) {
+        if (mPelletProfileEditAdapter.getLimitEnabled()) {
+            mBinding.pelletsLayout.editorCardView.setViewAll(limited && mProfileList.size() > 3);
+        }
     }
 
     private void setPowerSpinnerMaxHeight(DefaultSpinnerAdapter adapter, RecyclerView recyclerView) {
@@ -678,12 +681,10 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     @Override
     public void onItemDelete(String type, String item, int position) {
         if (getActivity() != null) {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 PelletsDeleteDialog pelletsDialog = new PelletsDeleteDialog(getActivity(),
                         this, type, item, position);
                 pelletsDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         }
     }
@@ -691,19 +692,17 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     @Override
     public void onLogLongClick(String logDate, int position) {
         if (getActivity() != null) {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 PelletsDeleteDialog pelletsDialog = new PelletsDeleteDialog(getActivity(),
                         this, Constants.PELLET_LOG, logDate, position);
                 pelletsDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         }
     }
 
     @Override
     public void onDeleteConfirmed(String type, String item, int position) {
-        if (mSocket != null && mSocket.connected()) {
+        if (socketConnected()) {
             switch (type) {
                 case Constants.PELLET_WOOD:
                     GrillControl.setDeletePelletWood(mSocket, item);
@@ -727,14 +726,12 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                     mPelletsLogAdapter.notifyItemRangeChanged(position, mLogsList.size());
                     break;
             }
-        } else {
-            if (getActivity() != null) AnimUtils.shakeOfflineBanner(getActivity());
         }
     }
 
     @Override
     public void onItemAdded(String type, String item) {
-        if (mSocket != null && mSocket.connected()) {
+        if (socketConnected()) {
             switch (type) {
                 case Constants.PELLET_WOOD:
                     GrillControl.setAddPelletWood(mSocket, item);
@@ -745,8 +742,6 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                     forceRefreshData();
                     break;
             }
-        } else {
-            AnimUtils.shakeOfflineBanner(getActivity());
         }
     }
 
@@ -760,11 +755,9 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
 
     @Override
     public void onProfileEdit(PelletProfileModel model) {
-        if (mSocket != null && mSocket.connected()) {
+        if (socketConnected()) {
             GrillControl.setEditPelletProfile(mSocket, model);
             forceRefreshData();
-        } else {
-            AnimUtils.shakeOfflineBanner(getActivity());
         }
     }
 
@@ -774,7 +767,7 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
     }
 
     private void deletePelletProfile(String profile, int position) {
-        if (mSocket != null && mSocket.connected()) {
+        if (socketConnected()) {
             if (mCurrentPelletId != null && !mCurrentPelletId.equals(profile)) {
                 GrillControl.setDeletePelletProfile(mSocket, profile);
                 mProfileEditList.remove(position);
@@ -782,19 +775,9 @@ public class PelletsFragment extends Fragment implements PelletsCallbackInterfac
                 mPelletProfileEditAdapter.notifyItemRangeChanged(position,
                         mProfileEditList.size());
             } else {
-                showSnackBarMessage(getActivity(), R.string.pellets_cannot_delete_profile);
+                AlertUtils.createErrorAlert(getActivity(), R.string.pellets_cannot_delete_profile,
+                        false);
             }
-        } else {
-            AnimUtils.shakeOfflineBanner(getActivity());
-        }
-    }
-
-    private void showSnackBarMessage(Activity activity, int message) {
-        if (activity != null) {
-            Snackbar snack = Snackbar.make(mBinding.getRoot(), message, Snackbar.LENGTH_LONG);
-            snack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-            snack.setTextColor(activity.getColor(R.color.colorWhite));
-            snack.show();
         }
     }
 }

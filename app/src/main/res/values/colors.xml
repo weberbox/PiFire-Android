@@ -28,4 +28,13 @@
     <color name="colorPelletDanger">#C8B10000</color>
     <color name="colorPelletDangerBG">#70B62929</color>
     <color name="colorPelletWarning">#DCAC9B02</color>
+
+    <color name="ucrop_color_statusbar">@color/colorPrimary</color>
+    <color name="ucrop_color_toolbar">@color/colorPrimary</color>
+    <color name="ucrop_color_toolbar_widget">@color/colorWhite</color>
+    <color name="ucrop_color_blaze_orange">@color/colorAccent</color>
+    <color name="ucrop_color_ebony_clay">@color/colorPrimary</color>
+    <color name="ucrop_color_crop_background">@color/colorPrimaryDark</color>
+    <color name="ucrop_color_widget">@color/colorWhite</color>
+
 </resources>

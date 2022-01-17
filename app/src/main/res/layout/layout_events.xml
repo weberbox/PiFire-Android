@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -15,37 +16,19 @@
         android:indeterminateTintMode="src_in"
         android:indeterminateTint="@color/colorAccent"/>
 
-    <LinearLayout
-        android:id="@+id/events_placeholder_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="8dp"
-        android:alpha="0.3"
-        android:orientation="vertical">
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-        <include layout="@layout/item_events_list_holder" />
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
+    <com.skydoves.androidveil.VeilRecyclerFrameView
         android:id="@+id/events_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:veilFrame_baseAlpha="0.6"
+        app:veilFrame_highlightAlpha="1.0"
+        app:veilFrame_radius="10dp"
+        app:veilFrame_highlightColor="@color/placeholderColor"
+        app:veilFrame_baseColor="@color/colorLighterGrey"
+        app:veilFrame_layout="@layout/item_events_list"
+        app:veilFrame_shimmerEnable="true"
+        app:veilFrame_veiled="true" />
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 
 import io.socket.client.Socket;
 
@@ -156,6 +157,9 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_pellets);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

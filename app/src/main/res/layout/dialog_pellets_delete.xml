@@ -56,6 +56,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/cancel"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 
@@ -89,6 +90,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/im_sure"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textColor="@color/colorAccentRed"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />

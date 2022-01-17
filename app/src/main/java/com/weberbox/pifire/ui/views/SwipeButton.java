@@ -29,7 +29,6 @@ import com.weberbox.pifire.interfaces.OnSwipeActiveListener;
 import com.weberbox.pifire.interfaces.OnStateChangeListener;
 import com.weberbox.pifire.interfaces.OnSwipeTouchListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
-import com.weberbox.pifire.ui.utils.TouchUtils;
 
 @SuppressWarnings("unused")
 public class SwipeButton extends RelativeLayout {
@@ -300,7 +299,7 @@ public class SwipeButton extends RelativeLayout {
             }
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    return !TouchUtils.isTouchOutsideInitialPosition(event, mSwipeButtonInner);
+                    return !isTouchOutsideInitialPosition(event, mSwipeButtonInner);
                 case MotionEvent.ACTION_MOVE:
                     if (mInitialX == 0) {
                         mInitialX = mSwipeButtonInner.getX();
@@ -521,5 +520,9 @@ public class SwipeButton extends RelativeLayout {
 
     public void setCenterTextStyle(int style) {
         mCenterText.setTextAppearance(style);
+    }
+
+    private boolean isTouchOutsideInitialPosition(MotionEvent event, View view) {
+        return event.getX() > view.getX() + view.getWidth();
     }
 }

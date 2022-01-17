@@ -58,31 +58,6 @@
             android:textColor="@color/colorWhite"
             android:textSize="16sp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/self_signed_note_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:paddingTop="@dimen/default_spacing"
-            android:visibility="invisible">
-
-            <TextView
-                android:id="@+id/self_signed_note"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/aller_regular"
-                android:text="@string/settings_self_signed_cert_summary"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <ProgressBar
             android:id="@+id/qr_code_scan_progressbar"
             android:layout_width="64dp"

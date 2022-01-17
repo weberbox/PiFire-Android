@@ -31,7 +31,6 @@ public class ServerSetupActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setTitle(R.string.setup_label);
         }
 
@@ -44,25 +43,9 @@ public class ServerSetupActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentManager mgr = getFragmentManager();
-        if (mgr.getBackStackEntryCount() > 0) {
-            mgr.popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        FragmentManager mgr = getFragmentManager();
-        if (mgr.getBackStackEntryCount() > 0) {
-            mgr.popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

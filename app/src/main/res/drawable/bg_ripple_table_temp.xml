@@ -7,5 +7,9 @@
             <corners android:radius="10dp" />
         </shape>
     </item>
-    <item android:drawable="@drawable/bg_table_item_temp" />
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/table_corner_radius" />
+        </shape>
+    </item>
 </ripple>

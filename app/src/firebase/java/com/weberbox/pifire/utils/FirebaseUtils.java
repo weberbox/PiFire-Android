@@ -15,7 +15,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.ui.dialogs.FirebaseTokenDialog;
 
 import timber.log.Timber;
 
@@ -25,6 +24,7 @@ public class FirebaseUtils {
         FirebaseApp.initializeApp(context);
     }
 
+    @SuppressWarnings("unused")
     public static void getFirebaseToken(Context context) {
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {
@@ -33,8 +33,7 @@ public class FirebaseUtils {
                         return;
                     }
                     String token = task.getResult();
-                    FirebaseTokenDialog dialog = new FirebaseTokenDialog(context, token);
-                    dialog.showDialog();
+                    Timber.d("Firebase Token: %s", token);
                 });
     }
 

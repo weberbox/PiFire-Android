@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -26,11 +25,16 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
+import com.weberbox.pifire.interfaces.AuthDialogCallback;
+import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
+import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
@@ -40,11 +44,15 @@ import java.util.regex.Pattern;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
-public class URLSetupFragment extends Fragment {
-    public static final String TAG = URLSetupFragment.class.getSimpleName();
+public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
     public static URLSetupFragment getInstance(){
         return new URLSetupFragment();
@@ -55,7 +63,6 @@ public class URLSetupFragment extends Fragment {
     private Snackbar mErrorSnack;
     private TextInputEditText mServerAddress;
     private TextInputLayout mServerURLLayout;
-    private ConstraintLayout mSelfSignedNote;
     private AutoCompleteTextView mServerScheme;
     private ProgressBar mConnectProgress;
     private ArrayAdapter<String> mSchemes;
@@ -86,7 +93,6 @@ public class URLSetupFragment extends Fragment {
         mErrorSnack = Snackbar.make(view, R.string.setup_error, Snackbar.LENGTH_LONG);
 
         mServerScheme = mBinding.serverAddressSchemeTv;
-        mSelfSignedNote = mBinding.selfSignedNoteContainer;
 
         mSecure = getString(R.string.https_scheme);
         mUnSecure = getString(R.string.http_scheme);
@@ -108,7 +114,7 @@ public class URLSetupFragment extends Fragment {
                     mServerScheme.setText(mSchemes.getItem(1), false);
                 }
             } catch (URISyntaxException e) {
-                Timber.w(e, "Error checking uri");
+                Timber.w(e, "Invalid URI");
             }
         }
 
@@ -147,7 +153,8 @@ public class URLSetupFragment extends Fragment {
             if(getActivity() != null) {
                 SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
+                        .add(R.id.server_setup_fragment, setupCompeteFragment,
+                                SetupFinishFragment.class.getSimpleName())
                         .addToBackStack(null)
                         .commit();
             }
@@ -165,13 +172,30 @@ public class URLSetupFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAuthDialogSave(boolean success) {
+        if (success) {
+            Prefs.putBoolean(getString(R.string.prefs_server_basic_auth), true);
+            if(mServerAddress.getText() != null && !mIsConnecting) {
+                verifyURLAndTestConnect(mServerAddress.getText().toString());
+            }
+        } else {
+            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+        }
+    }
+
+    @Override
+    public void onAuthDialogCancel() {
+        if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+    }
+
     private void verifyURLAndTestConnect(String address) {
         if(address.length() !=0) {
             if(isValidUrl(address)) {
                 String scheme = String.valueOf(mServerScheme.getText());
                 String url = scheme + address;
                 mServerAddress.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                testConnection(url);
+                testServerConnection(url);
             } else {
                 mServerURLLayout.setError(getString(R.string.setup_invalid_url));
             }
@@ -180,16 +204,77 @@ public class URLSetupFragment extends Fragment {
         }
     }
 
-    private void testConnection(String Url) {
+    private void testServerConnection(String url) {
+        if(!mIsConnecting) {
+            mConnectProgress.setVisibility(View.VISIBLE);
+            String credentials;
+
+            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
+                String username = SecurityUtils.decrypt(getActivity(),
+                        R.string.prefs_server_basic_auth_user);
+                String password = SecurityUtils.decrypt(getActivity(),
+                        R.string.prefs_server_basic_auth_password);
+                credentials = Credentials.basic(username, password);
+            } else {
+                credentials = null;
+            }
+
+            OkHttpClient client = HTTPUtils.createHttpClient(true, true);
+            Request request = HTTPUtils.createHttpRequest(url, credentials);
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Timber.d(e, "Request onFailure");
+                    if (getActivity() != null) {
+                        if (e.getMessage() != null && e.getMessage()
+                                .contains("CertPathValidatorException")) {
+                            getActivity().runOnUiThread(() -> {
+                                if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+                                MessageTextDialog dialog = new MessageTextDialog(getActivity(),
+                                        getString(R.string.setup_server_self_signed_title),
+                                        getString(R.string.setup_server_self_signed));
+                                dialog.showDialog();
+                            });
+                        } else {
+                            getActivity().runOnUiThread(() ->
+                                    showSnackBarMessage(getActivity(), e.getMessage()));
+                        }
+                    }
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull final Response response) {
+                    if (!response.isSuccessful()) {
+                        Timber.d("Response: %s", response.toString());
+                        if (response.code() == 401) {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    SetupUserPassDialog dialog = new SetupUserPassDialog(
+                                            getActivity(), URLSetupFragment.this);
+                                    dialog.showDialog();
+                                });
+                            }
+                        } else {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> showSnackBarMessage(getActivity(),
+                                        getString(R.string.setup_server_connect_error,
+                                                String.valueOf(response.code()), response.message())));
+                            }
+                        }
+                    } else {
+                        testSocketConnection(url, credentials);
+                    }
+                }
+            });
+        }
+    }
+
+    private void testSocketConnection(String Url, String credentials) {
         if(!mIsConnecting) {
             IO.Options options = new IO.Options();
 
-            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
-                String username = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_user);
-                String password = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_password);
-
-                String credentials = Credentials.basic(username, password);
-
+            if (credentials != null) {
                 options.extraHeaders = Collections.singletonMap("Authorization",
                         Collections.singletonList(credentials));
 
@@ -198,7 +283,6 @@ public class URLSetupFragment extends Fragment {
                 connectSocket(Url, null);
             }
 
-            mConnectProgress.setVisibility(View.VISIBLE);
             mIsConnecting = true;
 
             mValidURL = Url;
@@ -214,14 +298,13 @@ public class URLSetupFragment extends Fragment {
             SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
             if(getActivity() != null) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
+                        .add(R.id.server_setup_fragment, setupCompeteFragment,
+                                SetupFinishFragment.class.getSimpleName())
                         .addToBackStack(null)
                         .commit();
             }
         } else {
-            if(!mErrorSnack.isShown() && getActivity() != null) {
-                showSnackBarMessage(getActivity(), R.string.setup_error);
-            }
+            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
         }
     }
 
@@ -247,7 +330,7 @@ public class URLSetupFragment extends Fragment {
         @Override
         public void call(Object... args) {
             if(getActivity() != null) {
-                Timber.d("Connected address ok");
+                Timber.d("Socket Connected Storing URL");
                 getActivity().runOnUiThread(() -> {
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
@@ -265,14 +348,12 @@ public class URLSetupFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Timber.d("Error connecting bad address");
+                    Timber.d("Error Connecting to Socket");
                     mConnectProgress.setVisibility(View.GONE);
                     mSocket.disconnect();
                     mSocket.close();
                     mIsConnecting = false;
-                    if(!mErrorSnack.isShown() && getActivity() != null) {
-                        showSnackBarMessage(getActivity(), R.string.setup_cannot_connect);
-                    }
+                    showSnackBarMessage(getActivity(), getString(R.string.setup_cannot_connect));
                 });
             }
         }
@@ -287,14 +368,16 @@ public class URLSetupFragment extends Fragment {
         return m.matches();
     }
 
-    private void showSnackBarMessage(Activity activity, int message) {
-        AnimUtils.fadeView(mSkipButton, 300, Constants.FADE_IN);
-        if (mServerScheme.getText().toString().equals(mSecure)) {
-            AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
+    private void showSnackBarMessage(Activity activity, String message) {
+        if (mSkipButton.getVisibility() != View.VISIBLE) {
+            AnimUtils.fadeView(mSkipButton, 300, Constants.FADE_IN);
         }
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-        mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-        mErrorSnack.setText(message);
-        mErrorSnack.show();
+        if(!mErrorSnack.isShown() && activity != null) {
+            if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
+            mErrorSnack.setText(message);
+            mErrorSnack.show();
+        }
     }
 }

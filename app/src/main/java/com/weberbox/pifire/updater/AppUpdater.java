@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 public class AppUpdater implements IAppUpdater {
@@ -420,7 +422,7 @@ public class AppUpdater implements IAppUpdater {
     @Override
     public void stop() {
         if (mLatestAppVersion != null && !mLatestAppVersion.isCancelled()) {
-            mLatestAppVersion.cancel(true);
+            mLatestAppVersion.cancel();
         }
     }
 
@@ -490,12 +492,9 @@ public class AppUpdater implements IAppUpdater {
     }
 
     private String getDescriptionNoUpdate(Context context) {
-        if (mDescriptionNoUpdate == null) {
-            return String.format(context.getResources().getString(R.string.updater_update_not_available_description),
-                    UtilsLibrary.getAppName(context));
-        } else {
-            return mDescriptionNoUpdate;
-        }
+        return Objects.requireNonNullElseGet(mDescriptionNoUpdate, () ->
+                String.format(context.getResources().getString(R.string.updater_update_not_available_description),
+                UtilsLibrary.getAppName(context)));
     }
 
     private String getDescriptionUpdateFailed(Context context) {

@@ -102,7 +102,9 @@ public class ServerConstants {
     public static final String CYCLE_DEFAULT_SP = "defaultsmokeplus";
 
     public static final String SHUTDOWN_ACTION = "shutdown";
+    public static final String TIMERS_ACTION = "timers";
     public static final String SHUTDOWN_TIMER = "shutdown_timer";
+    public static final String STARTUP_TIMER = "startup_timer";
 
     public static final String HISTORY_ACTION = "history";
     public static final String HISTORY_MINS = "historymins";

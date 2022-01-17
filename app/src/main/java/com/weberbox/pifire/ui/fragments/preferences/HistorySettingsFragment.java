@@ -19,6 +19,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 
 import io.socket.client.Socket;
@@ -31,7 +32,6 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs_history_settings, rootKey);
-
     }
 
     @Override
@@ -99,6 +99,9 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_history);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

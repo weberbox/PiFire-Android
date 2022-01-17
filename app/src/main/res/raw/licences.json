@@ -1,6 +1,10 @@
 {
   "licenses":[
     [
+      "PiFire Android",
+      "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE"
+    ],
+    [
       "PiFire",
       "https://github.com/nebhead/PiFire/blob/main/license.txt"
     ],
@@ -43,6 +47,34 @@
     [
       "RecyclerViewFastScroller",
       "https://github.com/quiph/RecyclerView-FastScroller/blob/master/LICENSE"
+    ],
+    [
+      "OverlappingPanels",
+      "https://github.com/discord/OverlappingPanels/blob/master/LICENSE"
+    ],
+    [
+      "uCrop",
+      "https://github.com/Yalantis/uCrop"
+    ],
+    [
+      "TedPermission",
+      "https://github.com/ParkSangGwon/TedPermission"
+    ],
+    [
+      "AndroidVeil",
+      "https://github.com/skydoves/AndroidVeil/blob/master/LICENSE"
+    ],
+    [
+      "Alerter",
+      "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
+    ],
+    [
+      "MaterialRatingBar",
+      "https://github.com/zhanghai/MaterialRatingBar"
+    ],
+    [
+      "Glide",
+      "https://github.com/bumptech/glide/blob/master/LICENSE"
     ],
     [
       "MaterialDesign Icons",

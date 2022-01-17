@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -28,7 +26,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
@@ -37,12 +34,11 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.databinding.FragmentHistoryBinding;
-import com.weberbox.pifire.interfaces.HistoryCallbackInterface;
-import com.weberbox.pifire.model.HistoryModel;
-import com.weberbox.pifire.ui.dialogs.HistoryDeleteDialog;
-import com.weberbox.pifire.ui.model.MainViewModel;
-import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.model.remote.HistoryModel;
+import com.weberbox.pifire.model.view.MainViewModel;
+import com.weberbox.pifire.ui.dialogs.DeleteActionDialog;
 import com.weberbox.pifire.ui.utils.LineChartXAxisValueFormatter;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +52,7 @@ import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class HistoryFragment extends Fragment implements HistoryCallbackInterface {
+public class HistoryFragment extends Fragment {
 
     private FragmentHistoryBinding mBinding;
     private MainViewModel mMainViewModel;
@@ -95,13 +91,11 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
         mLoadingBar = mBinding.loadingProgressbar;
         mSwipeRefresh = mBinding.historyPullRefresh;
 
-
         mSwipeRefresh.setOnRefreshListener(() -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 forceRefreshData();
             } else {
                 mSwipeRefresh.setRefreshing(false);
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
@@ -140,14 +134,16 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
 
         ImageView deleteButton = mBinding.historyDeleteButton;
         deleteButton.setOnClickListener(view12 -> {
-            if (mSocket.connected()) {
+            if (socketConnected()) {
                 if (getActivity() != null) {
-                    HistoryDeleteDialog historyActionDialog = new HistoryDeleteDialog(getActivity(),
-                            HistoryFragment.this);
+                    DeleteActionDialog historyActionDialog = new DeleteActionDialog(getActivity(),
+                            getString(R.string.history_delete_content), () -> {
+                                if (mSocket != null) {
+                                    GrillControl.setHistoryDelete(mSocket);
+                                }
+                            });
                     historyActionDialog.showDialog();
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
@@ -157,7 +153,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                 mSwipeRefresh.setRefreshing(false);
                 if (historyData != null && historyData.getLiveData() != null) {
                     if (historyData.getIsNewData()) {
-                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_HISTORY,
+                        FileUtils.executorSaveJSON(getActivity(), Constants.JSON_HISTORY,
                                 historyData.getLiveData());
                     }
                     updateUIWithData(historyData.getLiveData());
@@ -165,19 +161,10 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             });
 
             mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-                if (enabled != null && enabled) {
-                    if (!mIsLoading) {
-                        mIsLoading = true;
-                        if (mSocket != null && mSocket.connected()) {
-                            toggleLoading(true);
-                            requestDataUpdate();
-                        }
-                    }
-                }
+                toggleLoading(true);
+                requestDataUpdate();
             });
         }
-
-        //checkViewModelData();
     }
 
     @Override
@@ -188,57 +175,47 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        stopRefresh();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        checkViewModelData();
+        requestDataUpdate();
     }
 
-    @Override
-    public void onHistoryDelete() {
-        if (mSocket != null) {
-            GrillControl.setHistoryDelete(mSocket);
+    private void showOfflineAlert() {
+        if (getActivity() != null) {
+            AlertUtils.createOfflineAlert(getActivity());
         }
     }
 
-    private void checkViewModelData() {
-        if (mMainViewModel.getEventsData().getValue() == null) {
-            toggleLoading(true);
-            loadStoredDataRequestUpdate();
+    private boolean socketConnected() {
+        if (mSocket != null && mSocket.connected()) {
+            return true;
         } else {
-            checkAutoRefreshGraph();
+            showOfflineAlert();
+            return false;
         }
     }
 
     private void requestDataUpdate() {
         if (mSocket != null && mSocket.connected()) {
-            mIsLoading = true;
-            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setHistoryData(args[0].toString(), true);
-                    mIsLoading = false;
-                }
-            });
+            checkAutoRefreshGraph();
+        } else {
+            loadStoredData();
         }
     }
 
-    private void loadStoredDataRequestUpdate() {
-        if (getActivity() != null) {
-            String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_HISTORY);
-            if (jsonData != null && mMainViewModel != null) {
-                mMainViewModel.setHistoryData(jsonData, false);
+    private void loadStoredData() {
+        FileUtils.executorLoadJSON(getActivity(), Constants.JSON_HISTORY, jsonString -> {
+            if (jsonString != null && mMainViewModel != null) {
+                mMainViewModel.setHistoryData(jsonString, false);
+            } else {
+                toggleLoading(false);
             }
-        }
-        checkAutoRefreshGraph();
+        });
     }
 
     private void forceRefreshData() {
         if (mSocket != null && mSocket.connected()) {
+            mIsLoading = true;
             mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
                 if (mMainViewModel != null) {
                     mMainViewModel.setHistoryData(args[0].toString(), true);
@@ -252,13 +229,12 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                 getResources().getBoolean(R.bool.def_history_refresh_enabled_app))) {
             if (!mStarted) {
                 if (!mIsLoading) {
-                    requestDataUpdate();
+                    forceRefreshData();
                 }
                 startRefresh();
             }
-        }
-        if (!mIsLoading) {
-            requestDataUpdate();
+        } else {
+            forceRefreshData();
         }
     }
 
@@ -291,6 +267,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
     };
 
     private void updateUIWithData(String response_data) {
+        mIsLoading = false;
 
         try {
 
@@ -399,9 +376,7 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.w("JSON Error %s", e.getMessage());
-            if (getActivity() != null) {
-                showSnackBarMessage(getActivity());
-            }
+            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_history, false);
         }
 
         toggleLoading(false);
@@ -421,11 +396,4 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             Color.rgb(127, 0, 0), Color.rgb(255, 0, 0),
             Color.rgb(0, 127, 0), Color.rgb(0, 255, 0)
     };
-
-    private void showSnackBarMessage(Activity activity) {
-        Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_history, Snackbar.LENGTH_LONG);
-        snack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-        snack.setTextColor(activity.getColor(R.color.colorWhite));
-        snack.show();
-    }
 }

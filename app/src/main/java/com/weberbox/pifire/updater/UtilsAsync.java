@@ -2,13 +2,13 @@ package com.weberbox.pifire.updater;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.weberbox.pifire.ui.dialogs.ProgressBarDialog;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.GitHub;
 import com.weberbox.pifire.updater.objects.Update;
+import com.weberbox.pifire.utils.async.AsyncTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,7 +36,6 @@ public class UtilsAsync {
         private final String mJsonUrl;
         private final AppUpdater.LibraryListener mListener;
 
-        @SuppressWarnings("deprecation")
         public LatestAppVersion(Context context, Boolean forceCheck, UpdateFrom updateFrom,
                                 GitHub gitHub, String jsonUrl, AppUpdater.LibraryListener listener) {
             mContextRef = new WeakReference<>(context);
@@ -54,23 +53,23 @@ public class UtilsAsync {
 
             Context context = mContextRef.get();
             if (context == null || mListener == null) {
-                cancel(true);
+                cancel();
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
                 if (!mForceCheck && !mLibraryPreferences.getAppUpdaterShow()) {
-                    cancel(true);
+                    cancel();
                 } else {
                     if (mUpdateFrom == UpdateFrom.GITHUB && !GitHub.isGitHubValid(mGitHub)) {
                         mListener.onFailed(AppUpdaterError.GITHUB_USER_REPO_INVALID);
-                        cancel(true);
+                        cancel();
                     } else if (mUpdateFrom == UpdateFrom.JSON && (mJsonUrl == null ||
                             !UtilsLibrary.isStringValidUrl(mJsonUrl))) {
                         mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
-                        cancel(true);
+                        cancel();
                     }
                 }
             } else {
                 mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
-                cancel(true);
+                cancel();
             }
         }
 
@@ -89,7 +88,12 @@ public class UtilsAsync {
         }
 
         @Override
-        protected Update doInBackground(Void... voids) {
+        protected void onBackgroundError(Exception e) {
+
+        }
+
+        @Override
+        protected Update doInBackground(Void unused) {
             try {
                 if (mUpdateFrom == UpdateFrom.JSON) {
                     Update update = UtilsLibrary.getLatestAppVersion(mJsonUrl);
@@ -101,7 +105,7 @@ public class UtilsAsync {
                         if (mListener != null) {
                             mListener.onFailed(error);
                         }
-                        cancel(true);
+                        cancel();
                         return null;
                     }
                 } else {
@@ -109,19 +113,18 @@ public class UtilsAsync {
                     if (context != null) {
                         return UtilsLibrary.getLatestAppVersionHttp(mGitHub);
                     } else {
-                        cancel(true);
+                        cancel();
                         return null;
                     }
                 }
             } catch (Exception ex) {
-                cancel(true);
+                cancel();
                 return null;
             }
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public static class DownloadNewVersion extends AsyncTask<String, Long, Boolean> {
+    public static class DownloadNewVersion extends AsyncTask<String, Long[], Boolean> {
         private final WeakReference<Context> mContextRef;
         private final AppUpdater.DownloadListener mListener;
         private final String mFileName;
@@ -145,11 +148,11 @@ public class UtilsAsync {
 
             Context context = mContextRef.get();
             if (context == null || mListener == null) {
-                cancel(true);
+                cancel();
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
                 if (!UtilsLibrary.isStringValidUrl(mApiUrl)) {
                     mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
-                    cancel(true);
+                    cancel();
                 } else {
                     if (mProgressDialog == null) {
                         mProgressDialog = new ProgressBarDialog(context);
@@ -159,13 +162,14 @@ public class UtilsAsync {
                 }
             } else {
                 mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
-                cancel(true);
+                cancel();
             }
         }
 
         @SuppressLint("DefaultLocale")
-        protected void onProgressUpdate(Long... values) {
-            super.onProgressUpdate(values);
+        @Override
+        protected void onProgress(Long[] values) {
+            super.onProgress(values);
 
             if (values[1] < 0) {
                 mProgressDialog.setIndeterminate(true);
@@ -198,7 +202,12 @@ public class UtilsAsync {
         }
 
         @Override
-        protected Boolean doInBackground(String... arg0) {
+        protected void onBackgroundError(Exception e) {
+
+        }
+
+        @Override
+        protected Boolean doInBackground(String arg0) {
             Context context = mContextRef.get();
             OkHttpClient client = new OkHttpClient();
 
@@ -230,7 +239,7 @@ public class UtilsAsync {
                         mUpdateFile = new File(context.getCacheDir(), mFileName);
                         OutputStream output = new FileOutputStream(mUpdateFile);
 
-                        publishProgress(0L, target);
+                        publishProgress(new Long[]{0L, target});
                         while (true) {
                             int read = inputStream.read(buff);
 
@@ -240,7 +249,7 @@ public class UtilsAsync {
                             output.write(buff, 0, read);
                             //write buff
                             downloaded += read;
-                            publishProgress(downloaded, target);
+                            publishProgress(new Long[]{downloaded, target});
                             if (isCancelled()) {
                                 return false;
                             }

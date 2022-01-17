@@ -13,7 +13,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPmodeTableBinding;
 import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
-import com.weberbox.pifire.recycler.viewmodel.PModeViewModel;
+import com.weberbox.pifire.model.local.PModeModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -30,7 +30,6 @@ public class PModeTableDialog {
         mPModeBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
         mContext = context;
-
     }
 
     public BottomSheetDialog showDialog(){
@@ -64,8 +63,8 @@ public class PModeTableDialog {
         return mPModeBottomSheet;
     }
 
-    private List<PModeViewModel> getPModeList() {
-        List<PModeViewModel> pModeList = new ArrayList<>();
+    private List<PModeModel> getPModeList() {
+        List<PModeModel> pModeList = new ArrayList<>();
 
         String augerOn = Prefs.getString(mContext.getString(R.string.prefs_work_auger_on),
                 mContext.getString(R.string.def_pmode_auger_on));
@@ -73,16 +72,16 @@ public class PModeTableDialog {
         String[] pmodes = mContext.getResources().getStringArray(R.array.pmode_setting);
         String[] pmode_times = mContext.getResources().getStringArray(R.array.pmode_times);
 
-        pModeList.add(new PModeViewModel(pmodes[0], augerOn, pmode_times[0]));
-        pModeList.add(new PModeViewModel(pmodes[1], augerOn, pmode_times[1]));
-        pModeList.add(new PModeViewModel(pmodes[2], augerOn, pmode_times[2]));
-        pModeList.add(new PModeViewModel(pmodes[3], augerOn, pmode_times[3]));
-        pModeList.add(new PModeViewModel(pmodes[4], augerOn, pmode_times[4]));
-        pModeList.add(new PModeViewModel(pmodes[5], augerOn, pmode_times[5]));
-        pModeList.add(new PModeViewModel(pmodes[6], augerOn, pmode_times[6]));
-        pModeList.add(new PModeViewModel(pmodes[7], augerOn, pmode_times[7]));
-        pModeList.add(new PModeViewModel(pmodes[8], augerOn, pmode_times[8]));
-        pModeList.add(new PModeViewModel(pmodes[9], augerOn, pmode_times[9]));
+        pModeList.add(new PModeModel(pmodes[0], augerOn, pmode_times[0]));
+        pModeList.add(new PModeModel(pmodes[1], augerOn, pmode_times[1]));
+        pModeList.add(new PModeModel(pmodes[2], augerOn, pmode_times[2]));
+        pModeList.add(new PModeModel(pmodes[3], augerOn, pmode_times[3]));
+        pModeList.add(new PModeModel(pmodes[4], augerOn, pmode_times[4]));
+        pModeList.add(new PModeModel(pmodes[5], augerOn, pmode_times[5]));
+        pModeList.add(new PModeModel(pmodes[6], augerOn, pmode_times[6]));
+        pModeList.add(new PModeModel(pmodes[7], augerOn, pmode_times[7]));
+        pModeList.add(new PModeModel(pmodes[8], augerOn, pmode_times[8]));
+        pModeList.add(new PModeModel(pmodes[9], augerOn, pmode_times[9]));
 
         return pModeList;
     }

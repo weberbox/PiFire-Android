@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/colorPrimaryDark"
     tools:context=".ui.fragments.HistoryFragment">
 
@@ -30,7 +29,7 @@
                     android:indeterminate="true"
                     android:max="100"
                     android:layout_marginTop="-7dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:indeterminateTintMode="src_in"
                     android:indeterminateTint="@color/colorAccent"/>
 
@@ -40,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_spacing"
                     app:cardBackgroundColor="@android:color/transparent"
-                    app:cardCornerRadius="2dp"
+                    app:cardCornerRadius="10dp"
                     app:cardElevation="10dp"
                     app:cardPreventCornerOverlap="false"
                     app:contentPadding="0dp">
@@ -111,7 +110,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:focusable="true"
-                            android:contentDescription="@string/pellets_delete" />
+                            android:contentDescription="@string/delete" />
 
                         <include
                             android:id="@+id/history_layout"

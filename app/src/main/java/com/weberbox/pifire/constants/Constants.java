@@ -59,6 +59,10 @@ public class Constants {
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
 
+    // Recipe Fragment
+    public static final int FRAG_VIEW_RECIPE = 0;
+    public static final int FRAG_EDIT_RECIPE = 1;
+
     // Fade Directions
     public static final int FADE_OUT = 0;
     public static final int FADE_IN = 1;
@@ -66,6 +70,22 @@ public class Constants {
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";
+    public static final String INTENT_RECIPE_FRAGMENT = "recipe_fragment";
+    public static final String INTENT_RECIPE_ID = "recipe_id";
+
+    public static final String INTENT_IMAGE_PICKER_OPTION = "image_picker_option";
+    public static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
+    public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
+    public static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
+    public static final String INTENT_IMAGE_COMPRESSION_QUALITY = "compression_quality";
+    public static final String INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT = "set_bitmap_max_width_height";
+    public static final String INTENT_BITMAP_MAX_WIDTH = "max_width";
+    public static final String INTENT_BITMAP_MAX_HEIGHT = "max_height";
+    public static final int INTENT_REQUEST_IMAGE_CAPTURE = 0;
+    public static final int INTENT_REQUEST_GALLERY_IMAGE = 1;
+
+    // Results
+    public static final int RESULT_PERMISSIONS = 405;
 
     // JSON File Names
     public static final String JSON_EVENTS = "events.json";
@@ -73,6 +93,8 @@ public class Constants {
     public static final String JSON_PELLETS = "pellets.json";
     public static final String JSON_SETTINGS = "settings.json";
     public static final String JSON_INFO = "info.json";
+    public static final String JSON_RECIPES = "recipes.json";
+
 
     // Licenses
     public static final String LICENSES_LIST = "licenses";
@@ -83,11 +105,11 @@ public class Constants {
     public static final String PELLET_PROFILE = "profile";
     public static final String PELLET_LOG = "log";
 
-    public static final String PELLET_RATING_5 = "★ ★ ★ ★ ★";
-    public static final String PELLET_RATING_4 = "★ ★ ★ ★";
-    public static final String PELLET_RATING_3 = "★ ★ ★";
-    public static final String PELLET_RATING_2 = "★ ★";
-    public static final String PELLET_RATING_1 = "★";
+    public static final String ITEM_RATING_5 = "★ ★ ★ ★ ★";
+    public static final String ITEM_RATING_4 = "★ ★ ★ ★";
+    public static final String ITEM_RATING_3 = "★ ★ ★";
+    public static final String ITEM_RATING_2 = "★ ★";
+    public static final String ITEM_RATING_1 = "★";
 
     // Update
     public static final String UPDATE_FILENAME = "app-update.apk";
@@ -103,10 +125,15 @@ public class Constants {
     public static final String DB_SET_SAFETY = "db_set_safety";
     public static final String DB_SET_NOTIF = "db_set_notif";
 
-    // Backup
+    // PiFire Backup
     public static final String BACKUP_SETTINGS = "settings";
     public static final String BACKUP_PELLETDB = "pelletdb";
     public static final String BACKUP_SETTINGS_FILENAME = "PiFire_";
     public static final String BACKUP_PELLETDB_FILENAME = "PelletDB_";
+
+    // Database
+    public static final String DB_RECIPES_TABLE = "recipes";
+    public static final String DB_RECIPES = "recipes.db";
+    public static final String DB_RECIPES_BACKUP_FILENAME = "Recipes_";
 
 }

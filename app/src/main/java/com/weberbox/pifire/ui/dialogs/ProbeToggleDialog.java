@@ -13,14 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogProbeActionBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
+import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class ProbeToggleDialog {
 
     private final BottomSheetDialog mProbeActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final DashboardCallbackInterface mCallBack;
+    private final DashboardCallback mCallBack;
     private final Context mContext;
     private final int mType;
     private final boolean mEnabled;
@@ -29,7 +29,7 @@ public class ProbeToggleDialog {
     public ProbeToggleDialog(Context context, Fragment fragment, int type, boolean enabled) {
         mProbeActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallbackInterface) fragment;
+        mCallBack = (DashboardCallback) fragment;
         mType = type;
         mEnabled = enabled;
         mContext = context;

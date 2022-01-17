@@ -1,7 +1,5 @@
 package com.weberbox.pifire.ui.fragments;
 
-import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionManager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
@@ -31,27 +29,28 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
-import com.weberbox.pifire.interfaces.DashboardCallbackInterface;
-import com.weberbox.pifire.model.GrillResponseModel;
-import com.weberbox.pifire.model.GrillResponseModel.NotifyReq;
-import com.weberbox.pifire.model.GrillResponseModel.NotifyData;
-import com.weberbox.pifire.model.GrillResponseModel.ProbeTemps;
-import com.weberbox.pifire.model.GrillResponseModel.ProbesEnabled;
-import com.weberbox.pifire.model.GrillResponseModel.SetPoints;
-import com.weberbox.pifire.model.GrillResponseModel.TimerInfo;
+import com.weberbox.pifire.interfaces.DashboardCallback;
+import com.weberbox.pifire.model.remote.GrillResponseModel;
+import com.weberbox.pifire.model.remote.GrillResponseModel.NotifyData;
+import com.weberbox.pifire.model.remote.GrillResponseModel.NotifyReq;
+import com.weberbox.pifire.model.remote.GrillResponseModel.ProbeTemps;
+import com.weberbox.pifire.model.remote.GrillResponseModel.ProbesEnabled;
+import com.weberbox.pifire.model.remote.GrillResponseModel.SetPoints;
+import com.weberbox.pifire.model.remote.GrillResponseModel.TimerInfo;
+import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.dialogs.ProbeToggleDialog;
 import com.weberbox.pifire.ui.dialogs.RunModeActionDialog;
 import com.weberbox.pifire.ui.dialogs.StartModeActionDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
 import com.weberbox.pifire.ui.dialogs.TimerActionDialog;
 import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
-import com.weberbox.pifire.ui.model.MainViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.ui.utils.CountDownTimer;
 import com.weberbox.pifire.ui.utils.TextTransition;
 import com.weberbox.pifire.ui.views.PelletLevelView;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
-import com.weberbox.pifire.ui.utils.CountDownTimer;
 import com.weberbox.pifire.utils.TempUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +60,7 @@ import java.util.concurrent.TimeUnit;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class DashboardFragment extends Fragment implements DashboardCallbackInterface {
+public class DashboardFragment extends Fragment implements DashboardCallback {
 
     private FragmentDashboardBinding mBinding;
     private TextView mTimerCountDownText;
@@ -88,7 +87,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     private TempPickerDialog mTempPickerDialog;
     private FrameLayout mTimerPausedLayout;
     private TableLayout mRootContainer;
-    private Snackbar mErrorSnack;
     private CountDownTimer mCountDownTimer;
     private PelletLevelView mPelletLevelIndicator;
     private Socket mSocket;
@@ -123,8 +121,6 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mErrorSnack = Snackbar.make(view, R.string.control_send_error, Snackbar.LENGTH_LONG);
 
         mLoadingBar = mBinding.connectProgressbar;
         mRootContainer = mBinding.dashLayout.grillControlsTable;
@@ -169,16 +165,15 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mIsFahrenheit = mTempUtils.isFahrenheit();
 
         mSwipeRefresh.setOnRefreshListener(() -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 requestForcedDashData(false);
             } else {
                 mSwipeRefresh.setRefreshing(false);
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         currentModeBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 if (!mCurrentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
                     if (mCurrentMode.equals(Constants.GRILL_CURRENT_STOP) ||
                             mCurrentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
@@ -192,38 +187,31 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         runModeActionDialog.showDialog();
                     }
                 } else {
-                    showSnackBarMessage(getActivity(), R.string.control_manual_mode, true);
+                    AlertUtils.createErrorAlert(getActivity(), R.string.control_manual_mode, false);
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         mSmokePlusBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 if (mCurrentMode.equals(Constants.GRILL_CURRENT_HOLD)
                         || mCurrentMode.equals(Constants.GRILL_CURRENT_SMOKE)) {
                     GrillControl.setSmokePlus(mSocket, !mSmokePlusEnabled);
-                } else {
-                    if (getActivity() != null) {
-                        showSnackBarMessage(getActivity(), R.string.control_smoke_plus_disabled,
-                                false);
-                    }
+                } else if (!mCurrentMode.equals(Constants.GRILL_CURRENT_STOP)){
+                    AlertUtils.createAlert(getActivity(), R.string.control_smoke_plus_disabled,
+                            1000);
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         grillTempBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 int defaultTemp = mTempUtils.getDefaultGrillTemp();
                 if (!mGrillSetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
                     String temp = mGrillSetText.getText().toString()
                             .replaceAll(getString(R.string.regex_numbers), "");
                     defaultTemp = Integer.parseInt(temp);
-
                 } else if (!mGrillTargetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
                     String temp = mGrillTargetText.getText().toString()
@@ -234,13 +222,11 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                         DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
                         defaultTemp, false);
                 mTempPickerDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         probeOneTempBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 int defaultTemp = mTempUtils.getDefaultProbeTemp();
                 if (!mProbeOneTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeOneTargetText.getText().toString().equals(
@@ -254,25 +240,21 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                             defaultTemp, false);
                     mTempPickerDialog.showDialog();
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         probeOneTempBox.setOnLongClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 ProbeToggleDialog probeToggleDialog = new ProbeToggleDialog(getActivity(),
                         DashboardFragment.this, Constants.ACTION_MODE_PROBE_ONE,
                         !mProbeOneTempText.getText().toString().equals(getString(R.string.off)));
                 probeToggleDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
             return true;
         });
 
         probeTwoTempBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 int defaultTemp = mTempUtils.getDefaultProbeTemp();
                 if (!mProbeTwoTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!mProbeTwoTargetText.getText().toString().equals("--")) {
@@ -285,25 +267,21 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                             defaultTemp, false);
                     mTempPickerDialog.showDialog();
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         probeTwoTempBox.setOnLongClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 ProbeToggleDialog probeToggleDialog = new ProbeToggleDialog(getActivity(),
                         DashboardFragment.this, Constants.ACTION_MODE_PROBE_TWO,
                         !mProbeTwoTempText.getText().toString().equals(getString(R.string.off)));
                 probeToggleDialog.showDialog();
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
             return true;
         });
 
         timerBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 if (mCountDownTimer != null && mCountDownTimer.isActive()) {
                     TimerActionDialog timerActionDialog = new TimerActionDialog(getActivity(),
                             DashboardFragment.this, mCountDownTimer.isPaused());
@@ -313,17 +291,13 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
                             DashboardFragment.this);
                     timerPickerDialog.showDialog();
                 }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
         pelletLevelBox.setOnClickListener(v -> {
-            if (mSocket != null && mSocket.connected()) {
+            if (socketConnected()) {
                 GrillControl.setCheckHopperLevel(mSocket);
                 requestForcedDashData(true);
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
             }
         });
 
@@ -390,6 +364,21 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         mBinding = null;
     }
 
+    private void showOfflineAlert() {
+        if (getActivity() != null) {
+            AlertUtils.createOfflineAlert(getActivity());
+        }
+    }
+
+    private boolean socketConnected() {
+        if (mSocket != null && mSocket.connected()) {
+            return true;
+        } else {
+            showOfflineAlert();
+            return false;
+        }
+    }
+
     private void requestDataUpdate() {
         if (mSocket != null && !mIsLoading) {
             mIsLoading = true;
@@ -406,19 +395,12 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
     private void toggleLoading(boolean show) {
         if (show && mSocket != null) {
-            if (getBannerVisibility() == View.GONE) {
+            if (!Alerter.isShowing()) {
                 mLoadingBar.setVisibility(View.VISIBLE);
             }
         } else {
             mLoadingBar.setVisibility(View.GONE);
         }
-    }
-
-    private int getBannerVisibility() {
-        if (getActivity() != null && getActivity().findViewById(R.id.offline_banner) != null) {
-            return getActivity().findViewById(R.id.offline_banner).getVisibility();
-        }
-        return View.GONE;
     }
 
     private void checkForceScreenOn() {
@@ -684,9 +666,7 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.w(e, "JSON Error");
-            if (getActivity() != null) {
-                showSnackBarMessage(getActivity(), R.string.json_error_dash, true);
-            }
+            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_dash, false);
         }
 
         toggleLoading(false);
@@ -733,18 +713,5 @@ public class DashboardFragment extends Fragment implements DashboardCallbackInte
         AnimUtils.fadeAnimation(mProbeOneShutdown, 300, Constants.FADE_OUT);
         AnimUtils.fadeAnimation(mProbeTwoShutdown, 300, Constants.FADE_OUT);
         AnimUtils.fadeAnimation(mTimerShutdown, 300, Constants.FADE_OUT);
-    }
-
-    private void showSnackBarMessage(Activity activity, int message, boolean error) {
-        if (!mErrorSnack.isShown()) {
-            int color = R.color.colorPrimary;
-            if (error) {
-                color = R.color.colorAccentRed;
-            }
-            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(color)));
-            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-            mErrorSnack.setText(message);
-            mErrorSnack.show();
-        }
     }
 }

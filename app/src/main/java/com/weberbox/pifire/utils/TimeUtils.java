@@ -1,8 +1,7 @@
 package com.weberbox.pifire.utils;
 
-import android.annotation.SuppressLint;
+import android.text.format.DateFormat;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,9 +13,11 @@ public class TimeUtils {
         return formatter.format(localTime);
     }
 
-    @SuppressLint("SimpleDateFormat")
-    public static String getCurrentTime(String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        return sdf.format(System.currentTimeMillis());
+    public static String getFormattedDate(String dateInMilliseconds, String dateFormat) {
+        return DateFormat.format(dateFormat, Long.parseLong(dateInMilliseconds)).toString();
+    }
+
+    public static String getFormattedDate(Long dateInMilliseconds, String dateFormat) {
+        return DateFormat.format(dateFormat, dateInMilliseconds).toString();
     }
 }

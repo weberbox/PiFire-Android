@@ -2,6 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
 
+    <dimen name="alerter_icon_size_small">30dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+
     <dimen name="large_spacing">20dp</dimen>
     <dimen name="default_spacing">14dp</dimen>
     <dimen name="medium_spacing">12dp</dimen>

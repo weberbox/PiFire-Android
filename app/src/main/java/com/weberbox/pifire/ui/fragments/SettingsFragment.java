@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +11,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSettingsBinding;
 import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import io.socket.client.Socket;
 
 public class SettingsFragment extends Fragment {
-
-    // TODO allow offline changes and sync to server once online.
 
     private FragmentSettingsBinding mBinding;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -66,7 +61,7 @@ public class SettingsFragment extends Fragment {
                 requestSettingsData();
             } else {
                 mSwipeRefresh.setRefreshing(false);
-                AnimUtils.shakeOfflineBanner(getActivity());
+                showOfflineAlert();
             }
         });
     }
@@ -81,6 +76,12 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         requestSettingsData();
+    }
+
+    private void showOfflineAlert() {
+        if (getActivity() != null) {
+            AlertUtils.createOfflineAlert(getActivity());
+        }
     }
 
     public void settingsOnClick(String settings) {
@@ -116,7 +117,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void startPreferenceActivity(int fragment) {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), PreferencesActivity.class);
             intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
             startActivity(intent);
@@ -132,15 +133,8 @@ public class SettingsFragment extends Fragment {
         public void onSettingsResult(boolean result) {
             mSwipeRefresh.setRefreshing(false);
             if (!result && getActivity() != null) {
-                showSnackBarMessage(getActivity());
+                AlertUtils.createErrorAlert(getActivity(), R.string.json_error_settings, false);
             }
         }
     };
-
-    private void showSnackBarMessage(Activity activity) {
-        Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_settings, Snackbar.LENGTH_LONG);
-        snack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-        snack.setTextColor(activity.getColor(R.color.colorWhite));
-        snack.show();
-    }
 }

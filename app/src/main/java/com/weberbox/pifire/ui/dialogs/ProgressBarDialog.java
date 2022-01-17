@@ -48,6 +48,10 @@ public class ProgressBarDialog {
         mAlertDialog.setCancelable(cancelable);
     }
 
+    public void setTitle(String title) {
+        mAlertDialog.setTitle(title);
+    }
+
     public void setMessage(String message) {
         mProgressText.setText(message);
     }

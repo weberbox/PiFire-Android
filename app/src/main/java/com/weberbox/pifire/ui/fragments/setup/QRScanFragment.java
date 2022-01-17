@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -20,13 +19,16 @@ import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
-import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.interfaces.AuthDialogCallback;
+import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
+import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
+import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
@@ -36,18 +38,22 @@ import java.util.regex.Pattern;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
-public class QRScanFragment extends Fragment {
-    public static final String TAG = QRScanFragment.class.getSimpleName();
+public class QRScanFragment extends Fragment implements AuthDialogCallback {
 
     private FragmentSetupQrScanBinding mBinding;
     private CompoundBarcodeView mBarcodeView;
     private ProgressBar mConnectProgress;
     private Snackbar mErrorSnack;
-    private ConstraintLayout mSelfSignedNote;
     private Socket mSocket;
+    private String mServerAddress;
     private String mValidURL;
     private String mSecure;
     private String mUnSecure;
@@ -75,8 +81,6 @@ public class QRScanFragment extends Fragment {
         mBarcodeView.getBarcodeView().getCameraSettings().setContinuousFocusEnabled(true);
         mBarcodeView.setStatusText(null);
         mBarcodeView.decodeContinuous(mBarCodeCallback);
-
-        mSelfSignedNote = mBinding.selfSignedNoteContainer;
 
         mSecure = getString(R.string.https_scheme);
         mUnSecure = getString(R.string.http_scheme);
@@ -112,7 +116,8 @@ public class QRScanFragment extends Fragment {
         public void barcodeResult(BarcodeResult result) {
             if (result.getText() != null) {
                 mConnectProgress.setVisibility(View.VISIBLE);
-                verifyURLAndTestConnect(result.getText());
+                mServerAddress = result.getText();
+                verifyURLAndTestConnect(mServerAddress);
             }
         }
 
@@ -122,31 +127,107 @@ public class QRScanFragment extends Fragment {
         }
     };
 
-    private void verifyURLAndTestConnect(String url) {
-        if(url.length() !=0 && isValidUrl(url)) {
-            if(url.startsWith(mUnSecure) || url.startsWith(mSecure)) {
-                testConnection(url);
-            } else {
-                testConnection(mUnSecure + url);
+    @Override
+    public void onAuthDialogSave(boolean success) {
+        if (success) {
+            Prefs.putBoolean(getString(R.string.prefs_server_basic_auth), true);
+            if(!mServerAddress.isEmpty() && !mIsConnecting) {
+                verifyURLAndTestConnect(mServerAddress);
             }
         } else {
-            mConnectProgress.setVisibility(View.GONE);
-            if(!mErrorSnack.isShown() && getActivity() != null) {
-                showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
-            }
+            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
         }
     }
 
-    private void testConnection(String Url) {
+    @Override
+    public void onAuthDialogCancel() {
+        if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+    }
+
+    private void verifyURLAndTestConnect(String url) {
+        if(url.length() != 0 && isValidUrl(url)) {
+            if(url.startsWith(mUnSecure) || url.startsWith(mSecure)) {
+                testServerConnection(url);
+            } else {
+                testServerConnection(mUnSecure + url);
+            }
+        } else {
+            mConnectProgress.setVisibility(View.GONE);
+            showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
+        }
+    }
+
+    private void testServerConnection(String url) {
+        if(!mIsConnecting) {
+            mConnectProgress.setVisibility(View.VISIBLE);
+            String credentials;
+
+            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
+                String username = SecurityUtils.decrypt(getActivity(),
+                        R.string.prefs_server_basic_auth_user);
+                String password = SecurityUtils.decrypt(getActivity(),
+                        R.string.prefs_server_basic_auth_password);
+                credentials = Credentials.basic(username, password);
+            } else {
+                credentials = null;
+            }
+
+            OkHttpClient client = HTTPUtils.createHttpClient(true, true);
+            Request request = HTTPUtils.createHttpRequest(url, credentials);
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    Timber.d(e, "Request onFailure");
+                    if (getActivity() != null) {
+                        if (e.getMessage() != null && e.getMessage()
+                                .contains("CertPathValidatorException")) {
+                            getActivity().runOnUiThread(() -> {
+                                if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+                                MessageTextDialog dialog = new MessageTextDialog(getActivity(),
+                                        getString(R.string.setup_server_self_signed_title),
+                                        getString(R.string.setup_server_self_signed));
+                                dialog.showDialog();
+                            });
+                        } else {
+                            getActivity().runOnUiThread(() ->
+                                    showSnackBarMessage(getActivity(), e.getMessage()));
+                        }
+                    }
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull final Response response) {
+                    if (!response.isSuccessful()) {
+                        Timber.d("Response: %s", response.toString());
+                        if (response.code() == 401) {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    SetupUserPassDialog dialog = new SetupUserPassDialog(
+                                            getActivity(), QRScanFragment.this);
+                                    dialog.showDialog();
+                                });
+                            }
+                        } else {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> showSnackBarMessage(getActivity(),
+                                        getString(R.string.setup_server_connect_error,
+                                                String.valueOf(response.code()), response.message())));
+                            }
+                        }
+                    } else {
+                        testSocketConnection(url, credentials);
+                    }
+                }
+            });
+        }
+    }
+
+    private void testSocketConnection(String Url, String credentials) {
         if(!mIsConnecting) {
             IO.Options options = new IO.Options();
 
-            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
-                String username = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_user);
-                String password = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_basic_auth_password);
-
-                String credentials = Credentials.basic(username, password);
-
+            if (credentials != null) {
                 options.extraHeaders = Collections.singletonMap("Authorization",
                         Collections.singletonList(credentials));
 
@@ -155,7 +236,6 @@ public class QRScanFragment extends Fragment {
                 connectSocket(Url, null);
             }
 
-            mConnectProgress.setVisibility(View.VISIBLE);
             mIsConnecting = true;
 
             mValidURL = Url;
@@ -171,9 +251,7 @@ public class QRScanFragment extends Fragment {
                 mSocket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
                 Timber.w(e, "Socket URI Error");
-                if(!mErrorSnack.isShown() && getActivity() != null) {
-                    showSnackBarMessage(getActivity(), R.string.setup_error);
-                }
+                showSnackBarMessage(getActivity(), getString(R.string.setup_error));
             }
         } else {
             try {
@@ -181,7 +259,7 @@ public class QRScanFragment extends Fragment {
             } catch (URISyntaxException e) {
                 Timber.w(e,"Socket URI Error");
                 if(!mErrorSnack.isShown() && getActivity() != null) {
-                    showSnackBarMessage(getActivity(), R.string.setup_error);
+                    showSnackBarMessage(getActivity(), getString(R.string.setup_error));
                 }
             }
         }
@@ -193,15 +271,14 @@ public class QRScanFragment extends Fragment {
             SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
             if(getActivity() != null) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.server_setup_fragment, setupCompeteFragment, SetupFinishFragment.TAG)
+                        .add(R.id.server_setup_fragment, setupCompeteFragment,
+                                SetupFinishFragment.class.getSimpleName())
                         .addToBackStack(null)
                         .commit();
             }
         } else {
             mConnectProgress.setVisibility(View.GONE);
-            if(!mErrorSnack.isShown() && getActivity() != null) {
-                showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
-            }
+            showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
         }
     }
 
@@ -210,7 +287,7 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Timber.d("Successful connection address ok");
+                    Timber.d("Socket Connected Storing URL");
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
                     if(mErrorSnack.isShown()) {
@@ -227,32 +304,30 @@ public class QRScanFragment extends Fragment {
         public void call(Object... args) {
             if(getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    Timber.d("Error connecting bad address");
+                    Timber.d("Error Connecting to Socket");
                     mConnectProgress.setVisibility(View.GONE);
                     mSocket.disconnect();
                     mSocket.close();
                     mIsConnecting = false;
-                    if(!mErrorSnack.isShown()) {
-                        showSnackBarMessage(getActivity(), R.string.setup_invalid_url_snack);
-                    }
+                    showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
                 });
             }
         }
     };
 
-    private void showSnackBarMessage(Activity activity, int message) {
-        if (mValidURL.startsWith(mSecure)) {
-            AnimUtils.fadeView(mSelfSignedNote, 300, Constants.FADE_IN);
-        }
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-        mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-        mErrorSnack.setText(message);
-        mErrorSnack.show();
-    }
-
     private boolean isValidUrl(String url) {
         Pattern p = Patterns.WEB_URL;
         Matcher m = p.matcher(url.toLowerCase());
         return m.matches();
+    }
+
+    private void showSnackBarMessage(Activity activity, String message) {
+        if(!mErrorSnack.isShown() && activity != null) {
+            if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
+            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
+            mErrorSnack.setText(message);
+            mErrorSnack.show();
+        }
     }
 }

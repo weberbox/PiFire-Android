@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_timers">
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_shutdown_time"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_shutdown_time"
+            app:title="@string/settings_shutdown_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_shutdown_note"
+            app:title="@string/settings_note" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_startup_time"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_startup_time"
+            app:title="@string/settings_startup_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_startup_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -39,7 +39,7 @@
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
             android:background="@drawable/bg_ripple_red_button"
-            android:text="@string/pellets_delete" />
+            android:text="@string/delete" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/pellet_edit_save"
@@ -47,8 +47,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bg_table_item"
-            android:text="@string/pellets_dialog_save" />
+            android:background="@drawable/bg_ripple_table"
+            android:text="@string/save" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

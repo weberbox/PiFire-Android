@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogListViewBinding;
-import com.weberbox.pifire.interfaces.BackupRestoreCallbackInterface;
+import com.weberbox.pifire.interfaces.BackupRestoreCallback;
 
 import java.util.List;
 
 public class RestoreListDialog {
 
-    private final BackupRestoreCallbackInterface mCallBack;
+    private final BackupRestoreCallback mCallBack;
     private final LayoutInflater mInflater;
     private final AlertDialog.Builder mDialog;
     private final Context mContext;
@@ -35,7 +35,7 @@ public class RestoreListDialog {
         mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mCallBack = (BackupRestoreCallbackInterface) fragment;
+        mCallBack = (BackupRestoreCallback) fragment;
         mTitle = title;
         mType = type;
     }
@@ -47,7 +47,7 @@ public class RestoreListDialog {
 
         mProgressSpinner = binding.dialogListviewPb;
         mNoBackups = binding.dialogListviewTv;
-        mRestoreList= binding.dialogListview;
+        mRestoreList = binding.dialogListview;
 
         mFileAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1);
         mRestoreList.setAdapter(mFileAdapter);

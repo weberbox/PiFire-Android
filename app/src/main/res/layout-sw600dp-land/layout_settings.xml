@@ -173,7 +173,7 @@
                             android:paddingTop="20dp"
                             android:paddingEnd="@dimen/settings_list_items"
                             android:paddingBottom="@dimen/settings_list_items"
-                            android:text="@string/settings_shutdown"
+                            android:text="@string/settings_timers"
                             app:drawableStartCompat="@drawable/ic_grill_shutdown" />
 
                         <TextView

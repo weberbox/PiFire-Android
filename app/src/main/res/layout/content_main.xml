@@ -5,49 +5,9 @@
     android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main">
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/offline_banner_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/nav_host_fragment_content_main"
-        app:layout_constraintTop_toTopOf="@+id/root_container">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/offline_banner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorAccentRed"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:src="@drawable/ic_grill_disconnected" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/BannerMessageTextAppearance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/control_not_connected" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-        </androidx.cardview.widget.CardView>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <fragment
         android:id="@+id/nav_host_fragment_content_main"
@@ -58,25 +18,15 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/offline_banner_container"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_controller_graph"
         tools:ignore="FragmentTagUsage" />
-
-    <!--<View
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="-70dp"
-        android:alpha="0.5"
-        android:background="@drawable/bg_black_gradient_180"
-        android:clickable="false"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_bar"/> -->
 
     <nl.joery.animatedbottombar.AnimatedBottomBar
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:background="@color/colorPrimary"
-        android:elevation="16dp"
         app:abb_indicatorAppearance="round"
         app:abb_indicatorColor="@color/colorAccent"
         app:abb_indicatorHeight="4dp"

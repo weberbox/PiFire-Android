@@ -18,6 +18,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
 import com.weberbox.pifire.ui.preferences.EmptyTextListener;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -191,6 +192,9 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_work);
+        }
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
     }

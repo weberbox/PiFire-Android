@@ -77,6 +77,25 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/settings_cat_app_recipes">
+
+        <Preference
+            app:key="@string/prefs_recipe_db_backup"
+            app:summary="@string/settings_recipe_db_backup"
+            app:title="@string/settings_recipe_db_backup_title" />
+
+        <Preference
+            app:key="@string/prefs_recipe_db_restore"
+            app:summary="@string/settings_recipe_db_restore"
+            app:title="@string/settings_recipe_db_restore_title" />
+
+        <Preference
+            app:key="@string/prefs_recipe_db_clear"
+            app:summary="@string/settings_recipe_db_clear"
+            app:title="@string/settings_recipe_db_clear_title" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         app:key="@string/prefs_app_updater_cat"
         app:title="@string/settings_cat_updates">
@@ -111,11 +130,6 @@
     <PreferenceCategory
         app:key="@string/prefs_debug_cat"
         app:title="@string/settings_cat_debug">
-
-        <Preference
-            app:key="@string/prefs_firebase_token"
-            app:summary="@string/settings_firebase_token_summary"
-            app:title="@string/settings_firebase_token" />
 
         <SwitchPreferenceCompat
             app:key="@string/prefs_debug_logging"

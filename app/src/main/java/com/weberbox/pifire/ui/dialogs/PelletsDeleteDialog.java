@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPelletsDeleteBinding;
-import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
+import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 
@@ -19,7 +19,7 @@ public class PelletsDeleteDialog {
 
     private final BottomSheetDialog mPelletsActionsBottomSheet;
     private final LayoutInflater mInflater;
-    private final PelletsCallbackInterface mCallBack;
+    private final PelletsProfileCallback mCallBack;
     private final String mType;
     private final String mItem;
     private final Context mContext;
@@ -29,7 +29,7 @@ public class PelletsDeleteDialog {
     public PelletsDeleteDialog(Context context, Fragment fragment, String type, String item, int position) {
         mPelletsActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (PelletsCallbackInterface) fragment;
+        mCallBack = (PelletsProfileCallback) fragment;
         mType = type;
         mItem = item;
         mPosition = position;

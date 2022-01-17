@@ -1,48 +1,72 @@
 package com.weberbox.pifire.recycler.adapter;
 
+import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.R;
-import com.weberbox.pifire.interfaces.LicensesCallbackInterface;
-import com.weberbox.pifire.recycler.viewholder.LicensesViewHolder;
-import com.weberbox.pifire.recycler.viewmodel.LicensesViewModel;
+import com.weberbox.pifire.databinding.ItemLicenseListBinding;
+import com.weberbox.pifire.model.local.LicensesModel;
 
 import java.util.List;
 
-public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapter.ViewHolder> {
 
-    private final List<LicensesViewModel> mModel;
-    private final LicensesCallbackInterface mCallBack;
+    private final List<LicensesModel> list;
 
-    public LicensesListAdapter(final List<LicensesViewModel> viewModel, LicensesCallbackInterface callback) {
-        mModel = viewModel;
-        mCallBack = callback;
+    public LicensesListAdapter(final List<LicensesModel> list) {
+        this.list = list;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new LicensesViewHolder(view, mCallBack);
+    public LicensesListAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
+                                                             final int viewType) {
+        return new ViewHolder(ItemLicenseListBinding.inflate(LayoutInflater.from(
+                parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((LicensesViewHolder) holder).bindData(mModel.get(position));
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.bindData(list.get(position));
+        holder.root.setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(holder.projectLicense.getText().toString()));
+            holder.itemView.getContext().startActivity(i);
+        });
     }
 
     @Override
     public int getItemCount() {
-        return mModel.size();
+        return list == null ? 0 : list.size();
     }
 
-    @Override
-    public int getItemViewType(final int position) {
-        return R.layout.item_license_list;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final View root;
+        private final TextView projectIcon;
+        private final TextView projectText;
+        private final TextView projectLicense;
+
+        public ViewHolder(ItemLicenseListBinding binding) {
+            super(binding.getRoot());
+            root = binding.getRoot();
+            projectIcon = binding.licenseIconHolder;
+            projectText = binding.licenseProjectName;
+            projectLicense = binding.licenseTextHolder;
+        }
+
+        public void bindData(final LicensesModel model) {
+            ((GradientDrawable) projectIcon.getBackground()).setColor(model.getProjectIconColor());
+            projectIcon.setText(model.getProjectIcon());
+            projectText.setText(model.getProjectText());
+            projectLicense.setText(model.getProjectLicense());
+        }
     }
 }

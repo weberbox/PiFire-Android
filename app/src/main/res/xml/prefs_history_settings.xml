@@ -6,7 +6,7 @@
         app:title="@string/settings_history">
 
         <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
-            app:defaultValue="bool/def_history_auto"
+            app:defaultValue="@bool/def_history_auto"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_auto"
             app:title="@string/settings_history_auto" />

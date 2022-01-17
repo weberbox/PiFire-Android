@@ -39,6 +39,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/grill_mode_smoke"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 
@@ -69,6 +70,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/grill_mode_hold"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 
@@ -101,6 +103,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/grill_mode_shutdown"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 

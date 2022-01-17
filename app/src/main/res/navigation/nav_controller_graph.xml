@@ -10,8 +10,22 @@
         android:name="com.weberbox.pifire.ui.fragments.SettingsFragment"
         android:label="@string/menu_setting"
         tools:layout="@layout/fragment_settings">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_info"
+        android:name="com.weberbox.pifire.ui.fragments.InfoFragment"
+        android:label="@string/menu_info"
+        tools:layout="@layout/fragment_info">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_recipes"
+        android:name="com.weberbox.pifire.ui.fragments.RecipesFragment"
+        android:label="@string/menu_recipes"
+        tools:layout="@layout/fragment_recipes">
         <action
-            android:id="@+id/action_nav_settings_to_nav_pellet_manager"
+            android:id="@+id/action_nav_recipes_to_nav_pellet_manager"
             app:destination="@id/nav_pellet_manager" />
     </fragment>
     <fragment
@@ -20,8 +34,8 @@
         android:label="@string/menu_pellet_manager"
         tools:layout="@layout/fragment_pellets">
         <action
-            android:id="@+id/action_nav_pellets_to_nav_settings"
-            app:destination="@id/nav_settings" />
+            android:id="@+id/action_nav_pellets_to_nav_recipes"
+            app:destination="@id/nav_recipes" />
         <action
             android:id="@+id/action_nav_pellets_to_nav_dashboard"
             app:destination="@id/nav_dashboard" />

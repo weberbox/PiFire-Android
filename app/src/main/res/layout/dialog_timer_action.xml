@@ -42,6 +42,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/timer_pause"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 
@@ -72,6 +73,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/timer_stop"
                 android:textAlignment="center"
+                android:gravity="center"
                 android:textSize="@dimen/action_dialog_text"
                 app:autoSizeTextType="uniform" />
 
