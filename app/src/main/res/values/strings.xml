@@ -186,7 +186,7 @@
     <string name="setup_finish">Finish</string>
     <string name="setup_server_address">Server address</string>
     <string name="setup_invalid_url">Address is invalid!</string>
-    <string name="setup_invalid_url_snack">Address is invalid! Please try again</string>
+    <string name="setup_invalid_url_alert">Address is invalid! Please try again</string>
     <string name="setup_blank_url">Address cannot blank!</string>
     <string name="setup_cannot_connect">Cannot connect to PiFire. Verify entered address and that grill is powered on</string>
     <string name="setup_error">There was an error please try again</string>

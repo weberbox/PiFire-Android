@@ -3,6 +3,8 @@ package com.weberbox.pifire.utils;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.annotation.RawRes;
+
 import com.weberbox.pifire.interfaces.ExecutorCallback;
 
 import java.io.BufferedReader;
@@ -59,7 +61,7 @@ public class FileUtils {
         return null;
     }
 
-    private static String readRawJSONFile(Context context, int file) {
+    private static String readRawJSONFile(Context context, @RawRes int file) {
         try {
             InputStream fis = context.getResources().openRawResource(file);
             InputStreamReader isr = new InputStreamReader(fis);

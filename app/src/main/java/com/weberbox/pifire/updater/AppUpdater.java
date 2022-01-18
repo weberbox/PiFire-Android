@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
 import com.weberbox.pifire.updater.enums.Display;
@@ -22,8 +23,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.text.TextUtils;
 import android.view.View;
-
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -49,10 +48,12 @@ public class AppUpdater implements IAppUpdater {
     private String mDescriptionUpdateFailed;
     private int mIconResId;
     private UtilsAsync.LatestAppVersion mLatestAppVersion;
-    private DialogInterface.OnClickListener mBtnUpdateClickListener, mBtnDismissClickListener, mBtnDisableClickListener;
+    private DialogInterface.OnClickListener mBtnUpdateClickListener, mBtnDismissClickListener,
+            mBtnDisableClickListener;
 
     private AlertDialog mAlertDialog;
     private Snackbar mSnackbar;
+    private Alerter mAlerter;
     private Boolean mIsDialogCancelable;
     private Boolean mShouldForceUpdateCheck;
     private Boolean mManualForceUpdateCheck;
@@ -359,6 +360,14 @@ public class AppUpdater implements IAppUpdater {
                                             getDescriptionUpdate(mContext, update, Display.SNACKBAR),
                                             UtilsLibrary.getDurationEnumToBoolean(mDuration), update);
                                     mSnackbar.show();
+                                case ALERTER:
+                                    if (mContext instanceof Activity) {
+                                        mAlerter = UtilsDisplay.showUpdateAvailableAlert(
+                                                (Activity) mContext, getDescriptionUpdate(mContext,
+                                                        update, Display.ALERTER),
+                                                UtilsLibrary.getDurationEnumToBoolean(mDuration), update);
+                                        mAlerter.show();
+                                    }
                                     break;
                                 case NOTIFICATION:
                                     UtilsDisplay.showUpdateAvailableNotification(mContext, mNotifTitleUpdate,
@@ -385,6 +394,14 @@ public class AppUpdater implements IAppUpdater {
                                     UtilsLibrary.getDurationEnumToBoolean(mDuration));
                             mSnackbar.show();
                             break;
+                        case ALERTER:
+                            if (mContext instanceof Activity) {
+                                mAlerter = UtilsDisplay.showUpdateNotAvailableAlert(
+                                        (Activity) mContext, getDescriptionNoUpdate(mContext),
+                                        UtilsLibrary.getDurationEnumToBoolean(mDuration));
+                                mAlerter.show();
+                            }
+                            break;
                         case NOTIFICATION:
                             UtilsDisplay.showUpdateNotAvailableNotification(mContext, mTitleNoUpdate,
                                     getDescriptionNoUpdate(mContext), mIconResId);
@@ -399,19 +416,17 @@ public class AppUpdater implements IAppUpdater {
             public void onFailed(AppUpdaterError error) {
                 Timber.d("AppUpdater onFailed: %s", error);
                 if (mShowAppUpdateError) {
-                    mSnackbar = UtilsDisplay.showUpdateFailedSnackbar(mView, null,
-                            getDescriptionUpdateFailed(mContext),
-                            UtilsLibrary.getDurationEnumToBoolean(mDuration));
-                    mSnackbar.show();
-                }
-                if (error == AppUpdaterError.GITHUB_USER_REPO_INVALID) {
-                    Timber.w("GitHub user or repo is empty!");
-                } else if (error == AppUpdaterError.JSON_URL_MALFORMED) {
-                    Timber.w("JSON file is not valid!");
-                } else if (error == AppUpdaterError.JSON_ERROR) {
-                    Timber.w("JSON file error");
-                } else if (error == AppUpdaterError.NETWORK_NOT_AVAILABLE) {
-                    Timber.w("Network Not Available");
+                    if (mContext instanceof Activity) {
+                        mAlerter = UtilsDisplay.showUpdateFailedAlert((Activity) mContext,
+                                getDescriptionUpdateFailed(mContext),
+                                UtilsLibrary.getDurationEnumToBoolean(mDuration));
+                        mAlerter.show();
+                    } else {
+                        mSnackbar = UtilsDisplay.showUpdateFailedSnackbar(mView, null,
+                                getDescriptionUpdateFailed(mContext),
+                                UtilsLibrary.getDurationEnumToBoolean(mDuration));
+                        mSnackbar.show();
+                    }
                 }
             }
         });
@@ -433,6 +448,9 @@ public class AppUpdater implements IAppUpdater {
         }
         if (mSnackbar != null && mSnackbar.isShown()) {
             mSnackbar.dismiss();
+        }
+        if (mAlerter != null && Alerter.isShowing()) {
+            Alerter.hide();
         }
     }
 
@@ -459,6 +477,7 @@ public class AppUpdater implements IAppUpdater {
                             R.string.updater_update_available_description_snackbar),
                             update.getLatestVersion());
 
+                case ALERTER:
                 case NOTIFICATION:
                     return String.format(context.getResources().getString(
                             R.string.updater_update_available_description_notification),
@@ -491,10 +510,15 @@ public class AppUpdater implements IAppUpdater {
         return mTitleUpdate;
     }
 
+    @SuppressWarnings("all")
     private String getDescriptionNoUpdate(Context context) {
-        return Objects.requireNonNullElseGet(mDescriptionNoUpdate, () ->
-                String.format(context.getResources().getString(R.string.updater_update_not_available_description),
-                UtilsLibrary.getAppName(context)));
+        if (mDescriptionNoUpdate == null) {
+            return String.format(context.getResources().getString(
+                    R.string.updater_update_not_available_description),
+                    UtilsLibrary.getAppName(context));
+        } else {
+            return mDescriptionNoUpdate;
+        }
     }
 
     private String getDescriptionUpdateFailed(Context context) {

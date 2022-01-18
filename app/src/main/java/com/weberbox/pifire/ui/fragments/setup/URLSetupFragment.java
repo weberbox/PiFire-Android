@@ -1,7 +1,6 @@
 package com.weberbox.pifire.ui.fragments.setup;
 
 import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,10 +17,10 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
@@ -29,6 +28,7 @@ import com.weberbox.pifire.interfaces.AuthDialogCallback;
 import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
 import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -60,7 +60,6 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
     private FragmentSetupUrlBinding mBinding;
     private Button mSkipButton;
-    private Snackbar mErrorSnack;
     private TextInputEditText mServerAddress;
     private TextInputLayout mServerURLLayout;
     private AutoCompleteTextView mServerScheme;
@@ -90,7 +89,6 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
         mServerAddress = mBinding.serverAddress;
         mServerURLLayout = mBinding.serverAddressLayout;
         mConnectProgress = mBinding.connectProgressbar;
-        mErrorSnack = Snackbar.make(view, R.string.setup_error, Snackbar.LENGTH_LONG);
 
         mServerScheme = mBinding.serverAddressSchemeTv;
 
@@ -137,8 +135,8 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
         Button continueButton = mBinding.continueUrlButton;
         continueButton.setOnClickListener(view1 -> {
-            if(mErrorSnack.isShown()) {
-                mErrorSnack.dismiss();
+            if(Alerter.isShowing()) {
+                Alerter.hide();
             }
             if(mServerAddress.getText() != null && !mIsConnecting) {
                 verifyURLAndTestConnect(mServerAddress.getText().toString());
@@ -147,8 +145,8 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
         mSkipButton = mBinding.skipUrlButton;
         mSkipButton.setOnClickListener(view12 -> {
-            if(mErrorSnack.isShown()) {
-                mErrorSnack.dismiss();
+            if(Alerter.isShowing()) {
+                Alerter.hide();
             }
             if(getActivity() != null) {
                 SetupFinishFragment setupCompeteFragment = SetupFinishFragment.getInstance();
@@ -180,7 +178,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                 verifyURLAndTestConnect(mServerAddress.getText().toString());
             }
         } else {
-            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+            showAlerter(getActivity(), getString(R.string.setup_error));
         }
     }
 
@@ -230,15 +228,17 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         if (e.getMessage() != null && e.getMessage()
                                 .contains("CertPathValidatorException")) {
                             getActivity().runOnUiThread(() -> {
-                                if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+                                mConnectProgress.setVisibility(View.GONE);
                                 MessageTextDialog dialog = new MessageTextDialog(getActivity(),
                                         getString(R.string.setup_server_self_signed_title),
                                         getString(R.string.setup_server_self_signed));
                                 dialog.showDialog();
                             });
                         } else {
-                            getActivity().runOnUiThread(() ->
-                                    showSnackBarMessage(getActivity(), e.getMessage()));
+                            getActivity().runOnUiThread(() -> {
+                                mConnectProgress.setVisibility(View.GONE);
+                                showAlerter(getActivity(), e.getMessage());
+                            });
                         }
                     }
                 }
@@ -250,6 +250,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         if (response.code() == 401) {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
+                                    mConnectProgress.setVisibility(View.GONE);
                                     SetupUserPassDialog dialog = new SetupUserPassDialog(
                                             getActivity(), URLSetupFragment.this);
                                     dialog.showDialog();
@@ -257,9 +258,12 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                             }
                         } else {
                             if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> showSnackBarMessage(getActivity(),
-                                        getString(R.string.setup_server_connect_error,
-                                                String.valueOf(response.code()), response.message())));
+                                getActivity().runOnUiThread(() -> {
+                                    mConnectProgress.setVisibility(View.GONE);
+                                    showAlerter(getActivity(),
+                                            getString(R.string.setup_server_connect_error,
+                                                    String.valueOf(response.code()), response.message()));
+                                });
                             }
                         }
                     } else {
@@ -304,7 +308,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         .commit();
             }
         } else {
-            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+            showAlerter(getActivity(), getString(R.string.setup_error));
         }
     }
 
@@ -334,8 +338,8 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                 getActivity().runOnUiThread(() -> {
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
-                    if(!mErrorSnack.isShown()) {
-                        mErrorSnack.dismiss();
+                    if(Alerter.isShowing()) {
+                        Alerter.hide();
                     }
                     storeValidURL();
                 });
@@ -353,7 +357,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                     mSocket.disconnect();
                     mSocket.close();
                     mIsConnecting = false;
-                    showSnackBarMessage(getActivity(), getString(R.string.setup_cannot_connect));
+                    showAlerter(getActivity(), getString(R.string.setup_cannot_connect));
                 });
             }
         }
@@ -368,16 +372,10 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
         return m.matches();
     }
 
-    private void showSnackBarMessage(Activity activity, String message) {
+    private void showAlerter(Activity activity, String message) {
         if (mSkipButton.getVisibility() != View.VISIBLE) {
             AnimUtils.fadeView(mSkipButton, 300, Constants.FADE_IN);
         }
-        if(!mErrorSnack.isShown() && activity != null) {
-            if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
-            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-            mErrorSnack.setText(message);
-            mErrorSnack.show();
-        }
+        AlertUtils.createErrorAlert(activity, message, false);
     }
 }

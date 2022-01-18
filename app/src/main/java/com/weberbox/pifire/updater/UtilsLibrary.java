@@ -1,5 +1,6 @@
 package com.weberbox.pifire.updater;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -232,8 +233,15 @@ class UtilsLibrary {
                     context.getString(R.string.def_github_api_url),
                     error -> {
                         Timber.d("App Download Error %s", error);
-                        Toast.makeText(context, R.string.updater_update_download_failed,
-                                Toast.LENGTH_LONG).show();
+                        if (context instanceof Activity) {
+                            UtilsDisplay.showUpdateFailedAlert((Activity) context,
+                                    context.getResources().getString(
+                                            R.string.updater_update_download_failed),
+                                    false).show();
+                        } else {
+                            Toast.makeText(context, R.string.updater_update_download_failed,
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }).execute();
         } else {
             Intent intent = intentToUpdate(update.getUrlToDownload());

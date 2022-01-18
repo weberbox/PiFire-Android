@@ -78,10 +78,13 @@ public class UtilsAsync {
             super.onPostExecute(update);
 
             if (mListener != null) {
-                if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
-                    mListener.onSuccess(update);
-                }
-                else {
+                if (!isCancelled()) {
+                    if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
+                        mListener.onSuccess(update);
+                    } else {
+                        mListener.onFailed(AppUpdaterError.UPDATER_ERROR);
+                    }
+                } else {
                     mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
                 }
             }
@@ -89,7 +92,10 @@ public class UtilsAsync {
 
         @Override
         protected void onBackgroundError(Exception e) {
-
+            Timber.w(e, "App Update check failed");
+            if (mListener != null) {
+                mListener.onFailed(AppUpdaterError.UPDATER_ERROR);
+            }
         }
 
         @Override
@@ -190,20 +196,28 @@ public class UtilsAsync {
                 mProgressDialog = null;
             }
 
-            if (result != null && !result) {
-                mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
-            } else {
-                if (mUpdateFile != null && mUpdateFile.exists()) {
-                    Context context = mContextRef.get();
-                    UtilsLibrary.OpenDownloadedFile(context, context.getCacheDir().getPath(),
-                            mFileName);
+            if (mListener != null) {
+                if (!isCancelled()) {
+                    if (result != null && !result) {
+                        mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+                    } else {
+                        if (mUpdateFile != null && mUpdateFile.exists()) {
+                            Context context = mContextRef.get();
+                            UtilsLibrary.OpenDownloadedFile(context,
+                                    context.getCacheDir().getPath(), mFileName);
+                        }
+                    }
+                } else {
+                    mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
                 }
             }
         }
 
         @Override
         protected void onBackgroundError(Exception e) {
-
+            if (mListener != null) {
+                mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+            }
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.weberbox.pifire.updater;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.updater.objects.Update;
@@ -62,7 +64,7 @@ public class UtilsDisplay {
     }
 
     public static Snackbar showUpdateAvailableSnackbar(
-            View view, View anchor, String content, Boolean indefinite, final Update update) {
+            View view, View anchor, String content, boolean indefinite, final Update update) {
 
         final Context context = view.getContext();
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
@@ -78,7 +80,7 @@ public class UtilsDisplay {
     }
 
     public static Snackbar showUpdateNotAvailableSnackbar(
-            View view, View anchor, String content, Boolean indefinite) {
+            View view, View anchor, String content, boolean indefinite) {
 
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
 
@@ -91,7 +93,7 @@ public class UtilsDisplay {
     }
 
     public static Snackbar showUpdateFailedSnackbar(
-            View view, View anchor, String content, Boolean indefinite) {
+            View view, View anchor, String content, boolean indefinite) {
 
         int snackbarTime = indefinite ? Snackbar.LENGTH_INDEFINITE : Snackbar.LENGTH_LONG;
 
@@ -101,6 +103,45 @@ public class UtilsDisplay {
         }
 
         return snackbar;
+    }
+
+    public static Alerter showUpdateAvailableAlert(
+            Activity activity, String content, boolean indefinite, final Update update) {
+        return Alerter.create(activity)
+                .setText(content)
+                .setIcon(R.drawable.ic_update)
+                .setBackgroundColorRes(R.color.colorPrimaryLighter)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(indefinite)
+                .setIconSize(R.dimen.alerter_icon_size_small)
+                .addButton(activity.getResources().getString(R.string.update_button),
+                        R.style.AlerterButton, v -> UtilsLibrary.getAppUpdate(activity, update));
+
+    }
+
+    public static Alerter showUpdateNotAvailableAlert(
+            Activity activity, String content, boolean indefinite) {
+        return Alerter.create(activity)
+                .setText(content)
+                .setIcon(R.drawable.ic_no_update)
+                .setBackgroundColorRes(R.color.colorPrimaryLighter)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(indefinite)
+                .setIconSize(R.dimen.alerter_icon_size_small);
+    }
+
+    public static Alerter showUpdateFailedAlert(
+            Activity activity, String content, boolean indefinite) {
+        return Alerter.create(activity)
+                .setText(content)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(indefinite)
+                .setIconSize(R.dimen.alerter_icon_size_small);
     }
 
     public static void showUpdateAvailableNotification(

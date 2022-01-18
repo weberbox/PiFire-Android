@@ -2,6 +2,9 @@ package com.weberbox.pifire.utils;
 
 import android.app.Activity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+
 import com.tapadoo.alerter.Alerter;
 import com.tapadoo.alerter.OnHideAlertListener;
 import com.weberbox.pifire.R;
@@ -42,7 +45,8 @@ public class AlertUtils {
                 .setIconSize(R.dimen.alerter_icon_size_small);
     }
 
-    public static void createErrorAlert(Activity activity, int message, boolean infinite) {
+    public static void createErrorAlert(Activity activity, @StringRes int message,
+                                        boolean infinite) {
         Alerter.create(activity)
                 .setText(message)
                 .setIcon(R.drawable.ic_error)
@@ -54,7 +58,20 @@ public class AlertUtils {
                 .show();
     }
 
-    public static void createAlert(Activity activity, int message, boolean infinite) {
+    public static void createErrorAlert(Activity activity, @NonNull String message,
+                                        boolean infinite) {
+        Alerter.create(activity)
+                .setText(message)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(infinite)
+                .setIconSize(R.dimen.alerter_icon_size_small)
+                .show();
+    }
+
+    public static void createAlert(Activity activity, @StringRes int message, boolean infinite) {
         Alerter.create(activity)
                 .setText(message)
                 .setIcon(R.drawable.ic_menu_about)
@@ -66,7 +83,7 @@ public class AlertUtils {
                 .show();
     }
 
-    public static void createAlert(Activity activity, int message, long duration) {
+    public static void createAlert(Activity activity, @StringRes int message, long duration) {
         Alerter.create(activity)
                 .setText(message)
                 .setIcon(R.drawable.ic_menu_about)

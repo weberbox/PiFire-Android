@@ -1,28 +1,28 @@
 package com.weberbox.pifire.ui.fragments.setup;
 
-import android.app.Activity;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
 import com.weberbox.pifire.interfaces.AuthDialogCallback;
 import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
 import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -51,7 +51,6 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
     private FragmentSetupQrScanBinding mBinding;
     private CompoundBarcodeView mBarcodeView;
     private ProgressBar mConnectProgress;
-    private Snackbar mErrorSnack;
     private Socket mSocket;
     private String mServerAddress;
     private String mValidURL;
@@ -73,8 +72,6 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mErrorSnack = Snackbar.make(view, R.string.setup_error, Snackbar.LENGTH_LONG);
-
         mConnectProgress = mBinding.qrCodeScanProgressbar;
         mBarcodeView = mBinding.barcodeScanner;
         mBarcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(true);
@@ -90,6 +87,7 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
     @Override
     public void onResume() {
         mBarcodeView.resume();
+        forceScreenOn();
         super.onResume();
     }
 
@@ -102,6 +100,7 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        clearForceScreenOn();
         mBinding = null;
         if(mSocket != null) {
             mSocket.disconnect();
@@ -135,7 +134,7 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                 verifyURLAndTestConnect(mServerAddress);
             }
         } else {
-            showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+            AlertUtils.createErrorAlert(getActivity(), R.string.setup_error, false);
         }
     }
 
@@ -153,7 +152,10 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
             }
         } else {
             mConnectProgress.setVisibility(View.GONE);
-            showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
+            if (!Alerter.isShowing()) {
+                AlertUtils.createErrorAlert(getActivity(), R.string.setup_invalid_url_alert,
+                        false);
+            }
         }
     }
 
@@ -183,15 +185,20 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                         if (e.getMessage() != null && e.getMessage()
                                 .contains("CertPathValidatorException")) {
                             getActivity().runOnUiThread(() -> {
-                                if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+                                mConnectProgress.setVisibility(View.GONE);
                                 MessageTextDialog dialog = new MessageTextDialog(getActivity(),
                                         getString(R.string.setup_server_self_signed_title),
                                         getString(R.string.setup_server_self_signed));
                                 dialog.showDialog();
                             });
                         } else {
-                            getActivity().runOnUiThread(() ->
-                                    showSnackBarMessage(getActivity(), e.getMessage()));
+                            getActivity().runOnUiThread(() -> {
+                                mConnectProgress.setVisibility(View.GONE);
+                                if (!Alerter.isShowing()) {
+                                    AlertUtils.createErrorAlert(getActivity(), e.getMessage(),
+                                            false);
+                                }
+                            });
                         }
                     }
                 }
@@ -203,6 +210,7 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                         if (response.code() == 401) {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
+                                    mConnectProgress.setVisibility(View.GONE);
                                     SetupUserPassDialog dialog = new SetupUserPassDialog(
                                             getActivity(), QRScanFragment.this);
                                     dialog.showDialog();
@@ -210,9 +218,13 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                             }
                         } else {
                             if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> showSnackBarMessage(getActivity(),
-                                        getString(R.string.setup_server_connect_error,
-                                                String.valueOf(response.code()), response.message())));
+                                getActivity().runOnUiThread(() -> {
+                                    mConnectProgress.setVisibility(View.GONE);
+                                    AlertUtils.createErrorAlert(getActivity(),
+                                            getString(R.string.setup_server_connect_error,
+                                                    String.valueOf(response.code()),
+                                                    response.message()), false);
+                                });
                             }
                         }
                     } else {
@@ -251,15 +263,19 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                 mSocket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
                 Timber.w(e, "Socket URI Error");
-                showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+                mConnectProgress.setVisibility(View.GONE);
+                if(!Alerter.isShowing() && getActivity() != null) {
+                    AlertUtils.createErrorAlert(getActivity(), R.string.setup_error, false);
+                }
             }
         } else {
             try {
                 mSocket = IO.socket(serverURL);
             } catch (URISyntaxException e) {
                 Timber.w(e,"Socket URI Error");
-                if(!mErrorSnack.isShown() && getActivity() != null) {
-                    showSnackBarMessage(getActivity(), getString(R.string.setup_error));
+                mConnectProgress.setVisibility(View.GONE);
+                if(!Alerter.isShowing() && getActivity() != null) {
+                    AlertUtils.createErrorAlert(getActivity(), R.string.setup_error, false);
                 }
             }
         }
@@ -278,7 +294,7 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
             }
         } else {
             mConnectProgress.setVisibility(View.GONE);
-            showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
+            AlertUtils.createErrorAlert(getActivity(), R.string.setup_invalid_url_alert, false);
         }
     }
 
@@ -290,8 +306,8 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                     Timber.d("Socket Connected Storing URL");
                     mConnectProgress.setVisibility(View.GONE);
                     mIsConnecting = false;
-                    if(mErrorSnack.isShown()) {
-                        mErrorSnack.dismiss();
+                    if(Alerter.isShowing()) {
+                        Alerter.hide();
                     }
                     storeValidURL();
                 });
@@ -309,7 +325,8 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
                     mSocket.disconnect();
                     mSocket.close();
                     mIsConnecting = false;
-                    showSnackBarMessage(getActivity(), getString(R.string.setup_invalid_url_snack));
+                    AlertUtils.createErrorAlert(getActivity(), R.string.setup_invalid_url_alert,
+                            false);
                 });
             }
         }
@@ -321,13 +338,15 @@ public class QRScanFragment extends Fragment implements AuthDialogCallback {
         return m.matches();
     }
 
-    private void showSnackBarMessage(Activity activity, String message) {
-        if(!mErrorSnack.isShown() && activity != null) {
-            if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
-            mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-            mErrorSnack.setTextColor(activity.getColor(R.color.colorWhite));
-            mErrorSnack.setText(message);
-            mErrorSnack.show();
+    private void forceScreenOn() {
+        if (getActivity() != null) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+    }
+
+    private void clearForceScreenOn() {
+        if (getActivity() != null) {
+            getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 }
