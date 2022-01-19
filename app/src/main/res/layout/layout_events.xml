@@ -9,12 +9,12 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:max="100"
         android:layout_marginTop="-7dp"
-        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_in"
-        android:indeterminateTint="@color/colorAccent"/>
+        android:max="100"
+        android:visibility="gone" />
 
     <com.skydoves.androidveil.VeilRecyclerFrameView
         android:id="@+id/events_list"
@@ -23,11 +23,11 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:veilFrame_baseAlpha="0.6"
-        app:veilFrame_highlightAlpha="1.0"
-        app:veilFrame_radius="10dp"
-        app:veilFrame_highlightColor="@color/placeholderColor"
         app:veilFrame_baseColor="@color/colorLighterGrey"
+        app:veilFrame_highlightAlpha="1.0"
+        app:veilFrame_highlightColor="@color/placeholderColor"
         app:veilFrame_layout="@layout/item_events_list"
+        app:veilFrame_radius="10dp"
         app:veilFrame_shimmerEnable="true"
         app:veilFrame_veiled="true" />
 

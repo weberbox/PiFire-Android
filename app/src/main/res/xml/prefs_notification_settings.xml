@@ -91,4 +91,44 @@
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_influxdb">
+
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_enabled"
+            app:title="@string/enabled" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_url"
+            app:title="@string/settings_influxdb_url"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_token"
+            app:title="@string/settings_influxdb_token"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_org"
+            app:title="@string/settings_influxdb_org"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_bucket"
+            app:title="@string/settings_influxdb_bucket"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

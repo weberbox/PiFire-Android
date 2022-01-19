@@ -17,6 +17,7 @@ import com.weberbox.pifire.model.remote.SettingsResponseModel.Globals;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.Versions;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.Ifttt;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.InfluxDB;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.Pushover;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.Firebase;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeTypes;
@@ -62,6 +63,7 @@ public class SettingsUtils {
             PushBullet pushBullet = settingsResponse.getPushBullet();
             Pushover pushOver = settingsResponse.getPushover();
             Firebase fireBase = settingsResponse.getFirebase();
+            InfluxDB influxDB = settingsResponse.getInfluxDB();
             ProbeTypes probeTypes = settingsResponse.getProbeTypes();
             CycleData cycleData = settingsResponse.getCycleData();
             SmokePlus smokePlus = settingsResponse.getSmokePlus();
@@ -88,11 +90,22 @@ public class SettingsUtils {
                 putString(R.string.prefs_grill_name, globals.getGrillName());
                 putBoolean(R.string.prefs_admin_debug, globals.getDebugMode());
                 putString(R.string.prefs_shutdown_time, globals.getShutdownTimer());
-                putBoolean(R.string.prefs_four_probe, globals.getFourProbes());
-                putString(R.string.prefs_grill_units, globals.getUnits());
+
+                if (globals.getStartUpTimer() != null) {
+                    putString(R.string.prefs_startup_time, globals.getStartUpTimer());
+                }
+
+                if (globals.getUnits() != null) {
+                    putString(R.string.prefs_grill_units, globals.getUnits());
+                }
+
+                if (globals.getFourProbes() != null) {
+                    putBoolean(R.string.prefs_four_probe, globals.getFourProbes());
+                }
 
                 if (globals.getFourProbes() != null && globals.getFourProbes()) {
-                    SettingsResponseModel.GrillProbeSettings grillProbeSettings = settingsResponse.getGrillProbeSettings();
+                    SettingsResponseModel.GrillProbeSettings grillProbeSettings =
+                            settingsResponse.getGrillProbeSettings();
 
                     Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();
 
@@ -127,6 +140,14 @@ public class SettingsUtils {
             if (fireBase != null) {
                 putBoolean(R.string.prefs_notif_firebase_enabled, fireBase.getEnabled());
                 putString(R.string.prefs_notif_firebase_serveruuid, fireBase.getServerUUID());
+            }
+
+            if (influxDB != null) {
+                putBoolean(R.string.prefs_notif_influxdb_enabled, influxDB.getEnabled());
+                putString(R.string.prefs_notif_influxdb_url, influxDB.getUrl());
+                putString(R.string.prefs_notif_influxdb_token, influxDB.getToken());
+                putString(R.string.prefs_notif_influxdb_org, influxDB.getOrg());
+                putString(R.string.prefs_notif_influxdb_bucket, influxDB.getBucket());
             }
 
             if (probeTypes != null) {
@@ -168,7 +189,7 @@ public class SettingsUtils {
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w(e, "JSON Error");
+            Timber.w(e, "Settings JSON Error");
             return false;
         }
         return true;

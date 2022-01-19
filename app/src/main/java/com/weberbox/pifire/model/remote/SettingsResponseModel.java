@@ -36,6 +36,9 @@ public class SettingsResponseModel {
     @SerializedName("firebase")
     @Expose
     private Firebase firebase;
+    @SerializedName("influxdb")
+    @Expose
+    private InfluxDB influxDB;
     @SerializedName("probe_types")
     @Expose
     private ProbeTypes probeTypes;
@@ -129,6 +132,14 @@ public class SettingsResponseModel {
 
     public void setPushover(Pushover pushover) {
         this.pushover = pushover;
+    }
+
+    public InfluxDB getInfluxDB() {
+        return influxDB;
+    }
+
+    public void setInfluxDB(InfluxDB influxDB) {
+        this.influxDB = influxDB;
     }
 
     public ProbeTypes getProbeTypes() {
@@ -351,12 +362,18 @@ public class SettingsResponseModel {
         @SerializedName("shutdown_timer")
         @Expose
         private String shutdownTimer;
+        @SerializedName("startup_timer")
+        @Expose
+        private String startUpTimer;
         @SerializedName("four_probes")
         @Expose
         private Boolean fourProbes;
         @SerializedName("units")
         @Expose
         private String units;
+        @SerializedName("augerrate")
+        @Expose
+        private String augerRate;
 
         public String getGrillName() {
             return grillName;
@@ -406,6 +423,14 @@ public class SettingsResponseModel {
             this.shutdownTimer = shutdownTimer;
         }
 
+        public String getStartUpTimer() {
+            return startUpTimer;
+        }
+
+        public void setStartUpTimer(String startUpTimer) {
+            this.startUpTimer = startUpTimer;
+        }
+
         public Boolean getFourProbes() {
             return fourProbes;
         }
@@ -420,6 +445,14 @@ public class SettingsResponseModel {
 
         public void setUnits(String units) {
             this.units = units;
+        }
+
+        public String getAugerRate() {
+            return augerRate;
+        }
+
+        public void setAugerRate(String augerRate) {
+            this.augerRate = augerRate;
         }
 
     }
@@ -647,6 +680,66 @@ public class SettingsResponseModel {
 
     }
 
+    public static class InfluxDB {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("url")
+        @Expose
+        private String url;
+        @SerializedName("token")
+        @Expose
+        private String token;
+        @SerializedName("org")
+        @Expose
+        private String org;
+        @SerializedName("bucket")
+        @Expose
+        private String bucket;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+
+        public String getOrg() {
+            return org;
+        }
+
+        public void setOrg(String org) {
+            this.org = org;
+        }
+
+        public String getBucket() {
+            return bucket;
+        }
+
+        public void setBucket(String bucket) {
+            this.bucket = bucket;
+        }
+
+    }
+
     public static class Ifttt {
 
         @SerializedName("enabled")
@@ -742,6 +835,9 @@ public class SettingsResponseModel {
         @SerializedName("probe_profiles")
         @Expose
         private Map<String, ProbeProfileModel> probeProfiles = new HashMap<>();
+        @SerializedName("probe_sources")
+        @Expose
+        private List<String> probeSources = null;
 
         public Map<String, ProbeProfileModel> getProbeProfiles() {
             return probeProfiles;
@@ -757,6 +853,14 @@ public class SettingsResponseModel {
 
         public void setProbesEnabled(List<String> probesEnabled) {
             this.probesEnabled = probesEnabled;
+        }
+
+        public List<String> getProbeSources() {
+            return probeSources;
+        }
+
+        public void setProbeSources(List<String> probeSources) {
+            this.probeSources = probeSources;
         }
 
     }

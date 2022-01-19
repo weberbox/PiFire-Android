@@ -20,6 +20,7 @@
     <bool name="def_notif_pushover_enabled">false</bool>
     <bool name="def_notif_pushbullet_enabled">false</bool>
     <bool name="def_notif_firebase_enabled">false</bool>
+    <bool name="def_notif_influxdb_enabled">false</bool>
 
     <bool name="def_grill_swipe_start">true</bool>
     <bool name="def_probe_shutdown">true</bool>

@@ -59,7 +59,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (startupTime != null && getActivity() != null) {
-            if (VersionUtils.isSupported("1.2.2")) {
+            if (VersionUtils.isSupported("1.2.3")) {
                 startupTime.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
@@ -68,7 +68,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
             } else {
                 startupTime.setEnabled(false);
                 startupTime.setSummaryProvider(null);
-                startupTime.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
+                startupTime.setSummary(getString(R.string.disabled_option_settings, "1.2.3"));
             }
         }
 

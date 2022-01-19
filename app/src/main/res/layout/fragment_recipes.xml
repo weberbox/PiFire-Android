@@ -16,13 +16,13 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@string/recipes_add"
-        android:textColor="@color/colorWhite"
-        android:text="@string/delete"
         android:minHeight="56dp"
+        android:text="@string/delete"
         android:textAppearance="@style/Text18Aller"
-        app:icon="@drawable/ic_add_white"
+        android:textColor="@color/colorWhite"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
+        app:icon="@drawable/ic_add_white"
         app:iconTint="@color/colorWhite" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -30,16 +30,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipes_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recipes_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingTop="5dp" />
-
-        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

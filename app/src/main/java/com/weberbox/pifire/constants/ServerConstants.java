@@ -85,6 +85,11 @@ public class ServerConstants {
     public static final String NOTIF_PUSHBULLET_URL = "pushbullet_publicurl";
     public static final String NOTIF_FIREBASE_ENABLED = "firebase_enabled";
     public static final String NOTIF_FIREBASE_SERVERURL = "firebase_serverurl";
+    public static final String NOTIF_INFLUXDB_ENABLED = "influxdb_enabled";
+    public static final String NOTIF_INFLUXDB_URL = "influxdb_url";
+    public static final String NOTIF_INFLUXDB_TOKEN = "influxdb_token";
+    public static final String NOTIF_INFLUXDB_ORG = "influxdb_org";
+    public static final String NOTIF_INFLUXDB_BUCKET = "influxdb_bucket";
 
     public static final String CYCLE_ACTION = "cycle";
     public static final String CYCLE_PMODE = "pmode";

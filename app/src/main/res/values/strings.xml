@@ -352,6 +352,7 @@
     <string name="settings_cat_pushover">PushOver</string>
     <string name="settings_cat_pushbullet">PushBullet</string>
     <string name="settings_cat_firebase">Firebase</string>
+    <string name="settings_cat_influxdb">InfluxDB</string>
 
     <string name="settings_ifttt_api">API Key</string>
     <string name="settings_pushover_api">API Key</string>
@@ -361,6 +362,10 @@
     <string name="settings_pushbullet_api">API Key</string>
     <string name="settings_pushbullet_url">Public URL</string>
     <string name="settings_firebase_disabled">Firebase is not configured on the Server and or Client.</string>
+    <string name="settings_influxdb_url">URL</string>
+    <string name="settings_influxdb_token">Token</string>
+    <string name="settings_influxdb_org">Org</string>
+    <string name="settings_influxdb_bucket">Bucket</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>

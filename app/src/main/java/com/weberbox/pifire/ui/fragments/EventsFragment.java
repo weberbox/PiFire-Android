@@ -77,6 +77,8 @@ public class EventsFragment extends Fragment {
         mEventsListAdapter = new EventsListAdapter();
 
         mEventsRecycler = mBinding.eventsLayout.eventsList;
+        mEventsRecycler.getRecyclerView().setClipToPadding(false);
+        mEventsRecycler.getRecyclerView().setPadding(0,8,0,8);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mEventsRecycler.addVeiledItems(15);
         mEventsRecycler.setAdapter(mEventsListAdapter);
