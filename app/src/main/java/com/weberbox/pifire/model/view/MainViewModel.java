@@ -65,8 +65,8 @@ public class MainViewModel extends ViewModel {
         return mServerConnected;
     }
 
-    public void setServerConnected(Boolean enabled) {
-        mServerConnected.postValue(enabled);
+    public void setServerConnected(Boolean connected) {
+        mServerConnected.postValue(connected);
     }
 
     public LiveData<DataModel> getInfoData() {

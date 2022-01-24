@@ -27,8 +27,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.discord.panels.OverlappingPanelsLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.tapadoo.alerter.Alerter;
-import com.tapadoo.alerter.OnHideAlertListener;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
@@ -62,11 +60,8 @@ public class MainActivity extends BaseActivity {
     private FrameLayout mStartPanel;
     private AppUpdater mAppUpdater;
     private FrameLayout mEndPanel;
-    private Alerter mAlerter;
     private Socket mSocket;
     private int mDownX;
-
-    private boolean mOfflineDismissed = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -178,7 +173,7 @@ public class MainActivity extends BaseActivity {
 
         mMainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
-                AlertUtils.toggleOfflineAlert(getOfflineAlerter(), connected, mOfflineDismissed);
+                AlertUtils.toggleOfflineAlert(this, connected);
 
                 if (connected) {
                     if (AppConfig.USE_ONESIGNAL) {
@@ -262,7 +257,6 @@ public class MainActivity extends BaseActivity {
         if (mAppUpdater != null) {
             mAppUpdater.stop();
         }
-        mAlerter = null;
     }
 
     @Override
@@ -274,13 +268,6 @@ public class MainActivity extends BaseActivity {
         mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
-    }
-
-    private Alerter getOfflineAlerter() {
-        if (mAlerter == null) {
-            mAlerter = AlertUtils.createOfflineAlert(this, offlineAlertListener);
-        }
-        return mAlerter;
     }
 
     private final SettingsCallback settingsCallback = result -> {
@@ -346,9 +333,6 @@ public class MainActivity extends BaseActivity {
         socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         socket.on(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
     }
-
-    private final OnHideAlertListener offlineAlertListener = () ->
-            mOfflineDismissed = true;
 
     private final Emitter.Listener onConnect = new Emitter.Listener() {
         @Override

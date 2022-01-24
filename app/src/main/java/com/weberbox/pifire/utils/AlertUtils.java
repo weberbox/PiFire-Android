@@ -12,15 +12,18 @@ import com.weberbox.pifire.R;
 
 public class AlertUtils {
 
-    public static void toggleOfflineAlert(Alerter alerter, boolean connected, boolean dismissed) {
-        if (!Alerter.isShowing() && !connected) {
-            alerter.show();
+    private static boolean mOfflineDismissed = false;
+
+    public static void toggleOfflineAlert(Activity activity, boolean connected) {
+        if (!Alerter.isShowing() && !connected && !mOfflineDismissed) {
+            createOfflineAlert(activity, offlineAlertListener);
         } else if (Alerter.isShowing() && connected) {
-            Alerter.hide();
-        } else if (Alerter.isShowing() && dismissed && connected) {
             Alerter.hide();
         }
     }
+
+    private static final OnHideAlertListener offlineAlertListener = () ->
+            mOfflineDismissed = true;
 
     public static void createOfflineAlert(Activity activity) {
         Alerter.create(activity)
@@ -34,8 +37,8 @@ public class AlertUtils {
                 .show();
     }
 
-    public static Alerter createOfflineAlert(Activity activity, OnHideAlertListener listener) {
-        return Alerter.create(activity)
+    public static void createOfflineAlert(Activity activity, OnHideAlertListener listener) {
+        Alerter.create(activity)
                 .setText(R.string.control_not_connected)
                 .setIcon(R.drawable.ic_grill_disconnected)
                 .setBackgroundColorRes(R.color.colorAccentRed)
@@ -43,7 +46,8 @@ public class AlertUtils {
                 .setTextAppearance(R.style.Text14Aller)
                 .enableInfiniteDuration(true)
                 .setOnHideListener(listener)
-                .setIconSize(R.dimen.alerter_icon_size_small);
+                .setIconSize(R.dimen.alerter_icon_size_small)
+                .show();
     }
 
     public static void createErrorAlert(Activity activity, @StringRes int message,
