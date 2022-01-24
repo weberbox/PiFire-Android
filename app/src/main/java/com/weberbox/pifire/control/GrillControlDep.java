@@ -217,14 +217,6 @@ public class GrillControlDep {
                         ServerConstants.NOTIF_PUSHBULLET_ENABLED, String.valueOf(enabled)));
     }
 
-    // Set Firebase Enabled
-    public static void setFirebaseEnabled(Socket socket, boolean enabled) {
-        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
-                JSONUtils.encodeJSON(
-                        ServerConstants.NOTIF_ACTION,
-                        ServerConstants.NOTIF_FIREBASE_ENABLED, String.valueOf(enabled)));
-    }
-
     // Set History Auto Refresh
     public static void setHistoryRefresh(Socket socket, boolean refresh) {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,

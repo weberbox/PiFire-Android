@@ -1,70 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+    <com.journeyapps.barcodescanner.CompoundBarcodeView
+        android:id="@+id/barcode_scanner"
+        android:layout_width="300dp"
+        android:layout_height="330dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/setup_stepper_padding"
+        android:layout_marginEnd="16dp"
+        app:zxing_preview_scaling_strategy="centerCrop"
+        app:zxing_use_texture_view="false" />
 
-        <include
-            layout="@layout/setup_step_two"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="17dp"
+        android:fontFamily="@font/knockout_htf70"
+        android:text="@string/setup_scan_qr"
+        android:textAllCaps="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="24sp" />
 
-        <com.journeyapps.barcodescanner.CompoundBarcodeView
-            android:id="@+id/barcode_scanner"
-            android:layout_width="300dp"
-            android:layout_height="330dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            app:zxing_preview_scaling_strategy="centerCrop"
-            app:zxing_use_texture_view="false" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/aller_regular"
+        android:gravity="center"
+        android:letterSpacing="0.01"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/setup_scan_qr_text"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="17dp"
-            android:fontFamily="@font/knockout_htf70"
-            android:text="@string/setup_scan_qr"
-            android:textAllCaps="true"
-            android:textColor="@color/colorWhite"
-            android:textSize="24sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/aller_regular"
+        android:gravity="center"
+        android:letterSpacing="0.01"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/setup_with_qr_code_text"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/aller_regular"
-            android:letterSpacing="0.01"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/setup_scan_qr_text"
-            android:textAlignment="center"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp" />
-
-        <ProgressBar
-            android:id="@+id/qr_code_scan_progressbar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:indeterminateTint="@color/colorAccent"
-            android:visibility="gone" />
-    </LinearLayout>
-</FrameLayout>
+</LinearLayout>

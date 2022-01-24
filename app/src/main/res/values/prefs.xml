@@ -2,6 +2,7 @@
 <resources>
 
     <!-- App Settings -->
+    <string name="prefs_installed_version">prefs_installed_version</string>
     <string name="prefs_server_settings">prefs_server_settings</string>
 
     <string name="prefs_keep_screen_on">prefs_keep_screen_on</string>
@@ -15,6 +16,8 @@
     <string name="prefs_history_refresh_interval_app">prefs_history_refresh_interval_app</string>
 
     <string name="prefs_event_amount">pref_event_amount</string>
+
+    <string name="prefs_onesignal_consent_dismiss">prefs_onesignal_consent_dismiss</string>
 
     <string name="prefs_app_updater_cat">prefs_app_updater_cat</string>
     <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
@@ -97,9 +100,13 @@
     <string name="prefs_notif_pushbullet_api">prefs_notif_pushbullet_api</string>
     <string name="prefs_notif_pushbullet_channel">prefs_notif_pushbullet_channel</string>
     <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
-    <string name="prefs_notif_firebase">prefs_notif_firebase</string>
-    <string name="prefs_notif_firebase_enabled">prefs_notif_firebase_enabled</string>
-    <string name="prefs_notif_firebase_serveruuid">prefs_notif_firebase_serveruuid</string>
+    <string name="prefs_notif_onesignal_cat">prefs_notif_onesignal_cat</string>
+    <string name="prefs_notif_onesignal_accepted">prefs_notif_onesignal_accepted</string>
+    <string name="prefs_notif_onesignal_player_id">prefs_notif_onesignal_player_id</string>
+    <string name="prefs_notif_onesignal_device_list">prefs_notif_onesignal_device_list</string>
+    <string name="prefs_notif_onesignal_serveruuid">prefs_notif_onesignal_serveruuid</string>
+    <string name="prefs_notif_onesignal_consent">prefs_notif_onesignal_consent</string>
+    <string name="prefs_notif_onesignal_enabled">prefs_notif_onesignal_enabled</string>
     <string name="prefs_notif_influxdb_enabled">prefs_notif_influxdb_enabled</string>
     <string name="prefs_notif_influxdb_url">prefs_notif_influxdb_url</string>
     <string name="prefs_notif_influxdb_token">prefs_notif_influxdb_token</string>

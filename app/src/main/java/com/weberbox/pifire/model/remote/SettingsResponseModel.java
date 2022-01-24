@@ -1,7 +1,6 @@
 package com.weberbox.pifire.model.remote;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -33,9 +32,9 @@ public class SettingsResponseModel {
     @SerializedName("pushover")
     @Expose
     private Pushover pushover;
-    @SerializedName("firebase")
+    @SerializedName("onesignal")
     @Expose
-    private Firebase firebase;
+    private OneSignalPush onesignal;
     @SerializedName("influxdb")
     @Expose
     private InfluxDB influxDB;
@@ -118,12 +117,12 @@ public class SettingsResponseModel {
         this.pushbullet = pushbullet;
     }
 
-    public Firebase getFirebase() {
-        return firebase;
+    public OneSignalPush getOneSignal() {
+        return onesignal;
     }
 
-    public void setFirebase(Firebase firebase) {
-        this.firebase = firebase;
+    public void setOnesignal(OneSignalPush onesignal) {
+        this.onesignal = onesignal;
     }
 
     public Pushover getPushover() {
@@ -642,17 +641,20 @@ public class SettingsResponseModel {
 
     }
 
-    public static class Firebase {
+    public static class OneSignalPush {
 
         @SerializedName("enabled")
         @Expose
         private Boolean enabled;
-        @SerializedName("ServerUrl")
-        @Expose
-        private String serverUrl;
         @SerializedName("uuid")
         @Expose
         private String uuid;
+        @SerializedName("app_id")
+        @Expose
+        private String appID;
+        @SerializedName("devices")
+        @Expose
+        private Map<String, OneSignalDeviceInfo> devices = new HashMap<>();
 
         public Boolean getEnabled() {
             return enabled;
@@ -662,20 +664,69 @@ public class SettingsResponseModel {
             this.enabled = enabled;
         }
 
-        public String getServerUrl() {
-            return serverUrl;
-        }
-
-        public void setServerUrl(String serverUrl) {
-            this.serverUrl = serverUrl;
-        }
-
         public String getServerUUID() {
             return uuid;
         }
 
         public void setServerUUID(String uuid) {
             this.uuid = uuid;
+        }
+
+        public String getAppID() {
+            return appID;
+        }
+
+        public void setAppID(String appID) {
+            this.appID = appID;
+        }
+
+        public Map<String, OneSignalDeviceInfo> getOneSignalDevices() {
+            return devices;
+        }
+
+        public void setOneSignalDevices(Map<String, OneSignalDeviceInfo> devices) {
+            this.devices = devices;
+        }
+
+        public static OneSignalPush parseJSON(String response) {
+            return new Gson().fromJson(response, OneSignalPush.class);
+        }
+    }
+
+    public static class OneSignalDeviceInfo {
+
+        @SerializedName("device_name")
+        @Expose
+        private String deviceName;
+        @SerializedName("friendly_name")
+        @Expose
+        private String friendlyName = "";
+        @SerializedName("app_version")
+        @Expose
+        private String appVersion;
+
+        public String getDeviceName() {
+            return deviceName;
+        }
+
+        public void setDeviceName(String deviceName) {
+            this.deviceName = deviceName;
+        }
+
+        public String getFriendlyName() {
+            return friendlyName;
+        }
+
+        public void setFriendlyName(String friendlyName) {
+            this.friendlyName = friendlyName;
+        }
+
+        public String getAppVersion() {
+            return appVersion;
+        }
+
+        public void setAppVersion(String appVersion) {
+            this.appVersion = appVersion;
         }
 
     }
@@ -1154,8 +1205,6 @@ public class SettingsResponseModel {
     }
 
     public static SettingsResponseModel parseJSON(String response) {
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(response, SettingsResponseModel.class);
+        return new Gson().fromJson(response, SettingsResponseModel.class);
     }
-
 }

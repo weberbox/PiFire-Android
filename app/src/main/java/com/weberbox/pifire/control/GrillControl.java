@@ -3,6 +3,7 @@ package com.weberbox.pifire.control;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.model.remote.PelletProfileModel;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.OneSignalDeviceInfo;
 import com.weberbox.pifire.utils.JSONUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
@@ -336,18 +337,6 @@ public class GrillControl {
         }
     }
 
-    // Set Firebase Enabled
-    public static void setFirebaseEnabled(Socket socket, boolean enabled) {
-        if (VersionUtils.isSupported("1.2.3")) {
-            socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
-                    JSONUtils.encodeJSON(
-                            ServerConstants.NOTIF_ACTION,
-                            ServerConstants.NOTIF_FIREBASE_ENABLED, enabled));
-        } else {
-            GrillControlDep.setFirebaseEnabled(socket, enabled);
-        }
-    }
-
     // Set InfluxDB Enabled
     public static void setInfluxDBEnabled(Socket socket, boolean enabled) {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
@@ -411,12 +400,41 @@ public class GrillControl {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA, payload);
     }
 
-    // Set Firebase ServerUrl
-    public static void setFirebaseServerUrl(Socket socket, String serverUrl) {
+    // Set OneSignal Enabled
+    public static void setOneSignalEnabled(Socket socket, boolean enabled) {
         socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
                 JSONUtils.encodeJSON(
                         ServerConstants.NOTIF_ACTION,
-                        ServerConstants.NOTIF_FIREBASE_SERVERURL, serverUrl));
+                        ServerConstants.NOTIF_ONESIGNAL_ENABLED, enabled));
+    }
+
+    // Set OneSignal App ID
+    public static void setOneSignalAppID(Socket socket, String appID) {
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
+                JSONUtils.encodeJSON(
+                        ServerConstants.NOTIF_ACTION,
+                        ServerConstants.NOTIF_ONESIGNAL_APP_ID, appID));
+    }
+
+    // Add OneSignal Device
+    public static void addOneSignalDevice(Socket socket, String playerID,
+                                          OneSignalDeviceInfo device) {
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
+                JSONUtils.encodeJSON(
+                        ServerConstants.NOTIF_ACTION,
+                        ServerConstants.NOTIF_ONESIGNAL_ADD, true,
+                        ServerConstants.NOTIF_ONESIGNAL_PLAYER_ID, playerID,
+                        ServerConstants.NOTIF_ONESIGNAL_DEVICE_NAME, device.getDeviceName(),
+                        ServerConstants.NOTIF_ONESIGNAL_APP_VERSION, device.getAppVersion()));
+    }
+
+    // Remove OneSignal Device
+    public static void removeOneSignalDevice(Socket socket, String playerId) {
+        socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
+                JSONUtils.encodeJSON(
+                        ServerConstants.NOTIF_ACTION,
+                        ServerConstants.NOTIF_ONESIGNAL_REMOVE, true,
+                        ServerConstants.NOTIF_ONESIGNAL_PLAYER_ID, playerId));
     }
 
     // Set InfluxDB URL

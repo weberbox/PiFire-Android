@@ -11,21 +11,20 @@ import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.model.remote.GrillProbeModel;
 import com.weberbox.pifire.model.remote.ProbeProfileModel;
 import com.weberbox.pifire.model.remote.SettingsResponseModel;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.HistoryPage;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeSettings;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Globals;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Versions;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Ifttt;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.PushBullet;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.InfluxDB;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Pushover;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Firebase;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeTypes;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.CycleData;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.SmokePlus;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Safety;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.Globals;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.HistoryPage;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.Ifttt;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.InfluxDB;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.OneSignalPush;
 import com.weberbox.pifire.model.remote.SettingsResponseModel.PelletLevel;
-
+import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeSettings;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeTypes;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.Pushover;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.Safety;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.SmokePlus;
+import com.weberbox.pifire.model.remote.SettingsResponseModel.Versions;
 
 import java.util.Map;
 
@@ -62,7 +61,7 @@ public class SettingsUtils {
             Ifttt ifttt = settingsResponse.getIfttt();
             PushBullet pushBullet = settingsResponse.getPushBullet();
             Pushover pushOver = settingsResponse.getPushover();
-            Firebase fireBase = settingsResponse.getFirebase();
+            OneSignalPush oneSignal = settingsResponse.getOneSignal();
             InfluxDB influxDB = settingsResponse.getInfluxDB();
             ProbeTypes probeTypes = settingsResponse.getProbeTypes();
             CycleData cycleData = settingsResponse.getCycleData();
@@ -137,9 +136,14 @@ public class SettingsUtils {
                 putString(R.string.prefs_notif_pushover_url, pushOver.getPublicURL());
             }
 
-            if (fireBase != null) {
-                putBoolean(R.string.prefs_notif_firebase_enabled, fireBase.getEnabled());
-                putString(R.string.prefs_notif_firebase_serveruuid, fireBase.getServerUUID());
+            if (oneSignal != null) {
+                putBoolean(R.string.prefs_notif_onesignal_enabled, oneSignal.getEnabled());
+                putString(R.string.prefs_notif_onesignal_serveruuid, oneSignal.getServerUUID());
+
+                if (oneSignal.getOneSignalDevices() != null) {
+                    putString(R.string.prefs_notif_onesignal_device_list,
+                            new Gson().toJson(oneSignal.getOneSignalDevices()));
+                }
             }
 
             if (influxDB != null) {

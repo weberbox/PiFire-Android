@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,18 +30,20 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.tapadoo.alerter.OnHideAlertListener;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
 import com.weberbox.pifire.interfaces.SettingsCallback;
+import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
-import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.AlertUtils;
+import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 
 import io.socket.client.Socket;
@@ -62,11 +66,11 @@ public class MainActivity extends BaseActivity {
     private Socket mSocket;
     private int mDownX;
 
-    private boolean mAppIsVisible = false;
     private boolean mOfflineDismissed = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
         boolean firstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
@@ -77,7 +81,8 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
-        mSocket = getSocket();
+        PiFireApplication app = (PiFireApplication) getApplication();
+        mSocket = app.getSocket();
 
         mSettingsUtils = new SettingsUtils(this, settingsCallback);
 
@@ -174,6 +179,15 @@ public class MainActivity extends BaseActivity {
         mMainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(getOfflineAlerter(), connected, mOfflineDismissed);
+
+                if (connected) {
+                    if (AppConfig.USE_ONESIGNAL) {
+                        if (OneSignalUtils.checkRegistration(MainActivity.this) ==
+                                Constants.ONESIGNAL_NOT_REGISTERED) {
+                            OneSignalUtils.registerDevice(MainActivity.this, mSocket);
+                        }
+                    }
+                }
             }
         });
 
@@ -217,7 +231,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavController navController = Navigation.findNavController(this,
+                R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -234,8 +249,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mAppIsVisible = true;
-        mOfflineDismissed = false;
         mPanelsLayout.registerStartPanelStateListeners(panelState ->
                 mMainViewModel.setStartPanelStateChange(panelState));
         mPanelsLayout.registerEndPanelStateListeners(panelState ->
@@ -249,7 +262,6 @@ public class MainActivity extends BaseActivity {
         if (mAppUpdater != null) {
             mAppUpdater.stop();
         }
-        mAppIsVisible = false;
         mAlerter = null;
     }
 
@@ -316,6 +328,64 @@ public class MainActivity extends BaseActivity {
         startActivity(intent, options.toBundle());
     }
 
+    private void setupActionBar(ActionBar actionBar) {
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.layout_actionbar);
+        View view = actionBar.getCustomView();
+        mActionBarText = view.findViewById(R.id.action_bar_text);
+        ImageButton navButton = view.findViewById(R.id.action_bar_button);
+        navButton.setOnClickListener(v ->
+                mPanelsLayout.openStartPanel());
+    }
+
+    public void connectSocketListenData(Socket socket) {
+        socket.connect();
+        socket.on(Socket.EVENT_CONNECT, onConnect);
+        socket.on(Socket.EVENT_DISCONNECT, onDisconnect);
+        socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        socket.on(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+    }
+
+    private final OnHideAlertListener offlineAlertListener = () ->
+            mOfflineDismissed = true;
+
+    private final Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Timber.d("Socket connected");
+            mMainViewModel.setServerConnected(true);
+            mSettingsUtils.requestSettingsData(mSocket);
+        }
+    };
+
+    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Timber.d("Socket disconnected");
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                mMainViewModel.setServerConnected(false);
+            }
+        }
+    };
+
+    private final Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            Timber.d("Error connecting socket");
+            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+                mMainViewModel.setServerConnected(false);
+            }
+        }
+    };
+
+    private final Emitter.Listener updateGrillData = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            mMainViewModel.setDashData(args[0].toString());
+        }
+    };
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -358,70 +428,4 @@ public class MainActivity extends BaseActivity {
         }
         return super.dispatchTouchEvent(event);
     }
-
-    private void setupActionBar(ActionBar actionBar) {
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.layout_actionbar);
-        View view = actionBar.getCustomView();
-        mActionBarText = view.findViewById(R.id.action_bar_text);
-        ImageButton navButton = view.findViewById(R.id.action_bar_button);
-        navButton.setOnClickListener(v ->
-                mPanelsLayout.openStartPanel());
-    }
-
-    private Socket getSocket() {
-        if (mSocket == null) {
-            PiFireApplication app = (PiFireApplication) getApplication();
-            mSocket = app.getSocket();
-        }
-        return mSocket;
-    }
-
-    public void connectSocketListenData(Socket socket) {
-        socket.connect();
-        socket.on(Socket.EVENT_CONNECT, onConnect);
-        socket.on(Socket.EVENT_DISCONNECT, onDisconnect);
-        socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        socket.on(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
-    }
-
-    private final OnHideAlertListener offlineAlertListener = () ->
-            mOfflineDismissed = true;
-
-    private final Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Timber.d("Socket connected");
-            mMainViewModel.setServerConnected(true);
-            mSettingsUtils.requestSettingsData(mSocket);
-        }
-    };
-
-    private final Emitter.Listener onDisconnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Timber.d("Socket disconnected");
-            if (mAppIsVisible) {
-                mMainViewModel.setServerConnected(false);
-            }
-        }
-    };
-
-    private final Emitter.Listener onConnectError = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            Timber.d("Error connecting socket");
-            if (mAppIsVisible) {
-                mMainViewModel.setServerConnected(false);
-            }
-        }
-    };
-
-    private final Emitter.Listener updateGrillData = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            mMainViewModel.setDashData(args[0].toString());
-        }
-    };
 }

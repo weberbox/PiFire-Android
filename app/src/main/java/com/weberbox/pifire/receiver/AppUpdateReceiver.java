@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 
 import java.io.File;
@@ -21,7 +23,17 @@ public class AppUpdateReceiver extends BroadcastReceiver {
         if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
             SharedPreferences prefs = context.getSharedPreferences(context.getPackageName() +
                             "_preferences", Context.MODE_PRIVATE);
+
+            if (prefs.getInt(context.getString(R.string.prefs_installed_version), 1) <
+                    AppConfig.FORCE_SETUP_VERSION) {
+                prefs.edit()
+                        .putBoolean(context.getString(R.string.prefs_first_app_start), true)
+                        .apply();
+            }
+
             prefs.edit()
+                    .putInt(context.getString(R.string.prefs_installed_version),
+                            BuildConfig.VERSION_CODE)
                     .putInt(context.getString(R.string.prefs_app_updater_checks), 0)
                     .putInt(context.getString(R.string.prefs_app_updater_force_checks), 0)
                     .putBoolean(context.getString(R.string.prefs_app_update_required), false)

@@ -1,21 +1,18 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
-
     <dimen name="alerter_icon_size_small">30dp</dimen>
-
     <dimen name="fab_margin">16dp</dimen>
-
+    <dimen name="recycler_padding">4dp</dimen>
     <dimen name="large_spacing">20dp</dimen>
     <dimen name="default_spacing">14dp</dimen>
     <dimen name="medium_spacing">12dp</dimen>
     <dimen name="small_spacing">8dp</dimen>
     <dimen name="picker_top_bottom_padding">90dp</dimen>
     <dimen name="action_dialog_text">32sp</dimen>
-
     <dimen name="table_corner_radius">10dp</dimen>
     <dimen name="button_corner_radius">10dp</dimen>
-
     <dimen name="settings_list_items">16dp</dimen>
     <dimen name="settings_header_view">55dp</dimen>
+    <dimen name="setup_stepper_padding">120dp</dimen>
 </resources>

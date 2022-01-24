@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.tapadoo.alerter.OnHideAlertListener;
 import com.weberbox.pifire.R;
@@ -71,6 +72,7 @@ public class AlertUtils {
                 .show();
     }
 
+    @SuppressWarnings("unused")
     public static void createAlert(Activity activity, @StringRes int message, boolean infinite) {
         Alerter.create(activity)
                 .setText(message)
@@ -92,6 +94,37 @@ public class AlertUtils {
                 .setTextAppearance(R.style.Text14Aller)
                 .setDuration(duration)
                 .setIconSize(R.dimen.alerter_icon_size_small)
+                .show();
+    }
+
+    public static void createOneSignalAlert(Activity activity, int title, int message) {
+        Alerter.create(activity)
+                .setTitle(title)
+                .setText(message)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTitleAppearance(R.style.Text18Aller)
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(false)
+                .show();
+    }
+
+    public static void createOneSignalConsentAlert(Activity activity, int title, int message) {
+        Alerter.create(activity)
+                .setTitle(title)
+                .setText(message)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTitleAppearance(R.style.Text18Aller)
+                .setTextAppearance(R.style.Text14Aller)
+                .enableInfiniteDuration(true)
+                .addButton(activity.getString(R.string.dismiss_button), R.style.AlerterButton, v -> {
+                    Prefs.putBoolean(activity.getString(R.string.prefs_onesignal_consent_dismiss),
+                            true);
+                    Alerter.hide();
+                })
                 .show();
     }
 }

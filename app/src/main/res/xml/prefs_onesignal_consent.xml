@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_onesignal_consent">
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_onesignal_consent_1">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/def_onesignal_privacy_link" />
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_onesignal_consent_2">
+        </Preference>
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:title="@string/settings_note"
+            app:summary="@string/settings_onesignal_consent_3"/>
+
+        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_onesignal_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_onesignal_accepted"
+            app:summaryOff="@string/settings_onesignal_declined"
+            app:summaryOn="@string/settings_onesignal_accepted"
+            app:title="@string/enabled" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

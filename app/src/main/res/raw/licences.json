@@ -77,6 +77,18 @@
       "https://github.com/bumptech/glide/blob/master/LICENSE"
     ],
     [
+      "OkHttp",
+      "https://github.com/square/okhttp/blob/master/LICENSE.txt"
+    ],
+    [
+      "Android-Stepper",
+      "https://github.com/acefalobi/android-stepper/blob/master/LICENSE"
+    ],
+    [
+      "OneSignal",
+      "https://github.com/OneSignal/OneSignal-Android-SDK/blob/main/LICENSE"
+    ],
+    [
       "MaterialDesign Icons",
       "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
     ]

@@ -20,6 +20,7 @@
         android:text="@string/delete"
         android:textAppearance="@style/Text18Aller"
         android:textColor="@color/colorWhite"
+        app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
         app:icon="@drawable/ic_add_white"

@@ -29,17 +29,16 @@
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.PiFire"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:theme="@style/Theme.PiFire" >
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="${appName}"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.PiFire.Starting"
-            android:screenOrientation="locked" >
+            android:screenOrientation="locked"
+            android:theme="@style/Theme.PiFire.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -47,8 +46,8 @@
         </activity>
         <activity
             android:name=".ui.activities.ServerSetupActivity"
-            android:theme="@style/Theme.PiFire.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.PiFire.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.activities.PreferencesActivity"
@@ -61,10 +60,9 @@
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            tools:ignore="LockedOrientationActivity"
-            tools:replace="android:theme"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.PiFire.NoActionBar" />
+            android:theme="@style/Theme.PiFire.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
 
         <receiver
             android:name=".receiver.AppUpdateReceiver"
@@ -84,8 +82,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
-        <meta-data android:name="io.sentry.environment" android:value="${environment}" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
+        <meta-data
+            android:name="io.sentry.environment"
+            android:value="${environment}" />
 
     </application>
 

@@ -5,8 +5,11 @@ import com.weberbox.pifire.BuildConfig;
 @SuppressWarnings("ConstantConditions")
 public class AppConfig {
     public static final boolean DEBUG = BuildConfig.DEBUG;
-    public static final boolean USE_FIREBASE = BuildConfig.IS_FIREBASE;
+    public static final boolean USE_ONESIGNAL = BuildConfig.IS_ONESIGNAL;
     public static final boolean IS_DEV_BUILD = BuildConfig.FLAVOR_type.equalsIgnoreCase("dev");
+
+    // Force Setup Version
+    public static final int FORCE_SETUP_VERSION = 8;
 
     // Pellet Warning
     public static final int LOW_PELLET_WARNING = 40;

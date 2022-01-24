@@ -95,7 +95,6 @@ public class Constants {
     public static final String JSON_INFO = "info.json";
     public static final String JSON_RECIPES = "recipes.json";
 
-
     // Licenses
     public static final String LICENSES_LIST = "licenses";
 
@@ -135,5 +134,12 @@ public class Constants {
     public static final String DB_RECIPES_TABLE = "recipes";
     public static final String DB_RECIPES = "recipes.db";
     public static final String DB_RECIPES_BACKUP_FILENAME = "Recipes_";
+
+    // One Signal Status
+    public static final int ONESIGNAL_NO_ID = 0;
+    public static final int ONESIGNAL_NO_CONSENT = 1;
+    public static final int ONESIGNAL_NOT_REGISTERED = 2;
+    public static final int ONESIGNAL_DEVICE_ERROR = 3;
+    public static final int ONESIGNAL_REGISTERED = 4;
 
 }

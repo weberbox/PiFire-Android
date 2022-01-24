@@ -72,6 +72,9 @@
     <string name="save">Save</string>
     <string name="exporting">Exporting</string>
     <string name="importing">Importing</string>
+    <string name="welcome">Welcome</string>
+    <string name="terms">Terms</string>
+    <string name="share">Share</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -178,26 +181,21 @@
     <string name="image_picker_cancelled">Operation Cancelled</string>
 
     <string name="setup_label">Server Setup</string>
-    <string name="setup_one">1</string>
-    <string name="setup_two">2</string>
-    <string name="setup_three">3</string>
     <string name="setup_connect">Connect</string>
     <string name="setup_address">Address</string>
+    <string name="setup_push">Consent</string>
     <string name="setup_finish">Finish</string>
-    <string name="setup_server_address">Server address</string>
+    <string name="setup_server_address">Server Address</string>
     <string name="setup_invalid_url">Address is invalid!</string>
     <string name="setup_invalid_url_alert">Address is invalid! Please try again</string>
     <string name="setup_blank_url">Address cannot blank!</string>
     <string name="setup_cannot_connect">Cannot connect to PiFire. Verify entered address and that grill is powered on</string>
     <string name="setup_error">There was an error please try again</string>
-    <string name="setup_have_qr_code">Use QR code</string>
-    <string name="setup_no_qr_code">Setup address manually</string>
-    <string name="setup_with_qr_code">Setup With QR code</string>
     <string name="setup_with_qr_code_text">You can generate a QR code by holding the down button on the grill\'s display or from the Admin menu in a browser</string>
-    <string name="setup_enter_address">"Enter PiFire Address"</string>
+    <string name="setup_enter_address">Enter PiFire Address</string>
     <string name="setup_enter_address_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
     <string name="setup_finish_title">Setup Complete</string>
-    <string name="setup_finish_text">Connection to your PiFire server is complete. If you need to change the address you can find it in the app settings</string>
+    <string name="setup_finish_text">Connection to your PiFire server is now complete. If you need to change the connection settings you can find them in the app settings</string>
     <string name="setup_qr_camera_denied">Camera permission is required to use QR feature. Continue manually or grant permission</string>
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
@@ -205,6 +203,12 @@
     <string name="setup_server_auth_required">Authentication Required</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
     <string name="setup_server_self_signed">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
+    <string name="setup_push_consent_title">OneSignal Data Privacy</string>
+    <string name="setup_push_consent_toggle">Allow OneSignal to send push notifications</string>
+    <string name="setup_push_dialog_declined_title">Skip Consent</string>
+    <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
+    <string name="setup_begin_terms_title">Terms of Use</string>
+    <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
 
     <string name="settings_config">Configuration</string>
     <string name="settings_server">Server Settings</string>
@@ -351,7 +355,8 @@
     <string name="settings_cat_ifttt">IFTTT WebHooks</string>
     <string name="settings_cat_pushover">PushOver</string>
     <string name="settings_cat_pushbullet">PushBullet</string>
-    <string name="settings_cat_firebase">Firebase</string>
+    <string name="settings_cat_onesignal">Push Notifications</string>
+    <string name="settings_cat_onesignal_consent">One Signal Consent</string>
     <string name="settings_cat_influxdb">InfluxDB</string>
 
     <string name="settings_ifttt_api">API Key</string>
@@ -361,11 +366,27 @@
     <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
     <string name="settings_pushbullet_api">API Key</string>
     <string name="settings_pushbullet_url">Public URL</string>
-    <string name="settings_firebase_disabled">Firebase is not configured on the Server and or Client.</string>
     <string name="settings_influxdb_url">URL</string>
     <string name="settings_influxdb_token">Token</string>
     <string name="settings_influxdb_org">Org</string>
     <string name="settings_influxdb_bucket">Bucket</string>
+    <string name="settings_onesignal_consent_title">OneSignal Consent</string>
+    <string name="settings_onesignal_consent_summary">Review OneSignal privacy policy</string>
+    <string name="settings_onesignal_consent_1">OneSignal is used to deliver notifications from PiFire. No Personally Identifiable Information is being collected by OneSignal. Notification data sent through OneSignal\'s API will be deleted after ~30 days.</string>
+    <string name="settings_onesignal_consent_2">Once you accept, this device will register with OneSignal. Consent can be revoked to prevent further communication with OneSignal.</string>
+    <string name="settings_onesignal_consent_3">OneSignal.com must not be blocked (e.g. in PiHole) for device registration to succeed</string>
+    <string name="settings_onesignal_unregistered">This device has not registered with OneSignal please verify that OneSignal.com is not being blocked. The registration process can take up to 2 minutes.</string>
+    <string name="settings_onesignal_declined">Status: Not Accepted X</string>
+    <string name="settings_onesignal_accepted">Status: Accepted \u2713</string>
+    <string name="settings_onesignal_error">Status: Error X</string>
+    <string name="settings_onesignal_alert_consent_title">OneSignal Consent Not Accepted</string>
+    <string name="settings_onesignal_alert_consent_message">To receive notifications from PiFire consent to the OneSignal data privacy.</string>
+    <string name="settings_onesignal_id_error_title">Not Registered With OneSignal</string>
+    <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole)</string>
+    <string name="settings_onesignal_register_title">Not Registered With PiFire</string>
+    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take up to 2 minutes.</string>
+    <string name="settings_onesignal_error_title">Error With OneSignal</string>
+    <string name="settings_onesignal_error_message">There was an unexpected error with OneSignal. Please try again later.</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>

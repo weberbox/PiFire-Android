@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:textAlignment="center"
+            android:gravity="center"
             android:textSize="120sp" />
 
         <TextView
@@ -26,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:gravity="center"
             android:paddingStart="140dp"
             android:paddingTop="20dp"
             android:paddingEnd="0dp"

@@ -23,7 +23,14 @@ public class MessageTextDialog {
         mMessage = message;
     }
 
-    public AlertDialog.Builder showDialog() {
+    public MessageTextDialog(Context context, int title, int message) {
+        mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        mInflater = LayoutInflater.from(context);
+        mTitle = context.getString(title);
+        mMessage = context.getString(message);
+    }
+
+    public AlertDialog.Builder getDialog() {
         DialogMessageTextBinding binding = DialogMessageTextBinding.inflate(mInflater);
 
         mDialog.setTitle(mTitle);
@@ -35,8 +42,6 @@ public class MessageTextDialog {
         mDialog.setView(binding.getRoot());
 
         mDialog.setNegativeButton(android.R.string.ok, (dialog, which) -> dialog.cancel());
-
-        mDialog.show();
 
         return mDialog;
     }

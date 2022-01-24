@@ -123,6 +123,20 @@ public class JSONUtils {
         return gsonJSON(outerMap);
     }
 
+    public static String encodeJSON(String outerKey, String key1, boolean value1, String key2,
+                                    String value2, String key3, String value3, String key4,
+                                    String value4) {
+        Map<String, Object> outerMap = new HashMap<>();
+        Map<String, Object> innerMap = new HashMap<>();
+        innerMap.put(key1, value1);
+        innerMap.put(key2, value2);
+        innerMap.put(key3, value3);
+        innerMap.put(key4, value4);
+        outerMap.put(outerKey, innerMap);
+
+        return gsonJSON(outerMap);
+    }
+
     public static String encodeJSON(String outerKey, String key1, String value1, String key2,
                                     String value2, String key3, String value3, String key4,
                                     String value4, String key5, String value5) {

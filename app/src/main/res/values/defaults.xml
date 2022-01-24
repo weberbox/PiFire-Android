@@ -2,6 +2,7 @@
 <resources>
     <string name="def_pid_link">http://engineeredmusings.com/pismoker/</string>
     <string name="def_pmode_link">http://tipsforbbq.com/Definition/Traeger-P-Setting</string>
+    <string name="def_onesignal_privacy_link">https://onesignal.com/privacy</string>
 
     <string name="def_app_update_check_url">https://raw.githubusercontent.com/weberbox/PiFire-Android/master/app/update-check.json</string>
     <string name="def_github_api_url">https://api.github.com/repos/weberbox/PiFire-Android/releases</string>
@@ -19,7 +20,7 @@
     <bool name="def_notif_ifttt_enabled">false</bool>
     <bool name="def_notif_pushover_enabled">false</bool>
     <bool name="def_notif_pushbullet_enabled">false</bool>
-    <bool name="def_notif_firebase_enabled">false</bool>
+    <bool name="def_notif_onesignal_enabled">false</bool>
     <bool name="def_notif_influxdb_enabled">false</bool>
 
     <bool name="def_grill_swipe_start">true</bool>

@@ -1,22 +1,31 @@
 package com.weberbox.pifire.ui.activities;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
+import com.aceinteract.android.stepper.StepperNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
+import com.weberbox.pifire.model.view.SetupViewModel;
 
 public class ServerSetupActivity extends AppCompatActivity {
 
+    private StepperNavigationView mStepper;
+    private AppBarConfiguration mAppBarConfiguration;
     private ActivityServerSetupBinding mBinding;
     private int mDownX;
 
@@ -29,10 +38,38 @@ public class ServerSetupActivity extends AppCompatActivity {
 
         setSupportActionBar(mBinding.setupToolbar);
 
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.setup_label);
         }
+
+        FloatingActionButton setupFab = mBinding.fabSetup;
+
+        mStepper = mBinding.setupLayout.setupStepper;
+
+        if (AppConfig.USE_ONESIGNAL) {
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_setup_welcome,
+                    R.id.nav_setup_address,
+                    R.id.nav_setup_push,
+                    R.id.nav_setup_finish)
+                    .build();
+        } else {
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_setup_welcome,
+                    R.id.nav_setup_address,
+                    R.id.nav_setup_finish)
+                    .build();
+        }
+
+        NavController navController = Navigation.findNavController(this,
+                R.id.server_setup_fragment);
+        mStepper.setupWithNavController(navController);
+
+        NavigationUI.setupActionBarWithNavController(this, navController);
+
+        SetupViewModel mViewModel = new ViewModelProvider(this).get(SetupViewModel.class);
+
+        mViewModel.setFab(setupFab);
 
     }
 
@@ -43,9 +80,19 @@ public class ServerSetupActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (mStepper.getCurrentStep() == 0) {
+            super.onBackPressed();
+        } else {
+            onSupportNavigateUp();
+        }
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
-        return true;
+        return NavigationUI.navigateUp(Navigation.findNavController(this,
+                R.id.server_setup_fragment), mAppBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
     @Override

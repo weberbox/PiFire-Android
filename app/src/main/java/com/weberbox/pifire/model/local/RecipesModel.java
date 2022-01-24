@@ -5,6 +5,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.weberbox.pifire.constants.Constants;
 
@@ -234,5 +236,10 @@ public class RecipesModel {
         public void setValue(String value) {
             this.value = value;
         }
+    }
+
+    public static RecipesModel parseJSON(String response) {
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(response, RecipesModel.class);
     }
 }

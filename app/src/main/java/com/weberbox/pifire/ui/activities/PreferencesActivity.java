@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
@@ -19,6 +20,7 @@ import com.weberbox.pifire.ui.fragments.preferences.TimersSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.WorkSettingsFragment;
 import com.weberbox.pifire.utils.SettingsUtils;
 
+import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class PreferencesActivity extends BaseActivity {
@@ -27,7 +29,10 @@ public class PreferencesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new SettingsUtils(this, settingsCallback);
+        PiFireApplication app = (PiFireApplication) getApplication();
+        Socket socket = app.getSocket();
+
+        new SettingsUtils(this, settingsCallback).requestSettingsData(socket);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

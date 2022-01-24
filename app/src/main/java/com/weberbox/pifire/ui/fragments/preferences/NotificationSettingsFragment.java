@@ -8,19 +8,21 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
+import com.weberbox.pifire.config.PushConfig;
 import com.weberbox.pifire.control.GrillControl;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.utils.FirebaseUtils;
+import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
@@ -44,34 +46,51 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        PreferenceCategory firebase = findPreference(getString(R.string.prefs_notif_firebase));
-        SwitchPreferenceCompat firebaseEnable = findPreference(getString(R.string.prefs_notif_firebase_enabled));
+        PreferenceCategory oneSignalCat = findPreference(getString(R.string.prefs_notif_onesignal_cat));
+        Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
         SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
 
-        if (firebase != null && firebaseEnable != null) {
-            firebase.setVisible(AppConfig.USE_FIREBASE);
-            if (Prefs.getString(
-                    getString(R.string.prefs_notif_firebase_serveruuid), "").isEmpty() ||
-                    getString(R.string.def_firebase_server_url).isEmpty()) {
-                firebase.setEnabled(false);
-                firebaseEnable.setSummary(R.string.settings_firebase_disabled);
+        if (oneSignalCat != null) {
+            if (!AppConfig.USE_ONESIGNAL || PushConfig.ONESIGNAL_APP_ID.isEmpty()) {
+                oneSignalCat.setVisible(false);
             }
         }
 
+        if (oneSignalConsent != null) {
+            oneSignalConsent.setOnPreferenceClickListener(preference -> {
+                if (getActivity() != null) {
+                    final FragmentManager fm = getActivity().getSupportFragmentManager();
+                    final FragmentTransaction ft = fm.beginTransaction();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .replace(android.R.id.content, new OneSignalRegisterFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+                return true;
+            });
+        }
+
         if (influxDBEnable != null && getActivity() != null) {
-            if (!VersionUtils.isSupported("1.2.3")) {
+            if (!VersionUtils.isSupported("1.2.4")) {
                 influxDBEnable.setEnabled(false);
-                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, "1.2.3"));
+                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, "1.2.4"));
             }
         }
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (AppConfig.USE_ONESIGNAL) {
+            OneSignalUtils.checkOneSignalStatus(requireActivity(), mSocket);
+        }
     }
 
     @Override
@@ -96,7 +115,6 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
-
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -181,16 +199,10 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                     GrillControl.setInfluxDBEnabled(mSocket,
                             ((SwitchPreferenceCompat) preference).isChecked());
                 }
-                if (preference.getContext().getString(R.string.prefs_notif_firebase_enabled)
+                if (preference.getContext().getString(R.string.prefs_notif_onesignal_enabled)
                         .equals(preference.getKey())) {
-                    boolean enabled = ((SwitchPreferenceCompat) preference).isChecked();
-                    if (enabled) {
-                        GrillControl.setFirebaseServerUrl(mSocket,
-                                getString(R.string.def_firebase_server_url));
-                    }
-                    GrillControl.setFirebaseEnabled(mSocket, enabled);
-                    FirebaseUtils.toggleFirebaseSubscription(enabled, sharedPreferences
-                            .getString(getString(R.string.prefs_notif_firebase_serveruuid), ""));
+                    GrillControl.setOneSignalEnabled(mSocket, ((SwitchPreferenceCompat)
+                            preference).isChecked());
                 }
             }
         }

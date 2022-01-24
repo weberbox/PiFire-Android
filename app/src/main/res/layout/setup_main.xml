@@ -4,16 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_server_setup">
 
     <fragment
         android:id="@+id/server_setup_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.weberbox.pifire.ui.fragments.setup.SetupBeginFragment"
-        android:label="@string/setup_label"
-        tools:layout="@layout/fragment_setup_begin"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/nav_setup_graph"
         tools:ignore="FragmentTagUsage" />
+
+    <com.aceinteract.android.stepper.StepperNavigationView
+        android:id="@+id/setup_stepper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:stepperItems="@menu/activity_setup_steps"
+        app:stepperTextAppearance="@style/Text15Aller"
+        app:stepperTextColor="@color/colorWhite"
+        app:stepperWidgetColor="@color/colorAccent"
+        app:stepperIconSize="25dp"
+        app:stepperType="tab_numbered" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

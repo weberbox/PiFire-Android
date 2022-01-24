@@ -76,9 +76,11 @@ public class EventsFragment extends Fragment {
 
         mEventsListAdapter = new EventsListAdapter();
 
+        int padding = getResources().getDimensionPixelOffset(R.dimen.recycler_padding);
+
         mEventsRecycler = mBinding.eventsLayout.eventsList;
         mEventsRecycler.getRecyclerView().setClipToPadding(false);
-        mEventsRecycler.getRecyclerView().setPadding(0,8,0,8);
+        mEventsRecycler.getRecyclerView().setPadding(0,padding,0,padding);
         mEventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mEventsRecycler.addVeiledItems(15);
         mEventsRecycler.setAdapter(mEventsListAdapter);

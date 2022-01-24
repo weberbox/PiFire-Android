@@ -83,8 +83,13 @@ public class ServerConstants {
     public static final String NOTIF_PUSHBULLET_KEY = "pushbullet_apikey";
     public static final String NOTIF_PUSHBULLET_CHANNEL = "pushbullet_channel";
     public static final String NOTIF_PUSHBULLET_URL = "pushbullet_publicurl";
-    public static final String NOTIF_FIREBASE_ENABLED = "firebase_enabled";
-    public static final String NOTIF_FIREBASE_SERVERURL = "firebase_serverurl";
+    public static final String NOTIF_ONESIGNAL_ENABLED = "onesignal_enabled";
+    public static final String NOTIF_ONESIGNAL_APP_ID = "onesignal_app_id";
+    public static final String NOTIF_ONESIGNAL_PLAYER_ID = "onesignal_player_id";
+    public static final String NOTIF_ONESIGNAL_DEVICE_NAME = "onesignal_device_name";
+    public static final String NOTIF_ONESIGNAL_APP_VERSION = "onesignal_app_version";
+    public static final String NOTIF_ONESIGNAL_ADD = "onesignal_add_device";
+    public static final String NOTIF_ONESIGNAL_REMOVE = "onesignal_remove_device";
     public static final String NOTIF_INFLUXDB_ENABLED = "influxdb_enabled";
     public static final String NOTIF_INFLUXDB_URL = "influxdb_url";
     public static final String NOTIF_INFLUXDB_TOKEN = "influxdb_token";

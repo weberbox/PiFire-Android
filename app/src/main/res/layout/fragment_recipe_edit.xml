@@ -18,7 +18,7 @@
         android:src="@drawable/ic_save"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
-
+        app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
         app:tint="@color/colorWhite" />
 
     <androidx.core.widget.NestedScrollView
@@ -103,9 +103,9 @@
                     android:fontFamily="@font/aller_regular"
                     android:hint="@string/recipes_cooking_time"
                     android:maxLines="1"
-                    android:text="@string/def_recipe_time"
                     android:paddingStart="2dp"
                     android:paddingEnd="2dp"
+                    android:text="@string/def_recipe_time"
                     android:textColor="@color/colorWhite"
                     android:textColorHighlight="@color/colorAccent" />
 
