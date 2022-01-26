@@ -7,7 +7,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.databinding.ItemPickerProfileBinding;
+import com.weberbox.pifire.databinding.ItemPickerTextBinding;
 import com.weberbox.pifire.model.remote.PelletProfileModel;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdap
     @Override
     public PelletProfileAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
                                                               final int viewType) {
-        return new ViewHolder(ItemPickerProfileBinding.inflate(
+        return new ViewHolder(ItemPickerTextBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -43,7 +43,7 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdap
         private final TextView pelletProfile;
         private final TextView pelletProfileId;
 
-        public ViewHolder(ItemPickerProfileBinding binding) {
+        public ViewHolder(ItemPickerTextBinding binding) {
             super(binding.getRoot());
             pelletProfile = binding.profileItemTextView;
             pelletProfileId = binding.profileItemId;

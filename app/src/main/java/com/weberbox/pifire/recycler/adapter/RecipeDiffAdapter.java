@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.databinding.ItemPickerProfileBinding;
+import com.weberbox.pifire.databinding.ItemPickerTextBinding;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class RecipeDiffAdapter extends RecyclerView.Adapter<RecipeDiffAdapter.Vi
     @Override
     public RecipeDiffAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
                                                               final int viewType) {
-        return new ViewHolder(ItemPickerProfileBinding.inflate(
+        return new ViewHolder(ItemPickerTextBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -38,9 +38,9 @@ public class RecipeDiffAdapter extends RecyclerView.Adapter<RecipeDiffAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemPickerProfileBinding binding;
+        private final ItemPickerTextBinding binding;
 
-        public ViewHolder(ItemPickerProfileBinding binding) {
+        public ViewHolder(ItemPickerTextBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
