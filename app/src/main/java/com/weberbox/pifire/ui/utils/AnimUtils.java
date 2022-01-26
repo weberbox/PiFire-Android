@@ -38,7 +38,7 @@ public class AnimUtils {
                 .start();
     }
 
-    public static void fadeView(View view, int duration, int direction) {
+    public static void fadeViewInvisible(View view, int duration, int direction) {
         switch (direction) {
             case Constants.FADE_IN:
                 fadeView(view, 0.0f, 1.0f, duration);
@@ -47,6 +47,23 @@ public class AnimUtils {
             case Constants.FADE_OUT:
                 fadeView(view, 1.0f, 0.0f, duration);
                 view.setVisibility(View.INVISIBLE);
+                break;
+        }
+    }
+
+    public static void fadeViewGone(View view, int duration, int direction) {
+        switch (direction) {
+            case Constants.FADE_IN:
+                if (view.getVisibility() == View.GONE) {
+                    fadeView(view, 0.0f, 1.0f, duration);
+                    view.setVisibility(View.VISIBLE);
+                }
+                break;
+            case Constants.FADE_OUT:
+                if (view.getVisibility() == View.VISIBLE) {
+                    fadeView(view, 1.0f, 0.0f, duration);
+                    view.setVisibility(View.GONE);
+                }
                 break;
         }
     }
@@ -69,7 +86,7 @@ public class AnimUtils {
     }
 
     public static void fadeInAnimation(View view, int duration) {
-        if (view.getVisibility() == View.GONE | view.getVisibility() == View.INVISIBLE) {
+        if (view.getVisibility() == View.GONE || view.getVisibility() == View.INVISIBLE) {
             Animation fadeIn = new AlphaAnimation(0f, 1f);
             fadeIn.setInterpolator(new DecelerateInterpolator());
             fadeIn.setDuration(duration);

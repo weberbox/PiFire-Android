@@ -7,8 +7,8 @@ public class ServerConstants {
     public static final String DEFAULT_SOCKET_URL = "http://192.168.1.254";
 
     // Socket Strings
-    public static final String REQUEST_GRILL_DATA = "request_grill_data";
     public static final String LISTEN_GRILL_DATA = "grill_control_data";
+    public static final String REQUEST_GRILL_DATA = "request_grill_data";
     public static final String REQUEST_PELLET_DATA = "request_pellet_data";
     public static final String REQUEST_HISTORY_DATA = "request_history_data";
     public static final String REQUEST_EVENT_DATA = "request_event_data";
@@ -17,6 +17,8 @@ public class ServerConstants {
     public static final String REQUEST_MANUAL_DATA = "request_manual_data";
     public static final String REQUEST_BACKUP_DATA = "request_backup_data";
     public static final String REQUEST_BACKUP_LIST = "request_backup_list";
+    public static final String REQUEST_UPDATER_DATA = "request_updater_data";
+    public static final String REQUEST_UPDATER_ACTION = "request_updater_action";
 
     // Socket Updating
     public static final String UPDATE_CONTROL_DATA = "update_control_data";
@@ -174,5 +176,9 @@ public class ServerConstants {
     public static final String MANUAL_OUTPUT_AUGER = "change_output_auger";
     public static final String MANUAL_OUTPUT_IGNITER = "change_output_igniter";
     public static final String MANUAL_OUTPUT_POWER = "change_output_power";
+
+    public static final String UPDATER_CHANGE_BRANCH = "change_branch";
+    public static final String UPDATER_BRANCH_TARGET = "branch_target";
+    public static final String UPDATER_START_UPDATE = "do_update";
 
 }

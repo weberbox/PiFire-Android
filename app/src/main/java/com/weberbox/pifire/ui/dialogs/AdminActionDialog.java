@@ -7,8 +7,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
@@ -26,10 +24,10 @@ public class AdminActionDialog {
     private final int mType;
 
 
-    public AdminActionDialog(Context context, Fragment fragment, int type) {
+    public AdminActionDialog(Context context, AdminCallback callback, int type) {
         mAdminActionsBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         mInflater = LayoutInflater.from(context);
-        mCallBack = (AdminCallback) fragment;
+        mCallBack = callback;
         mType = type;
         mContext = context;
     }
@@ -65,6 +63,14 @@ public class AdminActionDialog {
                 break;
             case Constants.ACTION_ADMIN_SHUTDOWN:
                 actionText.setText(R.string.settings_admin_shutdown_text);
+                rightButtonImage.setImageResource(R.drawable.ic_setup_finish);
+                break;
+            case Constants.ACTION_ADMIN_CHANGE_BRANCH:
+                actionText.setText(R.string.server_updater_change_dialog_message);
+                rightButtonImage.setImageResource(R.drawable.ic_setup_finish);
+                break;
+            case Constants.ACTION_ADMIN_DO_UPDATE:
+                actionText.setText(R.string.server_updater_update_dialog_message);
                 rightButtonImage.setImageResource(R.drawable.ic_setup_finish);
                 break;
         }

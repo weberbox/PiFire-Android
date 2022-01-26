@@ -104,7 +104,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
         if (getActivity() != null) {
             ArrayAdapter<String> schemesAdapter = new ArrayAdapter<>(getActivity(),
-                    R.layout.item_dropdown_menu_popup, scheme);
+                    R.layout.item_menu_popup, scheme);
             mServerScheme.setAdapter(schemesAdapter);
         }
 

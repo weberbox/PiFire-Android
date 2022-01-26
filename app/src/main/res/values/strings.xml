@@ -75,6 +75,7 @@
     <string name="welcome">Welcome</string>
     <string name="terms">Terms</string>
     <string name="share">Share</string>
+    <string name="status">Status</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -126,7 +127,7 @@
     <string name="file_permission_denied">File permissions are required to use this feature</string>
     <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
 
-    <string name="prefs_not_connected">Currently Offline - Settings cannot be changed</string>
+    <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
 
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
@@ -223,6 +224,7 @@
     <string name="settings_admin">Admin Settings</string>
     <string name="settings_pellets">Pellet Settings</string>
     <string name="settings_manual">Manual Mode</string>
+    <string name="settings_updater">Server Updater</string>
 
     <!-- Settings Preferences -->
     <string name="settings_note">Note:</string>
@@ -410,6 +412,10 @@
     <string name="settings_admin_factory_reset_note">Remove all user settings and restore to default</string>
     <string name="settings_admin_factory_reset_text">Are you sure that you want to reset to factory defaults? This operation cannot be undone.</string>
 
+    <string name="settings_admin_cat_server_update">Server Updates</string>
+    <string name="settings_admin_server_update_title">Update Check</string>
+    <string name="settings_admin_server_update_summary">Check for PiFire server updates</string>
+
     <string name="settings_cat_backup_settings">PiFire Settings</string>
     <string name="settings_cat_backup_pelletdb">Pellet Database</string>
     <string name="settings_admin_backup_restore">Backup &amp; Restore</string>
@@ -537,6 +543,7 @@
 
     <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
 
+    <!-- Local App Updater -->
     <string name="updater_update_available">New update available!</string>
     <string name="updater_update_required">Update Required!</string>
     <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
@@ -548,6 +555,32 @@
     <string name="updater_update_not_available_description">You\'ve got the latest version available of %s!</string>
     <string name="updater_update_check_failed">Update check failed. Please try again later</string>
     <string name="updater_update_download_failed">Error downloading update</string>
+
+    <!-- Remote Server Updater -->
+    <string name="server_updater_branch">Branch:</string>
+    <string name="server_updater_remote">Remote:</string>
+    <string name="server_updater_version">Current Version:</string>
+    <string name="server_updater_branches">Branches</string>
+    <string name="server_updater_change_branch">Change Branch</string>
+    <string name="server_updater_current_version">Current Version:</string>
+    <string name="server_updater_remote_version">Remote Version:</string>
+    <string name="server_updater_branch_selector">Branch Selector</string>
+    <string name="server_updater_branch_active">Select active branch:</string>
+    <string name="server_updater_check_button">Check Again</string>
+    <string name="server_updater_logs_button">Show Changes</string>
+    <string name="server_updater_checking">Checking for Updates</string>
+    <string name="server_updater_no_update">You are up to date on this branch</string>
+    <string name="server_updater_error">The update check has failed \nCheck your server logs</string>
+    <string name="server_updater_update_available">An update is available!</string>
+    <string name="server_updater_update_available_text">You are %1$s changes behind on this branch</string>
+    <string name="server_updater_update_now">Click here to update</string>
+    <string name="server_updater_logs_dialog_title">Changelog</string>
+    <string name="server_updater_change_branch_error">Current branch already set to %1$s</string>
+    <string name="server_updater_update_dialog_title">Updating Branch</string>
+    <string name="server_updater_change_dialog_title">Changing Branch</string>
+    <string name="server_updater_change_dialog_message">Changing branches will force a restart of the server. This operation will overwrite the current branch. Are you sure you want to change branches?</string>
+    <string name="server_updater_update_dialog_message">Updating to the latest version will destroy any local <i>code</i> changes that have been made. Settings will be preserved \nAfter the server will be restarted.</string>
+    <string name="server_updater_error_offline">Currently Offline - Cannot check for updates</string>
 
 
 </resources>

@@ -40,6 +40,8 @@ public class Constants {
     public static final int ACTION_ADMIN_RESET = 4;
     public static final int ACTION_ADMIN_REBOOT = 5;
     public static final int ACTION_ADMIN_SHUTDOWN = 6;
+    public static final int ACTION_ADMIN_CHANGE_BRANCH = 7;
+    public static final int ACTION_ADMIN_DO_UPDATE= 8;
 
     // Callback Backup/Restore Type
     public static final int ACTION_BACKUP_SETTINGS = 0;

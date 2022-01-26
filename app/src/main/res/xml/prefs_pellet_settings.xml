@@ -7,13 +7,13 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pellet_warning">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_pellet_warning_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_level"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_level"
@@ -32,14 +32,14 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pellets">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_full"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_full"
             app:title="@string/settings_pellet_full"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_empty"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_empty"

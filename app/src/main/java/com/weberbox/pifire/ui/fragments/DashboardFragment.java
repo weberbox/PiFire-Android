@@ -486,11 +486,11 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         }
     }
 
-    public void updateUIWithData(String response_data) {
+    public void updateUIWithData(String responseData) {
         GrillResponseModel grillResponseModel;
 
         try {
-            grillResponseModel = GrillResponseModel.parseJSON(response_data);
+            grillResponseModel = GrillResponseModel.parseJSON(responseData);
 
             ProbeTemps probeTemps = grillResponseModel.getProbeTemps();
             ProbesEnabled probesEnabled = grillResponseModel.getProbesEnabled();

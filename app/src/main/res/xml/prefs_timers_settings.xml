@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_timers">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_shutdown_time"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_shutdown_time"
@@ -19,7 +19,7 @@
             app:summary="@string/settings_shutdown_note"
             app:title="@string/settings_note" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_startup_time"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_startup_time"

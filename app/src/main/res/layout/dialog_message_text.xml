@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/large_spacing"
     android:paddingTop="@dimen/default_spacing"
     android:paddingEnd="@dimen/large_spacing"
-    android:paddingBottom="@dimen/small_spacing">
+    android:paddingBottom="@dimen/small_spacing"
+    android:scrollbars="none">
 
     <TextView
         android:id="@+id/dialog_message_text"
@@ -15,4 +16,5 @@
         android:layout_height="wrap_content"
         android:text="@string/placeholder_text_view"
         android:textStyle="normal" />
-</FrameLayout>
+
+</ScrollView>

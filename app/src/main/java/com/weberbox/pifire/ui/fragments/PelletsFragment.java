@@ -477,7 +477,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
     private void forceRefreshData() {
         if (mSocket != null && mSocket.connected()) {
             mSocket.emit(ServerConstants.REQUEST_PELLET_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
+                if (mMainViewModel != null && args.length > 0 && args[0] != null) {
                     mMainViewModel.setPelletData(args[0].toString(), true);
                 }
             });
@@ -493,7 +493,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void updateUIWithData(String response_data) {
+    private void updateUIWithData(String responseData) {
         mBrandsList.clear();
         mWoodsList.clear();
         mBrandsEditList.clear();
@@ -503,7 +503,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         mProfileEditList.clear();
 
         try {
-            PelletResponseModel pelletResponseModel = PelletResponseModel.parseJSON(response_data);
+            PelletResponseModel pelletResponseModel = PelletResponseModel.parseJSON(responseData);
 
             Integer pelletLevel = pelletResponseModel.getCurrent().getHopperLevel();
 

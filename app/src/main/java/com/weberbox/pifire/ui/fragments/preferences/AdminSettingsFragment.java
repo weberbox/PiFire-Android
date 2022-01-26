@@ -48,7 +48,9 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        PreferenceCategory serverUpdatesCat = findPreference(getString(R.string.prefs_server_cat_updates));
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
+        Preference serverUpdates = findPreference(getString(R.string.prefs_server_updates_frag));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
         Preference backupRestore = findPreference(getString(R.string.prefs_admin_backup_restore));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
@@ -58,6 +60,25 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference factoryReset = findPreference(getString(R.string.prefs_admin_factory_reset));
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
+
+        if (serverUpdatesCat != null && serverUpdates != null) {
+            if (VersionUtils.isSupported("1.2.5")) {
+                serverUpdates.setOnPreferenceClickListener(preference -> {
+                    if (getActivity() != null) {
+                        final FragmentManager fm = getActivity().getSupportFragmentManager();
+                        final FragmentTransaction ft = fm.beginTransaction();
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .replace(android.R.id.content, new ServerUpdateFragment())
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                    return true;
+                });
+            } else {
+                serverUpdatesCat.setEnabled(false);
+                serverUpdatesCat.setSummary(getString(R.string.disabled_option_settings, "1.2.5"));
+            }
+        }
 
         if (backupRestore != null) {
             if (VersionUtils.isSupported("1.2.2")) {
@@ -217,7 +238,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                         this, type);
                 adminDialog.showDialog();
             } else {
-                AlertUtils.createErrorAlert(getActivity(), R.string.prefs_not_connected, false);
+                AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
             }
         }
     }

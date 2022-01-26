@@ -5,26 +5,26 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_history">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_history_auto"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_auto"
             app:title="@string/settings_history_auto" />
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_history_clear"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_clear"
             app:title="@string/settings_history_clear" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_display"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_display"
             app:title="@string/settings_history_display"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_points"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_points"

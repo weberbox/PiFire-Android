@@ -136,7 +136,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                 }
                 backupRestore.showDialog();
             } else {
-                AlertUtils.createErrorAlert(getActivity(), R.string.prefs_not_connected, false);
+                AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
             }
         }
     }
@@ -192,7 +192,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
             mSocket.emit(ServerConstants.UPDATE_RESTORE_DATA, type, fileName, (Ack) args -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (args[0] != null) {
+                        if (args.length > 0 && args[0] != null) {
                             if (args[0].toString().equalsIgnoreCase("success")) {
                                 AlertUtils.createAlert(getActivity(), R.string.restore_success,
                                         1000);
@@ -214,7 +214,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                         jsonData, (Ack) args -> {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
-                                    if (args[0] != null) {
+                                    if (args.length > 0 && args[0] != null) {
                                         if (args[0].toString().equalsIgnoreCase("success")) {
                                             AlertUtils.createAlert(getActivity(),
                                                     R.string.restore_success, 1000);
@@ -232,7 +232,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
 
     private void requestBackupData(Socket socket, String backupType) {
         socket.emit(ServerConstants.REQUEST_BACKUP_DATA, backupType, (Ack) args -> {
-            if (getActivity() != null && args[0] != null) {
+            if (getActivity() != null && args.length > 0 && args[0] != null) {
                 mJsonData = args[0].toString();
                 String currentTime = TimeUtils.getFormattedDate(System.currentTimeMillis(),
                         "MM-dd-yy_hhmmss");
@@ -257,17 +257,19 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         socket.emit(ServerConstants.REQUEST_BACKUP_LIST, backupType, (Ack) args -> {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    ArrayList<String> fileNames = new ArrayList<>();
-                    try {
-                        JSONArray jsonArray = new JSONArray(args[0].toString());
-                        for (int i = 0 ; i < jsonArray.length() ; i++){
-                            fileNames.add(jsonArray.getString(i));
+                    if (args.length > 0 && args[0] != null) {
+                        ArrayList<String> fileNames = new ArrayList<>();
+                        try {
+                            JSONArray jsonArray = new JSONArray(args[0].toString());
+                            for (int i = 0 ; i < jsonArray.length() ; i++){
+                                fileNames.add(jsonArray.getString(i));
+                            }
+                            restoreDialog.populateList(fileNames);
+                        } catch (JSONException e) {
+                            Timber.w(e, "Failed to create file list");
+                            restoreDialog.dismiss();
+                            AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed, false);
                         }
-                        restoreDialog.populateList(fileNames);
-                    } catch (JSONException e) {
-                        Timber.w(e, "Failed to create file list");
-                        restoreDialog.dismiss();
-                        AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed, false);
                     }
                 });
             }
@@ -323,7 +325,8 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                         Uri fileUri = data.getData();
                         if (getActivity() != null) {
                             try {
-                                InputStream is = getActivity().getContentResolver().openInputStream(fileUri);
+                                InputStream is = getActivity().getContentResolver()
+                                        .openInputStream(fileUri);
                                 if (is != null) {
                                     String jsonData = StringUtils.streamToString(is);
                                     is.close();
@@ -348,7 +351,8 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                         Uri fileUri = data.getData();
                         if (getActivity() != null) {
                             try {
-                                OutputStream os = getActivity().getContentResolver().openOutputStream(fileUri);
+                                OutputStream os = getActivity().getContentResolver()
+                                        .openOutputStream(fileUri);
                                 if (os != null ) {
                                     os.write(mJsonData.getBytes());
                                     os.close();

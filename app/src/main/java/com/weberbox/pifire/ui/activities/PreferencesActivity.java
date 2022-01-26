@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.interfaces.SettingsCallback;
@@ -43,6 +44,14 @@ public class PreferencesActivity extends BaseActivity {
 
         if (savedInstanceState == null) {
             startSettingsFragment(fragment);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Alerter.isShowing()) {
+            Alerter.hide();
         }
     }
 

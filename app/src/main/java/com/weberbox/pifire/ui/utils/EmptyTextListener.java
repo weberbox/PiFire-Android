@@ -1,4 +1,4 @@
-package com.weberbox.pifire.ui.preferences;
+package com.weberbox.pifire.ui.utils;
 
 import android.content.Context;
 import android.text.Editable;

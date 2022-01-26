@@ -18,6 +18,15 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="TextAllerDialog" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/aller_font_family</item>
+        <item name="fontFamily">@font/aller_font_family</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="Text18AllerNormal" parent="@style/Text18Aller">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>

@@ -78,9 +78,12 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_MANUAL_DATA, (Ack) args ->
+            mSocket.emit(ServerConstants.REQUEST_MANUAL_DATA, (Ack) args -> {
+                if (args.length > 0 && args[0] != null) {
                     getActivity().runOnUiThread(() ->
-                            updateManualSettings(args[0].toString())));
+                            updateManualSettings(args[0].toString()));
+                }
+            });
         }
 
         getPreferenceScreen().getSharedPreferences()

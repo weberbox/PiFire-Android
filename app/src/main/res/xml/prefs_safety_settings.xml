@@ -6,21 +6,21 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_safety">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_min_start"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_min_start"
             app:title="@string/settings_safety_min_start"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_start"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_start"
             app:title="@string/settings_safety_max_start"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_safety_retries"
             app:entries="@array/reignite_retries"
             app:entryValues="@array/reignite_retries"
@@ -29,7 +29,7 @@
             app:title="@string/settings_safety_retries"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_temp"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_temp"

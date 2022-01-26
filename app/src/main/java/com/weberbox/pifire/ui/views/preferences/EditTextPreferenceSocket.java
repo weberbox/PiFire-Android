@@ -1,10 +1,10 @@
-package com.weberbox.pifire.ui.preferences;
+package com.weberbox.pifire.ui.views.preferences;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.preference.SwitchPreferenceCompat;
+import androidx.preference.EditTextPreference;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -13,27 +13,27 @@ import com.weberbox.pifire.utils.AlertUtils;
 import io.socket.client.Socket;
 
 @SuppressWarnings("unused")
-public class SwitchPreferenceCompatSocket extends SwitchPreferenceCompat {
+public class EditTextPreferenceSocket extends EditTextPreference {
 
     private Socket mSocket;
     private Context mContext;
 
-    public SwitchPreferenceCompatSocket(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public EditTextPreferenceSocket(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
 
-    public SwitchPreferenceCompatSocket(Context context, AttributeSet attrs, int defStyleAttr) {
+    public EditTextPreferenceSocket(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    public SwitchPreferenceCompatSocket(Context context, AttributeSet attrs) {
+    public EditTextPreferenceSocket(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public SwitchPreferenceCompatSocket(Context context) {
+    public EditTextPreferenceSocket(Context context) {
         super(context);
         init(context);
     }
@@ -49,7 +49,7 @@ public class SwitchPreferenceCompatSocket extends SwitchPreferenceCompat {
         if (mSocket != null && mSocket.connected()) {
             super.onClick();
         } else {
-            AlertUtils.createErrorAlert((Activity) mContext, R.string.prefs_not_connected, false);
+            AlertUtils.createErrorAlert((Activity) mContext, R.string.settings_error_offline, false);
         }
     }
 }

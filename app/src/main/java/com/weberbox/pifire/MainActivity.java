@@ -27,6 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.discord.panels.OverlappingPanelsLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
@@ -257,6 +258,9 @@ public class MainActivity extends BaseActivity {
         if (mAppUpdater != null) {
             mAppUpdater.stop();
         }
+        if (Alerter.isShowing()) {
+            Alerter.hide();
+        }
     }
 
     @Override
@@ -366,7 +370,9 @@ public class MainActivity extends BaseActivity {
     private final Emitter.Listener updateGrillData = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            mMainViewModel.setDashData(args[0].toString());
+            if (args.length > 0 && args[0] != null) {
+                mMainViewModel.setDashData(args[0].toString());
+            }
         }
     };
 

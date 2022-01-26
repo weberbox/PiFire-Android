@@ -5,7 +5,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_grill_name">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_name"
             app:title="@string/settings_grill_name"

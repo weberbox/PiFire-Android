@@ -7,7 +7,7 @@
         app:key="@string/prefs_notif_onesignal_cat"
         app:title="@string/settings_cat_onesignal">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_onesignal_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_onesignal_enabled"
@@ -25,13 +25,13 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_ifttt">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_api"
@@ -44,27 +44,27 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pushover">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_api"
             app:title="@string/settings_pushover_api"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_keys"
             app:summary="@string/settings_pushover_note"
             app:title="@string/settings_pushover_keys" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_url"
@@ -77,20 +77,20 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pushbullet">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_api"
             app:title="@string/settings_pushbullet_api"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_url"
@@ -103,34 +103,34 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_influxdb">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_influxdb_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_url"
             app:title="@string/settings_influxdb_url"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_token"
             app:title="@string/settings_influxdb_token"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_org"
             app:title="@string/settings_influxdb_org"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_bucket"

@@ -203,7 +203,7 @@ public class InfoFragment extends Fragment {
 
     private void forceRefreshData() {
         mSocket.emit(ServerConstants.REQUEST_INFO_DATA, (Ack) args -> {
-            if (mMainViewModel != null) {
+            if (mMainViewModel != null && args.length > 0 && args[0] != null) {
                 mMainViewModel.setInfoData(args[0].toString(), true);
             }
         });
@@ -217,11 +217,11 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void updateUIWithData(String response_data) {
+    private void updateUIWithData(String responseData) {
 
         try {
 
-            InfoResponseModel infoResponseModel = InfoResponseModel.parseJSON(response_data);
+            InfoResponseModel infoResponseModel = InfoResponseModel.parseJSON(responseData);
 
             List<String> cpuInfo = infoResponseModel.getCpuInfo();
             String cpuTemp = infoResponseModel.getTemp();

@@ -217,7 +217,7 @@ public class HistoryFragment extends Fragment {
         if (mSocket != null && mSocket.connected()) {
             mIsLoading = true;
             mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
+                if (mMainViewModel != null && args.length > 0 && args[0] != null) {
                     mMainViewModel.setHistoryData(args[0].toString(), true);
                 }
             });
@@ -266,12 +266,12 @@ public class HistoryFragment extends Fragment {
         }
     };
 
-    private void updateUIWithData(String response_data) {
+    private void updateUIWithData(String responseData) {
         mIsLoading = false;
 
         try {
 
-            HistoryModel historyModel = HistoryModel.parseJSON(response_data);
+            HistoryModel historyModel = HistoryModel.parseJSON(responseData);
 
             List<String> timeList = historyModel.getLabelTimeList();
             List<Double> grillSetTemp = historyModel.getGrillSetTempList();

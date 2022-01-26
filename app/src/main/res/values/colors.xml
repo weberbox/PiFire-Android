@@ -24,6 +24,9 @@
     <color name="colorNote">#DDC701</color>
     <color name="colorWarning">#BA0101</color>
     <color name="colorRedButton">#A50202</color>
+    <color name="colorNoUpdate">#C7ECF3</color>
+    <color name="colorUpdateAvailable">#11F402</color>
+    <color name="colorUpdateError">#C13B3B</color>
 
     <color name="colorPelletDanger">#C8B10000</color>
     <color name="colorPelletDangerBG">#70B62929</color>

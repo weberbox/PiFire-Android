@@ -110,7 +110,7 @@ public class OneSignalUtils {
                             ServerConstants.NOTIF_ONESIGNAL_APP_VERSION,
                             deviceInfo.getAppVersion()),
                     (Ack) args -> {
-                        if (args[0] != null) {
+                        if (args.length > 0 && args[0] != null) {
                             if (args[0].toString().equalsIgnoreCase("success")) {
                                 new SettingsUtils(context, settingsCallback)
                                         .requestSettingsData(socket);

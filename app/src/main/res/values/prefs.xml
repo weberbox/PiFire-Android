@@ -113,6 +113,9 @@
     <string name="prefs_notif_influxdb_org">prefs_notif_influxdb_org</string>
     <string name="prefs_notif_influxdb_bucket">prefs_notif_influxdb_bucket</string>
 
+    <string name="prefs_server_cat_updates">prefs_server_cat_updates</string>
+    <string name="prefs_server_updates_frag">prefs_server_updates_frag</string>
+
     <string name="prefs_admin_debug">prefs_admin_debug</string>
     <string name="prefs_admin_backup_restore">prefs_admin_backup_restore</string>
     <string name="prefs_admin_backup_settings">prefs_admin_backup_settings</string>

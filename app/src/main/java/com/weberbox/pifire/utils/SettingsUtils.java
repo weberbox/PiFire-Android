@@ -44,8 +44,11 @@ public class SettingsUtils {
 
     public void requestSettingsData(Socket socket) {
         if (socket != null && socket.connected()) {
-            socket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args ->
-                    mCallback.onSettingsResult(updateSettingsData(args[0].toString())));
+            socket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args -> {
+                if (args.length > 0 && args[0] != null) {
+                    mCallback.onSettingsResult(updateSettingsData(args[0].toString()));
+                }
+            });
         }
     }
 

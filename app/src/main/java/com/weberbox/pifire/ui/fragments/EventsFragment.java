@@ -154,7 +154,7 @@ public class EventsFragment extends Fragment {
 
     private void forceRefreshData() {
         mSocket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
-            if (mMainViewModel != null) {
+            if (mMainViewModel != null && args.length > 0 && args[0] != null) {
                 mMainViewModel.setEventsData(args[0].toString(), true);
             }
         });
@@ -168,11 +168,11 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    private void updateUIWithData(String response_data) {
+    private void updateUIWithData(String responseData) {
         mEvents.clear();
 
         try {
-            JSONObject rootObject = new JSONObject(response_data);
+            JSONObject rootObject = new JSONObject(responseData);
             JSONArray array = rootObject.getJSONArray(ServerConstants.EVENTS_LIST);
 
             int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount),
