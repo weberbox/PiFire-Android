@@ -17,7 +17,7 @@
 
         <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@+id/recipe_item_view_checkbox"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -29,7 +29,7 @@
             android:paddingStart="45dp"
             android:paddingEnd="5dp"
             android:textStyle="normal"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:gravity="start|center"
             android:text="@string/placeholder_text_view" />
 

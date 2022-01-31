@@ -22,7 +22,7 @@
             app:headerLayout="@layout/layout_nav_header_left"
             app:itemBackground="@drawable/bg_nav_item_selector"
             app:itemIconTint="@drawable/bg_nav_text_selected"
-            app:itemTextAppearance="@style/Text15Aller"
+            app:itemTextAppearance="@style/Text15AllerBold"
             app:itemTextColor="@drawable/bg_nav_text_selected"
             app:menu="@menu/activity_main_drawer" />
 

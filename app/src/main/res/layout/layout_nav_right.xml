@@ -36,7 +36,7 @@
 
                     <TextView
                         android:id="@+id/settings_app"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
@@ -44,7 +44,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_app")}'
+                        android:onClick='@{() -> callback.onClickAppSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -54,14 +54,14 @@
 
                     <TextView
                         android:id="@+id/settings_probe"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_probes")}'
+                        android:onClick='@{() -> callback.onClickProbeSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -71,14 +71,14 @@
 
                     <TextView
                         android:id="@+id/settings_name"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_name")}'
+                        android:onClick='@{() -> callback.onClickNameSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -88,14 +88,14 @@
 
                     <TextView
                         android:id="@+id/settings_work"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_work")}'
+                        android:onClick='@{() -> callback.onClickWorkSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -105,14 +105,14 @@
 
                     <TextView
                         android:id="@+id/settings_pellet"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_pellets")}'
+                        android:onClick='@{() -> callback.onClickPelletSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -122,14 +122,14 @@
 
                     <TextView
                         android:id="@+id/settings_shutdown"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_shutdown")}'
+                        android:onClick='@{() -> callback.onClickTimersSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -139,14 +139,14 @@
 
                     <TextView
                         android:id="@+id/settings_history"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_history")}'
+                        android:onClick='@{() -> callback.onClickHistorySettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -156,14 +156,14 @@
 
                     <TextView
                         android:id="@+id/settings_safety"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_safety")}'
+                        android:onClick='@{() -> callback.onClickSafetySettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -173,14 +173,14 @@
 
                     <TextView
                         android:id="@+id/settings_notifications"
-                        style="@style/Text15AllerNormal"
+                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.settingsOnClick("db_set_notif")}'
+                        android:onClick='@{() -> callback.onClickNotificationsSettings()}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -189,164 +189,7 @@
                         app:drawableStartCompat="@drawable/ic_settings_notification" />
 
                 </LinearLayout>
-
             </ScrollView>
-
-            <!--<TextView
-                android:id="@+id/settings_app"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_app")}'
-                android:layout_marginTop="5dp"
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_app"
-                app:drawableStartCompat="@drawable/ic_settings_app" />
-
-            <TextView
-                android:id="@+id/settings_probe"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_probes")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_probe"
-                app:drawableStartCompat="@drawable/ic_grill_probe" />
-
-            <TextView
-                android:id="@+id/settings_name"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_name")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_grill_name"
-                app:drawableStartCompat="@drawable/ic_grill" />
-
-            <TextView
-                android:id="@+id/settings_work"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_work")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_work"
-                app:drawableStartCompat="@drawable/ic_settings_work" />
-
-            <TextView
-                android:id="@+id/settings_pellet"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_pellets")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_pellets"
-                app:drawableStartCompat="@drawable/ic_grill_pellets" />
-
-            <TextView
-                android:id="@+id/settings_shutdown"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_shutdown")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_timers"
-                app:drawableStartCompat="@drawable/ic_grill_shutdown" />
-
-            <TextView
-                android:id="@+id/settings_history"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_history")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_history"
-                app:drawableStartCompat="@drawable/ic_menu_history" />
-
-            <TextView
-                android:id="@+id/settings_safety"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_safety")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_safety"
-                app:drawableStartCompat="@drawable/ic_settings_safety" />
-
-            <TextView
-                android:id="@+id/settings_notifications"
-                style="@style/Text15AllerNormal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:clickable="true"
-                android:drawablePadding="@dimen/default_spacing"
-                android:focusable="true"
-                android:onClick='@{() -> callback.settingsOnClick("db_set_notif")}'
-                android:paddingStart="25dp"
-                android:paddingTop="20dp"
-                android:paddingEnd="@dimen/settings_list_items"
-                android:paddingBottom="@dimen/settings_list_items"
-                android:text="@string/settings_notifications"
-                app:drawableStartCompat="@drawable/ic_settings_notification" /> -->
-
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

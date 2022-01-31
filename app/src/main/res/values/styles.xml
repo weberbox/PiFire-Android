@@ -6,70 +6,60 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/knockout_regular</item>
     </style>
+
     <style name="Text24Knockout" parent="@style/Text20Knockout">
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="Text18Aller" parent="@style/TextAppearance.AppCompat.Title">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/aller_font_family</item>
-        <item name="fontFamily">@font/aller_font_family</item>
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
-    <style name="TextAllerDialog" parent="@style/TextAppearance.AppCompat.Title">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">@font/aller_font_family</item>
-        <item name="fontFamily">@font/aller_font_family</item>
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
-    <style name="Text18AllerNormal" parent="@style/Text18Aller">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/aller_font_family</item>
-        <item name="fontFamily">@font/aller_font_family</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
     <style name="Text14Aller" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:fontFamily">@font/aller_font_family</item>
         <item name="fontFamily">@font/aller_font_family</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
-    <style name="Text15Aller" parent="@style/TextAppearance.AppCompat.Title">
-        <item name="android:textSize">15sp</item>
+    <style name="Text14AllerBold" parent="@style/Text14Aller">
         <item name="android:textStyle">bold</item>
-        <item name="android:fontFamily">@font/aller_font_family</item>
-        <item name="fontFamily">@font/aller_font_family</item>
-        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
-    <style name="Text15AllerNormal" parent="@style/Text15Aller">
+    <style name="Text15Aller" parent="@style/Text14Aller">
         <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Text15AllerBold" parent="@style/Text15Aller">
         <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/aller_font_family</item>
-        <item name="fontFamily">@font/aller_font_family</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="Text15AllerCaps" parent="@style/Text15AllerBold">
+        <item name="android:textAllCaps">true</item>
+        <item name="textAllCaps">true</item>
     </style>
 
     <style name="Text16Aller" parent="@style/Text15Aller">
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="Text16AllerBold" parent="@style/Text16Aller">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="Text16AllerAlpha" parent="@style/Text16Aller">
-        <item name="android:textStyle">normal</item>
         <item name="android:textColor">#a6ffffff</item>
+    </style>
+
+    <style name="Text18Aller" parent="@style/Text14Aller">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text18AllerNormal" parent="@style/Text18Aller">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Text18AllerBold" parent="@style/Text18Aller">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextTransparent" parent="@style/TextAppearance.AppCompat.Title">
@@ -96,6 +86,7 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/knockout_regular</item>
     </style>
+
     <style name="MainButtonAccent" parent="@style/MainButtonPrimary">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:background">@drawable/bg_main_button_accent_selector</item>
@@ -103,8 +94,6 @@
 
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
-<!--        <item name="android:navigationBarColor">@color/colorPrimary</item>-->
-<!--        <item name="android:windowIsFloating">false</item>-->
     </style>
 
     <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
@@ -124,6 +113,11 @@
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyleMaterial</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyleMaterial</item>
         <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyleMaterial</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
     </style>
 
     <style name="NegativeButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -177,7 +171,7 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
-        <item name="titleTextStyle">@style/Text18Aller</item>
+        <item name="titleTextStyle">@style/Text18AllerBold</item>
     </style>
 
     <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
@@ -194,6 +188,81 @@
         <item name="cornerSizeTopRight">10dp</item>
         <item name="cornerSizeBottomRight">10dp</item>
         <item name="cornerSizeBottomLeft">10dp</item>
+    </style>
+
+    <style name="Theme.MaterialDialog" parent="Theme.MaterialComponents.Light">
+        <item name="android:fontFamily">@font/aller_regular</item>
+    </style>
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_dialog</item>
+        <item name="android:layout_margin">8dp</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
+    <style name="MaterialDialog">
+        <item name="android:fontFamily">@font/aller_regular</item>
+    </style>
+
+    <style name="MaterialDialog.IconButtonText">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="MaterialDialog.Title">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/material_dialog_title_text_color</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:textSize">@dimen/text_title_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="MaterialDialog.Message">
+        <item name="android:textSize">@dimen/text_message_size</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textColor">@color/material_dialog_message_text_color</item>
+    </style>
+
+    <style name="MaterialDialog.PositiveButton" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MaterialDialog.NegativeButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="MaterialDialog.Positive.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="MaterialDialog.Negative.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:letterSpacing">0.025</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/material_dialog_negative_text_color</item>
     </style>
 
 </resources>

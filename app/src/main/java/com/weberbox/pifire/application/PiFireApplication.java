@@ -25,7 +25,7 @@ import timber.log.Timber;
 
 public class PiFireApplication extends Application {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreate() {
@@ -38,14 +38,19 @@ public class PiFireApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
-        if (!AppConfig.DEBUG) {
-            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
-            CrashUtils.initCrashReporting(this,
-                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
-            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
-        } else {
-            Timber.plant(new DebugLogTree());
-        }
+//        if (!AppConfig.DEBUG) {
+//            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+//            CrashUtils.initCrashReporting(this,
+//                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
+//            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+//        } else {
+//            Timber.plant(new DebugLogTree());
+//        }
+
+        Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+        CrashUtils.initCrashReporting(this,
+                Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
+        CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
 
         Timber.tag(getString(R.string.app_name));
 
@@ -60,10 +65,10 @@ public class PiFireApplication extends Application {
     }
 
     public Socket getSocket() {
-        if (mSocket == null) {
-            return mSocket = startSocket();
+        if (socket == null) {
+            return socket = startSocket();
         }
-        return mSocket;
+        return socket;
     }
 
     private Socket startSocket() {
@@ -91,12 +96,12 @@ public class PiFireApplication extends Application {
     }
 
     public void disconnectSocket() {
-        if (mSocket != null) {
+        if (socket != null) {
             Timber.i("Closing Socket");
-            mSocket.disconnect();
-            mSocket.close();
-            mSocket.off();
-            mSocket = null;
+            socket.disconnect();
+            socket.close();
+            socket.off();
+            socket = null;
         }
     }
 

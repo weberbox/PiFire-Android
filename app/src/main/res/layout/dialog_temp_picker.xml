@@ -65,7 +65,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/probe_shutdown_text"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/small_spacing"

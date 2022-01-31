@@ -29,7 +29,7 @@
                 android:paddingStart="@dimen/default_spacing"
                 android:paddingTop="@dimen/default_spacing"
                 android:paddingEnd="@dimen/default_spacing"
-                android:paddingBottom="@dimen/small_spacing">
+                android:paddingBottom="4dp">
 
                 <TextView
                     style="@style/Text16Aller"
@@ -54,14 +54,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/grill_status_container"
-                android:layout_marginTop="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/medium_spacing"
                 android:background="@drawable/bg_ripple_smokep_disabled"
                 android:clickable="true"
                 android:enabled="false"
                 android:focusable="true"
                 android:orientation="vertical"
                 android:padding="@dimen/default_spacing">
-
 
                 <TextView
                     style="@style/Text16Aller"

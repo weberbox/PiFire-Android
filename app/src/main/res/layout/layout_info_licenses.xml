@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/licenses_card_header">
 
             <TextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_spacing"
@@ -43,7 +43,7 @@
                 android:textStyle="normal" />
 
             <TextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_spacing"

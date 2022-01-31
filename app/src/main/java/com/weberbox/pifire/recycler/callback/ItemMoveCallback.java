@@ -9,10 +9,10 @@ import com.weberbox.pifire.recycler.adapter.RecipeEditAdapter;
 
 public class ItemMoveCallback extends ItemTouchHelper.Callback {
 
-    private final ItemTouchHelperCallback mAdapter;
+    private final ItemTouchHelperCallback adapter;
 
     public ItemMoveCallback(ItemTouchHelperCallback adapter) {
-        mAdapter = adapter;
+        this.adapter = adapter;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ItemMoveCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
-        mAdapter.onRowMoved(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
+        adapter.onRowMoved(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }
 
@@ -53,7 +53,7 @@ public class ItemMoveCallback extends ItemTouchHelper.Callback {
             if (viewHolder instanceof RecipeEditAdapter.ViewHolder) {
                 RecipeEditAdapter.ViewHolder myViewHolder =
                         (RecipeEditAdapter.ViewHolder) viewHolder;
-                mAdapter.onRowSelected(myViewHolder);
+                adapter.onRowSelected(myViewHolder);
             }
 
         }
@@ -69,7 +69,7 @@ public class ItemMoveCallback extends ItemTouchHelper.Callback {
         if (viewHolder instanceof RecipeEditAdapter.ViewHolder) {
             RecipeEditAdapter.ViewHolder myViewHolder =
                     (RecipeEditAdapter.ViewHolder) viewHolder;
-            mAdapter.onRowClear(myViewHolder);
+            adapter.onRowClear(myViewHolder);
         }
     }
 }

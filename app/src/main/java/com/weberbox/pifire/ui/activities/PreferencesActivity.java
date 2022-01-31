@@ -48,14 +48,6 @@ public class PreferencesActivity extends BaseActivity {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (Alerter.isShowing()) {
-            Alerter.hide();
-        }
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;

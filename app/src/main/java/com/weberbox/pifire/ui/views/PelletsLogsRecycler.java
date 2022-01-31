@@ -20,11 +20,11 @@ import com.weberbox.pifire.databinding.LayoutPelletsLogsBinding;
 @SuppressWarnings("unused")
 public class PelletsLogsRecycler extends CardView {
 
-    private VeilRecyclerFrameView mRecyclerView;
-    private TextView mHeaderTitle;
-    private ImageView mHeaderIcon;
-    private View mGradient;
-    private TextView mViewAllButton;
+    private VeilRecyclerFrameView recyclerView;
+    private TextView headerTitle;
+    private ImageView headerIcon;
+    private View gradient;
+    private TextView viewAllButton;
 
     public PelletsLogsRecycler(@NonNull Context context) {
         super(context);
@@ -49,52 +49,52 @@ public class PelletsLogsRecycler extends CardView {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PelletsLogsRecycler);
 
             String headerText = typedArray.getString(R.styleable.PelletsLogsRecycler_logs_header_title);
-            int headerIcon = typedArray.getResourceId(R.styleable.PelletsLogsRecycler_logs_header_icon,
+            int headerIconArray = typedArray.getResourceId(R.styleable.PelletsLogsRecycler_logs_header_icon,
                     R.drawable.ic_menu_history);
 
             headerText = headerText == null ? "" : headerText;
 
-            mHeaderTitle = binding.logsHeaderText;
-            mHeaderIcon = binding.logsHeaderIcon;
-            mRecyclerView = binding.logsRecycler;
-            mGradient = binding.logsViewAllShadow;
-            mViewAllButton = binding.logsViewAll;
+            headerTitle = binding.logsHeaderText;
+            headerIcon = binding.logsHeaderIcon;
+            recyclerView = binding.logsRecycler;
+            gradient = binding.logsViewAllShadow;
+            viewAllButton = binding.logsViewAll;
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            mRecyclerView.setNestedScrollingEnabled(false);
-            mRecyclerView.addVeiledItems(3);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setNestedScrollingEnabled(false);
+            recyclerView.addVeiledItems(3);
 
 
-            mHeaderTitle.setText(headerText);
-            mHeaderIcon.setImageResource(headerIcon);
+            headerTitle.setText(headerText);
+            headerIcon.setImageResource(headerIconArray);
 
             typedArray.recycle();
         }
     }
 
     public String getHeaderTitle() {
-        return mHeaderTitle.getText().toString();
+        return headerTitle.getText().toString();
     }
 
     public void setHeaderTitle(String text) {
-        mHeaderTitle.setText(text);
+        headerTitle.setText(text);
     }
 
     public void setHeaderIcon(int icon) {
-        mHeaderIcon.setImageResource(icon);
+        headerIcon.setImageResource(icon);
     }
 
     public VeilRecyclerFrameView getRecycler() {
-        return mRecyclerView;
+        return recyclerView;
     }
 
     public void setViewAll(boolean shown) {
-        mGradient.setVisibility(shown ? VISIBLE : GONE);
-        mViewAllButton.setVisibility(shown ? VISIBLE : GONE);
+        gradient.setVisibility(shown ? VISIBLE : GONE);
+        viewAllButton.setVisibility(shown ? VISIBLE : GONE);
     }
 
     public TextView getViewAllButton() {
-        return mViewAllButton;
+        return viewAllButton;
     }
 
 }

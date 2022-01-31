@@ -43,24 +43,24 @@ import java.util.List;
 
 public class RecipeViewFragment extends Fragment {
 
-    private FragmentRecipeViewBinding mBinding;
-    private RecipeViewAdapter mInstructionsAdapter;
-    private RecipeViewAdapter mIngredientsAdapter;
-    private RecipeDatabase mDb;
-    private RecipesModel mRecipe;
-    private FloatingActionButton mFloatingActionButton;
-    private LinearLayout mIngredientsContainer;
-    private LinearLayout mInstructionsContainer;
-    private LinearLayout mNotesContainer;
-    private RatingBar mRecipeRating;
-    private TextView mRecipeName;
-    private TextView mRecipeTime;
-    private TextView mRecipeDifficulty;
-    private TextView mRecipeCreated;
-    private TextView mRecipeModified;
-    private TextView mRecipeNotes;
-    private ImageView mRecipeImage;
-    private int mRecipeId;
+    private FragmentRecipeViewBinding binding;
+    private RecipeViewAdapter instructionsAdapter;
+    private RecipeViewAdapter ingredientsAdapter;
+    private RecipeDatabase recipeDB;
+    private RecipesModel recipe;
+    private FloatingActionButton floatingActionButton;
+    private LinearLayout ingredientsContainer;
+    private LinearLayout instructionsContainer;
+    private LinearLayout notesContainer;
+    private RatingBar recipeRating;
+    private TextView recipeName;
+    private TextView recipeTime;
+    private TextView recipeDifficulty;
+    private TextView recipeCreated;
+    private TextView recipeModified;
+    private TextView recipeNotes;
+    private ImageView recipeImage;
+    private int recipeId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,70 +68,70 @@ public class RecipeViewFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            mRecipeId = bundle.getInt(Constants.INTENT_RECIPE_ID, -1);
+            recipeId = bundle.getInt(Constants.INTENT_RECIPE_ID, -1);
         }
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
-            mDb = RecipeDatabase.getInstance(getActivity().getApplicationContext());
+            recipeDB = RecipeDatabase.getInstance(getActivity().getApplicationContext());
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentRecipeViewBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentRecipeViewBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecipeImage = mBinding.rvImage;
-        mRecipeName = mBinding.rvName;
-        mRecipeRating = mBinding.rvRating;
-        mRecipeTime = mBinding.rvTime;
-        mRecipeDifficulty = mBinding.rvDifficulty;
-        mRecipeCreated = mBinding.rvCreated;
-        mRecipeModified = mBinding.rvModified;
-        mIngredientsContainer = mBinding.rvIngredientsContainer;
-        mInstructionsContainer = mBinding.rvInstructionsContainer;
-        mNotesContainer = mBinding.rvNotesContainer;
-        mRecipeNotes = mBinding.rvNotes;
+        recipeImage = binding.rvImage;
+        recipeName = binding.rvName;
+        recipeRating = binding.rvRating;
+        recipeTime = binding.rvTime;
+        recipeDifficulty = binding.rvDifficulty;
+        recipeCreated = binding.rvCreated;
+        recipeModified = binding.rvModified;
+        ingredientsContainer = binding.rvIngredientsContainer;
+        instructionsContainer = binding.rvInstructionsContainer;
+        notesContainer = binding.rvNotesContainer;
+        recipeNotes = binding.rvNotes;
 
-        mFloatingActionButton = mBinding.fabEditRecipe;
+        floatingActionButton = binding.fabEditRecipe;
 
-        mBinding.rvScrollView.setOnScrollChangeListener(scrollListener);
+        binding.rvScrollView.setOnScrollChangeListener(scrollListener);
 
-        RecyclerView instructionsRecycler = mBinding.rvInstructionsRecycler;
-        RecyclerView ingredientsRecycler = mBinding.rvIngredientsRecycler;
+        RecyclerView instructionsRecycler = binding.rvInstructionsRecycler;
+        RecyclerView ingredientsRecycler = binding.rvIngredientsRecycler;
 
-        mInstructionsAdapter = new RecipeViewAdapter(new ArrayList<>());
-        instructionsRecycler.setAdapter(mInstructionsAdapter);
+        instructionsAdapter = new RecipeViewAdapter(new ArrayList<>());
+        instructionsRecycler.setAdapter(instructionsAdapter);
         instructionsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        mIngredientsAdapter = new RecipeViewAdapter(new ArrayList<>());
-        ingredientsRecycler.setAdapter(mIngredientsAdapter);
+        ingredientsAdapter = new RecipeViewAdapter(new ArrayList<>());
+        ingredientsRecycler.setAdapter(ingredientsAdapter);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        mRecipeRating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
-            if (mRecipe != null && mRecipeId != -1 && fromUser) {
-                mRecipe.setRating(String.valueOf(rating));
+        recipeRating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            if (recipe != null && recipeId != -1 && fromUser) {
+                recipe.setRating(String.valueOf(rating));
                 updateRecipe();
             }
         });
 
-        mRecipeImage.setOnClickListener(v -> {
-            if (getActivity() != null && mRecipe != null && mRecipe.getImage() != null) {
-                ImageViewDialog dialog = new ImageViewDialog(getActivity(), mRecipe.getImage());
+        recipeImage.setOnClickListener(v -> {
+            if (getActivity() != null && recipe != null && recipe.getImage() != null) {
+                ImageViewDialog dialog = new ImageViewDialog(getActivity(), recipe.getImage());
                 dialog.showDialog();
             }
         });
 
-        mFloatingActionButton.setOnClickListener(v -> {
+        floatingActionButton.setOnClickListener(v -> {
             if (getActivity() != null) {
                 RecipeEditFragment fragment = new RecipeEditFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(Constants.INTENT_RECIPE_ID, mRecipe.getId());
+                bundle.putInt(Constants.INTENT_RECIPE_ID, recipe.getId());
                 fragment.setArguments(bundle);
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
                 final FragmentTransaction ft = fm.beginTransaction();
@@ -142,9 +142,9 @@ public class RecipeViewFragment extends Fragment {
             }
         });
 
-        if (mDb != null && mRecipeId != -1) {
+        if (recipeDB != null && recipeId != -1) {
             AppExecutors.getInstance().diskIO().execute(() -> {
-                RecipesModel recipe = mDb.recipeDao().loadRecipeById(mRecipeId);
+                RecipesModel recipe = recipeDB.recipeDao().loadRecipeById(recipeId);
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> updateUIWithData(recipe));
                 }
@@ -163,7 +163,7 @@ public class RecipeViewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
         clearForceScreenOn();
     }
 
@@ -187,37 +187,37 @@ public class RecipeViewFragment extends Fragment {
         String notes = recipe.getNotes();
         String image = recipe.getImage();
 
-        mRecipe = recipe;
+        this.recipe = recipe;
 
-        mRecipeName.setText(name);
+        recipeName.setText(name);
 
         if (image != null) loadRecipeImage(Uri.parse(image));
-        if (rating != null) mRecipeRating.setRating(Float.parseFloat(rating));
-        if (time != null) mRecipeTime.setText(time);
-        if (difficulty != null) mRecipeDifficulty.setText(difficulty);
-        if (created != null) mRecipeCreated.setText(created);
-        if (modified != null) mRecipeModified.setText(modified);
+        if (rating != null) recipeRating.setRating(Float.parseFloat(rating));
+        if (time != null) recipeTime.setText(time);
+        if (difficulty != null) recipeDifficulty.setText(difficulty);
+        if (created != null) recipeCreated.setText(created);
+        if (modified != null) recipeModified.setText(modified);
 
         if (ingredients != null && !ingredients.isEmpty()) {
             Type collectionType = new TypeToken<List<RecipeItems>>(){}.getType();
             List<RecipeItems> list  = new Gson().fromJson(ingredients, collectionType);
-            mIngredientsAdapter.setRecipeItems(list);
+            ingredientsAdapter.setRecipeItems(list);
         } else {
-            mIngredientsContainer.setVisibility(View.GONE);
+            ingredientsContainer.setVisibility(View.GONE);
         }
 
         if (instructions != null && !instructions.isEmpty()) {
             Type collectionType = new TypeToken<List<RecipeItems>>(){}.getType();
             List<RecipeItems> list  = new Gson().fromJson(instructions, collectionType);
-            mInstructionsAdapter.setRecipeItems(list);
+            instructionsAdapter.setRecipeItems(list);
         } else {
-            mInstructionsContainer.setVisibility(View.GONE);
+            instructionsContainer.setVisibility(View.GONE);
         }
 
         if (notes != null && !notes.isEmpty()) {
-            mRecipeNotes.setText(notes);
+            recipeNotes.setText(notes);
         } else {
-            mNotesContainer.setVisibility(View.GONE);
+            notesContainer.setVisibility(View.GONE);
         }
     }
 
@@ -234,9 +234,9 @@ public class RecipeViewFragment extends Fragment {
     }
 
     private void updateRecipe() {
-        if (mDb !=  null) {
+        if (recipeDB !=  null) {
             AppExecutors.getInstance().diskIO().execute(() ->
-                    mDb.recipeDao().update(mRecipe));
+                    recipeDB.recipeDao().update(recipe));
         }
     }
 
@@ -246,7 +246,7 @@ public class RecipeViewFragment extends Fragment {
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .placeholder(R.drawable.ic_recipe_placeholder)
                 .error(R.drawable.ic_recipe_placeholder_error)
-                .into(mRecipeImage);
+                .into(recipeImage);
     }
 
     private void showErrorAlert() {
@@ -267,14 +267,14 @@ public class RecipeViewFragment extends Fragment {
     private final OnScrollChangeListener scrollListener = (v, scrollX, scrollY,
                                                            oldScrollX, oldScrollY) -> {
         if (scrollY < oldScrollY) {
-            if (!mFloatingActionButton.isShown()) {
-                mFloatingActionButton.show();
+            if (!floatingActionButton.isShown()) {
+                floatingActionButton.show();
             }
         }
 
         if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-            if (mFloatingActionButton.isShown()) {
-                mFloatingActionButton.hide();
+            if (floatingActionButton.isShown()) {
+                floatingActionButton.hide();
             }
         }
     };

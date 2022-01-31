@@ -2,8 +2,8 @@ package com.weberbox.pifire.model.local;
 
 public class DataModel {
 
-    private String mLiveData;
-    private boolean mNewData = false;
+    private String liveData;
+    private boolean newData = false;
 
     public DataModel(String liveData, boolean newData) {
         setLiveData(liveData);
@@ -11,18 +11,18 @@ public class DataModel {
     }
 
     public String getLiveData() {
-        return mLiveData;
+        return liveData;
     }
 
     public void setLiveData(String liveData) {
-        this.mLiveData = liveData;
+        this.liveData = liveData;
     }
 
     public boolean getIsNewData() {
-        return mNewData;
+        return newData;
     }
 
     public void setIsNewData(final boolean newData) {
-        this.mNewData = newData;
+        this.newData = newData;
     }
 }

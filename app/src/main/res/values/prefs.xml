@@ -98,7 +98,6 @@
     <string name="prefs_notif_pushover_url">prefs_notif_pushover_url</string>
     <string name="prefs_notif_pushbullet_enabled">prefs_notif_pushbullet_enabled</string>
     <string name="prefs_notif_pushbullet_api">prefs_notif_pushbullet_api</string>
-    <string name="prefs_notif_pushbullet_channel">prefs_notif_pushbullet_channel</string>
     <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
     <string name="prefs_notif_onesignal_cat">prefs_notif_onesignal_cat</string>
     <string name="prefs_notif_onesignal_accepted">prefs_notif_onesignal_accepted</string>

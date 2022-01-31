@@ -12,10 +12,10 @@ import com.weberbox.pifire.R;
 
 public class AlertUtils {
 
-    private static boolean mOfflineDismissed = false;
+    private static boolean offlineDismissed = false;
 
     public static void toggleOfflineAlert(Activity activity, boolean connected) {
-        if (!Alerter.isShowing() && !connected && !mOfflineDismissed) {
+        if (!Alerter.isShowing() && !connected && !offlineDismissed) {
             createOfflineAlert(activity, offlineAlertListener);
         } else if (Alerter.isShowing() && connected) {
             Alerter.hide();
@@ -23,7 +23,7 @@ public class AlertUtils {
     }
 
     private static final OnHideAlertListener offlineAlertListener = () ->
-            mOfflineDismissed = true;
+            offlineDismissed = true;
 
     public static void createOfflineAlert(Activity activity) {
         Alerter.create(activity)
@@ -31,7 +31,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_grill_disconnected)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(true)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .show();
@@ -43,7 +43,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_grill_disconnected)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(true)
                 .setOnHideListener(listener)
                 .setIconSize(R.dimen.alerter_icon_size_small)
@@ -57,7 +57,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_error)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(infinite)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .show();
@@ -70,7 +70,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_error)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(infinite)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .show();
@@ -83,7 +83,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_menu_about)
                 .setBackgroundColorRes(R.color.colorPrimaryLighter)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(infinite)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .show();
@@ -95,7 +95,7 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_menu_about)
                 .setBackgroundColorRes(R.color.colorPrimaryLighter)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .setDuration(duration)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .show();
@@ -108,8 +108,8 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_error)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTitleAppearance(R.style.Text18Aller)
-                .setTextAppearance(R.style.Text14Aller)
+                .setTitleAppearance(R.style.Text18AllerBold)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(false)
                 .show();
     }
@@ -121,8 +121,8 @@ public class AlertUtils {
                 .setIcon(R.drawable.ic_error)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTitleAppearance(R.style.Text18Aller)
-                .setTextAppearance(R.style.Text14Aller)
+                .setTitleAppearance(R.style.Text18AllerBold)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(true)
                 .addButton(activity.getString(R.string.dismiss_button), R.style.AlerterButton, v -> {
                     Prefs.putBoolean(activity.getString(R.string.prefs_onesignal_consent_dismiss),

@@ -13,8 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
@@ -25,12 +23,13 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentInfoBinding;
 import com.weberbox.pifire.model.local.LicensesModel;
-import com.weberbox.pifire.model.remote.InfoResponseModel;
+import com.weberbox.pifire.model.remote.InfoDataModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.LicensesListAdapter;
+import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
@@ -48,74 +47,72 @@ import timber.log.Timber;
 
 public class InfoFragment extends Fragment {
 
-    private FragmentInfoBinding mBinding;
-    private MainViewModel mMainViewModel;
-    private Socket mSocket;
-    private RelativeLayout mRootContainer;
-    private TextView mServerVersion;
-    private TextView mCPUInfo;
-    private TextView mTempInfo;
-    private TextView mNetworkInfo;
-    private TextView mUptimeInfo;
-    private TextView mGPIOOutAuger;
-    private TextView mGPIOOutFan;
-    private TextView mGPIOOutIgniter;
-    private TextView mGPIOOutPower;
-    private TextView mGPIOInSelector;
-    private SwipeRefreshLayout mSwipeRefresh;
-    private ProgressBar mLoadingBar;
-    private RecyclerView mLicenseInfo;
-    private ArrayList<LicensesModel> mLicenses;
+    private FragmentInfoBinding binding;
+    private MainViewModel mainViewModel;
+    private Socket socket;
+    private RelativeLayout rootContainer;
+    private TextView serverVersion;
+    private TextView cpuInfo;
+    private TextView tempInfo;
+    private TextView networkInfo;
+    private TextView uptimeInfo;
+    private TextView augerGPIOOut;
+    private TextView fanGPIOOut;
+    private TextView igniterGPIOOut;
+    private TextView powerGPIOOut;
+    private TextView selectorGPIOIn;
+    private SwipeRefreshLayout swipeRefresh;
+    private ProgressBar loadingBar;
+    private LicensesListAdapter licensesListAdapter;
+    private ArrayList<LicensesModel> licenses;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentInfoBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentInfoBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mLicenses = new ArrayList<>();
+        licenses = new ArrayList<>();
 
-        mRootContainer = mBinding.infoRootContainer;
-        mSwipeRefresh = mBinding.infoPullRefresh;
-        mLoadingBar = mBinding.loadingProgressbar;
+        rootContainer = binding.infoRootContainer;
+        swipeRefresh = binding.infoPullRefresh;
+        loadingBar = binding.loadingProgressbar;
 
-        mCPUInfo = mBinding.systemCardView.cpuInfoText;
-        mTempInfo = mBinding.systemCardView.tempInfoText;
-        mNetworkInfo = mBinding.systemCardView.networkInfoText;
+        cpuInfo = binding.systemCardView.cpuInfoText;
+        tempInfo = binding.systemCardView.tempInfoText;
+        networkInfo = binding.systemCardView.networkInfoText;
 
-        mUptimeInfo = mBinding.uptimeCardView.uptimeInfoText;
+        uptimeInfo = binding.uptimeCardView.uptimeInfoText;
 
-        mGPIOOutAuger = mBinding.gpioCardView.gpioOutputAuger;
-        mGPIOOutFan = mBinding.gpioCardView.gpioOutputFan;
-        mGPIOOutIgniter = mBinding.gpioCardView.gpioOutputIgniter;
-        mGPIOOutPower = mBinding.gpioCardView.gpioOutputPower;
-        mGPIOInSelector = mBinding.gpioCardView.gpioInputSelector;
+        augerGPIOOut = binding.gpioCardView.gpioOutputAuger;
+        fanGPIOOut = binding.gpioCardView.gpioOutputFan;
+        igniterGPIOOut = binding.gpioCardView.gpioOutputIgniter;
+        powerGPIOOut = binding.gpioCardView.gpioOutputPower;
+        selectorGPIOIn = binding.gpioCardView.gpioInputSelector;
 
-        mLicenseInfo = mBinding.licensesCardView.infoLicensesRecycler;
+        serverVersion = binding.serverVersionCardView.serverVersionText;
 
-        mServerVersion = mBinding.serverVersionCardView.serverVersionText;
-
-        LinearLayout appGitContainer = mBinding.appVersionCardView.appBuildGitContainer;
-        TextView appVersion = mBinding.appVersionCardView.appVersionText;
-        TextView appVersionCode = mBinding.appVersionCardView.appVersionCodeText;
-        TextView appBuildType = mBinding.appVersionCardView.appBuildTypeText;
-        TextView appBuildFlavor = mBinding.appVersionCardView.appBuildFlavorText;
-        TextView appBuildDate = mBinding.appVersionCardView.appBuildDate;
-        TextView appGitBranch = mBinding.appVersionCardView.appBuildGitBranch;
-        TextView appGitRev = mBinding.appVersionCardView.appBuildGitRev;
+        LinearLayout appGitContainer = binding.appVersionCardView.appBuildGitContainer;
+        TextView appVersion = binding.appVersionCardView.appVersionText;
+        TextView appVersionCode = binding.appVersionCardView.appVersionCodeText;
+        TextView appBuildType = binding.appVersionCardView.appBuildTypeText;
+        TextView appBuildFlavor = binding.appVersionCardView.appBuildFlavorText;
+        TextView appBuildDate = binding.appVersionCardView.appBuildDate;
+        TextView appGitBranch = binding.appVersionCardView.appBuildGitBranch;
+        TextView appGitRev = binding.appVersionCardView.appBuildGitRev;
 
         appVersion.setText(BuildConfig.VERSION_NAME);
         appVersionCode.setText(String.valueOf(BuildConfig.VERSION_CODE));
@@ -131,18 +128,24 @@ public class InfoFragment extends Fragment {
             appGitRev.setText(BuildConfig.GIT_REV);
         }
 
-        mSwipeRefresh.setOnRefreshListener(() -> {
+        RecyclerView licenseInfo = binding.licensesCardView.infoLicensesRecycler;
+        licensesListAdapter = new LicensesListAdapter();
+
+        licenseInfo.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
+        licenseInfo.setAdapter(licensesListAdapter);
+
+        swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
                 forceRefreshData();
             } else {
-                mSwipeRefresh.setRefreshing(false);
+                swipeRefresh.setRefreshing(false);
             }
         });
 
         if (getActivity() != null) {
-            mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mMainViewModel.getInfoData().observe(getViewLifecycleOwner(), infoData -> {
-                mSwipeRefresh.setRefreshing(false);
+            mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+            mainViewModel.getInfoData().observe(getViewLifecycleOwner(), infoData -> {
+                swipeRefresh.setRefreshing(false);
                 if (infoData != null && infoData.getLiveData() != null) {
                     if (infoData.getIsNewData()) {
                         FileUtils.executorSaveJSON(getActivity(), Constants.JSON_INFO,
@@ -153,7 +156,7 @@ public class InfoFragment extends Fragment {
             });
         }
 
-        mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
             toggleLoading(true);
             requestDataUpdate();
         });
@@ -164,7 +167,7 @@ public class InfoFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
     }
 
     private void showOfflineAlert() {
@@ -174,7 +177,7 @@ public class InfoFragment extends Fragment {
     }
 
     private boolean socketConnected() {
-        if (mSocket != null && mSocket.connected()) {
+        if (socket != null && socket.connected()) {
             return true;
         } else {
             showOfflineAlert();
@@ -183,7 +186,7 @@ public class InfoFragment extends Fragment {
     }
 
     private void requestDataUpdate() {
-        if (mSocket != null && mSocket.connected()) {
+        if (socket != null && socket.connected()) {
             forceRefreshData();
         } else {
             loadStoredData();
@@ -193,8 +196,8 @@ public class InfoFragment extends Fragment {
     private void loadStoredData() {
         toggleLoading(true);
         FileUtils.executorLoadJSON(getActivity(), Constants.JSON_INFO, jsonString -> {
-            if (jsonString != null && mMainViewModel != null) {
-                mMainViewModel.setInfoData(jsonString, false);
+            if (jsonString != null && mainViewModel != null) {
+                mainViewModel.setInfoData(jsonString, false);
             } else {
                 toggleLoading(false);
             }
@@ -202,18 +205,18 @@ public class InfoFragment extends Fragment {
     }
 
     private void forceRefreshData() {
-        mSocket.emit(ServerConstants.REQUEST_INFO_DATA, (Ack) args -> {
-            if (mMainViewModel != null && args.length > 0 && args[0] != null) {
-                mMainViewModel.setInfoData(args[0].toString(), true);
+        ServerControl.infoGetEmit(socket, response -> {
+            if (mainViewModel != null) {
+                mainViewModel.setInfoData(response, true);
             }
         });
     }
 
     private void toggleLoading(boolean show) {
-        if (show && mSocket != null && mSocket.connected()) {
-            mLoadingBar.setVisibility(View.VISIBLE);
+        if (show && socket != null && socket.connected()) {
+            loadingBar.setVisibility(View.VISIBLE);
         } else {
-            mLoadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.GONE);
         }
     }
 
@@ -221,18 +224,18 @@ public class InfoFragment extends Fragment {
 
         try {
 
-            InfoResponseModel infoResponseModel = InfoResponseModel.parseJSON(responseData);
+            InfoDataModel infoDataModel = InfoDataModel.parseJSON(responseData);
 
-            List<String> cpuInfo = infoResponseModel.getCpuInfo();
-            String cpuTemp = infoResponseModel.getTemp();
-            List<String> networkInfo = infoResponseModel.getIfConfig();
-            String upTime = infoResponseModel.getUpTime();
-            String auger = infoResponseModel.getOutPins().getAuger();
-            String fan = infoResponseModel.getOutPins().getFan();
-            String igniter = infoResponseModel.getOutPins().getIgniter();
-            String power = infoResponseModel.getOutPins().getPower();
-            String selector = infoResponseModel.getInPins().getSelector();
-            String version = infoResponseModel.getServerVersion();
+            List<String> cpuInfo = infoDataModel.getCpuInfo();
+            String cpuTemp = infoDataModel.getTemp();
+            List<String> networkInfo = infoDataModel.getIfConfig();
+            String upTime = infoDataModel.getUpTime();
+            String auger = infoDataModel.getOutPins().getAuger();
+            String fan = infoDataModel.getOutPins().getFan();
+            String igniter = infoDataModel.getOutPins().getIgniter();
+            String power = infoDataModel.getOutPins().getPower();
+            String selector = infoDataModel.getInPins().getSelector();
+            String version = infoDataModel.getServerVersion();
 
             StringBuilder cpuString = new StringBuilder();
             for (String cpu : cpuInfo) {
@@ -244,18 +247,18 @@ public class InfoFragment extends Fragment {
                 networkString.append(network.trim()).append("\n");
             }
 
-            TransitionManager.beginDelayedTransition(mRootContainer, new Fade(Fade.IN));
+            TransitionManager.beginDelayedTransition(rootContainer, new Fade(Fade.IN));
 
-            mCPUInfo.setText(cpuString);
-            mNetworkInfo.setText(networkString);
-            mUptimeInfo.setText(upTime);
-            mTempInfo.setText(cpuTemp);
-            mGPIOOutAuger.setText(auger);
-            mGPIOOutFan.setText(fan);
-            mGPIOOutIgniter.setText(igniter);
-            mGPIOOutPower.setText(power);
-            mGPIOInSelector.setText(selector);
-            mServerVersion.setText(version);
+            this.cpuInfo.setText(cpuString);
+            this.networkInfo.setText(networkString);
+            uptimeInfo.setText(upTime);
+            tempInfo.setText(cpuTemp);
+            augerGPIOOut.setText(auger);
+            fanGPIOOut.setText(fan);
+            igniterGPIOOut.setText(igniter);
+            powerGPIOOut.setText(power);
+            selectorGPIOIn.setText(selector);
+            serverVersion.setText(version);
 
         } catch (NullPointerException e) {
             Timber.w(e, "Info Response Error");
@@ -266,7 +269,7 @@ public class InfoFragment extends Fragment {
     }
 
     private void loadLicenses() {
-        mLicenses.clear();
+        licenses.clear();
 
         if (getActivity() != null) {
             FileUtils.executorLoadRawJson(getActivity(), R.raw.licences, jsonString -> {
@@ -283,15 +286,10 @@ public class InfoFragment extends Fragment {
                                     innerArray.getString(0),
                                     innerArray.getString(1)
                             );
-                            mLicenses.add(project);
+                            licenses.add(project);
                         }
 
-                        LicensesListAdapter licensesListAdapter =
-                                new LicensesListAdapter(mLicenses);
-
-                        mLicenseInfo.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        mLicenseInfo.setItemAnimator(new DefaultItemAnimator());
-                        mLicenseInfo.setAdapter(licensesListAdapter);
+                        licensesListAdapter.setList(licenses);
 
                     }
 

@@ -9,12 +9,12 @@ import com.weberbox.pifire.R;
 
 public class EmptyTextListener implements TextWatcher {
 
-    private final EditText mEditText;
-    private final Context mContext;
+    private final EditText editText;
+    private final Context context;
 
     public EmptyTextListener(Context context, EditText target) {
-        mContext = context;
-        mEditText = target;
+        this.context = context;
+        this.editText = target;
     }
 
     @Override
@@ -30,11 +30,11 @@ public class EmptyTextListener implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         if (s.length() == 0) {
-            mEditText.setError(mContext.getString(R.string.settings_blank_error));
+            editText.setError(context.getString(R.string.settings_blank_error));
         } else if (s.toString().equals("0")) {
-            mEditText.setError(mContext.getString(R.string.settings_zero_error));
+            editText.setError(context.getString(R.string.settings_zero_error));
         } else {
-            mEditText.setError(null);
+            editText.setError(null);
         }
     }
 }

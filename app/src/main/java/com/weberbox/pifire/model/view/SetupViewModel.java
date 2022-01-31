@@ -4,31 +4,31 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.weberbox.pifire.model.SingleLiveEvent;
 
 public class SetupViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mQRData;
-    private final MutableLiveData<FloatingActionButton> mSetupFab;
+    private final MutableLiveData<String> QRData;
+    private final SingleLiveEvent<Void> fabClickEvent;
 
     public SetupViewModel() {
-        mQRData = new MutableLiveData<>();
-        mSetupFab = new MutableLiveData<>();
-    }
-
-    public void setFab(final FloatingActionButton fab) {
-        mSetupFab.setValue(fab);
-    }
-
-    public LiveData<FloatingActionButton> getFab() {
-        return mSetupFab;
+        QRData = new MutableLiveData<>();
+        fabClickEvent = new SingleLiveEvent<>();
     }
 
     public LiveData<String> getQRData() {
-        return mQRData;
+        return QRData;
     }
 
     public void setQRData(String qrData) {
-        mQRData.setValue(qrData);
+        QRData.setValue(qrData);
+    }
+
+    public void fabOnClick() {
+        fabClickEvent.call();
+    }
+
+    public SingleLiveEvent<Void> getFabEvent() {
+        return fabClickEvent;
     }
 }

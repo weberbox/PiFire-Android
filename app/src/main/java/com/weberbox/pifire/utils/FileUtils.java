@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 
 public class FileUtils {
 
-    private static int mRetries = 0;
+    private static int retries = 0;
 
     public static void executorSaveJSON(Context context, String filename, String jsonString) {
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -41,12 +41,12 @@ public class FileUtils {
         if (context != null) {
             boolean isFileCreated = FileUtils.createJSONFile(context,
                     filename, jsonString);
-            if (!isFileCreated && mRetries < 3) {
+            if (!isFileCreated && retries < 3) {
                 // Try 3 times
-                mRetries++;
+                retries++;
                 saveJSONFile(context, jsonString, filename);
             } else {
-                mRetries = 0;
+                retries = 0;
             }
         }
     }

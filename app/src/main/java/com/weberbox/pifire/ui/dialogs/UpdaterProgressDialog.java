@@ -9,7 +9,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.databinding.DialogProgressUpdaterBinding;
+import com.weberbox.pifire.databinding.DialogProgressLinearBinding;
 
 public class UpdaterProgressDialog {
 
@@ -28,13 +28,13 @@ public class UpdaterProgressDialog {
     }
 
     public AlertDialog createDialog() {
-        DialogProgressUpdaterBinding binding = DialogProgressUpdaterBinding.inflate(mInflater);
+        DialogProgressLinearBinding binding = DialogProgressLinearBinding.inflate(mInflater);
 
         final Handler handler  = new Handler();
 
         mDialog.setTitle(mTitle);
 
-        mUpdaterLogOutput = binding.serverUpdaterOutLog;
+        mUpdaterLogOutput = binding.dialogProgressMessage;
 
         mDialog.setView(binding.getRoot());
 

@@ -17,31 +17,10 @@ public class Constants {
     public static final int PICKER_TYPE_PROBE_ONE = 1;
     public static final int PICKER_TYPE_PROBE_TWO = 2;
 
-    // Callback Mode Type
-    public static final int ACTION_MODE_START = 0;
-    public static final int ACTION_MODE_MONITOR = 1;
-    public static final int ACTION_MODE_STOP = 2;
-    public static final int ACTION_MODE_SMOKE = 3;
-    public static final int ACTION_MODE_HOLD = 4;
-    public static final int ACTION_MODE_SHUTDOWN = 5;
-    public static final int ACTION_MODE_PROBE_ONE = 6;
-    public static final int ACTION_MODE_PROBE_TWO = 7;
-
     // Callback Timer Type
     public static final int ACTION_TIMER_RESTART = 0;
     public static final int ACTION_TIMER_STOP = 1;
     public static final int ACTION_TIMER_PAUSE = 2;
-
-    // Callback Admin Type
-    public static final int ACTION_ADMIN_HISTORY = 0;
-    public static final int ACTION_ADMIN_EVENTS = 1;
-    public static final int ACTION_ADMIN_PELLET_LOG = 2;
-    public static final int ACTION_ADMIN_PELLET = 3;
-    public static final int ACTION_ADMIN_RESET = 4;
-    public static final int ACTION_ADMIN_REBOOT = 5;
-    public static final int ACTION_ADMIN_SHUTDOWN = 6;
-    public static final int ACTION_ADMIN_CHANGE_BRANCH = 7;
-    public static final int ACTION_ADMIN_DO_UPDATE= 8;
 
     // Callback Backup/Restore Type
     public static final int ACTION_BACKUP_SETTINGS = 0;
@@ -75,17 +54,6 @@ public class Constants {
     public static final String INTENT_RECIPE_FRAGMENT = "recipe_fragment";
     public static final String INTENT_RECIPE_ID = "recipe_id";
 
-    public static final String INTENT_IMAGE_PICKER_OPTION = "image_picker_option";
-    public static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
-    public static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
-    public static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
-    public static final String INTENT_IMAGE_COMPRESSION_QUALITY = "compression_quality";
-    public static final String INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT = "set_bitmap_max_width_height";
-    public static final String INTENT_BITMAP_MAX_WIDTH = "max_width";
-    public static final String INTENT_BITMAP_MAX_HEIGHT = "max_height";
-    public static final int INTENT_REQUEST_IMAGE_CAPTURE = 0;
-    public static final int INTENT_REQUEST_GALLERY_IMAGE = 1;
-
     // Results
     public static final int RESULT_PERMISSIONS = 405;
 
@@ -115,17 +83,6 @@ public class Constants {
     // Update
     public static final String UPDATE_FILENAME = "app-update.apk";
 
-    // Data Binding
-    public static final String DB_SET_APP = "db_set_app";
-    public static final String DB_SET_PROBE = "db_set_probes";
-    public static final String DB_SET_NAME = "db_set_name";
-    public static final String DB_SET_WORK = "db_set_work";
-    public static final String DB_SET_PELLETS = "db_set_pellets";
-    public static final String DB_SET_SHUTDOWN = "db_set_shutdown";
-    public static final String DB_SET_HISTORY = "db_set_history";
-    public static final String DB_SET_SAFETY = "db_set_safety";
-    public static final String DB_SET_NOTIF = "db_set_notif";
-
     // PiFire Backup
     public static final String BACKUP_SETTINGS = "settings";
     public static final String BACKUP_PELLETDB = "pelletdb";
@@ -143,5 +100,6 @@ public class Constants {
     public static final int ONESIGNAL_NOT_REGISTERED = 2;
     public static final int ONESIGNAL_DEVICE_ERROR = 3;
     public static final int ONESIGNAL_REGISTERED = 4;
+    public static final int ONESIGNAL_NOT_SUBSCRIBED = 5;
 
 }

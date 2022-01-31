@@ -36,7 +36,7 @@
                 android:indeterminateBehavior="repeat" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text18Aller"
+                style="@style/Text18AllerBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -67,7 +67,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Text18Aller"
+            style="@style/Text18AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,7 +102,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            style="@style/Text18Aller"
+            style="@style/Text18AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -146,7 +146,7 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text18Aller"
+                style="@style/Text18AllerBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

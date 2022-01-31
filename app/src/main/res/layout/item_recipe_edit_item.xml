@@ -26,20 +26,16 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_qty"
-            style="@style/Text15AllerNormal"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
             android:hint="@string/recipes_item_qty"
             android:inputType="numberDecimal"
             android:maxLines="1"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:textColor="@color/colorWhite"
             android:textColorHighlight="@color/colorAccent"
-            android:textSize="14sp"
-            android:textStyle="normal"
             app:autoSizeTextType="uniform" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -60,20 +56,16 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_unit"
-            style="@style/Text15AllerNormal"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:inputType="textCapWords"
-            android:fontFamily="@font/aller_regular"
             android:hint="@string/recipes_item_unit"
             android:maxLines="1"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,20 +85,16 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_value"
-            style="@style/Text15AllerNormal"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
             android:hint="@string/recipes_item_value"
             android:inputType="textCapWords"
             android:maxLines="1"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

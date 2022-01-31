@@ -27,7 +27,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.discord.panels.OverlappingPanelsLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.pixplicity.easyprefs.library.Prefs;
-import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
@@ -52,17 +51,17 @@ import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    private OverlappingPanelsLayout mPanelsLayout;
-    private ActivityMainPanelsBinding mBinding;
-    private SettingsUtils mSettingsUtils;
-    private MainViewModel mMainViewModel;
-    private TextView mActionBarText;
-    private FrameLayout mStartPanel;
-    private AppUpdater mAppUpdater;
-    private FrameLayout mEndPanel;
-    private Socket mSocket;
-    private int mDownX;
+    private AppBarConfiguration appBarConfiguration;
+    private OverlappingPanelsLayout panelsLayout;
+    private ActivityMainPanelsBinding binding;
+    private SettingsUtils settingsUtils;
+    private MainViewModel mainViewModel;
+    private TextView actionBarText;
+    private FrameLayout startPanel;
+    private AppUpdater appUpdater;
+    private FrameLayout endPanel;
+    private Socket socket;
+    private int downX;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,31 +77,31 @@ public class MainActivity extends BaseActivity {
         }
 
         PiFireApplication app = (PiFireApplication) getApplication();
-        mSocket = app.getSocket();
+        socket = app.getSocket();
 
-        mSettingsUtils = new SettingsUtils(this, settingsCallback);
+        settingsUtils = new SettingsUtils(this, settingsCallback);
 
-        mBinding = ActivityMainPanelsBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
+        binding = ActivityMainPanelsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        mBinding.settingsLayout.setCallback(this);
+        binding.settingsLayout.setCallback(this);
 
-        mMainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        setSupportActionBar(mBinding.appBarMain.toolbar);
+        setSupportActionBar(binding.appBarMain.toolbar);
 
         if (getSupportActionBar() != null) {
             setupActionBar(getSupportActionBar());
         }
 
-        mPanelsLayout = mBinding.overlappingPanels;
-        mStartPanel = mBinding.startPanel;
-        mEndPanel = mBinding.endPanel;
+        panelsLayout = binding.overlappingPanels;
+        startPanel = binding.startPanel;
+        endPanel = binding.endPanel;
 
         AnimatedBottomBar bottomBar = findViewById(R.id.bottom_bar);
 
-        NavigationView navigationView = mBinding.navView;
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
+        NavigationView navigationView = binding.navView;
+        appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_recipes,
                 R.id.nav_pellet_manager,
                 R.id.nav_dashboard,
@@ -132,17 +131,17 @@ public class MainActivity extends BaseActivity {
                     navController.navigate(R.id.nav_settings);
                 }
             }
-            mPanelsLayout.closePanels();
+            panelsLayout.closePanels();
             return true;
         });
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            mActionBarText.setText(destination.getLabel());
+            actionBarText.setText(destination.getLabel());
 
             if (destination.getId() == R.id.nav_settings) {
-                mPanelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
+                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
             } else {
-                mPanelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
+                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
             }
 
             if (destination.getId() == R.id.nav_info || destination.getId() == R.id.nav_settings) {
@@ -172,7 +171,7 @@ public class MainActivity extends BaseActivity {
             navGrillName.setText(grillName);
         }
 
-        mMainViewModel.getServerConnected().observe(this, connected -> {
+        mainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(this, connected);
 
@@ -180,25 +179,25 @@ public class MainActivity extends BaseActivity {
                     if (AppConfig.USE_ONESIGNAL) {
                         if (OneSignalUtils.checkRegistration(MainActivity.this) ==
                                 Constants.ONESIGNAL_NOT_REGISTERED) {
-                            OneSignalUtils.registerDevice(MainActivity.this, mSocket);
+                            OneSignalUtils.registerDevice(MainActivity.this, socket);
                         }
                     }
                 }
             }
         });
 
-        mMainViewModel.getStartPanelStateChange().observe(this, state ->
-                mPanelsLayout.handleStartPanelState(state));
+        mainViewModel.getStartPanelStateChange().observe(this, state ->
+                panelsLayout.handleStartPanelState(state));
 
-        mMainViewModel.getEndPanelStateChange().observe(this, state ->
-                mPanelsLayout.handleEndPanelState(state));
+        mainViewModel.getEndPanelStateChange().observe(this, state ->
+                panelsLayout.handleEndPanelState(state));
 
-        connectSocketListenData(mSocket);
+        connectSocketListenData(socket);
 
         String updaterUrl = getString(R.string.def_app_update_check_url);
 
         if (savedInstanceState == null && !updaterUrl.isEmpty()) {
-            mAppUpdater = new AppUpdater(this)
+            appUpdater = new AppUpdater(this)
                     .setDisplay(Display.DIALOG)
                     .setButtonDoNotShowAgain(R.string.disable_button)
                     .setUpdateFrom(UpdateFrom.JSON)
@@ -206,7 +205,7 @@ public class MainActivity extends BaseActivity {
                     .showEvery(Integer.parseInt(Prefs.getString(getString(
                             R.string.prefs_app_updater_frequency),
                             getString(R.string.def_app_updater_frequency))));
-            mAppUpdater.start();
+            appUpdater.start();
         }
     }
 
@@ -229,14 +228,14 @@ public class MainActivity extends BaseActivity {
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     @Override
     public void onBackPressed() {
-        if (mStartPanel.isShown() || mEndPanel.isShown()) {
-            mPanelsLayout.closePanels();
+        if (startPanel.isShown() || endPanel.isShown()) {
+            panelsLayout.closePanels();
         } else {
             super.onBackPressed();
         }
@@ -245,73 +244,74 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mPanelsLayout.registerStartPanelStateListeners(panelState ->
-                mMainViewModel.setStartPanelStateChange(panelState));
-        mPanelsLayout.registerEndPanelStateListeners(panelState ->
-                mMainViewModel.setEndPanelStateChange(panelState));
+        panelsLayout.registerStartPanelStateListeners(panelState ->
+                mainViewModel.setStartPanelStateChange(panelState));
+        panelsLayout.registerEndPanelStateListeners(panelState ->
+                mainViewModel.setEndPanelStateChange(panelState));
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (mAppUpdater != null) {
-            mAppUpdater.stop();
-        }
-        if (Alerter.isShowing()) {
-            Alerter.hide();
+        if (appUpdater != null) {
+            appUpdater.stop();
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBinding = null;
-        mSocket.disconnect();
-        mSocket.off(Socket.EVENT_CONNECT, onConnect);
-        mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+        binding = null;
+        socket.disconnect();
+        socket.off(Socket.EVENT_CONNECT, onConnect);
+        socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
+        socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
     }
 
     private final SettingsCallback settingsCallback = result -> {
         if (!result) Timber.d("Update Settings Failed");
     };
 
-    public void settingsOnClick(String settings) {
-        switch (settings) {
-            case Constants.DB_SET_APP:
-                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-                break;
-            case Constants.DB_SET_PROBE:
-                startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-                break;
-            case Constants.DB_SET_NAME:
-                startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-                break;
-            case Constants.DB_SET_WORK:
-                startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-                break;
-            case Constants.DB_SET_PELLETS:
-                startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-                break;
-            case Constants.DB_SET_SHUTDOWN:
-                startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-                break;
-            case Constants.DB_SET_HISTORY:
-                startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-                break;
-            case Constants.DB_SET_SAFETY:
-                startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-                break;
-            case Constants.DB_SET_NOTIF:
-                startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-                break;
-        }
+    public void onClickAppSettings() {
+        startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
+    }
+
+    public void onClickProbeSettings() {
+        startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
+    }
+
+    public void onClickNameSettings() {
+        startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
+    }
+
+    public void onClickWorkSettings() {
+        startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
+    }
+
+    public void onClickPelletSettings() {
+        startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
+    }
+
+    public void onClickTimersSettings() {
+        startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
+    }
+
+    public void onClickHistorySettings() {
+        startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
+    }
+
+    public void onClickSafetySettings() {
+        startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
+    }
+
+    public void onClickNotificationsSettings() {
+        startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
     }
 
     private void startPreferenceActivity(int fragment) {
-        mPanelsLayout.closePanels();
+        panelsLayout.closePanels();
         ActivityOptions options = ActivityOptions.makeCustomAnimation(this,
                 R.anim.slide_in_right, R.anim.slide_out_right);
         Intent intent = new Intent(this, PreferencesActivity.class);
@@ -324,10 +324,10 @@ public class MainActivity extends BaseActivity {
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.layout_actionbar);
         View view = actionBar.getCustomView();
-        mActionBarText = view.findViewById(R.id.action_bar_text);
+        actionBarText = view.findViewById(R.id.action_bar_text);
         ImageButton navButton = view.findViewById(R.id.action_bar_button);
         navButton.setOnClickListener(v ->
-                mPanelsLayout.openStartPanel());
+                panelsLayout.openStartPanel());
     }
 
     public void connectSocketListenData(Socket socket) {
@@ -342,8 +342,8 @@ public class MainActivity extends BaseActivity {
         @Override
         public void call(Object... args) {
             Timber.d("Socket connected");
-            mMainViewModel.setServerConnected(true);
-            mSettingsUtils.requestSettingsData(mSocket);
+            mainViewModel.setServerConnected(true);
+            settingsUtils.requestSettingsData(socket);
         }
     };
 
@@ -352,7 +352,7 @@ public class MainActivity extends BaseActivity {
         public void call(Object... args) {
             Timber.d("Socket disconnected");
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                mMainViewModel.setServerConnected(false);
+                mainViewModel.setServerConnected(false);
             }
         }
     };
@@ -362,7 +362,7 @@ public class MainActivity extends BaseActivity {
         public void call(Object... args) {
             Timber.d("Error connecting socket");
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
-                mMainViewModel.setServerConnected(false);
+                mainViewModel.setServerConnected(false);
             }
         }
     };
@@ -371,7 +371,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public void call(final Object... args) {
             if (args.length > 0 && args[0] != null) {
-                mMainViewModel.setDashData(args[0].toString());
+                mainViewModel.setDashData(args[0].toString());
             }
         }
     };
@@ -379,7 +379,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            mDownX = (int) event.getRawX();
+            downX = (int) event.getRawX();
         }
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -387,7 +387,7 @@ public class MainActivity extends BaseActivity {
             if (v instanceof EditText) {
                 int x = (int) event.getRawX();
                 int y = (int) event.getRawY();
-                if (Math.abs(mDownX - x) > 5) {
+                if (Math.abs(downX - x) > 5) {
                     return super.dispatchTouchEvent(event);
                 }
                 final int reducePx = 25;

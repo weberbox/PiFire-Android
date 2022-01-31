@@ -29,14 +29,17 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
+import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
 import com.weberbox.pifire.interfaces.AuthDialogCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
 import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
+import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
+import com.weberbox.pifire.utils.SettingsUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,18 +64,19 @@ import timber.log.Timber;
 
 public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
-    private FragmentSetupUrlBinding mBinding;
-    private TextInputEditText mServerAddress;
-    private TextInputLayout mServerURLLayout;
-    private AutoCompleteTextView mServerScheme;
-    private ProgressBar mConnectProgress;
-    private NavController mNavController;
-    private Socket mSocket;
-    private String mValidURL;
-    private String mSecure;
-    private String mUnSecure;
+    private FragmentSetupUrlBinding binding;
+    private TextInputEditText serverAddress;
+    private TextInputLayout serverURLLayout;
+    private AutoCompleteTextView serverScheme;
+    private SettingsUtils settingsUtils;
+    private ProgressBar connectProgress;
+    private NavController navController;
+    private Socket socket;
+    private String validURL;
+    private String secure;
+    private String unSecure;
 
-    private boolean mIsConnecting = false;
+    private boolean isConnecting = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,34 +85,36 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentSetupUrlBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentSetupUrlBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mNavController = Navigation.findNavController(view);
+        navController = Navigation.findNavController(view);
 
-        mServerAddress = mBinding.serverAddress;
-        mServerURLLayout = mBinding.serverAddressLayout;
-        mConnectProgress = mBinding.connectProgressbar;
+        serverAddress = binding.serverAddress;
+        serverURLLayout = binding.serverAddressLayout;
+        connectProgress = binding.connectProgressbar;
 
-        mServerScheme = mBinding.serverAddressSchemeTv;
+        serverScheme = binding.serverAddressSchemeTv;
 
-        mSecure = getString(R.string.https_scheme);
-        mUnSecure = getString(R.string.http_scheme);
+        secure = getString(R.string.https_scheme);
+        unSecure = getString(R.string.http_scheme);
 
-        String[] scheme = new String[] {mUnSecure, mSecure};
+        String[] scheme = new String[] {unSecure, secure};
 
         if (getActivity() != null) {
             ArrayAdapter<String> schemesAdapter = new ArrayAdapter<>(getActivity(),
                     R.layout.item_menu_popup, scheme);
-            mServerScheme.setAdapter(schemesAdapter);
+            serverScheme.setAdapter(schemesAdapter);
         }
 
-        mServerAddress.addTextChangedListener(new TextWatcher() {
+        settingsUtils = new SettingsUtils(requireActivity(), null);
+
+        serverAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -120,29 +126,28 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    mServerURLLayout.setError(getString(R.string.setup_blank_url));
+                    serverURLLayout.setError(getString(R.string.setup_blank_url));
                 } else {
-                    mServerURLLayout.setError(null);
+                    serverURLLayout.setError(null);
                 }
             }
         });
 
         SetupViewModel setupViewModel = new ViewModelProvider(requireActivity())
                 .get(SetupViewModel.class);
-        setupViewModel.getFab().observe(getViewLifecycleOwner(), setupFab ->
-                setupFab.setOnClickListener(v -> {
-            if (mServerAddress.getText() != null && !mIsConnecting) {
-                verifyURLAndTestConnect(mServerAddress.getText().toString());
+        setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> {
+            if (serverAddress.getText() != null && !isConnecting) {
+                verifyURLAndTestConnect(serverAddress.getText().toString());
             }
-        }));
+        });
 
         setupViewModel.getQRData().observe(getViewLifecycleOwner(), serverAddress -> {
             if (serverAddress != null && !serverAddress.isEmpty()) {
                 try {
                     URI uri = new URI(serverAddress);
-                    mServerAddress.setText(uri.getHost());
-                    if (serverAddress.startsWith(mSecure)) {
-                        mServerScheme.setText(mSecure, false);
+                    this.serverAddress.setText(uri.getHost());
+                    if (serverAddress.startsWith(secure)) {
+                        serverScheme.setText(secure, false);
                     }
                 } catch (URISyntaxException e) {
                     AlertUtils.createErrorAlert(requireActivity(), R.string.setup_invalid_url_alert,
@@ -156,7 +161,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
             setupViewModel.setQRData(Prefs.getString(getString(R.string.prefs_server_address), ""));
         }
 
-        ImageView scanQRButton = mBinding.useQrcode;
+        ImageView scanQRButton = binding.useQrcode;
         scanQRButton.setOnClickListener(view1 -> {
             if (Alerter.isShowing()) {
                 Alerter.hide();
@@ -168,10 +173,10 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mSocket != null) {
-            mSocket.disconnect();
-            mSocket.off(Socket.EVENT_CONNECT, onConnect);
-            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        if (socket != null) {
+            socket.disconnect();
+            socket.off(Socket.EVENT_CONNECT, onConnect);
+            socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         }
     }
 
@@ -179,8 +184,8 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
     public void onAuthDialogSave(boolean success) {
         if (success) {
             Prefs.putBoolean(getString(R.string.prefs_server_basic_auth), true);
-            if (mServerAddress.getText() != null && !mIsConnecting) {
-                verifyURLAndTestConnect(mServerAddress.getText().toString());
+            if (serverAddress.getText() != null && !isConnecting) {
+                verifyURLAndTestConnect(serverAddress.getText().toString());
             }
         } else {
             showAlerter(getActivity(), getString(R.string.setup_error));
@@ -189,27 +194,27 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
 
     @Override
     public void onAuthDialogCancel() {
-        if (mConnectProgress.isShown()) mConnectProgress.setVisibility(View.GONE);
+        if (connectProgress.isShown()) connectProgress.setVisibility(View.GONE);
     }
 
     private void verifyURLAndTestConnect(String address) {
         if (address.length() != 0) {
             if (isValidUrl(address)) {
-                String scheme = String.valueOf(mServerScheme.getText());
+                String scheme = String.valueOf(serverScheme.getText());
                 String url = scheme + address;
-                mServerAddress.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                serverAddress.onEditorAction(EditorInfo.IME_ACTION_DONE);
                 testServerConnection(url);
             } else {
-                mServerURLLayout.setError(getString(R.string.setup_invalid_url));
+                serverURLLayout.setError(getString(R.string.setup_invalid_url));
             }
         } else {
-            mServerURLLayout.setError(getString(R.string.setup_blank_url));
+            serverURLLayout.setError(getString(R.string.setup_blank_url));
         }
     }
 
     private void testServerConnection(String url) {
-        if (!mIsConnecting) {
-            mConnectProgress.setVisibility(View.VISIBLE);
+        if (!isConnecting) {
+            connectProgress.setVisibility(View.VISIBLE);
             String credentials;
 
             if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
@@ -233,7 +238,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         if (e.getMessage() != null && e.getMessage()
                                 .contains("CertPathValidatorException")) {
                             getActivity().runOnUiThread(() -> {
-                                mConnectProgress.setVisibility(View.GONE);
+                                connectProgress.setVisibility(View.GONE);
                                 MessageTextDialog dialog = new MessageTextDialog(getActivity(),
                                         getString(R.string.setup_server_self_signed_title),
                                         getString(R.string.setup_server_self_signed));
@@ -241,7 +246,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                             });
                         } else {
                             getActivity().runOnUiThread(() -> {
-                                mConnectProgress.setVisibility(View.GONE);
+                                connectProgress.setVisibility(View.GONE);
                                 showAlerter(getActivity(), e.getMessage());
                             });
                         }
@@ -255,7 +260,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         if (response.code() == 401) {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
-                                    mConnectProgress.setVisibility(View.GONE);
+                                    connectProgress.setVisibility(View.GONE);
                                     SetupUserPassDialog dialog = new SetupUserPassDialog(
                                             getActivity(), URLSetupFragment.this);
                                     dialog.showDialog();
@@ -264,7 +269,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                         } else {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
-                                    mConnectProgress.setVisibility(View.GONE);
+                                    connectProgress.setVisibility(View.GONE);
                                     showAlerter(getActivity(),
                                             getString(R.string.setup_server_connect_error,
                                                     String.valueOf(response.code()), response.message()));
@@ -280,74 +285,61 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
     }
 
     private void testSocketConnection(String Url, String credentials) {
-        if (!mIsConnecting) {
+        if (!isConnecting) {
             IO.Options options = new IO.Options();
+
+            isConnecting = true;
 
             if (credentials != null) {
                 options.extraHeaders = Collections.singletonMap("Authorization",
                         Collections.singletonList(credentials));
 
-                connectSocket(Url, options);
+                createSocket(Url, options);
             } else {
-                connectSocket(Url, null);
+                createSocket(Url, null);
             }
 
-            mIsConnecting = true;
-
-            mValidURL = Url;
-            mSocket.connect();
-            mSocket.on(Socket.EVENT_CONNECT, onConnect);
-            mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            validURL = Url;
+            socket.connect();
+            socket.on(Socket.EVENT_CONNECT, onConnect);
+            socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         }
     }
 
     private void storeValidURL() {
-        if (mValidURL != null) {
-            Prefs.putString(getString(R.string.prefs_server_address), mValidURL);
+        if (validURL != null) {
+            Prefs.putString(getString(R.string.prefs_server_address), validURL);
             if (AppConfig.USE_ONESIGNAL) {
-                mNavController.navigate(R.id.nav_setup_push);
+                navController.navigate(R.id.nav_setup_push);
             } else {
-                mNavController.navigate(R.id.nav_setup_finish);
+                navController.navigate(R.id.nav_setup_finish);
             }
         } else {
             showAlerter(getActivity(), getString(R.string.setup_error));
         }
     }
 
-    private void connectSocket(String serverURL, IO.Options options) {
+    private void createSocket(String serverURL, IO.Options options) {
         if (options != null) {
             try {
-                mSocket = IO.socket(serverURL, options);
+                socket = IO.socket(serverURL, options);
             } catch (URISyntaxException e) {
                 Timber.w(e, "Socket URI Error");
-                mServerURLLayout.setError(getString(R.string.setup_error));
+                isConnecting = false;
+                serverURLLayout.setError(getString(R.string.setup_error));
             }
         } else {
             try {
-                mSocket = IO.socket(serverURL);
+                socket = IO.socket(serverURL);
             } catch (URISyntaxException e) {
                 Timber.w(e, "Socket URI Error");
-                mServerURLLayout.setError(getString(R.string.setup_error));
+                isConnecting = false;
+                serverURLLayout.setError(getString(R.string.setup_error));
             }
         }
     }
 
-    private final Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            if (getActivity() != null) {
-                Timber.d("Socket Connected Storing URL");
-                getActivity().runOnUiThread(() -> {
-                    mConnectProgress.setVisibility(View.GONE);
-                    mIsConnecting = false;
-                    if (Alerter.isShowing()) {
-                        Alerter.hide();
-                    }
-                    storeValidURL();
-                });
-            }
-        }
-    };
+    private final Emitter.Listener onConnect = args -> requestSettings();
 
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -355,18 +347,80 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     Timber.d("Error Connecting to Socket");
-                    mConnectProgress.setVisibility(View.GONE);
-                    mSocket.disconnect();
-                    mSocket.close();
-                    mIsConnecting = false;
+                    connectProgress.setVisibility(View.GONE);
+                    socket.disconnect();
+                    socket.close();
+                    isConnecting = false;
                     showAlerter(getActivity(), getString(R.string.setup_cannot_connect));
                 });
             }
         }
     };
 
+    private void requestSettings() {
+        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_SETTINGS_DATA,
+                new AckTimeOut(3000) {
+                    @Override
+                    public void call(Object... args) {
+                        if (args.length > 0 && args[0] != null) {
+                            if (args[0].toString().equalsIgnoreCase("timeout")) {
+                                requestSettingsDep();
+                            } else {
+                                cancelTimer();
+                                if (settingsUtils.updateSettingsData(args[0].toString())) {
+                                    completeSetup();
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void requestSettingsDep() {
+        socket.emit(ServerConstants.REQUEST_SETTINGS_DATA,
+                new AckTimeOut(3000) {
+                    @Override
+                    public void call(Object... args) {
+                        if (args.length > 0 && args[0] != null) {
+                            if (args[0].toString().equalsIgnoreCase("timeout")) {
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(() -> {
+                                        Timber.d("Error Connecting to Socket");
+                                        connectProgress.setVisibility(View.GONE);
+                                        socket.disconnect();
+                                        socket.close();
+                                        isConnecting = false;
+                                        showAlerter(getActivity(),
+                                                getString(R.string.setup_cannot_connect));
+                                    });
+                                }
+                            } else {
+                                cancelTimer();
+                                if (settingsUtils.updateSettingsData(args[0].toString())) {
+                                    completeSetup();
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void completeSetup() {
+        if (getActivity() != null) {
+            Timber.d("Socket Connected Storing URL");
+            getActivity().runOnUiThread(() -> {
+                connectProgress.setVisibility(View.GONE);
+                isConnecting = false;
+                if (Alerter.isShowing()) {
+                    Alerter.hide();
+                }
+                storeValidURL();
+            });
+        }
+    }
+
     private boolean isValidUrl(String url) {
-        if (url.startsWith(mSecure) || url.startsWith(mUnSecure)) {
+        if (url.startsWith(secure) || url.startsWith(unSecure)) {
             return false;
         }
         Pattern p = Patterns.WEB_URL;
@@ -385,7 +439,7 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                     @Override
                     public void onPermissionGranted() {
                         if (getActivity() != null) {
-                            mNavController.navigate(R.id.nav_setup_scan_qr);
+                            navController.navigate(R.id.nav_setup_scan_qr);
                         }
                     }
 

@@ -57,7 +57,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -67,7 +67,7 @@
 
                     <TextView
                         android:id="@+id/current_brand_text"
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -87,7 +87,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/current_brand">
 
                     <TextView
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -96,7 +96,7 @@
 
                     <TextView
                         android:id="@+id/current_wood_text"
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -116,7 +116,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/current_wood">
 
                     <TextView
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -147,7 +147,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/current_rating">
 
                     <TextView
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -156,7 +156,7 @@
 
                     <TextView
                         android:id="@+id/current_date_loaded_text"
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -176,7 +176,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/current_date_loaded">
 
                     <TextView
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
@@ -185,7 +185,7 @@
 
                     <TextView
                         android:id="@+id/current_comments_text"
-                        style="@style/Text15Aller"
+                        style="@style/Text15AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_spacing"

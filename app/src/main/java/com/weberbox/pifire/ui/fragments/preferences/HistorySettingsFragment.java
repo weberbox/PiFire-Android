@@ -18,16 +18,18 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Socket;
 
 public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -40,10 +42,11 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,7 +96,7 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
     }
 
     @Override
@@ -102,45 +105,61 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_history);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_history_display)
                         .equals(preference.getKey())) {
-                    GrillControl.setHistoryMins(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setHistoryMins(socket,
+                            ((EditTextPreference) preference).getText(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_history_points)
                         .equals(preference.getKey())) {
-                    GrillControl.setHistoryPoints(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setHistoryPoints(socket,
+                            ((EditTextPreference) preference).getText(),
+                            this::processPostResponse);
                 }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_history_auto)
                         .equals(preference.getKey())) {
-                    GrillControl.setHistoryRefresh(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setHistoryRefresh(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_history_clear)
                         .equals(preference.getKey())) {
-                    GrillControl.setHistoryClear(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.sendHistoryClear(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
             }
         }

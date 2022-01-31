@@ -154,7 +154,7 @@
 
                 <TextView
                     android:id="@+id/re_ingredients_title"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/medium_spacing"
@@ -170,7 +170,7 @@
 
                 <TextView
                     android:id="@+id/re_ingredients_add_item"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/re_ingredients_recycler"
@@ -185,7 +185,7 @@
 
                 <TextView
                     android:id="@+id/re_ingredients_add_section"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/re_ingredients_recycler"
@@ -211,7 +211,7 @@
 
                 <TextView
                     android:id="@+id/re_instructions_title"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/medium_spacing"
@@ -227,7 +227,7 @@
 
                 <TextView
                     android:id="@+id/re_instructions_add_step"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/re_instructions_recycler"
@@ -242,7 +242,7 @@
 
                 <TextView
                     android:id="@+id/re_instructions_add_section"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/re_instructions_recycler"
@@ -270,7 +270,7 @@
                 app:layout_constraintTop_toBottomOf="@id/re_instructions_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:labelFor="@+id/re_notes_edit_text"
@@ -279,7 +279,7 @@
 
                 <EditText
                     android:id="@+id/re_notes_edit_text"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"

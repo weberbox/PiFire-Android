@@ -13,7 +13,7 @@
         <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-        <item name="android:actionMenuTextAppearance">@style/Text18Aller</item>
+        <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
         <item name="colorOfflineStatus">@color/colorAccentRed</item>
@@ -55,6 +55,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="alertDialogTheme">@style/AlertDialogThemeMaterial</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
         <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
         <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>

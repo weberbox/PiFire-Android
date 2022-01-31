@@ -76,6 +76,9 @@
     <string name="terms">Terms</string>
     <string name="share">Share</string>
     <string name="status">Status</string>
+    <string name="reset">Reset</string>
+    <string name="reboot">Reboot</string>
+    <string name="shutdown">Shutdown</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -109,11 +112,11 @@
     <string name="dialog_camera">Camera</string>
     <string name="dialog_gallery">Gallery</string>
 
-    <string name="dialog_backup_message">Are you sure you want to backup the %1$s</string>
+    <string name="dialog_confirm_action">Confirm Action</string>
+
+    <string name="dialog_backup_message">Are you sure you want to export a backup?</string>
     <string name="dialog_remote">Remote</string>
     <string name="dialog_local">Local</string>
-    <string name="dialog_backup_settings">PiFire Settings</string>
-    <string name="dialog_backup_pelletdb">Pellet Database</string>
     <string name="dialog_restore_title">Restore Backup</string>
 
     <string name="backup_failed">Backup failed! Please try again</string>
@@ -172,9 +175,9 @@
     <string name="recipes_add_section">Add Section</string>
     <string name="recipes_add_item">Add Ingredient</string>
     <string name="recipes_untitled">Untitled Recipe</string>
-    <string name="recipes_item_value"><font size="30">Item</font></string>
-    <string name="recipes_item_unit"><font size="30">Unit</font></string>
-    <string name="recipes_item_qty"><font size="30">Qty</font></string>
+    <string name="recipes_item_value">Item</string>
+    <string name="recipes_item_unit">Unit</string>
+    <string name="recipes_item_qty">Qty</string>
 
     <string name="image_picker_no_intent">Image picker option is missing</string>
     <string name="image_picker_toolbar_title">Crop Image</string>
@@ -457,7 +460,7 @@
     <string name="settings_recipe_db_cleared">Recipe database cleared</string>
     <string name="settings_recipe_db_clear_failed">Failed to clear the recipe database!</string>
     <string name="settings_recipe_db_not_exist">Recipe database already cleared</string>
-    <string name="settings_recipe_db_clear_message">Are you sure you want to clear the recipe database? This action cannot be undone</string>
+    <string name="settings_recipe_db_clear_message">Are you sure you want to delete the recipe database? This action cannot be undone</string>
 
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Info</string>
@@ -579,7 +582,7 @@
     <string name="server_updater_update_dialog_title">Updating Branch</string>
     <string name="server_updater_change_dialog_title">Changing Branch</string>
     <string name="server_updater_change_dialog_message">Changing branches will force a restart of the server. This operation will overwrite the current branch. Are you sure you want to change branches?</string>
-    <string name="server_updater_update_dialog_message">Updating to the latest version will destroy any local <i>code</i> changes that have been made. Settings will be preserved \nAfter the server will be restarted.</string>
+    <string name="server_updater_update_dialog_message">Updating to the latest version will destroy any local code changes that have been made. Settings will be preserved. After the server will be restarted.</string>
     <string name="server_updater_error_offline">Currently Offline - Cannot check for updates</string>
 
 

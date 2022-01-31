@@ -16,10 +16,10 @@ import com.weberbox.pifire.databinding.LayoutCardviewHeaderBinding;
 @SuppressWarnings("unused")
 public class CardViewHeaderButton extends LinearLayout {
 
-    private TextView mHeaderTitle;
-    private TextView mButtonTitle;
-    private ImageView mHeaderIcon;
-    private boolean mButtonEnabled;
+    private TextView headerTitle;
+    private TextView buttonTitle;
+    private ImageView headerIcon;
+    private boolean buttonEnabled;
 
     public CardViewHeaderButton(Context context) {
         super(context);
@@ -50,26 +50,26 @@ public class CardViewHeaderButton extends LinearLayout {
 
             String headerText = typedArray.getString(R.styleable.CardViewHeaderButton_header_title);
             String buttonText = typedArray.getString(R.styleable.CardViewHeaderButton_button_text);
-            mButtonEnabled = typedArray.getBoolean(R.styleable.CardViewHeaderButton_button_enabled,
+            buttonEnabled = typedArray.getBoolean(R.styleable.CardViewHeaderButton_button_enabled,
                     false);
-            int headerIcon = typedArray.getResourceId(R.styleable.CardViewHeaderButton_header_icon,
+            int headerIconArray = typedArray.getResourceId(R.styleable.CardViewHeaderButton_header_icon,
                     R.drawable.ic_pellet_edit);
 
             headerText = headerText == null ? "" : headerText;
             buttonText = buttonText == null ? "" : buttonText;
 
-            mHeaderTitle = binding.cardHeaderTitle;
-            mButtonTitle = binding.cardHeaderButton;
-            mHeaderIcon = binding.cardHeaderIcon;
+            headerTitle = binding.cardHeaderTitle;
+            buttonTitle = binding.cardHeaderButton;
+            headerIcon = binding.cardHeaderIcon;
 
-            mHeaderTitle.setText(headerText);
-            mButtonTitle.setText(buttonText);
-            mHeaderIcon.setImageResource(headerIcon);
+            headerTitle.setText(headerText);
+            buttonTitle.setText(buttonText);
+            headerIcon.setImageResource(headerIconArray);
 
-            if (mButtonEnabled) {
-                mButtonTitle.setText(buttonText);
+            if (buttonEnabled) {
+                buttonTitle.setText(buttonText);
             } else {
-                mButtonTitle.setVisibility(GONE);
+                buttonTitle.setVisibility(GONE);
             }
 
             typedArray.recycle();
@@ -77,35 +77,35 @@ public class CardViewHeaderButton extends LinearLayout {
     }
 
     public void setHeaderTitle(String text) {
-        mHeaderTitle.setText(text);
+        headerTitle.setText(text);
     }
 
     public void setButtonTitle(String text) {
-        mButtonTitle.setText(text);
+        buttonTitle.setText(text);
     }
 
     public TextView getButton() {
-        return mButtonTitle;
+        return buttonTitle;
     }
 
     public String getHeaderTitle() {
-        return mHeaderTitle.getText().toString();
+        return headerTitle.getText().toString();
     }
 
     public String getButtonTitle() {
-        return mButtonTitle.getText().toString();
+        return buttonTitle.getText().toString();
     }
 
     public void setHeaderIcon(int icon) {
-        mHeaderIcon.setImageResource(icon);
+        headerIcon.setImageResource(icon);
     }
 
     public boolean getButtonEnabled() {
-        return mButtonEnabled;
+        return buttonEnabled;
     }
 
     public void setButtonEnabled(boolean buttonEnabled) {
-        mButtonEnabled = buttonEnabled;
+        this.buttonEnabled = buttonEnabled;
     }
 
 }

@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:stepperItems="@menu/activity_setup_steps"
-        app:stepperTextAppearance="@style/Text15Aller"
+        app:stepperTextAppearance="@style/Text15AllerBold"
         app:stepperTextColor="@color/colorWhite"
         app:stepperWidgetColor="@color/colorAccent"
         app:stepperIconSize="25dp"

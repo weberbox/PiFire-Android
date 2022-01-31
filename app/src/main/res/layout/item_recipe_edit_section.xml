@@ -24,19 +24,15 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_section_text"
-            style="@style/Text15AllerNormal"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
             android:hint="@string/recipes_item_section"
-            android:inputType="textCapWords"
+            android:inputType="textCapSentences"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -24,7 +24,7 @@
 
         <com.skydoves.powerspinner.PowerSpinnerView
             android:id="@+id/pellet_edit_brand_text"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pellet_edit_brand">
 
         <TextView
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -67,7 +67,7 @@
 
         <com.skydoves.powerspinner.PowerSpinnerView
             android:id="@+id/pellet_edit_wood_text"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -100,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/pellet_edit_wood">
 
         <TextView
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -109,7 +109,7 @@
 
         <com.skydoves.powerspinner.PowerSpinnerView
             android:id="@+id/pellet_edit_rating_text"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="80dp"
@@ -147,7 +147,7 @@
 
         <TextView
             android:id="@+id/pellets_edit_comments"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/small_spacing"
@@ -155,7 +155,7 @@
 
         <EditText
             android:id="@+id/pellet_edit_comments_text"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pellets_edit_comments"

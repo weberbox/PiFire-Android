@@ -17,7 +17,7 @@ import com.weberbox.pifire.ui.fragments.recipes.RecipeViewFragment;
 
 public class RecipeActivity extends BaseActivity {
 
-    private int mDownX;
+    private int downX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class RecipeActivity extends BaseActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            mDownX = (int) event.getRawX();
+            downX = (int) event.getRawX();
         }
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -88,7 +88,7 @@ public class RecipeActivity extends BaseActivity {
             if (v instanceof EditText) {
                 int x = (int) event.getRawX();
                 int y = (int) event.getRawY();
-                if (Math.abs(mDownX - x) > 5) {
+                if (Math.abs(downX - x) > 5) {
                     return super.dispatchTouchEvent(event);
                 }
                 final int reducePx = 25;

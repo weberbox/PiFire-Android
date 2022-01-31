@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/system_card_header">
 
             <TextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_spacing"
@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/cpu_info_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cpu_info">
 
             <TextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_spacing"
@@ -73,7 +73,7 @@
 
             <TextView
                 android:id="@+id/temp_info_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -93,7 +93,7 @@
             app:layout_constraintTop_toBottomOf="@+id/temp_info">
 
             <TextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_spacing"
@@ -102,7 +102,7 @@
 
             <TextView
                 android:id="@+id/network_info_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"

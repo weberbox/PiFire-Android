@@ -15,20 +15,19 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.interfaces.AdminCallback;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.ui.dialogs.AdminActionDialog;
+import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
-        SharedPreferences.OnSharedPreferenceChangeListener, AdminCallback {
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -40,7 +39,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
@@ -120,50 +119,163 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         if (historyDelete != null) {
             historyDelete.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_HISTORY);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.history_delete_content))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.delete),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) ->
+                                            ServerControl.sendDeleteHistory(socket,
+                                                    this::processPostResponse))
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
+
         }
 
         if (eventsDelete != null) {
             eventsDelete.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_EVENTS);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_delete_events_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.delete),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) ->
+                                            ServerControl.sendDeleteEvents(socket,
+                                                    this::processPostResponse))
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
         }
 
         if (pelletsLogDelete != null) {
             pelletsLogDelete.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_PELLET_LOG);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_delete_pellets_log_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.delete),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) ->
+                                            ServerControl.sendDeletePelletsLog(socket,
+                                                    this::processPostResponse))
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
         }
 
         if (pelletsDelete != null) {
             pelletsDelete.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_PELLET);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_delete_pellets_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.delete),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) ->
+                                            ServerControl.sendDeletePellets(socket,
+                                                    this::processPostResponse))
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
         }
 
         if (factoryReset != null) {
             factoryReset.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_RESET);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_factory_reset_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.reset),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) -> {
+                                        ServerControl.sendFactoryReset(socket,
+                                                this::processPostResponse);
+                                        dialogInterface.dismiss();
+                                    })
+                            .build();
+                    dialog.show();
+
+                }
+                return false;
             });
         }
 
         if (rebootSystem != null) {
             rebootSystem.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_REBOOT);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_reboot_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.reboot),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) -> {
+                                        ServerControl.sendRebootSystem(socket,
+                                                this::processPostResponse);
+                                        dialogInterface.dismiss();
+                                    })
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
         }
 
         if (shutdownSystem != null) {
             shutdownSystem.setOnPreferenceClickListener(preference -> {
-                showAdminDialog(Constants.ACTION_ADMIN_SHUTDOWN);
-                return true;
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_shutdown_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.shutdown),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) -> {
+                                        ServerControl.sendShutdownSystem(socket,
+                                                this::processPostResponse);
+                                        dialogInterface.dismiss();
+                                    })
+                            .build();
+                    dialog.show();
+                }
+                return false;
             });
         }
     }
@@ -174,15 +286,28 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_admin);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
+    }
+
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
     }
 
     @Override
@@ -193,53 +318,22 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_admin_debug)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setDebugMode(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setDebugMode(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
             }
         }
     }
 
-    @Override
-    public void onDialogPositive(int action) {
-        if (mSocket != null && mSocket.connected()) {
-            switch (action) {
-                case Constants.ACTION_ADMIN_HISTORY:
-                    GrillControl.setDeleteHistory(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_EVENTS:
-                    GrillControl.setDeleteEvents(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_PELLET_LOG:
-                    GrillControl.setDeletePelletsLog(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_PELLET:
-                    GrillControl.setDeletePellets(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_RESET:
-                    GrillControl.setFactoryReset(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_REBOOT:
-                    GrillControl.setRebootSystem(mSocket);
-                    break;
-                case Constants.ACTION_ADMIN_SHUTDOWN:
-                    GrillControl.setShutdownSystem(mSocket);
-                    break;
-            }
-        }
-    }
-
-    private void showAdminDialog(int type) {
-        if (getActivity() != null) {
-            if (mSocket != null && mSocket.connected()) {
-                AdminActionDialog adminDialog = new AdminActionDialog(getActivity(),
-                        this, type);
-                adminDialog.showDialog();
-            } else {
-                AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
-            }
+    private boolean socketConnected() {
+        if (socket != null && socket.connected()) {
+            return true;
+        } else {
+            AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
+            return false;
         }
     }
 }

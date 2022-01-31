@@ -22,12 +22,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetupFinishFragment extends Fragment {
 
-    private FragmentSetupFinishBinding mBinding;
+    private FragmentSetupFinishBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentSetupFinishBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentSetupFinishBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -36,17 +36,15 @@ public class SetupFinishFragment extends Fragment {
 
         SetupViewModel setupViewModel = new ViewModelProvider(requireActivity())
                 .get(SetupViewModel.class);
-        setupViewModel.getFab().observe(getViewLifecycleOwner(), setupFab ->
-                setupFab.setOnClickListener(v -> {
-                    if (getActivity() != null) {
-                        Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }
-                }));
-
+        setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> {
+            if (getActivity() != null) {
+                Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
@@ -57,6 +55,6 @@ public class SetupFinishFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
     }
 }

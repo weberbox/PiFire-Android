@@ -23,7 +23,7 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.ItemPelletsListEditBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsEditCardBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
-import com.weberbox.pifire.model.remote.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.RotateUtils;
 import com.weberbox.pifire.utils.StringUtils;

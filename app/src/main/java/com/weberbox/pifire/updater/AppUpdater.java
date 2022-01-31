@@ -28,288 +28,288 @@ import timber.log.Timber;
 
 public class AppUpdater implements IAppUpdater {
 
-    private View mView;
-    private View mViewAnchor;
-    private final Context mContext;
-    private final LibraryPreferences mLibraryPreferences;
-    private final String mNotifTitleUpdate;
-    private Display mDisplay;
-    private UpdateFrom mUpdateFrom;
-    private Duration mDuration;
-    private GitHub mGitHub;
-    private String mJsonUrl;
-    private Integer mShowEvery;
-    private Boolean mShowAppUpToDate;
-    private Boolean mBtnDisableShown;
-    private Boolean mBtnDismissShown;
-    private Boolean mShowAppUpdateError;
-    private String mTitleUpdate, mDescriptionUpdate, mBtnDismiss, mBtnUpdate, mBtnDisable; // Update available
-    private String mTitleNoUpdate, mDescriptionNoUpdate; // Update not available
-    private String mDescriptionUpdateFailed;
-    private int mIconResId;
-    private UtilsAsync.LatestAppVersion mLatestAppVersion;
-    private DialogInterface.OnClickListener mBtnUpdateClickListener, mBtnDismissClickListener,
-            mBtnDisableClickListener;
+    private View view;
+    private View viewAnchor;
+    private final Context context;
+    private final LibraryPreferences libraryPreferences;
+    private final String notifTitleUpdate;
+    private Display display;
+    private UpdateFrom updateFrom;
+    private Duration duration;
+    private GitHub gitHub;
+    private String jsonUrl;
+    private Integer showEvery;
+    private Boolean showAppUpToDate;
+    private Boolean btnDisableShown;
+    private Boolean btnDismissShown;
+    private Boolean showAppUpdateError;
+    private String titleUpdate, descriptionUpdate, btnDismiss, btnUpdate, btnDisable; // Update available
+    private String titleNoUpdate, descriptionNoUpdate; // Update not available
+    private String descriptionUpdateFailed;
+    private int iconResId;
+    private UtilsAsync.LatestAppVersion latestAppVersion;
+    private DialogInterface.OnClickListener btnUpdateClickListener, btnDismissClickListener,
+            btnDisableClickListener;
 
-    private AlertDialog mAlertDialog;
-    private Snackbar mSnackbar;
-    private Alerter mAlerter;
-    private Boolean mIsDialogCancelable;
-    private Boolean mShouldForceUpdateCheck;
-    private Boolean mManualForceUpdateCheck;
+    private AlertDialog alertDialog;
+    private Snackbar snackbar;
+    private Alerter alerter;
+    private Boolean isDialogCancelable;
+    private Boolean shouldForceUpdateCheck;
+    private Boolean manualForceUpdateCheck;
 
     public AppUpdater(Context context) {
-        mContext = context;
-        mLibraryPreferences = new LibraryPreferences(context);
-        mDisplay = Display.DIALOG;
-        mUpdateFrom = UpdateFrom.JSON;
-        mDuration = Duration.NORMAL;
-        mShowEvery = 1;
-        mShowAppUpToDate = false;
-        mBtnDisableShown = true;
-        mShowAppUpdateError = false;
-        mShouldForceUpdateCheck = false;
-        mManualForceUpdateCheck = false;
-        mIconResId = R.drawable.ic_update;
+        this.context = context;
+        libraryPreferences = new LibraryPreferences(context);
+        display = Display.DIALOG;
+        updateFrom = UpdateFrom.JSON;
+        duration = Duration.NORMAL;
+        showEvery = 1;
+        showAppUpToDate = false;
+        btnDisableShown = true;
+        showAppUpdateError = false;
+        shouldForceUpdateCheck = false;
+        manualForceUpdateCheck = false;
+        iconResId = R.drawable.ic_update;
 
         // Dialog
-        mTitleNoUpdate = context.getResources().getString(R.string.updater_update_not_available);
-        mBtnUpdate = context.getResources().getString(R.string.update_button);
-        mBtnDismiss = context.getResources().getString(R.string.dismiss_button);
-        mBtnDisable = context.getResources().getString(R.string.disable_button);
-        mIsDialogCancelable = true;
-        mBtnDismissShown = true;
+        titleNoUpdate = context.getResources().getString(R.string.updater_update_not_available);
+        btnUpdate = context.getResources().getString(R.string.update_button);
+        btnDismiss = context.getResources().getString(R.string.dismiss_button);
+        btnDisable = context.getResources().getString(R.string.disable_button);
+        isDialogCancelable = true;
+        btnDismissShown = true;
 
         // Notification
-        mNotifTitleUpdate = context.getResources().getString(R.string.updater_update_available);
+        notifTitleUpdate = context.getResources().getString(R.string.updater_update_available);
     }
 
     @Override
     public AppUpdater setDisplay(Display display) {
-        mDisplay = display;
+        this.display = display;
         return this;
     }
 
     @Override
     public AppUpdater setUpdateFrom(UpdateFrom updateFrom) {
-        mUpdateFrom = updateFrom;
+        this.updateFrom = updateFrom;
         return this;
     }
 
     @Override
     public AppUpdater setDuration(Duration duration) {
-        mDuration = duration;
+        this.duration = duration;
         return this;
     }
 
     @Override
     public AppUpdater setView(View view) {
-        mView = view;
+        this.view = view;
         return this;
     }
 
     @Override
     public AppUpdater setViewAnchor(View view) {
-        mViewAnchor = view;
+        viewAnchor = view;
         return this;
     }
 
     @Override
     public AppUpdater setGitHubUserAndRepo(@NonNull String user, @NonNull String repo) {
-        mGitHub = new GitHub(user, repo);
+        gitHub = new GitHub(user, repo);
         return this;
     }
 
     @Override
     public AppUpdater setUpdateJSON(@NonNull String jsonUrl) {
-        mJsonUrl = jsonUrl;
+        this.jsonUrl = jsonUrl;
         return this;
     }
 
 
     @Override
     public AppUpdater showEvery(Integer times) {
-        mShowEvery = times;
+        showEvery = times;
         return this;
     }
 
     @Override
     public AppUpdater showAppUpToDate(Boolean res) {
-        mShowAppUpToDate = res;
+        showAppUpToDate = res;
         return this;
     }
 
     @Override
     public AppUpdater showAppUpdateError(Boolean res) {
-        mShowAppUpdateError = res;
+        showAppUpdateError = res;
         return this;
     }
 
     @Override
     public AppUpdater setAppUpdateCheckFailedText(@NonNull String text) {
-        mDescriptionUpdateFailed = text;
+        descriptionUpdateFailed = text;
         return this;
     }
 
     @Override
     public AppUpdater setTitleOnUpdateAvailable(@NonNull String title) {
-        mTitleUpdate = title;
+        titleUpdate = title;
         return this;
     }
 
     @Override
     public AppUpdater setTitleOnUpdateAvailable(@StringRes int textResource) {
-        mTitleUpdate = mContext.getString(textResource);
+        titleUpdate = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setContentOnUpdateAvailable(@NonNull String description) {
-        mDescriptionUpdate = description;
+        descriptionUpdate = description;
         return this;
     }
 
     @Override
     public AppUpdater setContentOnUpdateAvailable(@StringRes int textResource) {
-        mDescriptionUpdate = mContext.getString(textResource);
+        descriptionUpdate = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setTitleOnUpdateNotAvailable(@NonNull String title) {
-        mTitleNoUpdate = title;
+        titleNoUpdate = title;
         return this;
     }
 
     @Override
     public AppUpdater setTitleOnUpdateNotAvailable(@StringRes int textResource) {
-        mTitleNoUpdate = mContext.getString(textResource);
+        titleNoUpdate = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setContentOnUpdateNotAvailable(@NonNull String description) {
-        mDescriptionNoUpdate = description;
+        descriptionNoUpdate = description;
         return this;
     }
 
     @Override
     public AppUpdater setContentOnUpdateNotAvailable(@StringRes int textResource) {
-        mDescriptionNoUpdate = mContext.getString(textResource);
+        descriptionNoUpdate = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setButtonUpdate(@NonNull String text) {
-        mBtnUpdate = text;
+        btnUpdate = text;
         return this;
     }
 
     @Override
     public AppUpdater setButtonUpdate(@StringRes int textResource) {
-        mBtnUpdate = mContext.getString(textResource);
+        btnUpdate = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setButtonDismiss(@NonNull String text) {
-        mBtnDismiss = text;
+        btnDismiss = text;
         return this;
     }
 
     @Override
     public AppUpdater setButtonDismiss(@StringRes int textResource) {
-        mBtnDismiss = mContext.getString(textResource);
+        btnDismiss = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setButtonDoNotShowAgain(@NonNull String text) {
-        mBtnDisable = text;
+        btnDisable = text;
         return this;
     }
 
     @Override
     public AppUpdater setButtonDoNotShowAgain(@StringRes int textResource) {
-        mBtnDisable = mContext.getString(textResource);
+        btnDisable = context.getString(textResource);
         return this;
     }
 
     @Override
     public AppUpdater setButtonDoNotShowAgain(@NonNull Boolean isShown) {
-        mBtnDisableShown = isShown;
+        btnDisableShown = isShown;
         return this;
     }
 
     @Override
     public AppUpdater setButtonDismissEnabled(@NonNull Boolean isShown) {
-        mBtnDismissShown = isShown;
+        btnDismissShown = isShown;
         return this;
     }
 
     @Override
     public AppUpdater setButtonUpdateClickListener(final DialogInterface.OnClickListener clickListener) {
-        mBtnUpdateClickListener = clickListener;
+        btnUpdateClickListener = clickListener;
         return this;
     }
 
     @Override
     public AppUpdater setButtonDismissClickListener(final DialogInterface.OnClickListener clickListener) {
-        mBtnDismissClickListener = clickListener;
+        btnDismissClickListener = clickListener;
         return this;
     }
 
     @Override
     public AppUpdater setButtonDoNotShowAgainClickListener(final DialogInterface.OnClickListener clickListener) {
-        mBtnDisableClickListener = clickListener;
+        btnDisableClickListener = clickListener;
         return this;
     }
 
     @Override
     public AppUpdater setIcon(@DrawableRes int iconRes) {
-        mIconResId = iconRes;
+        iconResId = iconRes;
         return this;
     }
 
     @Override
     public AppUpdater setCancelable(Boolean isDialogCancelable) {
-        mIsDialogCancelable = isDialogCancelable;
+        this.isDialogCancelable = isDialogCancelable;
         return this;
     }
 
     @Override
     public AppUpdater setForceCheck(Boolean forceCheck) {
-        mManualForceUpdateCheck = forceCheck;
+        manualForceUpdateCheck = forceCheck;
         return this;
     }
 
     @Override
     public void start() {
-        Integer forceChecks = mLibraryPreferences.getForcedChecks();
-        if (!mLibraryPreferences.getAppUpdaterShow()) {
-            mLibraryPreferences.setForcedChecks(forceChecks + 1);
-            if (mLibraryPreferences.getUpdateRequired() | forceChecks % 25 == 0) {
-                mShouldForceUpdateCheck = true;
+        Integer forceChecks = libraryPreferences.getForcedChecks();
+        if (!libraryPreferences.getAppUpdaterShow()) {
+            libraryPreferences.setForcedChecks(forceChecks + 1);
+            if (libraryPreferences.getUpdateRequired() | forceChecks % 25 == 0) {
+                shouldForceUpdateCheck = true;
             }
         } else {
-            mShouldForceUpdateCheck = mLibraryPreferences.getAppUpdaterShow();
+            shouldForceUpdateCheck = libraryPreferences.getAppUpdaterShow();
         }
 
-        if (mManualForceUpdateCheck) {
-            mShouldForceUpdateCheck = true;
+        if (manualForceUpdateCheck) {
+            shouldForceUpdateCheck = true;
         }
 
-        mLatestAppVersion = new UtilsAsync.LatestAppVersion(mContext, mShouldForceUpdateCheck,
-                mUpdateFrom, mGitHub, mJsonUrl, new LibraryListener() {
+        latestAppVersion = new UtilsAsync.LatestAppVersion(context, shouldForceUpdateCheck,
+                updateFrom, gitHub, jsonUrl, new LibraryListener() {
             @Override
             public void onSuccess(Update update) {
-                if (mContext instanceof Activity && ((Activity) mContext).isFinishing()) {
+                if (context instanceof Activity && ((Activity) context).isFinishing()) {
                     return;
                 }
 
-                Integer currentInstalledVersionCode = UtilsLibrary.getAppInstalledVersionCode(mContext);
+                Integer currentInstalledVersionCode = UtilsLibrary.getAppInstalledVersionCode(context);
 
-                Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(mContext),
+                Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(context),
                         currentInstalledVersionCode);
 
                 boolean forceUpdateRequired =  UtilsLibrary.getRequiredUpdate(update,
@@ -317,94 +317,94 @@ public class AppUpdater implements IAppUpdater {
 
                 if (UtilsLibrary.isUpdateAvailable(installedVersion, update)) {
                     Timber.i("Update Available");
-                    Integer successfulChecks = mLibraryPreferences.getSuccessfulChecks();
-                    if (UtilsLibrary.isAbleToShow(successfulChecks, mShowEvery) |
-                            forceUpdateRequired | mManualForceUpdateCheck) {
-                        if (mLibraryPreferences.getAppUpdaterShow() | forceUpdateRequired |
-                                mManualForceUpdateCheck) {
-                            switch (mDisplay) {
+                    Integer successfulChecks = libraryPreferences.getSuccessfulChecks();
+                    if (UtilsLibrary.isAbleToShow(successfulChecks, showEvery) |
+                            forceUpdateRequired | manualForceUpdateCheck) {
+                        if (libraryPreferences.getAppUpdaterShow() | forceUpdateRequired |
+                                manualForceUpdateCheck) {
+                            switch (display) {
                                 case DIALOG:
                                     if (forceUpdateRequired) {
                                         Timber.d("Force Update Requested");
-                                        mLibraryPreferences.setUpdateRequired(true);
-                                        mBtnUpdateClickListener = new ForceUpdateClickListener(
-                                                mContext, update);
-                                        mIsDialogCancelable = false;
-                                        mBtnDisableShown = false;
-                                        mBtnDismissShown = false;
+                                        libraryPreferences.setUpdateRequired(true);
+                                        btnUpdateClickListener = new ForceUpdateClickListener(
+                                                context, update);
+                                        isDialogCancelable = false;
+                                        btnDisableShown = false;
+                                        btnDismissShown = false;
                                     } else {
-                                        mLibraryPreferences.setUpdateRequired(false);
+                                        libraryPreferences.setUpdateRequired(false);
                                     }
 
                                     final DialogInterface.OnClickListener updateClickListener =
-                                            mBtnUpdateClickListener == null ? new UpdateClickListener(
-                                                    mContext, update) : mBtnUpdateClickListener;
+                                            btnUpdateClickListener == null ? new UpdateClickListener(
+                                                    context, update) : btnUpdateClickListener;
 
                                     final DialogInterface.OnClickListener disableClickListener =
-                                            mBtnDisableClickListener == null ? new DisableClickListener(
-                                                    mContext) : mBtnDisableClickListener;
+                                            btnDisableClickListener == null ? new DisableClickListener(
+                                                    context) : btnDisableClickListener;
 
-                                    mAlertDialog = UtilsDisplay.showUpdateAvailableDialog(mContext,
-                                            getDialogTitleUpdate(mContext, update, forceUpdateRequired),
-                                            getDescriptionUpdate(mContext, update, Display.DIALOG),
-                                            mBtnDismiss, mBtnUpdate, mBtnDisable,
-                                            updateClickListener, mBtnDismissClickListener,
-                                            disableClickListener, mBtnDisableShown, mBtnDismissShown,
+                                    alertDialog = UtilsDisplay.showUpdateAvailableDialog(context,
+                                            getDialogTitleUpdate(context, update, forceUpdateRequired),
+                                            getDescriptionUpdate(context, update, Display.DIALOG),
+                                            btnDismiss, btnUpdate, btnDisable,
+                                            updateClickListener, btnDismissClickListener,
+                                            disableClickListener, btnDisableShown, btnDismissShown,
                                             forceUpdateRequired);
 
-                                    mAlertDialog.setCancelable(mIsDialogCancelable);
-                                    mAlertDialog.show();
+                                    alertDialog.setCancelable(isDialogCancelable);
+                                    alertDialog.show();
                                     break;
                                 case SNACKBAR:
-                                    mSnackbar = UtilsDisplay.showUpdateAvailableSnackbar(mView, mViewAnchor,
-                                            getDescriptionUpdate(mContext, update, Display.SNACKBAR),
-                                            UtilsLibrary.getDurationEnumToBoolean(mDuration), update);
-                                    mSnackbar.show();
+                                    snackbar = UtilsDisplay.showUpdateAvailableSnackbar(view, viewAnchor,
+                                            getDescriptionUpdate(context, update, Display.SNACKBAR),
+                                            UtilsLibrary.getDurationEnumToBoolean(duration), update);
+                                    snackbar.show();
                                 case ALERTER:
-                                    if (mContext instanceof Activity) {
-                                        mAlerter = UtilsDisplay.showUpdateAvailableAlert(
-                                                (Activity) mContext, getDescriptionUpdate(mContext,
+                                    if (context instanceof Activity) {
+                                        alerter = UtilsDisplay.showUpdateAvailableAlert(
+                                                (Activity) context, getDescriptionUpdate(context,
                                                         update, Display.ALERTER),
-                                                UtilsLibrary.getDurationEnumToBoolean(mDuration), update);
-                                        mAlerter.show();
+                                                UtilsLibrary.getDurationEnumToBoolean(duration), update);
+                                        alerter.show();
                                     }
                                     break;
                                 case NOTIFICATION:
-                                    UtilsDisplay.showUpdateAvailableNotification(mContext, mNotifTitleUpdate,
-                                            getDescriptionUpdate(mContext, update, Display.NOTIFICATION),
-                                            update.getUrlToDownload(), mIconResId);
+                                    UtilsDisplay.showUpdateAvailableNotification(context, notifTitleUpdate,
+                                            getDescriptionUpdate(context, update, Display.NOTIFICATION),
+                                            update.getUrlToDownload(), iconResId);
                                     break;
                             }
                         }
                     }
-                    mLibraryPreferences.setSuccessfulChecks(successfulChecks + 1);
-                } else if (mShowAppUpToDate) {
+                    libraryPreferences.setSuccessfulChecks(successfulChecks + 1);
+                } else if (showAppUpToDate) {
                     Timber.i("No Update Available");
 
-                    switch (mDisplay) {
+                    switch (display) {
                         case DIALOG:
-                            mAlertDialog = UtilsDisplay.showUpdateNotAvailableDialog(mContext,
-                                    mTitleNoUpdate, getDescriptionNoUpdate(mContext));
-                            mAlertDialog.setCancelable(mIsDialogCancelable);
-                            mAlertDialog.show();
+                            alertDialog = UtilsDisplay.showUpdateNotAvailableDialog(context,
+                                    titleNoUpdate, getDescriptionNoUpdate(context));
+                            alertDialog.setCancelable(isDialogCancelable);
+                            alertDialog.show();
                             break;
                         case SNACKBAR:
-                            mSnackbar = UtilsDisplay.showUpdateNotAvailableSnackbar(mView, mViewAnchor,
-                                    getDescriptionNoUpdate(mContext),
-                                    UtilsLibrary.getDurationEnumToBoolean(mDuration));
-                            mSnackbar.show();
+                            snackbar = UtilsDisplay.showUpdateNotAvailableSnackbar(view, viewAnchor,
+                                    getDescriptionNoUpdate(context),
+                                    UtilsLibrary.getDurationEnumToBoolean(duration));
+                            snackbar.show();
                             break;
                         case ALERTER:
-                            if (mContext instanceof Activity) {
-                                mAlerter = UtilsDisplay.showUpdateNotAvailableAlert(
-                                        (Activity) mContext, getDescriptionNoUpdate(mContext),
-                                        UtilsLibrary.getDurationEnumToBoolean(mDuration));
-                                mAlerter.show();
+                            if (context instanceof Activity) {
+                                alerter = UtilsDisplay.showUpdateNotAvailableAlert(
+                                        (Activity) context, getDescriptionNoUpdate(context),
+                                        UtilsLibrary.getDurationEnumToBoolean(duration));
+                                alerter.show();
                             }
                             break;
                         case NOTIFICATION:
-                            UtilsDisplay.showUpdateNotAvailableNotification(mContext, mTitleNoUpdate,
-                                    getDescriptionNoUpdate(mContext), mIconResId);
+                            UtilsDisplay.showUpdateNotAvailableNotification(context, titleNoUpdate,
+                                    getDescriptionNoUpdate(context), iconResId);
                             break;
                     }
                 } else {
@@ -415,51 +415,51 @@ public class AppUpdater implements IAppUpdater {
             @Override
             public void onFailed(AppUpdaterError error) {
                 Timber.d("AppUpdater onFailed: %s", error);
-                if (mShowAppUpdateError) {
-                    if (mContext instanceof Activity) {
-                        mAlerter = UtilsDisplay.showUpdateFailedAlert((Activity) mContext,
-                                getDescriptionUpdateFailed(mContext),
-                                UtilsLibrary.getDurationEnumToBoolean(mDuration));
-                        mAlerter.show();
+                if (showAppUpdateError) {
+                    if (context instanceof Activity) {
+                        alerter = UtilsDisplay.showUpdateFailedAlert((Activity) context,
+                                getDescriptionUpdateFailed(context),
+                                UtilsLibrary.getDurationEnumToBoolean(duration));
+                        alerter.show();
                     } else {
-                        mSnackbar = UtilsDisplay.showUpdateFailedSnackbar(mView, null,
-                                getDescriptionUpdateFailed(mContext),
-                                UtilsLibrary.getDurationEnumToBoolean(mDuration));
-                        mSnackbar.show();
+                        snackbar = UtilsDisplay.showUpdateFailedSnackbar(view, null,
+                                getDescriptionUpdateFailed(context),
+                                UtilsLibrary.getDurationEnumToBoolean(duration));
+                        snackbar.show();
                     }
                 }
             }
         });
 
-        mLatestAppVersion.execute();
+        latestAppVersion.execute();
     }
 
     @Override
     public void stop() {
-        if (mLatestAppVersion != null && !mLatestAppVersion.isCancelled()) {
-            mLatestAppVersion.cancel();
+        if (latestAppVersion != null && !latestAppVersion.isCancelled()) {
+            latestAppVersion.cancel();
         }
     }
 
     @Override
     public void dismiss() {
-        if (mAlertDialog != null && mAlertDialog.isShowing()) {
-            mAlertDialog.dismiss();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
         }
-        if (mSnackbar != null && mSnackbar.isShown()) {
-            mSnackbar.dismiss();
+        if (snackbar != null && snackbar.isShown()) {
+            snackbar.dismiss();
         }
-        if (mAlerter != null && Alerter.isShowing()) {
+        if (alerter != null && Alerter.isShowing()) {
             Alerter.hide();
         }
     }
 
     private String getDescriptionUpdate(Context context, Update update, Display display) {
-        if (mDescriptionUpdate == null || TextUtils.isEmpty(mDescriptionUpdate)) {
+        if (descriptionUpdate == null || TextUtils.isEmpty(descriptionUpdate)) {
             switch (display) {
                 case DIALOG:
                     if (update.getReleaseNotes() != null && !TextUtils.isEmpty(update.getReleaseNotes())) {
-                        if (TextUtils.isEmpty(mDescriptionUpdate)) {
+                        if (TextUtils.isEmpty(descriptionUpdate)) {
                             return update.getReleaseNotes();
                         } else {
                             return String.format(context.getResources().getString(
@@ -486,20 +486,20 @@ public class AppUpdater implements IAppUpdater {
             }
         }
 
-        return mDescriptionUpdate;
+        return descriptionUpdate;
     }
 
     private String getDialogTitleUpdate(Context context, Update update, boolean forceUpdate) {
         if (forceUpdate) {
-            mTitleUpdate = context.getResources().getString(R.string.updater_update_required);
+            titleUpdate = context.getResources().getString(R.string.updater_update_required);
         } else {
-            if (mTitleUpdate == null || TextUtils.isEmpty(mTitleUpdate)) {
+            if (titleUpdate == null || TextUtils.isEmpty(titleUpdate)) {
                 if (update.getReleaseNotes() != null && !TextUtils.isEmpty(update.getReleaseNotes())) {
-                    if (TextUtils.isEmpty(mTitleUpdate)) {
+                    if (TextUtils.isEmpty(titleUpdate)) {
                         return String.format(context.getResources().getString(
                                 R.string.updater_update_available_description_snackbar), update.getLatestVersion());
                     } else {
-                        return mTitleUpdate;
+                        return titleUpdate;
                     }
                 } else {
                     return context.getResources().getString(R.string.updater_update_available);
@@ -507,25 +507,25 @@ public class AppUpdater implements IAppUpdater {
             }
         }
 
-        return mTitleUpdate;
+        return titleUpdate;
     }
 
     @SuppressWarnings("all")
     private String getDescriptionNoUpdate(Context context) {
-        if (mDescriptionNoUpdate == null) {
+        if (descriptionNoUpdate == null) {
             return String.format(context.getResources().getString(
                     R.string.updater_update_not_available_description),
                     UtilsLibrary.getAppName(context));
         } else {
-            return mDescriptionNoUpdate;
+            return descriptionNoUpdate;
         }
     }
 
     private String getDescriptionUpdateFailed(Context context) {
-        if (mDescriptionUpdateFailed == null) {
+        if (descriptionUpdateFailed == null) {
             return context.getResources().getString(R.string.updater_update_check_failed);
         } else {
-            return mDescriptionUpdateFailed;
+            return descriptionUpdateFailed;
         }
     }
 

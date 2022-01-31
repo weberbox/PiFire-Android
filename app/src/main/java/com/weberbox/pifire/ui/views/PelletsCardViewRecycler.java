@@ -20,13 +20,13 @@ import com.weberbox.pifire.databinding.LayoutPelletsCardviewBinding;
 @SuppressWarnings("unused")
 public class PelletsCardViewRecycler extends CardView {
 
-    private VeilRecyclerFrameView mRecyclerView;
-    private TextView mHeaderTitle;
-    private TextView mHeaderButton;
-    private ImageView mHeaderIcon;
-    private View mGradient;
-    private TextView mViewAllButton;
-    private boolean mButtonEnabled;
+    private VeilRecyclerFrameView recyclerView;
+    private TextView headerTitle;
+    private TextView headerButton;
+    private ImageView headerIcon;
+    private View gradient;
+    private TextView viewAllButton;
+    private boolean buttonEnabled;
 
     public PelletsCardViewRecycler(@NonNull Context context) {
         super(context);
@@ -52,32 +52,32 @@ public class PelletsCardViewRecycler extends CardView {
 
             String headerText = typedArray.getString(R.styleable.PelletsCardViewRecycler_pellets_header_title);
             String buttonText = typedArray.getString(R.styleable.PelletsCardViewRecycler_pellets_button_text);
-            mButtonEnabled = typedArray.getBoolean(R.styleable.PelletsCardViewRecycler_pellets_button_enabled,
+            buttonEnabled = typedArray.getBoolean(R.styleable.PelletsCardViewRecycler_pellets_button_enabled,
                     false);
-            int headerIcon = typedArray.getResourceId(R.styleable.PelletsCardViewRecycler_pellets_header_icon,
+            int headerIconArray = typedArray.getResourceId(R.styleable.PelletsCardViewRecycler_pellets_header_icon,
                     R.drawable.ic_pellet_edit);
 
             headerText = headerText == null ? "" : headerText;
             buttonText = buttonText == null ? "" : buttonText;
 
-            mHeaderTitle = binding.cardHeaderTitle;
-            mHeaderButton = binding.cardHeaderButton;
-            mHeaderIcon = binding.cardHeaderIcon;
-            mRecyclerView = binding.pelletsRecycler;
-            mGradient = binding.pelletsViewAllShadow;
-            mViewAllButton = binding.pelletsViewAll;
+            headerTitle = binding.cardHeaderTitle;
+            headerButton = binding.cardHeaderButton;
+            headerIcon = binding.cardHeaderIcon;
+            recyclerView = binding.pelletsRecycler;
+            gradient = binding.pelletsViewAllShadow;
+            viewAllButton = binding.pelletsViewAll;
 
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            mRecyclerView.setNestedScrollingEnabled(false);
-            mRecyclerView.addVeiledItems(3);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setNestedScrollingEnabled(false);
+            recyclerView.addVeiledItems(3);
 
-            mHeaderTitle.setText(headerText);
-            mHeaderIcon.setImageResource(headerIcon);
+            headerTitle.setText(headerText);
+            headerIcon.setImageResource(headerIconArray);
 
-            if (mButtonEnabled) {
-                mHeaderButton.setText(buttonText);
+            if (buttonEnabled) {
+                headerButton.setText(buttonText);
             } else {
-                mHeaderButton.setVisibility(GONE);
+                headerButton.setVisibility(GONE);
             }
 
             typedArray.recycle();
@@ -85,48 +85,48 @@ public class PelletsCardViewRecycler extends CardView {
     }
 
     public String getHeaderTitle() {
-        return mHeaderTitle.getText().toString();
+        return headerTitle.getText().toString();
     }
 
     public void setHeaderTitle(String text) {
-        mHeaderTitle.setText(text);
+        headerTitle.setText(text);
     }
 
     public String getButtonTitle() {
-        return mHeaderButton.getText().toString();
+        return headerButton.getText().toString();
     }
 
     public void setButtonTitle(String text) {
-        mHeaderButton.setText(text);
+        headerButton.setText(text);
     }
 
     public boolean getButtonEnabled() {
-        return mButtonEnabled;
+        return buttonEnabled;
     }
 
     public void setButtonEnabled(boolean buttonEnabled) {
-        mButtonEnabled = buttonEnabled;
+        this.buttonEnabled = buttonEnabled;
     }
 
     public void setHeaderIcon(int icon) {
-        mHeaderIcon.setImageResource(icon);
+        headerIcon.setImageResource(icon);
     }
 
     public TextView getHeaderButton() {
-        return mHeaderButton;
+        return headerButton;
     }
 
     public VeilRecyclerFrameView getRecycler() {
-        return mRecyclerView;
+        return recyclerView;
     }
 
     public void setViewAll(boolean shown) {
-        mGradient.setVisibility(shown ? VISIBLE : GONE);
-        mViewAllButton.setVisibility(shown ? VISIBLE : GONE);
+        gradient.setVisibility(shown ? VISIBLE : GONE);
+        viewAllButton.setVisibility(shown ? VISIBLE : GONE);
     }
 
     public TextView getViewAllButton() {
-        return mViewAllButton;
+        return viewAllButton;
     }
 
 }

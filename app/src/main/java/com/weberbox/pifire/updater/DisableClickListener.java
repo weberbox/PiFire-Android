@@ -9,14 +9,14 @@ import android.content.DialogInterface;
  */
 public class DisableClickListener implements DialogInterface.OnClickListener {
 
-    private final LibraryPreferences mLibraryPreferences;
+    private final LibraryPreferences libraryPreferences;
 
     public DisableClickListener(final Context context) {
-        mLibraryPreferences = new LibraryPreferences(context);
+        libraryPreferences = new LibraryPreferences(context);
     }
 
     @Override
     public void onClick(final DialogInterface dialog, final int which) {
-        mLibraryPreferences.setAppUpdaterShow(false);
+        libraryPreferences.setAppUpdaterShow(false);
     }
 }

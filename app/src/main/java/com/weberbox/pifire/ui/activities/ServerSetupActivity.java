@@ -21,40 +21,42 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 import com.weberbox.pifire.model.view.SetupViewModel;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 
 public class ServerSetupActivity extends AppCompatActivity {
 
-    private StepperNavigationView mStepper;
-    private AppBarConfiguration mAppBarConfiguration;
-    private ActivityServerSetupBinding mBinding;
-    private int mDownX;
+    private StepperNavigationView stepper;
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityServerSetupBinding binding;
+    private FloatingActionButton setupFab;
+    private int downX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mBinding = ActivityServerSetupBinding.inflate(getLayoutInflater());
-        setContentView(mBinding.getRoot());
+        binding = ActivityServerSetupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setSupportActionBar(mBinding.setupToolbar);
+        setSupportActionBar(binding.setupToolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        FloatingActionButton setupFab = mBinding.fabSetup;
+        setupFab = binding.fabSetup;
 
-        mStepper = mBinding.setupLayout.setupStepper;
+        stepper = binding.setupLayout.setupStepper;
 
         if (AppConfig.USE_ONESIGNAL) {
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
+            appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_setup_welcome,
                     R.id.nav_setup_address,
                     R.id.nav_setup_push,
                     R.id.nav_setup_finish)
                     .build();
         } else {
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
+            appBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_setup_welcome,
                     R.id.nav_setup_address,
                     R.id.nav_setup_finish)
@@ -63,25 +65,33 @@ public class ServerSetupActivity extends AppCompatActivity {
 
         NavController navController = Navigation.findNavController(this,
                 R.id.server_setup_fragment);
-        mStepper.setupWithNavController(navController);
+        stepper.setupWithNavController(navController);
 
         NavigationUI.setupActionBarWithNavController(this, navController);
 
-        SetupViewModel mViewModel = new ViewModelProvider(this).get(SetupViewModel.class);
+        SetupViewModel setupViewModel = new ViewModelProvider(this).get(SetupViewModel.class);
 
-        mViewModel.setFab(setupFab);
+        setupFab.setOnClickListener(v -> setupViewModel.fabOnClick());
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.nav_setup_scan_qr) {
+                AnimUtils.rotateFabBackwards(setupFab);
+            } else {
+                AnimUtils.rotateFabForwards(setupFab);
+            }
+        });
 
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBinding = null;
+        binding = null;
     }
 
     @Override
     public void onBackPressed() {
-        if (mStepper.getCurrentStep() == 0) {
+        if (stepper.getCurrentStep() == 0) {
             super.onBackPressed();
         } else {
             onSupportNavigateUp();
@@ -91,14 +101,14 @@ public class ServerSetupActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(Navigation.findNavController(this,
-                R.id.server_setup_fragment), mAppBarConfiguration)
+                R.id.server_setup_fragment), appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            mDownX = (int) event.getRawX();
+            downX = (int) event.getRawX();
         }
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -106,7 +116,7 @@ public class ServerSetupActivity extends AppCompatActivity {
             if (v instanceof EditText) {
                 int x = (int) event.getRawX();
                 int y = (int) event.getRawY();
-                if (Math.abs(mDownX - x) > 5) {
+                if (Math.abs(downX - x) > 5) {
                     return super.dispatchTouchEvent(event);
                 }
                 final int reducePx = 25;

@@ -20,14 +20,13 @@ import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.PushConfig;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.interfaces.SettingsCallback;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.OneSignalDeviceInfo;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalDeviceInfo;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -47,23 +46,25 @@ public class OneSignalUtils {
             Timber.d("OneSignal State Changed %s", stateChanges);
             if (!stateChanges.getFrom().isSubscribed() &&
                     stateChanges.getTo().isSubscribed()) {
-                registerPlayerID(socket, stateChanges.getTo().getUserId(), true);
+//                registerPlayerID(socket, stateChanges.getTo().getUserId(), true);
 
             } else if (stateChanges.getFrom().isSubscribed() &&
                     !stateChanges.getTo().isSubscribed()) {
-                registerPlayerID(socket, stateChanges.getFrom().getUserId(), false);
+//                registerPlayerID(socket, stateChanges.getFrom().getUserId(), false);
             }
         });
     }
 
-    private static void registerPlayerID(Socket socket, String playerID,
+    private static void registerPlayerID(Context context, Socket socket, String playerID,
                                          boolean subscribed) {
         if (playerID != null && socket.connected()) {
             if (subscribed) {
-                GrillControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID);
-                GrillControl.addOneSignalDevice(socket, playerID, getDevice());
+                ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
+                        OneSignalUtils::processPostResponse);
+                addOneSignalDevice(context, socket, playerID, getDevice());
             } else {
-                GrillControl.removeOneSignalDevice(socket, playerID);
+                ServerControl.removeOneSignalDevice(socket, playerID,
+                        OneSignalUtils::processPostResponse);
             }
         }
     }
@@ -75,23 +76,26 @@ public class OneSignalUtils {
     public static void registerDevice(Context context, Socket socket) {
         if (OneSignal.userProvidedPrivacyConsent()) {
             if (OneSignal.getDeviceState() != null) {
-                String playerID = OneSignal.getDeviceState().getUserId();
-                if (playerID != null) {
-                    Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
-                    if (devicesHash != null) {
-                        for (Map.Entry<String, OneSignalDeviceInfo> device :
-                                devicesHash.entrySet()) {
-                            if (device.getKey().equals(playerID) &&
-                                    device.getValue().getAppVersion().equals(
-                                            BuildConfig.VERSION_NAME)) {
-                                Timber.d("Device already registered with PiFire");
-                                return;
+                if (OneSignal.getDeviceState().isSubscribed()) {
+                    String playerID = OneSignal.getDeviceState().getUserId();
+                    if (playerID != null) {
+                        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
+                        if (devicesHash != null) {
+                            for (Map.Entry<String, OneSignalDeviceInfo> device :
+                                    devicesHash.entrySet()) {
+                                if (device.getKey().equals(playerID) &&
+                                        device.getValue().getAppVersion().equals(
+                                                BuildConfig.VERSION_NAME)) {
+                                    Timber.d("Device already registered with PiFire");
+                                    return;
+                                }
                             }
                         }
-                    }
 
-                    GrillControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID);
-                    addOneSignalDevice(context, socket, playerID, getDevice());
+                        ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
+                                OneSignalUtils::processPostResponse);
+                        addOneSignalDevice(context, socket, playerID, getDevice());
+                    }
                 }
             }
         }
@@ -100,27 +104,36 @@ public class OneSignalUtils {
     private static void addOneSignalDevice(Context context, Socket socket, String playerID,
                                            OneSignalDeviceInfo deviceInfo) {
         if (socket.connected()) {
-            socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
-                    JSONUtils.encodeJSON(
-                            ServerConstants.NOTIF_ACTION,
-                            ServerConstants.NOTIF_ONESIGNAL_ADD, true,
-                            ServerConstants.NOTIF_ONESIGNAL_PLAYER_ID, playerID,
-                            ServerConstants.NOTIF_ONESIGNAL_DEVICE_NAME,
-                            deviceInfo.getDeviceName(),
-                            ServerConstants.NOTIF_ONESIGNAL_APP_VERSION,
-                            deviceInfo.getAppVersion()),
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null) {
-                            if (args[0].toString().equalsIgnoreCase("success")) {
-                                new SettingsUtils(context, settingsCallback)
-                                        .requestSettingsData(socket);
-                            } else {
-                                Timber.d("Failed to register with Pifire");
-                            }
-                        }
-                    });
+            Map<String, OneSignalDeviceInfo> device = new HashMap<>();
+            device.put(playerID, deviceInfo);
+            ServerControl.registerOneSignalDevice(context, socket, device);
         }
     }
+
+//    private static void addOneSignalDevice(Context context, Socket socket, String playerID,
+//                                           OneSignalDeviceInfo deviceInfo) {
+//        if (socket.connected()) {
+//            socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
+//                    JSONUtils.encodeJSON(
+//                            ServerConstants.NOTIF_ACTION,
+//                            ServerConstants.NOTIF_ONESIGNAL_ADD, true,
+//                            ServerConstants.NOTIF_ONESIGNAL_PLAYER_ID, playerID,
+//                            ServerConstants.NOTIF_ONESIGNAL_DEVICE_NAME,
+//                            deviceInfo.getDeviceName(),
+//                            ServerConstants.NOTIF_ONESIGNAL_APP_VERSION,
+//                            deviceInfo.getAppVersion()),
+//                    (Ack) args -> {
+//                        if (args.length > 0 && args[0] != null) {
+//                            if (args[0].toString().equalsIgnoreCase("success")) {
+//                                new SettingsUtils(context, settingsCallback)
+//                                        .requestSettingsData(socket);
+//                            } else {
+//                                Timber.d("Failed to register with Pifire");
+//                            }
+//                        }
+//                    });
+//        }
+//    }
 
     public static void checkOneSignalStatus(Activity activity, Socket socket) {
         int status = OneSignalUtils.checkRegistration(activity);
@@ -152,28 +165,34 @@ public class OneSignalUtils {
             case Constants.ONESIGNAL_REGISTERED:
                 Timber.d("Device already registered with PiFire");
                 break;
+            case Constants.ONESIGNAL_NOT_SUBSCRIBED:
+                Timber.d("Device is not subscribed");
+                break;
         }
     }
 
     public static int checkRegistration(Context context) {
+        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
         if (!OneSignal.userProvidedPrivacyConsent()) {
             return Constants.ONESIGNAL_NO_CONSENT;
-        }
-        if (OneSignal.getDeviceState() == null) return Constants.ONESIGNAL_DEVICE_ERROR;
-        String playerID = OneSignal.getDeviceState().getUserId();
-        if (playerID == null) return Constants.ONESIGNAL_NO_ID;
-
-        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
-
-        if (devicesHash == null || !devicesHash.containsKey(playerID)) {
+        } else if (OneSignal.getDeviceState() == null) {
+            return Constants.ONESIGNAL_DEVICE_ERROR;
+        } else if (!OneSignal.getDeviceState().isSubscribed()) {
+            return Constants.ONESIGNAL_NOT_SUBSCRIBED;
+        } else if (OneSignal.getDeviceState().getUserId() == null) {
+            return Constants.ONESIGNAL_NO_ID;
+        } else if (devicesHash == null || !devicesHash.containsKey(
+                OneSignal.getDeviceState().getUserId())) {
             return Constants.ONESIGNAL_NOT_REGISTERED;
+        } else {
+            return Constants.ONESIGNAL_REGISTERED;
         }
-        return Constants.ONESIGNAL_REGISTERED;
     }
 
     private static OneSignalDeviceInfo getDevice() {
         OneSignalDeviceInfo device = new OneSignalDeviceInfo();
         device.setDeviceName(android.os.Build.MODEL);
+        device.setFriendlyName("");
         device.setAppVersion(BuildConfig.VERSION_NAME);
         return device;
     }
@@ -186,9 +205,12 @@ public class OneSignalUtils {
         return new Gson().fromJson(jsonDevices, token.getType());
     }
 
-    private static final SettingsCallback settingsCallback = result -> {
-        if (!result) Timber.d("Update Settings Failed");
-    };
+    private static void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            Timber.d("Could not complete request %s", result.getResponse().getMessage());
+        }
+    }
 
     @TargetApi(26)
     public static void initNotificationChannels(Context context) {

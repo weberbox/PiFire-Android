@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_name"
-            android:textAppearance="@style/Text15Aller" />
+            android:textAppearance="@style/Text15AllerBold" />
 
         <View
             android:id="@+id/nav_head_divider"
@@ -38,7 +38,7 @@
             android:id="@+id/nav_head_grill_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Text15Aller"
+            android:textAppearance="@style/Text15AllerBold"
             android:visibility="gone"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/nav_head_divider" />

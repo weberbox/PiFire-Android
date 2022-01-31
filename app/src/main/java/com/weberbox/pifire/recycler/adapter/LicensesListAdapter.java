@@ -1,5 +1,6 @@
 package com.weberbox.pifire.recycler.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -18,10 +19,10 @@ import java.util.List;
 
 public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapter.ViewHolder> {
 
-    private final List<LicensesModel> list;
+    private List<LicensesModel> list;
 
-    public LicensesListAdapter(final List<LicensesModel> list) {
-        this.list = list;
+    public LicensesListAdapter() {
+
     }
 
     @NonNull
@@ -45,6 +46,12 @@ public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapte
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setList(List<LicensesModel> list) {
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

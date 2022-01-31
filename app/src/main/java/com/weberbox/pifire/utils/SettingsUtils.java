@@ -6,56 +6,56 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.interfaces.SettingsCallback;
-import com.weberbox.pifire.model.remote.GrillProbeModel;
-import com.weberbox.pifire.model.remote.ProbeProfileModel;
-import com.weberbox.pifire.model.remote.SettingsResponseModel;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.CycleData;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Globals;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.HistoryPage;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Ifttt;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.InfluxDB;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.OneSignalPush;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.PelletLevel;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeSettings;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.ProbeTypes;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.PushBullet;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Pushover;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Safety;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.SmokePlus;
-import com.weberbox.pifire.model.remote.SettingsResponseModel.Versions;
+import com.weberbox.pifire.model.remote.SettingsDataModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
+import com.weberbox.pifire.model.remote.SettingsDataModel.GrillProbeModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.HistoryPage;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Ifttt;
+import com.weberbox.pifire.model.remote.SettingsDataModel.InfluxDB;
+import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PelletLevel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeProfileModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeSettings;
+import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeTypes;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Safety;
+import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Versions;
 
 import java.util.Map;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class SettingsUtils {
 
-    private final Context mContext;
-    private final SettingsCallback mCallback;
+    private final Context context;
+    private final SettingsCallback callback;
 
     public SettingsUtils(Context context, SettingsCallback callback) {
-        mContext = context;
-        mCallback = callback;
+        this.context = context;
+        this.callback = callback;
     }
 
     public void requestSettingsData(Socket socket) {
         if (socket != null && socket.connected()) {
-            socket.emit(ServerConstants.REQUEST_SETTINGS_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null) {
-                    mCallback.onSettingsResult(updateSettingsData(args[0].toString()));
+            ServerControl.settingsGetEmit(socket, response -> {
+                boolean result = updateSettingsData(response);
+                if (callback != null) {
+                    callback.onSettingsResult(result);
                 }
             });
         }
     }
 
-    private boolean updateSettingsData(String response_data) {
+    public boolean updateSettingsData(String responseData) {
         try {
 
-            SettingsResponseModel settingsResponse = SettingsResponseModel.parseJSON(response_data);
+            SettingsDataModel settingsResponse = SettingsDataModel.parseJSON(responseData);
 
             HistoryPage historyPage = settingsResponse.getHistoryPage();
             ProbeSettings probesSettings = settingsResponse.getProbeSettings();
@@ -82,19 +82,19 @@ public class SettingsUtils {
             }
 
             if (historyPage != null) {
-                putString(R.string.prefs_history_display, historyPage.getMinutes());
+                putIntegerString(R.string.prefs_history_display, historyPage.getMinutes());
                 putBoolean(R.string.prefs_history_clear, historyPage.getClearHistoryOnStart());
                 putBoolean(R.string.prefs_history_auto, historyPage.getAutoRefresh().equals("on"));
-                putString(R.string.prefs_history_points, historyPage.getDataPoints());
+                putIntegerString(R.string.prefs_history_points, historyPage.getDataPoints());
             }
 
             if (globals != null) {
                 putString(R.string.prefs_grill_name, globals.getGrillName());
                 putBoolean(R.string.prefs_admin_debug, globals.getDebugMode());
-                putString(R.string.prefs_shutdown_time, globals.getShutdownTimer());
+                putString(R.string.prefs_shutdown_time, String.valueOf(globals.getShutdownTimer()));
 
                 if (globals.getStartUpTimer() != null) {
-                    putString(R.string.prefs_startup_time, globals.getStartUpTimer());
+                    putIntegerString(R.string.prefs_startup_time, globals.getStartUpTimer());
                 }
 
                 if (globals.getUnits() != null) {
@@ -106,7 +106,7 @@ public class SettingsUtils {
                 }
 
                 if (globals.getFourProbes() != null && globals.getFourProbes()) {
-                    SettingsResponseModel.GrillProbeSettings grillProbeSettings =
+                    SettingsDataModel.GrillProbeSettings grillProbeSettings =
                             settingsResponse.getGrillProbeSettings();
 
                     Map<String, GrillProbeModel> grillProbes = grillProbeSettings.getGrillProbes();
@@ -163,36 +163,36 @@ public class SettingsUtils {
             }
 
             if (cycleData != null) {
-                putString(R.string.prefs_work_pid_pb, cycleData.getPb());
-                putString(R.string.prefs_work_pid_ti, cycleData.getTi());
-                putString(R.string.prefs_work_pid_td, cycleData.getTd());
-                putString(R.string.prefs_work_pid_cycle, cycleData.getHoldCycleTime());
-                putString(R.string.prefs_work_auger_on, cycleData.getSmokeCycleTime());
-                putString(R.string.prefs_work_pmode_mode, cycleData.getPMode());
-                putString(R.string.prefs_work_pid_u_max, cycleData.getuMax());
-                putString(R.string.prefs_work_pid_u_min, cycleData.getuMin());
-                putString(R.string.prefs_work_pid_center, cycleData.getCenter());
+                putFloatString(R.string.prefs_work_pid_pb, cycleData.getPb());
+                putFloatString(R.string.prefs_work_pid_ti, cycleData.getTi());
+                putFloatString(R.string.prefs_work_pid_td, cycleData.getTd());
+                putIntegerString(R.string.prefs_work_pid_cycle, cycleData.getHoldCycleTime());
+                putIntegerString(R.string.prefs_work_auger_on, cycleData.getSmokeCycleTime());
+                putIntegerString(R.string.prefs_work_pmode_mode, cycleData.getPMode());
+                putFloatString(R.string.prefs_work_pid_u_max, cycleData.getuMax());
+                putFloatString(R.string.prefs_work_pid_u_min, cycleData.getuMin());
+                putFloatString(R.string.prefs_work_pid_center, cycleData.getCenter());
             }
 
             if (pellets != null) {
-                putString(R.string.prefs_pellet_empty, pellets.getEmpty());
-                putString(R.string.prefs_pellet_full, pellets.getFull());
+                putIntegerString(R.string.prefs_pellet_empty, pellets.getEmpty());
+                putIntegerString(R.string.prefs_pellet_full, pellets.getFull());
                 putBoolean(R.string.prefs_pellet_warning_enabled, pellets.getWarningEnabled());
-                putString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel());
+                putIntegerString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel());
             }
 
             if (smokePlus != null) {
                 putBoolean(R.string.prefs_work_splus_enabled, smokePlus.getEnabled());
-                putString(R.string.prefs_work_splus_min, smokePlus.getMinTemp());
-                putString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp());
-                putString(R.string.prefs_work_splus_fan, smokePlus.getCycle());
+                putIntegerString(R.string.prefs_work_splus_min, smokePlus.getMinTemp());
+                putIntegerString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp());
+                putIntegerString(R.string.prefs_work_splus_fan, smokePlus.getCycle());
             }
 
             if (safety != null) {
-                putString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
-                putString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
-                putString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
-                putString(R.string.prefs_safety_retries, safety.getReigniteRetries());
+                putIntegerString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
+                putIntegerString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
+                putIntegerString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
+                putIntegerString(R.string.prefs_safety_retries, safety.getReigniteRetries());
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
@@ -204,16 +204,16 @@ public class SettingsUtils {
 
     private void putString(int key, String value) {
         if (value != null) {
-            if (!Prefs.getString(mContext.getString(key)).equals(value)) {
-                Prefs.putString(mContext.getString(key), value);
+            if (!Prefs.getString(context.getString(key)).equals(value)) {
+                Prefs.putString(context.getString(key), value);
             }
         }
     }
 
     private void putBoolean(int key, Boolean value) {
         if (value != null) {
-            if (Prefs.getBoolean(mContext.getString(key)) != value) {
-                Prefs.putBoolean(mContext.getString(key), value);
+            if (Prefs.getBoolean(context.getString(key)) != value) {
+                Prefs.putBoolean(context.getString(key), value);
             }
         }
     }
@@ -221,8 +221,24 @@ public class SettingsUtils {
     @SuppressWarnings("unused")
     private void putInt(int key, Integer value) {
         if (value != null) {
-            if (Prefs.getInt(mContext.getString(key)) != value) {
-                Prefs.putInt(mContext.getString(key), value);
+            if (Prefs.getInt(context.getString(key)) != value) {
+                Prefs.putInt(context.getString(key), value);
+            }
+        }
+    }
+
+    private void putIntegerString(int key, Integer value) {
+        if (value != null) {
+            if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
+                Prefs.putString(context.getString(key), String.valueOf(value));
+            }
+        }
+    }
+
+    private void putFloatString(int key, Float value) {
+        if (value != null) {
+            if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
+                Prefs.putString(context.getString(key), String.valueOf(value));
             }
         }
     }

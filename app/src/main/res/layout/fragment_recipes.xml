@@ -18,7 +18,7 @@
         android:contentDescription="@string/recipes_add"
         android:minHeight="56dp"
         android:text="@string/delete"
-        android:textAppearance="@style/Text18Aller"
+        android:textAppearance="@style/Text18AllerBold"
         android:textColor="@color/colorWhite"
         app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
         app:backgroundTint="@color/colorAccent"

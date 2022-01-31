@@ -23,57 +23,54 @@ import org.jetbrains.annotations.NotNull;
 
 public class PushConsentFragment extends Fragment {
 
-    private FragmentSetupPushBinding mBinding;
-    private NavController mNavController;
-    private boolean mIsAccepted;
+    private FragmentSetupPushBinding binding;
+    private NavController navController;
+    private boolean isAccepted;
 
-    private boolean mSkipConsent = false;
+    private boolean skipConsent = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentSetupPushBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentSetupPushBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mNavController = Navigation.findNavController(view);
+        navController = Navigation.findNavController(view);
 
-        SwitchCompat consent = mBinding.setupPushConsent;
+        SwitchCompat consent = binding.setupPushConsent;
 
-        mIsAccepted = Prefs.getBoolean(getString(R.string.prefs_notif_onesignal_accepted));
+        isAccepted = Prefs.getBoolean(getString(R.string.prefs_notif_onesignal_accepted));
 
-        consent.setChecked(mIsAccepted);
+        consent.setChecked(isAccepted);
         consent.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            mIsAccepted = isChecked;
+            isAccepted = isChecked;
             Prefs.putBoolean(getString(R.string.prefs_notif_onesignal_accepted), isChecked);
             OneSignalUtils.provideUserConsent(isChecked);
         });
 
         SetupViewModel setupViewModel = new ViewModelProvider(requireActivity())
                 .get(SetupViewModel.class);
-        setupViewModel.getFab().observe(getViewLifecycleOwner(), setupFab ->
-                setupFab.setOnClickListener(v -> onFabClicked()));
+        setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> {
+            if (isAccepted || skipConsent) {
+                navController.navigate(R.id.nav_setup_finish);
+            } else {
+                MessageTextDialog skipDialog = new MessageTextDialog(getActivity(),
+                        R.string.setup_push_dialog_declined_title,
+                        R.string.setup_push_dialog_declined_message);
+                skipDialog.getDialog()
+                        .setOnDismissListener(dialog -> skipConsent = true)
+                        .show();
+            }
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
-    }
-
-    public void onFabClicked() {
-        if (mIsAccepted || mSkipConsent) {
-            mNavController.navigate(R.id.nav_setup_finish);
-        } else {
-            MessageTextDialog skipDialog = new MessageTextDialog(getActivity(),
-                    R.string.setup_push_dialog_declined_title,
-                    R.string.setup_push_dialog_declined_message);
-            skipDialog.getDialog()
-                    .setOnDismissListener(dialog -> mSkipConsent = true)
-                    .show();
-        }
+        binding = null;
     }
 }

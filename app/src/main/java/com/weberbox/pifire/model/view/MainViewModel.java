@@ -9,88 +9,88 @@ import com.weberbox.pifire.model.local.DataModel;
 
 public class MainViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mDashData;
-    private final MutableLiveData<DataModel> mEventsData;
-    private final MutableLiveData<DataModel> mHistoryData;
-    private final MutableLiveData<DataModel> mPelletData;
-    private final MutableLiveData<DataModel> mInfoData;
-    private final MutableLiveData<PanelState> mStartPanelState;
-    private final MutableLiveData<PanelState> mEndPanelState;
-    private final MutableLiveData<Boolean> mServerConnected;
+    private final MutableLiveData<String> dashData;
+    private final MutableLiveData<DataModel> eventsData;
+    private final MutableLiveData<DataModel> historyData;
+    private final MutableLiveData<DataModel> pelletData;
+    private final MutableLiveData<DataModel> infoData;
+    private final MutableLiveData<PanelState> startPanelState;
+    private final MutableLiveData<PanelState> endPanelState;
+    private final MutableLiveData<Boolean> serverConnected;
 
     public MainViewModel () {
-        mServerConnected = new MutableLiveData<>();
-        mDashData = new MutableLiveData<>();
-        mEventsData = new MutableLiveData<>();
-        mHistoryData = new MutableLiveData<>();
-        mPelletData = new MutableLiveData<>();
-        mInfoData = new MutableLiveData<>();
-        mStartPanelState = new MutableLiveData<>();
-        mEndPanelState = new MutableLiveData<>();
+        serverConnected = new MutableLiveData<>();
+        dashData = new MutableLiveData<>();
+        eventsData = new MutableLiveData<>();
+        historyData = new MutableLiveData<>();
+        pelletData = new MutableLiveData<>();
+        infoData = new MutableLiveData<>();
+        startPanelState = new MutableLiveData<>();
+        endPanelState = new MutableLiveData<>();
     }
 
     public LiveData<String> getDashData() {
-        return mDashData;
+        return dashData;
     }
 
     public void setDashData(String dashData) {
-        mDashData.postValue(dashData);
+        this.dashData.postValue(dashData);
     }
 
     public LiveData<DataModel> getEventsData() {
-        return mEventsData;
+        return eventsData;
     }
 
     public void setEventsData(String eventsData, boolean newData) {
-        mEventsData.postValue(new DataModel(eventsData, newData));
+        this.eventsData.postValue(new DataModel(eventsData, newData));
     }
 
     public LiveData<DataModel> getHistoryData() {
-        return mHistoryData;
+        return historyData;
     }
 
     public void setHistoryData(String historyData, boolean newData) {
-        mHistoryData.postValue(new DataModel(historyData, newData));
+        this.historyData.postValue(new DataModel(historyData, newData));
     }
 
     public LiveData<DataModel> getPelletData() {
-        return mPelletData;
+        return pelletData;
     }
 
     public void setPelletData(String pelletData, boolean newData) {
-        mPelletData.postValue(new DataModel(pelletData, newData));
+        this.pelletData.postValue(new DataModel(pelletData, newData));
     }
 
     public LiveData<Boolean> getServerConnected() {
-        return mServerConnected;
+        return serverConnected;
     }
 
     public void setServerConnected(Boolean connected) {
-        mServerConnected.postValue(connected);
+        serverConnected.postValue(connected);
     }
 
     public LiveData<DataModel> getInfoData() {
-        return mInfoData;
+        return infoData;
     }
 
     public void setInfoData(String infoData, boolean newData) {
-        mInfoData.postValue(new DataModel(infoData, newData));
+        this.infoData.postValue(new DataModel(infoData, newData));
     }
 
     public LiveData<PanelState> getStartPanelStateChange() {
-        return mStartPanelState;
+        return startPanelState;
     }
 
     public void setStartPanelStateChange(PanelState state) {
-        mStartPanelState.postValue(state);
+        startPanelState.postValue(state);
     }
 
     public LiveData<PanelState> getEndPanelStateChange() {
-        return mEndPanelState;
+        return endPanelState;
     }
 
     public void setEndPanelStateChange(PanelState state) {
-        mEndPanelState.postValue(state);
+        endPanelState.postValue(state);
     }
 
 }

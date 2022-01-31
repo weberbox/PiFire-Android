@@ -14,7 +14,6 @@
         android:padding="@dimen/small_spacing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/placeholder_text_view"
-        android:textStyle="normal" />
+        android:text="@string/placeholder_text_view" />
 
 </ScrollView>

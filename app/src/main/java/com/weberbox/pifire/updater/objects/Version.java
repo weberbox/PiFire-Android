@@ -3,10 +3,10 @@ package com.weberbox.pifire.updater.objects;
 import androidx.annotation.NonNull;
 
 public class Version implements Comparable<Version> {
-    private final String mVersion;
+    private final String version;
 
     public final String get() {
-        return mVersion;
+        return version;
     }
 
     public Version(@NonNull final String version) throws Exception {
@@ -16,7 +16,7 @@ public class Version implements Comparable<Version> {
         if (!trimmedVersion.matches("[0-9]+(\\.[0-9]+)*"))
             throw new Exception("Invalid version format. Original: `" + version + "` trimmed: `" +
                     trimmedVersion + "`");
-        mVersion = trimmedVersion;
+        this.version = trimmedVersion;
     }
 
     @Override

@@ -17,13 +17,13 @@ import com.weberbox.pifire.R;
 
 abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
-    private final Paint mClearPaint;
-    private final GradientDrawable mBackground;
+    private final Paint clearPaint;
+    private final GradientDrawable background;
 
     public SwipeToDeleteCallback() {
-        mBackground = new GradientDrawable();
-        mClearPaint = new Paint();
-        mClearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        background = new GradientDrawable();
+        clearPaint = new Paint();
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
     @Override
@@ -61,10 +61,10 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
         int mIntrinsicWidth = drawable != null ? drawable.getIntrinsicWidth() : 0;
         int mIntrinsicHeight = drawable != null ? drawable.getIntrinsicHeight() : 0;
 
-        mBackground.setColor(recyclerView.getContext().getColor(R.color.colorRedButton));
-        mBackground.setBounds(itemView.getLeft(), itemView.getTop(),
+        background.setColor(recyclerView.getContext().getColor(R.color.colorRedButton));
+        background.setBounds(itemView.getLeft(), itemView.getTop(),
                 itemView.getLeft() + (int) dX, itemView.getBottom());
-        mBackground.draw(c);
+        background.draw(c);
 
         int deleteIconTop = itemView.getTop() + (itemHeight - mIntrinsicHeight) / 2;
         int deleteIconMargin = (itemHeight - mIntrinsicHeight) / 2;
@@ -82,7 +82,7 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
     }
 
     private void clearCanvas(Canvas c, Float left, Float top, Float right, Float bottom) {
-        c.drawRect(left, top, right, bottom, mClearPaint);
+        c.drawRect(left, top, right, bottom, clearPaint);
     }
 
     @Override

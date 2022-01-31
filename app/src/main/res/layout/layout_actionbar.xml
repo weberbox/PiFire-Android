@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/action_bar_text"
-        style="@style/Text18Aller"
+        style="@style/Text18AllerBold"
         android:layout_width="wrap_content"
         android:layout_height="?android:actionBarSize"
         android:layout_centerVertical="true"

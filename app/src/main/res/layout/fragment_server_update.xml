@@ -72,7 +72,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/server_updater_check_button"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -93,7 +93,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/server_updater_log_button"
-                    style="@style/Text18Aller"
+                    style="@style/Text18AllerBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -177,7 +177,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
@@ -187,7 +187,7 @@
 
                             <TextView
                                 android:id="@+id/server_updater_cv_text"
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/default_spacing"
@@ -208,7 +208,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/server_updater_cv">
 
                             <TextView
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
@@ -217,7 +217,7 @@
 
                             <TextView
                                 android:id="@+id/server_updater_branch_text"
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/default_spacing"
@@ -238,7 +238,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/server_updater_branch">
 
                             <TextView
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
@@ -247,7 +247,7 @@
 
                             <TextView
                                 android:id="@+id/server_updater_remote_text"
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/default_spacing"
@@ -268,7 +268,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/server_updater_remote">
 
                             <TextView
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
@@ -277,7 +277,7 @@
 
                             <TextView
                                 android:id="@+id/server_updater_rv_text"
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/default_spacing"
@@ -352,7 +352,7 @@
                             app:layout_constraintTop_toTopOf="parent">
 
                             <TextView
-                                style="@style/Text15Aller"
+                                style="@style/Text15AllerBold"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/default_spacing"
@@ -393,7 +393,7 @@
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/server_updater_change_branch"
-                                style="@style/Text18Aller"
+                                style="@style/Text18AllerBold"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"

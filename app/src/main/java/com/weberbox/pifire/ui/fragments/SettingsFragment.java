@@ -84,36 +84,40 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    public void settingsOnClick(String settings) {
-        switch (settings) {
-            case Constants.DB_SET_APP:
-                startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-                break;
-            case Constants.DB_SET_PROBE:
-                startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-                break;
-            case Constants.DB_SET_NAME:
-                startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-                break;
-            case Constants.DB_SET_WORK:
-                startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-                break;
-            case Constants.DB_SET_PELLETS:
-                startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-                break;
-            case Constants.DB_SET_SHUTDOWN:
-                startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-                break;
-            case Constants.DB_SET_HISTORY:
-                startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-                break;
-            case Constants.DB_SET_SAFETY:
-                startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-                break;
-            case Constants.DB_SET_NOTIF:
-                startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-                break;
-        }
+    public void onClickAppSettings() {
+        startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
+    }
+
+    public void onClickProbeSettings() {
+        startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
+    }
+
+    public void onClickNameSettings() {
+        startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
+    }
+
+    public void onClickWorkSettings() {
+        startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
+    }
+
+    public void onClickPelletSettings() {
+        startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
+    }
+
+    public void onClickTimersSettings() {
+        startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
+    }
+
+    public void onClickHistorySettings() {
+        startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
+    }
+
+    public void onClickSafetySettings() {
+        startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
+    }
+
+    public void onClickNotificationsSettings() {
+        startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
     }
 
     private void startPreferenceActivity(int fragment) {

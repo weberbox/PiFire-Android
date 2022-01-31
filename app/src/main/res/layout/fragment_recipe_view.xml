@@ -101,7 +101,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rv_name_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_cooking_time"
@@ -110,7 +110,7 @@
 
                 <TextView
                     android:id="@+id/rv_time"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_none"
@@ -130,7 +130,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rv_name_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_difficulty_level"
@@ -139,7 +139,7 @@
 
                 <TextView
                     android:id="@+id/rv_difficulty"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_none"
@@ -160,7 +160,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rv_time_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_created"
@@ -169,7 +169,7 @@
 
                 <TextView
                     android:id="@+id/rv_created"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_none"
@@ -190,7 +190,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rv_time_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_modified"
@@ -199,7 +199,7 @@
 
                 <TextView
                     android:id="@+id/rv_modified"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/placeholder_none"
@@ -219,7 +219,7 @@
 
                 <TextView
                     android:id="@+id/rv_ingredients_title"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_ingredients"
@@ -245,7 +245,7 @@
 
                 <TextView
                     android:id="@+id/rv_instructions_title"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/recipes_instructions"
@@ -270,7 +270,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rv_instructions_container">
 
                 <TextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -280,7 +280,7 @@
 
                 <TextView
                     android:id="@+id/rv_notes"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|start"

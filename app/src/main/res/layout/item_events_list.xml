@@ -10,7 +10,7 @@
     android:focusable="true">
 
     <TextView
-        style="@style/Text18Aller"
+        style="@style/Text18AllerBold"
         android:id="@+id/event_icon_holder"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -21,7 +21,7 @@
         android:textSize="20sp" />
 
     <TextView
-        style="@style/Text15Aller"
+        style="@style/Text15AllerBold"
         android:id="@+id/event_time_text_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:text="@string/placeholder_text_view" />
 
     <TextView
-        style="@style/Text15Aller"
+        style="@style/Text15AllerBold"
         android:id="@+id/event_date_text_holder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 
     <TextView
         android:id="@+id/event_text_holder"
-        style="@style/Text15Aller"
+        style="@style/Text15AllerBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/event_date_text_holder"

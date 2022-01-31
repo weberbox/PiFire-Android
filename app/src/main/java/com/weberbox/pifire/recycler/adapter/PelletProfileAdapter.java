@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemPickerTextBinding;
-import com.weberbox.pifire.model.remote.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 
 import java.util.List;
 

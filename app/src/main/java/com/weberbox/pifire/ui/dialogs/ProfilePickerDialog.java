@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogScrollPickerBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
-import com.weberbox.pifire.model.remote.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.recycler.adapter.PelletProfileAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.ui.utils.ViewUtils;

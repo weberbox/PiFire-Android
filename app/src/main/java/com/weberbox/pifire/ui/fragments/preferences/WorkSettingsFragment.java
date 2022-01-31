@@ -17,18 +17,22 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
+
+import java.util.Objects;
 
 import io.socket.client.Socket;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -41,10 +45,11 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -195,96 +200,111 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_work);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
+    }
+
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof ListPreference) {
                 if (preference.getContext().getString(R.string.prefs_work_pmode_mode)
                         .equals(preference.getKey())) {
-                    GrillControl.setPMode(mSocket, ((ListPreference) preference).getValue());
+                    ServerControl.setPMode(socket, ((ListPreference) preference).getValue(),
+                            this::processPostResponse);
                 }
             }
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_work_auger_on)
                         .equals(preference.getKey())) {
-                    GrillControl.setAugerTime(mSocket, (
-                            (EditTextPreference) preference).getText());
+                    ServerControl.setAugerTime(socket, (
+                            (EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_splus_fan)
                         .equals(preference.getKey())) {
-                    GrillControl.setSmokeFan(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setSmokeFan(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_splus_min)
                         .equals(preference.getKey())) {
-                    GrillControl.setSmokeMinTemp(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setSmokeMinTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_splus_max)
                         .equals(preference.getKey())) {
-                    GrillControl.setSmokeMaxTemp(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setSmokeMaxTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_cycle)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDTime(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDTime(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_pb)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDPB(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDPB(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_ti)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDTi(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDTi(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_td)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDTd(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDTd(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_u_max)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDuMax(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDuMax(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_u_min)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDuMin(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDuMin(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_pid_center)
                         .equals(preference.getKey())) {
-                    GrillControl.setPIDCenter(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPIDCenter(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setSmokePlusDefault(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setSmokePlusDefault(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
             }
         }

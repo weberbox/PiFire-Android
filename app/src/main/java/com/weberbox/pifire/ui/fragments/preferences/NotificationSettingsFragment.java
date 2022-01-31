@@ -20,8 +20,10 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.config.PushConfig;
-import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
@@ -30,7 +32,7 @@ import io.socket.client.Socket;
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -42,10 +44,11 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -89,14 +92,14 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (AppConfig.USE_ONESIGNAL) {
-            OneSignalUtils.checkOneSignalStatus(requireActivity(), mSocket);
+            OneSignalUtils.checkOneSignalStatus(requireActivity(), socket);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
     }
 
     @Override
@@ -105,104 +108,116 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_notifications);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
+    }
+
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_notif_ifttt_api)
                         .equals(preference.getKey())) {
-                    GrillControl.setIFTTTAPIKey(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setIFTTTAPIKey(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushover_api)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushOverAPIKey(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPushOverAPIKey(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushover_keys)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushOverUserKeys(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPushOverUserKeys(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushover_url)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushOverURL(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPushOverURL(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushbullet_api)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushBulletAPIKey(mSocket,
-                            ((EditTextPreference) preference).getText());
-                }
-                if (preference.getContext().getString(R.string.prefs_notif_pushbullet_channel)
-                        .equals(preference.getKey())) {
-                    GrillControl.setPushBulletChannel(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPushBulletAPIKey(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushbullet_url)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushBulletURL(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPushBulletURL(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_influxdb_url)
                         .equals(preference.getKey())) {
-                    GrillControl.setInfluxDBUrl(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setInfluxDBUrl(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_influxdb_token)
                         .equals(preference.getKey())) {
-                    GrillControl.setInfluxDBToken(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setInfluxDBToken(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_influxdb_org)
                         .equals(preference.getKey())) {
-                    GrillControl.setInfluxDBOrg(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setInfluxDBOrg(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_influxdb_bucket)
                         .equals(preference.getKey())) {
-                    GrillControl.setInfluxDBBucket(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setInfluxDBBucket(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_notif_ifttt_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setIFTTTEnabled(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setIFTTTEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushover_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushOverEnabled(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setPushOverEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_pushbullet_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setPushBulletEnabled(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setPushBulletEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_influxdb_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setInfluxDBEnabled(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setInfluxDBEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_onesignal_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setOneSignalEnabled(mSocket, ((SwitchPreferenceCompat)
-                            preference).isChecked());
+                    ServerControl.setOneSignalEnabled(socket, ((SwitchPreferenceCompat)
+                            preference).isChecked(), this::processPostResponse);
                 }
             }
         }

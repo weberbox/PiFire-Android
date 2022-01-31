@@ -26,13 +26,12 @@
 
     <TextView
         android:id="@+id/logs_header_text"
-        style="@style/Text18AllerNormal"
+        style="@style/Text18AllerBold"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_margin="@dimen/default_spacing"
         android:gravity="center"
         android:text="@string/pellets_log"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/logs_card_header"
         app:layout_constraintStart_toEndOf="@+id/logs_header_icon"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,7 +69,7 @@
 
     <TextView
         android:id="@+id/logs_view_all"
-        style="@style/Text15Aller"
+        style="@style/Text15AllerBold"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:alpha="0.5"

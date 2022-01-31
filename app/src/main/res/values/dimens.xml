@@ -15,4 +15,10 @@
     <dimen name="settings_list_items">16dp</dimen>
     <dimen name="settings_header_view">55dp</dimen>
     <dimen name="setup_stepper_padding">120dp</dimen>
+
+    <dimen name="radiusTop">16dp</dimen>
+    <dimen name="paddingTop">16dp</dimen>
+
+    <dimen name="text_title_size">16sp</dimen>
+    <dimen name="text_message_size">14sp</dimen>
 </resources>

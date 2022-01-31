@@ -20,6 +20,64 @@ public class ServerConstants {
     public static final String REQUEST_UPDATER_DATA = "request_updater_data";
     public static final String REQUEST_UPDATER_ACTION = "request_updater_action";
 
+    // New Socket IO Strings
+    public static final String GE_GET_DASH_DATA = "get_dash_data";
+    public static final String GE_GET_APP_DATA = "get_app_data";
+    public static final String GA_SETTINGS_DATA = "settings_data";
+    public static final String GA_PELLETS_DATA = "pellets_data";
+    public static final String GA_EVENTS_DATA = "events_data";
+    public static final String GA_HISTORY_DATA = "history_data";
+    public static final String GA_INFO_DATA = "info_data";
+    public static final String GA_MANUAL_DATA = "manual_data";
+    public static final String GA_BACKUP_LIST = "backup_list";
+    public static final String GA_BACKUP_DATA = "backup_data";
+    public static final String GA_UPDATER_DATA = "updater_data";
+    public static final String GT_SETTINGS = "settings";
+    public static final String GT_PELLETS = "pelletdb";
+
+    public static final String PE_POST_APP_DATA = "post_app_data";
+    public static final String PA_UPDATE_ACTION = "update_action";
+    public static final String PA_ADMIN_ACTION = "admin_action";
+    public static final String PA_UNITS_ACTION = "units_action";
+    public static final String PA_REMOVE_ACTION = "remove_action";
+    public static final String PA_PELLETS_ACTION = "pellets_action";
+
+    public static final String PT_SETTINGS = "settings";
+    public static final String PT_CONTROL = "control";
+    public static final String PT_UNITS_F = "f_units";
+    public static final String PT_UNITS_C = "c_units";
+    public static final String PT_ONESIGNAL_DEVICE = "onesignal_device";
+    public static final String PT_LOAD_PROFILE = "load_profile";
+    public static final String PT_HOPPER_CHECK = "hopper_check";
+    public static final String PT_EDIT_BRANDS = "edit_brands";
+    public static final String PT_EDIT_WOODS = "edit_woods";
+    public static final String PT_ADD_PROFILE = "add_profile";
+    public static final String PT_EDIT_PROFILE = "edit_profile";
+    public static final String PT_DELETE_PROFILE = "delete_profile";
+    public static final String PT_DELETE_LOG = "delete_log";
+    public static final String PT_CLEAR_HISTORY = "clear_history";
+    public static final String PT_CLEAR_EVENTS = "clear_events";
+    public static final String PT_CLEAR_PELLETS = "clear_pelletdb";
+    public static final String PT_CLEAR_PELLETS_LOG = "clear_pelletdb_log";
+    public static final String PT_FACTORY_DEFAULTS = "factory_defaults";
+    public static final String PT_REBOOT = "reboot";
+    public static final String PT_SHUTDOWN = "shutdown";
+
+    public static final String PE_POST_RESTORE_DATA = "post_restore_data";
+
+    public static final String PE_POST_UPDATER_DATA = "post_updater_data";
+    public static final String PT_CHANGE_BRANCH = "change_branch";
+    public static final String PT_DO_UPDATE = "do_update";
+
+    public static final String G_MODE_HOLD = "Hold";
+    public static final String G_MODE_START = "Startup";
+    public static final String G_MODE_SMOKE = "Smoke";
+    public static final String G_MODE_SHUTDOWN = "Shutdown";
+    public static final String G_MODE_MONITOR = "Monitor";
+    public static final String G_MODE_STOP = "Stop";
+    public static final String G_MODE_SMOKE_PLUS = "s_plus";
+    public static final String G_MODE_MANUAL = "Manual";
+
     // Socket Updating
     public static final String UPDATE_CONTROL_DATA = "update_control_data";
     public static final String UPDATE_SETTINGS_DATA = "update_settings_data";

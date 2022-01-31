@@ -30,8 +30,8 @@ import com.weberbox.pifire.database.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.ui.dialogs.DeleteActionDialog;
-import com.weberbox.pifire.ui.dialogs.ProgressBarDialog;
+import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
+import com.weberbox.pifire.ui.dialogs.ProgressDialog;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
@@ -44,7 +44,7 @@ import java.util.List;
 
 public class AppSettingsFragment extends PreferenceFragmentCompat {
 
-    private AppUpdater mAppUpdater;
+    private AppUpdater appUpdater;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -98,7 +98,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         if (updateCheck != null) {
             updateCheck.setOnPreferenceClickListener(preference -> {
                 if (getActivity() != null) {
-                    mAppUpdater = new AppUpdater(getActivity())
+                    appUpdater = new AppUpdater(getActivity())
                             .setDisplay(Display.DIALOG)
                             .setButtonDoNotShowAgain(false)
                             .showAppUpToDate(true)
@@ -107,7 +107,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                             .setView(view)
                             .setUpdateFrom(UpdateFrom.JSON)
                             .setUpdateJSON(getString(R.string.def_app_update_check_url));
-                    mAppUpdater.start();
+                    appUpdater.start();
                 }
                 return true;
             });
@@ -146,8 +146,8 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onStop() {
         super.onStop();
-        if (mAppUpdater != null) {
-            mAppUpdater.stop();
+        if (appUpdater != null) {
+            appUpdater.stop();
         }
     }
 
@@ -165,24 +165,33 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
     private void clearDatabase() {
         if (getActivity() != null) {
-            DeleteActionDialog dialog = new DeleteActionDialog(getActivity(),
-                    getString(R.string.settings_recipe_db_clear_message), () -> {
-                if (getActivity().getDatabasePath(Constants.DB_RECIPES).exists()) {
-                    if (getActivity().deleteDatabase(Constants.DB_RECIPES)) {
-                        FileUtils.clearImgDir(getActivity());
-                        FileUtils.clearImgDir(getActivity());
-                        AlertUtils.createAlert(getActivity(), R.string.settings_recipe_db_cleared,
-                                1000);
-                    } else {
-                        AlertUtils.createErrorAlert(getActivity(),
-                                R.string.settings_recipe_db_clear_failed, false);
-                    }
-                } else {
-                    AlertUtils.createAlert(getActivity(), R.string.settings_recipe_db_not_exist,
-                            1000);
-                }
-            });
-            dialog.showDialog();
+            BottomButtonDialog dialog = new BottomButtonDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.dialog_confirm_action))
+                    .setMessage(getString(R.string.settings_recipe_db_clear_message))
+                    .setAutoDismiss(true)
+                    .setNegativeButton(getString(R.string.cancel),
+                            (dialogInterface, which) -> {
+                            })
+                    .setPositiveButtonWithColor(getString(R.string.delete),
+                            R.color.dialog_positive_button_color_red,
+                            (dialogInterface, which) -> {
+                                if (getActivity().getDatabasePath(Constants.DB_RECIPES).exists()) {
+                                    if (getActivity().deleteDatabase(Constants.DB_RECIPES)) {
+                                        FileUtils.clearImgDir(getActivity());
+                                        FileUtils.clearImgDir(getActivity());
+                                        AlertUtils.createAlert(getActivity(),
+                                                R.string.settings_recipe_db_cleared, 1000);
+                                    } else {
+                                        AlertUtils.createErrorAlert(getActivity(),
+                                                R.string.settings_recipe_db_clear_failed, false);
+                                    }
+                                } else {
+                                    AlertUtils.createAlert(getActivity(),
+                                            R.string.settings_recipe_db_not_exist, 1000);
+                                }
+                            })
+                    .build();
+            dialog.show();
         }
     }
 
@@ -195,10 +204,11 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                         Uri fileUri = data.getData();
 
                         if (getActivity() != null) {
-                            ProgressBarDialog dialog = new ProgressBarDialog(getActivity());
-                            dialog.showDialog();
-                            dialog.setTitle(getString(R.string.exporting));
-                            dialog.setIndeterminate(true);
+                            ProgressDialog dialog = new ProgressDialog.Builder(requireActivity())
+                                    .setTitle(getString(R.string.exporting))
+                                    .build();
+                            dialog.getProgressIndicator().setIndeterminate(true);
+                            dialog.show();
 
                             RecipeDatabase rb = RecipeDatabase.getInstance(getActivity()
                                     .getApplicationContext());
@@ -262,10 +272,11 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                     if (data != null) {
                         Uri fileUri = data.getData();
                         if (getActivity() != null) {
-                            ProgressBarDialog dialog = new ProgressBarDialog(getActivity());
-                            dialog.showDialog();
-                            dialog.setTitle(getString(R.string.importing));
-                            dialog.setIndeterminate(true);
+                            ProgressDialog dialog = new ProgressDialog.Builder(requireActivity())
+                                    .setTitle(getString(R.string.importing))
+                                    .build();
+                            dialog.getProgressIndicator().setIndeterminate(true);
+                            dialog.show();
 
                             RecipeDatabase db = RecipeDatabase.getInstance(getActivity()
                                     .getApplicationContext());
@@ -273,15 +284,15 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                             AppExecutors.getInstance().diskIO().execute(() ->
                                     DatabaseUtils.importDatabase(getActivity(), fileUri, db, success ->
                                             getActivity().runOnUiThread(() -> {
-                                        dialog.dismiss();
-                                        if (success) {
-                                            AlertUtils.createAlert(getActivity(),
-                                                    R.string.restore_success, 1000);
-                                        } else {
-                                            AlertUtils.createAlert(getActivity(),
-                                                    R.string.restore_failed, 1000);
-                                        }
-                                    })));
+                                                dialog.dismiss();
+                                                if (success) {
+                                                    AlertUtils.createAlert(getActivity(),
+                                                            R.string.restore_success, 1000);
+                                                } else {
+                                                    AlertUtils.createAlert(getActivity(),
+                                                            R.string.restore_failed, 1000);
+                                                }
+                                            })));
 
                         }
                     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="placeholderColor">#666666</color>
     <color name="probeProgressBgColor">#40164DD9</color>
     <color name="smokePlusDisabledBgColor">#57D80C0C</color>
@@ -8,12 +8,14 @@
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimary">#ff262626</color>
+    <color name="colorPrimaryRipple">#42262626</color>
     <color name="colorPrimaryLight">#2E2E2E</color>
     <color name="colorPrimaryLighter">#424242</color>
     <color name="colorPrimaryDark">#ff1d1d1d</color>
     <color name="colorAccent">#1942DA</color>
     <color name="colorAccent_disabled">#811942DA</color>
     <color name="colorAccentRed">#DC0000</color>
+    <color name="colorAccentRed_disabled">#82B62B2B</color>
     <color name="colorLighterGrey">#454545</color>
     <color name="colorUiPrimary_disabled">#80333333</color>
     <color name="colorTransBlack">#77000000</color>
@@ -32,12 +34,16 @@
     <color name="colorPelletDangerBG">#70B62929</color>
     <color name="colorPelletWarning">#DCAC9B02</color>
 
-    <color name="ucrop_color_statusbar">@color/colorPrimary</color>
-    <color name="ucrop_color_toolbar">@color/colorPrimary</color>
-    <color name="ucrop_color_toolbar_widget">@color/colorWhite</color>
-    <color name="ucrop_color_blaze_orange">@color/colorAccent</color>
-    <color name="ucrop_color_ebony_clay">@color/colorPrimary</color>
-    <color name="ucrop_color_crop_background">@color/colorPrimaryDark</color>
-    <color name="ucrop_color_widget">@color/colorWhite</color>
+    <color name="ucrop_color_statusbar" tools:override="true">@color/colorPrimary</color>
+    <color name="ucrop_color_toolbar" tools:override="true">@color/colorPrimary</color>
+    <color name="ucrop_color_toolbar_widget" tools:override="true">@color/colorWhite</color>
+    <color name="ucrop_color_blaze_orange" tools:override="true">@color/colorAccent</color>
+    <color name="ucrop_color_ebony_clay" tools:override="true">@color/colorPrimary</color>
+    <color name="ucrop_color_crop_background" tools:override="true">@color/colorPrimaryDark</color>
+    <color name="ucrop_color_widget" tools:override="true">@color/colorWhite</color>
 
+    <color name="material_dialog_negative_text_color">#A1A1A1</color>
+    <color name="material_dialog_background">@color/colorPrimary</color>
+    <color name="material_dialog_title_text_color">@android:color/primary_text_dark</color>
+    <color name="material_dialog_message_text_color">@android:color/secondary_text_dark</color>
 </resources>

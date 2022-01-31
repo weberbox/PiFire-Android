@@ -36,7 +36,6 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.database.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipeEditBinding;
-import com.weberbox.pifire.interfaces.PickerOptionCallback;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.interfaces.StartDragListener;
 import com.weberbox.pifire.model.local.RecipesModel;
@@ -46,7 +45,7 @@ import com.weberbox.pifire.recycler.callback.ItemMoveCallback;
 import com.weberbox.pifire.recycler.callback.SwipeToDeleteCallback;
 import com.weberbox.pifire.ui.activities.ImagePickerActivity;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
-import com.weberbox.pifire.ui.dialogs.ImagePickerDialog;
+import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.RecipeDiffDialog;
 import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
 import com.weberbox.pifire.utils.AlertUtils;
@@ -60,20 +59,20 @@ import java.util.List;
 
 public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
-    private FragmentRecipeEditBinding mBinding;
-    private RecipeEditAdapter mInstructionsAdapter;
-    private RecipeEditAdapter mIngredientsAdapter;
-    private FloatingActionButton mFloatingActionButton;
-    private RecipeDatabase mDb;
-    private RecipesModel mRecipe;
-    private ItemTouchHelper mIngredientsTouchHelper;
-    private ItemTouchHelper mInstructionsTouchHelper;
-    private TextInputEditText mRecipeName;
-    private TextInputEditText mRecipeTime;
-    private TextInputEditText mRecipeDifficulty;
-    private EditText mRecipeNotes;
-    private ImageView mRecipeImage;
-    private int mRecipeId;
+    private FragmentRecipeEditBinding binding;
+    private RecipeEditAdapter instructionsAdapter;
+    private RecipeEditAdapter ingredientsAdapter;
+    private FloatingActionButton floatingActionButton;
+    private RecipeDatabase recipeDB;
+    private RecipesModel recipe;
+    private ItemTouchHelper ingredientsTouchHelper;
+    private ItemTouchHelper instructionsTouchHelper;
+    private TextInputEditText recipeName;
+    private TextInputEditText recipeTime;
+    private TextInputEditText recipeDifficulty;
+    private EditText recipeNotes;
+    private ImageView recipeImage;
+    private int recipeId;
 
 
     @Override
@@ -82,69 +81,69 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            mRecipeId = bundle.getInt(Constants.INTENT_RECIPE_ID, -1);
+            recipeId = bundle.getInt(Constants.INTENT_RECIPE_ID, -1);
         } else {
-            mRecipeId = -1;
+            recipeId = -1;
         }
 
         // TODO check for unsaved changes
         //requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
-            mDb = RecipeDatabase.getInstance(getActivity().getApplicationContext());
+            recipeDB = RecipeDatabase.getInstance(getActivity().getApplicationContext());
         }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentRecipeEditBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentRecipeEditBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecipeImage = mBinding.reImage;
-        mRecipeName = mBinding.reNameText;
-        mRecipeTime = mBinding.reTimeText;
-        mRecipeDifficulty = mBinding.reDifficultyText;
-        mRecipeNotes = mBinding.reNotesEditText;
+        recipeImage = binding.reImage;
+        recipeName = binding.reNameText;
+        recipeTime = binding.reTimeText;
+        recipeDifficulty = binding.reDifficultyText;
+        recipeNotes = binding.reNotesEditText;
 
-        TextView addIngredient = mBinding.reIngredientsAddItem;
-        TextView addIngredientSection = mBinding.reIngredientsAddSection;
-        TextView addInstruction = mBinding.reInstructionsAddStep;
-        TextView addInstructionsSection = mBinding.reInstructionsAddSection;
+        TextView addIngredient = binding.reIngredientsAddItem;
+        TextView addIngredientSection = binding.reIngredientsAddSection;
+        TextView addInstruction = binding.reInstructionsAddStep;
+        TextView addInstructionsSection = binding.reInstructionsAddSection;
 
-        mFloatingActionButton = mBinding.fabSaveRecipe;
+        floatingActionButton = binding.fabSaveRecipe;
 
         // TODO check for unsaved changes
-        //mRecipeName.addTextChangedListener(textWatcher);
-        //mRecipeTime.addTextChangedListener(textWatcher);
-        //mRecipeDifficulty.addTextChangedListener(textWatcher);
-        //mRecipeNotes.addTextChangedListener(textWatcher);
+        //recipeName.addTextChangedListener(textWatcher);
+        //recipeTime.addTextChangedListener(textWatcher);
+        //recipeDifficulty.addTextChangedListener(textWatcher);
+        //recipeNotes.addTextChangedListener(textWatcher);
 
-        mBinding.reScrollView.setOnScrollChangeListener(scrollListener);
+        binding.reScrollView.setOnScrollChangeListener(scrollListener);
 
-        RecyclerView ingredientsRecycler = mBinding.reIngredientsRecycler;
-        RecyclerView instructionsRecycler = mBinding.reInstructionsRecycler;
+        RecyclerView ingredientsRecycler = binding.reIngredientsRecycler;
+        RecyclerView instructionsRecycler = binding.reInstructionsRecycler;
 
-        mIngredientsAdapter = new RecipeEditAdapter(new ArrayList<>(), ingredientsDragListener);
-        ingredientsRecycler.setAdapter(mIngredientsAdapter);
+        ingredientsAdapter = new RecipeEditAdapter(new ArrayList<>(), ingredientsDragListener);
+        ingredientsRecycler.setAdapter(ingredientsAdapter);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        mInstructionsAdapter = new RecipeEditAdapter(new ArrayList<>(), instructionsDragListener);
-        instructionsRecycler.setAdapter(mInstructionsAdapter);
+        instructionsAdapter = new RecipeEditAdapter(new ArrayList<>(), instructionsDragListener);
+        instructionsRecycler.setAdapter(instructionsAdapter);
         instructionsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        ItemTouchHelper.Callback ingredientsCallback = new ItemMoveCallback(mIngredientsAdapter);
-        ItemTouchHelper.Callback instructionsCallback = new ItemMoveCallback(mInstructionsAdapter);
+        ItemTouchHelper.Callback ingredientsCallback = new ItemMoveCallback(ingredientsAdapter);
+        ItemTouchHelper.Callback instructionsCallback = new ItemMoveCallback(instructionsAdapter);
 
-        mIngredientsTouchHelper  = new ItemTouchHelper(ingredientsCallback);
-        mIngredientsTouchHelper.attachToRecyclerView(ingredientsRecycler);
+        ingredientsTouchHelper = new ItemTouchHelper(ingredientsCallback);
+        ingredientsTouchHelper.attachToRecyclerView(ingredientsRecycler);
 
-        mInstructionsTouchHelper  = new ItemTouchHelper(instructionsCallback);
-        mInstructionsTouchHelper.attachToRecyclerView(instructionsRecycler);
+        instructionsTouchHelper = new ItemTouchHelper(instructionsCallback);
+        instructionsTouchHelper.attachToRecyclerView(instructionsRecycler);
 
         ItemTouchHelper ingredientsTouchHelper = new ItemTouchHelper(ingredientsDeleteCallback);
         ingredientsTouchHelper.attachToRecyclerView(ingredientsRecycler);
@@ -152,36 +151,36 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         ItemTouchHelper instructionsTouchHelper = new ItemTouchHelper(instructionsDeleteCallback);
         instructionsTouchHelper.attachToRecyclerView(instructionsRecycler);
 
-        mRecipeImage.setOnClickListener(v -> showImagePickerDialog());
+        recipeImage.setOnClickListener(v -> showImagePickerDialog());
 
-        mFloatingActionButton.setOnClickListener(v -> updateRecipe());
+        floatingActionButton.setOnClickListener(v -> updateRecipe());
 
         addIngredient.setOnClickListener(v ->
-                mIngredientsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_TYPE_ITEM));
+                ingredientsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_TYPE_ITEM));
 
         addIngredientSection.setOnClickListener(v ->
-                mIngredientsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_ITEM_SECTION));
+                ingredientsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_ITEM_SECTION));
 
         addInstruction.setOnClickListener(v ->
-                mInstructionsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_TYPE_STEP));
+                instructionsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_TYPE_STEP));
 
         addInstructionsSection.setOnClickListener(v ->
-                mInstructionsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_STEP_SECTION));
+                instructionsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_STEP_SECTION));
 
-        mRecipeTime.setOnClickListener(v -> {
+        recipeTime.setOnClickListener(v -> {
             TimerPickerDialog dialog = new TimerPickerDialog(requireActivity(), this);
             dialog.showDialog();
         });
 
-        mRecipeDifficulty.setOnClickListener(v -> {
+        recipeDifficulty.setOnClickListener(v -> {
             RecipeDiffDialog dialog = new RecipeDiffDialog(requireActivity(), this);
             dialog.showDialog();
         });
 
-        if (mRecipeId != -1) {
-            if (mDb != null) {
+        if (recipeId != -1) {
+            if (recipeDB != null) {
                 AppExecutors.getInstance().diskIO().execute(() -> {
-                    RecipesModel recipe = mDb.recipeDao().loadRecipeById(mRecipeId);
+                    RecipesModel recipe = recipeDB.recipeDao().loadRecipeById(recipeId);
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(() -> updateUIWithData(recipe));
                     }
@@ -197,7 +196,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
     }
 
     private void updateUIWithData(RecipesModel recipe) {
@@ -209,34 +208,36 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         String notes = recipe.getNotes();
         String image = recipe.getImage();
 
-        mRecipe = recipe;
+        this.recipe = recipe;
 
-        if (mRecipeId == -1) {
+        if (recipeId == -1) {
             updateActionBarTitle(getString(R.string.recipes_add));
         } else {
             updateActionBarTitle(name);
         }
 
-        mRecipeName.setText(name);
+        recipeName.setText(name);
 
         if (image != null) loadRecipeImage(Uri.parse(image));
-        if (time != null) mRecipeTime.setText(time);
-        if (difficulty != null) mRecipeDifficulty.setText(difficulty);
+        if (time != null) recipeTime.setText(time);
+        if (difficulty != null) recipeDifficulty.setText(difficulty);
 
         if (ingredients != null) {
-            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>(){}.getType();
-            List<RecipesModel.RecipeItems> list  = new Gson().fromJson(ingredients, collectionType);
-            mIngredientsAdapter.setRecipeItems(list);
+            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>() {
+            }.getType();
+            List<RecipesModel.RecipeItems> list = new Gson().fromJson(ingredients, collectionType);
+            ingredientsAdapter.setRecipeItems(list);
         }
 
         if (instructions != null) {
-            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>(){}.getType();
-            List<RecipesModel.RecipeItems> list  = new Gson().fromJson(instructions, collectionType);
-            mInstructionsAdapter.setRecipeItems(list);
+            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>() {
+            }.getType();
+            List<RecipesModel.RecipeItems> list = new Gson().fromJson(instructions, collectionType);
+            instructionsAdapter.setRecipeItems(list);
         }
 
         if (notes != null) {
-            mRecipeNotes.setText(notes);
+            recipeNotes.setText(notes);
         }
     }
 
@@ -246,7 +247,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                 .placeholder(R.drawable.ic_recipe_placeholder)
                 .error(R.drawable.ic_recipe_placeholder_error)
                 .transition(DrawableTransitionOptions.withCrossFade())
-                .into(mRecipeImage);
+                .into(recipeImage);
     }
 
     @Override
@@ -256,12 +257,12 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
     @Override
     public void onRecipeDifficulty(String difficulty) {
-        mRecipeDifficulty.setText(difficulty);
+        recipeDifficulty.setText(difficulty);
     }
 
     @Override
     public void onRecipeTime(String hours, String minutes) {
-        mRecipeTime.setText(formatRecipeTime(hours, minutes));
+        recipeTime.setText(formatRecipeTime(hours, minutes));
     }
 
     // TODO Check for unsaved changes
@@ -283,64 +284,65 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     }
 
     private void showImagePickerDialog() {
-        new ImagePickerDialog(getActivity(), new PickerOptionCallback() {
-            @Override
-            public void onTakeCameraSelected() {
-                Intent intent = new Intent(getActivity(), ImagePickerActivity.class);
-                intent.putExtra(Constants.INTENT_IMAGE_PICKER_OPTION,
-                        Constants.INTENT_REQUEST_IMAGE_CAPTURE);
-                requestNewImageUri.launch(intent);
-            }
-
-            @Override
-            public void onChooseGallerySelected() {
-                Intent intent = new Intent(getActivity(), ImagePickerActivity.class);
-                intent.putExtra(Constants.INTENT_IMAGE_PICKER_OPTION,
-                        Constants.INTENT_REQUEST_GALLERY_IMAGE);
-                requestNewImageUri.launch(intent);
-            }
-        }).showDialog();
+        BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                .setAutoDismiss(true)
+                .setNegativeButton(getString(R.string.dialog_camera),
+                        R.drawable.ic_camera, (dialogInterface, which) -> {
+                            Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
+                                    .setImageCapture()
+                                    .build(requireActivity());
+                            requestNewImageUri.launch(intent);
+                        })
+                .setPositiveButton(getString(R.string.dialog_gallery),
+                        R.drawable.ic_gallery, (dialogInterface, which) -> {
+                            Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
+                                    .setImageGallery()
+                                    .build(requireActivity());
+                            requestNewImageUri.launch(intent);
+                        })
+                .build();
+        dialog.show();
     }
 
     private final StartDragListener ingredientsDragListener = new StartDragListener() {
         @Override
         public void requestDrag(RecyclerView.ViewHolder holder) {
-            mIngredientsTouchHelper.startDrag(holder);
+            ingredientsTouchHelper.startDrag(holder);
         }
     };
 
     private final StartDragListener instructionsDragListener = new StartDragListener() {
         @Override
         public void requestDrag(RecyclerView.ViewHolder holder) {
-            mInstructionsTouchHelper.startDrag(holder);
+            instructionsTouchHelper.startDrag(holder);
         }
     };
 
     private final SwipeToDeleteCallback ingredientsDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder holder, int i) {
-            mIngredientsAdapter.removeRecipeItem(holder.getAbsoluteAdapterPosition());
+            ingredientsAdapter.removeRecipeItem(holder.getAbsoluteAdapterPosition());
         }
     };
 
     private final SwipeToDeleteCallback instructionsDeleteCallback = new SwipeToDeleteCallback() {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder holder, int i) {
-            mInstructionsAdapter.removeRecipeItem(holder.getAbsoluteAdapterPosition());
+            instructionsAdapter.removeRecipeItem(holder.getAbsoluteAdapterPosition());
         }
     };
 
     private final OnScrollChangeListener scrollListener = (v, scrollX, scrollY,
                                                            oldScrollX, oldScrollY) -> {
         if (scrollY < oldScrollY) {
-            if (!mFloatingActionButton.isShown()) {
-                mFloatingActionButton.show();
+            if (!floatingActionButton.isShown()) {
+                floatingActionButton.show();
             }
         }
 
         if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-            if (mFloatingActionButton.isShown()) {
-                mFloatingActionButton.hide();
+            if (floatingActionButton.isShown()) {
+                floatingActionButton.hide();
             }
         }
     };
@@ -383,7 +385,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                         if (data != null) {
                             // TODO Handle picture changes
                             Uri uri = data.getParcelableExtra("path");
-                            mRecipe.setImage(uri.toString());
+                            recipe.setImage(uri.toString());
                             loadRecipeImage(uri);
                             cleanImageDir(uri);
                         }
@@ -401,54 +403,54 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             });
 
     private void updateRecipe() {
-        List<RecipeItems> ingredients = mIngredientsAdapter.getRecipeItems();
-        List<RecipeItems> instructions = mInstructionsAdapter.getRecipeItems();
+        List<RecipeItems> ingredients = ingredientsAdapter.getRecipeItems();
+        List<RecipeItems> instructions = instructionsAdapter.getRecipeItems();
 
-        if (mRecipeName.getText() != null && !mRecipeName.getText().toString().isEmpty()) {
-            mRecipe.setName(mRecipeName.getText().toString());
+        if (recipeName.getText() != null && !recipeName.getText().toString().isEmpty()) {
+            recipe.setName(recipeName.getText().toString());
         } else {
-            mRecipe.setName(getString(R.string.recipes_untitled));
+            recipe.setName(getString(R.string.recipes_untitled));
         }
-        if (mRecipeTime.getText() != null) {
-            mRecipe.setTime(mRecipeTime.getText().toString());
+        if (recipeTime.getText() != null) {
+            recipe.setTime(recipeTime.getText().toString());
         }
-        if (mRecipeDifficulty.getText() != null) {
-            mRecipe.setDifficulty(mRecipeDifficulty.getText().toString());
+        if (recipeDifficulty.getText() != null) {
+            recipe.setDifficulty(recipeDifficulty.getText().toString());
         }
-        if (mRecipeNotes.getText() != null) {
-            mRecipe.setNotes(mRecipeNotes.getText().toString());
+        if (recipeNotes.getText() != null) {
+            recipe.setNotes(recipeNotes.getText().toString());
         }
-        if (mRecipe.getCreated() != null) {
-            mRecipe.setModified(TimeUtils.getFormattedDate(System.currentTimeMillis(),
+        if (recipe.getCreated() != null) {
+            recipe.setModified(TimeUtils.getFormattedDate(System.currentTimeMillis(),
                     "MM-dd-yyyy"));
         } else {
-            mRecipe.setCreated(TimeUtils.getFormattedDate(System.currentTimeMillis(),
+            recipe.setCreated(TimeUtils.getFormattedDate(System.currentTimeMillis(),
                     "MM-dd-yyyy"));
         }
 
         if (ingredients != null) {
             String stdJson = new Gson().toJson(ingredients);
-            mRecipe.setIngredients(stdJson);
+            recipe.setIngredients(stdJson);
         }
 
         if (instructions != null) {
             int count = 1;
-            for (int i = 0 ; i < instructions.size() ; i++) {
+            for (int i = 0; i < instructions.size(); i++) {
                 if (instructions.get(i).getType() == RecipeEditAdapter.RECIPE_TYPE_STEP) {
                     instructions.get(i).setKey(count);
                     count++;
                 }
             }
             String stdJson = new Gson().toJson(instructions);
-            mRecipe.setInstructions(stdJson);
+            recipe.setInstructions(stdJson);
         }
 
-        if (mRecipeId == -1) {
+        if (recipeId == -1) {
             AppExecutors.getInstance().diskIO().execute(() ->
-                    mDb.recipeDao().insert(mRecipe));
+                    recipeDB.recipeDao().insert(recipe));
         } else {
             AppExecutors.getInstance().diskIO().execute(() ->
-                    mDb.recipeDao().update(mRecipe));
+                    recipeDB.recipeDao().update(recipe));
         }
 
         requireActivity().onBackPressed();
@@ -467,8 +469,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             ArrayList<Uri> imgUris = new ArrayList<>();
             imgUris.add(uri);
             AppExecutors.getInstance().diskIO().execute(() -> {
-                List<RecipesModel> recipes = mDb.recipeDao().loadAllRecipes();
-                for (int i = 0 ; i < recipes.size() ; i++) {
+                List<RecipesModel> recipes = recipeDB.recipeDao().loadAllRecipes();
+                for (int i = 0; i < recipes.size(); i++) {
                     if (recipes.get(i).getImage() != null) {
                         imgUris.add(Uri.parse(recipes.get(i).getImage()));
                     }

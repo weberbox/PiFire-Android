@@ -30,7 +30,7 @@ import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private boolean mReloadRequired = false;
+    private boolean reloadRequired = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,12 +43,13 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         setPreferencesFromResource(R.xml.prefs_server_settings, rootKey);
     }
 
+    @NonNull
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        if (view != null && getActivity() != null) {
+        if (getActivity() != null) {
             view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
         }
 
@@ -96,7 +97,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                             Toast.LENGTH_LONG).show();
                     return false;
                 } else {
-                    mReloadRequired = true;
+                    reloadRequired = true;
                     return true;
                 }
             });
@@ -109,7 +110,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                             Toast.LENGTH_LONG).show();
                     return false;
                 } else {
-                    mReloadRequired = true;
+                    reloadRequired = true;
                     return true;
                 }
             });
@@ -147,15 +148,19 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_server);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (getPreferenceScreen().getSharedPreferences() != null) {
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
@@ -166,17 +171,17 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_server_basic_auth)
                         .equals(preference.getKey())) {
-                    mReloadRequired = true;
+                    reloadRequired = true;
                 }
             }
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_server_basic_auth_password)
                         .equals(preference.getKey())) {
-                    mReloadRequired = true;
+                    reloadRequired = true;
                 }
                 if (preference.getContext().getString(R.string.prefs_server_basic_auth_user)
                         .equals(preference.getKey())) {
-                    mReloadRequired = true;
+                    reloadRequired = true;
                 }
             }
         }
@@ -186,7 +191,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         @Override
         public void handleOnBackPressed() {
             this.setEnabled(false);
-            if (mReloadRequired) {
+            if (reloadRequired) {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
                 startActivity(intent);

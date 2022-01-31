@@ -14,7 +14,7 @@
         android:id="@+id/load_out_inner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryLight" >
+        android:background="@color/colorPrimaryLight">
 
         <ImageView
             android:id="@+id/pellet_edit_expand_icon"
@@ -36,13 +36,13 @@
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:clickable="true"
+            android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/pellets_item"
-            style="@style/Text15Aller"
+            style="@style/Text15AllerBold"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/default_spacing"
@@ -69,7 +69,8 @@
             android:layout_marginEnd="4dp"
             android:background="@drawable/bg_ripple_trans"
             android:clickable="true"
-            android:contentDescription="@string/placeholder_img"
+            android:contentDescription="@string/delete"
+            android:focusable="true"
             android:paddingStart="30dp"
             android:paddingTop="@dimen/default_spacing"
             android:paddingEnd="30dp"
@@ -78,8 +79,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/pellet_edit_card_header"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/colorAccentRed"
-            android:focusable="true" />
+            app:tint="@color/colorAccentRed" />
 
         <LinearLayout
             android:id="@+id/pellet_edit_card_container"

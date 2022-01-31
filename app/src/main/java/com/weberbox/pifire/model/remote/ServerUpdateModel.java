@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.weberbox.pifire.model.remote.ServerResponseModel.Response;
 
 @SuppressWarnings("unused")
 public class ServerUpdateModel {
@@ -36,6 +37,17 @@ public class ServerUpdateModel {
     @SerializedName("error_message")
     @Expose
     private String errorMessage;
+    @SerializedName("response")
+    @Expose
+    private Response response;
+
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
 
     public Boolean getCheckSuccess() {
         return checkSuccess;

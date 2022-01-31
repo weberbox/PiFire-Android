@@ -25,20 +25,19 @@
 
     <TextView
         android:id="@+id/card_header_title"
-        style="@style/Text18AllerNormal"
+        style="@style/Text18AllerBold"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_margin="@dimen/default_spacing"
         android:gravity="center"
         android:text="@string/pellets_current_load"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/card_header_btn"
         app:layout_constraintStart_toEndOf="@+id/card_header_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/card_header_button"
-        style="@style/Text15Aller"
+        style="@style/Text15AllerBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_spacing"

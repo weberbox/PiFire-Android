@@ -1,9 +1,10 @@
 package com.weberbox.pifire.updater;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 
-import com.weberbox.pifire.ui.dialogs.ProgressBarDialog;
+import com.weberbox.pifire.ui.dialogs.ProgressDialog;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.updater.objects.GitHub;
@@ -23,52 +24,53 @@ import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import timber.log.Timber;
 
 public class UtilsAsync {
 
     public static class LatestAppVersion extends AsyncTask<Void, Void, Update> {
-        private final WeakReference<Context> mContextRef;
-        private final LibraryPreferences mLibraryPreferences;
-        private final Boolean mForceCheck;
-        private final UpdateFrom mUpdateFrom;
-        private final GitHub mGitHub;
-        private final String mJsonUrl;
-        private final AppUpdater.LibraryListener mListener;
+        private final WeakReference<Context> contextRef;
+        private final LibraryPreferences libraryPreferences;
+        private final Boolean forceCheck;
+        private final UpdateFrom updateFrom;
+        private final GitHub gitHub;
+        private final String jsonUrl;
+        private final AppUpdater.LibraryListener listener;
 
         public LatestAppVersion(Context context, Boolean forceCheck, UpdateFrom updateFrom,
                                 GitHub gitHub, String jsonUrl, AppUpdater.LibraryListener listener) {
-            mContextRef = new WeakReference<>(context);
-            mLibraryPreferences = new LibraryPreferences(context);
-            mForceCheck = forceCheck;
-            mUpdateFrom = updateFrom;
-            mGitHub = gitHub;
-            mJsonUrl = jsonUrl;
-            mListener = listener;
+            contextRef = new WeakReference<>(context);
+            libraryPreferences = new LibraryPreferences(context);
+            this.forceCheck = forceCheck;
+            this.updateFrom = updateFrom;
+            this.gitHub = gitHub;
+            this.jsonUrl = jsonUrl;
+            this.listener = listener;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            Context context = mContextRef.get();
-            if (context == null || mListener == null) {
+            Context context = contextRef.get();
+            if (context == null || listener == null) {
                 cancel();
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
-                if (!mForceCheck && !mLibraryPreferences.getAppUpdaterShow()) {
+                if (!forceCheck && !libraryPreferences.getAppUpdaterShow()) {
                     cancel();
                 } else {
-                    if (mUpdateFrom == UpdateFrom.GITHUB && !GitHub.isGitHubValid(mGitHub)) {
-                        mListener.onFailed(AppUpdaterError.GITHUB_USER_REPO_INVALID);
+                    if (updateFrom == UpdateFrom.GITHUB && !GitHub.isGitHubValid(gitHub)) {
+                        listener.onFailed(AppUpdaterError.GITHUB_USER_REPO_INVALID);
                         cancel();
-                    } else if (mUpdateFrom == UpdateFrom.JSON && (mJsonUrl == null ||
-                            !UtilsLibrary.isStringValidUrl(mJsonUrl))) {
-                        mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
+                    } else if (updateFrom == UpdateFrom.JSON && (jsonUrl == null ||
+                            !UtilsLibrary.isStringValidUrl(jsonUrl))) {
+                        listener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
                         cancel();
                     }
                 }
             } else {
-                mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
+                listener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
                 cancel();
             }
         }
@@ -77,15 +79,15 @@ public class UtilsAsync {
         protected void onPostExecute(Update update) {
             super.onPostExecute(update);
 
-            if (mListener != null) {
+            if (listener != null) {
                 if (!isCancelled()) {
                     if (UtilsLibrary.isStringAVersion(update.getLatestVersion())) {
-                        mListener.onSuccess(update);
+                        listener.onSuccess(update);
                     } else {
-                        mListener.onFailed(AppUpdaterError.UPDATER_ERROR);
+                        listener.onFailed(AppUpdaterError.UPDATER_ERROR);
                     }
                 } else {
-                    mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
+                    listener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
                 }
             }
         }
@@ -93,31 +95,31 @@ public class UtilsAsync {
         @Override
         protected void onBackgroundError(Exception e) {
             Timber.w(e, "App Update check failed");
-            if (mListener != null) {
-                mListener.onFailed(AppUpdaterError.UPDATER_ERROR);
+            if (listener != null) {
+                listener.onFailed(AppUpdaterError.UPDATER_ERROR);
             }
         }
 
         @Override
         protected Update doInBackground(Void unused) {
             try {
-                if (mUpdateFrom == UpdateFrom.JSON) {
-                    Update update = UtilsLibrary.getLatestAppVersion(mJsonUrl);
+                if (updateFrom == UpdateFrom.JSON) {
+                    Update update = UtilsLibrary.getLatestAppVersion(jsonUrl);
                     if (update != null) {
                         return update;
                     } else {
                         AppUpdaterError error = AppUpdaterError.JSON_ERROR;
 
-                        if (mListener != null) {
-                            mListener.onFailed(error);
+                        if (listener != null) {
+                            listener.onFailed(error);
                         }
                         cancel();
                         return null;
                     }
                 } else {
-                    Context context = mContextRef.get();
+                    Context context = contextRef.get();
                     if (context != null) {
-                        return UtilsLibrary.getLatestAppVersionHttp(mGitHub);
+                        return UtilsLibrary.getLatestAppVersionHttp(gitHub);
                     } else {
                         cancel();
                         return null;
@@ -131,43 +133,47 @@ public class UtilsAsync {
     }
 
     public static class DownloadNewVersion extends AsyncTask<String, Long[], Boolean> {
-        private final WeakReference<Context> mContextRef;
-        private final AppUpdater.DownloadListener mListener;
-        private final String mFileName;
-        private final String mApiUrl;
-        private final Update mUpdate;
-        private File mUpdateFile;
-        private ProgressBarDialog mProgressDialog;
+        private final WeakReference<Context> contextRef;
+        private final AppUpdater.DownloadListener listener;
+        private final String fileName;
+        private final String apiUrl;
+        private final Update update;
+        private File updateFile;
+        private ProgressDialog progressDialog;
 
         public DownloadNewVersion(Context context, Update update, String fileName, String apiUrl,
                                   AppUpdater.DownloadListener listener) {
-            mContextRef = new WeakReference<>(context);
-            mFileName = fileName;
-            mUpdate = update;
-            mListener = listener;
-            mApiUrl = apiUrl;
+            contextRef = new WeakReference<>(context);
+            this.fileName = fileName;
+            this.update = update;
+            this.listener = listener;
+            this.apiUrl = apiUrl;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            Context context = mContextRef.get();
-            if (context == null || mListener == null) {
+            Context context = contextRef.get();
+            if (context == null || listener == null) {
                 cancel();
             } else if (UtilsLibrary.isNetworkAvailable(context)) {
-                if (!UtilsLibrary.isStringValidUrl(mApiUrl)) {
-                    mListener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
+                if (!UtilsLibrary.isStringValidUrl(apiUrl)) {
+                    listener.onFailed(AppUpdaterError.JSON_URL_MALFORMED);
                     cancel();
                 } else {
-                    if (mProgressDialog == null) {
-                        mProgressDialog = new ProgressBarDialog(context);
-                        mProgressDialog.showDialog();
-                        mProgressDialog.setCancelable(false);
+                    if (progressDialog == null) {
+                        if (context instanceof Activity) {
+                            progressDialog = new ProgressDialog.Builder((Activity) context)
+                                    .setMessage("")
+                                    .setCancelable(false)
+                                    .build();
+                            progressDialog.show();
+                        }
                     }
                 }
             } else {
-                mListener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
+                listener.onFailed(AppUpdaterError.NETWORK_NOT_AVAILABLE);
                 cancel();
             }
         }
@@ -177,13 +183,16 @@ public class UtilsAsync {
         protected void onProgress(Long[] values) {
             super.onProgress(values);
 
-            if (values[1] < 0) {
-                mProgressDialog.setIndeterminate(true);
-            } else {
-                mProgressDialog.setIndeterminate(false);
-                mProgressDialog.setMax(values[1].intValue());
-                mProgressDialog.setProgress(values[0].intValue());
-                mProgressDialog.setMessage(String.format("%d / %d ", values[0], values[1]));
+            if (progressDialog != null) {
+                if (values[1] < 0) {
+                    progressDialog.getProgressIndicator().setIndeterminate(true);
+                } else {
+                    progressDialog.getProgressIndicator().setIndeterminate(false);
+                    progressDialog.getProgressIndicator().setMax(values[1].intValue());
+                    progressDialog.getProgressIndicator().setProgress(values[0].intValue());
+                    progressDialog.getProgressMessage().setText(String.format("%d / %d ", values[0],
+                            values[1]));
+                }
             }
         }
 
@@ -191,41 +200,41 @@ public class UtilsAsync {
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
 
-            if (mProgressDialog.isShowing() && mProgressDialog != null) {
-                mProgressDialog.dismiss();
-                mProgressDialog = null;
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+                progressDialog = null;
             }
 
-            if (mListener != null) {
+            if (listener != null) {
                 if (!isCancelled()) {
                     if (result != null && !result) {
-                        mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+                        listener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
                     } else {
-                        if (mUpdateFile != null && mUpdateFile.exists()) {
-                            Context context = mContextRef.get();
+                        if (updateFile != null && updateFile.exists()) {
+                            Context context = contextRef.get();
                             UtilsLibrary.OpenDownloadedFile(context,
-                                    context.getCacheDir().getPath(), mFileName);
+                                    context.getCacheDir().getPath(), fileName);
                         }
                     }
                 } else {
-                    mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+                    listener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
                 }
             }
         }
 
         @Override
         protected void onBackgroundError(Exception e) {
-            if (mListener != null) {
-                mListener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+            if (listener != null) {
+                listener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
             }
         }
 
         @Override
         protected Boolean doInBackground(String arg0) {
-            Context context = mContextRef.get();
+            Context context = contextRef.get();
             OkHttpClient client = new OkHttpClient();
 
-            String downloadUrl = new ParserJSON(mApiUrl).parseGitHubJSON(mUpdate);
+            String downloadUrl = new ParserJSON(apiUrl).parseGitHubJSON(update);
 
             if (downloadUrl == null) {
                 return false;
@@ -244,14 +253,15 @@ public class UtilsAsync {
 
                     InputStream inputStream = null;
                     try {
-                        assert response.body() != null;
-                        inputStream = response.body().byteStream();
+                        ResponseBody responseBody = response.body();
+                        assert responseBody!= null;
+                        inputStream = responseBody.byteStream();
 
                         byte[] buff = new byte[1024 * 4];
                         long downloaded = 0;
-                        long target = response.body().contentLength();
-                        mUpdateFile = new File(context.getCacheDir(), mFileName);
-                        OutputStream output = new FileOutputStream(mUpdateFile);
+                        long target = responseBody.contentLength();
+                        updateFile = new File(context.getCacheDir(), fileName);
+                        OutputStream output = new FileOutputStream(updateFile);
 
                         publishProgress(new Long[]{0L, target});
                         while (true) {

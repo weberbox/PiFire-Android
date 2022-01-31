@@ -28,14 +28,14 @@ public class AppExecutors {
 
     private static final Object LOCK = new Object();
     private static AppExecutors sInstance;
-    private final Executor mDiskIO;
-    private final Executor mMainThread;
-    private final Executor mNetworkIO;
+    private final Executor diskIO;
+    private final Executor mainThread;
+    private final Executor networkIO;
 
     private AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
-        mDiskIO = diskIO;
-        mNetworkIO = networkIO;
-        mMainThread = mainThread;
+        this.diskIO = diskIO;
+        this.networkIO = networkIO;
+        this.mainThread = mainThread;
     }
 
     public static AppExecutors getInstance() {
@@ -50,15 +50,15 @@ public class AppExecutors {
     }
 
     public Executor diskIO() {
-        return mDiskIO;
+        return diskIO;
     }
 
     public Executor mainThread() {
-        return mMainThread;
+        return mainThread;
     }
 
     public Executor networkIO() {
-        return mNetworkIO;
+        return networkIO;
     }
 
     private static class MainThreadExecutor implements Executor {

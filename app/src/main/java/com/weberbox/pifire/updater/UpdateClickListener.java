@@ -7,16 +7,16 @@ import com.weberbox.pifire.updater.objects.Update;
 
 public class UpdateClickListener implements DialogInterface.OnClickListener {
 
-    private final Context mContext;
-    private final Update mUpdate;
+    private final Context context;
+    private final Update update;
 
     public UpdateClickListener(final Context context, final Update update) {
-        mContext = context;
-        mUpdate = update;
+        this.context = context;
+        this.update = update;
     }
 
     @Override
     public void onClick(final DialogInterface dialog, final int which) {
-        UtilsLibrary.getAppUpdate(mContext, mUpdate);
+        UtilsLibrary.getAppUpdate(context, update);
     }
 }
