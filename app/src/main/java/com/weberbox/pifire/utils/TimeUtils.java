@@ -27,10 +27,4 @@ public class TimeUtils {
         long fullSecs = seconds + TimeUnit.MINUTES.toSeconds(Long.parseLong(minutes));
         return (float) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + fullSecs;
     }
-
-    public static Float getRestartTime(float endTime, float pauseTime) {
-        float newTime = endTime - pauseTime;
-        long now = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        return (float) newTime + now;
-    }
 }

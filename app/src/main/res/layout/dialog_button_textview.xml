@@ -79,19 +79,6 @@
                     app:iconGravity="textStart"
                     tools:text="Positive" />
 
-<!--                <androidx.appcompat.widget.AppCompatTextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="0.5"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:contentDescription="@string/dialog_gallery"-->
-<!--                    android:drawableTop="@drawable/ic_camera" />-->
-
-<!--                <androidx.appcompat.widget.AppCompatTextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="0.5"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:drawableTop="@drawable/ic_gallery"-->
-<!--                    android:contentDescription="@string/dialog_gallery" />-->
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>

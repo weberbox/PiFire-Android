@@ -3,9 +3,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +15,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -25,13 +24,12 @@ import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
-import java.util.Objects;
-
 import io.socket.client.Socket;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -49,11 +47,10 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
@@ -146,7 +143,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             }
 
             if (pidUMax != null) {
-                if (VersionUtils.isSupported("1.2.0")) {
+                if (VersionUtils.isSupported(Versions.V_120)) {
                     pidUMax.setOnBindEditTextListener(editText -> {
                         editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -156,12 +153,12 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 } else {
                     pidUMax.setEnabled(false);
                     pidUMax.setSummaryProvider(null);
-                    pidUMax.setSummary(getString(R.string.disabled_option_settings, "1.2.0"));
+                    pidUMax.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
                 }
             }
 
             if (pidUMin != null) {
-                if (VersionUtils.isSupported("1.2.0")) {
+                if (VersionUtils.isSupported(Versions.V_120)) {
                     pidUMin.setOnBindEditTextListener(editText -> {
                         editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -171,12 +168,12 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 } else {
                     pidUMin.setEnabled(false);
                     pidUMin.setSummaryProvider(null);
-                    pidUMin.setSummary(getString(R.string.disabled_option_settings, "1.2.0"));
+                    pidUMin.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
                 }
             }
 
             if (pidCenter != null) {
-                if (VersionUtils.isSupported("1.2.2")) {
+                if (VersionUtils.isSupported(Versions.V_122)) {
                     pidCenter.setOnBindEditTextListener(editText -> {
                         editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                                 InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -186,12 +183,10 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 } else {
                     pidCenter.setEnabled(false);
                     pidCenter.setSummaryProvider(null);
-                    pidCenter.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
+                    pidCenter.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
                 }
             }
         }
-
-        return view;
     }
 
     @Override
@@ -200,18 +195,16 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_work);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

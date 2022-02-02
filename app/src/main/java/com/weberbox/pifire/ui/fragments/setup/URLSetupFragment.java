@@ -33,7 +33,7 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
 import com.weberbox.pifire.interfaces.AuthDialogCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
-import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
+import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.AlertUtils;
@@ -239,10 +239,15 @@ public class URLSetupFragment extends Fragment implements AuthDialogCallback {
                                 .contains("CertPathValidatorException")) {
                             getActivity().runOnUiThread(() -> {
                                 connectProgress.setVisibility(View.GONE);
-                                MessageTextDialog dialog = new MessageTextDialog(getActivity(),
-                                        getString(R.string.setup_server_self_signed_title),
-                                        getString(R.string.setup_server_self_signed));
-                                dialog.getDialog().show();
+                                MaterialDialogText dialog = new MaterialDialogText.Builder(
+                                        requireActivity())
+                                        .setTitle(getString(R.string.setup_server_self_signed_title))
+                                        .setMessage(getString(R.string.setup_server_self_signed))
+                                        .setPositiveButton(getString(R.string.close),
+                                                (dialogInterface, which) ->
+                                                        dialogInterface.dismiss())
+                                        .build();
+                                dialog.show();
                             });
                         } else {
                             getActivity().runOnUiThread(() -> {

@@ -21,56 +21,56 @@ import java.util.List;
 
 public class PModeTableDialog {
 
-    private final BottomSheetDialog mPModeBottomSheet;
-    private final LayoutInflater mInflater;
-    private final Context mContext;
+    private final BottomSheetDialog bottomSheetDialog;
+    private final LayoutInflater inflater;
+    private final Context context;
 
 
     public PModeTableDialog(Context context) {
-        mPModeBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mContext = context;
+        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
     public BottomSheetDialog showDialog(){
-        DialogPmodeTableBinding binding = DialogPmodeTableBinding.inflate(mInflater);
+        DialogPmodeTableBinding binding = DialogPmodeTableBinding.inflate(inflater);
 
         RecyclerView recyclerView = binding.pmodeRecycler;
 
         PModeViewAdapter adapter = new PModeViewAdapter(getPModeList());
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         recyclerView.setAdapter(adapter);
 
-        mPModeBottomSheet.setContentView(binding.getRoot());
+        bottomSheetDialog.setContentView(binding.getRoot());
 
-        mPModeBottomSheet.setOnShowListener(dialog -> {
+        bottomSheetDialog.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        mPModeBottomSheet.show();
+        bottomSheetDialog.show();
 
-        Configuration configuration = mContext.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            mPModeBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
         }
 
-        return mPModeBottomSheet;
+        return bottomSheetDialog;
     }
 
     private List<PModeModel> getPModeList() {
         List<PModeModel> pModeList = new ArrayList<>();
 
-        String augerOn = Prefs.getString(mContext.getString(R.string.prefs_work_auger_on),
-                mContext.getString(R.string.def_pmode_auger_on));
+        String augerOn = Prefs.getString(context.getString(R.string.prefs_work_auger_on),
+                context.getString(R.string.def_pmode_auger_on));
 
-        String[] pmodes = mContext.getResources().getStringArray(R.array.pmode_setting);
-        String[] pmode_times = mContext.getResources().getStringArray(R.array.pmode_times);
+        String[] pmodes = context.getResources().getStringArray(R.array.pmode_setting);
+        String[] pmode_times = context.getResources().getStringArray(R.array.pmode_times);
 
         pModeList.add(new PModeModel(pmodes[0], augerOn, pmode_times[0]));
         pModeList.add(new PModeModel(pmodes[1], augerOn, pmode_times[1]));

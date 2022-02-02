@@ -13,32 +13,32 @@ import com.weberbox.pifire.databinding.DialogImageViewBinding;
 
 public class ImageViewDialog {
 
-    private final LayoutInflater mInflater;
-    private final AlertDialog.Builder mDialog;
-    private final Context mContext;
-    private final String mImageUri;
+    private final LayoutInflater inflater;
+    private final AlertDialog.Builder dialog;
+    private final Context context;
+    private final String imageUri;
 
     public ImageViewDialog(Context context, String uri) {
-        mDialog = new AlertDialog.Builder(context, R.style.AlertDialogImageView);
-        mInflater = LayoutInflater.from(context);
-        mContext = context;
-        mImageUri = uri;
+        dialog = new AlertDialog.Builder(context, R.style.AlertDialogImageView);
+        inflater = LayoutInflater.from(context);
+        this.context = context;
+        imageUri = uri;
     }
 
     public AlertDialog.Builder showDialog() {
-        DialogImageViewBinding binding = DialogImageViewBinding.inflate(mInflater);
+        DialogImageViewBinding binding = DialogImageViewBinding.inflate(inflater);
 
         final ImageView imageView = binding.dialogImageView;
 
-        Glide.with(mContext)
-                .load(Uri.parse(mImageUri))
+        Glide.with(context)
+                .load(Uri.parse(imageUri))
                 .error(R.drawable.ic_recipe_placeholder_error)
                 .into(imageView);
 
-        mDialog.setView(binding.getRoot());
+        dialog.setView(binding.getRoot());
 
-        mDialog.show();
+        dialog.show();
 
-        return mDialog;
+        return dialog;
     }
 }

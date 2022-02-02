@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -30,6 +27,7 @@ import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private boolean reloadRequired = false;
 
     @Override
@@ -43,15 +41,10 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         setPreferencesFromResource(R.xml.prefs_server_settings, rootKey);
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
-
-        if (getActivity() != null) {
-            view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
         EditTextPreference authPass = findPreference(getString(R.string.prefs_server_basic_auth_password));
@@ -73,23 +66,23 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         if (authUser != null) {
             authUser.setOnBindEditTextListener(editText -> editText.addTextChangedListener(
                     new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
 
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (s.length() == 0) {
-                        editText.setError(getString(R.string.settings_username_blank_error));
-                    } else {
-                        editText.setError(null);
-                    }
-                }
-            }));
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            if (s.length() == 0) {
+                                editText.setError(getString(R.string.settings_username_blank_error));
+                            } else {
+                                editText.setError(null);
+                            }
+                        }
+                    }));
 
             authUser.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (newValue.equals("Error")) {
@@ -138,8 +131,6 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                 });
             });
         }
-
-        return view;
     }
 
     @Override
@@ -148,18 +139,16 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_server);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

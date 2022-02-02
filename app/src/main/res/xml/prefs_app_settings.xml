@@ -148,6 +148,13 @@
             android:summary="@string/settings_crash_summary"
             android:title="@string/settings_enable_crash" />
 
+        <SwitchPreferenceCompat
+            android:defaultValue="@bool/def_crash_dev_enabled"
+            android:key="@string/prefs_dev_crash_enable"
+            android:summary="@string/settings_dev_crash_summary"
+            android:title="@string/settings_enable_crash"
+            app:isPreferenceVisible="false" />
+
         <EditTextPreference
             android:key="@string/prefs_crash_user_email"
             android:summary="@string/settings_crash_email_summary"

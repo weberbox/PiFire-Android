@@ -54,7 +54,6 @@ import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.PelletItemsAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletProfileEditAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletsLogAdapter;
-import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsAddDialog;
 import com.weberbox.pifire.ui.dialogs.ProfilePickerDialog;
@@ -66,7 +65,6 @@ import com.weberbox.pifire.ui.views.PelletsLogsRecycler;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.StringUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,34 +177,28 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         PowerSpinnerView pelletsRating = editCardBinding.pelletEditRatingText;
         pelletsRating.getSpinnerRecyclerView().setVerticalScrollBarEnabled(false);
 
-
         addProfileCard = editorCardView.getAddProfileView();
 
         pelletBrandsAdapter = new PelletItemsAdapter(brandsEditList, this, true);
 
         brandsCardViewRecycler = brandsCardView.getRecycler();
-        brandsCardViewRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         brandsCardViewRecycler.setAdapter(pelletBrandsAdapter);
 
         pelletWoodsAdapter = new PelletItemsAdapter(woodsEditList, this, true);
 
         woodsCardViewRecycler = woodsCardView.getRecycler();
-        woodsCardViewRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         woodsCardViewRecycler.setAdapter(pelletWoodsAdapter);
 
         pelletsLogAdapter = new PelletsLogAdapter(logsList, this, true);
 
         logsRecycler = logsCardView.getRecycler();
-        logsRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         logsRecycler.setAdapter(pelletsLogAdapter);
 
         pelletProfileEditAdapter = new PelletProfileEditAdapter(requireActivity(), brandsList,
                 woodsList, profileEditList, this, true);
 
         editorRecycler = editorCardView.getRecycler();
-        editorRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         editorRecycler.setAdapter(pelletProfileEditAdapter);
-
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
@@ -634,6 +626,10 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
             woodsCardViewRecycler.unVeil();
             editorRecycler.unVeil();
             logsRecycler.unVeil();
+            brandsCardViewRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
+            woodsCardViewRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
+            editorRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
+            logsRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
 
             toggleLoading(false);
 
@@ -651,7 +647,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
 
     private void setBrandsViewLimited(boolean limited) {
         if (pelletBrandsAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.brandsCardView.setViewAll(limited && woodsList.size() > 3);
+            binding.pelletsLayout.brandsCardView.setViewAll(limited && brandsList.size() > 3);
         }
     }
 

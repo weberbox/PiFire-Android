@@ -11,11 +11,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.LayoutPelletsLogsBinding;
+import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 
 @SuppressWarnings("unused")
 public class PelletsLogsRecycler extends CardView {
@@ -60,10 +60,9 @@ public class PelletsLogsRecycler extends CardView {
             gradient = binding.logsViewAllShadow;
             viewAllButton = binding.logsViewAll;
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setLayoutManager(new ScrollDisableLayoutManager(context));
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.addVeiledItems(3);
-
 
             headerTitle.setText(headerText);
             headerIcon.setImageResource(headerIconArray);

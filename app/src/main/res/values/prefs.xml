@@ -31,6 +31,7 @@
     <string name="prefs_crash_cat">prefs_crash_cat</string>
     <string name="prefs_crash_enable">prefs_crash_enable</string>
     <string name="prefs_crash_user_email">prefs_crash_user_email</string>
+    <string name="prefs_dev_crash_enable">prefs_dev_crash_enable</string>
 
     <string name="prefs_first_app_start">prefs_first_app_start</string>
 
@@ -101,7 +102,6 @@
     <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
     <string name="prefs_notif_onesignal_cat">prefs_notif_onesignal_cat</string>
     <string name="prefs_notif_onesignal_accepted">prefs_notif_onesignal_accepted</string>
-    <string name="prefs_notif_onesignal_player_id">prefs_notif_onesignal_player_id</string>
     <string name="prefs_notif_onesignal_device_list">prefs_notif_onesignal_device_list</string>
     <string name="prefs_notif_onesignal_serveruuid">prefs_notif_onesignal_serveruuid</string>
     <string name="prefs_notif_onesignal_consent">prefs_notif_onesignal_consent</string>
@@ -112,7 +112,6 @@
     <string name="prefs_notif_influxdb_org">prefs_notif_influxdb_org</string>
     <string name="prefs_notif_influxdb_bucket">prefs_notif_influxdb_bucket</string>
 
-    <string name="prefs_server_cat_updates">prefs_server_cat_updates</string>
     <string name="prefs_server_updates_frag">prefs_server_updates_frag</string>
 
     <string name="prefs_admin_debug">prefs_admin_debug</string>

@@ -37,72 +37,72 @@ import java.util.stream.IntStream;
 
 public class TempPickerDialog {
 
-    private RecyclerView mTempList;
-    private String mSelectedTemp;
-    private final BottomSheetDialog mTempPickerBottomSheet;
-    private final LayoutInflater mInflater;
-    private final DashboardCallback mCallBack;
-    private final Context mContext;
-    private final String mTempUnit;
-    private final int mTempType;
-    private final int mScrollTemp;
-    private final boolean mHoldMode;
+    private RecyclerView tempListRecycler;
+    private String selectedTemp;
+    private final BottomSheetDialog pickerBottomSheet;
+    private final LayoutInflater inflater;
+    private final DashboardCallback callBack;
+    private final Context context;
+    private final String tempUnit;
+    private final int tempType;
+    private final int scrollTemp;
+    private final boolean holdMode;
 
     public TempPickerDialog(Context context, Fragment fragment, int tempType, int defaultTemp,
                             boolean hold) {
-        mTempPickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mCallBack = (DashboardCallback) fragment;
-        mContext = context;
-        mTempType = tempType;
-        mScrollTemp = defaultTemp;
-        mHoldMode = hold;
-        mTempUnit = TempUtils.getTempUnit(context);
+        pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        callBack = (DashboardCallback) fragment;
+        this.context = context;
+        this.tempType = tempType;
+        scrollTemp = defaultTemp;
+        holdMode = hold;
+        tempUnit = TempUtils.getTempUnit(context);
     }
 
     public BottomSheetDialog showDialog() {
-        DialogTempPickerBinding binding = DialogTempPickerBinding.inflate(mInflater);
+        DialogTempPickerBinding binding = DialogTempPickerBinding.inflate(inflater);
 
         RelativeLayout shutdownContainer = binding.probeShutdownContainer;
         SwitchCompat shutdownSwitch = binding.probeShutdownSwitch;
         Button confirmButton = binding.setTempConfirm;
         Button clearButton = binding.setTempClear;
 
-        PickerLayoutManager tempPickerLayoutManager = new PickerLayoutManager(mContext,
+        PickerLayoutManager tempPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
         tempPickerLayoutManager.setChangeAlpha(true);
         tempPickerLayoutManager.setScaleDownBy(0.99f);
         tempPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mTempList = binding.tempList;
+        tempListRecycler = binding.tempList;
 
         SnapHelper tempSnapHelper = new LinearSnapHelper();
-        tempSnapHelper.attachToRecyclerView(mTempList);
+        tempSnapHelper.attachToRecyclerView(tempListRecycler);
 
         TempPickerAdapter tempPickerAdapter;
 
-        TempUtils tempUtils = new TempUtils(mContext);
+        TempUtils tempUtils = new TempUtils(context);
 
-        if(mTempType == Constants.PICKER_TYPE_GRILL) {
-            mSelectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
-            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(mTempUnit,
+        if(tempType == Constants.PICKER_TYPE_GRILL) {
+            selectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
+            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(tempUnit,
                     tempUtils.getMinGrillTemp(), (tempUtils.getMaxGrillTemp() + 1)));
         } else {
-            if (Prefs.getBoolean(mContext.getString(R.string.prefs_probe_shutdown),
-                    mContext.getResources().getBoolean(R.bool.def_probe_shutdown))) {
+            if (Prefs.getBoolean(context.getString(R.string.prefs_probe_shutdown),
+                    context.getResources().getBoolean(R.bool.def_probe_shutdown))) {
                 shutdownContainer.setVisibility(View.VISIBLE);
             }
-            mSelectedTemp = String.valueOf(tempUtils.getDefaultProbeTemp());
-            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(mTempUnit,
+            selectedTemp = String.valueOf(tempUtils.getDefaultProbeTemp());
+            tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(tempUnit,
                     tempUtils.getMinProbeTemp(), (tempUtils.getMaxProbeTemp() + 1)));
         }
 
-        if(mScrollTemp > 0) {
-            mSelectedTemp = String.valueOf(mScrollTemp);
+        if(scrollTemp > 0) {
+            selectedTemp = String.valueOf(scrollTemp);
         }
 
-        mTempList.setLayoutManager(tempPickerLayoutManager);
-        mTempList.setAdapter(tempPickerAdapter);
+        tempListRecycler.setLayoutManager(tempPickerLayoutManager);
+        tempListRecycler.setAdapter(tempPickerAdapter);
         
 
         tempPickerLayoutManager.setOnScrollStopListener(
@@ -110,7 +110,7 @@ public class TempPickerDialog {
                     LinearLayout parent = view.findViewById(R.id.temp_item_container);
                     RelativeLayout parent_two = parent.findViewById(R.id.temp_item_container_two);
                     TextView text = parent_two.findViewById(R.id.temp_item_text_view);
-                    mSelectedTemp = text.getText().toString();
+                    selectedTemp = text.getText().toString();
                 });
 
         RecyclerViewFastScroller fastScroll = binding.tempFastScroll;
@@ -122,7 +122,7 @@ public class TempPickerDialog {
 
             @Override
             public void onDragged(float v, int position) {
-                mSelectedTemp = String.valueOf(tempPickerAdapter.onChange(position));
+                selectedTemp = String.valueOf(tempPickerAdapter.onChange(position));
             }
 
             @Override
@@ -132,60 +132,60 @@ public class TempPickerDialog {
         });
 
         confirmButton.setOnClickListener(v -> {
-            mTempPickerBottomSheet.dismiss();
-            mCallBack.onTempConfirmClicked(mTempType, mSelectedTemp, mHoldMode,
+            pickerBottomSheet.dismiss();
+            callBack.onTempConfirmClicked(tempType, selectedTemp, holdMode,
                     shutdownSwitch.isChecked());
         });
 
         clearButton.setOnClickListener(v -> {
-            mTempPickerBottomSheet.dismiss();
-            mCallBack.onTempClearClicked(mTempType);
+            pickerBottomSheet.dismiss();
+            callBack.onTempClearClicked(tempType);
         });
 
 
-        mTempPickerBottomSheet.setOnDismissListener(dialogInterface -> {
+        pickerBottomSheet.setOnDismissListener(dialogInterface -> {
 
         });
 
-        mTempPickerBottomSheet.setContentView(binding.getRoot());
+        pickerBottomSheet.setContentView(binding.getRoot());
 
-        if(mScrollTemp != 0) {
-            if(mTempType == Constants.PICKER_TYPE_GRILL) {
-                setDefaultTemp(mScrollTemp - tempUtils.getMinGrillTemp(), false);
+        if(scrollTemp != 0) {
+            if(tempType == Constants.PICKER_TYPE_GRILL) {
+                setDefaultTemp(scrollTemp - tempUtils.getMinGrillTemp(), false);
             } else {
-                setDefaultTemp(mScrollTemp - tempUtils.getMinProbeTemp(), false);
+                setDefaultTemp(scrollTemp - tempUtils.getMinProbeTemp(), false);
             }
         }
 
-        if(mHoldMode) {
+        if(holdMode) {
             clearButton.setVisibility(View.GONE);
         } else {
             clearButton.setVisibility(View.VISIBLE);
         }
 
-        mTempPickerBottomSheet.setOnShowListener(dialog -> {
+        pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        mTempPickerBottomSheet.show();
+        pickerBottomSheet.show();
 
-        Configuration configuration = mContext.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            mTempPickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
         }
 
-        return mTempPickerBottomSheet;
+        return pickerBottomSheet;
     }
 
     @SuppressWarnings("SameParameterValue")
     private void setDefaultTemp(int position, boolean smooth){
         if (smooth) {
-            mTempList.smoothScrollToPosition(position);
+            tempListRecycler.smoothScrollToPosition(position);
         } else {
-            mTempList.scrollToPosition(position);
+            tempListRecycler.scrollToPosition(position);
         }
     }
 

@@ -137,18 +137,18 @@ public class ServerControlDep {
     }
 
     // Timer Start/Stop
-    public static void setTimerAction(Socket socket, int type) {
+    public static void setTimerAction(Socket socket, String action) {
         String payload = null;
-        switch (type) {
-            case Constants.ACTION_TIMER_RESTART:
+        switch (action) {
+            case ServerConstants.PT_TIMER_START:
                 payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
                         ServerConstants.TIMER_START, String.valueOf(true));
                 break;
-            case Constants.ACTION_TIMER_PAUSE:
+            case ServerConstants.PT_TIMER_PAUSE:
                 payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
                         ServerConstants.TIMER_PAUSE, String.valueOf(true));
                 break;
-            case Constants.ACTION_TIMER_STOP:
+            case ServerConstants.PT_TIMER_STOP:
                 payload = JSONUtils.encodeJSON(ServerConstants.TIMER_ACTION,
                         ServerConstants.TIMER_STOP, String.valueOf(true));
                 break;

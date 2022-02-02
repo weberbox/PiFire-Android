@@ -13,6 +13,9 @@ public class PostDataModel {
     @SerializedName("pellets_action")
     @Expose
     private PelletsAction pelletsAction;
+    @SerializedName("timer_action")
+    @Expose
+    private TimerAction timerAction;
 
     public OneSignalDevice getOneSignalDevice() {
         return oneSignalDevice;
@@ -37,6 +40,19 @@ public class PostDataModel {
 
     public PostDataModel withPelletsAction(PelletsAction pelletsAction) {
         this.pelletsAction = pelletsAction;
+        return this;
+    }
+
+    public TimerAction getTimerAction() {
+        return timerAction;
+    }
+
+    public void setPelletsTimerAction(TimerAction timerAction) {
+        this.timerAction = timerAction;
+    }
+
+    public PostDataModel withTimerAction(TimerAction timerAction) {
+        this.timerAction = timerAction;
         return this;
     }
 
@@ -237,6 +253,59 @@ public class PostDataModel {
 
         public PelletsAction withLogItem(String logItem) {
             this.logItem = logItem;
+            return this;
+        }
+
+    }
+
+    public static class TimerAction {
+
+        @SerializedName("hours_range")
+        @Expose
+        private Integer hoursRange;
+        @SerializedName("minutes_range")
+        @Expose
+        private Integer minutesRange;
+        @SerializedName("timer_shutdown")
+        @Expose
+        private Boolean timerShutdown;
+
+        public Integer getHours() {
+            return hoursRange;
+        }
+
+        public void setHours(Integer hoursRange) {
+            this.hoursRange = hoursRange;
+        }
+
+        public TimerAction withHours(Integer hoursRange) {
+            this.hoursRange = hoursRange;
+            return this;
+        }
+
+        public Integer getMinutes() {
+            return minutesRange;
+        }
+
+        public void setMinutes(Integer minutesRange) {
+            this.minutesRange = minutesRange;
+        }
+
+        public TimerAction withMinutes(Integer minutesRange) {
+            this.minutesRange = minutesRange;
+            return this;
+        }
+
+        public Boolean getShutdown() {
+            return timerShutdown;
+        }
+
+        public void setShutdown(Boolean timerShutdown) {
+            this.timerShutdown = timerShutdown;
+        }
+
+        public TimerAction withShutdown(Boolean timerShutdown) {
+            this.timerShutdown = timerShutdown;
             return this;
         }
 

@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +27,7 @@ import io.socket.client.Socket;
 public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -39,6 +38,7 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
@@ -46,11 +46,10 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         EditTextPreference historyDisplay = findPreference(getString(R.string.prefs_history_display));
         EditTextPreference historyPoints = findPreference(getString(R.string.prefs_history_points));
@@ -89,8 +88,6 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
                 });
             });
         }
-
-        return view;
     }
 
     @Override
@@ -105,18 +102,16 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_history);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

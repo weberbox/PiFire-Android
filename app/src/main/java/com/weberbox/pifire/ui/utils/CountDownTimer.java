@@ -214,16 +214,4 @@ public abstract class CountDownTimer implements TimerTickListener {
         }
         this.interval = intervalInMillis;
     }
-
-    public Float getStartTimeSecs() {
-        return (float) TimeUnit.MILLISECONDS.toSeconds(startTime);
-    }
-
-    public Float getEndTimeSecs() {
-        return (float) TimeUnit.MILLISECONDS.toSeconds(endTime);
-    }
-
-    public Float getPauseTimeSecs() {
-        return (float) TimeUnit.MILLISECONDS.toSeconds(pauseTime);
-    }
 }

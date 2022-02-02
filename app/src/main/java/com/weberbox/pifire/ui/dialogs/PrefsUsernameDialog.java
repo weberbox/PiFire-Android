@@ -10,29 +10,29 @@ import com.weberbox.pifire.utils.SecurityUtils;
 
 public class PrefsUsernameDialog extends EditTextPreference {
 
-    private final Context mContext;
+    private final Context context;
 
     @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
+        this.context = context;
     }
 
     @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
+        this.context = context;
     }
 
     @SuppressWarnings("unused")
     public PrefsUsernameDialog(Context context) {
         super(context);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public String getText() {
-        return SecurityUtils.decrypt(mContext, R.string.prefs_server_basic_auth_user);
+        return SecurityUtils.decrypt(context, R.string.prefs_server_basic_auth_user);
     }
 
     @SuppressWarnings("deprecation")
@@ -43,11 +43,11 @@ public class PrefsUsernameDialog extends EditTextPreference {
 
     @Override
     public void setText(String text) {
-        if (text.isEmpty()) {
+        if (text != null && text.isEmpty()) {
             super.setText(null);
             return;
         }
-        if (SecurityUtils.encrypt(mContext, R.string.prefs_server_basic_auth_user, text)) {
+        if (SecurityUtils.encrypt(context, R.string.prefs_server_basic_auth_user, text)) {
             super.setText("Encrypted");
         } else {
             super.setText("Error");

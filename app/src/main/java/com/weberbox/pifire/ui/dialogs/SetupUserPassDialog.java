@@ -17,46 +17,46 @@ import com.weberbox.pifire.utils.SecurityUtils;
 
 public class SetupUserPassDialog {
 
-    private final LayoutInflater mInflater;
-    private final AlertDialog.Builder mDialog;
-    private final AuthDialogCallback mCallback;
-    private final Context mContext;
-    private EditText mUser;
-    private EditText mPass;
-    private AlertDialog mAlertDialog;
+    private final LayoutInflater inflater;
+    private final AlertDialog.Builder dialog;
+    private final AuthDialogCallback callback;
+    private final Context context;
+    private EditText user;
+    private EditText pass;
+    private AlertDialog alertDialog;
 
     public SetupUserPassDialog(Context context, Fragment fragment) {
-        mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
-        mInflater = LayoutInflater.from(context);
-        mContext = context;
-        mCallback = (AuthDialogCallback) fragment;
+        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        inflater = LayoutInflater.from(context);
+        this.context = context;
+        callback = (AuthDialogCallback) fragment;
     }
 
     public AlertDialog showDialog() {
-        DialogUserPassBinding binding = DialogUserPassBinding.inflate(mInflater);
+        DialogUserPassBinding binding = DialogUserPassBinding.inflate(inflater);
 
-        mDialog.setTitle(R.string.setup_server_auth_required);
+        dialog.setTitle(R.string.setup_server_auth_required);
 
-        mUser = binding.dialogUserInputText;
-        mPass = binding.dialogPassInputText;
+        user = binding.dialogUserInputText;
+        pass = binding.dialogPassInputText;
 
-        mDialog.setView(binding.getRoot());
+        dialog.setView(binding.getRoot());
 
-        mDialog.setPositiveButton(android.R.string.ok, (dialog, which) ->
-                mCallback.onAuthDialogSave(saveCredentials()));
+        dialog.setPositiveButton(android.R.string.ok, (dialog, which) ->
+                callback.onAuthDialogSave(saveCredentials()));
 
-        mDialog.setNegativeButton(android.R.string.cancel, (dialog, which) ->
-                mCallback.onAuthDialogCancel());
+        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) ->
+                callback.onAuthDialogCancel());
 
-        mAlertDialog = mDialog.create();
+        alertDialog = dialog.create();
 
-        mAlertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-        mAlertDialog.show();
+        alertDialog.show();
 
-        mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-        mUser.addTextChangedListener(new TextWatcher() {
+        user.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -64,9 +64,9 @@ public class SetupUserPassDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    mUser.setError(mContext.getString(R.string.settings_blank_error));
+                    user.setError(context.getString(R.string.settings_blank_error));
                 } else {
-                    mUser.setError(null);
+                    user.setError(null);
                 }
                 togglePositiveButton();
             }
@@ -76,7 +76,7 @@ public class SetupUserPassDialog {
             }
         });
 
-        mPass.addTextChangedListener(new TextWatcher() {
+        pass.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -84,9 +84,9 @@ public class SetupUserPassDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    mPass.setError(mContext.getString(R.string.settings_blank_error));
+                    pass.setError(context.getString(R.string.settings_blank_error));
                 } else {
-                    mPass.setError(null);
+                    pass.setError(null);
                 }
                 togglePositiveButton();
             }
@@ -96,24 +96,24 @@ public class SetupUserPassDialog {
             }
         });
 
-        mUser.requestFocus();
+        user.requestFocus();
 
-        return mAlertDialog;
+        return alertDialog;
     }
 
     private boolean saveCredentials() {
-        String user = mUser.getText().toString();
-        String pass = mPass.getText().toString();
+        String user = this.user.getText().toString();
+        String pass = this.pass.getText().toString();
         if (!user.isEmpty() && !pass.isEmpty()) {
-            return SecurityUtils.encrypt(mContext, R.string.prefs_server_basic_auth_user, user) &&
-                    SecurityUtils.encrypt(mContext, R.string.prefs_server_basic_auth_password, pass);
+            return SecurityUtils.encrypt(context, R.string.prefs_server_basic_auth_user, user) &&
+                    SecurityUtils.encrypt(context, R.string.prefs_server_basic_auth_password, pass);
         } else {
             return false;
         }
     }
 
     private void togglePositiveButton() {
-        mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
-                !mUser.getText().toString().isEmpty() && !mPass.getText().toString().isEmpty());
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
+                !user.getText().toString().isEmpty() && !pass.getText().toString().isEmpty());
     }
 }

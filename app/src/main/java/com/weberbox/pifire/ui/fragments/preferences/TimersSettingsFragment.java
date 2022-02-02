@@ -3,9 +3,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +13,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -27,6 +26,7 @@ import io.socket.client.Socket;
 public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -44,11 +44,10 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
@@ -62,7 +61,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (startupTime != null && getActivity() != null) {
-            if (VersionUtils.isSupported("1.2.3")) {
+            if (VersionUtils.isSupported(Versions.V_123)) {
                 startupTime.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
@@ -71,11 +70,9 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
             } else {
                 startupTime.setEnabled(false);
                 startupTime.setSummaryProvider(null);
-                startupTime.setSummary(getString(R.string.disabled_option_settings, "1.2.3"));
+                startupTime.setSummary(getString(R.string.disabled_option_settings, Versions.V_123));
             }
         }
-
-        return view;
     }
 
     @Override
@@ -90,18 +87,16 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_timers);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

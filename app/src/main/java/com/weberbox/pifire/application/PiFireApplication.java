@@ -38,19 +38,14 @@ public class PiFireApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
-//        if (!AppConfig.DEBUG) {
-//            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
-//            CrashUtils.initCrashReporting(this,
-//                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
-//            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
-//        } else {
-//            Timber.plant(new DebugLogTree());
-//        }
-
-        Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
-        CrashUtils.initCrashReporting(this,
-                Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
-        CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+        if (!AppConfig.DEBUG || Prefs.getBoolean(getString(R.string.prefs_dev_crash_enable))) {
+            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+            CrashUtils.initCrashReporting(this,
+                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
+            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+        } else {
+            Timber.plant(new DebugLogTree());
+        }
 
         Timber.tag(getString(R.string.app_name));
 

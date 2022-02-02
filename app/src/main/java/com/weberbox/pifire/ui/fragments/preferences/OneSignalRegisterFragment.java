@@ -2,7 +2,9 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -10,11 +12,16 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 public class OneSignalRegisterFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -22,9 +29,13 @@ public class OneSignalRegisterFragment extends PreferenceFragmentCompat implemen
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        if (!VersionUtils.isSupported(Versions.V_126)) {
+            AlertUtils.createErrorAlert(requireActivity(),
+                    getString(R.string.disabled_option_dialog_message, Versions.V_126), 5000);
+        }
     }
 
     @Override
@@ -33,15 +44,17 @@ public class OneSignalRegisterFragment extends PreferenceFragmentCompat implemen
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_notifications);
         }
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override

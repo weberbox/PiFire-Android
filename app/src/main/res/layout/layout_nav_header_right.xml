@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
         android:text="@string/settings_config"
-        android:textAppearance="@style/Text16Aller"
+        android:textAppearance="@style/Text16AllerBold"
         android:alpha=".8"/>
 
 </LinearLayout>

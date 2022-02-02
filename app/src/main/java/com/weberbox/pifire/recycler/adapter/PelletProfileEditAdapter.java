@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionManager;
 
@@ -164,7 +164,7 @@ public class PelletProfileEditAdapter extends RecyclerView.Adapter<PelletProfile
         private final TextView pelletProfileComments;
         private final ImageView expandIcon;
         private final ImageView deleteIcon;
-        private final CardView cardView;
+        private final ConstraintLayout cardView;
         private final LinearLayout editCardView;
         private final AppCompatButton deleteButton;
         private final AppCompatButton saveButton;

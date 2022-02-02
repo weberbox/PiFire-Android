@@ -44,7 +44,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/rv_name"
-                    style="@style/Text16Aller"
+                    style="@style/Text16AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"

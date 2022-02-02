@@ -26,25 +26,25 @@ import java.util.List;
 
 public class RecipeDiffDialog {
 
-    private final BottomSheetDialog mBottomSheetDialog;
-    private final LayoutInflater mInflater;
-    private final RecipeEditCallback mCallBack;
-    private final Context mContext;
-    private String mDifficulty;
+    private final BottomSheetDialog bottomSheetDialog;
+    private final LayoutInflater inflater;
+    private final RecipeEditCallback callBack;
+    private final Context context;
+    private String difficulty;
 
     public RecipeDiffDialog(Context context, RecipeEditCallback callback) {
-        mBottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mCallBack = callback;
-        mContext = context;
+        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        callBack = callback;
+        this.context = context;
     }
 
     public BottomSheetDialog showDialog() {
-        DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(mInflater);
+        DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(inflater);
 
         Button confirmButton = binding.setProfileLoad;
 
-        PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(mContext,
+        PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
         pickerLayoutManager.setChangeAlpha(true);
         pickerLayoutManager.setScaleDownBy(0.99f);
@@ -56,44 +56,44 @@ public class RecipeDiffDialog {
         profileSnapHelper.attachToRecyclerView(recyclerView);
 
         List<String> difficulties = Arrays.asList(
-                mContext.getResources().getStringArray(R.array.recipe_difficulties));
+                context.getResources().getStringArray(R.array.recipe_difficulties));
 
         RecipeDiffAdapter adapter = new RecipeDiffAdapter(difficulties);
 
         recyclerView.setLayoutManager(pickerLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        mDifficulty = difficulties.get(0);
+        difficulty = difficulties.get(0);
 
         pickerLayoutManager.setOnScrollStopListener(
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.profile_item_container);
                     RelativeLayout parent_two = parent.findViewById(R.id.profile_item_container_two);
                     TextView text = parent_two.findViewById(R.id.profile_item_text_view);
-                    mDifficulty = text.getText().toString();
+                    difficulty = text.getText().toString();
                 });
 
         confirmButton.setOnClickListener(v -> {
-            mBottomSheetDialog.dismiss();
-            mCallBack.onRecipeDifficulty(mDifficulty);
+            bottomSheetDialog.dismiss();
+            callBack.onRecipeDifficulty(difficulty);
         });
 
-        mBottomSheetDialog.setContentView(binding.getRoot());
+        bottomSheetDialog.setContentView(binding.getRoot());
 
-        mBottomSheetDialog.setOnShowListener(dialog -> {
+        bottomSheetDialog.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        mBottomSheetDialog.show();
+        bottomSheetDialog.show();
 
-        Configuration configuration = mContext.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            mBottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
         }
 
-        return mBottomSheetDialog;
+        return bottomSheetDialog;
     }
 }

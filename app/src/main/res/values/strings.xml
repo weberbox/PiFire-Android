@@ -39,7 +39,9 @@
     <string name="json_error_dash">JSON Parsing Error - Dashboard not updated</string>
     <string name="json_error_info">JSON Parsing Error - Info not updated</string>
 
-    <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s</string>
+    <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
+    <string name="disabled_option_dialog_title">Disabled Feature</string>
+    <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher to function. Please upgrade to a newer version to use this function.</string>
 
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -48,15 +50,11 @@
     <string name="clear">Clear</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
-    <string name="im_sure">I\'m Sure</string>
     <string name="view_all">View All</string>
     <string name="enabled">Enabled</string>
-    <string name="not_set">Not set</string>
     <string name="search">Search</string>
     <string name="undo">Undo</string>
     <string name="swipe_to_start">Swipe to start</string>
-    <string name="continue_button">Continue</string>
-    <string name="skip_button">Skip</string>
     <string name="disable_button">Disable</string>
     <string name="update_button">Update</string>
     <string name="dismiss_button">Dismiss</string>
@@ -101,7 +99,6 @@
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
 
-    <string name="probe_cancel">Cancel</string>
     <string name="probe_disable">Disable</string>
     <string name="probe_enable">Enable</string>
 
@@ -184,9 +181,7 @@
     <string name="image_picker_result_error">There was an error retrieving the image</string>
     <string name="image_picker_cancelled">Operation Cancelled</string>
 
-    <string name="setup_label">Server Setup</string>
     <string name="setup_connect">Connect</string>
-    <string name="setup_address">Address</string>
     <string name="setup_push">Consent</string>
     <string name="setup_finish">Finish</string>
     <string name="setup_server_address">Server Address</string>
@@ -200,7 +195,6 @@
     <string name="setup_enter_address_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
     <string name="setup_finish_title">Setup Complete</string>
     <string name="setup_finish_text">Connection to your PiFire server is now complete. If you need to change the connection settings you can find them in the app settings</string>
-    <string name="setup_qr_camera_denied">Camera permission is required to use QR feature. Continue manually or grant permission</string>
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
     <string name="setup_server_connect_error">Failed to connect. HTTP Code: %1$s - Message: %2$s</string>
@@ -258,6 +252,7 @@
     <string name="settings_enable_crash">Enable</string>
     <string name="settings_enable_crash_disabled">Sentry DSN is not set. Option is disabled</string>
     <string name="settings_crash_summary">If the application crashes this will send a report to the developer</string>
+    <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
     <string name="settings_crash_email">Email</string>
     <string name="settings_crash_email_summary">Include your email address with the error report</string>
 
@@ -380,14 +375,12 @@
     <string name="settings_onesignal_consent_1">OneSignal is used to deliver notifications from PiFire. No Personally Identifiable Information is being collected by OneSignal. Notification data sent through OneSignal\'s API will be deleted after ~30 days.</string>
     <string name="settings_onesignal_consent_2">Once you accept, this device will register with OneSignal. Consent can be revoked to prevent further communication with OneSignal.</string>
     <string name="settings_onesignal_consent_3">OneSignal.com must not be blocked (e.g. in PiHole) for device registration to succeed</string>
-    <string name="settings_onesignal_unregistered">This device has not registered with OneSignal please verify that OneSignal.com is not being blocked. The registration process can take up to 2 minutes.</string>
     <string name="settings_onesignal_declined">Status: Not Accepted X</string>
     <string name="settings_onesignal_accepted">Status: Accepted \u2713</string>
-    <string name="settings_onesignal_error">Status: Error X</string>
     <string name="settings_onesignal_alert_consent_title">OneSignal Consent Not Accepted</string>
     <string name="settings_onesignal_alert_consent_message">To receive notifications from PiFire consent to the OneSignal data privacy.</string>
     <string name="settings_onesignal_id_error_title">Not Registered With OneSignal</string>
-    <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole)</string>
+    <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole) The registration process can take up to 2 minutes.</string>
     <string name="settings_onesignal_register_title">Not Registered With PiFire</string>
     <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take up to 2 minutes.</string>
     <string name="settings_onesignal_error_title">Error With OneSignal</string>
@@ -562,7 +555,6 @@
     <!-- Remote Server Updater -->
     <string name="server_updater_branch">Branch:</string>
     <string name="server_updater_remote">Remote:</string>
-    <string name="server_updater_version">Current Version:</string>
     <string name="server_updater_branches">Branches</string>
     <string name="server_updater_change_branch">Change Branch</string>
     <string name="server_updater_current_version">Current Version:</string>

@@ -22,6 +22,7 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.interfaces.BackupRestoreCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
@@ -32,6 +33,7 @@ import com.weberbox.pifire.ui.dialogs.RestoreListDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -182,14 +184,16 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
             ServerControl.backupRestoreRemoteEmit(socket, type, fileName, response -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        ServerResponseModel result = ServerResponseModel.parseJSON(response);
-                        if (result.getResponse() != null &&
-                                result.getResponse().getResult().equals("success")) {
-                            AlertUtils.createAlert(getActivity(), R.string.restore_success,
-                                    1000);
-                        } else {
-                            AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
-                                    false);
+                        if (VersionUtils.isSupported(Versions.V_126)) {
+                            ServerResponseModel result = ServerResponseModel.parseJSON(response);
+                            if (result.getResponse() != null &&
+                                    result.getResponse().getResult().equals("success")) {
+                                AlertUtils.createAlert(getActivity(), R.string.restore_success,
+                                        1000);
+                            } else {
+                                AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
+                                        false);
+                            }
                         }
                     });
                 }

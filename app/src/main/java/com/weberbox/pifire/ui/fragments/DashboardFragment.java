@@ -27,6 +27,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
@@ -377,18 +378,12 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                 .setNegativeButton(getString(R.string.timer_stop),
                                         R.drawable.ic_timer_stop, (dialogInterface, which) ->
                                                 ServerControl.sendTimerAction(socket,
-                                                        Constants.ACTION_TIMER_STOP, true,
-                                                        countDownTimer.getEndTimeSecs(),
-                                                        countDownTimer.getPauseTimeSecs(),
-                                                        countDownTimer.isRunning(),
+                                                        ServerConstants.PT_TIMER_STOP,
                                                         this::processPostResponse))
-                                .setPositiveButton(getString(R.string.grill_mode_start),
+                                .setPositiveButton(getString(R.string.timer_start),
                                         R.drawable.ic_timer_start, (dialogInterface, which) ->
                                                 ServerControl.sendTimerAction(socket,
-                                                        Constants.ACTION_TIMER_RESTART, true,
-                                                        countDownTimer.getEndTimeSecs(),
-                                                        countDownTimer.getPauseTimeSecs(),
-                                                        countDownTimer.isRunning(),
+                                                        ServerConstants.PT_TIMER_START,
                                                         this::processPostResponse))
                                 .build();
                     } else {
@@ -397,18 +392,12 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                 .setNegativeButton(getString(R.string.timer_stop),
                                         R.drawable.ic_timer_stop, (dialogInterface, which) ->
                                                 ServerControl.sendTimerAction(socket,
-                                                        Constants.ACTION_TIMER_STOP, false,
-                                                        countDownTimer.getEndTimeSecs(),
-                                                        countDownTimer.getPauseTimeSecs(),
-                                                        countDownTimer.isRunning(),
+                                                        ServerConstants.PT_TIMER_STOP,
                                                         this::processPostResponse))
                                 .setPositiveButton(getString(R.string.timer_pause),
                                         R.drawable.ic_timer_pause, (dialogInterface, which) ->
                                                 ServerControl.sendTimerAction(socket,
-                                                        Constants.ACTION_TIMER_PAUSE, false,
-                                                        countDownTimer.getEndTimeSecs(),
-                                                        countDownTimer.getPauseTimeSecs(),
-                                                        countDownTimer.isRunning(),
+                                                        ServerConstants.PT_TIMER_PAUSE,
                                                         this::processPostResponse))
                                 .build();
                     }
@@ -492,7 +481,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private void requestForcedDashData(boolean showLoading) {
         toggleLoading(showLoading);
         if (socket != null) {
-            if (VersionUtils.isSupported("1.2.6")) {
+            if (VersionUtils.isSupported(Versions.V_126)) {
                 socket.emit(ServerConstants.GE_GET_DASH_DATA, true);
             } else {
                 socket.emit(ServerConstants.REQUEST_GRILL_DATA, true);

@@ -25,6 +25,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.database.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
@@ -58,6 +59,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
         PreferenceCategory crashCat = findPreference(getString(R.string.prefs_crash_cat));
         SwitchPreferenceCompat crashEnabled = findPreference(getString(R.string.prefs_crash_enable));
+        SwitchPreferenceCompat devCrashEnabled = findPreference(getString(R.string.prefs_dev_crash_enable));
         Preference serverSettings = findPreference(getString(R.string.prefs_server_settings));
         PreferenceCategory updaterCat = findPreference(getString(R.string.prefs_app_updater_cat));
         SwitchPreferenceCompat updaterEnabled = findPreference(getString(R.string.prefs_app_updater_enabled));
@@ -84,6 +86,12 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                 crashCat.setEnabled(false);
                 crashEnabled.setChecked(false);
                 crashEnabled.setSummary(getString(R.string.settings_enable_crash_disabled));
+            }
+        }
+
+        if (devCrashEnabled != null) {
+            if (AppConfig.IS_DEV_BUILD) {
+                devCrashEnabled.setVisible(true);
             }
         }
 

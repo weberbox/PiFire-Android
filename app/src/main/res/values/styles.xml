@@ -159,21 +159,6 @@
         <item name="colorOnSurface">@color/colorPrimaryLighter</item>
     </style>
 
-    <style name="Theme.PiFire.Slide">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
-    </style>
-
-    <style name="Theme.PiFire.FullScreenDialog" parent="Theme.MaterialComponents.Dialog">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="actionMenuTextColor">@color/colorAccent</item>
-        <item name="titleTextStyle">@style/Text18AllerBold</item>
-    </style>
-
     <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
         <item name="background">@color/colorAccent</item>
     </style>
@@ -188,10 +173,6 @@
         <item name="cornerSizeTopRight">10dp</item>
         <item name="cornerSizeBottomRight">10dp</item>
         <item name="cornerSizeBottomLeft">10dp</item>
-    </style>
-
-    <style name="Theme.MaterialDialog" parent="Theme.MaterialComponents.Light">
-        <item name="android:fontFamily">@font/aller_regular</item>
     </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">

@@ -16,43 +16,43 @@ import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 
 public class PelletsAddDialog {
 
-    private final PelletsProfileCallback mCallBack;
-    private final LayoutInflater mInflater;
-    private final AlertDialog.Builder mDialog;
-    private final Context mContext;
-    private final String mTitle;
-    private final String mType;
-    private String mString;
+    private final PelletsProfileCallback callBack;
+    private final LayoutInflater inflater;
+    private final AlertDialog.Builder dialog;
+    private final Context context;
+    private final String title;
+    private final String type;
+    private String string;
 
     public PelletsAddDialog(Context context, Fragment fragment, String type, String title) {
-        mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mCallBack = (PelletsProfileCallback) fragment;
-        mType = type;
-        mTitle = title;
+        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        this.context = context;
+        inflater = LayoutInflater.from(context);
+        callBack = (PelletsProfileCallback) fragment;
+        this.type = type;
+        this.title = title;
     }
 
     public AlertDialog showDialog() {
-        DialogInputTextBinding binding = DialogInputTextBinding.inflate(mInflater);
+        DialogInputTextBinding binding = DialogInputTextBinding.inflate(inflater);
 
-        mDialog.setTitle(mTitle);
+        dialog.setTitle(title);
 
         final EditText input = binding.dialogTextInput;
 
-        mDialog.setView(binding.getRoot());
+        dialog.setView(binding.getRoot());
 
-        mDialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            mString = input.getText().toString();
-            if (mString.length() != 0) {
-                mCallBack.onItemAdded(mType, mString);
+        dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            string = input.getText().toString();
+            if (string.length() != 0) {
+                callBack.onItemAdded(type, string);
                 dialog.dismiss();
             }
         });
 
-        mDialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
 
-        final AlertDialog alertDialog = mDialog.create();
+        final AlertDialog alertDialog = dialog.create();
 
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -69,7 +69,7 @@ public class PelletsAddDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    input.setError(mContext.getString(R.string.settings_blank_error));
+                    input.setError(context.getString(R.string.settings_blank_error));
                 } else {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     input.setError(null);

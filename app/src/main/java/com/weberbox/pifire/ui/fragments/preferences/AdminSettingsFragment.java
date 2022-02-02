@@ -15,6 +15,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -27,6 +28,7 @@ import io.socket.client.Socket;
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -46,8 +48,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        PreferenceCategory serverUpdatesCat = findPreference(getString(R.string.prefs_server_cat_updates));
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
         Preference serverUpdates = findPreference(getString(R.string.prefs_server_updates_frag));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
@@ -60,8 +62,8 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
-        if (serverUpdatesCat != null && serverUpdates != null) {
-            if (VersionUtils.isSupported("1.2.5")) {
+        if (serverUpdates != null) {
+            if (VersionUtils.isSupported(Versions.V_126)) {
                 serverUpdates.setOnPreferenceClickListener(preference -> {
                     if (getActivity() != null) {
                         final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -74,13 +76,13 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                     return true;
                 });
             } else {
-                serverUpdatesCat.setEnabled(false);
-                serverUpdatesCat.setSummary(getString(R.string.disabled_option_settings, "1.2.5"));
+                serverUpdates.setEnabled(false);
+                serverUpdates.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
             }
         }
 
         if (backupRestore != null) {
-            if (VersionUtils.isSupported("1.2.2")) {
+            if (VersionUtils.isSupported(Versions.V_122)) {
                 backupRestore.setOnPreferenceClickListener(preference -> {
                     if (getActivity() != null) {
                         final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -94,12 +96,12 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 });
             } else {
                 backupRestore.setEnabled(false);
-                backupRestore.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
+                backupRestore.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
             }
         }
 
         if (manualCat != null && manualMode != null) {
-            if (VersionUtils.isSupported("1.2.1")) {
+            if (VersionUtils.isSupported(Versions.V_121)) {
                 manualMode.setOnPreferenceClickListener(preference -> {
                     if (getActivity() != null) {
                         final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -113,7 +115,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 });
             } else {
                 manualCat.setEnabled(false);
-                manualMode.setSummary(getString(R.string.disabled_option_settings, "1.2.1"));
+                manualMode.setSummary(getString(R.string.disabled_option_settings, Versions.V_121));
             }
         }
 
@@ -286,18 +288,16 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_admin);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

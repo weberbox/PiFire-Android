@@ -27,47 +27,47 @@ import java.util.List;
 
 public class ProfilePickerDialog {
 
-    private final BottomSheetDialog mPelletPickerBottomSheet;
-    private final LayoutInflater mInflater;
-    private final PelletsProfileCallback mCallBack;
-    private final List<PelletProfileModel> mPelletsList;
-    private final Context mContext;
-    private RecyclerView mProfileList;
-    private String mCurrentProfile;
-    private String mCurrentProfileId;
+    private final BottomSheetDialog pickerBottomSheet;
+    private final LayoutInflater inflater;
+    private final PelletsProfileCallback callBack;
+    private final List<PelletProfileModel> pelletsList;
+    private final Context context;
+    private RecyclerView profileList;
+    private String currentProfile;
+    private String currentProfileId;
 
     public ProfilePickerDialog(Context context, Fragment fragment,
                                List<PelletProfileModel> pelletList, String currentProfile) {
-        mPelletPickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mCallBack = (PelletsProfileCallback) fragment;
-        mContext = context;
-        mPelletsList = pelletList;
-        mCurrentProfileId = currentProfile;
+        pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        callBack = (PelletsProfileCallback) fragment;
+        this.context = context;
+        pelletsList = pelletList;
+        currentProfileId = currentProfile;
     }
 
     public BottomSheetDialog showDialog() {
-        DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(mInflater);
+        DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(inflater);
 
         Button confirmButton = binding.setProfileLoad;
 
-        PickerLayoutManager pelletPickerLayoutManager = new PickerLayoutManager(mContext,
+        PickerLayoutManager pelletPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
         pelletPickerLayoutManager.setChangeAlpha(true);
         pelletPickerLayoutManager.setScaleDownBy(0.99f);
         pelletPickerLayoutManager.setScaleDownDistance(1.2f);
 
-        mProfileList = binding.profileList;
+        profileList = binding.profileList;
 
         SnapHelper profileSnapHelper = new LinearSnapHelper();
-        profileSnapHelper.attachToRecyclerView(mProfileList);
+        profileSnapHelper.attachToRecyclerView(profileList);
 
-        PelletProfileAdapter profileAdapter = new PelletProfileAdapter(mPelletsList);
+        PelletProfileAdapter profileAdapter = new PelletProfileAdapter(pelletsList);
 
-        mProfileList.setLayoutManager(pelletPickerLayoutManager);
-        mProfileList.setAdapter(profileAdapter);
+        profileList.setLayoutManager(pelletPickerLayoutManager);
+        profileList.setAdapter(profileAdapter);
 
-        mCurrentProfileId = mPelletsList.get(0).getId();
+        currentProfileId = pelletsList.get(0).getId();
 
         pelletPickerLayoutManager.setOnScrollStopListener(
                 view -> {
@@ -75,40 +75,40 @@ public class ProfilePickerDialog {
                     RelativeLayout parent_two = parent.findViewById(R.id.profile_item_container_two);
                     TextView text = parent_two.findViewById(R.id.profile_item_text_view);
                     TextView id = parent_two.findViewById(R.id.profile_item_id);
-                    mCurrentProfile = text.getText().toString();
-                    mCurrentProfileId = id.getText().toString();
+                    currentProfile = text.getText().toString();
+                    currentProfileId = id.getText().toString();
                 });
 
         confirmButton.setOnClickListener(v -> {
-            mPelletPickerBottomSheet.dismiss();
-            mCallBack.onProfileSelected(mCurrentProfile, mCurrentProfileId);
+            pickerBottomSheet.dismiss();
+            callBack.onProfileSelected(currentProfile, currentProfileId);
         });
 
-        mPelletPickerBottomSheet.setContentView(binding.getRoot());
+        pickerBottomSheet.setContentView(binding.getRoot());
 
-        mPelletPickerBottomSheet.setOnShowListener(dialog -> {
+        pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        mPelletPickerBottomSheet.show();
+        pickerBottomSheet.show();
 
-        Configuration configuration = mContext.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            mPelletPickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
         }
 
-        return mPelletPickerBottomSheet;
+        return pickerBottomSheet;
     }
 
     @SuppressWarnings("unused")
     private void setDefaultProfile(int position, boolean smooth){
         if (smooth) {
-            mProfileList.smoothScrollToPosition(position);
+            profileList.smoothScrollToPosition(position);
         } else {
-            mProfileList.scrollToPosition(position);
+            profileList.scrollToPosition(position);
         }
     }
 }

@@ -34,77 +34,77 @@ import java.util.stream.IntStream;
 
 public class TimerPickerDialog {
 
-    private final BottomSheetDialog mTimePickerBottomSheet;
-    private final DashboardCallback mDashCallBack;
-    private final RecipeEditCallback mRecipeCallback;
-    private RecyclerView mHoursList;
-    private RecyclerView mMinutesList;
-    private String mHoursSelected = "00";
-    private String mMinutesSelected = "00";
-    private final LayoutInflater mInflater;
-    private final Context mContext;
-    private final int mScrollHours;
-    private final int mScrollMinutes;
+    private final BottomSheetDialog pickerBottomSheet;
+    private final DashboardCallback dashCallBack;
+    private final RecipeEditCallback recipeCallback;
+    private RecyclerView hoursList;
+    private RecyclerView minutesList;
+    private String hoursSelected = "00";
+    private String minutesSelected = "00";
+    private final LayoutInflater inflater;
+    private final Context context;
+    private final int scrollHours;
+    private final int scrollMinutes;
 
     public TimerPickerDialog(Context context, DashboardCallback callback) {
-        mTimePickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mDashCallBack = callback;
-        mRecipeCallback = null;
-        mContext = context;
-        mScrollHours = 0;
-        mScrollMinutes = 0;
+        pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        dashCallBack = callback;
+        recipeCallback = null;
+        this.context = context;
+        scrollHours = 0;
+        scrollMinutes = 0;
     }
 
     public TimerPickerDialog(Context context, RecipeEditCallback callback) {
-        mTimePickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        mInflater = LayoutInflater.from(context);
-        mRecipeCallback = callback;
-        mDashCallBack = null;
-        mContext = context;
-        mScrollHours = 0;
-        mScrollMinutes = 0;
+        pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+        inflater = LayoutInflater.from(context);
+        recipeCallback = callback;
+        dashCallBack = null;
+        this.context = context;
+        scrollHours = 0;
+        scrollMinutes = 0;
     }
 
     public BottomSheetDialog showDialog() {
-        DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(mInflater);
+        DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(inflater);
 
         RelativeLayout shutdownContainer = binding.timerShutdownContainer;
         SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
         Button confirmButton = binding.setTimerConfirm;
 
-        PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(mContext,
+        PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
         hoursPickerLayoutManager.setChangeAlpha(true);
         hoursPickerLayoutManager.setScaleDownBy(0.99f);
         hoursPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        PickerLayoutManager minsPickerLayoutManager = new PickerLayoutManager(mContext,
+        PickerLayoutManager minsPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
         minsPickerLayoutManager.setChangeAlpha(true);
         minsPickerLayoutManager.setScaleDownBy(0.96f);
         minsPickerLayoutManager.setScaleDownDistance(1.9f);
 
-        mHoursList = binding.hoursList;
-        mMinutesList = binding.minutesList;
+        hoursList = binding.hoursList;
+        minutesList = binding.minutesList;
 
         SnapHelper hoursSnapHelper = new LinearSnapHelper();
         SnapHelper minutesSnapHelper = new LinearSnapHelper();
-        hoursSnapHelper.attachToRecyclerView(mHoursList);
-        minutesSnapHelper.attachToRecyclerView(mMinutesList);
+        hoursSnapHelper.attachToRecyclerView(hoursList);
+        minutesSnapHelper.attachToRecyclerView(minutesList);
 
         TimePickerAdapter hoursAdapter = new TimePickerAdapter(generateTimeList(0, 24));
         TimePickerAdapter minsAdapter = new TimePickerAdapter(generateTimeList(0, 60));
 
-        mHoursList.setLayoutManager(hoursPickerLayoutManager);
-        mHoursList.setAdapter(hoursAdapter);
+        hoursList.setLayoutManager(hoursPickerLayoutManager);
+        hoursList.setAdapter(hoursAdapter);
 
-        mMinutesList.setLayoutManager(minsPickerLayoutManager);
-        mMinutesList.setAdapter(minsAdapter);
+        minutesList.setLayoutManager(minsPickerLayoutManager);
+        minutesList.setAdapter(minsAdapter);
 
-        if (mDashCallBack != null) {
-            if (Prefs.getBoolean(mContext.getString(R.string.prefs_timer_shutdown),
-                    mContext.getResources().getBoolean(R.bool.def_timer_shutdown))) {
+        if (dashCallBack != null) {
+            if (Prefs.getBoolean(context.getString(R.string.prefs_timer_shutdown),
+                    context.getResources().getBoolean(R.bool.def_timer_shutdown))) {
                 shutdownContainer.setVisibility(View.VISIBLE);
             }
         }
@@ -113,69 +113,69 @@ public class TimerPickerDialog {
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.timer_item_container);
                     TextView text = parent.findViewById(R.id.timer_item_text_view);
-                    mHoursSelected =  text.getText().toString();
+                    hoursSelected =  text.getText().toString();
                 });
 
         minsPickerLayoutManager.setOnScrollStopListener(
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.timer_item_container);
                     TextView text = parent.findViewById(R.id.timer_item_text_view);
-                    mMinutesSelected =  text.getText().toString();
+                    minutesSelected =  text.getText().toString();
                 });
 
         confirmButton.setOnClickListener(v -> {
-            mTimePickerBottomSheet.dismiss();
-            if (mDashCallBack != null) {
-                mDashCallBack.onTimerConfirmClicked(mHoursSelected, mMinutesSelected,
+            pickerBottomSheet.dismiss();
+            if (dashCallBack != null) {
+                dashCallBack.onTimerConfirmClicked(hoursSelected, minutesSelected,
                         shutdownSwitch.isChecked());
             } else {
-                mRecipeCallback.onRecipeTime(mHoursSelected, mMinutesSelected);
+                recipeCallback.onRecipeTime(hoursSelected, minutesSelected);
             }
         });
 
-        mTimePickerBottomSheet.setOnDismissListener(dialogInterface -> {
+        pickerBottomSheet.setOnDismissListener(dialogInterface -> {
 
         });
 
-        mTimePickerBottomSheet.setContentView(binding.getRoot());
+        pickerBottomSheet.setContentView(binding.getRoot());
 
-        if(mScrollHours != 0 && mScrollMinutes != 0) {
-            setCurrentHours(mScrollHours, false);
-            setCurrentMinutes(mScrollMinutes, false);
+        if(scrollHours != 0 && scrollMinutes != 0) {
+            setCurrentHours(scrollHours, false);
+            setCurrentMinutes(scrollMinutes, false);
         }
 
-        mTimePickerBottomSheet.setOnShowListener(dialog -> {
+        pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
-        mTimePickerBottomSheet.show();
+        pickerBottomSheet.show();
 
-        Configuration configuration = mContext.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            mTimePickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
         }
 
-        return mTimePickerBottomSheet;
+        return pickerBottomSheet;
     }
 
     @SuppressWarnings("SameParameterValue")
     private void setCurrentHours(int position, boolean smooth){
         if(smooth) {
-            mHoursList.smoothScrollToPosition(position);
+            hoursList.smoothScrollToPosition(position);
         } else {
-            mHoursList.scrollToPosition(position);
+            hoursList.scrollToPosition(position);
         }
     }
 
     @SuppressWarnings("SameParameterValue")
     private void setCurrentMinutes(int position, boolean smooth){
         if(smooth) {
-            mMinutesList.smoothScrollToPosition(position);
+            minutesList.smoothScrollToPosition(position);
         } else {
-            mMinutesList.scrollToPosition(position);
+            minutesList.scrollToPosition(position);
         }
     }
 

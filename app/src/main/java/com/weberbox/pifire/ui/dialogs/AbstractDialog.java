@@ -25,8 +25,9 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogBottomButtonIconBinding;
+import com.weberbox.pifire.databinding.DialogButtonTextviewBinding;
+import com.weberbox.pifire.databinding.DialogMaterialTextviewBinding;
 import com.weberbox.pifire.databinding.DialogProgressLinearBinding;
-import com.weberbox.pifire.databinding.LayoutAlertDialogBinding;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogInterface;
 import com.weberbox.pifire.ui.dialogs.interfaces.OnCancelListener;
 import com.weberbox.pifire.ui.dialogs.interfaces.OnDismissListener;
@@ -100,9 +101,185 @@ public abstract class AbstractDialog implements DialogInterface {
     }
 
     @SuppressLint("WrongConstant")
+    @SuppressWarnings("SameParameterValue")
+    protected View createMaterialTextView(@NonNull LayoutInflater inflater,
+                                      @Nullable ViewGroup container) {
+        DialogMaterialTextviewBinding binding = DialogMaterialTextviewBinding.inflate(inflater);
+
+        TextView titleView = binding.materialTitle;
+        TextView messageView = binding.materialMessage;
+        MaterialButton positiveButtonView = binding.materialPositiveBtn;
+        MaterialButton negativeButtonView = binding.materialNegativeBtn;
+
+        if (title != null) {
+            titleView.setVisibility(View.VISIBLE);
+            titleView.setText(title.getText());
+            titleView.setTextAlignment(title.getTextAlignment().getAlignment());
+        } else {
+            titleView.setVisibility(View.GONE);
+        }
+
+        if (message != null) {
+            messageView.setVisibility(View.VISIBLE);
+
+            messageView.setText(message.getText());
+            messageView.setTextAlignment(message.getTextAlignment().getAlignment());
+        } else {
+            messageView.setVisibility(View.GONE);
+        }
+
+        if (positiveButton != null) {
+            positiveButtonView.setVisibility(View.VISIBLE);
+            positiveButtonView.setText(positiveButton.getTitle());
+            if (positiveButton.getIcon() != NO_ICON) {
+                positiveButtonView.setIcon(ContextCompat.getDrawable(activity,
+                        positiveButton.getIcon()));
+            }
+
+            positiveButtonView.setOnClickListener(view -> {
+                        positiveButton.getOnClickListener().onClick(AbstractDialog.this,
+                                BUTTON_POSITIVE);
+                        if (autoDismiss) dialog.dismiss();
+                    }
+
+            );
+        } else {
+            positiveButtonView.setVisibility(View.INVISIBLE);
+        }
+
+        if (negativeButton != null) {
+            negativeButtonView.setVisibility(View.VISIBLE);
+            negativeButtonView.setText(negativeButton.getTitle());
+            if (negativeButton.getIcon() != NO_ICON) {
+                negativeButtonView.setIcon(ContextCompat.getDrawable(activity,
+                        negativeButton.getIcon()));
+            }
+
+            negativeButtonView.setOnClickListener(view -> {
+                        negativeButton.getOnClickListener().onClick(AbstractDialog.this,
+                                BUTTON_NEGATIVE);
+                        if (autoDismiss) dialog.dismiss();
+                    }
+            );
+        } else {
+            negativeButtonView.setVisibility(View.INVISIBLE);
+        }
+
+        binding.getRoot().setBackgroundResource(R.drawable.bg_alert_dialog);
+
+        titleView.setTextColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_title_text_color));
+
+        messageView.setTextColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_message_text_color));
+
+        ColorStateList positiveButtonTint = ContextCompat.getColorStateList(
+                activity.getApplicationContext(),
+                R.color.dialog_positive_button_text_color);
+        positiveButtonView.setTextColor(positiveButtonTint);
+        positiveButtonView.setIconTint(positiveButtonTint);
+
+        ColorStateList negativeButtonTint = ContextCompat.getColorStateList(
+                activity.getApplicationContext(),
+                R.color.dialog_negative_button_text_color);
+        negativeButtonView.setIconTint(negativeButtonTint);
+        negativeButtonView.setTextColor(negativeButtonTint);
+
+        return binding.getRoot();
+    }
+
+    @SuppressLint("WrongConstant")
+    @SuppressWarnings("SameParameterValue")
+    protected View createMaterialListView(@NonNull LayoutInflater inflater,
+                                          @Nullable ViewGroup container) {
+        DialogMaterialTextviewBinding binding = DialogMaterialTextviewBinding.inflate(inflater);
+
+        TextView titleView = binding.materialTitle;
+        TextView messageView = binding.materialMessage;
+        MaterialButton positiveButtonView = binding.materialPositiveBtn;
+        MaterialButton negativeButtonView = binding.materialNegativeBtn;
+
+        if (title != null) {
+            titleView.setVisibility(View.VISIBLE);
+            titleView.setText(title.getText());
+            titleView.setTextAlignment(title.getTextAlignment().getAlignment());
+        } else {
+            titleView.setVisibility(View.GONE);
+        }
+
+        if (message != null) {
+            messageView.setVisibility(View.VISIBLE);
+
+            messageView.setText(message.getText());
+            messageView.setTextAlignment(message.getTextAlignment().getAlignment());
+        } else {
+            messageView.setVisibility(View.GONE);
+        }
+
+        if (positiveButton != null) {
+            positiveButtonView.setVisibility(View.VISIBLE);
+            positiveButtonView.setText(positiveButton.getTitle());
+            if (positiveButton.getIcon() != NO_ICON) {
+                positiveButtonView.setIcon(ContextCompat.getDrawable(activity,
+                        positiveButton.getIcon()));
+            }
+
+            positiveButtonView.setOnClickListener(view -> {
+                        positiveButton.getOnClickListener().onClick(AbstractDialog.this,
+                                BUTTON_POSITIVE);
+                        if (autoDismiss) dialog.dismiss();
+                    }
+
+            );
+        } else {
+            positiveButtonView.setVisibility(View.INVISIBLE);
+        }
+
+        if (negativeButton != null) {
+            negativeButtonView.setVisibility(View.VISIBLE);
+            negativeButtonView.setText(negativeButton.getTitle());
+            if (negativeButton.getIcon() != NO_ICON) {
+                negativeButtonView.setIcon(ContextCompat.getDrawable(activity,
+                        negativeButton.getIcon()));
+            }
+
+            negativeButtonView.setOnClickListener(view -> {
+                        negativeButton.getOnClickListener().onClick(AbstractDialog.this,
+                                BUTTON_NEGATIVE);
+                        if (autoDismiss) dialog.dismiss();
+                    }
+            );
+        } else {
+            negativeButtonView.setVisibility(View.INVISIBLE);
+        }
+
+        binding.getRoot().setBackgroundResource(R.drawable.bg_alert_dialog);
+
+        titleView.setTextColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_title_text_color));
+
+        messageView.setTextColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_message_text_color));
+
+        ColorStateList positiveButtonTint = ContextCompat.getColorStateList(
+                activity.getApplicationContext(),
+                R.color.dialog_positive_button_text_color);
+        positiveButtonView.setTextColor(positiveButtonTint);
+        positiveButtonView.setIconTint(positiveButtonTint);
+
+        ColorStateList negativeButtonTint = ContextCompat.getColorStateList(
+                activity.getApplicationContext(),
+                R.color.dialog_negative_button_text_color);
+        negativeButtonView.setIconTint(negativeButtonTint);
+        negativeButtonView.setTextColor(negativeButtonTint);
+
+        return binding.getRoot();
+    }
+
+    @SuppressLint("WrongConstant")
     protected View createButtonView(@NonNull LayoutInflater inflater,
                                     @Nullable ViewGroup container) {
-        LayoutAlertDialogBinding binding = LayoutAlertDialogBinding.inflate(inflater);
+        DialogButtonTextviewBinding binding = DialogButtonTextviewBinding.inflate(inflater);
 
         TextView titleView = binding.textViewTitle;
         TextView messageView = binding.textViewMessage;

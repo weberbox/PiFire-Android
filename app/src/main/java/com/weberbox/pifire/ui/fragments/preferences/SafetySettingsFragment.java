@@ -3,9 +3,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -28,6 +26,7 @@ import io.socket.client.Socket;
 public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference.OnBindEditTextListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -45,11 +44,10 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
         EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
@@ -64,8 +62,6 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         if (maxGrillTemp != null) {
             maxGrillTemp.setOnBindEditTextListener(this);
         }
-
-        return view;
     }
 
     @Override
@@ -80,18 +76,16 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_safety);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

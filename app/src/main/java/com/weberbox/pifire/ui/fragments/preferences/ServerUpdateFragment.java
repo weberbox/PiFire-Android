@@ -24,12 +24,10 @@ import com.weberbox.pifire.databinding.FragmentServerUpdateBinding;
 import com.weberbox.pifire.model.remote.ServerUpdateModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
-import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
+import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.ProgressDialog;
-import com.weberbox.pifire.ui.dialogs.UpdaterProgressDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.JSONUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -110,9 +108,13 @@ public class ServerUpdateFragment extends Fragment {
         checkAgainButton.setOnClickListener(v -> requestServerUpdateInfo());
 
         showLogsButton.setOnClickListener(v -> {
-            MessageTextDialog dialog = new MessageTextDialog(requireActivity(),
-                    getString(R.string.server_updater_logs_dialog_title), logsResult);
-            dialog.getDialog().show();
+            MaterialDialogText dialog = new MaterialDialogText.Builder(requireActivity())
+                    .setTitle(getString(R.string.server_updater_logs_dialog_title))
+                    .setMessage(logsResult)
+                    .setPositiveButton(getString(R.string.close), (dialogInterface, which) ->
+                            dialogInterface.dismiss())
+                    .build();
+            dialog.show();
         });
 
         changeBranch.setOnClickListener(v -> {
@@ -286,9 +288,13 @@ public class ServerUpdateFragment extends Fragment {
     }
 
     private void changeRemoteBranch(Socket socket, String targetBranch) {
-        UpdaterProgressDialog dialog = new UpdaterProgressDialog(requireActivity(),
-                R.string.server_updater_change_dialog_title);
-        dialog.createDialog().show();
+        ProgressDialog dialog = new ProgressDialog.Builder(requireActivity())
+                .setTitle(getString(R.string.server_updater_change_dialog_title))
+                .setMessage("")
+                .setCancelable(false)
+                .build();
+        dialog.getProgressIndicator().setIndeterminate(true);
+        dialog.show();
         socket.emit(ServerConstants.PE_POST_UPDATER_DATA, ServerConstants.PT_CHANGE_BRANCH,
                 targetBranch, (Ack) args -> {
                     if (args.length > 0 && args[0] != null) {
@@ -299,7 +305,7 @@ public class ServerUpdateFragment extends Fragment {
                                 output.append(array.get(i));
                             }
                             requireActivity().runOnUiThread(() ->
-                                    dialog.setOutputMessage(output.toString()));
+                                    dialog.getProgressMessage().setText(output.toString()));
                         } catch (JSONException e) {
                             Timber.w(e, "Updater JSON Error");
                         }

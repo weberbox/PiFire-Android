@@ -9,34 +9,35 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.appcompat.app.AlertDialog;
 
+import com.weberbox.pifire.R;
 import com.weberbox.pifire.ui.dialogs.model.DialogButton;
 import com.weberbox.pifire.ui.dialogs.model.DialogMessage;
 import com.weberbox.pifire.ui.dialogs.model.DialogSwipeButton;
 import com.weberbox.pifire.ui.dialogs.model.DialogTitle;
 
-@SuppressWarnings("unused")
-public final class MaterialDialog extends AbstractDialog {
+public final class MaterialDialogText extends AbstractDialog {
 
     @SuppressWarnings("rawtypes")
-    private MaterialDialog(@NonNull final Activity activity,
-                           @NonNull DialogTitle title,
-                           @NonNull DialogMessage message,
-                           boolean cancelable,
-                           boolean autoDismiss,
-                           @NonNull DialogButton positiveButton,
-                           @NonNull DialogButton neutralButton,
-                           @NonNull DialogButton negativeButton,
-                           @Nullable DialogSwipeButton swipeButton,
-                           @RawRes int animationResId,
-                           @NonNull String animationFile) {
+    private MaterialDialogText(@NonNull final Activity activity,
+                         @NonNull DialogTitle title,
+                         @NonNull DialogMessage message,
+                         boolean cancelable,
+                         boolean autoDismiss,
+                         @NonNull DialogButton positiveButton,
+                         @NonNull DialogButton neutralButton,
+                         @NonNull DialogButton negativeButton,
+                         @Nullable DialogSwipeButton swipeButton,
+                         @RawRes int animationResId,
+                         @NonNull String animationFile) {
         super(activity, title, message, cancelable, autoDismiss, positiveButton, neutralButton,
                 negativeButton, swipeButton, animationResId, animationFile);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(activity,
+                R.style.AlertDialogTheme);
 
         LayoutInflater inflater = activity.getLayoutInflater();
 
-        View dialogView = createButtonView(inflater, null);
+        View dialogView = createMaterialTextView(inflater, null);
 
         builder.setView(dialogView);
 
@@ -46,7 +47,7 @@ public final class MaterialDialog extends AbstractDialog {
     }
 
 
-    public static class Builder extends AbstractDialog.Builder<MaterialDialog> {
+    public static class Builder extends AbstractDialog.Builder<MaterialDialogText> {
 
         public Builder(@NonNull Activity activity) {
             super(activity);
@@ -54,8 +55,8 @@ public final class MaterialDialog extends AbstractDialog {
 
         @NonNull
         @Override
-        public MaterialDialog build() {
-            return new MaterialDialog(
+        public MaterialDialogText build() {
+            return new MaterialDialogText(
                     activity,
                     title,
                     message,

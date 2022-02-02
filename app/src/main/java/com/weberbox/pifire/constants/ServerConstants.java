@@ -6,21 +6,7 @@ public class ServerConstants {
     // Default String
     public static final String DEFAULT_SOCKET_URL = "http://192.168.1.254";
 
-    // Socket Strings
-    public static final String LISTEN_GRILL_DATA = "grill_control_data";
-    public static final String REQUEST_GRILL_DATA = "request_grill_data";
-    public static final String REQUEST_PELLET_DATA = "request_pellet_data";
-    public static final String REQUEST_HISTORY_DATA = "request_history_data";
-    public static final String REQUEST_EVENT_DATA = "request_event_data";
-    public static final String REQUEST_SETTINGS_DATA = "request_settings_data";
-    public static final String REQUEST_INFO_DATA = "request_info_data";
-    public static final String REQUEST_MANUAL_DATA = "request_manual_data";
-    public static final String REQUEST_BACKUP_DATA = "request_backup_data";
-    public static final String REQUEST_BACKUP_LIST = "request_backup_list";
-    public static final String REQUEST_UPDATER_DATA = "request_updater_data";
-    public static final String REQUEST_UPDATER_ACTION = "request_updater_action";
-
-    // New Socket IO Strings
+    // Socket IO Strings
     public static final String GE_GET_DASH_DATA = "get_dash_data";
     public static final String GE_GET_APP_DATA = "get_app_data";
     public static final String GA_SETTINGS_DATA = "settings_data";
@@ -41,6 +27,7 @@ public class ServerConstants {
     public static final String PA_UNITS_ACTION = "units_action";
     public static final String PA_REMOVE_ACTION = "remove_action";
     public static final String PA_PELLETS_ACTION = "pellets_action";
+    public static final String PA_TIMER_ACTION = "timer_action";
 
     public static final String PT_SETTINGS = "settings";
     public static final String PT_CONTROL = "control";
@@ -62,6 +49,9 @@ public class ServerConstants {
     public static final String PT_FACTORY_DEFAULTS = "factory_defaults";
     public static final String PT_REBOOT = "reboot";
     public static final String PT_SHUTDOWN = "shutdown";
+    public static final String PT_TIMER_START = "start_timer";
+    public static final String PT_TIMER_PAUSE = "pause_timer";
+    public static final String PT_TIMER_STOP = "stop_timer";
 
     public static final String PE_POST_RESTORE_DATA = "post_restore_data";
 
@@ -77,6 +67,20 @@ public class ServerConstants {
     public static final String G_MODE_STOP = "Stop";
     public static final String G_MODE_SMOKE_PLUS = "s_plus";
     public static final String G_MODE_MANUAL = "Manual";
+
+    // Socket Strings Dep
+    public static final String LISTEN_GRILL_DATA = "grill_control_data";
+    public static final String REQUEST_GRILL_DATA = "request_grill_data";
+    public static final String REQUEST_PELLET_DATA = "request_pellet_data";
+    public static final String REQUEST_HISTORY_DATA = "request_history_data";
+    public static final String REQUEST_EVENT_DATA = "request_event_data";
+    public static final String REQUEST_SETTINGS_DATA = "request_settings_data";
+    public static final String REQUEST_INFO_DATA = "request_info_data";
+    public static final String REQUEST_MANUAL_DATA = "request_manual_data";
+    public static final String REQUEST_BACKUP_DATA = "request_backup_data";
+    public static final String REQUEST_BACKUP_LIST = "request_backup_list";
+    public static final String REQUEST_UPDATER_DATA = "request_updater_data";
+    public static final String REQUEST_UPDATER_ACTION = "request_updater_action";
 
     // Socket Updating
     public static final String UPDATE_CONTROL_DATA = "update_control_data";

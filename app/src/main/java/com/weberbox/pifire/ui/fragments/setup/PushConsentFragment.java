@@ -16,7 +16,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentSetupPushBinding;
 import com.weberbox.pifire.model.view.SetupViewModel;
-import com.weberbox.pifire.ui.dialogs.MessageTextDialog;
+import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.utils.OneSignalUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,12 +58,14 @@ public class PushConsentFragment extends Fragment {
             if (isAccepted || skipConsent) {
                 navController.navigate(R.id.nav_setup_finish);
             } else {
-                MessageTextDialog skipDialog = new MessageTextDialog(getActivity(),
-                        R.string.setup_push_dialog_declined_title,
-                        R.string.setup_push_dialog_declined_message);
-                skipDialog.getDialog()
-                        .setOnDismissListener(dialog -> skipConsent = true)
-                        .show();
+                MaterialDialogText dialog = new MaterialDialogText.Builder(requireActivity())
+                        .setTitle(getString(R.string.setup_push_dialog_declined_title))
+                        .setMessage(getString(R.string.setup_push_dialog_declined_message))
+                        .setPositiveButton(getString(R.string.close), (dialogInterface, which) ->
+                                dialogInterface.dismiss())
+                        .build();
+                dialog.setOnDismissListener(dialogInterface -> skipConsent = true);
+                dialog.show();
             }
         });
     }

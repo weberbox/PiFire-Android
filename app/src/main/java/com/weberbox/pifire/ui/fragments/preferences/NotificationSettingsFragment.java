@@ -2,9 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +18,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.config.PushConfig;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -32,6 +31,7 @@ import io.socket.client.Socket;
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private Socket socket;
 
     @Override
@@ -48,19 +48,26 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
     }
 
-    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         PreferenceCategory oneSignalCat = findPreference(getString(R.string.prefs_notif_onesignal_cat));
+        SwitchPreferenceCompat oneSignal = findPreference(getString(R.string.prefs_notif_onesignal_enabled));
         Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
         SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
 
         if (oneSignalCat != null) {
             if (!AppConfig.USE_ONESIGNAL || PushConfig.ONESIGNAL_APP_ID.isEmpty()) {
                 oneSignalCat.setVisible(false);
+            }
+        }
+
+        if (oneSignal != null) {
+            if (!VersionUtils.isSupported(Versions.V_126)) {
+                oneSignal.setEnabled(false);
+                oneSignal.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
             }
         }
 
@@ -79,18 +86,12 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
 
         if (influxDBEnable != null && getActivity() != null) {
-            if (!VersionUtils.isSupported("1.2.4")) {
+            if (!VersionUtils.isSupported(Versions.V_126)) {
                 influxDBEnable.setEnabled(false);
-                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, "1.2.4"));
+                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
             }
         }
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         if (AppConfig.USE_ONESIGNAL) {
             OneSignalUtils.checkOneSignalStatus(requireActivity(), socket);
         }
@@ -108,18 +109,16 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_notifications);
         }
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

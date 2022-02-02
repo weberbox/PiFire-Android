@@ -25,6 +25,7 @@ import timber.log.Timber;
 public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private SharedPreferences sharedPreferences;
     private SwitchPreferenceCompat manualMode;
     private SwitchPreferenceCompat fanEnable;
     private SwitchPreferenceCompat augerEnable;
@@ -49,6 +50,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         manualMode = findPreference(getString(R.string.prefs_manual_mode));
         fanEnable = findPreference(getString(R.string.prefs_manual_mode_fan));
@@ -85,18 +87,16 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (getPreferenceScreen().getSharedPreferences() != null) {
-            getPreferenceScreen().getSharedPreferences()
-                    .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
 

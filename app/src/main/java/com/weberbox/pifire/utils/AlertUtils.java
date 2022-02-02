@@ -76,6 +76,19 @@ public class AlertUtils {
                 .show();
     }
 
+    public static void createErrorAlert(Activity activity, @NonNull String message,
+                                        int duration) {
+        Alerter.create(activity)
+                .setText(message)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14AllerBold)
+                .setDuration(duration)
+                .setIconSize(R.dimen.alerter_icon_size_small)
+                .show();
+    }
+
     @SuppressWarnings("unused")
     public static void createAlert(Activity activity, @StringRes int message, boolean infinite) {
         Alerter.create(activity)
