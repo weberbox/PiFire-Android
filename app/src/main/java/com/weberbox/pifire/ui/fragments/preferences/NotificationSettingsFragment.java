@@ -65,9 +65,9 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
 
         if (oneSignal != null) {
-            if (!VersionUtils.isSupported(Versions.V_126)) {
+            if (!VersionUtils.isSupported(Versions.V_127)) {
                 oneSignal.setEnabled(false);
-                oneSignal.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
+                oneSignal.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
             }
         }
 
@@ -86,9 +86,9 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
 
         if (influxDBEnable != null && getActivity() != null) {
-            if (!VersionUtils.isSupported(Versions.V_126)) {
+            if (!VersionUtils.isSupported(Versions.V_127)) {
                 influxDBEnable.setEnabled(false);
-                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
+                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
             }
         }
 

@@ -63,7 +63,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
 
         if (serverUpdates != null) {
-            if (VersionUtils.isSupported(Versions.V_126)) {
+            if (VersionUtils.isSupported(Versions.V_127)) {
                 serverUpdates.setOnPreferenceClickListener(preference -> {
                     if (getActivity() != null) {
                         final FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -77,7 +77,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 });
             } else {
                 serverUpdates.setEnabled(false);
-                serverUpdates.setSummary(getString(R.string.disabled_option_settings, Versions.V_126));
+                serverUpdates.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
             }
         }
 
@@ -303,11 +303,13 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
     private void processPostResponse(String response) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
-        if (result.getResult().equals("error")) {
-            requireActivity().runOnUiThread(() ->
-                    AlertUtils.createErrorAlert(requireActivity(),
-                            result.getMessage(), false));
-        }
+        requireActivity().runOnUiThread(() -> {
+            if (result.getResult().equals("error")) {
+                AlertUtils.createErrorAlert(requireActivity(), result.getMessage(), false);
+            } else {
+                AlertUtils.createAlert(requireActivity(), R.string.settings_action_success, 1000);
+            }
+        });
     }
 
     @Override

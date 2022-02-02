@@ -481,7 +481,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private void requestForcedDashData(boolean showLoading) {
         toggleLoading(showLoading);
         if (socket != null) {
-            if (VersionUtils.isSupported(Versions.V_126)) {
+            if (VersionUtils.isSupported(Versions.V_127)) {
                 socket.emit(ServerConstants.GE_GET_DASH_DATA, true);
             } else {
                 socket.emit(ServerConstants.REQUEST_GRILL_DATA, true);

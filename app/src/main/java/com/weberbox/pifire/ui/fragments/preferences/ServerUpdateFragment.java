@@ -1,6 +1,7 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentServerUpdateBinding;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.ServerUpdateModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
@@ -28,9 +30,6 @@ import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.ProgressDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.utils.AlertUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +54,7 @@ public class ServerUpdateFragment extends Fragment {
     private VeilLayout branchesVeilLayout;
     private AutoCompleteTextView branchesList;
     private AppCompatButton showLogsButton;
+    private ProgressDialog progressDialog;
     private List<String> branches;
     private String logsResult;
     private String currentBranch;
@@ -216,7 +216,20 @@ public class ServerUpdateFragment extends Fragment {
 
             ServerUpdateModel updateResponse = ServerUpdateModel.parseJSON(responseData);
 
-            boolean checkSuccess = updateResponse.getCheckSuccess();
+            if (updateResponse.getResponse() != null) {
+                String result = updateResponse.getResponse().getResult();
+                String message = updateResponse.getResponse().getMessage();
+
+                if (result != null && result.equals("error")) {
+                    setUpdateError();
+                    if (message != null) {
+                        AlertUtils.createErrorAlert(getActivity(), message,
+                                false);
+                    }
+                }
+            }
+
+            Boolean checkSuccess = updateResponse.getCheckSuccess();
             List<String> branches = updateResponse.getBranches();
             String currentVersion = updateResponse.getVersion();
             String branchTarget = updateResponse.getBranchTarget();
@@ -227,7 +240,7 @@ public class ServerUpdateFragment extends Fragment {
             String errorMessage = updateResponse.getErrorMessage();
 
 
-            if (checkSuccess) {
+            if (checkSuccess != null && checkSuccess) {
                 if (commitsBehind != null) {
                     if (commitsBehind > 0) {
                         setUpdateAvailable(String.valueOf(commitsBehind));
@@ -270,71 +283,88 @@ public class ServerUpdateFragment extends Fragment {
                 AnimUtils.fadeViewGone(showLogsButton, 300, Constants.FADE_IN);
                 StringBuilder logs = new StringBuilder();
                 for (String log : logsResult) {
-                    logs.append(log);
+                    String logClean = log.replaceAll("((?i)<br*/?>)", "\n");
+                    logs.append(logClean);
                 }
                 this.logsResult = logs.toString();
             } else {
                 AnimUtils.fadeViewGone(showLogsButton, 300, Constants.FADE_OUT);
             }
 
-            infoVeilLayout.unVeil();
-            branchesVeilLayout.unVeil();
-
-
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.w(e, "Updater JSON Error");
             AlertUtils.createErrorAlert(getActivity(), R.string.json_error_info, false);
+            setUpdateError();
         }
+
+        infoVeilLayout.unVeil();
+        branchesVeilLayout.unVeil();
     }
 
     private void changeRemoteBranch(Socket socket, String targetBranch) {
-        ProgressDialog dialog = new ProgressDialog.Builder(requireActivity())
+        final Handler handler = new Handler();
+        progressDialog = new ProgressDialog.Builder(requireActivity())
                 .setTitle(getString(R.string.server_updater_change_dialog_title))
                 .setMessage("")
                 .setCancelable(false)
                 .build();
-        dialog.getProgressIndicator().setIndeterminate(true);
-        dialog.show();
+        progressDialog.getProgressIndicator().setIndeterminate(true);
+        progressDialog.setOnShowListener(dialogInterface -> handler.postDelayed(runnable, 30000));
+        progressDialog.setOnDismissListener(dialogInterface -> {
+            handler.removeCallbacks(runnable);
+            requireActivity().finish();
+        });
+        progressDialog.show();
         socket.emit(ServerConstants.PE_POST_UPDATER_DATA, ServerConstants.PT_CHANGE_BRANCH,
                 targetBranch, (Ack) args -> {
                     if (args.length > 0 && args[0] != null) {
-                        try {
-                            JSONArray array = new JSONArray(args[0].toString());
-                            StringBuilder output = new StringBuilder();
-                            for (int i = 0; i < array.length(); i++) {
-                                output.append(array.get(i));
+                        ServerResponseModel response =
+                                ServerResponseModel.parseJSON(args[0].toString());
+                        String result = response.getResult();
+                        String message = response.getMessage();
+
+                        requireActivity().runOnUiThread(() -> {
+                            if (result.equals("success")) {
+                                String cleanMessage = message.replaceAll("((?i)<br*/?>)", "\n");
+                                progressDialog.getProgressMessage().setText(cleanMessage);
+                            } else {
+                                AlertUtils.createErrorAlert(getActivity(), message, false);
                             }
-                            requireActivity().runOnUiThread(() ->
-                                    dialog.getProgressMessage().setText(output.toString()));
-                        } catch (JSONException e) {
-                            Timber.w(e, "Updater JSON Error");
-                        }
+                        });
                     }
                 });
     }
 
     private void startRemoteUpdate(Socket socket, String targetBranch) {
-        ProgressDialog dialog = new ProgressDialog.Builder(requireActivity())
+        final Handler handler = new Handler();
+        progressDialog = new ProgressDialog.Builder(requireActivity())
                 .setTitle(getString(R.string.server_updater_update_dialog_title))
                 .setCancelable(false)
                 .setMessage("")
                 .build();
-        dialog.getProgressIndicator().setIndeterminate(true);
-        dialog.show();
+        progressDialog.getProgressIndicator().setIndeterminate(true);
+        progressDialog.setOnShowListener(dialogInterface -> handler.postDelayed(runnable, 30000));
+        progressDialog.setOnDismissListener(dialogInterface -> {
+            handler.removeCallbacks(runnable);
+            requireActivity().finish();
+        });
+        progressDialog.show();
         socket.emit(ServerConstants.PE_POST_UPDATER_DATA, ServerConstants.PT_DO_UPDATE,
                 targetBranch, (Ack) args -> {
                     if (args.length > 0 && args[0] != null) {
-                        try {
-                            JSONArray array = new JSONArray(args[0].toString());
-                            StringBuilder output = new StringBuilder();
-                            for (int i = 0; i < array.length(); i++) {
-                                output.append(array.get(i));
+                        ServerResponseModel response =
+                                ServerResponseModel.parseJSON(args[0].toString());
+                        String result = response.getResult();
+                        String message = response.getMessage();
+
+                        requireActivity().runOnUiThread(() -> {
+                            if (result.equals("success")) {
+                                String cleanMessage = message.replaceAll("((?i)<br*/?>)", "\n");
+                                progressDialog.getProgressMessage().setText(cleanMessage);
+                            } else {
+                                AlertUtils.createErrorAlert(getActivity(), message, false);
                             }
-                            requireActivity().runOnUiThread(() ->
-                                    dialog.getProgressMessage().setText(output.toString()));
-                        } catch (JSONException e) {
-                            Timber.w(e, "Updater JSON Error");
-                        }
+                        });
                     }
                 });
     }
@@ -368,4 +398,14 @@ public class ServerUpdateFragment extends Fragment {
         AnimUtils.fadeOutAnimation(noUpdateAvailable, 300);
         AnimUtils.fadeInAnimation(updateCheckError, 300);
     }
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+        }
+    };
+
 }

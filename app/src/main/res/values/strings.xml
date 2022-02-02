@@ -231,6 +231,8 @@
     <string name="settings_min_ten_error">Value must be greater than 10</string>
     <string name="settings_max_hundred_error">Value must be less than 100</string>
 
+    <string name="settings_action_success">Action completed successfully</string>
+
     <string name="settings_server_settings_title">Server Settings</string>
     <string name="settings_server_settings_summary">Setup server address and basic auth</string>
 

@@ -184,7 +184,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
             ServerControl.backupRestoreRemoteEmit(socket, type, fileName, response -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (VersionUtils.isSupported(Versions.V_126)) {
+                        if (VersionUtils.isSupported(Versions.V_127)) {
                             ServerResponseModel result = ServerResponseModel.parseJSON(response);
                             if (result.getResponse() != null &&
                                     result.getResponse().getResult().equals("success")) {

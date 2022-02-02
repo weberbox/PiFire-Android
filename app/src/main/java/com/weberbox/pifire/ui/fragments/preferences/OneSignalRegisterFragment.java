@@ -32,9 +32,9 @@ public class OneSignalRegisterFragment extends PreferenceFragmentCompat implemen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        if (!VersionUtils.isSupported(Versions.V_126)) {
+        if (!VersionUtils.isSupported(Versions.V_127)) {
             AlertUtils.createErrorAlert(requireActivity(),
-                    getString(R.string.disabled_option_dialog_message, Versions.V_126), 5000);
+                    getString(R.string.disabled_option_dialog_message, Versions.V_127), 5000);
         }
     }
 
