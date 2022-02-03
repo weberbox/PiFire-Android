@@ -186,12 +186,4 @@
         <item>10</item>
     </string-array>
 
-    <string-array name="recipe_difficulties">
-        <item>@string/recipes_level_beginner</item>
-        <item>@string/recipes_level_easy</item>
-        <item>@string/recipes_level_mod</item>
-        <item>@string/recipes_level_hard</item>
-        <item>@string/recipes_level_v_hard</item>
-    </string-array>
-
 </resources>

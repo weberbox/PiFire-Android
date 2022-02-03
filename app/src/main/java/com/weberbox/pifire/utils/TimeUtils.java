@@ -4,9 +4,13 @@ import android.text.format.DateFormat;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class TimeUtils {
+
+    private static final String FORMAT_HOURS = "%2d h %2d min";
+    private static final String FORMAT_MINUTES = "%2d min";
 
     public static String getTimeFormatted(float value, String format) {
         LocalTime localTime = LocalTime.ofSecondOfDay((long) value);
@@ -22,9 +26,29 @@ public class TimeUtils {
         return DateFormat.format(dateFormat, dateInMilliseconds).toString();
     }
 
-    public static Float getTimeInSeconds(String hours, String minutes) {
-        long seconds = TimeUnit.HOURS.toSeconds(Long.parseLong(hours));
-        long fullSecs = seconds + TimeUnit.MINUTES.toSeconds(Long.parseLong(minutes));
-        return (float) TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + fullSecs;
+    public static Long getTimeInMillis(String hours, String minutes) {
+        return TimeUnit.HOURS.toMillis(Long.parseLong(hours)) +
+                TimeUnit.MINUTES.toMillis(Long.parseLong(minutes));
+    }
+
+    public static Integer getHoursMillis(long milliseconds) {
+        return (int) TimeUnit.MILLISECONDS.toHours(milliseconds);
+    }
+
+    public static Integer getMinutesMillis(long milliseconds) {
+        return Math.toIntExact(TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)));
+    }
+
+    public static String parseRecipeTime(long milliseconds) {
+        if (TimeUnit.MILLISECONDS.toHours(milliseconds) >= 1) {
+            return String.format(Locale.getDefault(), FORMAT_HOURS,
+                    TimeUnit.MILLISECONDS.toHours(milliseconds),
+                    TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(
+                            TimeUnit.MILLISECONDS.toHours(milliseconds)));
+        } else {
+            return String.format(Locale.getDefault(), FORMAT_MINUTES,
+                    TimeUnit.MILLISECONDS.toMinutes(milliseconds));
+        }
     }
 }

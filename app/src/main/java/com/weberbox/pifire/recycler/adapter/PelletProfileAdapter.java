@@ -45,8 +45,8 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdap
 
         public ViewHolder(ItemPickerTextBinding binding) {
             super(binding.getRoot());
-            pelletProfile = binding.profileItemTextView;
-            pelletProfileId = binding.profileItemId;
+            pelletProfile = binding.pickerItemTextView;
+            pelletProfileId = binding.pickerItemId;
         }
 
         public void bindData(final PelletProfileModel model) {

@@ -137,14 +137,19 @@ public class MainActivity extends BaseActivity {
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             actionBarText.setText(destination.getLabel());
+            int dest = destination.getId();
 
-            if (destination.getId() == R.id.nav_settings) {
+            if (dest == R.id.nav_settings) {
+                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
+            } else if (dest == R.id.nav_history) {
+                panelsLayout.setStartPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
                 panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
             } else {
+                panelsLayout.setStartPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
                 panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
             }
 
-            if (destination.getId() == R.id.nav_info || destination.getId() == R.id.nav_settings) {
+            if (dest == R.id.nav_info || dest == R.id.nav_settings) {
                 bottomBar.setVisibility(View.GONE);
             } else {
                 bottomBar.setVisibility(View.VISIBLE);

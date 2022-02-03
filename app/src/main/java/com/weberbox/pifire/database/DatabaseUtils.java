@@ -1,4 +1,4 @@
-package com.weberbox.pifire.utils;
+package com.weberbox.pifire.database;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,10 +7,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.database.AppExecutors;
-import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.interfaces.ExecutorDatabaseCallback;
 import com.weberbox.pifire.model.local.RecipesModel;
+import com.weberbox.pifire.utils.FileUtils;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -21,8 +21,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -34,25 +32,24 @@ public class DatabaseUtils {
     private static final int BUFFER = 80000;
 
     public static void exportDatabase(Context context, Uri outputUri,
-                                              List<RecipesModel> recipesModel, 
-                                              ExecutorDatabaseCallback callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> callback.onExecutorResult(exportDatabase(context, outputUri,
-                recipesModel)));
+                                      List<RecipesModel> recipesModel,
+                                      ExecutorDatabaseCallback callback) {
+        AppExecutors.getInstance().diskIO().execute(() ->
+                callback.onExecutorResult(exportDatabase(context, outputUri, recipesModel)));
     }
 
     public static void importDatabase(Context context, Uri inputUri, RecipeDatabase db,
                                       ExecutorDatabaseCallback callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> callback.onExecutorResult(importDatabase(context, inputUri, db)));
+        AppExecutors.getInstance().diskIO().execute(() ->
+                callback.onExecutorResult(importDatabase(context, inputUri, db)));
     }
 
     private static boolean exportDatabase(Context context, Uri outputUri,
-                                         List<RecipesModel> recipesModel) {
+                                          List<RecipesModel> recipesModel) {
 
         ArrayList<Uri> inputUris = new ArrayList<>();
 
-        for (int i = 0 ; i < recipesModel.size() ; i++) {
+        for (int i = 0; i < recipesModel.size(); i++) {
             if (recipesModel.get(i).getImage() != null) {
                 inputUris.add(Uri.parse(recipesModel.get(i).getImage()));
             }
@@ -64,7 +61,8 @@ public class DatabaseUtils {
 
             try (os; ZipOutputStream zos = new ZipOutputStream(os)) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                Type type = new TypeToken<List<RecipesModel>>(){}.getType();
+                Type type = new TypeToken<List<RecipesModel>>() {
+                }.getType();
                 String stdJson = gson.toJson(recipesModel, type);
 
                 ZipEntry jsonEntry = new ZipEntry(Constants.JSON_RECIPES);
@@ -106,6 +104,8 @@ public class DatabaseUtils {
     }
 
     private static boolean importDatabase(Context context, Uri uri, RecipeDatabase db) {
+        FileUtils.clearImgDir(context);
+        db.recipeDao().nukeTable();
         String filePath = context.getFilesDir() + "/img/";
         FileUtils.dirChecker(filePath);
 
@@ -123,20 +123,20 @@ public class DatabaseUtils {
                         jsonData.append(new String(buffer, 0, read));
                     }
                     if (jsonData.length() > 0) {
-                        Type collectionType = new TypeToken<List<RecipesModel>>(){}.getType();
-                        List<RecipesModel> recipes  = new Gson().fromJson(jsonData.toString(),
+                        Type collectionType = new TypeToken<List<RecipesModel>>() {
+                        }.getType();
+                        List<RecipesModel> recipes = new Gson().fromJson(jsonData.toString(),
                                 collectionType);
 
                         for (RecipesModel recipe : recipes) {
-                            AppExecutors.getInstance().diskIO().execute(() ->
-                                    db.recipeDao().insert(recipe));
+                            recipe.setId(0);
+                            db.recipeDao().insert(recipe);
                         }
                     }
                     zin.closeEntry();
 
                 } else {
                     FileOutputStream fos = new FileOutputStream(new File(filePath, ze.getName()));
-
                     for (int c = zin.read(); c != -1; c = zin.read()) {
                         fos.write(c);
                     }

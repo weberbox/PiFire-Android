@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.database.AppExecutors;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipesBinding;
 import com.weberbox.pifire.interfaces.OnRecipeItemCallback;

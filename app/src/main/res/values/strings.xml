@@ -145,7 +145,7 @@
     <string name="event_type_info">I</string>
 
     <string name="recipes_unsaved_title">Unsaved Changes</string>
-    <string name="recipes_unsaved_message">This recipe has unsaved changes.What would you like to do?</string>
+    <string name="recipes_unsaved_message">This recipe has unsaved changes. What would you like to do?</string>
     <string name="recipes_unsaved_discard">Discard</string>
     <string name="recipes_unsaved_cancel">Keep Editing</string>
     <string name="recipes_load_error">There was an error loading the requested recipe!</string>
@@ -446,16 +446,18 @@
     <string name="settings_manual_power">Toggle Power</string>
 
     <string name="settings_cat_app_recipes">Recipes</string>
-    <string name="settings_recipe_db_backup">Export recipes database</string>
-    <string name="settings_recipe_db_backup_title">Backup</string>
-    <string name="settings_recipe_db_restore">Import recipes database</string>
-    <string name="settings_recipe_db_restore_title">Restore</string>
+    <string name="settings_recipe_db_backup">Backup recipes database</string>
+    <string name="settings_recipe_db_backup_title">Export</string>
+    <string name="settings_recipe_db_restore">Restore recipes database</string>
+    <string name="settings_recipe_db_restore_title">Import</string>
     <string name="settings_recipe_db_clear">Clear recipes database</string>
     <string name="settings_recipe_db_clear_title">Delete</string>
     <string name="settings_recipe_db_cleared">Recipe database cleared</string>
     <string name="settings_recipe_db_clear_failed">Failed to clear the recipe database!</string>
     <string name="settings_recipe_db_not_exist">Recipe database already cleared</string>
     <string name="settings_recipe_db_clear_message">Are you sure you want to delete the recipe database? This action cannot be undone</string>
+    <string name="settings_recipe_db_import_button">Import</string>
+    <string name="settings_recipe_db_import_message">Importing a recipe database will overwrite any existing items. Are you sure you want to import?</string>
 
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Info</string>

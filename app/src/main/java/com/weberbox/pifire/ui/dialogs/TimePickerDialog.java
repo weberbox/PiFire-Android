@@ -29,10 +29,11 @@ import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TimerPickerDialog {
+public class TimePickerDialog {
 
     private final BottomSheetDialog pickerBottomSheet;
     private final DashboardCallback dashCallBack;
@@ -46,24 +47,25 @@ public class TimerPickerDialog {
     private final int scrollHours;
     private final int scrollMinutes;
 
-    public TimerPickerDialog(Context context, DashboardCallback callback) {
+    public TimePickerDialog(Context context, DashboardCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
+        this.context = context;
         dashCallBack = callback;
         recipeCallback = null;
-        this.context = context;
         scrollHours = 0;
         scrollMinutes = 0;
     }
 
-    public TimerPickerDialog(Context context, RecipeEditCallback callback) {
+    public TimePickerDialog(Context context, Integer hours, Integer minutes,
+                            RecipeEditCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
+        this.context = context;
         recipeCallback = callback;
         dashCallBack = null;
-        this.context = context;
-        scrollHours = 0;
-        scrollMinutes = 0;
+        scrollHours = hours;
+        scrollMinutes = minutes;
     }
 
     public BottomSheetDialog showDialog() {
@@ -139,9 +141,14 @@ public class TimerPickerDialog {
 
         pickerBottomSheet.setContentView(binding.getRoot());
 
-        if(scrollHours != 0 && scrollMinutes != 0) {
+        if (scrollHours != 0) {
             setCurrentHours(scrollHours, false);
+            hoursSelected = String.format(Locale.getDefault(), "%02d", scrollHours);
+        }
+
+        if (scrollMinutes != 0) {
             setCurrentMinutes(scrollMinutes, false);
+            minutesSelected = String.format(Locale.getDefault(), "%02d", scrollMinutes);
         }
 
         pickerBottomSheet.setOnShowListener(dialog -> {

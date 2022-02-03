@@ -20,14 +20,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
-import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.database.AppExecutors;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -37,7 +36,7 @@ import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.DatabaseUtils;
+import com.weberbox.pifire.database.DatabaseUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 
@@ -123,14 +122,14 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
         if (exportRecipes != null) {
             exportRecipes.setOnPreferenceClickListener(preference -> {
-                exportDBBackup();
+                exportDatabase();
                 return true;
             });
         }
 
         if (importRecipes != null) {
             importRecipes.setOnPreferenceClickListener(preference -> {
-                requestPermissionAndBrowseFile();
+                importDatabase();
                 return true;
             });
         }
@@ -159,7 +158,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void exportDBBackup() {
+    private void exportDatabase() {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/zip");
@@ -169,6 +168,23 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
         }
         createFileResultLauncher.launch(intent);
+    }
+
+    private void importDatabase() {
+        if (getActivity() != null) {
+            BottomButtonDialog dialog = new BottomButtonDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.dialog_confirm_action))
+                    .setMessage(getString(R.string.settings_recipe_db_import_message))
+                    .setAutoDismiss(true)
+                    .setNegativeButton(getString(R.string.cancel),
+                            (dialogInterface, which) -> {
+                            })
+                    .setPositiveButtonWithColor(getString(R.string.settings_recipe_db_import_button),
+                            R.color.dialog_positive_button_color_red,
+                            (dialogInterface, which) -> requestPermissionAndBrowseFile())
+                    .build();
+            dialog.show();
+        }
     }
 
     private void clearDatabase() {
@@ -184,9 +200,13 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                             R.color.dialog_positive_button_color_red,
                             (dialogInterface, which) -> {
                                 if (getActivity().getDatabasePath(Constants.DB_RECIPES).exists()) {
+                                    RecipeDatabase db = RecipeDatabase.getInstance(getActivity()
+                                            .getApplicationContext());
+                                    AppExecutors.getInstance().diskIO().execute(db::close);
+                                    RecipeDatabase.clearInstance();
                                     if (getActivity().deleteDatabase(Constants.DB_RECIPES)) {
-                                        FileUtils.clearImgDir(getActivity());
-                                        FileUtils.clearImgDir(getActivity());
+                                        AppExecutors.getInstance().diskIO().execute(() ->
+                                                FileUtils.clearImgDir(getActivity()));
                                         AlertUtils.createAlert(getActivity(),
                                                 R.string.settings_recipe_db_cleared, 1000);
                                     } else {
@@ -223,9 +243,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
                             AppExecutors.getInstance().diskIO().execute(() -> {
                                 final List<RecipesModel> recipeModels = rb.recipeDao().loadAllRecipes();
-                                rb.recipeDao().checkpoint(
-                                        new SimpleSQLiteQuery("pragma wal_checkpoint(full)"));
-
                                 DatabaseUtils.exportDatabase(getActivity(), fileUri, recipeModels,
                                         success -> getActivity().runOnUiThread(() -> {
                                             dialog.dismiss();
@@ -289,18 +306,17 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                             RecipeDatabase db = RecipeDatabase.getInstance(getActivity()
                                     .getApplicationContext());
 
-                            AppExecutors.getInstance().diskIO().execute(() ->
-                                    DatabaseUtils.importDatabase(getActivity(), fileUri, db, success ->
-                                            getActivity().runOnUiThread(() -> {
-                                                dialog.dismiss();
-                                                if (success) {
-                                                    AlertUtils.createAlert(getActivity(),
-                                                            R.string.restore_success, 1000);
-                                                } else {
-                                                    AlertUtils.createAlert(getActivity(),
-                                                            R.string.restore_failed, 1000);
-                                                }
-                                            })));
+                            DatabaseUtils.importDatabase(getActivity(), fileUri, db, success ->
+                                    getActivity().runOnUiThread(() -> {
+                                dialog.dismiss();
+                                if (success) {
+                                    AlertUtils.createAlert(getActivity(),
+                                            R.string.restore_success, 1000);
+                                } else {
+                                    AlertUtils.createAlert(getActivity(),
+                                            R.string.restore_failed, 1000);
+                                }
+                            }));
 
                         }
                     }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.DialogScrollPickerBinding;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.recycler.adapter.RecipeDiffAdapter;
@@ -28,15 +29,17 @@ public class RecipeDiffDialog {
 
     private final BottomSheetDialog bottomSheetDialog;
     private final LayoutInflater inflater;
-    private final RecipeEditCallback callBack;
+    private final RecipeEditCallback callback;
     private final Context context;
-    private String difficulty;
+    private RecyclerView recyclerView;
+    private Integer difficulty;
 
-    public RecipeDiffDialog(Context context, RecipeEditCallback callback) {
+    public RecipeDiffDialog(Context context, Integer difficulty, RecipeEditCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
-        callBack = callback;
         this.context = context;
+        this.difficulty = difficulty;
+        this.callback = callback;
     }
 
     public BottomSheetDialog showDialog() {
@@ -50,35 +53,39 @@ public class RecipeDiffDialog {
         pickerLayoutManager.setScaleDownBy(0.99f);
         pickerLayoutManager.setScaleDownDistance(1.2f);
 
-        RecyclerView recyclerView = binding.profileList;
+        recyclerView = binding.profileList;
 
         SnapHelper profileSnapHelper = new LinearSnapHelper();
         profileSnapHelper.attachToRecyclerView(recyclerView);
 
-        List<String> difficulties = Arrays.asList(
-                context.getResources().getStringArray(R.array.recipe_difficulties));
+        List<Integer> difficulties = Arrays.asList(
+                Constants.RECIPE_DIF_BEGIN,
+                Constants.RECIPE_DIF_EASY,
+                Constants.RECIPE_DIF_MOD,
+                Constants.RECIPE_DIF_HARD,
+                Constants.RECIPE_DIF_V_HARD);
 
         RecipeDiffAdapter adapter = new RecipeDiffAdapter(difficulties);
 
         recyclerView.setLayoutManager(pickerLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        difficulty = difficulties.get(0);
-
         pickerLayoutManager.setOnScrollStopListener(
                 view -> {
-                    LinearLayout parent = view.findViewById(R.id.profile_item_container);
-                    RelativeLayout parent_two = parent.findViewById(R.id.profile_item_container_two);
-                    TextView text = parent_two.findViewById(R.id.profile_item_text_view);
-                    difficulty = text.getText().toString();
+                    LinearLayout parent = view.findViewById(R.id.picker_item_container);
+                    RelativeLayout parent_two = parent.findViewById(R.id.picker_item_container_two);
+                    TextView text = parent_two.findViewById(R.id.picker_item_text_view);
+                    difficulty = (Integer) text.getTag();
                 });
 
         confirmButton.setOnClickListener(v -> {
             bottomSheetDialog.dismiss();
-            callBack.onRecipeDifficulty(difficulty);
+            callback.onRecipeDifficulty(difficulty);
         });
 
         bottomSheetDialog.setContentView(binding.getRoot());
+
+        setDefault(difficulty, false);
 
         bottomSheetDialog.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
@@ -95,5 +102,14 @@ public class RecipeDiffDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private void setDefault(int position, boolean smooth){
+        if (smooth) {
+            recyclerView.smoothScrollToPosition(position);
+        } else {
+            recyclerView.scrollToPosition(position);
+        }
     }
 }

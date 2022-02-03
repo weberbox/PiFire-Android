@@ -30,5 +30,9 @@ public abstract class RecipeDatabase extends RoomDatabase {
         return sInstance;
     }
 
+    public static void clearInstance() {
+        sInstance = null;
+    }
+
     public abstract RecipeDao recipeDao();
 }

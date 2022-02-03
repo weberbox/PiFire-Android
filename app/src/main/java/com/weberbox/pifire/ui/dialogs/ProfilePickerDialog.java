@@ -71,10 +71,10 @@ public class ProfilePickerDialog {
 
         pelletPickerLayoutManager.setOnScrollStopListener(
                 view -> {
-                    LinearLayout parent = view.findViewById(R.id.profile_item_container);
-                    RelativeLayout parent_two = parent.findViewById(R.id.profile_item_container_two);
-                    TextView text = parent_two.findViewById(R.id.profile_item_text_view);
-                    TextView id = parent_two.findViewById(R.id.profile_item_id);
+                    LinearLayout parent = view.findViewById(R.id.picker_item_container);
+                    RelativeLayout parent_two = parent.findViewById(R.id.picker_item_container_two);
+                    TextView text = parent_two.findViewById(R.id.picker_item_text_view);
+                    TextView id = parent_two.findViewById(R.id.picker_item_id);
                     currentProfile = text.getText().toString();
                     currentProfileId = id.getText().toString();
                 });

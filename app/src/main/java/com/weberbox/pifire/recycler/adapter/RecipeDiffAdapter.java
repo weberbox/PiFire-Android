@@ -7,14 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemPickerTextBinding;
+import com.weberbox.pifire.utils.StringUtils;
 
 import java.util.List;
 
 public class RecipeDiffAdapter extends RecyclerView.Adapter<RecipeDiffAdapter.ViewHolder> {
 
-    private final List<String> list;
+    private final List<Integer> list;
 
-    public RecipeDiffAdapter(final List<String> list) {
+    public RecipeDiffAdapter(final List<Integer> list) {
         this.list = list;
     }
 
@@ -28,7 +29,9 @@ public class RecipeDiffAdapter extends RecyclerView.Adapter<RecipeDiffAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.binding.profileItemTextView.setText(list.get(position));
+        holder.binding.pickerItemTextView.setText(StringUtils.getDifficultyText(
+                list.get(position)));
+        holder.binding.pickerItemTextView.setTag(list.get(position));
     }
 
     @Override

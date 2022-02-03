@@ -21,6 +21,8 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ItemRecipeBinding;
 import com.weberbox.pifire.interfaces.OnRecipeItemCallback;
 import com.weberbox.pifire.model.local.RecipesModel;
+import com.weberbox.pifire.utils.StringUtils;
+import com.weberbox.pifire.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,21 +200,21 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
         }
 
         public void bindData(final RecipesModel recipe, ViewHolder holder) {
-            String time = recipe.getTime();
+            Long time = recipe.getTime();
             String rating = recipe.getRating();
-            String difficulty = recipe.getDifficulty();
+            Integer difficulty = recipe.getDifficulty();
             String image = recipe.getImage();
 
             recipeName.setText(recipe.getName());
 
             if (time != null) {
-                recipeTime.setText(time);
+                recipeTime.setText(TimeUtils.parseRecipeTime(time));
             } else {
                 recipeTime.setText(R.string.placeholder_none);
             }
 
             if (difficulty != null) {
-                recipeDifficulty.setText(difficulty);
+                recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
             } else {
                 recipeDifficulty.setText(R.string.placeholder_none);
             }

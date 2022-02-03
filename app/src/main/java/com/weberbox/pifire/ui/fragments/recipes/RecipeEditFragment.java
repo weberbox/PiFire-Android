@@ -18,8 +18,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
+import androidx.databinding.ObservableArrayList;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +33,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.database.AppExecutors;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipeEditBinding;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
@@ -45,11 +45,13 @@ import com.weberbox.pifire.recycler.callback.ItemMoveCallback;
 import com.weberbox.pifire.recycler.callback.SwipeToDeleteCallback;
 import com.weberbox.pifire.ui.activities.ImagePickerActivity;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
+import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.RecipeDiffDialog;
-import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
+import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
+import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 import com.yalantis.ucrop.UCrop;
 
@@ -72,7 +74,10 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     private TextInputEditText recipeDifficulty;
     private EditText recipeNotes;
     private ImageView recipeImage;
+    private TextWatcher textWatcher;
     private int recipeId;
+
+    private boolean unsavedChanged = false;
 
 
     @Override
@@ -86,8 +91,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             recipeId = -1;
         }
 
-        // TODO check for unsaved changes
-        //requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
             recipeDB = RecipeDatabase.getInstance(getActivity().getApplicationContext());
@@ -117,22 +121,20 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
         floatingActionButton = binding.fabSaveRecipe;
 
-        // TODO check for unsaved changes
-        //recipeName.addTextChangedListener(textWatcher);
-        //recipeTime.addTextChangedListener(textWatcher);
-        //recipeDifficulty.addTextChangedListener(textWatcher);
-        //recipeNotes.addTextChangedListener(textWatcher);
+        textWatcher = getTextWatcher();
 
         binding.reScrollView.setOnScrollChangeListener(scrollListener);
 
         RecyclerView ingredientsRecycler = binding.reIngredientsRecycler;
         RecyclerView instructionsRecycler = binding.reInstructionsRecycler;
 
-        ingredientsAdapter = new RecipeEditAdapter(new ArrayList<>(), ingredientsDragListener);
+        ingredientsAdapter = new RecipeEditAdapter(new ObservableArrayList<>(),
+                ingredientsDragListener, this);
         ingredientsRecycler.setAdapter(ingredientsAdapter);
         ingredientsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
-        instructionsAdapter = new RecipeEditAdapter(new ArrayList<>(), instructionsDragListener);
+        instructionsAdapter = new RecipeEditAdapter(new ObservableArrayList<>(),
+                instructionsDragListener, this);
         instructionsRecycler.setAdapter(instructionsAdapter);
         instructionsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
@@ -168,12 +170,27 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                 instructionsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_STEP_SECTION));
 
         recipeTime.setOnClickListener(v -> {
-            TimerPickerDialog dialog = new TimerPickerDialog(requireActivity(), this);
+            int hours;
+            int minutes;
+            if (recipeTime != null && recipeTime.getTag() != null) {
+                hours = TimeUtils.getHoursMillis((Long) recipeTime.getTag());
+                minutes = TimeUtils.getMinutesMillis((Long) recipeTime.getTag());
+            } else {
+                hours = 0;
+                minutes = 0;
+            }
+            TimePickerDialog dialog = new TimePickerDialog(requireActivity(), hours, minutes, this);
             dialog.showDialog();
         });
 
         recipeDifficulty.setOnClickListener(v -> {
-            RecipeDiffDialog dialog = new RecipeDiffDialog(requireActivity(), this);
+            Integer difficulty;
+            if (recipeDifficulty != null && recipeDifficulty.getTag() != null) {
+                difficulty = (Integer) recipeDifficulty.getTag();
+            } else {
+                difficulty = Constants.RECIPE_DIF_EASY;
+            }
+            RecipeDiffDialog dialog = new RecipeDiffDialog(requireActivity(), difficulty, this);
             dialog.showDialog();
         });
 
@@ -201,8 +218,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
     private void updateUIWithData(RecipesModel recipe) {
         String name = recipe.getName();
-        String time = recipe.getTime();
-        String difficulty = recipe.getDifficulty();
+        Long time = recipe.getTime();
+        Integer difficulty = recipe.getDifficulty();
         String ingredients = recipe.getIngredients();
         String instructions = recipe.getInstructions();
         String notes = recipe.getNotes();
@@ -216,29 +233,45 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             updateActionBarTitle(name);
         }
 
+        recipeName.removeTextChangedListener(textWatcher);
+        recipeTime.removeTextChangedListener(textWatcher);
+        recipeDifficulty.removeTextChangedListener(textWatcher);
+        recipeNotes.removeTextChangedListener(textWatcher);
+
         recipeName.setText(name);
 
         if (image != null) loadRecipeImage(Uri.parse(image));
-        if (time != null) recipeTime.setText(time);
-        if (difficulty != null) recipeDifficulty.setText(difficulty);
+        if (difficulty != null) {
+            recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
+            recipeDifficulty.setTag(difficulty);
+        }
+        if (time != null) {
+            recipeTime.setText(TimeUtils.parseRecipeTime(time));
+            recipeTime.setTag(time);
+        }
 
         if (ingredients != null) {
-            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>() {
+            Type collectionType = new TypeToken<List<RecipeItems>>() {
             }.getType();
-            List<RecipesModel.RecipeItems> list = new Gson().fromJson(ingredients, collectionType);
+            List<RecipeItems> list = new Gson().fromJson(ingredients, collectionType);
             ingredientsAdapter.setRecipeItems(list);
         }
 
         if (instructions != null) {
-            Type collectionType = new TypeToken<List<RecipesModel.RecipeItems>>() {
+            Type collectionType = new TypeToken<List<RecipeItems>>() {
             }.getType();
-            List<RecipesModel.RecipeItems> list = new Gson().fromJson(instructions, collectionType);
+            List<RecipeItems> list = new Gson().fromJson(instructions, collectionType);
             instructionsAdapter.setRecipeItems(list);
         }
 
         if (notes != null) {
             recipeNotes.setText(notes);
         }
+
+        recipeName.addTextChangedListener(textWatcher);
+        recipeTime.addTextChangedListener(textWatcher);
+        recipeDifficulty.addTextChangedListener(textWatcher);
+        recipeNotes.addTextChangedListener(textWatcher);
     }
 
     private void loadRecipeImage(Uri uri) {
@@ -252,29 +285,36 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
     @Override
     public void onRecipeUpdated() {
-
+        unsavedChanged = true;
     }
 
     @Override
-    public void onRecipeDifficulty(String difficulty) {
-        recipeDifficulty.setText(difficulty);
+    public void onRecipeDifficulty(Integer difficulty) {
+        recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
+        recipeDifficulty.setTag(difficulty);
     }
 
     @Override
     public void onRecipeTime(String hours, String minutes) {
-        recipeTime.setText(formatRecipeTime(hours, minutes));
+        Long millis = TimeUtils.getTimeInMillis(hours, minutes);
+        recipeTime.setText(TimeUtils.parseRecipeTime(millis));
+        recipeTime.setTag(millis);
     }
 
-    // TODO Check for unsaved changes
-    @SuppressWarnings("unused")
     private void showUnsavedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(),
-                R.style.AlertDialogThemeMaterial);
-        builder.setTitle(R.string.recipes_unsaved_title);
-        builder.setMessage(R.string.recipes_unsaved_message);
-        builder.setPositiveButton(R.string.recipes_unsaved_cancel, (dialog, which) -> dialog.dismiss());
-        builder.setNegativeButton(R.string.recipes_unsaved_discard, (dialog, which) -> requireActivity().onBackPressed());
-        builder.create().show();
+        BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                .setTitle(getString(R.string.recipes_unsaved_title))
+                .setMessage(getString(R.string.recipes_unsaved_message))
+                .setPositiveButton(getString(R.string.recipes_unsaved_cancel),
+                        (dialogInterface, which) -> dialogInterface.dismiss())
+                .setNegativeButton(getString(R.string.recipes_unsaved_discard),
+                        (dialogInterface, which) -> {
+                            unsavedChanged = false;
+                            dialogInterface.dismiss();
+                            requireActivity().onBackPressed();
+                        })
+                .build();
+        dialog.show();
     }
 
     private void updateActionBarTitle(String name) {
@@ -347,32 +387,35 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         }
     };
 
-    // TODO check for unsaved changes
-    @SuppressWarnings("unused")
-    private final TextWatcher textWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private TextWatcher getTextWatcher() {
+        if (textWatcher == null) {
+            return textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    onRecipeUpdated();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            };
         }
+        return textWatcher;
+    }
 
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            onRecipeUpdated();
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
-
-    // TODO check for unsaved changes
-    @SuppressWarnings("unused")
     private final OnBackPressedCallback onBackCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
-            this.setEnabled(false);
-            requireActivity().onBackPressed();
+            if (unsavedChanged) {
+                showUnsavedDialog();
+            } else {
+                this.setEnabled(false);
+                requireActivity().onBackPressed();
+            }
         }
     };
 
@@ -383,7 +426,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            // TODO Handle picture changes
+                            onRecipeUpdated();
                             Uri uri = data.getParcelableExtra("path");
                             recipe.setImage(uri.toString());
                             loadRecipeImage(uri);
@@ -411,11 +454,15 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         } else {
             recipe.setName(getString(R.string.recipes_untitled));
         }
-        if (recipeTime.getText() != null) {
-            recipe.setTime(recipeTime.getText().toString());
+        if (recipeTime.getTag() != null) {
+            recipe.setTime(Long.parseLong(recipeTime.getTag().toString()));
+        } else {
+            recipe.setTime(0L);
         }
-        if (recipeDifficulty.getText() != null) {
-            recipe.setDifficulty(recipeDifficulty.getText().toString());
+        if (recipeDifficulty.getTag() != null) {
+            recipe.setDifficulty((Integer) recipeDifficulty.getTag());
+        } else {
+            recipe.setDifficulty(Constants.RECIPE_DIF_EASY);
         }
         if (recipeNotes.getText() != null) {
             recipe.setNotes(recipeNotes.getText().toString());
@@ -453,15 +500,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                     recipeDB.recipeDao().update(recipe));
         }
 
+        unsavedChanged = false;
         requireActivity().onBackPressed();
-    }
-
-    private String formatRecipeTime(String hours, String minutes) {
-        if (hours.equals("00")) {
-            return Integer.valueOf(minutes) + " min";
-        } else {
-            return Integer.valueOf(hours) + " h " + Integer.valueOf(minutes) + " min";
-        }
     }
 
     private void cleanImageDir(Uri uri) {

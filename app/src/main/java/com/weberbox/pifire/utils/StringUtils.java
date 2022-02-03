@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,14 +21,14 @@ public class StringUtils {
     }
 
     public static String formatTemp(Integer temp) {
-        return temp + "\u00B0";
+        return String.format(Locale.getDefault(), "%02d %s", temp, "\u00B0");
     }
 
     public static String formatTemp(double temp, boolean fahrenheit) {
         if (fahrenheit) {
-            return (int) temp + "\u00B0";
+            return String.format(Locale.getDefault(), "%02d %s", (int) temp, "\u00B0");
         } else {
-            return temp + "\u00B0";
+            return String.format(Locale.getDefault(), "%f %s", temp, "\u00B0");
         }
     }
 
@@ -66,6 +67,23 @@ public class StringUtils {
                 return 5;
         }
         return 1;
+    }
+
+    public static int getDifficultyText(Integer difficulty) {
+        switch (difficulty) {
+            case Constants.RECIPE_DIF_BEGIN:
+                return R.string.recipes_level_beginner;
+            case Constants.RECIPE_DIF_EASY:
+                return R.string.recipes_level_easy;
+            case Constants.RECIPE_DIF_MOD:
+                return R.string.recipes_level_mod;
+            case Constants.RECIPE_DIF_HARD:
+                return R.string.recipes_level_hard;
+            case Constants.RECIPE_DIF_V_HARD:
+                return R.string.recipes_level_v_hard;
+            default:
+                return R.string.item_rating_error;
+        }
     }
 
     public static String streamToString(InputStream stream) throws IOException {

@@ -6,15 +6,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemRecipeEditItemBinding;
-
 import com.weberbox.pifire.databinding.ItemRecipeEditSectionBinding;
 import com.weberbox.pifire.databinding.ItemRecipeEditStepBinding;
 import com.weberbox.pifire.interfaces.ItemTouchHelperCallback;
+import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.interfaces.StartDragListener;
 import com.weberbox.pifire.model.local.RecipesModel.RecipeItems;
 
@@ -30,11 +32,14 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
     public static final int RECIPE_TYPE_STEP = 3;
 
     private final StartDragListener dragListener;
-    private final List<RecipeItems> list;
+    private final RecipeEditCallback callback;
+    private final ObservableList<RecipeItems> list;
 
-    public RecipeEditAdapter(List<RecipeItems> list, StartDragListener listener) {
+    public RecipeEditAdapter(ObservableList<RecipeItems> list,
+                             StartDragListener listener, RecipeEditCallback callback) {
         this.list = list;
         this.dragListener = listener;
+        this.callback = callback;
     }
 
     @NonNull
@@ -59,7 +64,7 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
         switch (holder.getItemViewType()) {
             case RECIPE_ITEM_SECTION:
             case RECIPE_STEP_SECTION:
-                holder.sectionBinding.recipeEditSectionText.setText(item.getValue());
+                setEditTextViewTag(holder.sectionBinding.recipeEditSectionText, item.getValue());
                 holder.sectionBinding.recipeEditSectionDrag.setOnTouchListener((v, event) -> {
                     if (event.getAction() ==
                             MotionEvent.ACTION_DOWN) {
@@ -69,9 +74,9 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
                 });
                 break;
             case RECIPE_TYPE_ITEM:
-                holder.itemBinding.recipeEditItemQty.setText(item.getQuantity());
-                holder.itemBinding.recipeEditItemUnit.setText(item.getUnit());
-                holder.itemBinding.recipeEditItemValue.setText(item.getValue());
+                setEditTextViewTag(holder.itemBinding.recipeEditItemQty, item.getQuantity());
+                setEditTextViewTag(holder.itemBinding.recipeEditItemUnit, item.getUnit());
+                setEditTextViewTag(holder.itemBinding.recipeEditItemValue, item.getValue());
                 holder.itemBinding.recipeEditItemDrag.setOnTouchListener((v, event) -> {
                     if (event.getAction() ==
                             MotionEvent.ACTION_DOWN) {
@@ -81,7 +86,7 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
                 });
                 break;
             case RECIPE_TYPE_STEP:
-                holder.stepBinding.recipeEditStepText.setText(item.getValue());
+                setEditTextViewTag(holder.stepBinding.recipeEditStepText, item.getValue());
                 holder.stepBinding.recipeEditStepDrag.setOnTouchListener((v, event) -> {
                     if (event.getAction() ==
                             MotionEvent.ACTION_DOWN) {
@@ -91,6 +96,12 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
                 });
                 break;
         }
+    }
+
+    private void setEditTextViewTag(EditText editText, String value) {
+        editText.setTag(value);
+        editText.setText(value);
+        editText.setTag(null);
     }
 
     public void addNewRecipeItem(int type) {
@@ -110,6 +121,7 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
     @SuppressLint("NotifyDataSetChanged")
     public void setRecipeItems(List<RecipeItems> items) {
         list.addAll(items);
+        list.addOnListChangedCallback(observable);
         notifyDataSetChanged();
     }
 
@@ -169,17 +181,18 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
             sectionBinding.recipeEditSectionText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(getAbsoluteAdapterPosition()).setValue(s.toString());
+                    if (sectionBinding.recipeEditSectionText.getTag() == null) {
+                        callback.onRecipeUpdated();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             });
         }
@@ -190,49 +203,52 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
             itemBinding.recipeEditItemQty.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(getAbsoluteAdapterPosition()).setQuantity(s.toString());
+                    if (itemBinding.recipeEditItemQty.getTag() == null) {
+                        callback.onRecipeUpdated();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             });
             itemBinding.recipeEditItemUnit.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(getAbsoluteAdapterPosition()).setUnit(s.toString());
+                    if (itemBinding.recipeEditItemUnit.getTag() == null) {
+                        callback.onRecipeUpdated();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             });
             itemBinding.recipeEditItemValue.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(getAbsoluteAdapterPosition()).setValue(s.toString());
+                    if (itemBinding.recipeEditItemValue.getTag() == null) {
+                        callback.onRecipeUpdated();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             });
         }
@@ -243,19 +259,52 @@ public class RecipeEditAdapter extends RecyclerView.Adapter<RecipeEditAdapter.Vi
             stepBinding.recipeEditStepText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     list.get(getAbsoluteAdapterPosition()).setValue(s.toString());
+                    if (stepBinding.recipeEditStepText.getTag() == null) {
+                        callback.onRecipeUpdated();
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
                 }
             });
         }
     }
+
+    private final ObservableList.OnListChangedCallback<ObservableList<RecipeItems>> observable =
+            new ObservableList.OnListChangedCallback<>() {
+        @Override
+        public void onChanged(ObservableList<RecipeItems> sender) {
+            callback.onRecipeUpdated();
+        }
+
+        @Override
+        public void onItemRangeChanged(ObservableList<RecipeItems> sender, int positionStart,
+                                       int itemCount) {
+            callback.onRecipeUpdated();
+        }
+
+        @Override
+        public void onItemRangeInserted(ObservableList<RecipeItems> sender, int positionStart,
+                                        int itemCount) {
+            callback.onRecipeUpdated();
+        }
+
+        @Override
+        public void onItemRangeMoved(ObservableList<RecipeItems> sender, int fromPosition,
+                                     int toPosition, int itemCount) {
+            callback.onRecipeUpdated();
+        }
+
+        @Override
+        public void onItemRangeRemoved(ObservableList<RecipeItems> sender, int positionStart,
+                                       int itemCount) {
+            callback.onRecipeUpdated();
+        }
+    };
 }

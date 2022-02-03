@@ -5,6 +5,7 @@ import android.net.Uri;
 
 import androidx.annotation.RawRes;
 
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.interfaces.ExecutorCallback;
 
 import java.io.BufferedReader;
@@ -15,26 +16,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class FileUtils {
 
     private static int retries = 0;
 
     public static void executorSaveJSON(Context context, String filename, String jsonString) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> saveJSONFile(context, filename, jsonString));
+        AppExecutors.getInstance().diskIO().execute(() ->
+                saveJSONFile(context, filename, jsonString));
     }
 
     public static void executorLoadJSON(Context context, String filename, ExecutorCallback callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> callback.onDataLoaded(loadJSONFile(context, filename)));
+        AppExecutors.getInstance().diskIO().execute(() ->
+                callback.onDataLoaded(loadJSONFile(context, filename)));
     }
 
     public static void executorLoadRawJson(Context context, int file, ExecutorCallback callback) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> callback.onDataLoaded(readRawJSONFile(context, file)));
+        AppExecutors.getInstance().diskIO().execute(() ->
+                callback.onDataLoaded(readRawJSONFile(context, file)));
     }
 
     private static void saveJSONFile(Context context, String filename, String jsonString) {
@@ -137,50 +136,41 @@ public class FileUtils {
     }
 
     public static void cleanImgDir(Context context, ArrayList<Uri> uris) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            File imgDir = new File(context.getFilesDir(), "img");
-            File[] files = imgDir.listFiles();
-            if(files != null) {
-                for(File file : files) {
-                    Uri imgUri = Uri.fromFile(file);
-                    if (!uris.contains(imgUri)) {
-                        deleteFile(imgUri);
-                    }
+        File imgDir = new File(context.getFilesDir(), "img");
+        File[] files = imgDir.listFiles();
+        if (files != null) {
+            for(File file : files) {
+                Uri imgUri = Uri.fromFile(file);
+                if (!uris.contains(imgUri)) {
+                    deleteFile(imgUri);
                 }
             }
-        });
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void clearImgDir(Context context) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            File path = new File(context.getFilesDir(), "img");
-            if (path.exists() && path.isDirectory()) {
-                File[] files = path.listFiles();
-                if(files != null) {
-                    for(File file : files) {
-                        file.delete();
-                    }
+        File path = new File(context.getFilesDir(), "img");
+        if (path.exists() && path.isDirectory()) {
+            File[] files = path.listFiles();
+            if(files != null) {
+                for(File file : files) {
+                    file.delete();
                 }
             }
-        });
+        }
     }
 
     @SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
     public static void clearCache(Context context, String child) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            File path = new File(context.getCacheDir(), child);
-            if (path.exists() && path.isDirectory()) {
-                File[] files = path.listFiles();
-                if(files != null) {
-                    for(File file : files) {
-                        file.delete();
-                    }
+        File path = new File(context.getCacheDir(), child);
+        if (path.exists() && path.isDirectory()) {
+            File[] files = path.listFiles();
+            if(files != null) {
+                for(File file : files) {
+                    file.delete();
                 }
             }
-        });
+        }
     }
 }

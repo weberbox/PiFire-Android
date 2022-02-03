@@ -17,22 +17,22 @@ Settings | Work Mode | Admin | Drawer
 
 This application supports two versions of the PiFire server, the main PiFire project and another version that adds the option for a second grill probe with an updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
 
-The main PiFire branch now supports the Android app you can find it [here](https://github.com/nebhead/PiFire)
+[Main PiFire branch](https://github.com/nebhead/PiFire)
 
-Multi Grill Probe version [here](https://github.com/weberbox/PiFire/tree/fourprobes)
+[Multi Grill Probe version](https://github.com/weberbox/PiFire/tree/fourprobes)
 
 
 There are currently two Android versions that can be downloaded
 
-Github Firebase – This supports push notifications directly to the application from PiFire. It was redesigned so it no longer requires custom compiling the Android source and signing up for Firebase etc. You can enable Firebase notifications from the app once you have connected to a PiFire server. This version requires the device to have Google play services installed.
+**Github Firebase** – This supports push notifications directly to the application from PiFire. It was redesigned so it no longer requires custom compiling the Android source and signing up for Firebase or OneSignal. This version requires the device to have Google play services installed.
 
-Github NonFirebase – This version does not support mobile push notifications in the Android app. Pushbullet, Pushover, IFTTT, etc are still supported by the server but PiFire Android will not receive push notifications directly. This version does not require Google play services installed.
+**Github NonFirebase** – This version does not support mobile push notifications in the Android app. Pushbullet, Pushover, IFTTT, etc are still supported by the server but PiFire Android will not receive push notifications directly. This version does not require Google play services installed.
 
-Self Compile Option
+**Self Compile Option**
 
-There is also another version version that can be self compiled. This is pretty straight forward like any other Android project, just download the source code from here and import the project to Android Studio. There usually will be a few prompts to download any required SDK's or dependencies. Once everything has downloaded you will need to open the Build Variants menu usually located in the lower left corner of Android Studio and change to Compile Non Firebase
+There is also another version version that can be self compiled. This is pretty straight forward like any other Android project, just download the source code from here and import the project to Android Studio. There usually will be a few prompts to download any required SDK's or dependencies. Once everything has downloaded you will need to open the Build Variants menu usually located in the lower left corner of Android Studio and change to Compile Non OneSignal
 
-If you want to self compile and use Firebase you would need to setup a Google Firebase account and download the google-services.json file as well as host an app server instance somewhere to communicate with Google Firebase. The scope of this project will not cover how to do this but it is possible if you desire. You can also utilize the Sentry crash reporting if you sign up for an account and enter your own dsn in defaults.xml
+If you want to self compile and use OneSignal you would need to setup a Google Firebase account, a OneSignal Account and download the google-services.json file as well as get a OneSignal AppID/API Key. The scope of this project will not cover how to do this but it is possible if you desire. You can also utilize the Sentry crash reporting if you sign up for an account and enter your own dsn in defaults.xml
 
 ### Warnings
 
@@ -42,43 +42,32 @@ The creator of this project takes no responsibility for any damage that you may 
 
 Android Application created by James Weber, copyright 2021.
 
-* **PiFire** - The core project that this app works with. An awesome project to manage and control your pellet smoker with a Raspberry pi [github](https://github.com/nebhead/PiFire)
+This app used the following open-source libraries and/or code inspired from these projects.
 
-* **Socket.IO** - [github](https://github.com/socketio/socket.io-client-java)
-
-* **AnimatedBottomBar** - [github](https://github.com/Droppers/AnimatedBottomBar)
-
-* **zxing-android-embedded** - [github](https://github.com/journeyapps/zxing-android-embedded)
-
-* **EasyPrefs** - [github](https://github.com/Pixplicity/EasyPrefs)
-
-* **PowerSpinner** - [github](https://github.com/skydoves/PowerSpinner)
-
-* **MaterialDesign Icons** - [github](https://github.com/Templarian/MaterialDesign)
-
-* **RecyclerViewFastScroller** - [github](https://github.com/quiph/RecyclerView-FastScroller)
-
-* **MPAndroidChart** - [github](https://github.com/PhilJay/MPAndroidChart)
-
-* **AppUpdater** - [github](https://github.com/javiersantos/AppUpdater)
-
-* **Sentry** - [github](https://github.com/getsentry/sentry-java)
-
-* **Timber** - [github](https://github.com/JakeWharton/timber)
-
-* **OverlappingPanels** - [github](https://github.com/discord/OverlappingPanels)
-
-* **uCrop** - [github](https://github.com/Yalantis/uCrop)
-
-* **TedPermission** - [github](https://github.com/ParkSangGwon/TedPermission)
-
-* **AndroidVeil** - [github](https://github.com/skydoves/AndroidVeil)
-
-* **Alerter** - [github](https://github.com/Tapadoo/Alerter)
-
-* **MaterialRatingBar** - [github](https://github.com/zhanghai/MaterialRatingBar)
-
-* **Glide** - [github](https://github.com/bumptech/glide)
+- [PiFire](https://github.com/nebhead/PiFire)
+- [Socket.IO](https://github.com/socketio/socket.io-client-java)
+- [AnimatedBottomBar](https://github.com/Droppers/AnimatedBottomBar)
+- [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
+- [EasyPrefs](https://github.com/Pixplicity/EasyPrefs)
+- [PowerSpinner](https://github.com/skydoves/PowerSpinner)
+- [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
+- [RecyclerViewFastScroller](https://github.com/quiph/RecyclerView-FastScroller)
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)
+- [AppUpdater](https://github.com/javiersantos/AppUpdater)
+- [Sentry](https://github.com/getsentry/sentry-java)
+- [Timber](https://github.com/JakeWharton/timber)
+- [OverlappingPanels](https://github.com/discord/OverlappingPanels)
+- [uCrop](https://github.com/Yalantis/uCrop)
+- [TedPermission](https://github.com/ParkSangGwon/TedPermission)
+- [AndroidVeil](https://github.com/skydoves/AndroidVeil)
+- [Alerter](https://github.com/Tapadoo/Alerter)
+- [MaterialRatingBar](https://github.com/zhanghai/MaterialRatingBar)
+- [Material Dialog](https://github.com/PatilShreyas/MaterialDialog-Android)
+- [Android-Stepper](https://github.com/acefalobi/android-stepper)
+- [Lottie](https://github.com/airbnb/lottie-android)
+- [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
+- [OkHttp](https://github.com/square/okhttp)
+- [Glide](https://github.com/bumptech/glide)
 
 ### Licensing
 

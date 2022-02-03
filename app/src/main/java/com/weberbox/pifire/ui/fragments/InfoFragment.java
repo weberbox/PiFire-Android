@@ -41,7 +41,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -51,16 +50,16 @@ public class InfoFragment extends Fragment {
     private MainViewModel mainViewModel;
     private Socket socket;
     private RelativeLayout rootContainer;
-    private TextView serverVersion;
+    private TextView version;
     private TextView cpuInfo;
-    private TextView tempInfo;
+    private TextView cpuTemp;
     private TextView networkInfo;
-    private TextView uptimeInfo;
-    private TextView augerGPIOOut;
-    private TextView fanGPIOOut;
-    private TextView igniterGPIOOut;
-    private TextView powerGPIOOut;
-    private TextView selectorGPIOIn;
+    private TextView upTime;
+    private TextView auger;
+    private TextView fan;
+    private TextView igniter;
+    private TextView power;
+    private TextView selector;
     private SwipeRefreshLayout swipeRefresh;
     private ProgressBar loadingBar;
     private LicensesListAdapter licensesListAdapter;
@@ -92,18 +91,18 @@ public class InfoFragment extends Fragment {
         loadingBar = binding.loadingProgressbar;
 
         cpuInfo = binding.systemCardView.cpuInfoText;
-        tempInfo = binding.systemCardView.tempInfoText;
+        cpuTemp = binding.systemCardView.tempInfoText;
         networkInfo = binding.systemCardView.networkInfoText;
 
-        uptimeInfo = binding.uptimeCardView.uptimeInfoText;
+        upTime = binding.uptimeCardView.uptimeInfoText;
 
-        augerGPIOOut = binding.gpioCardView.gpioOutputAuger;
-        fanGPIOOut = binding.gpioCardView.gpioOutputFan;
-        igniterGPIOOut = binding.gpioCardView.gpioOutputIgniter;
-        powerGPIOOut = binding.gpioCardView.gpioOutputPower;
-        selectorGPIOIn = binding.gpioCardView.gpioInputSelector;
+        auger = binding.gpioCardView.gpioOutputAuger;
+        fan = binding.gpioCardView.gpioOutputFan;
+        igniter = binding.gpioCardView.gpioOutputIgniter;
+        power = binding.gpioCardView.gpioOutputPower;
+        selector = binding.gpioCardView.gpioInputSelector;
 
-        serverVersion = binding.serverVersionCardView.serverVersionText;
+        version = binding.serverVersionCardView.serverVersionText;
 
         LinearLayout appGitContainer = binding.appVersionCardView.appBuildGitContainer;
         TextView appVersion = binding.appVersionCardView.appVersionText;
@@ -251,14 +250,14 @@ public class InfoFragment extends Fragment {
 
             this.cpuInfo.setText(cpuString);
             this.networkInfo.setText(networkString);
-            uptimeInfo.setText(upTime);
-            tempInfo.setText(cpuTemp);
-            augerGPIOOut.setText(auger);
-            fanGPIOOut.setText(fan);
-            igniterGPIOOut.setText(igniter);
-            powerGPIOOut.setText(power);
-            selectorGPIOIn.setText(selector);
-            serverVersion.setText(version);
+            this.upTime.setText(upTime);
+            this.cpuTemp.setText(cpuTemp);
+            this.auger.setText(auger);
+            this.fan.setText(fan);
+            this.igniter.setText(igniter);
+            this.power.setText(power);
+            this.selector.setText(selector);
+            this.version.setText(version);
 
         } catch (NullPointerException e) {
             Timber.w(e, "Info Response Error");

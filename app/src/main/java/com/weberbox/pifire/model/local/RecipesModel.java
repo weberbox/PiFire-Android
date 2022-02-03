@@ -18,8 +18,8 @@ public class RecipesModel {
     private int id;
 
     private String name;
-    private String time;
-    private String difficulty;
+    private Long time;
+    private Integer difficulty;
     private String rating;
     private String pellets;
     private String created;
@@ -33,7 +33,7 @@ public class RecipesModel {
     private boolean isSelected = false;
 
     @Ignore
-    public RecipesModel(@NonNull String name, String time, String difficulty,
+    public RecipesModel(@NonNull String name, Long time, Integer difficulty,
                         String rating, String pellets, String created, String modified,
                         String image, String notes, String instructions,
                         String ingredients) {
@@ -50,7 +50,7 @@ public class RecipesModel {
         this.ingredients = ingredients;
     }
 
-    public RecipesModel(int id, @NonNull String name, String time, String difficulty,
+    public RecipesModel(int id, @NonNull String name, Long time, Integer difficulty,
                         String rating, String pellets, String created, String modified,
                         String image, String notes, String instructions,
                         String ingredients) {
@@ -85,19 +85,19 @@ public class RecipesModel {
         this.name = name;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
-    public String getDifficulty() {
+    public Integer getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(Integer difficulty) {
         this.difficulty = difficulty;
     }
 

@@ -42,7 +42,7 @@ import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
-import com.weberbox.pifire.ui.dialogs.TimerPickerDialog;
+import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
 import com.weberbox.pifire.ui.utils.TextTransition;
@@ -403,9 +403,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
                     dialog.show();
                 } else {
-                    TimerPickerDialog timerPickerDialog = new TimerPickerDialog(getActivity(),
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
                             DashboardFragment.this);
-                    timerPickerDialog.showDialog();
+                    timePickerDialog.showDialog();
                 }
             }
         });

@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.database.AppExecutors;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipeViewBinding;
 import com.weberbox.pifire.model.local.RecipesModel;
@@ -36,6 +36,8 @@ import com.weberbox.pifire.model.local.RecipesModel.RecipeItems;
 import com.weberbox.pifire.recycler.adapter.RecipeViewAdapter;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.ImageViewDialog;
+import com.weberbox.pifire.utils.StringUtils;
+import com.weberbox.pifire.utils.TimeUtils;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -178,8 +180,8 @@ public class RecipeViewFragment extends Fragment {
     private void updateUIWithData(RecipesModel recipe) {
         String name = recipe.getName();
         String rating = recipe.getRating();
-        String time = recipe.getTime();
-        String difficulty = recipe.getDifficulty();
+        Long time = recipe.getTime();
+        Integer difficulty = recipe.getDifficulty();
         String created = recipe.getCreated();
         String modified = recipe.getModified();
         String ingredients = recipe.getIngredients();
@@ -193,8 +195,8 @@ public class RecipeViewFragment extends Fragment {
 
         if (image != null) loadRecipeImage(Uri.parse(image));
         if (rating != null) recipeRating.setRating(Float.parseFloat(rating));
-        if (time != null) recipeTime.setText(time);
-        if (difficulty != null) recipeDifficulty.setText(difficulty);
+        if (time != null) recipeTime.setText(TimeUtils.parseRecipeTime(time));
+        if (difficulty != null) recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
         if (created != null) recipeCreated.setText(created);
         if (modified != null) recipeModified.setText(modified);
 

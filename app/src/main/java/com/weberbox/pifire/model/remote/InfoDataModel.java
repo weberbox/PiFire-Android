@@ -1,7 +1,6 @@
 package com.weberbox.pifire.model.remote;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -156,8 +155,7 @@ public class InfoDataModel {
     }
 
     public static InfoDataModel parseJSON(String response) {
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(response, InfoDataModel.class);
+        return new Gson().fromJson(response, InfoDataModel.class);
     }
 
 }

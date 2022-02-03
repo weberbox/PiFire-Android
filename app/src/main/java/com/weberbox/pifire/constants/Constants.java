@@ -80,6 +80,13 @@ public class Constants {
     public static final String ITEM_RATING_2 = "★ ★";
     public static final String ITEM_RATING_1 = "★";
 
+    // Recipe Difficulties
+    public static final int RECIPE_DIF_BEGIN = 0;
+    public static final int RECIPE_DIF_EASY = 1;
+    public static final int RECIPE_DIF_MOD = 2;
+    public static final int RECIPE_DIF_HARD = 3;
+    public static final int RECIPE_DIF_V_HARD = 4;
+
     // Update
     public static final String UPDATE_FILENAME = "app-update.apk";
 
