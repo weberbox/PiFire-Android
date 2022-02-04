@@ -137,7 +137,7 @@
     </style>
 
     <style name="AlerterButton" parent="Widget.MaterialComponents.Button">
-        <item name="android:textAppearance">@style/Text16Aller</item>
+        <item name="android:textAppearance">@style/Text15AllerBold</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textAllCaps">true</item>
     </style>

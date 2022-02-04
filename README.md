@@ -9,9 +9,9 @@ Dashboard | History | Event Log | Pellet Manager
 ----------|---------|-----------|----------------
 ![Dashboard](docs/screenshots/dashboard.png) | ![History](docs/screenshots/history.png) | ![Event Log](docs/screenshots/eventlog.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png)
 
-Settings | Work Mode | Admin | Drawer
----------|-----------|-------|--------
-![Settings](docs/screenshots/settings.png) | ![Settings / Work Mode](docs/screenshots/workmode.png) | ![Admin](docs/screenshots/admin.png) | ![Drawer](docs/screenshots/drawer.png)
+Recipes | Updater | Admin | Drawer
+--------|---------|-------|--------
+![Recipes](docs/screenshots/recipes.png) | ![Updater](docs/screenshots/updater.png) | ![Admin](docs/screenshots/admin.png) | ![Drawer](docs/screenshots/drawer.png)
 
 ## Documentation
 

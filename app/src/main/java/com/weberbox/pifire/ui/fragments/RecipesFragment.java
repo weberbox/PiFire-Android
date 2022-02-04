@@ -238,7 +238,7 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
                         .setIcon(R.drawable.ic_delete)
                         .setBackgroundColorRes(R.color.colorPrimaryLighter)
                         .setDuration(3000)
-                        .setTextAppearance(R.style.Text14Aller)
+                        .setTextAppearance(R.style.Text14AllerBold)
                         .setIconSize(R.dimen.alerter_icon_size_small)
                         .addButton(getString(R.string.undo), R.style.AlerterButton, v -> {
                             for (Map.Entry<Integer, RecipesModel> pair : delRecipe.entrySet()) {
