@@ -201,7 +201,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
 
         public void bindData(final RecipesModel recipe, ViewHolder holder) {
             Long time = recipe.getTime();
-            String rating = recipe.getRating();
+            Float rating = recipe.getRating();
             Integer difficulty = recipe.getDifficulty();
             String image = recipe.getImage();
 
@@ -219,11 +219,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHold
                 recipeDifficulty.setText(R.string.placeholder_none);
             }
 
-            if (rating != null) {
-                recipeRating.setRating(Float.parseFloat(rating));
-            } else {
-                recipeRating.setRating(0);
-            }
+            recipeRating.setRating(rating != null ? rating : 0);
 
             if (image != null) {
                 Glide.with(holder.itemView.getContext())

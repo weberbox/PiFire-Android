@@ -15,13 +15,8 @@ import java.util.stream.Stream;
 public class StringUtils {
 
     public static String cleanString(String[] strings, String delimiter) {
-        return Stream.of(strings)
-                .filter(s -> s != null && !s.isEmpty())
+        return Stream.of(strings).filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(delimiter));
-    }
-
-    public static String formatTemp(Integer temp) {
-        return String.format(Locale.getDefault(), "%02d %s", temp, "\u00B0");
     }
 
     public static String formatTemp(double temp, boolean fahrenheit) {
@@ -33,7 +28,18 @@ public class StringUtils {
     }
 
     public static String formatPercentage(Integer percent) {
-        return percent + "\u0025";
+        return String.format(Locale.getDefault(), "%s %s", percent, "\u0025");
+    }
+
+    public static String streamToString(InputStream stream) throws IOException {
+        int bufferSize = 1024;
+        char[] buffer = new char[bufferSize];
+        StringBuilder out = new StringBuilder();
+        Reader in = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        for (int numRead; (numRead = in.read(buffer, 0, buffer.length)) > 0; ) {
+            out.append(buffer, 0, numRead);
+        }
+        return out.toString();
     }
 
     public static int getRatingText(Integer rating) {
@@ -84,16 +90,5 @@ public class StringUtils {
             default:
                 return R.string.item_rating_error;
         }
-    }
-
-    public static String streamToString(InputStream stream) throws IOException {
-        int bufferSize = 1024;
-        char[] buffer = new char[bufferSize];
-        StringBuilder out = new StringBuilder();
-        Reader in = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        for (int numRead; (numRead = in.read(buffer, 0, buffer.length)) > 0; ) {
-            out.append(buffer, 0, numRead);
-        }
-        return out.toString();
     }
 }

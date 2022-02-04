@@ -23,6 +23,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
@@ -89,7 +90,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         }
 
         if (devCrashEnabled != null) {
-            if (AppConfig.IS_DEV_BUILD) {
+            if (AppConfig.IS_DEV_BUILD && BuildConfig.DEBUG) {
                 devCrashEnabled.setVisible(true);
             }
         }

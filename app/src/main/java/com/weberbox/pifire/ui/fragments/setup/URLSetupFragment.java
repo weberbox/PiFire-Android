@@ -31,7 +31,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
-import com.weberbox.pifire.interfaces.AuthDialogCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
@@ -62,7 +62,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import timber.log.Timber;
 
-public class URLSetupFragment extends Fragment implements AuthDialogCallback {
+public class URLSetupFragment extends Fragment implements DialogAuthCallback {
 
     private FragmentSetupUrlBinding binding;
     private TextInputEditText serverAddress;

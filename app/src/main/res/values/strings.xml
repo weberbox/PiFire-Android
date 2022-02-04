@@ -73,6 +73,8 @@
     <string name="welcome">Welcome</string>
     <string name="terms">Terms</string>
     <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="print">Print</string>
     <string name="status">Status</string>
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
@@ -150,6 +152,8 @@
     <string name="recipes_unsaved_cancel">Keep Editing</string>
     <string name="recipes_load_error">There was an error loading the requested recipe!</string>
     <string name="recipes_add">Add Recipe</string>
+    <string name="recipes_rating">Rating</string>
+    <string name="recipes_actions">Actions</string>
     <string name="recipes_title_hint">Recipe title</string>
     <string name="recipes_notes_hint">Notes</string>
     <string name="recipes_removed">Recipe removed from the list</string>
@@ -165,7 +169,7 @@
     <string name="recipes_ingredients">Ingredients</string>
     <string name="recipes_instructions">Instructions</string>
     <string name="recipes_notes">Notes</string>
-    <string name="recipes_action_title">Recipe View</string>
+    <string name="recipes_action_view">Recipe View</string>
     <string name="recipes_item_section">Section</string>
     <string name="recipes_item_step">Step</string>
     <string name="recipes_add_step">Add Step</string>

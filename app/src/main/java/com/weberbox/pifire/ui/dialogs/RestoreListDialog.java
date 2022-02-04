@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogListViewBinding;
-import com.weberbox.pifire.interfaces.BackupRestoreCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogRestoreCallback;
 
 import java.util.List;
 
 public class RestoreListDialog {
 
-    private final BackupRestoreCallback callBack;
+    private final DialogRestoreCallback callBack;
     private final LayoutInflater inflater;
     private final AlertDialog.Builder dialog;
     private final Context context;
@@ -35,7 +35,7 @@ public class RestoreListDialog {
         dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         this.context = context;
         inflater = LayoutInflater.from(context);
-        callBack = (BackupRestoreCallback) fragment;
+        callBack = (DialogRestoreCallback) fragment;
         this.title = title;
         this.type = type;
     }

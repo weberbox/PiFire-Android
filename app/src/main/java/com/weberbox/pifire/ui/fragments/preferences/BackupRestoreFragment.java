@@ -24,7 +24,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.interfaces.BackupRestoreCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogRestoreCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
@@ -48,7 +48,7 @@ import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class BackupRestoreFragment extends PreferenceFragmentCompat implements
-        BackupRestoreCallback {
+        DialogRestoreCallback {
 
     private Socket socket;
     private String jsonData;

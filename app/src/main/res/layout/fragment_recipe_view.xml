@@ -8,22 +8,6 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".ui.fragments.recipes.RecipeViewFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_edit_recipe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:contentDescription="@string/recipes_add"
-        android:src="@drawable/ic_edit_white"
-        app:backgroundTint="@color/colorAccent"
-        app:borderWidth="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
-        app:tint="@color/colorWhite" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/rv_scroll_view"
         android:layout_width="match_parent"
@@ -294,4 +278,8 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include android:id="@+id/recipe_view_fab"
+        layout="@layout/layout_recipes_view_fab" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

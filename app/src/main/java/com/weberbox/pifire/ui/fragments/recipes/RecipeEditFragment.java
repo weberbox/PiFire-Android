@@ -22,7 +22,6 @@ import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
 import androidx.databinding.ObservableArrayList;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +32,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipeEditBinding;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
@@ -43,6 +41,7 @@ import com.weberbox.pifire.model.local.RecipesModel.RecipeItems;
 import com.weberbox.pifire.recycler.adapter.RecipeEditAdapter;
 import com.weberbox.pifire.recycler.callback.ItemMoveCallback;
 import com.weberbox.pifire.recycler.callback.SwipeToDeleteCallback;
+import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.ui.activities.ImagePickerActivity;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
@@ -53,6 +52,7 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.yalantis.ucrop.UCrop;
 
 import java.lang.reflect.Type;
@@ -131,12 +131,12 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         ingredientsAdapter = new RecipeEditAdapter(new ObservableArrayList<>(),
                 ingredientsDragListener, this);
         ingredientsRecycler.setAdapter(ingredientsAdapter);
-        ingredientsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        ingredientsRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
 
         instructionsAdapter = new RecipeEditAdapter(new ObservableArrayList<>(),
                 instructionsDragListener, this);
         instructionsRecycler.setAdapter(instructionsAdapter);
-        instructionsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        instructionsRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
 
         ItemTouchHelper.Callback ingredientsCallback = new ItemMoveCallback(ingredientsAdapter);
         ItemTouchHelper.Callback instructionsCallback = new ItemMoveCallback(instructionsAdapter);
@@ -204,8 +204,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                 });
             }
         } else {
-            updateUIWithData(new RecipesModel("", null, null, null,
-                    null, null, null, null, null,
+            updateUIWithData(new RecipesModel("", 0L, Constants.RECIPE_DIF_EASY, 0f,
+                    null, null, "--", null, null,
                     null, null));
         }
     }
@@ -456,13 +456,9 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         }
         if (recipeTime.getTag() != null) {
             recipe.setTime(Long.parseLong(recipeTime.getTag().toString()));
-        } else {
-            recipe.setTime(0L);
         }
         if (recipeDifficulty.getTag() != null) {
             recipe.setDifficulty((Integer) recipeDifficulty.getTag());
-        } else {
-            recipe.setDifficulty(Constants.RECIPE_DIF_EASY);
         }
         if (recipeNotes.getText() != null) {
             recipe.setNotes(recipeNotes.getText().toString());

@@ -648,7 +648,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 }
 
                 if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && grillTarget > 0) {
-                    grillSetText.setText(StringUtils.formatTemp(grillTarget));
+                    grillSetText.setText(StringUtils.formatTemp(grillTarget, isFahrenheit));
                 } else {
                     grillSetText.setText(R.string.placeholder_none);
                 }
@@ -670,7 +670,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 if (grillEnabled) {
                     if (grillNotify && grillTarget > 0) {
                         grillTempProgress.setMax(grillTarget);
-                        grillTargetText.setText(StringUtils.formatTemp(grillTarget));
+                        grillTargetText.setText(StringUtils.formatTemp(grillTarget, isFahrenheit));
                     } else {
                         grillTempProgress.setMax(tempUtils.getMaxGrillTemp());
                         grillTargetText.setText(R.string.placeholder_none);
@@ -694,7 +694,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 if (probeOneEnabled) {
                     if (probeOneNotify && probeOneTarget > 0) {
                         probeOneProgress.setMax(probeOneTarget);
-                        probeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget));
+                        probeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget,
+                                isFahrenheit));
                     } else {
                         probeOneProgress.setMax(tempUtils.getMaxProbeTemp());
                         probeOneTargetText.setText(R.string.placeholder_none);
@@ -702,7 +703,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
 
                     if (probeOneTemp > 0) {
                         probeOneProgress.setProgress((int) probeOneTemp);
-                        probeOneTempText.setText(StringUtils.formatTemp(probeOneTemp, isFahrenheit));
+                        probeOneTempText.setText(StringUtils.formatTemp(probeOneTemp,
+                                isFahrenheit));
                     } else {
                         probeOneTempText.setText(R.string.placeholder_temp);
                     }
@@ -718,7 +720,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 if (probeTwoEnabled) {
                     if (probeTwoNotify && probeTwoTarget > 0) {
                         probeTwoProgress.setMax(probeTwoTarget);
-                        probeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget));
+                        probeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget,
+                                isFahrenheit));
                     } else {
                         probeTwoProgress.setMax(tempUtils.getMaxProbeTemp());
                         probeTwoTargetText.setText(R.string.placeholder_none);
@@ -726,7 +729,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
 
                     if (probeTwoTemp > 0) {
                         probeTwoProgress.setProgress((int) probeTwoTemp);
-                        probeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp, isFahrenheit));
+                        probeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp,
+                                isFahrenheit));
                     } else {
                         probeTwoTempText.setText(R.string.placeholder_temp);
                     }

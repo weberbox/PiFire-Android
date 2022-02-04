@@ -1,11 +1,19 @@
 package com.weberbox.pifire.ui.fragments.recipes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -17,52 +25,53 @@ import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipeViewBinding;
 import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.model.local.RecipesModel.RecipeItems;
 import com.weberbox.pifire.recycler.adapter.RecipeViewAdapter;
+import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.ImageViewDialog;
+import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.utils.RecipeExportUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class RecipeViewFragment extends Fragment {
 
     private FragmentRecipeViewBinding binding;
-    private RecipeViewAdapter instructionsAdapter;
-    private RecipeViewAdapter ingredientsAdapter;
+    private RecipeViewAdapter instructionsAdapter, ingredientsAdapter;
     private RecipeDatabase recipeDB;
     private RecipesModel recipe;
-    private FloatingActionButton floatingActionButton;
-    private LinearLayout ingredientsContainer;
-    private LinearLayout instructionsContainer;
-    private LinearLayout notesContainer;
+    private ExtendedFloatingActionButton fabActions;
+    private FloatingActionButton fabEdit, fabPrint, fabShare;
+    private LinearLayout ingredientsContainer, instructionsContainer, notesContainer;
     private RatingBar recipeRating;
-    private TextView recipeName;
-    private TextView recipeTime;
-    private TextView recipeDifficulty;
-    private TextView recipeCreated;
-    private TextView recipeModified;
+    private TextView recipeName, recipeTime, recipeDifficulty, recipeCreated, recipeModified;
     private TextView recipeNotes;
     private ImageView recipeImage;
+    private WebView webViewReference;
     private int recipeId;
+
+    private boolean fabClicked = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,8 +108,12 @@ public class RecipeViewFragment extends Fragment {
         instructionsContainer = binding.rvInstructionsContainer;
         notesContainer = binding.rvNotesContainer;
         recipeNotes = binding.rvNotes;
+        fabActions = binding.recipeViewFab.fabRecipeActions;
+        fabEdit = binding.recipeViewFab.fabEditRecipe;
+        fabPrint = binding.recipeViewFab.fabPrintRecipe;
+        fabShare = binding.recipeViewFab.fabShareRecipe;
 
-        floatingActionButton = binding.fabEditRecipe;
+        fabActions.shrink();
 
         binding.rvScrollView.setOnScrollChangeListener(scrollListener);
 
@@ -109,15 +122,15 @@ public class RecipeViewFragment extends Fragment {
 
         instructionsAdapter = new RecipeViewAdapter(new ArrayList<>());
         instructionsRecycler.setAdapter(instructionsAdapter);
-        instructionsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        instructionsRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
 
         ingredientsAdapter = new RecipeViewAdapter(new ArrayList<>());
         ingredientsRecycler.setAdapter(ingredientsAdapter);
-        ingredientsRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        ingredientsRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
 
         recipeRating.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
             if (recipe != null && recipeId != -1 && fromUser) {
-                recipe.setRating(String.valueOf(rating));
+                recipe.setRating(rating);
                 updateRecipe();
             }
         });
@@ -129,7 +142,10 @@ public class RecipeViewFragment extends Fragment {
             }
         });
 
-        floatingActionButton.setOnClickListener(v -> {
+        fabActions.setOnClickListener(v -> fabActionsClicked());
+
+        fabEdit.setOnClickListener(v -> {
+            fabActionsClicked();
             if (getActivity() != null) {
                 RecipeEditFragment fragment = new RecipeEditFragment();
                 Bundle bundle = new Bundle();
@@ -137,11 +153,21 @@ public class RecipeViewFragment extends Fragment {
                 fragment.setArguments(bundle);
                 final FragmentManager fm = getActivity().getSupportFragmentManager();
                 final FragmentTransaction ft = fm.beginTransaction();
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .replace(android.R.id.content, fragment)
                         .addToBackStack(null)
                         .commit();
             }
+        });
+
+        fabPrint.setOnClickListener(v -> {
+            fabActionsClicked();
+            printRecipe();
+        });
+
+        fabShare.setOnClickListener(v -> {
+            fabActionsClicked();
+            shareRecipe();
         });
 
         if (recipeDB != null && recipeId != -1) {
@@ -173,13 +199,13 @@ public class RecipeViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (getActivity() != null) {
-            ((RecipeActivity) getActivity()).setActionBarTitle(R.string.recipes_action_title);
+            ((RecipeActivity) getActivity()).setActionBarTitle(R.string.recipes_action_view);
         }
     }
 
     private void updateUIWithData(RecipesModel recipe) {
         String name = recipe.getName();
-        String rating = recipe.getRating();
+        Float rating = recipe.getRating();
         Long time = recipe.getTime();
         Integer difficulty = recipe.getDifficulty();
         String created = recipe.getCreated();
@@ -194,23 +220,25 @@ public class RecipeViewFragment extends Fragment {
         recipeName.setText(name);
 
         if (image != null) loadRecipeImage(Uri.parse(image));
-        if (rating != null) recipeRating.setRating(Float.parseFloat(rating));
+        if (rating != null) recipeRating.setRating(rating);
         if (time != null) recipeTime.setText(TimeUtils.parseRecipeTime(time));
         if (difficulty != null) recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
         if (created != null) recipeCreated.setText(created);
         if (modified != null) recipeModified.setText(modified);
 
         if (ingredients != null && !ingredients.isEmpty()) {
-            Type collectionType = new TypeToken<List<RecipeItems>>(){}.getType();
-            List<RecipeItems> list  = new Gson().fromJson(ingredients, collectionType);
+            Type collectionType = new TypeToken<List<RecipeItems>>() {
+            }.getType();
+            List<RecipeItems> list = new Gson().fromJson(ingredients, collectionType);
             ingredientsAdapter.setRecipeItems(list);
         } else {
             ingredientsContainer.setVisibility(View.GONE);
         }
 
         if (instructions != null && !instructions.isEmpty()) {
-            Type collectionType = new TypeToken<List<RecipeItems>>(){}.getType();
-            List<RecipeItems> list  = new Gson().fromJson(instructions, collectionType);
+            Type collectionType = new TypeToken<List<RecipeItems>>() {
+            }.getType();
+            List<RecipeItems> list = new Gson().fromJson(instructions, collectionType);
             instructionsAdapter.setRecipeItems(list);
         } else {
             instructionsContainer.setVisibility(View.GONE);
@@ -236,7 +264,7 @@ public class RecipeViewFragment extends Fragment {
     }
 
     private void updateRecipe() {
-        if (recipeDB !=  null) {
+        if (recipeDB != null) {
             AppExecutors.getInstance().diskIO().execute(() ->
                     recipeDB.recipeDao().update(recipe));
         }
@@ -266,17 +294,81 @@ public class RecipeViewFragment extends Fragment {
         }
     }
 
-    private final OnScrollChangeListener scrollListener = (v, scrollX, scrollY,
-                                                           oldScrollX, oldScrollY) -> {
+    private void printRecipe() {
+        WebView webView = new WebView(getActivity());
+        webView.setWebViewClient(new WebViewClient() {
+
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                createWebPrintJob(view);
+                webViewReference = null;
+            }
+        });
+
+        RecipeExportUtils recipeExportUtils = new RecipeExportUtils(requireActivity(), recipe);
+
+        webView.getSettings().setAllowFileAccess(true);
+        webView.loadDataWithBaseURL("file:///android_asset",
+                recipeExportUtils.getRecipeHTML(), "text/html; charset=utf-8",
+                "UTF-8", "");
+
+        webViewReference = webView;
+    }
+
+    private void createWebPrintJob(WebView webView) {
+        PrintManager printManager = (PrintManager) requireActivity()
+                .getSystemService(Context.PRINT_SERVICE);
+
+        String jobName = recipe.getName();
+
+        PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(jobName);
+        printManager.print(jobName, printAdapter, new PrintAttributes.Builder().build());
+
+    }
+
+    private void shareRecipe() {
+        RecipeExportUtils recipeExportUtils = new RecipeExportUtils(requireActivity(), recipe);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, recipeExportUtils.getRecipeString());
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
+    private void fabActionsClicked() {
+        if (!fabClicked) {
+            AnimUtils.fabFromBottomAnim(fabEdit);
+            AnimUtils.fabFromBottomAnim(fabPrint);
+            AnimUtils.fabFromBottomAnim(fabShare);
+            fabActions.extend();
+        } else {
+            AnimUtils.fabToBottomAnim(fabEdit);
+            AnimUtils.fabToBottomAnim(fabPrint);
+            AnimUtils.fabToBottomAnim(fabShare);
+            fabActions.shrink();
+        }
+        fabClicked = !fabClicked;
+    }
+
+    private final OnScrollChangeListener scrollListener = (v, scrollX, scrollY, oldScrollX,
+                                                           oldScrollY) -> {
         if (scrollY < oldScrollY) {
-            if (!floatingActionButton.isShown()) {
-                floatingActionButton.show();
+            if (!fabActions.isShown()) {
+                AnimUtils.fabShowAnimation(fabActions);
             }
         }
 
         if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-            if (floatingActionButton.isShown()) {
-                floatingActionButton.hide();
+            if (fabActions.isShown()) {
+                AnimUtils.fabHideAnimation(fabActions);
+                if (fabClicked) {
+                    fabActionsClicked();
+                }
             }
         }
     };

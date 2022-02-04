@@ -6,7 +6,6 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.weberbox.pifire.constants.Constants;
 
@@ -20,7 +19,7 @@ public class RecipesModel {
     private String name;
     private Long time;
     private Integer difficulty;
-    private String rating;
+    private Float rating;
     private String pellets;
     private String created;
     private String modified;
@@ -34,7 +33,7 @@ public class RecipesModel {
 
     @Ignore
     public RecipesModel(@NonNull String name, Long time, Integer difficulty,
-                        String rating, String pellets, String created, String modified,
+                        Float rating, String pellets, String created, String modified,
                         String image, String notes, String instructions,
                         String ingredients) {
         this.name = name;
@@ -51,7 +50,7 @@ public class RecipesModel {
     }
 
     public RecipesModel(int id, @NonNull String name, Long time, Integer difficulty,
-                        String rating, String pellets, String created, String modified,
+                        Float rating, String pellets, String created, String modified,
                         String image, String notes, String instructions,
                         String ingredients) {
         this.id = id;
@@ -101,11 +100,11 @@ public class RecipesModel {
         this.difficulty = difficulty;
     }
 
-    public String getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
@@ -239,7 +238,6 @@ public class RecipesModel {
     }
 
     public static RecipesModel parseJSON(String response) {
-        Gson gson = new GsonBuilder().create();
-        return gson.fromJson(response, RecipesModel.class);
+        return new Gson().fromJson(response, RecipesModel.class);
     }
 }

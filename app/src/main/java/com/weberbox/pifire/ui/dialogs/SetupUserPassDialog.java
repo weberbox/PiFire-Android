@@ -12,14 +12,14 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogUserPassBinding;
-import com.weberbox.pifire.interfaces.AuthDialogCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.utils.SecurityUtils;
 
 public class SetupUserPassDialog {
 
     private final LayoutInflater inflater;
     private final AlertDialog.Builder dialog;
-    private final AuthDialogCallback callback;
+    private final DialogAuthCallback callback;
     private final Context context;
     private EditText user;
     private EditText pass;
@@ -29,7 +29,7 @@ public class SetupUserPassDialog {
         dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         inflater = LayoutInflater.from(context);
         this.context = context;
-        callback = (AuthDialogCallback) fragment;
+        callback = (DialogAuthCallback) fragment;
     }
 
     public AlertDialog showDialog() {

@@ -10,7 +10,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
 import androidx.core.view.ViewCompat;
@@ -133,6 +135,121 @@ public class AnimUtils {
             });
             view.startAnimation(animation);
         }
+    }
+
+    public static void fabHideAnimation(View view) {
+        Animation scaleDown = new ScaleAnimation(1f, 0f, 1f, 0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleDown.setInterpolator(new LinearInterpolator());
+        scaleDown.setDuration(150);
+        AnimationSet animation = new AnimationSet(false);
+        animation.addAnimation(scaleDown);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
+        view.startAnimation(animation);
+    }
+
+    public static void fabShowAnimation(View view) {
+        Animation scaleUp = new ScaleAnimation(0f, 1f, 0f, 1f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleUp.setInterpolator(new LinearInterpolator());
+        scaleUp.setDuration(150);
+        AnimationSet animation = new AnimationSet(false);
+        animation.addAnimation(scaleUp);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                view.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+            }
+        });
+        view.startAnimation(animation);
+    }
+
+    public static void fabFromBottomAnim(View view) {
+        AnimationSet animation = new AnimationSet(false);
+        Animation alpha = new AlphaAnimation(0f, 1f);
+        Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
+        Animation scale = new ScaleAnimation(Animation.RELATIVE_TO_SELF, 0.8f,
+                Animation.RELATIVE_TO_SELF, 0.8f, 0.5f, 0.5f);
+        scale.setInterpolator(new LinearInterpolator());
+        trans.setDuration(300);
+        alpha.setDuration(500);
+        animation.addAnimation(trans);
+        animation.addAnimation(scale);
+        animation.addAnimation(alpha);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                view.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                view.setClickable(true);
+            }
+        });
+        view.startAnimation(animation);
+    }
+
+    public static void fabToBottomAnim(View view) {
+        Animation alpha = new AlphaAnimation(1f, 0f);
+        Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f,
+                Animation.RELATIVE_TO_PARENT, 1.0f);
+        Animation scaleUp = new ScaleAnimation(0.8f, 0.8f, 0.8f, 0.8f, 0.5f, 0.5f);
+        scaleUp.setInterpolator(new LinearInterpolator());
+        trans.setDuration(300);
+        alpha.setDuration(100);
+        AnimationSet animation = new AnimationSet(false);
+        animation.addAnimation(trans);
+        animation.addAnimation(scaleUp);
+        animation.addAnimation(alpha);
+        animation.setFillAfter(true);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation arg0) {
+                view.setClickable(false);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation arg0) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
+        view.startAnimation(animation);
     }
 
     @SuppressWarnings("unused")
