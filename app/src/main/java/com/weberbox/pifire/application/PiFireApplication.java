@@ -70,7 +70,7 @@ public class PiFireApplication extends Application {
         URI serverUri = URI.create(Prefs.getString(getString(R.string.prefs_server_address),
                 ServerConstants.DEFAULT_SOCKET_URL));
 
-        Timber.i("Creating Socket connection to: %s", serverUri);
+        Timber.i("Creating Socket connection");
 
         IO.Options options = new IO.Options();
 

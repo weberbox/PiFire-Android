@@ -46,15 +46,16 @@ public class OneSignalUtils {
             Timber.d("OneSignal State Changed %s", stateChanges);
             if (!stateChanges.getFrom().isSubscribed() &&
                     stateChanges.getTo().isSubscribed()) {
-//                registerPlayerID(socket, stateChanges.getTo().getUserId(), true);
+                //registerPlayerID(socket, stateChanges.getTo().getUserId(), true);
 
             } else if (stateChanges.getFrom().isSubscribed() &&
                     !stateChanges.getTo().isSubscribed()) {
-//                registerPlayerID(socket, stateChanges.getFrom().getUserId(), false);
+                //registerPlayerID(socket, stateChanges.getFrom().getUserId(), false);
             }
         });
     }
 
+    @SuppressWarnings("unused")
     private static void registerPlayerID(Context context, Socket socket, String playerID,
                                          boolean subscribed) {
         if (playerID != null && socket.connected()) {
@@ -109,31 +110,6 @@ public class OneSignalUtils {
             ServerControl.registerOneSignalDevice(context, socket, device);
         }
     }
-
-//    private static void addOneSignalDevice(Context context, Socket socket, String playerID,
-//                                           OneSignalDeviceInfo deviceInfo) {
-//        if (socket.connected()) {
-//            socket.emit(ServerConstants.UPDATE_SETTINGS_DATA,
-//                    JSONUtils.encodeJSON(
-//                            ServerConstants.NOTIF_ACTION,
-//                            ServerConstants.NOTIF_ONESIGNAL_ADD, true,
-//                            ServerConstants.NOTIF_ONESIGNAL_PLAYER_ID, playerID,
-//                            ServerConstants.NOTIF_ONESIGNAL_DEVICE_NAME,
-//                            deviceInfo.getDeviceName(),
-//                            ServerConstants.NOTIF_ONESIGNAL_APP_VERSION,
-//                            deviceInfo.getAppVersion()),
-//                    (Ack) args -> {
-//                        if (args.length > 0 && args[0] != null) {
-//                            if (args[0].toString().equalsIgnoreCase("success")) {
-//                                new SettingsUtils(context, settingsCallback)
-//                                        .requestSettingsData(socket);
-//                            } else {
-//                                Timber.d("Failed to register with Pifire");
-//                            }
-//                        }
-//                    });
-//        }
-//    }
 
     public static void checkOneSignalStatus(Activity activity, Socket socket) {
         int status = OneSignalUtils.checkRegistration(activity);

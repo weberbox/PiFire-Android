@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
@@ -28,7 +29,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -45,6 +48,7 @@ import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.ImageViewDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.RecipeExportUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
@@ -81,6 +85,8 @@ public class RecipeViewFragment extends Fragment {
         if (bundle != null) {
             recipeId = bundle.getInt(Constants.INTENT_RECIPE_ID, -1);
         }
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
             recipeDB = RecipeDatabase.getInstance(getActivity().getApplicationContext());
@@ -162,12 +168,16 @@ public class RecipeViewFragment extends Fragment {
 
         fabPrint.setOnClickListener(v -> {
             fabActionsClicked();
-            printRecipe();
+            if (recipe != null && recipe.getId() != -1) {
+                printRecipe();
+            }
         });
 
         fabShare.setOnClickListener(v -> {
             fabActionsClicked();
-            shareRecipe();
+            if (recipe != null && recipe.getId() != -1) {
+                shareRecipe();
+            }
         });
 
         if (recipeDB != null && recipeId != -1) {
@@ -271,11 +281,14 @@ public class RecipeViewFragment extends Fragment {
     }
 
     private void loadRecipeImage(Uri uri) {
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new RoundedCorners(ViewUtils.dpToPx(20)));
         Glide.with(this)
                 .load(uri)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .placeholder(R.drawable.ic_recipe_placeholder)
                 .error(R.drawable.ic_recipe_placeholder_error)
+                .apply(requestOptions)
                 .into(recipeImage);
     }
 
@@ -293,6 +306,18 @@ public class RecipeViewFragment extends Fragment {
                     .show();
         }
     }
+
+    private final OnBackPressedCallback onBackCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (fabClicked) {
+                fabActionsClicked();
+            } else {
+                this.setEnabled(false);
+                requireActivity().onBackPressed();
+            }
+        }
+    };
 
     private void printRecipe() {
         WebView webView = new WebView(getActivity());
