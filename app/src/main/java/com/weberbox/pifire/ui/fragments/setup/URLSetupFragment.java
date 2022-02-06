@@ -2,6 +2,7 @@ package com.weberbox.pifire.ui.fragments.setup;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -162,6 +163,10 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
         }
 
         ImageView scanQRButton = binding.useQrcode;
+        if (!cameraAvailable()) {
+            scanQRButton.setVisibility(View.GONE);
+        }
+
         scanQRButton.setOnClickListener(view1 -> {
             if (Alerter.isShowing()) {
                 Alerter.hide();
@@ -435,6 +440,11 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
 
     private void showAlerter(Activity activity, String message) {
         AlertUtils.createErrorAlert(activity, message, false);
+    }
+
+    public boolean cameraAvailable() {
+        return requireActivity().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA_ANY);
     }
 
     private void requestPermissionCamera() {
