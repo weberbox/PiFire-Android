@@ -35,7 +35,9 @@
                 android:layout_width="0dp"
                 android:layout_height="300dp"
                 android:layout_margin="@dimen/medium_spacing"
+                app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/re_name"
@@ -45,8 +47,9 @@
                     android:id="@+id/re_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/ic_recipe_placeholder"
-                    android:contentDescription="@string/placeholder_img" />
+                    android:contentDescription="@string/placeholder_img"
+                    android:transitionName="recipe_image"
+                    tools:src="@drawable/ic_recipe_placeholder" />
 
             </androidx.cardview.widget.CardView>
 
@@ -67,15 +70,13 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/re_name_text"
+                    style="@style/TextInputEditTextFilledSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/aller_regular"
                     android:hint="@string/recipes_title_hint"
                     android:inputType="textCapWords"
                     android:maxLines="1"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
                     android:textColor="@color/colorWhite"
                     android:textColorHighlight="@color/colorAccent" />
 
@@ -96,15 +97,13 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/re_time_text"
+                    style="@style/TextInputEditTextFilledSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:focusable="false"
-                    android:fontFamily="@font/aller_regular"
                     android:hint="@string/recipes_cooking_time"
                     android:maxLines="1"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
                     android:text="@string/def_recipe_time"
                     android:textColor="@color/colorWhite"
                     android:textColorHighlight="@color/colorAccent" />
@@ -126,15 +125,13 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/re_difficulty_text"
+                    style="@style/TextInputEditTextFilledSmall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:focusable="false"
-                    android:fontFamily="@font/aller_regular"
                     android:hint="@string/recipes_difficulty_level"
                     android:maxLines="1"
-                    android:paddingStart="2dp"
-                    android:paddingEnd="2dp"
                     android:text="@string/def_recipe_diff"
                     android:textColor="@color/colorWhite"
                     android:textColorHighlight="@color/colorAccent" />
@@ -145,8 +142,8 @@
                 android:id="@+id/re_recyclers_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/re_image_container">
 
                 <RelativeLayout
@@ -155,7 +152,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="@dimen/large_spacing"
-                    android:animateLayoutChanges="true"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/re_instructions_container"
                     app:layout_constraintStart_toStartOf="parent"

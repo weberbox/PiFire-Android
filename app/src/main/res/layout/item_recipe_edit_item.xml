@@ -26,15 +26,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_qty"
-            style="@style/Text14Aller"
+            style="@style/TextInputEditTextFilledSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:hint="@string/recipes_item_qty"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            android:paddingStart="2dp"
-            android:paddingEnd="2dp"
             android:textColorHighlight="@color/colorAccent"
             app:autoSizeTextType="uniform" />
 
@@ -56,15 +54,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_unit"
-            style="@style/Text14Aller"
+            style="@style/TextInputEditTextFilledSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:inputType="textCapWords"
             android:hint="@string/recipes_item_unit"
             android:maxLines="1"
-            android:paddingStart="2dp"
-            android:paddingEnd="2dp"
             android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -85,15 +81,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_item_value"
-            style="@style/Text14Aller"
+            style="@style/TextInputEditTextFilledSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:hint="@string/recipes_item_value"
-            android:inputType="textCapWords"
+            android:inputType="textCapSentences"
             android:maxLines="1"
-            android:paddingStart="2dp"
-            android:paddingEnd="2dp"
             android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>

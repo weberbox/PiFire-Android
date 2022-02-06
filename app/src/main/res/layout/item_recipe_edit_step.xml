@@ -24,14 +24,12 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/recipe_edit_step_text"
-            style="@style/Text14Aller"
+            style="@style/TextInputEditTextFilledSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:hint="@string/recipes_item_step"
             android:inputType="textCapSentences"
-            android:paddingStart="2dp"
-            android:paddingEnd="2dp"
             android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>

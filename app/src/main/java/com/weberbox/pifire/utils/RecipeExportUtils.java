@@ -86,12 +86,12 @@ public class RecipeExportUtils {
 
         if (list != null && list.size() > 0) {
             int count = 1;
-            instructions.add(String.format("%s:\n\n", context.getString(
+            instructions.add(String.format("%s:\n", context.getString(
                     R.string.recipes_instructions)));
 
             for (RecipeItems item : list) {
                 if (item.getType() == RECIPE_STEP_SECTION) {
-                    String value = String.format("%s", item.getValue());
+                    String value = String.format("\n%s\n", item.getValue());
                     instructions.add(value);
                 }
                 if (item.getType() == RECIPE_TYPE_STEP) {
@@ -99,8 +99,8 @@ public class RecipeExportUtils {
                     count++;
                     instructions.add(value);
                 }
-                instructions.add("\n");
             }
+            instructions.add("\n");
             return TextUtils.join("", instructions);
         } else {
             return "";
@@ -223,8 +223,8 @@ public class RecipeExportUtils {
                     count++;
                     instructions.add(value);
                 }
-                instructions.add("</ul>");
             }
+            instructions.add("</ul>");
             return TextUtils.join("", instructions);
         } else {
             return "";

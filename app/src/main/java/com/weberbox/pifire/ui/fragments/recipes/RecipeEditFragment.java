@@ -2,6 +2,8 @@ package com.weberbox.pifire.ui.fragments.recipes;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,7 +27,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -48,6 +55,7 @@ import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.RecipeDiffDialog;
 import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.StringUtils;
@@ -83,6 +91,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        postponeEnterTransition();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -153,7 +162,13 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         ItemTouchHelper instructionsTouchHelper = new ItemTouchHelper(instructionsDeleteCallback);
         instructionsTouchHelper.attachToRecyclerView(instructionsRecycler);
 
-        recipeImage.setOnClickListener(v -> showImagePickerDialog());
+        recipeImage.setOnClickListener(v -> {
+            if (cameraAvailable()) {
+                showImagePickerDialog();
+            } else {
+                openImageGallery();
+            }
+        });
 
         floatingActionButton.setOnClickListener(v -> updateRecipe());
 
@@ -240,7 +255,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
         recipeName.setText(name);
 
-        if (image != null) loadRecipeImage(Uri.parse(image));
+        loadRecipeImage(image);
+
         if (difficulty != null) {
             recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
             recipeDifficulty.setTag(difficulty);
@@ -274,12 +290,29 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         recipeNotes.addTextChangedListener(textWatcher);
     }
 
-    private void loadRecipeImage(Uri uri) {
-        Glide.with(this)
-                .load(uri)
+    private void loadRecipeImage(String uri) {
+        Glide.with(requireActivity())
+                .load(uri != null ? Uri.parse(uri) : R.drawable.ic_recipe_placeholder)
                 .placeholder(R.drawable.ic_recipe_placeholder)
                 .error(R.drawable.ic_recipe_placeholder_error)
+                .transform(new RoundedCorners(ViewUtils.dpToPx(10)))
                 .transition(DrawableTransitionOptions.withCrossFade())
+                .listener(new RequestListener<>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                Target<Drawable> target, boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model,
+                                                   Target<Drawable> target, DataSource dataSource,
+                                                   boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+                })
                 .into(recipeImage);
     }
 
@@ -334,14 +367,16 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                             requestNewImageUri.launch(intent);
                         })
                 .setPositiveButton(getString(R.string.dialog_gallery),
-                        R.drawable.ic_gallery, (dialogInterface, which) -> {
-                            Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
-                                    .setImageGallery()
-                                    .build(requireActivity());
-                            requestNewImageUri.launch(intent);
-                        })
+                        R.drawable.ic_gallery, (dialogInterface, which) -> openImageGallery())
                 .build();
         dialog.show();
+    }
+
+    private void openImageGallery() {
+        Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
+                .setImageGallery()
+                .build(requireActivity());
+        requestNewImageUri.launch(intent);
     }
 
     private final StartDragListener ingredientsDragListener = new StartDragListener() {
@@ -429,7 +464,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                             onRecipeUpdated();
                             Uri uri = data.getParcelableExtra("path");
                             recipe.setImage(uri.toString());
-                            loadRecipeImage(uri);
+                            loadRecipeImage(uri.toString());
                             cleanImageDir(uri);
                         }
                     } else if (result.getResultCode() == UCrop.RESULT_ERROR) {
@@ -498,6 +533,11 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
 
         unsavedChanged = false;
         requireActivity().onBackPressed();
+    }
+
+    public boolean cameraAvailable() {
+        return requireActivity().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA_ANY);
     }
 
     private void cleanImageDir(Uri uri) {

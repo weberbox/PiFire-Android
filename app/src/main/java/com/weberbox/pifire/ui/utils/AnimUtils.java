@@ -185,8 +185,8 @@ public class AnimUtils {
         view.startAnimation(animation);
     }
 
-    public static void fabFromBottomAnim(View view) {
-        AnimationSet animation = new AnimationSet(false);
+    public static void fabFromBottomAnim(FloatingActionButton fab) {
+        AnimationSet animation = new AnimationSet(true);
         Animation alpha = new AlphaAnimation(0f, 1f);
         Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
@@ -201,25 +201,13 @@ public class AnimUtils {
         animation.addAnimation(scale);
         animation.addAnimation(alpha);
         animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setClickable(true);
-            }
-        });
-        view.startAnimation(animation);
+        fab.setVisibility(View.VISIBLE);
+        fab.setClickable(true);
+        fab.startAnimation(animation);
     }
 
-    public static void fabToBottomAnim(View view) {
+    public static void fabToBottomAnim(FloatingActionButton fab) {
+        AnimationSet animation = new AnimationSet(true);
         Animation alpha = new AlphaAnimation(1f, 0f);
         Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
@@ -229,27 +217,13 @@ public class AnimUtils {
         scaleUp.setInterpolator(new LinearInterpolator());
         trans.setDuration(300);
         alpha.setDuration(100);
-        AnimationSet animation = new AnimationSet(false);
         animation.addAnimation(trans);
         animation.addAnimation(scaleUp);
         animation.addAnimation(alpha);
-        animation.setFillAfter(true);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                view.setClickable(false);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-        view.startAnimation(animation);
+        animation.setFillAfter(false);
+        fab.startAnimation(animation);
+        fab.setVisibility(View.GONE);
+        fab.setClickable(false);
     }
 
     @SuppressWarnings("unused")

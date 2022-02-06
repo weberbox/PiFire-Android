@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.recipes;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,11 +28,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.ImageViewDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.ui.utils.ImageTransition;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.RecipeExportUtils;
 import com.weberbox.pifire.utils.StringUtils;
@@ -151,19 +153,8 @@ public class RecipeViewFragment extends Fragment {
         fabActions.setOnClickListener(v -> fabActionsClicked());
 
         fabEdit.setOnClickListener(v -> {
+            fabActions.addOnShrinkAnimationListener(listener);
             fabActionsClicked();
-            if (getActivity() != null) {
-                RecipeEditFragment fragment = new RecipeEditFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.INTENT_RECIPE_ID, recipe.getId());
-                fragment.setArguments(bundle);
-                final FragmentManager fm = getActivity().getSupportFragmentManager();
-                final FragmentTransaction ft = fm.beginTransaction();
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .replace(android.R.id.content, fragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
         });
 
         fabPrint.setOnClickListener(v -> {
@@ -213,6 +204,27 @@ public class RecipeViewFragment extends Fragment {
         }
     }
 
+    private void openRecipeEditFragment() {
+        RecipeEditFragment fragment = new RecipeEditFragment();
+        fragment.setSharedElementEnterTransition(new ImageTransition());
+        fragment.setEnterTransition(new AutoTransition());
+        setExitTransition(new AutoTransition());
+        fragment.setSharedElementReturnTransition(new ImageTransition());
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.INTENT_RECIPE_ID, recipe.getId());
+        fragment.setArguments(bundle);
+
+        final FragmentManager fm = requireActivity().getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .setReorderingAllowed(true)
+                .replace(android.R.id.content, fragment)
+                .addToBackStack(null)
+                .addSharedElement(recipeImage, "recipe_image")
+                .commit();
+    }
+
     private void updateUIWithData(RecipesModel recipe) {
         String name = recipe.getName();
         Float rating = recipe.getRating();
@@ -229,7 +241,8 @@ public class RecipeViewFragment extends Fragment {
 
         recipeName.setText(name);
 
-        if (image != null) loadRecipeImage(Uri.parse(image));
+        loadRecipeImage(image);
+
         if (rating != null) recipeRating.setRating(rating);
         if (time != null) recipeTime.setText(TimeUtils.parseRecipeTime(time));
         if (difficulty != null) recipeDifficulty.setText(StringUtils.getDifficultyText(difficulty));
@@ -280,15 +293,13 @@ public class RecipeViewFragment extends Fragment {
         }
     }
 
-    private void loadRecipeImage(Uri uri) {
-        RequestOptions requestOptions = new RequestOptions()
-                .transform(new RoundedCorners(ViewUtils.dpToPx(20)));
+    private void loadRecipeImage(String uri) {
         Glide.with(this)
-                .load(uri)
-                .transition(DrawableTransitionOptions.withCrossFade())
+                .load(uri != null ? Uri.parse(uri) : R.drawable.ic_recipe_placeholder)
                 .placeholder(R.drawable.ic_recipe_placeholder)
                 .error(R.drawable.ic_recipe_placeholder_error)
-                .apply(requestOptions)
+                .transform(new RoundedCorners(ViewUtils.dpToPx(10)))
+                .transition(DrawableTransitionOptions.withCrossFade())
                 .into(recipeImage);
     }
 
@@ -395,6 +406,26 @@ public class RecipeViewFragment extends Fragment {
                     fabActionsClicked();
                 }
             }
+        }
+    };
+
+    private final Animator.AnimatorListener listener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            fabActions.removeOnShrinkAnimationListener(listener);
+            openRecipeEditFragment();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
         }
     };
 }

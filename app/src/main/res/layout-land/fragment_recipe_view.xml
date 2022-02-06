@@ -65,8 +65,9 @@
                         android:id="@+id/rv_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:src="@drawable/ic_recipe_placeholder"
-                        android:contentDescription="@string/placeholder_img" />
+                        android:contentDescription="@string/placeholder_img"
+                        android:transitionName="recipe_image"
+                        tools:src="@drawable/ic_recipe_placeholder" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -279,7 +280,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <include android:id="@+id/recipe_view_fab"
+    <include
+        android:id="@+id/recipe_view_fab"
         layout="@layout/layout_recipes_view_fab" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

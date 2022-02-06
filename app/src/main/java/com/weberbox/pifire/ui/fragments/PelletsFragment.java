@@ -227,13 +227,11 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         });
 
         addNewBrand.setOnClickListener(v -> {
-            if (getActivity() != null) {
-                if (socketConnected()) {
-                    PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
-                            PelletsFragment.this, Constants.PELLET_BRAND,
-                            getString(R.string.pellets_add_brand));
-                    pelletsAddDialog.showDialog();
-                }
+            if (socketConnected()) {
+                PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
+                        PelletsFragment.this, Constants.PELLET_BRAND,
+                        getString(R.string.pellets_add_brand));
+                pelletsAddDialog.showDialog();
             }
         });
 
