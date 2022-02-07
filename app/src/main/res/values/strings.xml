@@ -41,7 +41,7 @@
 
     <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
     <string name="disabled_option_dialog_title">Disabled Feature</string>
-    <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher to function. Please upgrade to a newer version to use this function.</string>
+    <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher is required. Please upgrade to a newer version to use this function.</string>
 
     <string name="on">On</string>
     <string name="off">Off</string>

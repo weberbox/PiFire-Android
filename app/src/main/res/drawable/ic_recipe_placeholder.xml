@@ -3,8 +3,8 @@
     <item>
         <shape>
             <size
-                android:width="120dp"
-                android:height="120dp" />
+                android:width="200dp"
+                android:height="200dp" />
             <solid android:color="@color/colorPrimaryLighter" />
             <corners
                 android:bottomLeftRadius="10dp"

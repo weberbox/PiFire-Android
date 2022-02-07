@@ -82,19 +82,19 @@ public class SettingsUtils {
             }
 
             if (historyPage != null) {
-                putIntegerString(R.string.prefs_history_display, historyPage.getMinutes());
+                putIntString(R.string.prefs_history_display, historyPage.getMinutes());
                 putBoolean(R.string.prefs_history_clear, historyPage.getClearHistoryOnStart());
                 putBoolean(R.string.prefs_history_auto, historyPage.getAutoRefresh().equals("on"));
-                putIntegerString(R.string.prefs_history_points, historyPage.getDataPoints());
+                putIntString(R.string.prefs_history_points, historyPage.getDataPoints());
             }
 
             if (globals != null) {
                 putString(R.string.prefs_grill_name, globals.getGrillName());
                 putBoolean(R.string.prefs_admin_debug, globals.getDebugMode());
-                putString(R.string.prefs_shutdown_time, String.valueOf(globals.getShutdownTimer()));
+                putIntString(R.string.prefs_shutdown_time, globals.getShutdownTimer());
 
                 if (globals.getStartUpTimer() != null) {
-                    putIntegerString(R.string.prefs_startup_time, globals.getStartUpTimer());
+                    putIntString(R.string.prefs_startup_time, globals.getStartUpTimer());
                 }
 
                 if (globals.getUnits() != null) {
@@ -166,33 +166,33 @@ public class SettingsUtils {
                 putFloatString(R.string.prefs_work_pid_pb, cycleData.getPb());
                 putFloatString(R.string.prefs_work_pid_ti, cycleData.getTi());
                 putFloatString(R.string.prefs_work_pid_td, cycleData.getTd());
-                putIntegerString(R.string.prefs_work_pid_cycle, cycleData.getHoldCycleTime());
-                putIntegerString(R.string.prefs_work_auger_on, cycleData.getSmokeCycleTime());
-                putIntegerString(R.string.prefs_work_pmode_mode, cycleData.getPMode());
+                putIntString(R.string.prefs_work_pid_cycle, cycleData.getHoldCycleTime());
+                putIntString(R.string.prefs_work_auger_on, cycleData.getSmokeCycleTime());
+                putIntString(R.string.prefs_work_pmode_mode, cycleData.getPMode());
                 putFloatString(R.string.prefs_work_pid_u_max, cycleData.getuMax());
                 putFloatString(R.string.prefs_work_pid_u_min, cycleData.getuMin());
                 putFloatString(R.string.prefs_work_pid_center, cycleData.getCenter());
             }
 
             if (pellets != null) {
-                putIntegerString(R.string.prefs_pellet_empty, pellets.getEmpty());
-                putIntegerString(R.string.prefs_pellet_full, pellets.getFull());
+                putIntString(R.string.prefs_pellet_empty, pellets.getEmpty());
+                putIntString(R.string.prefs_pellet_full, pellets.getFull());
                 putBoolean(R.string.prefs_pellet_warning_enabled, pellets.getWarningEnabled());
-                putIntegerString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel());
+                putIntString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel());
             }
 
             if (smokePlus != null) {
                 putBoolean(R.string.prefs_work_splus_enabled, smokePlus.getEnabled());
-                putIntegerString(R.string.prefs_work_splus_min, smokePlus.getMinTemp());
-                putIntegerString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp());
-                putIntegerString(R.string.prefs_work_splus_fan, smokePlus.getCycle());
+                putIntString(R.string.prefs_work_splus_min, smokePlus.getMinTemp());
+                putIntString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp());
+                putIntString(R.string.prefs_work_splus_fan, smokePlus.getCycle());
             }
 
             if (safety != null) {
-                putIntegerString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
-                putIntegerString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
-                putIntegerString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
-                putIntegerString(R.string.prefs_safety_retries, safety.getReigniteRetries());
+                putIntString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
+                putIntString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
+                putIntString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
+                putIntString(R.string.prefs_safety_retries, safety.getReigniteRetries());
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
@@ -227,7 +227,7 @@ public class SettingsUtils {
         }
     }
 
-    private void putIntegerString(int key, Integer value) {
+    private void putIntString(int key, Integer value) {
         if (value != null) {
             if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
                 Prefs.putString(context.getString(key), String.valueOf(value));

@@ -182,9 +182,9 @@ public class MainActivity extends BaseActivity {
 
                 if (connected) {
                     if (AppConfig.USE_ONESIGNAL) {
-                        if (OneSignalUtils.checkRegistration(MainActivity.this) ==
+                        if (OneSignalUtils.checkRegistration(this) ==
                                 Constants.ONESIGNAL_NOT_REGISTERED) {
-                            OneSignalUtils.registerDevice(MainActivity.this, socket);
+                            OneSignalUtils.registerDevice(this, socket);
                         }
                     }
                 }
