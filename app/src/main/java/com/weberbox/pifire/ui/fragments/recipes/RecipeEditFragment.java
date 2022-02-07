@@ -262,7 +262,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             recipeDifficulty.setTag(difficulty);
         }
         if (time != null) {
-            recipeTime.setText(TimeUtils.parseRecipeTime(time));
+            recipeTime.setText(TimeUtils.parseRecipeTime(time).trim());
             recipeTime.setTag(time);
         }
 
@@ -330,7 +330,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     @Override
     public void onRecipeTime(String hours, String minutes) {
         Long millis = TimeUtils.getTimeInMillis(hours, minutes);
-        recipeTime.setText(TimeUtils.parseRecipeTime(millis));
+        recipeTime.setText(TimeUtils.parseRecipeTime(millis).trim());
         recipeTime.setTag(millis);
     }
 

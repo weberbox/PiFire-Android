@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class StringUtils {
 
-    public static String cleanString(String[] strings, String delimiter) {
+    public static String cleanStrings(String[] strings, String delimiter) {
         return Stream.of(strings).filter(s -> s != null && !s.isEmpty())
                 .collect(Collectors.joining(delimiter));
     }

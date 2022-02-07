@@ -59,7 +59,7 @@ public class RecipeViewAdapter extends RecyclerView.Adapter<RecipeViewAdapter.Vi
                 TextView item = holder.itemBinding.recipeItemViewText;
                 AppCompatCheckBox checkBox = holder.itemBinding.recipeItemViewCheckbox;
                 String[] recipeItem = { items.getQuantity(), items.getUnit() , items.getValue() };
-                item.setText(StringUtils.cleanString(recipeItem, " "));
+                item.setText(StringUtils.cleanStrings(recipeItem, " "));
                 checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
                         item.setPaintFlags(item.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

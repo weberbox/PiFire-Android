@@ -67,7 +67,7 @@ public class RecipeExportUtils {
                 if (item.getType() == RECIPE_TYPE_ITEM) {
                     String[] recipeItem = {item.getQuantity(), item.getUnit(), item.getValue()};
                     String value = String.format("- %s\n",
-                            StringUtils.cleanString(recipeItem, " "));
+                            StringUtils.cleanStrings(recipeItem, " "));
                     ingredients.add(value);
                 }
             }
@@ -189,7 +189,7 @@ public class RecipeExportUtils {
                 if (item.getType() == RECIPE_TYPE_ITEM) {
                     String[] recipeItem = {item.getQuantity(), item.getUnit(), item.getValue()};
                     String value = String.format("<li>%s</li>",
-                            StringUtils.cleanString(recipeItem, " "));
+                            StringUtils.cleanStrings(recipeItem, " "));
                     ingredients.add(value);
                 }
             }
@@ -219,7 +219,7 @@ public class RecipeExportUtils {
                 if (item.getType() == RECIPE_TYPE_STEP) {
                     String[] recipeItem = {item.getQuantity(), item.getUnit(), item.getValue()};
                     String value = String.format("<ol>%s - %s</ol>", count,
-                            StringUtils.cleanString(recipeItem, " "));
+                            StringUtils.cleanStrings(recipeItem, " "));
                     count++;
                     instructions.add(value);
                 }

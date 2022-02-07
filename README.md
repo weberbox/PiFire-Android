@@ -2,7 +2,9 @@
 ## A native Android app for the PiFire smoker project
 
 ### Introduction
-This app was created to work with the PiFire smoker project. I wanted a native Android app to control my smoker using the awesome PiFire project so I created this.
+This app was created to work with the PiFire smoker project. I wanted a native Android app to control my smoker using the awesome PiFire project so I created this. 
+
+**Note:** I am not a developer by trade and this is just a hobby for me. While I try my best to keep the app stable you may find bugs or experience a crash. If you see something in the code that could be done better please let me know, I am always willing to learn more.
 
 ## Screenshots
 Dashboard | History | Event Log | Pellet Manager
