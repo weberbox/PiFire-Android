@@ -3,6 +3,8 @@ package com.weberbox.pifire.utils;
 import android.app.Activity;
 import android.content.Context;
 
+import com.weberbox.pifire.constants.Constants;
+
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -29,7 +31,7 @@ public class OneSignalUtils {
     }
 
     public static int checkRegistration(Context context) {
-        return 4;
+        return Constants.ONESIGNAL_REGISTERED;
     }
 
     public static void checkOneSignalStatus(Activity activity, Socket socket) {

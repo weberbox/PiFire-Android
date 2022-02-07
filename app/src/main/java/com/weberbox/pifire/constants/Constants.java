@@ -17,11 +17,6 @@ public class Constants {
     public static final int PICKER_TYPE_PROBE_ONE = 1;
     public static final int PICKER_TYPE_PROBE_TWO = 2;
 
-    // Callback Timer Type
-    public static final int ACTION_TIMER_RESTART = 0;
-    public static final int ACTION_TIMER_STOP = 1;
-    public static final int ACTION_TIMER_PAUSE = 2;
-
     // Callback Backup/Restore Type
     public static final int ACTION_BACKUP_SETTINGS = 0;
     public static final int ACTION_BACKUP_PELLETDB = 1;
