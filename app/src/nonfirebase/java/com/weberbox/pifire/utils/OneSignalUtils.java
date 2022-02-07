@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class OneSignalUtils {
 
