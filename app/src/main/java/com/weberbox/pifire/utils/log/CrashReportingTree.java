@@ -6,8 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.pixplicity.easyprefs.library.Prefs;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,9 +17,11 @@ public class CrashReportingTree extends Timber.Tree {
 
     private static final int CALL_STACK_INDEX = 6;
     private static final Pattern ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$");
+    private static boolean logDebugEvents;
 
-    public CrashReportingTree(String tag) {
+    public CrashReportingTree(String tag, boolean logDebug) {
         TAG = tag;
+        logDebugEvents = logDebug;
     }
 
     @Nullable
@@ -51,7 +51,7 @@ public class CrashReportingTree extends Timber.Tree {
             case Log.VERBOSE:
                 break;
             case Log.DEBUG:
-                if (Prefs.getBoolean("prefs_debug_logging")) {
+                if (logDebugEvents) {
                     Log.d(TAG, getTag() + " / " + message);
                 }
                 break;

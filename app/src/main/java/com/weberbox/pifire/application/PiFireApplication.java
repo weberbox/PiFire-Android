@@ -39,7 +39,8 @@ public class PiFireApplication extends Application {
                 .build();
 
         if (!AppConfig.DEBUG || Prefs.getBoolean(getString(R.string.prefs_dev_crash_enable))) {
-            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
+            Timber.plant(new CrashReportingTree(getString(R.string.app_name),
+                    Prefs.getBoolean(getString(R.string.prefs_debug_logging))));
             CrashUtils.initCrashReporting(this,
                     Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
             CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));

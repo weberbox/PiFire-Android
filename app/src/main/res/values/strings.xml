@@ -248,7 +248,7 @@
 
     <string name="settings_cat_debug">Debug</string>
     <string name="settings_debug_logging">Debug Logging</string>
-    <string name="settings_debug_logging_summary">This enables debug logging. May impact performance</string>
+    <string name="settings_debug_logging_summary">App must be fully restarted to take effect. May impact performance.</string>
 
     <string name="settings_cat_updates">Update Checking</string>
     <string name="settings_update_enabled">Enabled</string>
@@ -342,7 +342,7 @@
     <string name="settings_cat_keep_warm">Keep Warm Settings</string>
     <string name="settings_keep_warm_s_plus">Smoke Plus Enabled</string>
     <string name="settings_keep_warm_temp">Keep Warm Temp</string>
-    <string name="settings_keep_warm_note">The Keep Warm Mode will be activated when selected once a probe set temp has been achieved or the set timer has expired. The Grill will exit the currently running mode then switch to Hold Mode and attempt to maintain the temperature set above. You can also enable or disable the Smoke Plus feature during Keep Warm Mode</string>
+    <string name="settings_keep_warm_note">The Keep Warm option will be activated when selected once a probe set temp has been achieved or the set timer has expired. The Grill will exit the currently running mode then switch to Hold Mode and attempt to maintain the temperature set above. You can also enable or disable the Smoke Plus feature during Keep Warm</string>
 
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>

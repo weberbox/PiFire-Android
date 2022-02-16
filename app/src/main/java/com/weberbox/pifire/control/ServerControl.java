@@ -155,15 +155,15 @@ public class ServerControl {
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe1(Integer.valueOf(temp)))
                             .withNotifyReq(new NotifyReq().withProbe1(true))
-                            .withNotifyData(new NotifyData().withP1Shutdown(shutdown))
-                            .withNotifyData(new NotifyData().withP1KeepWarm(keepWarm)));
+                            .withNotifyData(new NotifyData().withP1Shutdown(shutdown)
+                                    .withP1KeepWarm(keepWarm)));
                     break;
                 case Constants.PICKER_TYPE_PROBE_TWO:
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe2(Integer.valueOf(temp)))
                             .withNotifyReq(new NotifyReq().withProbe2(true))
-                            .withNotifyData(new NotifyData().withP2Shutdown(shutdown))
-                            .withNotifyData(new NotifyData().withP2KeepWarm(keepWarm)));
+                            .withNotifyData(new NotifyData().withP2Shutdown(shutdown)
+                                    .withP2KeepWarm(keepWarm)));
                     break;
             }
             if (json != null) {
@@ -187,15 +187,15 @@ public class ServerControl {
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe1(0))
                             .withNotifyReq(new NotifyReq().withProbe1(false))
-                            .withNotifyData(new NotifyData().withP1Shutdown(false))
-                            .withNotifyData(new NotifyData().withP1KeepWarm(false)));
+                            .withNotifyData(new NotifyData().withP1Shutdown(false)
+                                    .withP1KeepWarm(false)));
                     break;
                 case Constants.PICKER_TYPE_PROBE_TWO:
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe2(0))
                             .withNotifyReq(new NotifyReq().withProbe2(false))
-                            .withNotifyData(new NotifyData().withP2Shutdown(false))
-                            .withNotifyData(new NotifyData().withP2KeepWarm(false)));
+                            .withNotifyData(new NotifyData().withP2Shutdown(false)
+                                    .withP2KeepWarm(false)));
                     break;
             }
             if (json != null) {

@@ -55,15 +55,16 @@ public class OneSignalUtils {
                             ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
                                     OneSignalUtils::processPostResponse);
                         }
-                        addOneSignalDevice(context, socket, playerID, getDevice());
+                        registerOneSignalDevice(context, socket, playerID,
+                                getDevice(context, playerID));
                     }
                 }
             }
         }
     }
 
-    private static void addOneSignalDevice(Context context, Socket socket, String playerID,
-                                           OneSignalDeviceInfo deviceInfo) {
+    private static void registerOneSignalDevice(Context context, Socket socket, String playerID,
+                                                OneSignalDeviceInfo deviceInfo) {
         if (socket.connected()) {
             Map<String, OneSignalDeviceInfo> device = new HashMap<>();
             device.put(playerID, deviceInfo);
@@ -146,12 +147,21 @@ public class OneSignalUtils {
         return Constants.ONESIGNAL_REGISTERED;
     }
 
-    private static OneSignalDeviceInfo getDevice() {
-        OneSignalDeviceInfo device = new OneSignalDeviceInfo();
-        device.setDeviceName(android.os.Build.MODEL);
-        device.setFriendlyName("");
-        device.setAppVersion(BuildConfig.VERSION_NAME);
-        return device;
+    private static OneSignalDeviceInfo getDevice(Context context, String playerID) {
+        OneSignalDeviceInfo newDevice = new OneSignalDeviceInfo();
+        newDevice.setDeviceName(android.os.Build.MODEL);
+        newDevice.setFriendlyName("");
+        newDevice.setAppVersion(BuildConfig.VERSION_NAME);
+
+        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
+        OneSignalDeviceInfo existingDevice = devicesHash.getOrDefault(playerID, newDevice);
+
+        if (existingDevice != null) {
+            existingDevice.setAppVersion(BuildConfig.VERSION_NAME);
+            return existingDevice;
+        } else {
+            return newDevice;
+        }
     }
 
     private static Map<String, OneSignalDeviceInfo> getDevicesHash(Context context) {
