@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -37,6 +39,7 @@ import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
+import com.weberbox.pifire.ui.fragments.ChangelogFragment;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
@@ -62,6 +65,8 @@ public class MainActivity extends BaseActivity {
     private FrameLayout endPanel;
     private Socket socket;
     private int downX;
+
+    private boolean firstLaunch = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,6 +134,8 @@ public class MainActivity extends BaseActivity {
                     navController.navigate(R.id.nav_info);
                 } else if (id == R.id.nav_settings) {
                     navController.navigate(R.id.nav_settings);
+                } else if (id == R.id.nav_changelog) {
+                    showChangelog();
                 }
             }
             panelsLayout.closePanels();
@@ -176,15 +183,22 @@ public class MainActivity extends BaseActivity {
             navGrillName.setText(grillName);
         }
 
+        if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
+            Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
+            showChangelog();
+        }
+
         mainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(this, connected);
 
-                if (connected) {
-                    if (AppConfig.USE_ONESIGNAL) {
-                        if (OneSignalUtils.checkRegistration(this) ==
-                                Constants.ONESIGNAL_NOT_REGISTERED) {
-                            OneSignalUtils.registerDevice(this, socket);
+                if (AppConfig.USE_ONESIGNAL) {
+                    if (connected && firstLaunch) {
+                        firstLaunch = false;
+                        int registrationResult = OneSignalUtils.checkRegistration(this);
+                        if (registrationResult == Constants.ONESIGNAL_NOT_REGISTERED ||
+                                registrationResult == Constants.ONESIGNAL_APP_UPDATED) {
+                            OneSignalUtils.registerDevice(this, socket, registrationResult);
                         }
                     }
                 }
@@ -333,6 +347,15 @@ public class MainActivity extends BaseActivity {
         ImageButton navButton = view.findViewById(R.id.action_bar_button);
         navButton.setOnClickListener(v ->
                 panelsLayout.openStartPanel());
+    }
+
+    private void showChangelog() {
+        final FragmentManager fm = getSupportFragmentManager();
+        final FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(android.R.id.content, new ChangelogFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     public void connectSocketListenData(Socket socket) {

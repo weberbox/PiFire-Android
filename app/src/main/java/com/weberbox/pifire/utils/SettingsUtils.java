@@ -9,22 +9,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.interfaces.SettingsCallback;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
-import com.weberbox.pifire.model.remote.SettingsDataModel.GrillProbeModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.HistoryPage;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Ifttt;
-import com.weberbox.pifire.model.remote.SettingsDataModel.InfluxDB;
-import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalPush;
-import com.weberbox.pifire.model.remote.SettingsDataModel.PelletLevel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeProfileModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeSettings;
-import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeTypes;
-import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Safety;
-import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Versions;
+import com.weberbox.pifire.model.remote.SettingsDataModel.*;
 
 import java.util.Map;
 
@@ -68,6 +53,7 @@ public class SettingsUtils {
             InfluxDB influxDB = settingsResponse.getInfluxDB();
             ProbeTypes probeTypes = settingsResponse.getProbeTypes();
             CycleData cycleData = settingsResponse.getCycleData();
+            KeepWarm keepWarm = settingsResponse.getKeepWarm();
             SmokePlus smokePlus = settingsResponse.getSmokePlus();
             Safety safety = settingsResponse.getSafety();
             PelletLevel pellets = settingsResponse.getPellets();
@@ -172,6 +158,11 @@ public class SettingsUtils {
                 putFloatString(R.string.prefs_work_pid_u_max, cycleData.getuMax());
                 putFloatString(R.string.prefs_work_pid_u_min, cycleData.getuMin());
                 putFloatString(R.string.prefs_work_pid_center, cycleData.getCenter());
+            }
+
+            if (keepWarm != null) {
+                putIntString(R.string.prefs_work_keep_warm_temp, keepWarm.getTemp());
+                putBoolean(R.string.prefs_work_keep_warm_s_plus, keepWarm.getSPlus());
             }
 
             if (pellets != null) {

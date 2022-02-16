@@ -288,7 +288,7 @@ public class InfoFragment extends Fragment {
                             licenses.add(project);
                         }
 
-                        licensesListAdapter.setList(licenses);
+                        requireActivity().runOnUiThread(() -> licensesListAdapter.setList(licenses));
 
                     }
 

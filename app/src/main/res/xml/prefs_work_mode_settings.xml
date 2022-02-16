@@ -142,4 +142,29 @@
         </Preference>
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_keep_warm">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_keep_warm_s_plus"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_keep_warm_s_plus"
+            app:title="@string/settings_keep_warm_s_plus" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_keep_warm_temp"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_keep_warm_temp"
+            app:title="@string/settings_keep_warm_temp"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_keep_warm_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

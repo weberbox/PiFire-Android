@@ -269,6 +269,9 @@ public class PostDataModel {
         @SerializedName("timer_shutdown")
         @Expose
         private Boolean timerShutdown;
+        @SerializedName("timer_keep_warm")
+        @Expose
+        private Boolean timerKeepWarm;
 
         public Integer getHours() {
             return hoursRange;
@@ -306,6 +309,19 @@ public class PostDataModel {
 
         public TimerAction withShutdown(Boolean timerShutdown) {
             this.timerShutdown = timerShutdown;
+            return this;
+        }
+
+        public Boolean getKeepWarm() {
+            return timerKeepWarm;
+        }
+
+        public void setKeepWarm(Boolean timerKeepWarm) {
+            this.timerKeepWarm = timerKeepWarm;
+        }
+
+        public TimerAction withKeepWarm(Boolean timerKeepWarm) {
+            this.timerKeepWarm = timerKeepWarm;
             return this;
         }
 

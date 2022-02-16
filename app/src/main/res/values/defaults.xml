@@ -25,10 +25,9 @@
     <bool name="def_notif_influxdb_enabled">false</bool>
 
     <bool name="def_grill_swipe_start">true</bool>
-    <bool name="def_probe_shutdown">true</bool>
-    <bool name="def_timer_shutdown">true</bool>
     <bool name="def_keep_screen_on">false</bool>
     <bool name="def_pellet_warning_enabled">true</bool>
+    <bool name="def_keep_warm_s_plus">false</bool>
 
     <string name="def_grill_temp_unit">F</string>
 
@@ -56,6 +55,8 @@
     <string name="def_pid_u_min">0.15</string>
     <string name="def_pid_u_max">1.0</string>
     <string name="def_pid_center">0.5</string>
+
+    <string name="def_keep_warm_temp">165</string>
 
     <string name="def_shutdown_time">60</string>
     <string name="def_startup_time">240</string>

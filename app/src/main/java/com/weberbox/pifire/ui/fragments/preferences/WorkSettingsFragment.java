@@ -64,129 +64,151 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_pid_u_max));
         EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_pid_u_min));
         EditTextPreference pidCenter = findPreference(getString(R.string.prefs_work_pid_center));
+        SwitchPreferenceCompat keepWarmSPlus = findPreference(getString(R.string.prefs_work_keep_warm_s_plus));
+        EditTextPreference keepWarmTemp = findPreference(getString(R.string.prefs_work_keep_warm_temp));
 
-        if (getActivity() != null) {
 
-            if (pModeTable != null) {
-                pModeTable.setOnPreferenceClickListener(preference -> {
-                    PModeTableDialog pModeTableDialog = new PModeTableDialog(getActivity());
-                    pModeTableDialog.showDialog();
-                    return true;
-                });
-            }
+        if (pModeTable != null) {
+            pModeTable.setOnPreferenceClickListener(preference -> {
+                PModeTableDialog pModeTableDialog = new PModeTableDialog(requireActivity());
+                pModeTableDialog.showDialog();
+                return true;
+            });
+        }
 
-            if (pidPB != null) {
-                pidPB.setOnBindEditTextListener(editText -> {
+        if (pidPB != null) {
+            pidPB.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (pidTi != null) {
+            pidTi.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (pidTd != null) {
+            pidTd.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (augerOnTime != null) {
+            augerOnTime.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (fanCycleTime != null) {
+            fanCycleTime.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (minSmokeTemp != null) {
+            minSmokeTemp.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (maxSmokeTemp != null) {
+            maxSmokeTemp.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (pidCycle != null) {
+            pidCycle.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), editText));
+            });
+        }
+
+        if (pidUMax != null) {
+            if (VersionUtils.isSupported(Versions.V_120)) {
+                pidUMax.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                             InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
+                            new EmptyTextListener(requireActivity(), editText));
                 });
-            }
-
-            if (pidTi != null) {
-                pidTi.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (pidTd != null) {
-                pidTd.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (augerOnTime != null) {
-                augerOnTime.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (fanCycleTime != null) {
-                fanCycleTime.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (minSmokeTemp != null) {
-                minSmokeTemp.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (maxSmokeTemp != null) {
-                maxSmokeTemp.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (pidCycle != null) {
-                pidCycle.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
-                });
-            }
-
-            if (pidUMax != null) {
-                if (VersionUtils.isSupported(Versions.V_120)) {
-                    pidUMax.setOnBindEditTextListener(editText -> {
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                        editText.addTextChangedListener(
-                                new EmptyTextListener(getActivity(), editText));
-                    });
-                } else {
-                    pidUMax.setEnabled(false);
-                    pidUMax.setSummaryProvider(null);
-                    pidUMax.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
-                }
-            }
-
-            if (pidUMin != null) {
-                if (VersionUtils.isSupported(Versions.V_120)) {
-                    pidUMin.setOnBindEditTextListener(editText -> {
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                        editText.addTextChangedListener(
-                                new EmptyTextListener(getActivity(), editText));
-                    });
-                } else {
-                    pidUMin.setEnabled(false);
-                    pidUMin.setSummaryProvider(null);
-                    pidUMin.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
-                }
-            }
-
-            if (pidCenter != null) {
-                if (VersionUtils.isSupported(Versions.V_122)) {
-                    pidCenter.setOnBindEditTextListener(editText -> {
-                        editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                                InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                        editText.addTextChangedListener(
-                                new EmptyTextListener(getActivity(), editText));
-                    });
-                } else {
-                    pidCenter.setEnabled(false);
-                    pidCenter.setSummaryProvider(null);
-                    pidCenter.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
-                }
+            } else {
+                pidUMax.setEnabled(false);
+                pidUMax.setSummaryProvider(null);
+                pidUMax.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
             }
         }
+
+        if (pidUMin != null) {
+            if (VersionUtils.isSupported(Versions.V_120)) {
+                pidUMin.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), editText));
+                });
+            } else {
+                pidUMin.setEnabled(false);
+                pidUMin.setSummaryProvider(null);
+                pidUMin.setSummary(getString(R.string.disabled_option_settings, Versions.V_120));
+            }
+        }
+
+        if (pidCenter != null) {
+            if (VersionUtils.isSupported(Versions.V_122)) {
+                pidCenter.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), editText));
+                });
+            } else {
+                pidCenter.setEnabled(false);
+                pidCenter.setSummaryProvider(null);
+                pidCenter.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
+            }
+        }
+
+        if (keepWarmSPlus != null) {
+            if (!VersionUtils.isSupported(Versions.V_127)) {
+                keepWarmSPlus.setEnabled(false);
+                keepWarmSPlus.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
+            }
+        }
+
+        if (keepWarmTemp != null) {
+            if (VersionUtils.isSupported(Versions.V_127)) {
+                keepWarmTemp.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), editText));
+                });
+            } else {
+                keepWarmTemp.setEnabled(false);
+                keepWarmTemp.setSummaryProvider(null);
+                keepWarmTemp.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
+            }
+        }
+
     }
 
     @Override
@@ -291,11 +313,22 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     ServerControl.setPIDCenter(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
+                if (preference.getContext().getString(R.string.prefs_work_keep_warm_temp)
+                        .equals(preference.getKey())) {
+                    ServerControl.setKeepWarmTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
                         .equals(preference.getKey())) {
                     ServerControl.setSmokePlusDefault(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_work_keep_warm_s_plus)
+                        .equals(preference.getKey())) {
+                    ServerControl.setKeepWarmSPlus(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
                 }

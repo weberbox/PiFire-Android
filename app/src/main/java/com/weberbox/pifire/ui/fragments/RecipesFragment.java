@@ -41,12 +41,12 @@ import java.util.Map;
 public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
         SearchView.OnQueryTextListener, ActionMode.Callback {
 
-    private FragmentRecipesBinding mBinding;
-    private ExtendedFloatingActionButton mFloatingActionButton;
-    private RecipesAdapter mAdapter;
-    private RecipeDatabase mDb;
-    private SwipeRefreshLayout mSwipeRefresh;
-    private ActionMode mActionMode;
+    private FragmentRecipesBinding binding;
+    private ExtendedFloatingActionButton floatingActionButton;
+    private RecipesAdapter adapter;
+    private RecipeDatabase database;
+    private SwipeRefreshLayout swipeRefresh;
+    private ActionMode actionMode;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,26 +56,26 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentRecipesBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentRecipesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recycler = mBinding.recipesRecycler;
-        mFloatingActionButton = mBinding.fabAddRecipes;
-        mSwipeRefresh = mBinding.recipesPullRefresh;
+        RecyclerView recycler = binding.recipesRecycler;
+        floatingActionButton = binding.fabAddRecipes;
+        swipeRefresh = binding.recipesPullRefresh;
 
-        mFloatingActionButton.shrink();
+        floatingActionButton.shrink();
 
         if (getActivity() != null) {
             recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mFloatingActionButton.setOnClickListener(v -> {
-                if (mFloatingActionButton.isExtended() && mActionMode != null) {
+            floatingActionButton.setOnClickListener(v -> {
+                if (floatingActionButton.isExtended() && actionMode != null) {
                     deleteSelectedItems();
-                    mActionMode.finish();
+                    actionMode.finish();
                 } else {
                     startNewRecipeFragment();
                 }
@@ -83,14 +83,14 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
         }
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
-            mDb = RecipeDatabase.getInstance(getActivity().getApplicationContext());
+            database = RecipeDatabase.getInstance(getActivity().getApplicationContext());
         }
 
-        mAdapter = new RecipesAdapter(this);
+        adapter = new RecipesAdapter(this);
         recycler.setNestedScrollingEnabled(false);
-        recycler.setAdapter(mAdapter);
+        recycler.setAdapter(adapter);
 
-        mSwipeRefresh.setOnRefreshListener(this::retrieveRecipes);
+        swipeRefresh.setOnRefreshListener(this::retrieveRecipes);
 
     }
 
@@ -103,15 +103,15 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
     @Override
     public void onPause() {
         super.onPause();
-        if (mActionMode != null) {
-            mActionMode.finish();
+        if (actionMode != null) {
+            actionMode.finish();
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
     }
 
     @Override
@@ -131,13 +131,13 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     @Override
     public boolean onQueryTextChange(String query) {
-        mAdapter.getFilter().filter(query);
+        adapter.getFilter().filter(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mAdapter.getFilter().filter(query);
+        adapter.getFilter().filter(query);
         return false;
     }
 
@@ -147,8 +147,8 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
         if (getActivity() != null) {
             ViewUtils.toggleStatusBarColor(getActivity(), true);
         }
-        mFloatingActionButton.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
-        mFloatingActionButton.extend();
+        floatingActionButton.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_delete));
+        floatingActionButton.extend();
         return true;
     }
 
@@ -164,14 +164,14 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-        mAdapter.clearSelectedState();
-        mActionMode = null;
-        if (!mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(true);
+        adapter.clearSelectedState();
+        actionMode = null;
+        if (!swipeRefresh.isEnabled()) swipeRefresh.setEnabled(true);
         if (getActivity() != null) {
             ViewUtils.toggleStatusBarColor(getActivity(), false);
         }
-        mFloatingActionButton.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_white));
-        mFloatingActionButton.shrink();
+        floatingActionButton.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_add_white));
+        floatingActionButton.shrink();
     }
 
     @Override
@@ -186,27 +186,27 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     @Override
     public void onRecipeMultiSelect() {
-        if (mActionMode == null && getActivity() != null) {
-            mActionMode = getActivity().startActionMode(this);
+        if (actionMode == null && getActivity() != null) {
+            actionMode = getActivity().startActionMode(this);
         }
-        if (mSwipeRefresh.isEnabled()) mSwipeRefresh.setEnabled(false);
+        if (swipeRefresh.isEnabled()) swipeRefresh.setEnabled(false);
         toggleSelection();
     }
 
     private void toggleSelection() {
-        int count = mAdapter.getSelectedItemCount();
+        int count = adapter.getSelectedItemCount();
         if (count == 0) {
-            mAdapter.setIsInChoiceMode(false);
-            mActionMode.finish();
+            adapter.setIsInChoiceMode(false);
+            actionMode.finish();
         } else {
-            mActionMode.setTitle(getString(R.string.action_item_selected, String.valueOf(count)));
-            mActionMode.invalidate();
+            actionMode.setTitle(getString(R.string.action_item_selected, String.valueOf(count)));
+            actionMode.invalidate();
         }
     }
 
     private void deleteSelectedItems() {
-        List<RecipesModel> recipes = mAdapter.getRecipes();
-        List<RecipesModel> filtered = mAdapter.getFilteredRecipes();
+        List<RecipesModel> recipes = adapter.getRecipes();
+        List<RecipesModel> filtered = adapter.getFilteredRecipes();
         Map<Integer, RecipesModel> delRecipe = new HashMap<>();
         Map<Integer, RecipesModel> delRecipeFilter = new HashMap<>();
 
@@ -216,7 +216,7 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
                 int id = recipe.getId();
                 recipes.remove(recipe);
                 delRecipe.put(i, recipe);
-                mAdapter.notifyItemRemoved(i);
+                adapter.notifyItemRemoved(i);
                 for (int j = filtered.size() - 1; j >= 0; j--) {
                     if (id == filtered.get(j).getId()) {
                         delRecipeFilter.put(j, filtered.get(j));
@@ -225,11 +225,11 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
                 }
             }
         }
-        mAdapter.setIsInChoiceMode(false);
+        adapter.setIsInChoiceMode(false);
 
-        if (mDb != null) {
+        if (database != null) {
             for (RecipesModel recipe : delRecipe.values()) {
-                AppExecutors.getInstance().diskIO().execute(() -> mDb.recipeDao().delete(recipe));
+                AppExecutors.getInstance().diskIO().execute(() -> database.recipeDao().delete(recipe));
             }
 
             if (getActivity() != null) {
@@ -244,15 +244,15 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
                             for (Map.Entry<Integer, RecipesModel> pair : delRecipe.entrySet()) {
                                 pair.getValue().setSelected(false);
                                 AppExecutors.getInstance().diskIO().execute(() ->
-                                        mDb.recipeDao().insert(pair.getValue()));
+                                        database.recipeDao().insert(pair.getValue()));
 
-                                mAdapter.getRecipes().add(pair.getKey(), pair.getValue());
-                                mAdapter.notifyItemInserted(pair.getKey());
+                                adapter.getRecipes().add(pair.getKey(), pair.getValue());
+                                adapter.notifyItemInserted(pair.getKey());
                             }
                             for (Map.Entry<Integer, RecipesModel> filterPair :
                                     delRecipeFilter.entrySet()) {
                                 filterPair.getValue().setSelected(false);
-                                mAdapter.getFilteredRecipes().add(filterPair.getKey(),
+                                adapter.getFilteredRecipes().add(filterPair.getKey(),
                                         filterPair.getValue());
                             }
                             Alerter.hide();
@@ -263,12 +263,12 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     private void retrieveRecipes() {
         AppExecutors.getInstance().diskIO().execute(() -> {
-            List<RecipesModel> recipeModels = mDb.recipeDao().loadAllRecipes();
+            List<RecipesModel> recipeModels = database.recipeDao().loadAllRecipes();
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    mAdapter.setRecipes(recipeModels);
-                    if (mSwipeRefresh.isRefreshing()) {
-                        mSwipeRefresh.setRefreshing(false);
+                    adapter.setRecipes(recipeModels);
+                    if (swipeRefresh.isRefreshing()) {
+                        swipeRefresh.setRefreshing(false);
                     }
                 });
             }

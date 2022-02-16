@@ -67,6 +67,7 @@ This app used the following open-source libraries and/or code inspired from thes
 - [Material Dialog](https://github.com/PatilShreyas/MaterialDialog-Android)
 - [Android-Stepper](https://github.com/acefalobi/android-stepper)
 - [Lottie](https://github.com/airbnb/lottie-android)
+- [Changelog Lib](https://github.com/weberbox/changeloglib)
 - [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
 - [OkHttp](https://github.com/square/okhttp)
 - [Glide](https://github.com/bumptech/glide)

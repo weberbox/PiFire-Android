@@ -45,5 +45,10 @@
             android:icon="@drawable/ic_menu_about"
             android:title="@string/menu_info"
             android:checkable="true" />
+        <item
+            android:id="@+id/nav_changelog"
+            android:icon="@drawable/ic_menu_changelog"
+            android:title="@string/nav_changelog"
+            android:checkable="false" />
     </group>
 </menu>

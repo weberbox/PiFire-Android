@@ -34,7 +34,8 @@ public class PickerLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler,
+                                    RecyclerView.State state) {
         int orientation = getOrientation();
         if (orientation == HORIZONTAL) {
             int scrolled = super.scrollHorizontallyBy(dx, recycler, state);
@@ -44,7 +45,8 @@ public class PickerLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler,
+                                  RecyclerView.State state) {
         int orientation = getOrientation();
         if (orientation == VERTICAL) {
             int scrolled = super.scrollVerticallyBy(dy, recycler, state);
@@ -60,7 +62,8 @@ public class PickerLayoutManager extends LinearLayoutManager {
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             float childMid = (getDecoratedLeft(child) + getDecoratedRight(child)) / 2.0f;
-            float scale = 1.0f + (-1 * scaleDownBy) * (Math.min(unitScaleDownDist, Math.abs(mid - childMid))) / unitScaleDownDist;
+            float scale = 1.0f + (-1 * scaleDownBy) * (Math.min(unitScaleDownDist,
+                    Math.abs(mid - childMid))) / unitScaleDownDist;
             child.setScaleX(scale);
             child.setScaleY(scale);
             if (changeAlpha) {
@@ -76,7 +79,8 @@ public class PickerLayoutManager extends LinearLayoutManager {
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             float childMid = (getDecoratedTop(child) + getDecoratedBottom(child)) / 2.0f;
-            float scale = 1.0f + (-1 * scaleDownBy) * (Math.min(unitScaleDownDist, Math.abs(mid - childMid))) / unitScaleDownDist;
+            float scale = 1.0f + (-1 * scaleDownBy) * (Math.min(unitScaleDownDist,
+                    Math.abs(mid - childMid))) / unitScaleDownDist;
             child.setScaleX(scale);
             child.setScaleY(scale);
             if (changeAlpha) {
@@ -108,16 +112,16 @@ public class PickerLayoutManager extends LinearLayoutManager {
         return scaleDownBy;
     }
 
-    public void setScaleDownBy(float mScaleDownBy) {
-        this.scaleDownBy = mScaleDownBy;
+    public void setScaleDownBy(float scaleDownBy) {
+        this.scaleDownBy = scaleDownBy;
     }
 
     public float getScaleDownDistance() {
         return scaleDownDistance;
     }
 
-    public void setScaleDownDistance(float mScaleDownDistance) {
-        this.scaleDownDistance = mScaleDownDistance;
+    public void setScaleDownDistance(float scaleDownDistance) {
+        this.scaleDownDistance = scaleDownDistance;
     }
 
     public boolean isChangeAlpha() {
@@ -128,7 +132,7 @@ public class PickerLayoutManager extends LinearLayoutManager {
         this.changeAlpha = changeAlpha;
     }
 
-    public void setOnScrollStopListener(OnScrollStopListener mOnScrollStopListener) {
-        this.onScrollStopListener = mOnScrollStopListener;
+    public void setOnScrollStopListener(OnScrollStopListener onScrollStopListener) {
+        this.onScrollStopListener = onScrollStopListener;
     }
 }

@@ -39,6 +39,8 @@
     <color name="ucrop_color_crop_background" tools:override="true">@color/colorPrimaryDark</color>
     <color name="ucrop_color_widget" tools:override="true">@color/colorWhite</color>
 
+    <color name="chglib_version_text_color" tools:override="true">@color/colorPrimaryLighter</color>
+
     <color name="material_dialog_negative_text_color">#A1A1A1</color>
     <color name="material_dialog_background">@color/colorPrimary</color>
     <color name="material_dialog_title_text_color">@android:color/primary_text_dark</color>

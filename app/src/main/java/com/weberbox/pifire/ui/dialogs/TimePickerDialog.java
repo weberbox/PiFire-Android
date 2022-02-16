@@ -12,21 +12,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
+import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.model.local.TimePickerModel;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -71,9 +74,12 @@ public class TimePickerDialog {
     public BottomSheetDialog showDialog() {
         DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(inflater);
 
-        RelativeLayout shutdownContainer = binding.timerShutdownContainer;
+        RelativeLayout warmContainer = binding.timerWarmContainer;
+        ConstraintLayout optionsContainer = binding.timerOptionsContainer;
         SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
+        SwitchCompat keepWarmSwitch = binding.timerKeepWarmSwitch;
         Button confirmButton = binding.setTimerConfirm;
+        Button optionsButton = binding.timerOptions;
 
         PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
@@ -105,11 +111,27 @@ public class TimePickerDialog {
         minutesList.setAdapter(minsAdapter);
 
         if (dashCallBack != null) {
-            if (Prefs.getBoolean(context.getString(R.string.prefs_timer_shutdown),
-                    context.getResources().getBoolean(R.bool.def_timer_shutdown))) {
-                shutdownContainer.setVisibility(View.VISIBLE);
-            }
+            optionsButton.setVisibility(View.VISIBLE);
+            optionsButton.setOnClickListener(v -> {
+                if (optionsContainer.getVisibility() == View.GONE) {
+                    AnimUtils.slideOpen(optionsContainer);
+                } else {
+                    AnimUtils.slideClosed(optionsContainer);
+                }
+            });
+        } else {
+            optionsButton.setVisibility(View.GONE);
         }
+
+        if (VersionUtils.isSupported(Versions.V_127)) {
+            warmContainer.setVisibility(View.VISIBLE);
+        }
+
+        shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                keepWarmSwitch.setEnabled(!isChecked));
+
+        keepWarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                shutdownSwitch.setEnabled(!isChecked));
 
         hoursPickerLayoutManager.setOnScrollStopListener(
                 view -> {
@@ -129,7 +151,7 @@ public class TimePickerDialog {
             pickerBottomSheet.dismiss();
             if (dashCallBack != null) {
                 dashCallBack.onTimerConfirmClicked(hoursSelected, minutesSelected,
-                        shutdownSwitch.isChecked());
+                        shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
             } else {
                 recipeCallback.onRecipeTime(hoursSelected, minutesSelected);
             }
@@ -144,11 +166,15 @@ public class TimePickerDialog {
         if (scrollHours != 0) {
             setCurrentHours(scrollHours, false);
             hoursSelected = String.format(Locale.getDefault(), "%02d", scrollHours);
+        } else {
+            setCurrentHours(0, false);
         }
 
         if (scrollMinutes != 0) {
             setCurrentMinutes(scrollMinutes, false);
             minutesSelected = String.format(Locale.getDefault(), "%02d", scrollMinutes);
+        } else {
+            setCurrentMinutes(0, false);
         }
 
         pickerBottomSheet.setOnShowListener(dialog -> {

@@ -26,14 +26,17 @@ import java.util.List;
 public class ImagePickerActivity extends BaseActivity {
 
     private String fileName;
+    private String fileDir;
     private int aspectRatioX = 1;
     private int aspectRatioY = 1;
     private int bitmapMaxWidth = 600;
     private int bitmapMaxHeight = 600;
     private int imageCompression = 80;
 
-    private boolean lockAspectRatio = true;
-    private boolean setMaxWidthHeight = true;
+    private boolean overwrite = false;
+    private boolean useCacheDir = false;
+    private boolean lockAspectRatio = false;
+    private boolean setMaxWidthHeight = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,8 @@ public class ImagePickerActivity extends BaseActivity {
         }
 
         fileName = intent.getStringExtra(INTENT_IMAGE_FILENAME);
+        fileDir = intent.getStringExtra(INTENT_FILE_DIR);
+        useCacheDir = intent.getBooleanExtra(INTENT_USE_CACHE_DIR, useCacheDir);
         aspectRatioX = intent.getIntExtra(INTENT_ASPECT_RATIO_X, aspectRatioX);
         aspectRatioY = intent.getIntExtra(INTENT_ASPECT_RATIO_Y, aspectRatioY);
         imageCompression = intent.getIntExtra(INTENT_COMPRESSION_QUALITY, imageCompression);
@@ -53,6 +58,7 @@ public class ImagePickerActivity extends BaseActivity {
         setMaxWidthHeight = intent.getBooleanExtra(INTENT_BITMAP_MAX_WIDTH_HEIGHT, setMaxWidthHeight);
         bitmapMaxWidth = intent.getIntExtra(INTENT_BITMAP_MAX_WIDTH, bitmapMaxWidth);
         bitmapMaxHeight = intent.getIntExtra(INTENT_BITMAP_MAX_HEIGHT, bitmapMaxHeight);
+        overwrite = intent.getBooleanExtra(INTENT_OVERWRITE, overwrite);
 
         int requestCode = intent.getIntExtra(INTENT_PICKER_OPTION, -1);
         if (requestCode == INTENT_REQUEST_IMAGE_CAPTURE) {
@@ -69,11 +75,11 @@ public class ImagePickerActivity extends BaseActivity {
                     @Override
                     public void onPermissionGranted() {
                         if (fileName == null) {
-                            fileName = System.currentTimeMillis() + ".jpg";
+                            fileName = String.valueOf(System.currentTimeMillis());
                         }
                         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                getCacheImagePath(fileName));
+                                getCacheImagePath(fileName + ".jpg"));
                         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                             requestImageCapture.launch(takePictureIntent);
                         }
@@ -94,7 +100,7 @@ public class ImagePickerActivity extends BaseActivity {
                     @Override
                     public void onPermissionGranted() {
                         if (fileName == null) {
-                            fileName = System.currentTimeMillis() + ".jpg";
+                            fileName = String.valueOf(System.currentTimeMillis());
                         }
                         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -127,7 +133,7 @@ public class ImagePickerActivity extends BaseActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result != null && result.getResultCode() == Activity.RESULT_OK) {
-                    cropImage(getCacheImagePath(fileName));
+                    cropImage(getCacheImagePath(fileName + ".jpg"));
                 } else {
                     setResultCancelled();
                 }
@@ -147,8 +153,15 @@ public class ImagePickerActivity extends BaseActivity {
                 }
             });
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void cropImage(Uri sourceUri) {
-        Uri destinationUri = Uri.fromFile(new File(getDestinationPath(), fileName));
+        Uri destinationUri = Uri.fromFile(new File(getDestinationPath(), fileName + ".jpg"));
+        if (overwrite) {
+            File file = new File(destinationUri.getPath());
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         uCropActivityResult.launch(getUCropIntent(ImagePickerActivity.this, sourceUri,
                 destinationUri, getUCropOptions()));
     }
@@ -223,13 +236,16 @@ public class ImagePickerActivity extends BaseActivity {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private File getDestinationPath() {
-        File path = new File(getFilesDir(), "img");
+        File path = new File(useCacheDir ? getCacheDir() : getFilesDir(),
+                fileDir != null ? fileDir : "img");
         if (!path.exists()) path.mkdirs();
         return path;
     }
 
     private static final String INTENT_PICKER_OPTION = "image_picker_option";
     private static final String INTENT_IMAGE_FILENAME = "image_filename";
+    private static final String INTENT_FILE_DIR = "image_file_dir";
+    private static final String INTENT_USE_CACHE_DIR = "use_cache_dir";
     private static final String INTENT_ASPECT_RATIO_X = "aspect_ratio_x";
     private static final String INTENT_ASPECT_RATIO_Y = "aspect_ratio_Y";
     private static final String INTENT_LOCK_ASPECT_RATIO = "lock_aspect_ratio";
@@ -237,14 +253,15 @@ public class ImagePickerActivity extends BaseActivity {
     private static final String INTENT_BITMAP_MAX_WIDTH_HEIGHT = "set_bitmap_max_width_height";
     private static final String INTENT_BITMAP_MAX_WIDTH = "max_width";
     private static final String INTENT_BITMAP_MAX_HEIGHT = "max_height";
+    private static final String INTENT_OVERWRITE = "can_overwrite";
     private static final int INTENT_REQUEST_IMAGE_CAPTURE = 0;
 
     @SuppressWarnings("unused")
     public static class ImageOptionBuilder {
-        private final Bundle mExtras;
+        private final Bundle extras;
 
         private ImageOptionBuilder() {
-            mExtras = new Bundle();
+            extras = new Bundle();
         }
 
         /**
@@ -260,7 +277,7 @@ public class ImagePickerActivity extends BaseActivity {
          * @return this, for chaining.
          */
         public ImageOptionBuilder setImageCapture() {
-            mExtras.putInt(INTENT_PICKER_OPTION, 0);
+            extras.putInt(INTENT_PICKER_OPTION, 0);
             return this;
         }
 
@@ -270,95 +287,124 @@ public class ImagePickerActivity extends BaseActivity {
          * @return this, for chaining.
          */
         public ImageOptionBuilder setImageGallery() {
-            mExtras.putInt(INTENT_PICKER_OPTION, 1);
+            extras.putInt(INTENT_PICKER_OPTION, 1);
             return this;
         }
 
         /**
-         * Sets the filename that will be used when image is stored
+         * Sets the filename that will be used when image is stored. Default CurrentSystemTime
          *
          * @param name sets the name of file
          * @return this, for chaining.
          */
         public ImageOptionBuilder setFilename(String name) {
-            mExtras.putString(INTENT_IMAGE_FILENAME, name);
+            extras.putString(INTENT_IMAGE_FILENAME, name);
             return this;
         }
 
         /**
-         * Sets the allowed X ratio for image cropping eg x1:y1 x4:y3 x16:y9
+         * Sets the file directory name. Default "img"
+         *
+         * @param path the folder to create/use
+         * @return this, for chaining.
+         */
+        public ImageOptionBuilder setFilePath(String path) {
+            extras.putString(INTENT_FILE_DIR, path);
+            return this;
+        }
+
+        /**
+         * Sets the output location to cacheDir. Default filesDir
+         *
+         * @return this, for chaining.
+         */
+        public ImageOptionBuilder setUseCacheDir() {
+            extras.putBoolean(INTENT_USE_CACHE_DIR, true);
+            return this;
+        }
+
+        /**
+         * Sets the allowed X ratio for image cropping eg x1:y1 x4:y3 x16:y9. Default 1
          *
          * @param ratioX sets X ratio for the image
          * @return this, for chaining.
          */
         public ImageOptionBuilder setAspectRatioX(int ratioX) {
-            mExtras.putInt(INTENT_ASPECT_RATIO_X, ratioX);
+            extras.putInt(INTENT_ASPECT_RATIO_X, ratioX);
             return this;
         }
 
         /**
-         * Sets the allowed Y ratio for image cropping eg x1:y1 x4:y3 x16:y9
+         * Sets the allowed Y ratio for image cropping eg x1:y1 x4:y3 x16:y9. Default 1
          *
          * @param ratioY sets Y ratio for the image
          * @return this, for chaining.
          */
         public ImageOptionBuilder setAspectRatioY(int ratioY) {
-            mExtras.putInt(INTENT_ASPECT_RATIO_Y, ratioY);
+            extras.putInt(INTENT_ASPECT_RATIO_Y, ratioY);
             return this;
         }
 
         /**
-         * Sets if the aspect ratio is locked when cropping
+         * Sets if the aspect ratio is locked when cropping. Default unlocked
          *
-         * @param locked will lock the aspect ratio
          * @return this, for chaining.
          */
-        public ImageOptionBuilder setAspectRatioLocked(boolean locked) {
-            mExtras.putBoolean(INTENT_LOCK_ASPECT_RATIO, locked);
+        public ImageOptionBuilder setAspectRatioLocked() {
+            extras.putBoolean(INTENT_LOCK_ASPECT_RATIO, true);
             return this;
         }
 
         /**
-         * Sets the output image compression quality
+         * Sets the output image compression quality. Default 80
          *
          * @param quality the compression quality
          * @return this, for chaining.
          */
         public ImageOptionBuilder setCompressionQuality(int quality) {
-            mExtras.putInt(INTENT_COMPRESSION_QUALITY, quality);
+            extras.putInt(INTENT_COMPRESSION_QUALITY, quality);
             return this;
         }
 
         /**
-         * Sets if the Bitmap has a locked Width and Height
+         * Sets if the Bitmap has a locked Width and Height. Default unlocked
          *
-         * @param enabled true for locked and false to unlock
          * @return this, for chaining.
          */
-        public ImageOptionBuilder setBitmapMaxWidthHeight(boolean enabled) {
-            mExtras.putBoolean(INTENT_BITMAP_MAX_WIDTH_HEIGHT, enabled);
+        public ImageOptionBuilder setBitmapMaxWidthHeight() {
+            extras.putBoolean(INTENT_BITMAP_MAX_WIDTH_HEIGHT, true);
             return this;
         }
 
         /**
-         * Sets the max Bitmap width for the output file
+         * Sets the max Bitmap width for the output file. Default 600
          *
          * @param width the max bitmap width
          * @return this, for chaining.
          */
         public ImageOptionBuilder setBitmapMaxWidth(int width) {
-            mExtras.putInt(INTENT_BITMAP_MAX_WIDTH, width);
+            extras.putInt(INTENT_BITMAP_MAX_WIDTH, width);
             return this;
         }
 
         /**
-         * Sets the max Bitmap height for the output file
+         * Sets the max Bitmap height for the output file. Default 600
          *
          * @param height the max bitmap height
          * @return this, for chaining.
          */
         public ImageOptionBuilder setBitmapMaxHeight(int height) {
-            mExtras.putInt(INTENT_BITMAP_MAX_HEIGHT, height);
+            extras.putInt(INTENT_BITMAP_MAX_HEIGHT, height);
+            return this;
+        }
+
+        /**
+         * Sets if previous image with same filename will be overwritten. Default false
+         *
+         * @return this, for chaining.
+         */
+        public ImageOptionBuilder setCanOverwrite() {
+            extras.putBoolean(INTENT_OVERWRITE, true);
             return this;
         }
 
@@ -367,7 +413,7 @@ public class ImagePickerActivity extends BaseActivity {
          */
         public Intent build(Context ctx) {
             Intent i = new Intent(ctx, ImagePickerActivity.class);
-            i.putExtras(mExtras);
+            i.putExtras(extras);
             return i;
         }
     }

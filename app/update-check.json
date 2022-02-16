@@ -8,9 +8,12 @@
   ],
   "releaseNotes": [
     "- Added Recipes Section",
+    "- Moved to OneSignal notifications",
+    "- Added Keep Warm options",
     "- Added Grill Startup Time",
     "- Changed Nav to Overlapping Panels",
-    "- Moved Settings to side panels",
+    "- Moved Settings to side panel",
+    "- Added Changelog",
     "- UI improvements",
     "- Misc fixes and updates"
   ]

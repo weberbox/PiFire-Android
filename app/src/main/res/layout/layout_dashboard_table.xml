@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/grill_controls_table"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
                 android:paddingBottom="4dp">
 
                 <TextView
-                    style="@style/Text16Aller"
+                    style="@style/Text16AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/grill_state_mode" />
@@ -63,7 +64,7 @@
                 android:padding="@dimen/default_spacing">
 
                 <TextView
-                    style="@style/Text16Aller"
+                    style="@style/Text16AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/grill_smoke_plus" />
@@ -111,7 +112,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Text16Aller"
+                        style="@style/Text16AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -226,7 +227,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Text16Aller"
+                        style="@style/Text16AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -273,17 +274,28 @@
                         style="@style/Text16AllerAlpha"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/grill_state_target" />
+                        android:text="@string/grill_state_target"
+                        tools:ignore="RelativeOverlap" />
 
                     <ImageView
                         android:id="@+id/probe_one_shutdown"
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
-                        android:contentDescription="@string/placeholder_img"
                         android:src="@drawable/ic_flag_shutdown"
                         android:visibility="invisible"
-                        app:tint="@color/colorRedButton" />
+                        app:tint="@color/colorRedButton"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/probe_one_keep_warm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_keep_warm"
+                        android:visibility="invisible"
+                        app:tint="@color/colorRedButton"
+                        tools:ignore="ContentDescription" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -315,7 +327,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Text16Aller"
+                        style="@style/Text16AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -327,8 +339,8 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_alignParentEnd="true"
-                        android:contentDescription="@string/placeholder_img"
-                        android:src="@drawable/ic_grill_probe" />
+                        android:src="@drawable/ic_grill_probe"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <TextView
@@ -369,10 +381,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_alignParentEnd="true"
-                        android:contentDescription="@string/placeholder_img"
                         android:src="@drawable/ic_flag_shutdown"
                         android:visibility="invisible"
-                        app:tint="@color/colorRedButton" />
+                        app:tint="@color/colorRedButton"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
+                        android:id="@+id/probe_two_keep_warm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_keep_warm"
+                        android:visibility="invisible"
+                        app:tint="@color/colorRedButton"
+                        tools:ignore="ContentDescription" />
 
                 </RelativeLayout>
             </LinearLayout>
@@ -414,7 +436,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Text16Aller"
+                        style="@style/Text16AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
@@ -459,10 +481,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="20dp"
                             android:layout_alignParentEnd="true"
-                            android:contentDescription="@string/placeholder_img"
                             android:src="@drawable/ic_flag_shutdown"
                             android:visibility="invisible"
-                            app:tint="@color/colorRedButton" />
+                            app:tint="@color/colorRedButton"
+                            tools:ignore="ContentDescription" />
+
+                        <ImageView
+                            android:id="@+id/timer_keep_warm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_alignParentEnd="true"
+                            android:src="@drawable/ic_keep_warm"
+                            android:visibility="invisible"
+                            app:tint="@color/colorRedButton"
+                            tools:ignore="ContentDescription" />
 
                     </RelativeLayout>
                 </LinearLayout>
@@ -491,7 +523,7 @@
             android:background="@drawable/bg_table_item"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="@drawable/bg_ripple_table_temp" >
+            android:foreground="@drawable/bg_ripple_table_temp">
 
             <com.weberbox.pifire.ui.views.PelletLevelView
                 android:id="@+id/pellet_level_indicator"
@@ -513,7 +545,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/Text16Aller"
+                        style="@style/Text16AllerBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"

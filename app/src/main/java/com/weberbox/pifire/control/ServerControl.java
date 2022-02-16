@@ -141,7 +141,7 @@ public class ServerControl {
 
     // Set Temp Notify
     public static void setProbeNotify(Socket socket, int probe, String temp, boolean holdMode,
-                                      boolean shutdown, SocketCallback callback) {
+                                      boolean shutdown, boolean keepWarm, SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {
             String json = null;
             switch (probe) {
@@ -155,13 +155,15 @@ public class ServerControl {
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe1(Integer.valueOf(temp)))
                             .withNotifyReq(new NotifyReq().withProbe1(true))
-                            .withNotifyData(new NotifyData().withP1Shutdown(shutdown)));
+                            .withNotifyData(new NotifyData().withP1Shutdown(shutdown))
+                            .withNotifyData(new NotifyData().withP1KeepWarm(keepWarm)));
                     break;
                 case Constants.PICKER_TYPE_PROBE_TWO:
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe2(Integer.valueOf(temp)))
                             .withNotifyReq(new NotifyReq().withProbe2(true))
-                            .withNotifyData(new NotifyData().withP2Shutdown(shutdown)));
+                            .withNotifyData(new NotifyData().withP2Shutdown(shutdown))
+                            .withNotifyData(new NotifyData().withP2KeepWarm(keepWarm)));
                     break;
             }
             if (json != null) {
@@ -185,13 +187,15 @@ public class ServerControl {
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe1(0))
                             .withNotifyReq(new NotifyReq().withProbe1(false))
-                            .withNotifyData(new NotifyData().withP1Shutdown(false)));
+                            .withNotifyData(new NotifyData().withP1Shutdown(false))
+                            .withNotifyData(new NotifyData().withP1KeepWarm(false)));
                     break;
                 case Constants.PICKER_TYPE_PROBE_TWO:
                     json = new Gson().toJson(new ControlDataModel()
                             .withSetPoints(new SetPoints().withProbe2(0))
                             .withNotifyReq(new NotifyReq().withProbe2(false))
-                            .withNotifyData(new NotifyData().withP2Shutdown(false)));
+                            .withNotifyData(new NotifyData().withP2Shutdown(false))
+                            .withNotifyData(new NotifyData().withP2KeepWarm(false)));
                     break;
             }
             if (json != null) {
@@ -213,13 +217,14 @@ public class ServerControl {
 
     // Timer Set Time
     public static void sendTimerTime(Socket socket, String hours, String minutes, boolean shutdown,
-                                     SocketCallback callback) {
+                                     boolean keepWarm, SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {
             String json = new Gson().toJson(new PostDataModel()
                     .withTimerAction(new TimerAction()
                             .withHours(Integer.parseInt(hours))
                             .withMinutes(Integer.parseInt(minutes))
-                            .withShutdown(shutdown)));
+                            .withShutdown(shutdown)
+                            .withKeepWarm(keepWarm)));
             timerPostEmit(socket, ServerConstants.PT_TIMER_START, json, callback);
         } else {
             ServerControlDep.setTimerTime(socket, hours, minutes, shutdown);
@@ -463,8 +468,7 @@ public class ServerControl {
                     if (args.length > 0 && args[0] != null) {
                         ServerResponseModel response =
                                 ServerResponseModel.parseJSON(args[0].toString());
-                        if (response.getResponse() != null &&
-                                response.getResponse().getResult().equals("success")) {
+                        if (response.getResult().equals("success")) {
                             new SettingsUtils(context, null).requestSettingsData(socket);
                         } else {
                             Timber.d("Failed to register with Pifire");
@@ -473,6 +477,7 @@ public class ServerControl {
                 });
     }
 
+    @SuppressWarnings("unused")
     // Remove OneSignal Device
     public static void removeOneSignalDevice(Socket socket, String playerId,
                                              SocketCallback callback) {
@@ -760,6 +765,20 @@ public class ServerControl {
         } else {
             ServerControlDep.setPIDCenter(socket, center);
         }
+    }
+
+    // Set Keep Warm S Plus
+    public static void setKeepWarmSPlus(Socket socket, boolean enabled, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withKeepWarm(new KeepWarm().withSPlus(enabled)));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Keep Warm Temp
+    public static void setKeepWarmTemp(Socket socket, String temp, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withKeepWarm(new KeepWarm().withTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Pellets Warning Enabled

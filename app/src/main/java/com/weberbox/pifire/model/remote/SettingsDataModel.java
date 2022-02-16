@@ -47,6 +47,9 @@ public class SettingsDataModel {
     @SerializedName("cycle_data")
     @Expose
     private CycleData cycleData;
+    @SerializedName("keep_warm")
+    @Expose
+    private KeepWarm keepWarm;
     @SerializedName("smoke_plus")
     @Expose
     private SmokePlus smokePlus;
@@ -222,6 +225,19 @@ public class SettingsDataModel {
 
     public SettingsDataModel withCycleData(CycleData cycleData) {
         this.cycleData = cycleData;
+        return this;
+    }
+
+    public KeepWarm getKeepWarm() {
+        return keepWarm;
+    }
+
+    public void setKeepWarm(KeepWarm keepWarm) {
+        this.keepWarm = keepWarm;
+    }
+
+    public SettingsDataModel withKeepWarm(KeepWarm keepWarm) {
+        this.keepWarm = keepWarm;
         return this;
     }
 
@@ -448,6 +464,42 @@ public class SettingsDataModel {
             return this;
         }
 
+    }
+
+    public static class KeepWarm {
+
+        @SerializedName("temp")
+        @Expose
+        private Integer temp;
+        @SerializedName("s_plus")
+        @Expose
+        private Boolean sPlus;
+
+        public Integer getTemp() {
+            return temp;
+        }
+
+        public void setTemp(Integer temp) {
+            this.temp = temp;
+        }
+
+        public KeepWarm withTemp(Integer temp) {
+            this.temp = temp;
+            return this;
+        }
+
+        public Boolean getSPlus() {
+            return sPlus;
+        }
+
+        public void setSPlus(Boolean sPlus) {
+            this.sPlus = sPlus;
+        }
+
+        public KeepWarm withSPlus(Boolean sPlus) {
+            this.sPlus = sPlus;
+            return this;
+        }
     }
 
     public static class Versions {

@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -132,7 +133,7 @@ public class UtilsAsync {
         }
     }
 
-    public static class DownloadNewVersion extends AsyncTask<String, Long[], Boolean> {
+    public static class DownloadNewVersion extends AsyncTask<String, Integer, Boolean> {
         private final WeakReference<Context> contextRef;
         private final AppUpdater.DownloadListener listener;
         private final String fileName;
@@ -180,18 +181,18 @@ public class UtilsAsync {
 
         @SuppressLint("DefaultLocale")
         @Override
-        protected void onProgress(Long[] values) {
-            super.onProgress(values);
+        protected void onProgress(Integer progress) {
+            super.onProgress(progress);
 
             if (progressDialog != null) {
-                if (values[1] < 0) {
+                if (progress < 0) {
                     progressDialog.getProgressIndicator().setIndeterminate(true);
                 } else {
                     progressDialog.getProgressIndicator().setIndeterminate(false);
-                    progressDialog.getProgressIndicator().setMax(values[1].intValue());
-                    progressDialog.getProgressIndicator().setProgress(values[0].intValue());
-                    progressDialog.getProgressMessage().setText(String.format("%d / %d ", values[0],
-                            values[1]));
+                    progressDialog.getProgressIndicator().setMax(100);
+                    progressDialog.getProgressIndicator().setProgress(progress);
+                    progressDialog.getProgressMessage().setText(String.format(Locale.US,
+                            "%d / %d", progress, 100));
                 }
             }
         }
@@ -217,7 +218,7 @@ public class UtilsAsync {
                         }
                     }
                 } else {
-                    listener.onFailed(AppUpdaterError.DOWNLOAD_ERROR);
+                    listener.onFailed(AppUpdaterError.DOWNLOAD_CANCELED);
                 }
             }
         }
@@ -263,7 +264,7 @@ public class UtilsAsync {
                         updateFile = new File(context.getCacheDir(), fileName);
                         OutputStream output = new FileOutputStream(updateFile);
 
-                        publishProgress(new Long[]{0L, target});
+                        publishProgress(0);
                         while (true) {
                             int read = inputStream.read(buff);
 
@@ -273,7 +274,9 @@ public class UtilsAsync {
                             output.write(buff, 0, read);
                             //write buff
                             downloaded += read;
-                            publishProgress(new Long[]{downloaded, target});
+                            if (target > 0) {
+                                publishProgress((int) (downloaded * 100 / target));
+                            }
                             if (isCancelled()) {
                                 return false;
                             }

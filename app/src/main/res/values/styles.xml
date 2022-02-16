@@ -62,6 +62,30 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Text16Russo" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/russo_font_family</item>
+        <item name="fontFamily">@font/russo_font_family</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="Text16RussoBold" parent="@style/Text16Russo">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Text16RussoAlpha" parent="@style/Text16Russo">
+        <item name="android:textColor">#a6ffffff</item>
+    </style>
+
+    <style name="Text18Russo" parent="@style/Text16Russo">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text18RussoBold" parent="@style/Text18Russo">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="TextTransparent" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textColor">@android:color/transparent</item>
     </style>
@@ -78,11 +102,11 @@
     </style>
 
     <style name="MainButtonPrimary" parent="@style/TextAppearance.AppCompat.Widget.Button">
-        <item name="android:textSize">24.0sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:background">@drawable/bg_main_button_primary_selector</item>
-        <item name="android:paddingTop">13.0dip</item>
-        <item name="android:paddingBottom">13.0dip</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">13dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/knockout_regular</item>
     </style>

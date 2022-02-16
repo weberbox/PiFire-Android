@@ -103,5 +103,6 @@ public class Constants {
     public static final int ONESIGNAL_DEVICE_ERROR = 3;
     public static final int ONESIGNAL_REGISTERED = 4;
     public static final int ONESIGNAL_NOT_SUBSCRIBED = 5;
+    public static final int ONESIGNAL_APP_UPDATED = 6;
 
 }

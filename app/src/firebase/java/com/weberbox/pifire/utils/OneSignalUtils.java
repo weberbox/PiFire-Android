@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.onesignal.OSDeviceState;
 import com.onesignal.OneSignal;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
@@ -40,61 +41,20 @@ public class OneSignalUtils {
         OneSignal.setAppId(PushConfig.ONESIGNAL_APP_ID);
     }
 
-    @SuppressWarnings("unused")
-    public static void setSubscriptionObserver(Socket socket) {
-        OneSignal.addSubscriptionObserver(stateChanges -> {
-            Timber.d("OneSignal State Changed %s", stateChanges);
-            if (!stateChanges.getFrom().isSubscribed() &&
-                    stateChanges.getTo().isSubscribed()) {
-                //registerPlayerID(socket, stateChanges.getTo().getUserId(), true);
-
-            } else if (stateChanges.getFrom().isSubscribed() &&
-                    !stateChanges.getTo().isSubscribed()) {
-                //registerPlayerID(socket, stateChanges.getFrom().getUserId(), false);
-            }
-        });
-    }
-
-    @SuppressWarnings("unused")
-    private static void registerPlayerID(Context context, Socket socket, String playerID,
-                                         boolean subscribed) {
-        if (playerID != null && socket.connected()) {
-            if (subscribed) {
-                ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
-                        OneSignalUtils::processPostResponse);
-                addOneSignalDevice(context, socket, playerID, getDevice());
-            } else {
-                ServerControl.removeOneSignalDevice(socket, playerID,
-                        OneSignalUtils::processPostResponse);
-            }
-        }
-    }
-
     public static void provideUserConsent(boolean accepted) {
         OneSignal.provideUserConsent(accepted);
     }
 
-    public static void registerDevice(Context context, Socket socket) {
+    public static void registerDevice(Context context, Socket socket, int registrationResult) {
         if (OneSignal.userProvidedPrivacyConsent()) {
             if (OneSignal.getDeviceState() != null) {
                 if (OneSignal.getDeviceState().isSubscribed()) {
                     String playerID = OneSignal.getDeviceState().getUserId();
                     if (playerID != null) {
-                        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
-                        if (devicesHash != null) {
-                            for (Map.Entry<String, OneSignalDeviceInfo> device :
-                                    devicesHash.entrySet()) {
-                                if (device.getKey().equals(playerID) &&
-                                        device.getValue().getAppVersion().equals(
-                                                BuildConfig.VERSION_NAME)) {
-                                    Timber.d("Device already registered with PiFire");
-                                    return;
-                                }
-                            }
+                        if (registrationResult == Constants.ONESIGNAL_NOT_REGISTERED) {
+                            ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
+                                    OneSignalUtils::processPostResponse);
                         }
-
-                        ServerControl.setOneSignalAppID(socket, PushConfig.ONESIGNAL_APP_ID,
-                                OneSignalUtils::processPostResponse);
                         addOneSignalDevice(context, socket, playerID, getDevice());
                     }
                 }
@@ -131,7 +91,11 @@ public class OneSignalUtils {
                 AlertUtils.createOneSignalAlert(activity,
                         R.string.settings_onesignal_register_title,
                         R.string.settings_onesignal_register_message);
-                registerDevice(activity, socket);
+                registerDevice(activity, socket, status);
+                break;
+            case Constants.ONESIGNAL_APP_UPDATED:
+                Timber.d("App updated re-registering with PiFire");
+                registerDevice(activity, socket, status);
                 break;
             case Constants.ONESIGNAL_DEVICE_ERROR:
                 AlertUtils.createOneSignalAlert(activity,
@@ -148,21 +112,38 @@ public class OneSignalUtils {
     }
 
     public static int checkRegistration(Context context) {
-        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
         if (!OneSignal.userProvidedPrivacyConsent()) {
             return Constants.ONESIGNAL_NO_CONSENT;
-        } else if (OneSignal.getDeviceState() == null) {
-            return Constants.ONESIGNAL_DEVICE_ERROR;
-        } else if (!OneSignal.getDeviceState().isSubscribed()) {
-            return Constants.ONESIGNAL_NOT_SUBSCRIBED;
-        } else if (OneSignal.getDeviceState().getUserId() == null) {
-            return Constants.ONESIGNAL_NO_ID;
-        } else if (devicesHash == null || !devicesHash.containsKey(
-                OneSignal.getDeviceState().getUserId())) {
-            return Constants.ONESIGNAL_NOT_REGISTERED;
-        } else {
-            return Constants.ONESIGNAL_REGISTERED;
         }
+
+        OSDeviceState deviceState = OneSignal.getDeviceState();
+        if (deviceState == null) {
+            return Constants.ONESIGNAL_DEVICE_ERROR;
+        } else if (!deviceState.isSubscribed()) {
+            return Constants.ONESIGNAL_NOT_SUBSCRIBED;
+        }
+
+        String playerID = deviceState.getUserId();
+        if (playerID == null) {
+            return Constants.ONESIGNAL_NO_ID;
+        }
+
+        Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
+
+        if (devicesHash == null || !devicesHash.containsKey(playerID)) {
+            return Constants.ONESIGNAL_NOT_REGISTERED;
+        }
+
+        if (devicesHash.containsKey(playerID)) {
+            for (Map.Entry<String, OneSignalDeviceInfo> device : devicesHash.entrySet()) {
+                if (device.getKey().equals(playerID) &&
+                        !device.getValue().getAppVersion().equals(BuildConfig.VERSION_NAME)) {
+                    return Constants.ONESIGNAL_APP_UPDATED;
+                }
+            }
+        }
+
+        return Constants.ONESIGNAL_REGISTERED;
     }
 
     private static OneSignalDeviceInfo getDevice() {

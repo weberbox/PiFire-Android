@@ -22,7 +22,10 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/action_bar_button"
         android:gravity="center|start"
-        android:padding="15dp"
+        android:paddingStart="5dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="15dp"
         android:text="@string/placeholder_text_view"
         android:textColor="@color/colorWhite"
         android:textStyle="bold" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,11 +17,11 @@
             android:id="@+id/server_updater_status_cv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/medium_spacing"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardPreventCornerOverlap="false"
-            android:layout_marginEnd="@dimen/medium_spacing"
             app:contentPadding="0dp"
             app:layout_constraintEnd_toStartOf="@+id/server_updater_info_cv"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,8 +126,8 @@
             app:cardElevation="10dp"
             app:cardPreventCornerOverlap="false"
             app:contentPadding="0dp"
-            app:layout_constraintStart_toEndOf="@+id/server_updater_status_cv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/server_updater_status_cv"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -296,15 +296,15 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/medium_spacing"
             android:layout_marginTop="@dimen/default_spacing"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardPreventCornerOverlap="false"
-            android:layout_marginStart="@dimen/medium_spacing"
             app:contentPadding="0dp"
-            app:layout_constraintStart_toEndOf="@+id/server_updater_status_cv"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/server_updater_status_cv"
             app:layout_constraintTop_toBottomOf="@+id/server_updater_info_cv">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -421,4 +421,4 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

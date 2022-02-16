@@ -29,6 +29,11 @@ public enum AppUpdaterError {
     /**
      * Update Download Error
      */
-    DOWNLOAD_ERROR
+    DOWNLOAD_ERROR,
+
+    /**
+     * Update Download Canceled
+     */
+    DOWNLOAD_CANCELED
 
 }

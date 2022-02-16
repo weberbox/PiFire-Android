@@ -363,6 +363,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                         R.drawable.ic_camera, (dialogInterface, which) -> {
                             Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
                                     .setImageCapture()
+                                    .setAspectRatioLocked()
+                                    .setBitmapMaxWidthHeight()
                                     .build(requireActivity());
                             requestNewImageUri.launch(intent);
                         })
@@ -375,6 +377,8 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     private void openImageGallery() {
         Intent intent = ImagePickerActivity.ImageOptionBuilder.getBuilder()
                 .setImageGallery()
+                .setAspectRatioLocked()
+                .setBitmapMaxWidthHeight()
                 .build(requireActivity());
         requestNewImageUri.launch(intent);
     }

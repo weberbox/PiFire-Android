@@ -168,8 +168,8 @@ class UtilsLibrary {
                 Timber.d("Cannot retrieve latest version. Is it configured properly?");
             }
 
-            if (response.body() != null) {
-                response.body().close();
+            if (body != null) {
+                body.close();
             }
             source = str.toString();
         } catch (FileNotFoundException e) {

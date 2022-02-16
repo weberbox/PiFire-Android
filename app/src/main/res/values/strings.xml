@@ -21,6 +21,7 @@
     <string name="nav_setting">Settings</string>
     <string name="nav_admin">Admin</string>
     <string name="nav_recipes">Recipes</string>
+    <string name="nav_changelog">Changelog</string>
 
     <string name="placeholder_img">placeholder_img</string>
     <string name="placeholder_temp">0°</string>
@@ -79,6 +80,7 @@
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
     <string name="shutdown">Shutdown</string>
+    <string name="options">Options</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -99,7 +101,9 @@
     <string name="grill_state_remaining">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
+    <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
+    <string name="grill_keep_warm_timer">Keep Warm When Timer Expires</string>
 
     <string name="probe_disable">Disable</string>
     <string name="probe_enable">Enable</string>
@@ -145,6 +149,8 @@
     <string name="history_delete_content">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
 
     <string name="event_type_info">I</string>
+
+    <string name="changelog_title">What\'s New</string>
 
     <string name="recipes_unsaved_title">Unsaved Changes</string>
     <string name="recipes_unsaved_message">This recipe has unsaved changes. What would you like to do?</string>
@@ -291,12 +297,6 @@
     <string name="settings_app_safety_start">Swipe to Start</string>
     <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
 
-    <string name="settings_cat_app_shutdown">Shutdown</string>
-    <string name="settings_app_probe_shutdown">Probe Temp Shutdown</string>
-    <string name="settings_app_probe_shutdown_summary">Show option to shutdown grill when set temp is achieved</string>
-    <string name="settings_app_timer_shutdown">Timer Shutdown</string>
-    <string name="settings_app_timer_shutdown_summary">Show option to shutdown grill when timer expires</string>
-
     <string name="settings_cat_app_screen">Screen</string>
     <string name="settings_app_screen_on_title">Keep Screen On</string>
     <string name="settings_app_screen_on_summary">Force the screen to remain on while viewing the dashboard.</string>
@@ -338,6 +338,11 @@
     <string name="settings_pid_u_max">Maximum Cycle Ratio</string>
     <string name="settings_pid_center">Center Ratio</string>
     <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
+
+    <string name="settings_cat_keep_warm">Keep Warm Settings</string>
+    <string name="settings_keep_warm_s_plus">Smoke Plus Enabled</string>
+    <string name="settings_keep_warm_temp">Keep Warm Temp</string>
+    <string name="settings_keep_warm_note">The Keep Warm Mode will be activated when selected once a probe set temp has been achieved or the set timer has expired. The Grill will exit the currently running mode then switch to Hold Mode and attempt to maintain the temperature set above. You can also enable or disable the Smoke Plus feature during Keep Warm Mode</string>
 
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>

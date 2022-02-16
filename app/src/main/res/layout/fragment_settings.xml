@@ -2,8 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-        <variable name="callback"
+
+        <variable
+            name="callback"
             type="com.weberbox.pifire.ui.fragments.SettingsFragment" />
     </data>
 
@@ -18,10 +21,11 @@
             android:layout_height="match_parent"
             android:background="@color/colorPrimaryDark">
 
-            <androidx.core.widget.NestedScrollView
+            <ScrollView
                 android:id="@+id/settings_nested_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -31,10 +35,10 @@
                     <include
                         android:id="@+id/settings_layout"
                         layout="@layout/layout_settings"
-                        app:callback="@{callback}"/>
+                        app:callback="@{callback}" />
 
                 </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
+            </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <FrameLayout

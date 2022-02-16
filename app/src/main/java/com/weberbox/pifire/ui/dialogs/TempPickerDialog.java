@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,17 +20,19 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
+import com.weberbox.pifire.model.local.TempPickerModel;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.model.local.TempPickerModel;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.TempUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,13 +66,16 @@ public class TempPickerDialog {
     public BottomSheetDialog showDialog() {
         DialogTempPickerBinding binding = DialogTempPickerBinding.inflate(inflater);
 
-        RelativeLayout shutdownContainer = binding.probeShutdownContainer;
+        RelativeLayout warmContainer = binding.probeWarmContainer;
+        ConstraintLayout probeOptions = binding.probeOptionsContainer;
         SwitchCompat shutdownSwitch = binding.probeShutdownSwitch;
+        SwitchCompat keepWarmSwitch = binding.probeKeepWarmSwitch;
         Button confirmButton = binding.setTempConfirm;
         Button clearButton = binding.setTempClear;
+        Button optionButton = binding.probeOptions;
 
         PickerLayoutManager tempPickerLayoutManager = new PickerLayoutManager(context,
-                PickerLayoutManager.VERTICAL, false);
+                PickerLayoutManager.VERTICAL, true);
         tempPickerLayoutManager.setChangeAlpha(true);
         tempPickerLayoutManager.setScaleDownBy(0.99f);
         tempPickerLayoutManager.setScaleDownDistance(1.9f);
@@ -83,27 +89,24 @@ public class TempPickerDialog {
 
         TempUtils tempUtils = new TempUtils(context);
 
-        if(tempType == Constants.PICKER_TYPE_GRILL) {
+        if (tempType == Constants.PICKER_TYPE_GRILL) {
             selectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
             tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(tempUnit,
                     tempUtils.getMinGrillTemp(), (tempUtils.getMaxGrillTemp() + 1)));
+            optionButton.setVisibility(View.GONE);
         } else {
-            if (Prefs.getBoolean(context.getString(R.string.prefs_probe_shutdown),
-                    context.getResources().getBoolean(R.bool.def_probe_shutdown))) {
-                shutdownContainer.setVisibility(View.VISIBLE);
-            }
+            optionButton.setVisibility(View.VISIBLE);
             selectedTemp = String.valueOf(tempUtils.getDefaultProbeTemp());
             tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(tempUnit,
                     tempUtils.getMinProbeTemp(), (tempUtils.getMaxProbeTemp() + 1)));
         }
 
-        if(scrollTemp > 0) {
+        if (scrollTemp > 0) {
             selectedTemp = String.valueOf(scrollTemp);
         }
 
         tempListRecycler.setLayoutManager(tempPickerLayoutManager);
         tempListRecycler.setAdapter(tempPickerAdapter);
-        
 
         tempPickerLayoutManager.setOnScrollStopListener(
                 view -> {
@@ -131,10 +134,28 @@ public class TempPickerDialog {
             }
         });
 
+        if (VersionUtils.isSupported(Versions.V_127)) {
+            warmContainer.setVisibility(View.VISIBLE);
+        }
+
+        shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                keepWarmSwitch.setEnabled(!isChecked));
+
+        keepWarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                shutdownSwitch.setEnabled(!isChecked));
+
+        optionButton.setOnClickListener(v -> {
+            if (probeOptions.getVisibility() == View.GONE) {
+                AnimUtils.slideOpen(probeOptions);
+            } else {
+                AnimUtils.slideClosed(probeOptions);
+            }
+        });
+
         confirmButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
             callBack.onTempConfirmClicked(tempType, selectedTemp, holdMode,
-                    shutdownSwitch.isChecked());
+                    shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
         });
 
         clearButton.setOnClickListener(v -> {
@@ -149,15 +170,15 @@ public class TempPickerDialog {
 
         pickerBottomSheet.setContentView(binding.getRoot());
 
-        if(scrollTemp != 0) {
-            if(tempType == Constants.PICKER_TYPE_GRILL) {
+        if (scrollTemp != 0) {
+            if (tempType == Constants.PICKER_TYPE_GRILL) {
                 setDefaultTemp(scrollTemp - tempUtils.getMinGrillTemp(), false);
             } else {
                 setDefaultTemp(scrollTemp - tempUtils.getMinProbeTemp(), false);
             }
         }
 
-        if(holdMode) {
+        if (holdMode) {
             clearButton.setVisibility(View.GONE);
         } else {
             clearButton.setVisibility(View.VISIBLE);
@@ -165,7 +186,7 @@ public class TempPickerDialog {
 
         pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
-            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
@@ -181,7 +202,7 @@ public class TempPickerDialog {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void setDefaultTemp(int position, boolean smooth){
+    private void setDefaultTemp(int position, boolean smooth) {
         if (smooth) {
             tempListRecycler.smoothScrollToPosition(position);
         } else {

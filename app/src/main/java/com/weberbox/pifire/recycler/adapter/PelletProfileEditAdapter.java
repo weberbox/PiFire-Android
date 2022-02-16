@@ -196,9 +196,9 @@ public class PelletProfileEditAdapter extends RecyclerView.Adapter<PelletProfile
         public void toggleCardView() {
             boolean visibility = editCardView.getVisibility() == View.VISIBLE;
             if (visibility) {
-                AnimUtils.slideUp(editCardView);
+                AnimUtils.slideClosed(editCardView);
             } else {
-                AnimUtils.slideDown(editCardView);
+                AnimUtils.slideOpen(editCardView);
             }
             TransitionManager.beginDelayedTransition(cardView, new RotateUtils());
             expandIcon.setRotation(visibility ? 0 : 180);

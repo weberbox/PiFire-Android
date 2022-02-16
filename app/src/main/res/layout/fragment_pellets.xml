@@ -12,10 +12,11 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/pellets_nested_scroll_view"
+        <ScrollView
+            android:id="@+id/pellets_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <RelativeLayout
                 android:id="@+id/pellets_root_container"
@@ -39,6 +40,6 @@
                     layout="@layout/layout_pellets" />
 
             </RelativeLayout>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

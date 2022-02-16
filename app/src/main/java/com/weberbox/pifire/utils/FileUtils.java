@@ -43,7 +43,7 @@ public class FileUtils {
             if (!isFileCreated && retries < 3) {
                 // Try 3 times
                 retries++;
-                saveJSONFile(context, jsonString, filename);
+                saveJSONFile(context, filename, jsonString);
             } else {
                 retries = 0;
             }
@@ -139,7 +139,7 @@ public class FileUtils {
         File imgDir = new File(context.getFilesDir(), "img");
         File[] files = imgDir.listFiles();
         if (files != null) {
-            for(File file : files) {
+            for (File file : files) {
                 Uri imgUri = Uri.fromFile(file);
                 if (!uris.contains(imgUri)) {
                     deleteFile(imgUri);
@@ -153,8 +153,8 @@ public class FileUtils {
         File path = new File(context.getFilesDir(), "img");
         if (path.exists() && path.isDirectory()) {
             File[] files = path.listFiles();
-            if(files != null) {
-                for(File file : files) {
+            if (files != null) {
+                for (File file : files) {
                     file.delete();
                 }
             }
@@ -166,8 +166,8 @@ public class FileUtils {
         File path = new File(context.getCacheDir(), child);
         if (path.exists() && path.isDirectory()) {
             File[] files = path.listFiles();
-            if(files != null) {
-                for(File file : files) {
+            if (files != null) {
+                for (File file : files) {
                     file.delete();
                 }
             }

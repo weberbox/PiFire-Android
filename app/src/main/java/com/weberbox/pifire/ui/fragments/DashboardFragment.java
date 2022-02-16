@@ -69,6 +69,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private TextView grillSetText, probeOneTargetText, probeTwoTargetText, pelletLevelText;
     private TextView currentStatusText, smokePlusText, grillTargetText;
     private ImageView probeOneShutdown, probeTwoShutdown, timerShutdown;
+    private ImageView probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm;
     private ProgressBar grillTempProgress, probeOneProgress, probeTwoProgress, timerProgress;
     private ProgressBar loadingBar;
     private LinearLayout smokePlusBox;
@@ -123,6 +124,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         probeOneShutdown = binding.dashLayout.probeOneShutdown;
         probeTwoShutdown = binding.dashLayout.probeTwoShutdown;
         timerShutdown = binding.dashLayout.timerShutdown;
+        probeOneKeepWarm = binding.dashLayout.probeOneKeepWarm;
+        probeTwoKeepWarm = binding.dashLayout.probeTwoKeepWarm;
+        timerKeepWarm = binding.dashLayout.timerKeepWarm;
 
         grillTempText = binding.dashLayout.controlsGrillTemp;
         probeOneTempText = binding.dashLayout.controlsProbeOneTemp;
@@ -298,7 +302,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                     R.drawable.ic_probe_disable, (dialogInterface, which) ->
                                             ServerControl.probeOneToggle(socket,
                                                     getProbesEnabled(false, probeTwoEnabled),
-                                            this::processPostResponse))
+                                                    this::processPostResponse))
                             .build();
                 } else {
                     dialog = new BottomIconDialog.Builder(requireActivity())
@@ -417,28 +421,27 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
         });
 
-        if (getActivity() != null) {
-            MainViewModel mainViewModel = new ViewModelProvider(getActivity()).get(
-                    MainViewModel.class);
-            mainViewModel.getDashData().observe(getViewLifecycleOwner(), dashData -> {
-                isLoading = false;
-                swipeRefresh.setRefreshing(false);
-                if (dashData != null) {
-                    updateUIWithData(dashData);
-                }
-            });
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        mainViewModel.getDashData().observe(getViewLifecycleOwner(), dashData -> {
+            isLoading = false;
+            swipeRefresh.setRefreshing(false);
+            if (dashData != null) {
+                updateUIWithData(dashData);
+            }
+        });
 
-            mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-                if (enabled != null && enabled) {
-                    if (!isLoading) {
-                        requestDataUpdate();
-                    }
-                } else {
-                    toggleLoading(false);
-                    setOfflineMode();
+        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+            if (enabled != null && enabled) {
+                if (!isLoading) {
+                    requestDataUpdate();
                 }
-            });
-        }
+            } else {
+                toggleLoading(false);
+                setOfflineMode();
+            }
+        });
+
     }
 
     @Override
@@ -552,12 +555,13 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     }
 
     @Override
-    public void onTempConfirmClicked(int type, String temp, boolean hold, boolean shutdown) {
+    public void onTempConfirmClicked(int type, String temp, boolean hold, boolean shutdown,
+                                     boolean keepWarm) {
         if (socket != null) {
             if (hold && type == Constants.PICKER_TYPE_GRILL) {
                 ServerControl.setGrillTemp(socket, temp, this::processPostResponse);
             }
-            ServerControl.setProbeNotify(socket, type, temp, hold, shutdown,
+            ServerControl.setProbeNotify(socket, type, temp, hold, shutdown, keepWarm,
                     this::processPostResponse);
         }
     }
@@ -570,9 +574,10 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     }
 
     @Override
-    public void onTimerConfirmClicked(String hours, String minutes, Boolean shutdown) {
+    public void onTimerConfirmClicked(String hours, String minutes, boolean shutdown,
+                                      boolean keepWarm) {
         if (socket != null) {
-            ServerControl.sendTimerTime(socket, hours, minutes, shutdown,
+            ServerControl.sendTimerTime(socket, hours, minutes, shutdown, keepWarm,
                     this::processPostResponse);
         }
     }
@@ -620,6 +625,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             boolean probeOneShutdown = notifyData.getP1Shutdown();
             boolean probeTwoShutdown = notifyData.getP2Shutdown();
             boolean timerShutdown = notifyData.getTimerShutdown();
+            boolean probeOneKeepWarm = notifyData.getP1KeepWarm();
+            boolean probeTwoKeepWarm = notifyData.getP2KeepWarm();
+            boolean timerKeepWarm = notifyData.getTimerKeepWarm();
             probeOneEnabled = probesEnabled.getProbeOneEnabled();
             probeTwoEnabled = probesEnabled.getProbeTwoEnabled();
 
@@ -766,6 +774,15 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 AnimUtils.fadeAnimation(this.probeTwoShutdown, 300, probeTwoShutdown ?
                         Constants.FADE_IN : Constants.FADE_OUT);
                 AnimUtils.fadeAnimation(this.timerShutdown, 300, timerShutdown ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
+            }
+
+            if (NullUtils.checkObjectNotNull(probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm)) {
+                AnimUtils.fadeAnimation(this.probeOneKeepWarm, 300, probeOneKeepWarm ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
+                AnimUtils.fadeAnimation(this.probeTwoKeepWarm, 300, probeTwoKeepWarm ?
+                        Constants.FADE_IN : Constants.FADE_OUT);
+                AnimUtils.fadeAnimation(this.timerKeepWarm, 300, timerKeepWarm ?
                         Constants.FADE_IN : Constants.FADE_OUT);
             }
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog bulletedList="false">
+
+    <changelogversion versionName="1.4.0" changeDate="" currentVersion="true">
+	    <changelogtext logType="new">Added a recipes section with print and share functions</changelogtext>
+        <changelogtext logType="new">Added Overlapping Panels Navigation</changelogtext>
+        <changelogtext logType="new">Added Keep Warm Mode toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
+        <changelogtext logType="new">Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later</changelogtext>
+	    <changelogtext logType="imp">Moved to OneSignal Push Notifications. Requires PiFire Server v1.2.7 or later</changelogtext>
+	    <changelogtext logType="imp">Replaced most Snackbars with Alerter's for better visibility</changelogtext>
+        <changelogtext logType="imp">Various UI improvements including expandable views in the Pellets section</changelogtext>
+        <changelogtext logType="imp">Backend WebSocket overhaul to improve functions and receive responses from PiFire. Backward compatibility is present for PiFire versions below 1.2.7</changelogtext>
+        <changelogtext logType="note">Firebase Notifications were removed to support OneSignal</changelogtext>
+	    <changelogtext logType="fix">Fixed issue where reinstalling would break basic auth username and password decryption. If the app is removed these preferences will not be backed up and will need to be reentered upon installation</changelogtext>
+    </changelogversion>
+
+	<changelogversion versionName="1.3.2" changeDate="">
+	    <changelogtext logType="new">Added Celsius Support. Setting can be found in probe settings section or can be changed in PiFire</changelogtext>
+	    <changelogtext logType="new">Added PID Center Ratio to Work Settings</changelogtext>
+        <changelogtext logType="new">Added Server Backup and Restore to Admin section</changelogtext>
+        <changelogtext logType="imp">Moved Crash Reporting to Sentry</changelogtext>
+        <changelogtext logType="fix">Misc Fixes</changelogtext>
+        <changelogtext logType="note">Some functions require PiFire v1.2.2 or later</changelogtext>
+    </changelogversion>
+
+	<changelogversion versionName="1.3.1" changeDate="">
+	    <changelogtext logType="new">Added Manual Controls to Admin section</changelogtext>
+	    <changelogtext logType="imp">Added a Fast Scroll Option to Temp Selectors. This should help in scrolling to desired temp faster</changelogtext>
+	    <changelogtext logType="imp">Added More Temp Selections to Temp Selections</changelogtext>
+	    <changelogtext logType="imp">Updated self signed certificate implementation. This will allow self signed certificates that are imported to the Android certificate store</changelogtext>
+	    <changelogtext logType="fix">Misc Fixes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.3.0" changeDate="">
+        <changelogtext logType="new">Added Temp Shutdown to Temp Selectors along with a visual flag to indicate it is active</changelogtext>
+        <changelogtext logType="new">Added Time Shutdown to Time Selector along with a visual flag to indicate it is active</changelogtext>
+        <changelogtext logType="new">Added Pellet Level Check function. Just press the pellet level box on the dashboard or the refresh button on the pellets page</changelogtext>
+        <changelogtext logType="new">Added option to delete individual pellet logs. Just long press and a dialog will show</changelogtext>
+        <changelogtext logType="new">Added low pellet warning notifications. With this you can receive notifications if pellet levels go below a set threshold during a cook</changelogtext>
+        <changelogtext logType="new">Added a Keep Screen on function. This will force the screen to remain on when viewing the dashboard. This was it will not timeout and turn off. Be careful as this can drain battery</changelogtext>
+        <changelogtext logType="imp">Begin adding landscape tablet layout for dashboard, pellet manager, history and info</changelogtext>
+        <changelogtext logType="imp">Update Timer Operation to be more reliable and run locally. This allows a minute/seconds countdown without the server needing to send updates continuously</changelogtext>
+        <changelogtext logType="imp">Lowered the minimum api to 24. This should help support some older tablets</changelogtext>
+        <changelogtext logType="fix">Updated Firebase notifications</changelogtext>
+        <changelogtext logType="fix">Misc other bugfixes</changelogtext>
+    </changelogversion>
+
+	<changelogversion versionName="1.2.0-rc1" changeDate="">
+        <changelogtext logType="note">Release Candidate</changelogtext>
+        <changelogtext logType="new">Added Temp Shutdown to Temp Selectors along with a visual flag to indicate it is active</changelogtext>
+        <changelogtext logType="new">Added Time Shutdown to Time Selector along with a visual flag to indicate it is active</changelogtext>
+        <changelogtext logType="new">Added Pellet Level Check function. Just press the pellet level box on the dashboard or the refresh button on the pellets page</changelogtext>
+        <changelogtext logType="new">Added option to delete individual pellet logs. Just long press and a dialog will show</changelogtext>
+        <changelogtext logType="new">Added low pellet warning notifications. With this you can receive notifications if pellet levels go below a set threshold during a cook</changelogtext>
+        <changelogtext logType="new">Added a Keep Screen on function. This will force the screen to remain on when viewing the dashboard. This was it will not timeout and turn off. Be careful as this can drain battery</changelogtext>
+        <changelogtext logType="imp">Begin adding landscape tablet layout for dashboard, pellet manager, history and info</changelogtext>
+        <changelogtext logType="imp">Update Timer Operation to be more reliable and run locally. This allows a minute/seconds countdown without the server needing to send updates continuously</changelogtext>
+        <changelogtext logType="imp">Lowered the minimum api to 24. This should help support some older tablets</changelogtext>
+        <changelogtext logType="fix">Misc other bugfixes</changelogtext>
+    </changelogversion>
+
+	<changelogversion versionName="1.1.0-rc2" changeDate="">
+	    <changelogtext logType="fix">Fixed loading bar views</changelogtext>
+	    <changelogtext logType="new">Added option to view settings offline</changelogtext>
+	    <changelogtext logType="imp">Updated the app updater functions</changelogtext>
+    </changelogversion>
+
+ 	<changelogversion versionName="1.1.0-rc1" changeDate="">
+        <changelogtext logType="note">First Release Candidate</changelogtext>
+    </changelogversion>
+
+</changelog>

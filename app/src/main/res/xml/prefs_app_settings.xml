@@ -61,22 +61,6 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_app_shutdown">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_probe_shutdown"
-            app:key="@string/prefs_probe_shutdown"
-            app:summary="@string/settings_app_probe_shutdown_summary"
-            app:title="@string/settings_app_probe_shutdown" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_timer_shutdown"
-            app:key="@string/prefs_timer_shutdown"
-            app:summary="@string/settings_app_timer_shutdown_summary"
-            app:title="@string/settings_app_timer_shutdown" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="@string/settings_cat_app_recipes">
 
         <Preference

@@ -82,8 +82,8 @@ public class EventsFragment extends Fragment {
         eventsRecycler.getRecyclerView().setClipToPadding(false);
         eventsRecycler.getRecyclerView().setPadding(0,padding,0,padding);
         eventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        eventsRecycler.addVeiledItems(15);
         eventsRecycler.setAdapter(eventsListAdapter);
+        eventsRecycler.addVeiledItems(15);
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {

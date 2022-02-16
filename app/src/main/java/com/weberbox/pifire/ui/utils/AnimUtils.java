@@ -256,7 +256,7 @@ public class AnimUtils {
         view.setLayoutAnimation(controller);
     }
 
-    public static void slideDown(final View view) {
+    public static void slideOpen(final View view) {
         if (view != null) {
             view.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
@@ -284,7 +284,7 @@ public class AnimUtils {
         }
     }
 
-    public static void slideUp(final View view) {
+    public static void slideClosed(final View view) {
         if (view != null) {
             view.post(() -> {
                 final int height = view.getHeight();

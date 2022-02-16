@@ -369,6 +369,15 @@ public class ControlDataModel {
         @SerializedName("timer_shutdown")
         @Expose
         private Boolean timerShutdown;
+        @SerializedName("p1_keep_warm")
+        @Expose
+        private Boolean p1KeepWarm;
+        @SerializedName("p2_keep_warm")
+        @Expose
+        private Boolean p2KeepWarm;
+        @SerializedName("timer_keep_warm")
+        @Expose
+        private Boolean timerKeepWarm;
 
         public Boolean getHopperLow() {
             return hopperLow;
@@ -419,6 +428,45 @@ public class ControlDataModel {
 
         public NotifyData withTimerShutdown(Boolean timerShutdown) {
             this.timerShutdown = timerShutdown;
+            return this;
+        }
+
+        public Boolean getP1KeepWarm() {
+            return p1KeepWarm;
+        }
+
+        public void setP1KeepWarm(Boolean p1KeepWarm) {
+            this.p1KeepWarm = p1KeepWarm;
+        }
+
+        public NotifyData withP1KeepWarm(Boolean p1KeepWarm) {
+            this.p1KeepWarm = p1KeepWarm;
+            return this;
+        }
+
+        public Boolean getP2KeepWarm() {
+            return p2KeepWarm;
+        }
+
+        public void setP2KeepWarm(Boolean p2KeepWarm) {
+            this.p2KeepWarm = p2KeepWarm;
+        }
+
+        public NotifyData withP2KeepWarm(Boolean p2KeepWarm) {
+            this.p2KeepWarm = p2KeepWarm;
+            return this;
+        }
+
+        public Boolean getTimerKeepWarm() {
+            return timerKeepWarm;
+        }
+
+        public void setTimerKeepWarm(Boolean timerKeepWarm) {
+            this.timerKeepWarm = timerKeepWarm;
+        }
+
+        public NotifyData withTimerKeepWarm(Boolean timerKeepWarm) {
+            this.timerKeepWarm = timerKeepWarm;
             return this;
         }
 

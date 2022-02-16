@@ -189,6 +189,15 @@ public class DashDataModel {
         @SerializedName("timer_shutdown")
         @Expose
         private Boolean timerShutdown;
+        @SerializedName("p1_keep_warm")
+        @Expose
+        private Boolean p1KeepWarm;
+        @SerializedName("p2_keep_warm")
+        @Expose
+        private Boolean p2KeepWarm;
+        @SerializedName("timer_keep_warm")
+        @Expose
+        private Boolean timerKeepWarm;
 
         public Boolean getHopperLow() {
             return hopperLow;
@@ -204,6 +213,18 @@ public class DashDataModel {
 
         public Boolean getTimerShutdown() {
             return timerShutdown;
+        }
+
+        public Boolean getP1KeepWarm() {
+            return p1KeepWarm;
+        }
+
+        public Boolean getP2KeepWarm() {
+            return p2KeepWarm;
+        }
+
+        public Boolean getTimerKeepWarm() {
+            return timerKeepWarm;
         }
     }
 

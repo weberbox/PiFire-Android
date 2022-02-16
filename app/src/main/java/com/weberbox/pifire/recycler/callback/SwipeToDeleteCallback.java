@@ -58,19 +58,19 @@ abstract public class SwipeToDeleteCallback extends ItemTouchHelper.Callback {
 
         Drawable drawable = ContextCompat.getDrawable(recyclerView.getContext(), R.drawable.ic_delete);
 
-        int mIntrinsicWidth = drawable != null ? drawable.getIntrinsicWidth() : 0;
-        int mIntrinsicHeight = drawable != null ? drawable.getIntrinsicHeight() : 0;
+        int intrinsicWidth = drawable != null ? drawable.getIntrinsicWidth() : 0;
+        int intrinsicHeight = drawable != null ? drawable.getIntrinsicHeight() : 0;
 
         background.setColor(recyclerView.getContext().getColor(R.color.colorRedButton));
         background.setBounds(itemView.getLeft(), itemView.getTop(),
                 itemView.getLeft() + (int) dX, itemView.getBottom());
         background.draw(c);
 
-        int deleteIconTop = itemView.getTop() + (itemHeight - mIntrinsicHeight) / 2;
-        int deleteIconMargin = (itemHeight - mIntrinsicHeight) / 2;
+        int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+        int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
         int deleteIconLeft = itemView.getLeft() + deleteIconMargin;
-        int deleteIconRight = itemView.getLeft() + deleteIconMargin + mIntrinsicWidth;
-        int deleteIconBottom = deleteIconTop + mIntrinsicHeight;
+        int deleteIconRight = itemView.getLeft() + deleteIconMargin + intrinsicWidth;
+        int deleteIconBottom = deleteIconTop + intrinsicHeight;
 
         if (drawable != null) {
             drawable.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);

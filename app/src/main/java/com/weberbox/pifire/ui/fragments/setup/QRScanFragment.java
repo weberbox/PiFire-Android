@@ -47,7 +47,7 @@ public class QRScanFragment extends Fragment {
         barcodeView.getBarcodeView().getCameraSettings().setAutoFocusEnabled(true);
         barcodeView.getBarcodeView().getCameraSettings().setContinuousFocusEnabled(true);
         barcodeView.setStatusText(null);
-        barcodeView.decodeContinuous(mBarCodeCallback);
+        barcodeView.decodeContinuous(barCodeCallback);
 
         setupViewModel = new ViewModelProvider(requireActivity()).get(SetupViewModel.class);
         setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> navigateBack());
@@ -78,7 +78,7 @@ public class QRScanFragment extends Fragment {
         navController.navigate(R.id.nav_setup_address);
     }
 
-    private final BarcodeCallback mBarCodeCallback = new BarcodeCallback() {
+    private final BarcodeCallback barCodeCallback = new BarcodeCallback() {
 
         @Override
         public void barcodeResult(BarcodeResult result) {

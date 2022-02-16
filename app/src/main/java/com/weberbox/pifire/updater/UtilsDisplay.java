@@ -112,7 +112,7 @@ public class UtilsDisplay {
                 .setIcon(R.drawable.ic_update)
                 .setBackgroundColorRes(R.color.colorPrimaryLighter)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(indefinite)
                 .setIconSize(R.dimen.alerter_icon_size_small)
                 .addButton(activity.getResources().getString(R.string.update_button),
@@ -127,7 +127,7 @@ public class UtilsDisplay {
                 .setIcon(R.drawable.ic_no_update)
                 .setBackgroundColorRes(R.color.colorPrimaryLighter)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(indefinite)
                 .setIconSize(R.dimen.alerter_icon_size_small);
     }
@@ -139,7 +139,7 @@ public class UtilsDisplay {
                 .setIcon(R.drawable.ic_error)
                 .setBackgroundColorRes(R.color.colorAccentRed)
                 .enableSwipeToDismiss()
-                .setTextAppearance(R.style.Text14Aller)
+                .setTextAppearance(R.style.Text14AllerBold)
                 .enableInfiniteDuration(indefinite)
                 .setIconSize(R.dimen.alerter_icon_size_small);
     }

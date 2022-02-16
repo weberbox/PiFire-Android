@@ -677,9 +677,9 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
     private void toggleCardView() {
         boolean visibility = addProfileCard.getVisibility() == View.VISIBLE;
         if (visibility) {
-            AnimUtils.slideUp(addProfileCard);
+            AnimUtils.slideClosed(addProfileCard);
         } else {
-            AnimUtils.slideDown(addProfileCard);
+            AnimUtils.slideOpen(addProfileCard);
         }
         addNewProfile.setText(visibility ? R.string.pellets_add : R.string.close);
     }
