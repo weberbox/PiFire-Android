@@ -14,10 +14,6 @@ public class OneSignalUtils {
         Timber.d("Non OneSignal Build");
     }
 
-    public static void setSubscriptionObserver(Socket socket) {
-        Timber.d("Non OneSignal Build");
-    }
-
     public static void initNotificationChannels(Context context) {
         Timber.d("Non OneSignal Build");
     }
@@ -26,7 +22,7 @@ public class OneSignalUtils {
         Timber.d("Non OneSignal Build");
     }
 
-    public static void registerDevice(Context context, Socket socket) {
+    public static void registerDevice(Context context, Socket socket, int registrationResult) {
         Timber.d("Non OneSignal Build");
     }
 
