@@ -1,16 +1,13 @@
 {
-  "latestVersion": "1.3.2",
-  "latestVersionCode": "7",
+  "latestVersion": "1.3.3",
+  "latestVersionCode": "8",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
     "1"
   ],
   "releaseNotes": [
-    "- Added Celsius Support",
-    "- Added PID Center Ratio",
-    "- Added Server Backup and Restore to Admin",
-    "- Moved Crash Reporting to Sentry",
-    "- Misc Fixes"
+    "- Fix Crash if PiFire Server does not respond to websocket request",
+    "- App will now show a dialog if the server does not respond indicating that the PiFire Server version may be unsupported"
   ]
 }
