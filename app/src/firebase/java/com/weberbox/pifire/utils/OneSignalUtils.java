@@ -148,18 +148,17 @@ public class OneSignalUtils {
     }
 
     private static OneSignalDeviceInfo getDevice(Context context, String playerID) {
-        OneSignalDeviceInfo newDevice = new OneSignalDeviceInfo();
-        newDevice.setDeviceName(android.os.Build.MODEL);
-        newDevice.setFriendlyName("");
-        newDevice.setAppVersion(BuildConfig.VERSION_NAME);
-
         Map<String, OneSignalDeviceInfo> devicesHash = getDevicesHash(context);
-        OneSignalDeviceInfo existingDevice = devicesHash.getOrDefault(playerID, newDevice);
+        OneSignalDeviceInfo existingDevice = devicesHash.get(playerID);
 
         if (existingDevice != null) {
             existingDevice.setAppVersion(BuildConfig.VERSION_NAME);
             return existingDevice;
         } else {
+            OneSignalDeviceInfo newDevice = new OneSignalDeviceInfo();
+            newDevice.setDeviceName(android.os.Build.MODEL);
+            newDevice.setFriendlyName("");
+            newDevice.setAppVersion(BuildConfig.VERSION_NAME);
             return newDevice;
         }
     }

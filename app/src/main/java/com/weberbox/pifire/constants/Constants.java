@@ -1,5 +1,6 @@
 package com.weberbox.pifire.constants;
 
+@SuppressWarnings("unused")
 public class Constants {
 
     // Grill Modes

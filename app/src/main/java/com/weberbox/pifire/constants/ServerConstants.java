@@ -7,6 +7,8 @@ public class ServerConstants {
     public static final String DEFAULT_SOCKET_URL = "http://192.168.1.254";
 
     // Socket IO Strings
+    public static final String LISTEN_GRILL_DATA = "grill_control_data";
+
     public static final String GE_GET_DASH_DATA = "get_dash_data";
     public static final String GE_GET_APP_DATA = "get_app_data";
     public static final String GA_SETTINGS_DATA = "settings_data";
@@ -69,7 +71,6 @@ public class ServerConstants {
     public static final String G_MODE_MANUAL = "Manual";
 
     // Socket Strings Dep
-    public static final String LISTEN_GRILL_DATA = "grill_control_data";
     public static final String REQUEST_GRILL_DATA = "request_grill_data";
     public static final String REQUEST_PELLET_DATA = "request_pellet_data";
     public static final String REQUEST_HISTORY_DATA = "request_history_data";

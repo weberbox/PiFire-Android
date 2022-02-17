@@ -4,7 +4,7 @@
     <changelogversion versionName="1.4.0" changeDate="" currentVersion="true">
 	    <changelogtext logType="new">Added a recipes section with print and share functions</changelogtext>
         <changelogtext logType="new">Added Overlapping Panels Navigation</changelogtext>
-        <changelogtext logType="new">Added Keep Warm Mode toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
+        <changelogtext logType="new">Added Keep Warm option toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
         <changelogtext logType="new">Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later</changelogtext>
 	    <changelogtext logType="imp">Moved to OneSignal Push Notifications. Requires PiFire Server v1.2.7 or later</changelogtext>
 	    <changelogtext logType="imp">Replaced most Snackbars with Alerter's for better visibility</changelogtext>

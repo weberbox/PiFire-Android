@@ -7,7 +7,7 @@ import com.weberbox.pifire.model.remote.PelletDataModel.*;
 
 import io.socket.client.Socket;
 
-//Depreciated methods prior to PiFire 1.2.6
+//Depreciated methods prior to PiFire 1.2.7
 //@Deprecated
 public class ServerControlDep {
 
