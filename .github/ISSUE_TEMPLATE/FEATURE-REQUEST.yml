@@ -1,0 +1,31 @@
+name: Feature Request
+description: Suggest a new feature for PiFire Android
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to help improve PiFire Android!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: If so, please provide clear and concise description of the problem.
+      placeholder: ex. I'm always frustrated when [...]
+  - type: textarea
+    id: feature
+    attributes:
+      label: What is your feature request?
+      placeholder: A clear and concise description of the feature.
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Are there any workarounds?
+      placeholder: A clear and concise description of any alternative solutions or features you've considered.
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      placeholder: Add any other context or screenshots about the feature request here.

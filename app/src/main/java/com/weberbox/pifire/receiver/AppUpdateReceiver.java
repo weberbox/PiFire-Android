@@ -27,13 +27,13 @@ public class AppUpdateReceiver extends BroadcastReceiver {
             if (prefs.getInt(context.getString(R.string.prefs_installed_version), 1) <
                     AppConfig.FORCE_SETUP_VERSION) {
                 prefs.edit()
+                        .putInt(context.getString(R.string.prefs_installed_version),
+                                BuildConfig.VERSION_CODE)
                         .putBoolean(context.getString(R.string.prefs_first_app_start), true)
                         .apply();
             }
 
             prefs.edit()
-                    .putInt(context.getString(R.string.prefs_installed_version),
-                            BuildConfig.VERSION_CODE)
                     .putInt(context.getString(R.string.prefs_app_updater_checks), 0)
                     .putInt(context.getString(R.string.prefs_app_updater_force_checks), 0)
                     .putBoolean(context.getString(R.string.prefs_app_update_required), false)

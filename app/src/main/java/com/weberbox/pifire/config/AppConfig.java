@@ -6,10 +6,10 @@ import com.weberbox.pifire.BuildConfig;
 public class AppConfig {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final boolean USE_ONESIGNAL = BuildConfig.IS_ONESIGNAL;
-    public static final boolean IS_DEV_BUILD = BuildConfig.FLAVOR_type.equalsIgnoreCase("dev");
+    public static final boolean IS_DEV_BUILD = BuildConfig.FLAVOR_type.equals("dev");
 
     // Force Setup Version
-    public static final int FORCE_SETUP_VERSION = 8;
+    public static final int FORCE_SETUP_VERSION = 1040000;
 
     // Pellet Warning
     public static final int LOW_PELLET_WARNING = 40;

@@ -4,6 +4,8 @@ plugins {
     id 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 }
 
+def currentTime = System.currentTimeMillis().toString()
+
 def getGitRevCount = { ->
     try {
         def stdout = new ByteArrayOutputStream()
@@ -32,6 +34,12 @@ def getGitBranch = { ->
     }
 }
 
+def vMajor = 1
+def vMinor = 4
+def vPatch = 0
+def vBuild = 2
+def isDev = true
+
 android {
     compileSdk 31
 
@@ -39,8 +47,8 @@ android {
         applicationId "com.weberbox.pifire"
         minSdk 24
         targetSdk 31
-        versionCode 9
-        versionName "1.4.0-dev2"
+        versionCode vMajor * 1000000 + vMinor * 10000 + vPatch * 100 + vBuild
+        versionName "${vMajor}.${vMinor}.${vPatch}${isDev ? "-dev" + vBuild : ""}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -56,17 +64,17 @@ android {
             manifestPlaceholders = [appName: "PiFire", environment: "production"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
-            buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
-            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount() + "\""
+            buildConfigField "String", "BUILD_TIME", "\"${currentTime}\""
+            buildConfigField "String", "GIT_BRANCH", "\"${getGitBranch}\""
+            buildConfigField "String", "GIT_REV", "\"${getGitRevCount}\""
         }
         debug {
             manifestPlaceholders = [appName: "PiFire Debug", environment: "debug"]
             applicationIdSuffix ".debug"
             debuggable true
-            buildConfigField("String", "BUILD_TIME", "\"" + System.currentTimeMillis().toString() + "\"")
-            buildConfigField "String", "GIT_BRANCH", "\"" + getGitBranch() + "\""
-            buildConfigField "String", "GIT_REV", "\"" + getGitRevCount() + "\""
+            buildConfigField "String", "BUILD_TIME", "\"${currentTime}\""
+            buildConfigField "String", "GIT_BRANCH", "\"${getGitBranch}\""
+            buildConfigField "String", "GIT_REV", "\"${getGitRevCount}\""
         }
     }
 
