@@ -93,7 +93,7 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
     public void onBindEditText(@NonNull EditText editText) {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.addTextChangedListener(
-                new EmptyTextListener(getActivity(), editText));
+                new EmptyTextListener(getActivity(), 1.0, null, editText));
     }
 
     private void processPostResponse(String response) {

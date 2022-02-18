@@ -8,6 +8,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_min_start"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_min_start"
             app:title="@string/settings_safety_min_start"
@@ -15,6 +16,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_start"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_start"
             app:title="@string/settings_safety_max_start"
@@ -31,6 +33,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_temp"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_temp"
             app:title="@string/settings_safety_max_temp"

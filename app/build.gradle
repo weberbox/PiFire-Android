@@ -37,7 +37,7 @@ def getGitBranch = { ->
 def vMajor = 1
 def vMinor = 4
 def vPatch = 0
-def vBuild = 3
+def vBuild = 4
 def isDev = true
 
 android {

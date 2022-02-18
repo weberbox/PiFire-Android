@@ -8,6 +8,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pmode_auger_on"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_auger_on"
             app:title="@string/settings_pmode_auger_on"
@@ -57,6 +58,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_fan"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_fan"
             app:title="@string/settings_splus_fan"
@@ -64,6 +66,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_min"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_min"
             app:title="@string/settings_splus_min"
@@ -71,6 +74,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_max"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_max"
             app:title="@string/settings_splus_max"
@@ -84,6 +88,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_cycle"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_cycle"
             app:title="@string/settings_pid_cycle"
@@ -91,6 +96,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_pb"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_pb"
             app:title="@string/settings_pid_pb"
@@ -98,6 +104,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_ti"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_ti"
             app:title="@string/settings_pid_ti"
@@ -105,6 +112,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_td"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_td"
             app:title="@string/settings_pid_td"
@@ -112,6 +120,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_u_min"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_u_min"
             app:title="@string/settings_pid_u_min"
@@ -119,6 +128,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_u_max"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_u_max"
             app:title="@string/settings_pid_u_max"
@@ -126,6 +136,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_center"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_center"
             app:title="@string/settings_pid_center"
@@ -155,6 +166,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_keep_warm_temp"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_keep_warm_temp"
             app:title="@string/settings_keep_warm_temp"

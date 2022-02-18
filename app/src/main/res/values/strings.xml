@@ -236,9 +236,8 @@
     <string name="settings_note">Note:</string>
     <string name="settings_warning">Warning:</string>
     <string name="settings_blank_error">Cannot be blank</string>
-    <string name="settings_zero_error">Value must be greater than 0</string>
-    <string name="settings_min_ten_error">Value must be greater than 10</string>
-    <string name="settings_max_hundred_error">Value must be less than 100</string>
+    <string name="settings_min_error">Value must be greater than %1$s</string>
+    <string name="settings_max_error">Value must be less than %1$s</string>
 
     <string name="settings_action_success">Action completed successfully</string>
 

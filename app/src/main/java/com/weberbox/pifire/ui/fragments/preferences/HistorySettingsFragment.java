@@ -2,9 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -58,34 +56,15 @@ public class HistorySettingsFragment extends PreferenceFragmentCompat implements
             historyDisplay.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(getActivity(), editText));
+                        new EmptyTextListener(getActivity(), 1.0, null, editText));
             });
         }
 
         if (historyPoints != null) {
             historyPoints.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (Integer.parseInt(s.toString()) < 10) {
-                            editText.setError(getString(R.string.settings_min_ten_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(getActivity(), 10.0, null, editText));
             });
         }
     }

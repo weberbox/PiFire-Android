@@ -8,6 +8,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_shutdown_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_shutdown_time"
             app:title="@string/settings_shutdown_time"
@@ -21,6 +22,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_startup_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_startup_time"
             app:title="@string/settings_startup_time"

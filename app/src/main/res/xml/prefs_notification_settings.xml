@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
@@ -14,10 +14,10 @@
             app:title="@string/enabled" />
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/prefs_notif_onesignal_consent"
+            android:summary="@string/settings_onesignal_consent_summary"
             android:title="@string/settings_onesignal_consent_title"
-            android:summary="@string/settings_onesignal_consent_summary" />
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_onesignal_consent" />
 
     </PreferenceCategory>
 
@@ -33,6 +33,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_ifttt_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_api"
             app:title="@string/settings_ifttt_api"
@@ -52,6 +53,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_api"
             app:title="@string/settings_pushover_api"
@@ -59,6 +61,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_keys"
             app:summary="@string/settings_pushover_note"
@@ -66,6 +69,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_url"
             app:title="@string/settings_pushover_url"
@@ -85,6 +89,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_api"
             app:title="@string/settings_pushbullet_api"
@@ -92,6 +97,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_url"
             app:title="@string/settings_pushbullet_url"
@@ -111,6 +117,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_url"
             app:title="@string/settings_influxdb_url"
@@ -118,6 +125,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_token"
             app:title="@string/settings_influxdb_token"
@@ -125,6 +133,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_org"
             app:title="@string/settings_influxdb_org"
@@ -132,6 +141,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_influxdb_bucket"
             app:title="@string/settings_influxdb_bucket"

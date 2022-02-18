@@ -2,9 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,6 +19,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Socket;
@@ -63,86 +62,24 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         if (pelletWarningLevel != null) {
             pelletWarningLevel.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, 100.0, editText));
             });
         }
 
         if (pelletsFull != null) {
             pelletsFull.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), null, 100.0, editText));
             });
         }
 
         if (pelletsEmpty != null) {
             pelletsEmpty.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, 100.0, editText));
             });
         }
     }

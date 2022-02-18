@@ -81,7 +81,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                         InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -90,7 +90,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                         InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -99,7 +99,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                         InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -107,7 +107,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             augerOnTime.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -115,7 +115,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             fanCycleTime.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -123,7 +123,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             minSmokeTemp.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -131,7 +131,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             maxSmokeTemp.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -139,7 +139,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             pidCycle.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), editText));
+                        new EmptyTextListener(requireActivity(), 0.1, null, editText));
             });
         }
 
@@ -149,7 +149,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                             InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), editText));
+                            new EmptyTextListener(requireActivity(), 0.1, null, editText));
                 });
             } else {
                 pidUMax.setEnabled(false);
@@ -164,7 +164,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                             InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), editText));
+                            new EmptyTextListener(requireActivity(), 0.1, null, editText));
                 });
             } else {
                 pidUMin.setEnabled(false);
@@ -179,7 +179,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                             InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), editText));
+                            new EmptyTextListener(requireActivity(), 0.1, null, editText));
                 });
             } else {
                 pidCenter.setEnabled(false);
@@ -200,7 +200,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 keepWarmTemp.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), editText));
+                            new EmptyTextListener(requireActivity(), 1.0, null, editText));
                 });
             } else {
                 keepWarmTemp.setEnabled(false);

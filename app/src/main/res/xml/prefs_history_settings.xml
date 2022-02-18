@@ -19,6 +19,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_display"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_display"
             app:title="@string/settings_history_display"
@@ -26,6 +27,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_history_points"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_history_points"
             app:title="@string/settings_history_points"

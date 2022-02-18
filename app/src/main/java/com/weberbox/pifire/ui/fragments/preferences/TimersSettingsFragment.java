@@ -56,7 +56,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
             shutdownTime.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(getActivity(), editText));
+                        new EmptyTextListener(getActivity(), 1.0, null, editText));
             });
         }
 
@@ -65,7 +65,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 startupTime.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), editText));
+                            new EmptyTextListener(getActivity(), 1.0, null, editText));
                 });
             } else {
                 startupTime.setEnabled(false);

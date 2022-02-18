@@ -15,6 +15,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_level"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_level"
             app:title="@string/settings_pellet_warning_level"
@@ -34,6 +35,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_full"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_full"
             app:title="@string/settings_pellet_full"
@@ -41,6 +43,7 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_empty"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_empty"
             app:title="@string/settings_pellet_empty"
