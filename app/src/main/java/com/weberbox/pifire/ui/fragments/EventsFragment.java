@@ -72,7 +72,7 @@ public class EventsFragment extends Fragment {
         events = new ArrayList<>();
 
         swipeRefresh = binding.eventsPullRefresh;
-        loadingBar = binding.eventsLayout.loadingProgressbar;
+        loadingBar = binding.loadingProgressbar;
 
         eventsListAdapter = new EventsListAdapter();
 

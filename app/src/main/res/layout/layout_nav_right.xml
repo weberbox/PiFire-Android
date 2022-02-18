@@ -4,9 +4,10 @@
 
     <data>
 
+        <import type="com.weberbox.pifire.constants.Constants"/>
         <variable
             name="callback"
-            type="com.weberbox.pifire.MainActivity" />
+            type="com.weberbox.pifire.interfaces.SettingsBindingCallback" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,7 +45,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickAppSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_APP_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -61,7 +62,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickProbeSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PROBE_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -78,7 +79,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickNameSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NAME_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -95,7 +96,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickWorkSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_WORK_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -112,7 +113,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickPelletSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PELLET_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -121,7 +122,7 @@
                         app:drawableStartCompat="@drawable/ic_grill_pellets" />
 
                     <TextView
-                        android:id="@+id/settings_shutdown"
+                        android:id="@+id/settings_timers"
                         style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -129,7 +130,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickTimersSettings()}'
+                        android:onClick="@{() -> callback.onSettingsClick(Constants.FRAG_TIMERS_SETTINGS)}"
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -146,7 +147,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickHistorySettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_HISTORY_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -163,7 +164,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickSafetySettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_SAFETY_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"
@@ -180,7 +181,7 @@
                         android:clickable="true"
                         android:drawablePadding="@dimen/default_spacing"
                         android:focusable="true"
-                        android:onClick='@{() -> callback.onClickNotificationsSettings()}'
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NOTIF_SETTINGS)}'
                         android:paddingStart="25dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="@dimen/settings_list_items"

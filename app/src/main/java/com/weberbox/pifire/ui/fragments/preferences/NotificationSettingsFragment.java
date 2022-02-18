@@ -2,7 +2,9 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,21 +50,29 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
     }
 
+    @NonNull
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        sharedPreferences = getPreferenceScreen().getSharedPreferences();
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         PreferenceCategory oneSignalCat = findPreference(getString(R.string.prefs_notif_onesignal_cat));
-        SwitchPreferenceCompat oneSignal = findPreference(getString(R.string.prefs_notif_onesignal_enabled));
-        Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
-        SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
 
         if (oneSignalCat != null) {
             if (!AppConfig.USE_ONESIGNAL || PushConfig.ONESIGNAL_APP_ID.isEmpty()) {
                 oneSignalCat.setVisible(false);
             }
         }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
+
+        SwitchPreferenceCompat oneSignal = findPreference(getString(R.string.prefs_notif_onesignal_enabled));
+        Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
+        SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
 
         if (oneSignal != null) {
             if (!VersionUtils.isSupported(Versions.V_127)) {

@@ -3,16 +3,11 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -23,6 +18,9 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
+import com.weberbox.pifire.ui.dialogs.UserPassDialog;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
+import com.weberbox.pifire.utils.AlertUtils;
 
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -47,8 +45,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
-        EditTextPreference authPass = findPreference(getString(R.string.prefs_server_basic_auth_password));
-        EditTextPreference authUser = findPreference(getString(R.string.prefs_server_basic_auth_user));
+        Preference credentials = findPreference(getString(R.string.prefs_server_credentials));
 
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(preference -> {
@@ -63,72 +60,12 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                     preference -> Prefs.getString(getString(R.string.prefs_server_address), ""));
         }
 
-        if (authUser != null) {
-            authUser.setOnBindEditTextListener(editText -> editText.addTextChangedListener(
-                    new TextWatcher() {
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if (s.length() == 0) {
-                                editText.setError(getString(R.string.settings_username_blank_error));
-                            } else {
-                                editText.setError(null);
-                            }
-                        }
-                    }));
-
-            authUser.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (newValue.equals("Error")) {
-                    Toast.makeText(getActivity(), R.string.settings_username_encrypt_error,
-                            Toast.LENGTH_LONG).show();
-                    return false;
-                } else {
-                    reloadRequired = true;
-                    return true;
-                }
-            });
-        }
-
-        if (authPass != null) {
-            authPass.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (newValue.equals("Error")) {
-                    Toast.makeText(getActivity(), R.string.settings_password_encrypt_error,
-                            Toast.LENGTH_LONG).show();
-                    return false;
-                } else {
-                    reloadRequired = true;
-                    return true;
-                }
-            });
-
-            authPass.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_TEXT |
-                        InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_password_blank_error));
-                        } else {
-                            editText.setError(null);
-                        }
-                    }
-                });
+        if (credentials != null) {
+            credentials.setOnPreferenceClickListener(preference -> {
+                UserPassDialog dialog = new UserPassDialog(requireActivity(),
+                        R.string.settings_credentials_title, callback);
+                dialog.showDialog();
+                return false;
             });
         }
     }
@@ -163,16 +100,6 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                     reloadRequired = true;
                 }
             }
-            if (preference instanceof EditTextPreference) {
-                if (preference.getContext().getString(R.string.prefs_server_basic_auth_password)
-                        .equals(preference.getKey())) {
-                    reloadRequired = true;
-                }
-                if (preference.getContext().getString(R.string.prefs_server_basic_auth_user)
-                        .equals(preference.getKey())) {
-                    reloadRequired = true;
-                }
-            }
         }
     }
 
@@ -190,6 +117,22 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
             } else {
                 requireActivity().onBackPressed();
             }
+        }
+    };
+
+    private final DialogAuthCallback callback = new DialogAuthCallback() {
+        @Override
+        public void onAuthDialogSave(boolean success) {
+            if (success) {
+                reloadRequired = true;
+            } else {
+                AlertUtils.createErrorAlert(getActivity(), R.string.settings_credentials_error, false);
+            }
+        }
+
+        @Override
+        public void onAuthDialogCancel() {
+
         }
     };
 }

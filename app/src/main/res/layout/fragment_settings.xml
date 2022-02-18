@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="callback"
-            type="com.weberbox.pifire.ui.fragments.SettingsFragment" />
-    </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -34,18 +26,10 @@
 
                     <include
                         android:id="@+id/settings_layout"
-                        layout="@layout/layout_settings"
-                        app:callback="@{callback}" />
+                        layout="@layout/layout_settings" />
 
                 </LinearLayout>
             </ScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <FrameLayout
-            android:id="@+id/settings_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_anchor="@id/settings_nested_scroll_view"
-            app:layout_anchorGravity="center" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

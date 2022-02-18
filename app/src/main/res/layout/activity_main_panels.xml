@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.discord.panels.OverlappingPanelsLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/overlapping_panels"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
-        android:id="@+id/start_panel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/colorPrimaryDark">
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/bg_nav_left"
-            app:elevation="0dp"
-            app:headerLayout="@layout/layout_nav_header_left"
-            app:itemBackground="@drawable/bg_nav_item_selector"
-            app:itemIconTint="@drawable/bg_nav_text_selected"
-            app:itemTextAppearance="@style/Text15AllerBold"
-            app:itemTextColor="@drawable/bg_nav_text_selected"
-            app:menu="@menu/activity_main_drawer" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/center_panel"
+    <com.discord.panels.OverlappingPanelsLayout
+        android:id="@+id/overlapping_panels"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/app_bar_main"
-            layout="@layout/app_bar_main"
+        <FrameLayout
+            android:id="@+id/start_panel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/colorPrimaryDark">
 
-    </FrameLayout>
+            <com.google.android.material.navigation.NavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/bg_nav_left"
+                app:elevation="0dp"
+                app:headerLayout="@layout/layout_nav_header_left"
+                app:itemBackground="@drawable/bg_nav_item_selector"
+                app:itemIconTint="@drawable/bg_nav_text_selected"
+                app:itemTextAppearance="@style/Text15AllerBold"
+                app:itemTextColor="@drawable/bg_nav_text_selected"
+                app:menu="@menu/activity_main_drawer" />
 
-    <FrameLayout
-        android:id="@+id/end_panel"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end">
+        </FrameLayout>
 
-        <include
-            android:id="@+id/settings_layout"
-            layout="@layout/layout_nav_right"
+        <FrameLayout
+            android:id="@+id/center_panel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </FrameLayout>
+            <include
+                android:id="@+id/app_bar_main_panel"
+                layout="@layout/app_bar_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-</com.discord.panels.OverlappingPanelsLayout>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/end_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end">
+
+            <include
+                android:id="@+id/settings_layout_panel"
+                layout="@layout/layout_nav_right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+    </com.discord.panels.OverlappingPanelsLayout>
+</layout>

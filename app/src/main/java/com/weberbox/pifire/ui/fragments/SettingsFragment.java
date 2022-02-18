@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -15,7 +16,8 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSettingsBinding;
-import com.weberbox.pifire.interfaces.SettingsCallback;
+import com.weberbox.pifire.interfaces.SettingsBindingCallback;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
@@ -26,25 +28,25 @@ import io.socket.client.Socket;
 
 public class SettingsFragment extends Fragment {
 
-    private FragmentSettingsBinding mBinding;
-    private SwipeRefreshLayout mSwipeRefresh;
-    private SettingsUtils mSettingsUtils;
-    private Socket mSocket;
+    private FragmentSettingsBinding binding;
+    private SwipeRefreshLayout swipeRefresh;
+    private SettingsUtils settingsUtils;
+    private Socket socket;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentSettingsBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
-            mSettingsUtils = new SettingsUtils(getActivity(), settingsCallback);
+            settingsUtils = new SettingsUtils(getActivity(), settingsSocketCallback);
 
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
@@ -52,15 +54,15 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mBinding.setCallback(this);
+        binding.settingsLayout.setCallback(settingsBindingCallback);
 
-        mSwipeRefresh = mBinding.settingsPullRefresh;
+        swipeRefresh = binding.settingsPullRefresh;
 
-        mSwipeRefresh.setOnRefreshListener(() -> {
-            if (mSocket != null && mSocket.connected()) {
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (socket != null && socket.connected()) {
                 requestSettingsData();
             } else {
-                mSwipeRefresh.setRefreshing(false);
+                swipeRefresh.setRefreshing(false);
                 showOfflineAlert();
             }
         });
@@ -69,7 +71,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mBinding = null;
+        binding = null;
     }
 
     @Override
@@ -84,43 +86,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    public void onClickAppSettings() {
-        startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-    }
-
-    public void onClickProbeSettings() {
-        startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-    }
-
-    public void onClickNameSettings() {
-        startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-    }
-
-    public void onClickWorkSettings() {
-        startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-    }
-
-    public void onClickPelletSettings() {
-        startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-    }
-
-    public void onClickTimersSettings() {
-        startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-    }
-
-    public void onClickHistorySettings() {
-        startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-    }
-
-    public void onClickSafetySettings() {
-        startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-    }
-
-    public void onClickNotificationsSettings() {
-        startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-    }
-
-    private void startPreferenceActivity(int fragment) {
+    public void startPreferenceActivity(int fragment) {
         if (getActivity() != null) {
             Intent intent = new Intent(getActivity(), PreferencesActivity.class);
             intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
@@ -129,13 +95,21 @@ public class SettingsFragment extends Fragment {
     }
 
     private void requestSettingsData() {
-        mSettingsUtils.requestSettingsData(mSocket);
+        settingsUtils.requestSettingsData(socket);
     }
 
-    private final SettingsCallback settingsCallback = new SettingsCallback() {
+    private final SettingsBindingCallback settingsBindingCallback = fragment -> {
+        if (getActivity() != null) {
+            Intent intent = new Intent(getActivity(), PreferencesActivity.class);
+            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
+            startActivity(intent);
+        }
+    };
+
+    private final SettingsSocketCallback settingsSocketCallback = new SettingsSocketCallback() {
         @Override
         public void onSettingsResult(boolean result) {
-            mSwipeRefresh.setRefreshing(false);
+            swipeRefresh.setRefreshing(false);
             if (!result && getActivity() != null) {
                 AlertUtils.createErrorAlert(getActivity(), R.string.json_error_settings, false);
             }

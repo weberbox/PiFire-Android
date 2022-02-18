@@ -30,7 +30,7 @@ public class Constants {
     public static final int FRAG_NAME_SETTINGS = 2;
     public static final int FRAG_WORK_SETTINGS = 3;
     public static final int FRAG_PELLET_SETTINGS = 4;
-    public static final int FRAG_SHUTDOWN_SETTINGS = 5;
+    public static final int FRAG_TIMERS_SETTINGS = 5;
     public static final int FRAG_HISTORY_SETTINGS = 6;
     public static final int FRAG_SAFETY_SETTINGS = 7;
     public static final int FRAG_NOTIF_SETTINGS = 8;

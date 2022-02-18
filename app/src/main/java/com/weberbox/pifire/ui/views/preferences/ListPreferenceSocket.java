@@ -15,8 +15,8 @@ import io.socket.client.Socket;
 @SuppressWarnings("unused")
 public class ListPreferenceSocket extends ListPreference {
 
-    private Socket mSocket;
-    private Context mContext;
+    private Socket socket;
+    private Context context;
 
     public ListPreferenceSocket(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -40,16 +40,16 @@ public class ListPreferenceSocket extends ListPreference {
 
     private void init(Context context) {
         PiFireApplication app = (PiFireApplication) context.getApplicationContext();
-        mSocket = app.getSocket();
-        mContext = context;
+        socket = app.getSocket();
+        this.context = context;
     }
 
     @Override
     protected void onClick() {
-        if (mSocket != null && mSocket.connected()) {
+        if (socket != null && socket.connected()) {
             super.onClick();
         } else {
-            AlertUtils.createErrorAlert((Activity) mContext, R.string.settings_error_offline, false);
+            AlertUtils.createErrorAlert((Activity) context, R.string.settings_error_offline, false);
         }
     }
 }

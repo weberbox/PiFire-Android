@@ -7,7 +7,7 @@ import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.interfaces.SettingsCallback;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel.*;
 
@@ -19,9 +19,9 @@ import timber.log.Timber;
 public class SettingsUtils {
 
     private final Context context;
-    private final SettingsCallback callback;
+    private final SettingsSocketCallback callback;
 
-    public SettingsUtils(Context context, SettingsCallback callback) {
+    public SettingsUtils(Context context, SettingsSocketCallback callback) {
         this.context = context;
         this.callback = callback;
     }

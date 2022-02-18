@@ -5,11 +5,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogInputTextBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
@@ -38,15 +39,18 @@ public class PelletsAddDialog {
 
         dialog.setTitle(title);
 
-        final EditText input = binding.dialogTextInput;
+        final TextInputLayout inputLayout = binding.dialogTextInputLayout;
+        final TextInputEditText input = binding.dialogTextInput;
 
         dialog.setView(binding.getRoot());
 
         dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            string = input.getText().toString();
-            if (string.length() != 0) {
-                callBack.onItemAdded(type, string);
-                dialog.dismiss();
+            if (input.getText() != null) {
+                string = input.getText().toString();
+                if (string.length() != 0) {
+                    callBack.onItemAdded(type, string);
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -69,10 +73,10 @@ public class PelletsAddDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    input.setError(context.getString(R.string.settings_blank_error));
+                    inputLayout.setError(context.getString(R.string.settings_blank_error));
                 } else {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    input.setError(null);
+                    inputLayout.setError(null);
                 }
             }
 

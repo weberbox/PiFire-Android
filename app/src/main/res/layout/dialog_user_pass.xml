@@ -23,11 +23,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_user_input_text"
+            style="@style/TextInputEditTextFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fontFamily="@font/aller_regular"
             android:hint="@string/settings_username"
+            android:inputType="text"
             android:textColor="@color/colorWhite"
             android:textColorHighlight="@color/colorAccent" />
 
@@ -39,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxStrokeColor="@color/selector_stroke_color"
+        app:endIconMode="password_toggle"
         app:errorEnabled="true"
         app:hintTextColor="@color/colorGreyHint"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -48,6 +51,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_pass_input_text"
+            style="@style/TextInputEditTextFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"

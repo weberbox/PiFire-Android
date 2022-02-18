@@ -1,5 +1,5 @@
 package com.weberbox.pifire.interfaces;
 
-public interface SettingsCallback {
+public interface SettingsSocketCallback {
     void onSettingsResult(boolean result);
 }

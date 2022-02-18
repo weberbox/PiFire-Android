@@ -206,7 +206,6 @@
     <string name="setup_finish_title">Setup Complete</string>
     <string name="setup_finish_text">Connection to your PiFire server is now complete. If you need to change the connection settings you can find them in the app settings</string>
     <string name="setup_scan_qr">Scan QR Code</string>
-    <string name="setup_scan_qr_text">Center QR code in the camera view above</string>
     <string name="setup_server_connect_error">Failed to connect. HTTP Code: %1$s - Message: %2$s</string>
     <string name="setup_server_auth_required">Authentication Required</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
@@ -273,15 +272,11 @@
 
     <string name="settings_cat_basic_auth_title">Server Authentication</string>
     <string name="settings_basic_auth_summary">Use authentication if the server is behind a reverse proxy</string>
-    <string name="settings_basic_auth_title">Use Basic Auth</string>
+    <string name="settings_credentials_title">Credentials</string>
     <string name="settings_username">Username</string>
     <string name="settings_password">Password</string>
-    <string name="settings_username_summary">Basic auth username</string>
-    <string name="settings_password_summary">Basic auth password</string>
-    <string name="settings_password_blank_error">Password cannot be blank</string>
-    <string name="settings_username_blank_error">Username cannot be blank</string>
-    <string name="settings_username_encrypt_error">Error encrypting username</string>
-    <string name="settings_password_encrypt_error">Error encrypting password</string>
+    <string name="settings_credentials_summary">Basic Auth Credentials</string>
+    <string name="settings_credentials_error">Error encrypting credentials. Please try again</string>
 
     <string name="settings_cat_app_history">History</string>
     <string name="settings_app_history_refresh_title">Auto History Refresh</string>

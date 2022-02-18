@@ -21,18 +21,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ProgressBar
-                    android:id="@+id/loading_progressbar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:max="100"
-                    android:layout_marginTop="-7dp"
-                    android:visibility="visible"
-                    android:indeterminateTintMode="src_in"
-                    android:indeterminateTint="@color/colorAccent"/>
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/history_card_view"
                     android:layout_width="match_parent"
@@ -60,11 +48,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:layout_margin="@dimen/default_spacing"
+                            android:contentDescription="@string/placeholder_img"
                             android:src="@drawable/ic_line_chart"
                             app:layout_constraintBottom_toBottomOf="@+id/history_card_header"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:contentDescription="@string/placeholder_img" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             style="@style/Text18AllerBold"
@@ -79,37 +67,37 @@
 
                         <TextView
                             android:id="@+id/history_refresh_button"
+                            style="@style/Text15AllerBold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
                             android:layout_margin="@dimen/default_spacing"
-                            android:gravity="center"
                             android:background="@drawable/bg_ripple_refresh_on"
                             android:clickable="true"
-                            android:textAllCaps="true"
-                            android:text="@string/on"
-                            style="@style/Text15AllerBold"
                             android:drawablePadding="3dp"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="@string/on"
+                            android:textAllCaps="true"
                             app:drawableStartCompat="@drawable/ic_restart"
                             app:layout_constraintBottom_toBottomOf="@+id/history_card_header"
                             app:layout_constraintEnd_toStartOf="@+id/history_delete_button"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:focusable="true" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/history_delete_button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/default_spacing"
-                            android:src="@drawable/ic_delete"
                             android:background="@drawable/bg_ripple_grey_button"
                             android:clickable="true"
+                            android:contentDescription="@string/delete"
+                            android:focusable="true"
                             android:padding="8dp"
+                            android:src="@drawable/ic_delete"
                             app:layout_constraintBottom_toBottomOf="@+id/history_card_header"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            android:focusable="true"
-                            android:contentDescription="@string/delete" />
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <include
                             android:id="@+id/history_layout"
@@ -121,10 +109,16 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <FrameLayout
-        android:id="@+id/history_container"
+    <ProgressBar
+        android:id="@+id/loading_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@id/history_scroll_view"
-        app:layout_anchorGravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="visible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

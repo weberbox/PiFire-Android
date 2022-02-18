@@ -35,7 +35,7 @@ import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
-import com.weberbox.pifire.ui.dialogs.SetupUserPassDialog;
+import com.weberbox.pifire.ui.dialogs.UserPassDialog;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
@@ -271,8 +271,9 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() -> {
                                     connectProgress.setVisibility(View.GONE);
-                                    SetupUserPassDialog dialog = new SetupUserPassDialog(
-                                            getActivity(), URLSetupFragment.this);
+                                    UserPassDialog dialog = new UserPassDialog(
+                                            getActivity(), R.string.setup_server_auth_required,
+                                            URLSetupFragment.this);
                                     dialog.showDialog();
                                 });
                             }

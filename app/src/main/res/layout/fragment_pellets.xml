@@ -23,18 +23,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ProgressBar
-                    android:id="@+id/loading_progressbar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/colorAccent"
-                    android:indeterminateTintMode="src_in"
-                    android:max="100"
-                    android:visibility="gone" />
-
                 <include
                     android:id="@+id/pellets_layout"
                     layout="@layout/layout_pellets" />
@@ -42,4 +30,17 @@
             </RelativeLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/loading_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

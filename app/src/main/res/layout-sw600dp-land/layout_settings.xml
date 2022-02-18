@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
+        <import type="com.weberbox.pifire.constants.Constants" />
+
         <variable
             name="callback"
-            type="com.weberbox.pifire.ui.fragments.SettingsFragment" />
+            type="com.weberbox.pifire.interfaces.SettingsBindingCallback" />
     </data>
 
     <RelativeLayout
@@ -82,7 +86,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickAppSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_APP_SETTINGS)}'
                             android:paddingStart="@dimen/settings_list_items"
                             android:paddingTop="20dp"
                             android:paddingEnd="@dimen/settings_list_items"
@@ -99,7 +103,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickProbeSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PROBE_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_probe"
                             app:drawableStartCompat="@drawable/ic_grill_probe" />
@@ -113,7 +117,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickNameSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NAME_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_grill_name"
                             app:drawableStartCompat="@drawable/ic_grill" />
@@ -127,7 +131,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickWorkSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_WORK_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_work"
                             app:drawableStartCompat="@drawable/ic_settings_work" />
@@ -141,7 +145,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickPelletSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PELLET_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_pellets"
                             app:drawableStartCompat="@drawable/ic_grill_pellets" />
@@ -160,7 +164,7 @@
 
 
                         <TextView
-                            android:id="@+id/settings_shutdown"
+                            android:id="@+id/settings_timers"
                             style="@style/Text15AllerBold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -168,7 +172,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickTimersSettings()}'
+                            android:onClick="@{() -> callback.onSettingsClick(Constants.FRAG_TIMERS_SETTINGS)}"
                             android:paddingStart="@dimen/settings_list_items"
                             android:paddingTop="20dp"
                             android:paddingEnd="@dimen/settings_list_items"
@@ -185,7 +189,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickHistorySettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_HISTORY_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_history"
                             app:drawableStartCompat="@drawable/ic_menu_history" />
@@ -199,7 +203,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickSafetySettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_SAFETY_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:text="@string/settings_safety"
                             app:drawableStartCompat="@drawable/ic_settings_safety" />
@@ -213,7 +217,7 @@
                             android:clickable="true"
                             android:drawablePadding="@dimen/default_spacing"
                             android:focusable="true"
-                            android:onClick='@{() -> callback.onClickNotificationsSettings()}'
+                            android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NOTIF_SETTINGS)}'
                             android:padding="@dimen/settings_list_items"
                             android:paddingBottom="24dp"
                             android:text="@string/settings_notifications"

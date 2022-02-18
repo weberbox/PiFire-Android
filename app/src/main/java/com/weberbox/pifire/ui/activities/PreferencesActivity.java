@@ -5,10 +5,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.interfaces.SettingsCallback;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.AppSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.HistorySettingsFragment;
@@ -33,7 +32,7 @@ public class PreferencesActivity extends BaseActivity {
         PiFireApplication app = (PiFireApplication) getApplication();
         Socket socket = app.getSocket();
 
-        new SettingsUtils(this, settingsCallback).requestSettingsData(socket);
+        new SettingsUtils(this, settingsSocketCallback).requestSettingsData(socket);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,7 +72,7 @@ public class PreferencesActivity extends BaseActivity {
             case Constants.FRAG_PELLET_SETTINGS:
                 launchFragment(new PelletSettingsFragment());
                 break;
-            case Constants.FRAG_SHUTDOWN_SETTINGS:
+            case Constants.FRAG_TIMERS_SETTINGS:
                 launchFragment(new TimersSettingsFragment());
                 break;
             case Constants.FRAG_HISTORY_SETTINGS:
@@ -101,7 +100,7 @@ public class PreferencesActivity extends BaseActivity {
         }
     }
 
-    private final SettingsCallback settingsCallback = result -> {
+    private final SettingsSocketCallback settingsSocketCallback = result -> {
         if (!result) Timber.d("Update Settings Failed");
     };
 }

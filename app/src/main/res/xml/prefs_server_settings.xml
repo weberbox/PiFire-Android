@@ -14,19 +14,12 @@
         <SwitchPreferenceCompat
             app:key="@string/prefs_server_basic_auth"
             app:summary="@string/settings_basic_auth_summary"
-            app:title="@string/settings_basic_auth_title" />
+            app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.dialogs.PrefsUsernameDialog
-            app:dependency="@string/prefs_server_basic_auth"
-            app:key="@string/prefs_server_basic_auth_user"
-            app:summary="@string/settings_username_summary"
-            app:title="@string/settings_username" />
-
-        <com.weberbox.pifire.ui.dialogs.PrefsPasswordDialog
-            app:dependency="@string/prefs_server_basic_auth"
-            app:key="@string/prefs_server_basic_auth_password"
-            app:summary="@string/settings_password_summary"
-            app:title="@string/settings_password" />
+        <Preference
+            app:key="@string/prefs_server_credentials"
+            app:title="@string/settings_credentials_title"
+            app:summary="@string/settings_credentials_summary" />
 
     </PreferenceCategory>
 </PreferenceScreen>

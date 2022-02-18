@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
@@ -34,7 +35,8 @@ import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
-import com.weberbox.pifire.interfaces.SettingsCallback;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
+import com.weberbox.pifire.interfaces.SettingsBindingCallback;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -84,16 +86,15 @@ public class MainActivity extends BaseActivity {
         PiFireApplication app = (PiFireApplication) getApplication();
         socket = app.getSocket();
 
-        settingsUtils = new SettingsUtils(this, settingsCallback);
+        settingsUtils = new SettingsUtils(this, settingsSocketCallback);
 
-        binding = ActivityMainPanelsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main_panels);
 
-        binding.settingsLayout.setCallback(this);
+        binding.settingsLayoutPanel.setCallback(settingsBindingCallback);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(binding.appBarMainPanel.toolbar);
 
         if (getSupportActionBar() != null) {
             setupActionBar(getSupportActionBar());
@@ -289,54 +290,21 @@ public class MainActivity extends BaseActivity {
         socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
     }
 
-    private final SettingsCallback settingsCallback = result -> {
+    private final SettingsSocketCallback settingsSocketCallback = result -> {
         if (!result) Timber.d("Update Settings Failed");
     };
 
-    public void onClickAppSettings() {
-        startPreferenceActivity(Constants.FRAG_APP_SETTINGS);
-    }
-
-    public void onClickProbeSettings() {
-        startPreferenceActivity(Constants.FRAG_PROBE_SETTINGS);
-    }
-
-    public void onClickNameSettings() {
-        startPreferenceActivity(Constants.FRAG_NAME_SETTINGS);
-    }
-
-    public void onClickWorkSettings() {
-        startPreferenceActivity(Constants.FRAG_WORK_SETTINGS);
-    }
-
-    public void onClickPelletSettings() {
-        startPreferenceActivity(Constants.FRAG_PELLET_SETTINGS);
-    }
-
-    public void onClickTimersSettings() {
-        startPreferenceActivity(Constants.FRAG_SHUTDOWN_SETTINGS);
-    }
-
-    public void onClickHistorySettings() {
-        startPreferenceActivity(Constants.FRAG_HISTORY_SETTINGS);
-    }
-
-    public void onClickSafetySettings() {
-        startPreferenceActivity(Constants.FRAG_SAFETY_SETTINGS);
-    }
-
-    public void onClickNotificationsSettings() {
-        startPreferenceActivity(Constants.FRAG_NOTIF_SETTINGS);
-    }
-
-    private void startPreferenceActivity(int fragment) {
-        panelsLayout.closePanels();
-        ActivityOptions options = ActivityOptions.makeCustomAnimation(this,
-                R.anim.slide_in_right, R.anim.slide_out_right);
-        Intent intent = new Intent(this, PreferencesActivity.class);
-        intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
-        startActivity(intent, options.toBundle());
-    }
+    private final SettingsBindingCallback settingsBindingCallback = new SettingsBindingCallback() {
+        @Override
+        public void onSettingsClick(int fragment) {
+            panelsLayout.closePanels();
+            ActivityOptions options = ActivityOptions.makeCustomAnimation(MainActivity.this,
+                    R.anim.slide_in_right, R.anim.slide_out_right);
+            Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
+            startActivity(intent, options.toBundle());
+        }
+    };
 
     private void setupActionBar(ActionBar actionBar) {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
