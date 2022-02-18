@@ -1,6 +1,7 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.utils.LineChartXAxisValueFormatter;
+import com.weberbox.pifire.ui.views.CustomMarkerView;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 
@@ -333,40 +335,35 @@ public class HistoryFragment extends Fragment {
             grillTempD.setLineWidth(3.0f);
             grillTempD.setDrawCircles(false);
 
-            LineDataSet Probe1SetD = new LineDataSet(probe1STArray, getString(R.string.history_probe1_set));
-            Probe1SetD.setLineWidth(3.0f);
-            Probe1SetD.setDrawCircles(false);
+            LineDataSet probe1SetD = new LineDataSet(probe1STArray, getString(R.string.history_probe1_set));
+            probe1SetD.setLineWidth(3.0f);
+            probe1SetD.setDrawCircles(false);
 
-            LineDataSet Probe1TempD = new LineDataSet(probe1TArray, getString(R.string.history_probe1_temp));
-            Probe1TempD.setLineWidth(3.0f);
-            Probe1TempD.setDrawCircles(false);
+            LineDataSet probe1TempD = new LineDataSet(probe1TArray, getString(R.string.history_probe1_temp));
+            probe1TempD.setLineWidth(3.0f);
+            probe1TempD.setDrawCircles(false);
 
-            LineDataSet Probe2SetD = new LineDataSet(probe2STArray, getString(R.string.history_probe2_set));
-            Probe2SetD.setLineWidth(3.0f);
-            Probe2SetD.setDrawCircles(false);
+            LineDataSet probe2SetD = new LineDataSet(probe2STArray, getString(R.string.history_probe2_set));
+            probe2SetD.setLineWidth(3.0f);
+            probe2SetD.setDrawCircles(false);
 
-            LineDataSet Probe2TempD = new LineDataSet(probe2TArray, getString(R.string.history_probe2_temp));
-            Probe2TempD.setLineWidth(3.0f);
-            Probe2TempD.setDrawCircles(false);
+            LineDataSet probe2TempD = new LineDataSet(probe2TArray, getString(R.string.history_probe2_temp));
+            probe2TempD.setLineWidth(3.0f);
+            probe2TempD.setDrawCircles(false);
 
             grillSetD.setColor(colors[0]);
-            grillSetD.setCircleColor(colors[0]);
             grillTempD.setColor(colors[1]);
-            grillTempD.setCircleColor(colors[1]);
-            Probe1SetD.setColor(colors[2]);
-            Probe1SetD.setCircleColor(colors[2]);
-            Probe1TempD.setColor(colors[3]);
-            Probe1TempD.setCircleColor(colors[3]);
-            Probe2SetD.setColor(colors[4]);
-            Probe2SetD.setCircleColor(colors[4]);
-            Probe2TempD.setColor(colors[5]);
-            Probe2TempD.setCircleColor(colors[5]);
+            probe1SetD.setColor(colors[2]);
+            probe1TempD.setColor(colors[3]);
+            probe2SetD.setColor(colors[4]);
+            probe2TempD.setColor(colors[5]);
+
             dataSets.add(grillTempD);
             dataSets.add(grillSetD);
-            dataSets.add(Probe1TempD);
-            dataSets.add(Probe1SetD);
-            dataSets.add(Probe2TempD);
-            dataSets.add(Probe2SetD);
+            dataSets.add(probe1TempD);
+            dataSets.add(probe1SetD);
+            dataSets.add(probe2TempD);
+            dataSets.add(probe2SetD);
 
             lineChart.setGridBackgroundColor(Color.WHITE);
             lineChart.getXAxis().setTextColor(Color.WHITE);
@@ -378,6 +375,9 @@ public class HistoryFragment extends Fragment {
             lineChart.getLegend().setWordWrapEnabled(true);
             lineChart.getDescription().setEnabled(false);
             lineChart.getAxisRight().setEnabled(false);
+            lineChart.setScaleEnabled(false);
+            lineChart.setDrawMarkers(true);
+            lineChart.setMarker(markerView(requireActivity()));
 
             LineData data = new LineData(dataSets);
             lineChart.setData(data);
@@ -390,6 +390,13 @@ public class HistoryFragment extends Fragment {
         }
 
         toggleLoading(false);
+    }
+
+    public CustomMarkerView markerView(Context context) {
+        CustomMarkerView mv = new CustomMarkerView(context, R.layout.layout_custom_marker,
+                16, Color.WHITE);
+        mv.setOffset((float) -mv.getWidth() / 2, -mv.getHeight() - 25);
+        return mv;
     }
 
     private final int[] colors = new int[]{

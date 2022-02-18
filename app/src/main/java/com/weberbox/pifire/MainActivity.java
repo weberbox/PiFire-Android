@@ -149,9 +149,6 @@ public class MainActivity extends BaseActivity {
 
             if (dest == R.id.nav_settings) {
                 panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
-            } else if (dest == R.id.nav_history) {
-                panelsLayout.setStartPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
-                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
             } else {
                 panelsLayout.setStartPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
                 panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);

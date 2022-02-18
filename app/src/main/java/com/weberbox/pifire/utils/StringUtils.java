@@ -21,14 +21,14 @@ public class StringUtils {
 
     public static String formatTemp(double temp, boolean fahrenheit) {
         if (fahrenheit) {
-            return String.format(Locale.getDefault(), "%02d %s", (int) temp, "\u00B0");
+            return String.format(Locale.US, "%02d %s", (int) temp, "\u00B0");
         } else {
-            return String.format(Locale.getDefault(), "%f %s", temp, "\u00B0");
+            return String.format(Locale.US, "%s %s", temp, "\u00B0");
         }
     }
 
     public static String formatPercentage(Integer percent) {
-        return String.format(Locale.getDefault(), "%s %s", percent, "\u0025");
+        return String.format(Locale.US, "%s %s", percent, "\u0025");
     }
 
     public static String streamToString(InputStream stream) throws IOException {
