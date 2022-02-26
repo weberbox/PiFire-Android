@@ -1,6 +1,6 @@
 {
   "latestVersion": "1.4.0",
-  "latestVersionCode": "8",
+  "latestVersionCode": "1040004",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
@@ -8,12 +8,15 @@
   ],
   "releaseNotes": [
     "- Added Recipes Section",
-    "- Moved to OneSignal notifications",
     "- Added Keep Warm options",
     "- Added Grill Startup Time",
+    "- Added Server Restart option",
+    "- Added Viewpager to Dashboard",
+    "- Added Changelog",
     "- Changed Nav to Overlapping Panels",
     "- Moved Settings to side panel",
-    "- Added Changelog",
+    "- Moved to OneSignal notifications",
+    "- WebSockets overhaul",
     "- UI improvements",
     "- Misc fixes and updates"
   ]

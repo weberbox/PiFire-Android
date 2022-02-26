@@ -6,8 +6,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -61,18 +60,12 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference factoryReset = findPreference(getString(R.string.prefs_admin_factory_reset));
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
+        Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
 
         if (serverUpdates != null) {
             if (VersionUtils.isSupported(Versions.V_127)) {
                 serverUpdates.setOnPreferenceClickListener(preference -> {
-                    if (getActivity() != null) {
-                        final FragmentManager fm = getActivity().getSupportFragmentManager();
-                        final FragmentTransaction ft = fm.beginTransaction();
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(android.R.id.content, new ServerUpdateFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                    showFragment(new ServerUpdateFragment());
                     return true;
                 });
             } else {
@@ -84,14 +77,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (backupRestore != null) {
             if (VersionUtils.isSupported(Versions.V_122)) {
                 backupRestore.setOnPreferenceClickListener(preference -> {
-                    if (getActivity() != null) {
-                        final FragmentManager fm = getActivity().getSupportFragmentManager();
-                        final FragmentTransaction ft = fm.beginTransaction();
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(android.R.id.content, new BackupRestoreFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                    showFragment(new BackupRestoreFragment());
                     return true;
                 });
             } else {
@@ -103,14 +89,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (manualCat != null && manualMode != null) {
             if (VersionUtils.isSupported(Versions.V_121)) {
                 manualMode.setOnPreferenceClickListener(preference -> {
-                    if (getActivity() != null) {
-                        final FragmentManager fm = getActivity().getSupportFragmentManager();
-                        final FragmentTransaction ft = fm.beginTransaction();
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                .replace(android.R.id.content, new ManualSettingsFragment())
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                    showFragment(new ManualSettingsFragment());
                     return true;
                 });
             } else {
@@ -233,6 +212,37 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
+        if (restartSystem != null) {
+            if (VersionUtils.isSupported(Versions.V_129)) {
+                restartSystem.setOnPreferenceClickListener(preference -> {
+                    if (socketConnected()) {
+                        BottomButtonDialog dialog = new BottomButtonDialog.Builder(
+                                requireActivity())
+                                .setTitle(getString(R.string.dialog_confirm_action))
+                                .setMessage(getString(R.string.settings_admin_restart_text))
+                                .setAutoDismiss(true)
+                                .setNegativeButton(getString(R.string.cancel),
+                                        (dialogInterface, which) -> {
+                                        })
+                                .setPositiveButtonWithColor(getString(R.string.restart),
+                                        R.color.dialog_positive_button_color_red,
+                                        (dialogInterface, which) -> {
+                                            ServerControl.sendRestartSystem(socket,
+                                                    this::processPostResponse);
+                                            dialogInterface.dismiss();
+                                        })
+                                .build();
+                        dialog.show();
+                    }
+                    return false;
+                });
+            } else {
+                restartSystem.setEnabled(false);
+                restartSystem.setSummary(getString(R.string.disabled_option_settings,
+                        Versions.V_129));
+            }
+        }
+
         if (rebootSystem != null) {
             rebootSystem.setOnPreferenceClickListener(preference -> {
                 if (socketConnected()) {
@@ -299,6 +309,14 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (sharedPreferences != null) {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
+    }
+
+    private void showFragment(Fragment fragment) {
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
+                .replace(android.R.id.content, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void processPostResponse(String response) {

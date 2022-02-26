@@ -1,47 +1,53 @@
 package com.weberbox.pifire;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager2.widget.ViewPager2;
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 
 import com.discord.panels.OverlappingPanelsLayout;
-import com.google.android.material.navigation.NavigationView;
+import com.discord.panels.OverlappingPanelsLayout.Panel;
+import com.discord.panels.PanelsChildGestureRegionObserver;
+import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
-import com.weberbox.pifire.interfaces.SettingsSocketCallback;
+import com.weberbox.pifire.databinding.LayoutNavHeaderLeftBinding;
+import com.weberbox.pifire.interfaces.NavBindingCallback;
 import com.weberbox.pifire.interfaces.SettingsBindingCallback;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
+import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
+import com.weberbox.pifire.ui.adapter.MainPagerAdapter;
 import com.weberbox.pifire.ui.fragments.ChangelogFragment;
+import com.weberbox.pifire.ui.fragments.InfoFragment;
+import com.weberbox.pifire.ui.views.NavListItem;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
@@ -49,22 +55,28 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 
+import java.util.Collections;
+import java.util.List;
+
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements
+        PanelsChildGestureRegionObserver.GestureRegionsListener {
 
-    private AppBarConfiguration appBarConfiguration;
     private OverlappingPanelsLayout panelsLayout;
     private ActivityMainPanelsBinding binding;
+    private AnimatedBottomBar bottomBar;
     private SettingsUtils settingsUtils;
     private MainViewModel mainViewModel;
+    private ViewPager2 viewPager;
     private TextView actionBarText;
     private FrameLayout startPanel;
     private AppUpdater appUpdater;
     private FrameLayout endPanel;
+    private NavListItem navDashboard, navPellets, navHistory, navEvents, navRecipes;
     private Socket socket;
     private int downX;
 
@@ -83,14 +95,14 @@ public class MainActivity extends BaseActivity {
             finish();
         }
 
-        PiFireApplication app = (PiFireApplication) getApplication();
-        socket = app.getSocket();
+        socket = ((PiFireApplication) getApplication()).getSocket();
 
         settingsUtils = new SettingsUtils(this, settingsSocketCallback);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_panels);
 
         binding.settingsLayoutPanel.setCallback(settingsBindingCallback);
+        binding.navLayoutPanel.setCallback(navBindingCallback);
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
@@ -104,86 +116,41 @@ public class MainActivity extends BaseActivity {
         startPanel = binding.startPanel;
         endPanel = binding.endPanel;
 
-        AnimatedBottomBar bottomBar = findViewById(R.id.bottom_bar);
+        navDashboard = binding.navLayoutPanel.navDashboard;
+        navPellets = binding.navLayoutPanel.navPellets;
+        navHistory = binding.navLayoutPanel.navHistory;
+        navEvents = binding.navLayoutPanel.navEvents;
+        navRecipes = binding.navLayoutPanel.navRecipes;
 
-        NavigationView navigationView = binding.navView;
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_recipes,
-                R.id.nav_pellet_manager,
-                R.id.nav_dashboard,
-                R.id.nav_history,
-                R.id.nav_events)
-                .setOpenableLayout(null)
-                .build();
+        bottomBar = binding.appBarMainPanel.contentMain.bottomBar;
+        viewPager = binding.appBarMainPanel.contentMain.viewPager;
 
-        NavController navController = Navigation.findNavController(this,
-                R.id.nav_host_fragment_content_main);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(pagerAdapter.getItemCount() - 1);
+        viewPager.setCurrentItem(Constants.FRAG_DASHBOARD, false);
+        viewPager.registerOnPageChangeCallback(onPageChangeCallback);
 
-        navigationView.setNavigationItemSelectedListener(menuItem -> {
-            boolean handled = NavigationUI.onNavDestinationSelected(menuItem, navController);
+        bottomBar.setupWithViewPager2(viewPager);
+        actionBarText.setText(R.string.menu_dashboard);
 
-            if (!handled) {
-                int id = menuItem.getItemId();
-                if (id == R.id.nav_admin) {
-                    ActivityOptions options = ActivityOptions.makeCustomAnimation(this,
-                            R.anim.slide_in_left, R.anim.slide_out_left);
-                    Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-                    intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
-                    startActivity(intent, options.toBundle());
-                } else if (id == R.id.nav_info) {
-                    navController.navigate(R.id.nav_info);
-                } else if (id == R.id.nav_settings) {
-                    navController.navigate(R.id.nav_settings);
-                } else if (id == R.id.nav_changelog) {
-                    showChangelog();
-                }
-            }
-            panelsLayout.closePanels();
-            return true;
-        });
+        PanelsChildGestureRegionObserver.Provider.get().register(viewPager);
 
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            actionBarText.setText(destination.getLabel());
-            int dest = destination.getId();
-
-            if (dest == R.id.nav_settings) {
-                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.CLOSE);
-            } else {
-                panelsLayout.setStartPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
-                panelsLayout.setEndPanelLockState(OverlappingPanelsLayout.LockState.UNLOCKED);
-            }
-
-            if (dest == R.id.nav_info || dest == R.id.nav_settings) {
-                bottomBar.setVisibility(View.GONE);
-            } else {
-                bottomBar.setVisibility(View.VISIBLE);
-            }
-        });
-
-
-        PopupMenu popupMenu = new PopupMenu(this, null);
-        popupMenu.inflate(R.menu.activity_main_tabs);
-        bottomBar.setupWithNavController(popupMenu.getMenu(), navController);
-
-        View header = navigationView.getHeaderView(0);
-        TextView navGrillName = header.findViewById(R.id.nav_head_grill_name);
-        View divider = header.findViewById(R.id.nav_head_divider);
+        LayoutNavHeaderLeftBinding header = binding.navLayoutPanel.navLeftHeader;
+        TextView navGrillName = header.navHeadGrillName;
 
         String grillName = Prefs.getString(getString(R.string.prefs_grill_name), "");
 
         if (grillName.isEmpty()) {
             navGrillName.setVisibility(View.GONE);
-            divider.setVisibility(View.GONE);
         } else {
             navGrillName.setVisibility(View.VISIBLE);
-            divider.setVisibility(View.VISIBLE);
             navGrillName.setText(grillName);
         }
 
         if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
             Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
-            showChangelog();
+            showFragment(new ChangelogFragment());
         }
 
         mainViewModel.getServerConnected().observe(this, connected -> {
@@ -227,32 +194,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        boolean restartSocket = intent.getBooleanExtra(Constants.INTENT_SETUP_RESTART, false);
-        if (restartSocket) {
-            PiFireApplication app = (PiFireApplication) getApplication();
-            app.disconnectSocket();
-            this.recreate();
-        }
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this,
-                R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-    @Override
     public void onBackPressed() {
-        if (startPanel.isShown() || endPanel.isShown()) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else if (startPanel.isShown() || endPanel.isShown()) {
             panelsLayout.closePanels();
+        } else if (viewPager.getCurrentItem() != Constants.FRAG_DASHBOARD) {
+            viewPager.setCurrentItem(Constants.FRAG_DASHBOARD);
         } else {
             super.onBackPressed();
         }
@@ -261,11 +209,17 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        PanelsChildGestureRegionObserver.Provider.get().addGestureRegionsUpdateListener(this);
         panelsLayout.registerStartPanelStateListeners(panelState ->
                 mainViewModel.setStartPanelStateChange(panelState));
         panelsLayout.registerEndPanelStateListeners(panelState ->
                 mainViewModel.setEndPanelStateChange(panelState));
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PanelsChildGestureRegionObserver.Provider.get().removeGestureRegionsUpdateListener(this);
     }
 
     @Override
@@ -278,28 +232,128 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         binding = null;
         socket.disconnect();
         socket.off(Socket.EVENT_CONNECT, onConnect);
         socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
         socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
         socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+        PanelsChildGestureRegionObserver.Provider.get().unregister(viewPager);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        boolean restartSocket = intent.getBooleanExtra(Constants.INTENT_SETUP_RESTART, false);
+        if (restartSocket) {
+            socket = null;
+            socket = ((PiFireApplication) getApplication()).getSocket();
+            connectSocketListenData(socket);
+        }
+    }
+
+    @Override
+    public void onGestureRegionsUpdate(@NonNull List<Rect> list) {
+        panelsLayout.setChildGestureRegions(list);
+    }
+
+    private void closePanelsDelayed() {
+        Panel panel = panelsLayout.getSelectedPanel();
+        if (panel == Panel.START || panel == Panel.END) {
+            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                    panelsLayout.closePanels(), 800L);
+        }
     }
 
     private final SettingsSocketCallback settingsSocketCallback = result -> {
         if (!result) Timber.d("Update Settings Failed");
     };
 
-    private final SettingsBindingCallback settingsBindingCallback = new SettingsBindingCallback() {
+    private final SettingsBindingCallback settingsBindingCallback = fragment -> {
+        closePanelsDelayed();
+        Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+        intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+    };
+
+    private final NavBindingCallback navBindingCallback = new NavBindingCallback() {
         @Override
-        public void onSettingsClick(int fragment) {
+        public void onNavItemClick(int fragment) {
             panelsLayout.closePanels();
-            ActivityOptions options = ActivityOptions.makeCustomAnimation(MainActivity.this,
-                    R.anim.slide_in_right, R.anim.slide_out_right);
+            viewPager.setCurrentItem(fragment, true);
+        }
+
+        @Override
+        public void onNavAdmin() {
+            closePanelsDelayed();
             Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
-            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
-            startActivity(intent, options.toBundle());
+            intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+        }
+
+        @Override
+        public void onNavInfo() {
+            closePanelsDelayed();
+            showFragment(new InfoFragment());
+        }
+
+        @Override
+        public void onNavChangelog() {
+            closePanelsDelayed();
+            showFragment(new ChangelogFragment());
+        }
+    };
+
+    private final OnPageChangeCallback onPageChangeCallback = new OnPageChangeCallback() {
+
+        private boolean settled = false;
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset,
+                                   int positionOffsetPixels) {
+            super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+            bottomBar.selectTabAt(position, true);
+            if (bottomBar.getSelectedTab() != null) {
+                actionBarText.setText(bottomBar.getSelectedTab().getTitle());
+            }
+            navDashboard.setNavSelected(position == Constants.FRAG_DASHBOARD);
+            navPellets.setNavSelected(position == Constants.FRAG_PELLETS);
+            navHistory.setNavSelected(position == Constants.FRAG_HISTORY);
+            navEvents.setNavSelected(position == Constants.FRAG_EVENTS);
+            navRecipes.setNavSelected(position == Constants.FRAG_RECIPES);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            super.onPageScrollStateChanged(state);
+            if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                settled = false;
+            }
+            if (state == ViewPager2.SCROLL_STATE_SETTLING) {
+                settled = true;
+            }
+            if (state == ViewPager2.SCROLL_STATE_IDLE && !settled) {
+                if (viewPager.getCurrentItem() == 0) {
+                    onGestureRegionsUpdate(Collections.emptyList());
+                    panelsLayout.openStartPanel();
+                } else if (viewPager.getAdapter() != null && viewPager.getCurrentItem() ==
+                        viewPager.getAdapter().getItemCount() - 1) {
+                    onGestureRegionsUpdate(Collections.emptyList());
+                    panelsLayout.openEndPanel();
+                }
+            }
         }
     };
 
@@ -309,16 +363,22 @@ public class MainActivity extends BaseActivity {
         actionBar.setCustomView(R.layout.layout_actionbar);
         View view = actionBar.getCustomView();
         actionBarText = view.findViewById(R.id.action_bar_text);
-        ImageButton navButton = view.findViewById(R.id.action_bar_button);
-        navButton.setOnClickListener(v ->
-                panelsLayout.openStartPanel());
+        ImageButton navButton = view.findViewById(R.id.action_bar_nav_button);
+        ImageButton configButton = view.findViewById(R.id.action_bar_config_button);
+        navButton.setOnClickListener(v -> {
+            onGestureRegionsUpdate(Collections.emptyList());
+            panelsLayout.openStartPanel();
+        });
+        configButton.setOnClickListener(v -> {
+            onGestureRegionsUpdate(Collections.emptyList());
+            panelsLayout.openEndPanel();
+        });
     }
 
-    private void showChangelog() {
-        final FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction ft = fm.beginTransaction();
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(android.R.id.content, new ChangelogFragment())
+    private void showFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
+                .replace(android.R.id.content, fragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -364,7 +424,11 @@ public class MainActivity extends BaseActivity {
         @Override
         public void call(final Object... args) {
             if (args.length > 0 && args[0] != null) {
-                mainViewModel.setDashData(args[0].toString());
+                try {
+                    mainViewModel.setDashData(DashDataModel.parseJSON(args[0].toString()));
+                } catch (JsonSyntaxException e) {
+                    Timber.w(e, "Dash JSON parsing error");
+                }
             }
         }
     };

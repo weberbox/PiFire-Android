@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="placeholderColor">#666666</color>
-    <color name="probeProgressBgColor">#40164DD9</color>
-    <color name="smokePlusDisabledBgColor">#57D80C0C</color>
-    <color name="timerProgressColor">#ff414243</color>
 
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimary">#ff262626</color>
+    <color name="colorPrimaryNav">#292929</color>
     <color name="colorPrimaryLight">#2E2E2E</color>
     <color name="colorPrimaryLighter">#424242</color>
     <color name="colorPrimaryDark">#ff1d1d1d</color>
     <color name="colorAccent">#1942DA</color>
-    <color name="colorAccent_disabled">#811942DA</color>
+    <color name="colorAccentDisabled">#811942DA</color>
     <color name="colorAccentRed">#DC0000</color>
-    <color name="colorAccentRed_disabled">#82B62B2B</color>
+    <color name="colorAccentRedDisabled">#82B62B2B</color>
     <color name="colorLighterGrey">#454545</color>
-    <color name="colorUiPrimary_disabled">#80333333</color>
+    <color name="colorUiPrimaryDisabled">#80333333</color>
     <color name="colorTransBlack">#77000000</color>
     <color name="colorLightGrey">#FF333333</color>
     <color name="colorGreyHint">#C8C7C7</color>
@@ -26,10 +23,24 @@
     <color name="colorRedButton">#A50202</color>
     <color name="colorUpdateAvailable">#11F402</color>
     <color name="colorUpdateError">#C13B3B</color>
+    <color name="colorNavSelector">#40164DD9</color>
+    <color name="colorNavSelected">#811942DA</color>
+    <color name="colorTimerProgress">#ff414243</color>
+    <color name="colorSmokePlusDisabled">#57D80C0C</color>
+    <color name="colorProbeProgress">#40164DD9</color>
+    <color name="colorPlaceholder">#666666</color>
+
+    <color name="eventsScriptStart">#8024D1A6</color>
+    <color name="eventsScriptEnded">#ED5A49</color>
+    <color name="eventsModeStarted">#800093F8</color>
+    <color name="eventsModeEnded">#80FAB247</color>
+    <color name="eventsError">#80F6260D</color>
+    <color name="eventsWarning">#80FF4731</color>
+    <color name="eventsDebug">#80004CFA</color>
+    <color name="eventsInfo">#666666</color>
 
     <color name="colorPelletDanger">#C8B10000</color>
     <color name="colorPelletDangerBG">#70B62929</color>
-    <color name="colorPelletWarning">#DCAC9B02</color>
 
     <color name="ucrop_color_statusbar" tools:override="true">@color/colorPrimary</color>
     <color name="ucrop_color_toolbar" tools:override="true">@color/colorPrimary</color>

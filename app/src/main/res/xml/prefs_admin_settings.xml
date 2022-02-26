@@ -67,6 +67,10 @@
     <PreferenceCategory app:title="@string/settings_cat_power">
 
         <Preference
+            app:key="@string/prefs_admin_restart"
+            app:title="@string/settings_admin_restart" />
+
+        <Preference
             app:key="@string/prefs_admin_reboot"
             app:title="@string/settings_admin_reboot" />
 

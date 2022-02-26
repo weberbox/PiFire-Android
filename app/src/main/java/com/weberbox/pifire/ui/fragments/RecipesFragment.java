@@ -18,14 +18,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.databinding.FragmentRecipesBinding;
 import com.weberbox.pifire.interfaces.OnRecipeItemCallback;
@@ -33,6 +32,7 @@ import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.recycler.adapter.RecipesAdapter;
 import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +43,7 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
 
     private FragmentRecipesBinding binding;
     private ExtendedFloatingActionButton floatingActionButton;
+    private VeilRecyclerFrameView recipesRecycler;
     private RecipesAdapter adapter;
     private RecipeDatabase database;
     private SwipeRefreshLayout swipeRefresh;
@@ -64,33 +65,37 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recycler = binding.recipesRecycler;
+        recipesRecycler = binding.recipesRecycler;
         floatingActionButton = binding.fabAddRecipes;
         swipeRefresh = binding.recipesPullRefresh;
 
         floatingActionButton.shrink();
-
-        if (getActivity() != null) {
-            recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-            floatingActionButton.setOnClickListener(v -> {
-                if (floatingActionButton.isExtended() && actionMode != null) {
-                    deleteSelectedItems();
-                    actionMode.finish();
-                } else {
-                    startNewRecipeFragment();
-                }
-            });
-        }
+        floatingActionButton.setOnClickListener(v -> {
+            if (floatingActionButton.isExtended() && actionMode != null) {
+                deleteSelectedItems();
+                actionMode.finish();
+            } else {
+                startNewRecipeFragment();
+            }
+        });
 
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
             database = RecipeDatabase.getInstance(getActivity().getApplicationContext());
         }
 
         adapter = new RecipesAdapter(this);
-        recycler.setNestedScrollingEnabled(false);
-        recycler.setAdapter(adapter);
+
+        int padding = getResources().getDimensionPixelOffset(R.dimen.recycler_padding);
+
+        recipesRecycler.getRecyclerView().setClipToPadding(false);
+        recipesRecycler.getRecyclerView().setPadding(0, padding,0, padding);
+        recipesRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recipesRecycler.setAdapter(adapter);
+        recipesRecycler.addVeiledItems(10);
 
         swipeRefresh.setOnRefreshListener(this::retrieveRecipes);
+
+        retrieveRecipes();
 
     }
 
@@ -267,6 +272,8 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     adapter.setRecipes(recipeModels);
+                    recipesRecycler.unVeil();
+                    recipesRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
                     if (swipeRefresh.isRefreshing()) {
                         swipeRefresh.setRefreshing(false);
                     }

@@ -49,6 +49,7 @@ public class ServerConstants {
     public static final String PT_CLEAR_PELLETS = "clear_pelletdb";
     public static final String PT_CLEAR_PELLETS_LOG = "clear_pelletdb_log";
     public static final String PT_FACTORY_DEFAULTS = "factory_defaults";
+    public static final String PT_RESTART = "restart";
     public static final String PT_REBOOT = "reboot";
     public static final String PT_SHUTDOWN = "shutdown";
     public static final String PT_TIMER_START = "start_timer";

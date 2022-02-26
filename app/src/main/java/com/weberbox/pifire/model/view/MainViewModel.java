@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.discord.panels.PanelState;
 import com.weberbox.pifire.model.local.DataModel;
+import com.weberbox.pifire.model.remote.DashDataModel;
 
 public class MainViewModel extends ViewModel {
 
-    private final MutableLiveData<String> dashData;
+    private final MutableLiveData<DashDataModel> dashData;
     private final MutableLiveData<DataModel> eventsData;
     private final MutableLiveData<DataModel> historyData;
     private final MutableLiveData<DataModel> pelletData;
@@ -29,11 +30,11 @@ public class MainViewModel extends ViewModel {
         endPanelState = new MutableLiveData<>();
     }
 
-    public LiveData<String> getDashData() {
+    public LiveData<DashDataModel> getDashData() {
         return dashData;
     }
 
-    public void setDashData(String dashData) {
+    public void setDashData(DashDataModel dashData) {
         this.dashData.postValue(dashData);
     }
 

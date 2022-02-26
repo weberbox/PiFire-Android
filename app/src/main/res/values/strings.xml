@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">PiFire</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_app_title_one">Pi</string>
+    <string name="nav_app_title_two">Fire\u00A0</string>
 
     <string name="action_item_selected">%1$s Selected</string>
-    <string name="action_offline">Currently Offline</string>
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_pellet_manager">Pellets</string>
@@ -18,7 +18,6 @@
     <string name="nav_pellet_manager">Pellet Manager</string>
     <string name="nav_history">History</string>
     <string name="nav_events">Event Log</string>
-    <string name="nav_setting">Settings</string>
     <string name="nav_admin">Admin</string>
     <string name="nav_recipes">Recipes</string>
     <string name="nav_changelog">Changelog</string>
@@ -33,12 +32,7 @@
     <string name="placeholder_text_view">TextView</string>
     <string name="placeholder_string">This is a very long text and we need to show 3…(dots)</string>
 
-    <string name="json_error_settings">JSON Parsing Error - Settings not updated</string>
-    <string name="json_error_events">JSON Parsing Error - Events not updated</string>
-    <string name="json_error_history">JSON Parsing Error - History not updated</string>
-    <string name="json_error_pellets">JSON Parsing Error - Pellets not updated</string>
-    <string name="json_error_dash">JSON Parsing Error - Dashboard not updated</string>
-    <string name="json_error_info">JSON Parsing Error - Info not updated</string>
+    <string name="json_parsing_error">JSON Parsing Error - %1$s not updated</string>
 
     <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
     <string name="disabled_option_dialog_title">Disabled Feature</string>
@@ -79,6 +73,7 @@
     <string name="status">Status</string>
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
+    <string name="restart">Restart</string>
     <string name="shutdown">Shutdown</string>
     <string name="options">Options</string>
 
@@ -148,8 +143,6 @@
     <string name="history_probe2_set">Probe 2 Set</string>
     <string name="history_delete_content">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
 
-    <string name="event_type_info">I</string>
-
     <string name="changelog_title">What\'s New</string>
 
     <string name="recipes_unsaved_title">Unsaved Changes</string>
@@ -217,7 +210,6 @@
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
 
-    <string name="settings_config">Configuration</string>
     <string name="settings_server">Server Settings</string>
     <string name="settings_app">App Settings</string>
     <string name="settings_probe">Probe Settings</string>
@@ -431,6 +423,8 @@
     <string name="settings_admin_reboot_text">Are you sure that you want to reboot the system</string>
     <string name="settings_admin_shutdown">Shutdown System</string>
     <string name="settings_admin_shutdown_text">Are you sure that you want to shutdown the system</string>
+    <string name="settings_admin_restart">Restart System</string>
+    <string name="settings_admin_restart_text">Are you sure that you want to restart the system</string>
 
     <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
     <string name="settings_pellet_warning_level">Warning Level (%)</string>
@@ -492,11 +486,16 @@
 
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_current_load">Current</string>
-    <string name="pellets_current_band">Brand:</string>
+    <string name="pellets_current_brand">Brand:</string>
     <string name="pellets_current_wood">Wood:</string>
     <string name="pellets_current_rating">Rating:</string>
     <string name="pellets_current_date">Date Loaded:</string>
     <string name="pellets_current_comments">Comments:</string>
+
+    <string name="pellets_brand">Brand</string>
+    <string name="pellets_wood">Wood</string>
+    <string name="pellets_rating">Rating</string>
+    <string name="pellets_comments">Comments</string>
 
     <string name="pellets_add">Add New</string>
     <string name="pellets_brands">Brands</string>
@@ -514,7 +513,6 @@
     <string name="pellets_wood_holder">Alder</string>
     <string name="pellets_date_holder" tools:ignore="TypographyDashes">2021-09-07 21:39:08</string>
     <string name="pellets_comments_holder">This is a placeholder profile. Alder is generic and used in almost all pellets, regardless of the wood type indicated on the packaging. It tends to burn consistently and produces a mild smoke.</string>
-    <string name="pellets_comments_hint">Enter comments here</string>
 
     <string name="item_rating_error">Unknown</string>
     <string name="item_rating_5">★ ★ ★ ★ ★</string>

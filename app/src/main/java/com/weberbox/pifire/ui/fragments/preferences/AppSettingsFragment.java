@@ -14,8 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -27,7 +25,7 @@ import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.utils.executors.AppExecutors;
+import com.weberbox.pifire.database.DatabaseUtils;
 import com.weberbox.pifire.database.RecipeDatabase;
 import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -37,9 +35,9 @@ import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.database.DatabaseUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.util.List;
 
@@ -69,14 +67,12 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
 
         if (serverSettings != null) {
             serverSettings.setOnPreferenceClickListener(preference -> {
-                if (getActivity() != null) {
-                    final FragmentManager fm = getActivity().getSupportFragmentManager();
-                    final FragmentTransaction ft = fm.beginTransaction();
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .replace(android.R.id.content, new ServerSettingsFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.animator.fragment_fade_enter,
+                                R.animator.fragment_fade_exit)
+                        .replace(android.R.id.content, new ServerSettingsFragment())
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             });
         }

@@ -4,6 +4,8 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
+import com.weberbox.pifire.R;
+
 public class EventsModel {
 
     private int eventIconColor;
@@ -18,30 +20,30 @@ public class EventsModel {
         setEventTime(eventTime);
         setEventText(eventText);
 
-        if(eventText.toLowerCase().contains("script starting")) {
+        if (eventText.toLowerCase().contains("script starting")) {
             setEventIcon("S");
-            setEventIconColor(Color.rgb(124, 220, 196)); // table-success
-        } else if(eventText.toLowerCase().contains("mode started")) {
+            setEventIconColor(R.color.eventsScriptStart);
+        } else if (eventText.toLowerCase().contains("mode started")) {
             setEventIcon("M");
-            setEventIconColor(Color.rgb(133, 193, 234)); // table-info
-        } else if(eventText.toLowerCase().contains("script ended")) {
+            setEventIconColor(R.color.eventsModeStarted);
+        } else if (eventText.toLowerCase().contains("script ended")) {
             setEventIcon("S");
-            setEventIconColor(Color.rgb(239, 143, 132)); // table-danger
-        } else if(eventText.toUpperCase().contains("ERROR")) {
+            setEventIconColor(R.color.eventsScriptEnded);
+        } else if (eventText.toUpperCase().contains("ERROR")) {
             setEventIcon("E");
-            setEventIconColor(Color.rgb(239, 143, 132)); // table-danger
-        } else if(eventText.toLowerCase().contains("mode ended")) {
+            setEventIconColor(R.color.eventsError);
+        } else if (eventText.toLowerCase().contains("mode ended")) {
             setEventIcon("M");
-            setEventIconColor(Color.rgb(249, 196, 116)); // table-warning
-        } else if(eventText.toUpperCase().contains("WARNING")) {
+            setEventIconColor(R.color.eventsModeEnded);
+        } else if (eventText.toUpperCase().contains("WARNING")) {
             setEventIcon("W");
-            setEventIconColor(Color.rgb(249, 196, 116)); // table-warning
-        } else if(eventText.toLowerCase().startsWith("*")) {
+            setEventIconColor(R.color.eventsWarning);
+        } else if (eventText.toLowerCase().startsWith("*")) {
             setEventIcon("D");
-            setEventIconColor(Color.rgb(47, 126, 245)); // debug
+            setEventIconColor(R.color.eventsDebug);
         } else {
             setEventIcon("I");
-            setEventIconColor(Color.GRAY);
+            setEventIconColor(R.color.eventsInfo);
         }
     }
 

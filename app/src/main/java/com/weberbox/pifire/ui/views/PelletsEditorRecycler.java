@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,15 +15,12 @@ import androidx.cardview.widget.CardView;
 import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.LayoutPelletsEditorBinding;
-import com.weberbox.pifire.databinding.LayoutPelletsProfileAddBinding;
 import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 
 @SuppressWarnings("unused")
 public class PelletsEditorRecycler extends CardView {
 
-    private LayoutPelletsProfileAddBinding addProfileContainer;
     private VeilRecyclerFrameView recyclerView;
-    private LinearLayout addProfileHolder;
     private TextView headerTitle;
     private TextView headerButton;
     private ImageView headerIcon;
@@ -70,8 +66,6 @@ public class PelletsEditorRecycler extends CardView {
             recyclerView = binding.editorRecycler;
             gradient = binding.editorViewAllShadow;
             viewAllButton = binding.editorViewAll;
-            addProfileContainer = binding.pelletsAddProfileContainer;
-            addProfileHolder = binding.pelletsAddProfile;
 
             recyclerView.setLayoutManager(new ScrollDisableLayoutManager(context));
             recyclerView.setNestedScrollingEnabled(false);
@@ -120,14 +114,6 @@ public class PelletsEditorRecycler extends CardView {
 
     public TextView getHeaderButton() {
         return headerButton;
-    }
-
-    public LinearLayout getAddProfileView() {
-        return addProfileHolder;
-    }
-
-    public LayoutPelletsProfileAddBinding getAddProfileContainer() {
-        return addProfileContainer;
     }
 
     public VeilRecyclerFrameView getRecycler() {

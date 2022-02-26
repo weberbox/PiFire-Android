@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
@@ -37,7 +38,7 @@
             app:veilLayout_baseAlpha="0.6"
             app:veilLayout_baseColor="@color/colorLighterGrey"
             app:veilLayout_highlightAlpha="1.0"
-            app:veilLayout_highlightColor="@color/placeholderColor"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
             app:veilLayout_radius="18dp"
             app:veilLayout_shimmerEnable="true"
             app:veilLayout_veiled="true">
@@ -62,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
                         android:gravity="center"
-                        android:text="@string/pellets_current_band"
+                        android:text="@string/pellets_current_brand"
                         android:textSize="15sp" />
 
                     <TextView
@@ -72,8 +73,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
                         android:gravity="center"
-                        android:text="@string/pellets_brand_holder"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_brand_holder" />
 
                 </LinearLayout>
 
@@ -101,8 +102,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
                         android:gravity="center"
-                        android:text="@string/pellets_wood_holder"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_wood_holder" />
 
                 </LinearLayout>
 
@@ -128,8 +129,8 @@
                         style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/default_spacing"
                         android:layout_gravity="center"
+                        android:layout_margin="@dimen/default_spacing"
                         android:isIndicator="true"
                         android:max="5"
                         android:numStars="5"
@@ -161,8 +162,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/default_spacing"
                         android:gravity="center"
-                        android:text="@string/pellets_date_holder"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_date_holder" />
 
                 </LinearLayout>
 
@@ -191,8 +192,8 @@
                         android:layout_marginStart="@dimen/default_spacing"
                         android:layout_marginEnd="@dimen/default_spacing"
                         android:layout_marginBottom="@dimen/default_spacing"
-                        android:text="@string/pellets_comments_holder"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_comments_holder" />
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

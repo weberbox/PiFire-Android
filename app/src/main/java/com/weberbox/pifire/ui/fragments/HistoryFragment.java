@@ -67,15 +67,6 @@ public class HistoryFragment extends Fragment {
     private boolean started = false;
     private boolean isLoading = false;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
@@ -173,16 +164,23 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-        stopRefresh();
+    public void onResume() {
+        super.onResume();
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+        requestDataUpdate();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        requestDataUpdate();
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        socket = null;
+        stopRefresh();
     }
 
     private void showOfflineAlert() {
@@ -255,11 +253,13 @@ public class HistoryFragment extends Fragment {
     }
 
     private void startRefresh() {
-        started = true;
-        int customAmount = Integer.parseInt(Prefs.getString(
-                getString(R.string.prefs_history_refresh_interval_app),
-                getString(R.string.def_history_refresh_time_app)));
-        handler.postDelayed(runnable, customAmount);
+        if (isAdded()) {
+            started = true;
+            int customAmount = Integer.parseInt(Prefs.getString(
+                    getString(R.string.prefs_history_refresh_interval_app),
+                    getString(R.string.def_history_refresh_time_app)));
+            handler.postDelayed(runnable, customAmount);
+        }
     }
 
     private final Runnable runnable = () -> {
@@ -375,7 +375,6 @@ public class HistoryFragment extends Fragment {
             lineChart.getLegend().setWordWrapEnabled(true);
             lineChart.getDescription().setEnabled(false);
             lineChart.getAxisRight().setEnabled(false);
-            lineChart.setScaleEnabled(false);
             lineChart.setDrawMarkers(true);
             lineChart.setMarker(markerView(requireActivity()));
 
@@ -386,7 +385,8 @@ public class HistoryFragment extends Fragment {
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.w("JSON Error %s", e.getMessage());
-            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_history, false);
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_history)), false);
         }
 
         toggleLoading(false);

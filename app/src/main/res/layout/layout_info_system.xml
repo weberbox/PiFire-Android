@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
                 android:layout_marginEnd="@dimen/default_spacing"
-                android:lineSpacingExtra="-5dp"
+                android:maxLines="5"
                 android:textStyle="normal" />
 
         </LinearLayout>

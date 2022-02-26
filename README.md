@@ -51,7 +51,6 @@ This app used the following open-source libraries and/or code inspired from thes
 - [AnimatedBottomBar](https://github.com/Droppers/AnimatedBottomBar)
 - [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
 - [EasyPrefs](https://github.com/Pixplicity/EasyPrefs)
-- [PowerSpinner](https://github.com/skydoves/PowerSpinner)
 - [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
 - [RecyclerViewFastScroller](https://github.com/quiph/RecyclerView-FastScroller)
 - [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart)

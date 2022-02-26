@@ -37,17 +37,19 @@ public class ChangelogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView toolbarTitle = binding.changelogToolbar.actionBarText;
-        ImageView toolbarButton = binding.changelogToolbar.actionBarButton;
+        TextView actionBarText = binding.changelogToolbar.actionBarText;
+        ImageView navButton = binding.changelogToolbar.actionBarNavButton;
+        ImageView configButton = binding.changelogToolbar.actionBarConfigButton;
         changeLogView = binding.changelog;
         animationView = binding.animationView;
 
         changeLogView.setAlpha(0.0f);
         animationView.addAnimatorListener(listener);
 
-        toolbarTitle.setText(R.string.changelog_title);
-        toolbarButton.setImageResource(R.drawable.ic_nav_back);
-        toolbarButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        actionBarText.setText(R.string.changelog_title);
+        navButton.setImageResource(R.drawable.ic_nav_back);
+        navButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        configButton.setVisibility(View.GONE);
 
     }
 

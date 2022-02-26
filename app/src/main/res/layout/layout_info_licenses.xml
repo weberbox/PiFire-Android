@@ -53,7 +53,31 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/info_licenses_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp" />
+
+            <View
+                android:id="@+id/licenses_view_all_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="-45dp"
+                android:alpha="0.5"
+                android:background="@drawable/bg_grey_gradient_270"
+                android:clickable="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/licenses_view_all"
+                style="@style/Text15AllerBold"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:alpha="0.5"
+                android:background="@drawable/bg_ripple_view_all"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/view_all"
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

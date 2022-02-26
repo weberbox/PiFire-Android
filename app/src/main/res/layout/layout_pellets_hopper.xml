@@ -37,7 +37,7 @@
             app:veilLayout_baseAlpha="0.6"
             app:veilLayout_baseColor="@color/colorLighterGrey"
             app:veilLayout_highlightAlpha="1.0"
-            app:veilLayout_highlightColor="@color/placeholderColor"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
             app:veilLayout_radius="18dp"
             app:veilLayout_shimmerEnable="true"
             app:veilLayout_veiled="true">

@@ -1,13 +1,14 @@
 package com.weberbox.pifire.recycler.adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.GradientDrawable;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemEventsListBinding;
@@ -34,7 +35,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final EventsModel event = list.get(position);
-        holder.bindData(event);
+        holder.bindData(holder.itemView.getContext(), event);
 
         holder.root.setOnClickListener(view -> {
             if (TextUtils.hasEllipsis(holder.eventText)) {
@@ -66,7 +67,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
         private final TextView eventTime;
         private final TextView eventText;
 
-        public ViewHolder(final ItemEventsListBinding binding) {
+        public ViewHolder(ItemEventsListBinding binding) {
             super(binding.getRoot());
             root = binding.getRoot();
             eventIcon = binding.eventIconHolder;
@@ -75,12 +76,12 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
             eventText = binding.eventTextHolder;
         }
 
-        public void bindData(final EventsModel model) {
-            ((GradientDrawable) eventIcon.getBackground()).setColor(model.getEventIconColor());
-            eventIcon.setText(model.getEventIcon());
-            eventDate.setText(model.getEventDate());
-            eventTime.setText(model.getEventTime());
-            eventText.setText(model.getEventText());
+        public void bindData(Context context, EventsModel event) {
+            eventIcon.setBackgroundColor(ContextCompat.getColor(context, event.getEventIconColor()));
+            eventIcon.setText(event.getEventIcon());
+            eventDate.setText(event.getEventDate());
+            eventTime.setText(event.getEventTime());
+            eventText.setText(event.getEventText());
         }
     }
 }

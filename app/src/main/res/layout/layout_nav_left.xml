@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.weberbox.pifire.constants.Constants" />
+
+        <variable
+            name="callback"
+            type="com.weberbox.pifire.interfaces.NavBindingCallback" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/bg_nav_left"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/nav_left_header"
+                layout="@layout/layout_nav_header_left" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_spacing"
+                    android:orientation="vertical">
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_dashboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_DASHBOARD)}'
+                        app:nav_icon="@drawable/ic_grill"
+                        app:nav_selected="true"
+                        app:nav_title="@string/nav_dashboard"
+                        app:nav_adjust_text="true" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_pellets"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_PELLETS)}'
+                        app:nav_icon="@drawable/ic_grill_pellets"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_pellet_manager"
+                        app:nav_adjust_text="true" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_HISTORY)}'
+                        app:nav_icon="@drawable/ic_menu_history"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_history"
+                        app:nav_adjust_text="true" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_events"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_EVENTS)}'
+                        app:nav_icon="@drawable/ic_menu_events"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_events"
+                        app:nav_adjust_text="true" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_recipes"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_RECIPES)}'
+                        app:nav_icon="@drawable/ic_menu_recipes"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_recipes"
+                        app:nav_adjust_text="true" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@color/colorPlaceholder" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_admin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavAdmin()}'
+                        app:nav_icon="@drawable/ic_menu_admin"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_admin" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavInfo()}'
+                        app:nav_icon="@drawable/ic_menu_about"
+                        app:nav_selected="false"
+                        app:nav_title="@string/menu_info" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_changelog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavChangelog()}'
+                        app:nav_icon="@drawable/ic_menu_changelog"
+                        app:nav_selected="false"
+                        app:nav_title="@string/nav_changelog" />
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

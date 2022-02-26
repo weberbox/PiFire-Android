@@ -46,7 +46,7 @@
         app:veilFrame_baseAlpha="0.6"
         app:veilFrame_baseColor="@color/colorLighterGrey"
         app:veilFrame_highlightAlpha="1.0"
-        app:veilFrame_highlightColor="@color/placeholderColor"
+        app:veilFrame_highlightColor="@color/colorPlaceholder"
         app:veilFrame_layout="@layout/item_pellets_list_log"
         app:veilFrame_radius="10dp"
         app:veilFrame_shimmerEnable="true"

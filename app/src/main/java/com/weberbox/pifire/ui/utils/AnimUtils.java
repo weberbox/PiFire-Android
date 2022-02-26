@@ -263,10 +263,10 @@ public class AnimUtils {
             layoutParams.height = 1;
             view.setLayoutParams(layoutParams);
 
-            view.measure(View.MeasureSpec.makeMeasureSpec(Resources.getSystem().getDisplayMetrics().widthPixels,
+            view.measure(View.MeasureSpec.makeMeasureSpec(
+                    Resources.getSystem().getDisplayMetrics().widthPixels,
                     View.MeasureSpec.EXACTLY),
-                    View.MeasureSpec.makeMeasureSpec(0,
-                            View.MeasureSpec.UNSPECIFIED));
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
             final int height = view.getMeasuredHeight();
             ValueAnimator valueAnimator = ObjectAnimator.ofInt(1, height);

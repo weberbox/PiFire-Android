@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,29 +50,15 @@ public class InfoFragment extends Fragment {
     private MainViewModel mainViewModel;
     private Socket socket;
     private RelativeLayout rootContainer;
-    private TextView version;
-    private TextView cpuInfo;
-    private TextView cpuTemp;
-    private TextView networkInfo;
-    private TextView upTime;
-    private TextView auger;
-    private TextView fan;
-    private TextView igniter;
-    private TextView power;
+    private TextView version, cpuInfo, cpuTemp, networkInfo, upTime, auger, fan, igniter, power;
     private TextView selector;
     private SwipeRefreshLayout swipeRefresh;
     private ProgressBar loadingBar;
     private LicensesListAdapter licensesListAdapter;
     private ArrayList<LicensesModel> licenses;
+    private View gradient;
+    private TextView viewAllButton;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -83,6 +69,17 @@ public class InfoFragment extends Fragment {
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+
+        TextView actionBarText = binding.infoToolbar.actionBarText;
+        ImageView navButton = binding.infoToolbar.actionBarNavButton;
+        ImageView configButton = binding.infoToolbar.actionBarConfigButton;
+
+        actionBarText.setText(R.string.menu_info);
+        navButton.setImageResource(R.drawable.ic_nav_back);
+        navButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        configButton.setVisibility(View.GONE);
 
         licenses = new ArrayList<>();
 
@@ -128,10 +125,19 @@ public class InfoFragment extends Fragment {
         }
 
         RecyclerView licenseInfo = binding.licensesCardView.infoLicensesRecycler;
-        licensesListAdapter = new LicensesListAdapter();
+        licensesListAdapter = new LicensesListAdapter(true);
 
         licenseInfo.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         licenseInfo.setAdapter(licensesListAdapter);
+
+        gradient = binding.licensesCardView.licensesViewAllShadow;
+        viewAllButton = binding.licensesCardView.licensesViewAll;
+
+        viewAllButton.setOnClickListener(v -> {
+            licensesListAdapter.setLimitEnabled(false);
+            licensesListAdapter.notifyItemRangeChanged(3, licenses.size());
+            setLicensesViewLimited(false);
+        });
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
@@ -219,6 +225,11 @@ public class InfoFragment extends Fragment {
         }
     }
 
+    private void setLicensesViewLimited(boolean limited) {
+        gradient.setVisibility(limited ? View.VISIBLE : View.GONE);
+        viewAllButton.setVisibility(limited ? View.VISIBLE : View.GONE);
+    }
+
     private void updateUIWithData(String responseData) {
 
         try {
@@ -238,7 +249,7 @@ public class InfoFragment extends Fragment {
 
             StringBuilder cpuString = new StringBuilder();
             for (String cpu : cpuInfo) {
-                cpuString.append(cpu).append("\n");
+                cpuString.append(cpu.trim()).append("\n");
             }
 
             StringBuilder networkString = new StringBuilder();
@@ -261,7 +272,8 @@ public class InfoFragment extends Fragment {
 
         } catch (NullPointerException e) {
             Timber.w(e, "Info Response Error");
-            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_info, false);
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_info)), false);
         }
 
         toggleLoading(false);
@@ -288,13 +300,17 @@ public class InfoFragment extends Fragment {
                             licenses.add(project);
                         }
 
-                        requireActivity().runOnUiThread(() -> licensesListAdapter.setList(licenses));
+                        requireActivity().runOnUiThread(() -> {
+                            setLicensesViewLimited(licenses.size() > 3);
+                            licensesListAdapter.setList(licenses);
+                        });
 
                     }
 
                 } catch (Exception e) {
                     Timber.w(e, "Licences JSON Error");
-                    AlertUtils.createErrorAlert(getActivity(), R.string.json_error_info, false);
+                    AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                            getString(R.string.info_credits)), false);
                 }
             });
         }

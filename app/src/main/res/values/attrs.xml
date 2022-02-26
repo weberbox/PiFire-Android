@@ -11,6 +11,13 @@
         <attr name="dot_radius" format="integer"/>
     </declare-styleable>
 
+    <declare-styleable name="NavListItem">
+        <attr name="nav_selected" format="boolean"/>
+        <attr name="nav_adjust_text" format="boolean"/>
+        <attr name="nav_icon" format="reference"/>
+        <attr name="nav_title" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="MaxHeightLinearLayout">
         <attr name="max_height" format="dimension" />
     </declare-styleable>

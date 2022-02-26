@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.TransitionManager;
 
-import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
@@ -92,15 +91,6 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
 
     public DashboardFragment() {
         super();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
     }
 
     @Override
@@ -447,15 +437,22 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     @Override
     public void onResume() {
         super.onResume();
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
         requestDataUpdate();
         checkForceScreenOn();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        socket = null;
+        clearForceScreenOn();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         stopTimer();
-        clearForceScreenOn();
         binding = null;
     }
 
@@ -591,11 +588,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         }
     }
 
-    public void updateUIWithData(String responseData) {
-        DashDataModel dashDataModel;
+    public void updateUIWithData(DashDataModel dashDataModel) {
 
         try {
-            dashDataModel = DashDataModel.parseJSON(responseData);
 
             ProbeTemps probeTemps = dashDataModel.getProbeTemps();
             ProbesEnabled probesEnabled = dashDataModel.getProbesEnabled();
@@ -786,9 +781,10 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                         Constants.FADE_IN : Constants.FADE_OUT);
             }
 
-        } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
+        } catch (IllegalStateException | NullPointerException e) {
             Timber.w(e, "JSON Error");
-            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_dash, false);
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_dashboard)), false);
         }
 
         toggleLoading(false);

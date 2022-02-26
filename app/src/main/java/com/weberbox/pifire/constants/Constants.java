@@ -24,6 +24,13 @@ public class Constants {
     public static final int ACTION_RESTORE_SETTINGS = 2;
     public static final int ACTION_RESTORE_PELLETDB = 3;
 
+    // Main Fragments
+    public static final int FRAG_RECIPES = 0;
+    public static final int FRAG_PELLETS = 1;
+    public static final int FRAG_DASHBOARD = 2;
+    public static final int FRAG_HISTORY = 3;
+    public static final int FRAG_EVENTS = 4;
+
     // Settings Fragment
     public static final int FRAG_APP_SETTINGS = 0;
     public static final int FRAG_PROBE_SETTINGS = 1;

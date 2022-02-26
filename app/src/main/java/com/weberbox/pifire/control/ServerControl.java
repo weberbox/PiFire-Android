@@ -882,6 +882,11 @@ public class ServerControl {
         }
     }
 
+    // Restart System
+    public static void sendRestartSystem(Socket socket, SocketCallback callback) {
+        adminPostEmit(socket, ServerConstants.PT_RESTART, callback);
+    }
+
     // Reboot System
     public static void sendRebootSystem(Socket socket, SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {

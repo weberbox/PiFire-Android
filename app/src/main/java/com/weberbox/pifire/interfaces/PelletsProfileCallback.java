@@ -7,7 +7,9 @@ public interface PelletsProfileCallback {
     void onDeleteConfirmed(String type, String item, int position);
     void onItemAdded(String type, String item);
     void onProfileSelected(String profileName, String profileId);
-    void onProfileEdit(PelletProfileModel model);
+    void onProfileAdd(PelletProfileModel profile);
+    void onProfileEdit(PelletProfileModel profile, boolean load);
+    void onProfileOpen(PelletProfileModel profile, int position);
     void onProfileDelete(String profileId, int position);
     void onLogLongClick(String logDate, int position);
 }

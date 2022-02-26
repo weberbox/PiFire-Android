@@ -132,34 +132,6 @@
         <item>@string/item_rating_5</item>
     </string-array>
 
-    <string-array name="pellet_profiles">
-        <item>Custom</item>
-        <item>Generic</item>
-    </string-array>
-
-    <string-array name="pellet_woods">
-        <item>Alder</item>
-        <item>Almond</item>
-        <item>Apple</item>
-        <item>Apricot</item>
-        <item>Blend</item>
-        <item>Cherry</item>
-        <item>Chestnut</item>
-        <item>Competition</item>
-        <item>Hickory</item>
-        <item>Lemon</item>
-        <item>Maple</item>
-        <item>Mesquite</item>
-        <item>Mulberry</item>
-        <item>Nectarine</item>
-        <item>Oak</item>
-        <item>Orange</item>
-        <item>Peach</item>
-        <item>Pear</item>
-        <item>Plum</item>
-        <item>Walnut</item>
-    </string-array>
-
     <string-array name="app_updater_frequency_names">
         <item>Every Launch</item>
         <item>Every 2 Launches</item>
@@ -185,5 +157,16 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+
+    <integer-array name="licenses_color_list">
+        <item>@color/eventsInfo</item>
+        <item>@color/eventsDebug</item>
+        <item>@color/eventsError</item>
+        <item>@color/eventsModeEnded</item>
+        <item>@color/eventsModeStarted</item>
+        <item>@color/eventsScriptEnded</item>
+        <item>@color/eventsScriptStart</item>
+        <item>@color/eventsWarning</item>
+    </integer-array>
 
 </resources>

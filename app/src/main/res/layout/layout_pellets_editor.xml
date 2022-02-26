@@ -52,19 +52,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/pellets_add_profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/editor_card_header">
-
-        <include
-            android:id="@+id/pellets_add_profile_container"
-            layout="@layout/layout_pellets_profile_add" />
-
-    </LinearLayout>
-
     <com.skydoves.androidveil.VeilRecyclerFrameView
         android:id="@+id/editor_recycler"
         android:layout_width="match_parent"
@@ -72,11 +59,11 @@
         app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pellets_add_profile"
+        app:layout_constraintTop_toBottomOf="@+id/editor_card_header"
         app:veilFrame_baseAlpha="0.6"
         app:veilFrame_baseColor="@color/colorLighterGrey"
         app:veilFrame_highlightAlpha="1.0"
-        app:veilFrame_highlightColor="@color/placeholderColor"
+        app:veilFrame_highlightColor="@color/colorPlaceholder"
         app:veilFrame_layout="@layout/item_pellets_list"
         app:veilFrame_radius="10dp"
         app:veilFrame_shimmerEnable="true"

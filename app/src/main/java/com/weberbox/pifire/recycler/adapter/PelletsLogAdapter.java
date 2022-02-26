@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ItemPelletsListLogBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 import com.weberbox.pifire.model.local.PelletLogModel;
@@ -48,7 +49,7 @@ public class PelletsLogAdapter extends RecyclerView.Adapter<PelletsLogAdapter.Vi
     @Override
     public int getItemCount() {
         if (limited) {
-            return Math.min(list.size(), 3);
+            return Math.min(list.size(), AppConfig.RECYCLER_LIMIT);
         } else {
             return list == null ? 0 : list.size();
         }

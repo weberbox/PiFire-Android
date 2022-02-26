@@ -5,10 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
+    <include
+        android:id="@+id/info_toolbar"
+        layout="@layout/layout_actionbar" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/info_pull_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/info_toolbar">
 
         <ScrollView
             android:id="@+id/info_scroll_view"

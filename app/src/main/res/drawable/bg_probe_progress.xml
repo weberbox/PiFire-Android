@@ -5,7 +5,7 @@
         <layer-list>
             <item>
                 <shape>
-                    <solid android:color="@color/probeProgressBgColor" />
+                    <solid android:color="@color/colorProbeProgress" />
                     <corners android:radius="@dimen/table_corner_radius" />
                 </shape>
             </item>

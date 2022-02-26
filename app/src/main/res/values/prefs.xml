@@ -129,6 +129,7 @@
     <string name="prefs_admin_factory_reset">prefs_admin_factory_reset</string>
     <string name="prefs_admin_reboot">prefs_admin_reboot</string>
     <string name="prefs_admin_shutdown">prefs_admin_shutdown</string>
+    <string name="prefs_admin_restart">prefs_admin_restart</string>
 
     <string name="prefs_pellet_warning_cat">prefs_pellet_warning_cat</string>
     <string name="prefs_pellet_warning_enabled">prefs_pellet_warning_enabled</string>

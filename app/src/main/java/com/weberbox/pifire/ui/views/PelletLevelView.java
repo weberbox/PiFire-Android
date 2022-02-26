@@ -6,10 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import timber.log.Timber;
 
@@ -22,10 +22,6 @@ public class PelletLevelView extends View {
     private int dotRadius;
 
     Paint paint = new Paint();
-
-    public PelletLevelView(Context context) {
-        super (context);
-    }
 
     public PelletLevelView(Context context, AttributeSet attrs) {
         super (context, attrs);
@@ -67,16 +63,11 @@ public class PelletLevelView extends View {
             primaryColor = a.getColor(R.styleable.PelletLevelView_primary_color, Color.WHITE);
             secondaryColor = a.getColor(R.styleable.PelletLevelView_secondary_color,
                     Color.TRANSPARENT);
-            dotRadius = dpToPx(a.getInt(R.styleable.PelletLevelView_dot_radius, 4));
+            dotRadius = ViewUtils.dpToPx(a.getInt(R.styleable.PelletLevelView_dot_radius, 4));
             setLevel(a.getInt (R.styleable.PelletLevelView_initial_value, 0));
 
             a.recycle();
         }
-    }
-
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     @Override

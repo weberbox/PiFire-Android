@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="130dp"
+    android:layout_height="100dp"
+    android:gravity="start"
     android:background="@drawable/bg_gradient_radius_left"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/nav_header_desc"
-        app:srcCompat="@drawable/ic_launcher_splash" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        app:srcCompat="@drawable/ic_pifire_logo"
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="3dp">
 
         <TextView
             android:id="@+id/nav_head_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textAppearance="@style/Text15AllerBold" />
+            android:fontFamily="@font/days_one_regular"
+            android:layout_marginStart="10dp"
+            android:text="@string/nav_app_title_one"
+            android:textColor="@color/colorWhite"
+            android:alpha="0.9"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nav_head_app_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/nav_head_app_name"
+            android:fontFamily="@font/days_one_regular"
+            android:text="@string/nav_app_title_two"
+            android:textColor="@color/colorRedButton"
+            android:textSize="35sp"
+            android:textStyle="bold|italic" />
 
         <View
             android:id="@+id/nav_head_divider"
-            android:layout_width="10dp"
+            android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/nav_head_app_name"
-            android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:background="@color/colorWhite" />
+            android:layout_below="@+id/nav_head_app_name"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/colorWhite"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/nav_head_grill_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Text15AllerBold"
+            android:layout_below="@+id/nav_head_app_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-5dp"
+            android:fontFamily="@font/days_one_regular"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp"
             android:visibility="gone"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/nav_head_divider" />
+            tools:text="Development" />
 
     </RelativeLayout>
 

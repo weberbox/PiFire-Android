@@ -14,6 +14,9 @@ public class AppConfig {
     // Pellet Warning
     public static final int LOW_PELLET_WARNING = 40;
 
+    // Recycler limited view
+    public static final int RECYCLER_LIMIT = 3;
+
     // Temp Selector Temps F
     public static final int MIN_GRILL_TEMP_SET_F = 125;
     public static final int MAX_GRILL_TEMP_SET_F = 500;

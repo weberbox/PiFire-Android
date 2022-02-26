@@ -73,17 +73,17 @@ public class EventsFragment extends Fragment {
 
         swipeRefresh = binding.eventsPullRefresh;
         loadingBar = binding.loadingProgressbar;
+        eventsRecycler = binding.eventsList;
 
         eventsListAdapter = new EventsListAdapter();
 
         int padding = getResources().getDimensionPixelOffset(R.dimen.recycler_padding);
 
-        eventsRecycler = binding.eventsLayout.eventsList;
         eventsRecycler.getRecyclerView().setClipToPadding(false);
-        eventsRecycler.getRecyclerView().setPadding(0,padding,0,padding);
+        eventsRecycler.getRecyclerView().setPadding(0, padding,0, padding);
         eventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsRecycler.setAdapter(eventsListAdapter);
-        eventsRecycler.addVeiledItems(15);
+        eventsRecycler.addVeiledItems(10);
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
@@ -111,6 +111,19 @@ public class EventsFragment extends Fragment {
                 requestDataUpdate();
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+        requestDataUpdate();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        socket = null;
     }
 
     @Override
@@ -193,10 +206,12 @@ public class EventsFragment extends Fragment {
             eventsListAdapter.setEventsList(events);
 
             eventsRecycler.unVeil();
+            eventsRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
 
         } catch (JSONException | IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.e(e,"Events JSON Error");
-            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_events, false);
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_events)), false);
         }
 
         toggleLoading(false);

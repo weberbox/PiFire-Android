@@ -194,7 +194,8 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
         } catch (NullPointerException e) {
             Timber.w(e, "Manual JSON Response Error");
-            AlertUtils.createErrorAlert(getActivity(), R.string.json_error_settings, false);
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_setting)), false);
         }
     }
 }

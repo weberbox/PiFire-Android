@@ -4,7 +4,8 @@
 
     <data>
 
-        <import type="com.weberbox.pifire.constants.Constants"/>
+        <import type="com.weberbox.pifire.constants.Constants" />
+
         <variable
             name="callback"
             type="com.weberbox.pifire.interfaces.SettingsBindingCallback" />
@@ -33,161 +34,89 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_spacing"
                     android:orientation="vertical">
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_app"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_APP_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_app"
-                        app:drawableStartCompat="@drawable/ic_settings_app" />
+                        app:nav_icon="@drawable/ic_settings_app"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_app" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_probe"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PROBE_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_probe"
-                        app:drawableStartCompat="@drawable/ic_grill_probe" />
+                        app:nav_icon="@drawable/ic_grill_probe"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_probe" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_name"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NAME_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_grill_name"
-                        app:drawableStartCompat="@drawable/ic_grill" />
+                        app:nav_icon="@drawable/ic_grill"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_grill_name" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_work"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_WORK_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_work"
-                        app:drawableStartCompat="@drawable/ic_settings_work" />
+                        app:nav_icon="@drawable/ic_settings_work"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_work" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_pellet"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PELLET_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_pellets"
-                        app:drawableStartCompat="@drawable/ic_grill_pellets" />
+                        app:nav_icon="@drawable/ic_grill_pellets"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_pellets" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_timers"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
-                        android:onClick="@{() -> callback.onSettingsClick(Constants.FRAG_TIMERS_SETTINGS)}"
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_timers"
-                        app:drawableStartCompat="@drawable/ic_grill_shutdown" />
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_TIMERS_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_grill_shutdown"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_timers" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_history"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_HISTORY_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_history"
-                        app:drawableStartCompat="@drawable/ic_menu_history" />
+                        app:nav_icon="@drawable/ic_menu_history"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_history" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_safety"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_SAFETY_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_safety"
-                        app:drawableStartCompat="@drawable/ic_settings_safety" />
+                        app:nav_icon="@drawable/ic_settings_safety"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_safety" />
 
-                    <TextView
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_notifications"
-                        style="@style/Text15AllerBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:drawablePadding="@dimen/default_spacing"
-                        android:focusable="true"
                         android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NOTIF_SETTINGS)}'
-                        android:paddingStart="25dp"
-                        android:paddingTop="20dp"
-                        android:paddingEnd="@dimen/settings_list_items"
-                        android:paddingBottom="@dimen/settings_list_items"
-                        android:text="@string/settings_notifications"
-                        app:drawableStartCompat="@drawable/ic_settings_notification" />
+                        app:nav_icon="@drawable/ic_settings_notification"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_notifications" />
 
                 </LinearLayout>
             </ScrollView>

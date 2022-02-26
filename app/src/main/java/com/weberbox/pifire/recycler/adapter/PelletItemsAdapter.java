@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ItemPelletsListBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 import com.weberbox.pifire.model.local.PelletItemModel;
@@ -39,14 +40,14 @@ public class PelletItemsAdapter extends RecyclerView.Adapter<PelletItemsAdapter.
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.bindData(list.get(position));
         holder.pelletIcon.setOnClickListener(view -> callback.onItemDelete(
-                holder.pelletId.getText().toString(),
+                holder.pelletId,
                 holder.pelletItem.getText().toString(), holder.getAbsoluteAdapterPosition()));
     }
 
     @Override
     public int getItemCount() {
         if (limited) {
-            return Math.min(list.size(), 3);
+            return Math.min(list.size(), AppConfig.RECYCLER_LIMIT);
         } else {
             return list == null ? 0 : list.size();
         }
@@ -63,19 +64,18 @@ public class PelletItemsAdapter extends RecyclerView.Adapter<PelletItemsAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView pelletItem;
-        private final TextView pelletId;
         private final ImageView pelletIcon;
+        private String pelletId;
 
         public ViewHolder(ItemPelletsListBinding binding) {
             super(binding.getRoot());
             pelletItem = binding.pelletsItem;
-            pelletId = binding.pelletsItemId;
             pelletIcon = binding.pelletsItemDelete;
         }
 
         public void bindData(final PelletItemModel viewModel) {
             pelletItem.setText(viewModel.getPelletItem());
-            pelletId.setText(viewModel.getPelletItemId());
+            pelletId = viewModel.getPelletItemId();
         }
     }
 }
