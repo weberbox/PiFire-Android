@@ -32,10 +32,11 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
+import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.UserPassDialog;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
@@ -98,14 +99,15 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
 
         serverAddress = binding.serverAddress;
         serverURLLayout = binding.serverAddressLayout;
-        connectProgress = binding.connectProgressbar;
+
+        connectProgress = ((ServerSetupActivity) requireActivity()).getProgressBar();
 
         serverScheme = binding.serverAddressSchemeTv;
 
         secure = getString(R.string.https_scheme);
         unSecure = getString(R.string.http_scheme);
 
-        String[] scheme = new String[] {unSecure, secure};
+        String[] scheme = new String[]{unSecure, secure};
 
         if (getActivity() != null) {
             ArrayAdapter<String> schemesAdapter = new ArrayAdapter<>(getActivity(),

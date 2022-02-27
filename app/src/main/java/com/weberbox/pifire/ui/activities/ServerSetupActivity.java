@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,6 +30,7 @@ public class ServerSetupActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityServerSetupBinding binding;
     private FloatingActionButton setupFab;
+    private ProgressBar connectProgress;
     private int downX;
 
     @Override
@@ -45,7 +47,7 @@ public class ServerSetupActivity extends AppCompatActivity {
         }
 
         setupFab = binding.fabSetup;
-
+        connectProgress = binding.setupLayout.connectProgressbar;
         stepper = binding.setupLayout.setupStepper;
 
         if (AppConfig.USE_ONESIGNAL) {
@@ -81,6 +83,10 @@ public class ServerSetupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public ProgressBar getProgressBar() {
+        return connectProgress;
     }
 
     @Override

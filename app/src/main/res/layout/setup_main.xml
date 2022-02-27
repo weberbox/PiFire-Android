@@ -8,6 +8,21 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_server_setup">
 
+    <ProgressBar
+        android:id="@+id/connect_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <fragment
         android:id="@+id/server_setup_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -16,7 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setup_stepper"
         app:navGraph="@navigation/nav_setup_graph"
         tools:ignore="FragmentTagUsage" />
 
@@ -25,14 +40,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
+        android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:stepperIconSize="25dp"
         app:stepperItems="@menu/activity_setup_steps"
         app:stepperTextAppearance="@style/Text15AllerBold"
         app:stepperTextColor="@color/colorWhite"
-        app:stepperWidgetColor="@color/colorAccent"
-        app:stepperIconSize="25dp"
-        app:stepperType="tab_numbered" />
+        app:stepperType="tab_numbered"
+        app:stepperWidgetColor="@color/colorAccent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

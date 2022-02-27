@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.activities.ServerSetupActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/setup_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.PiFire.AppBarOverlay">
@@ -20,23 +22,28 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include android:id="@+id/setup_layout"
-        layout="@layout/setup_main" />
+    <include
+        android:id="@+id/setup_layout"
+        layout="@layout/setup_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/setup_appbar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_setup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        android:contentDescription="@string/recipes_add"
         android:src="@drawable/ic_arrow_forward"
         app:backgroundTint="@color/colorAccent"
         app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
-        app:tint="@color/colorWhite" />
+        app:tint="@color/colorWhite"
+        tools:ignore="ContentDescription" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

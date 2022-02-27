@@ -2,7 +2,9 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,9 +55,10 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
+    @NonNull
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         ListPreference tempUnits = findPreference(getString(R.string.prefs_grill_units));
@@ -131,6 +134,8 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                 tempUnits.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
             }
         }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override

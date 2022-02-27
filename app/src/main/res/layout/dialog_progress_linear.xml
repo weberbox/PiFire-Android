@@ -35,33 +35,42 @@
         app:trackThickness="15dp"
         tools:background="@color/colorAccent" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/dialog_progress_message"
-        style="@style/Text14Aller"
+    <ScrollView
+        android:id="@+id/dialog_progress_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="20dp"
-        android:gravity="center"
-        android:inputType="textMultiLine"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_progress_linear"
-        tools:text="Message" />
+        app:layout_constraintTop_toBottomOf="@id/dialog_progress_linear">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/dialog_progress_message"
+            style="@style/Text14Aller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:inputType="textMultiLine"
+            tools:text="Message" />
+
+    </ScrollView>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_spacing"
+        android:layout_marginBottom="16dp"
         android:gravity="end"
         android:orientation="horizontal"
         android:paddingStart="16dp"
-        android:layout_marginTop="@dimen/medium_spacing"
         android:paddingEnd="16dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_progress_message">
+        app:layout_constraintTop_toBottomOf="@+id/dialog_progress_scroll">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/progress_negative_btn"
