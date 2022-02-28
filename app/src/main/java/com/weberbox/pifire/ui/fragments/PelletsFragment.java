@@ -52,7 +52,9 @@ import com.weberbox.pifire.ui.views.PelletsLogsRecycler;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.StringUtils;
+import com.weberbox.pifire.utils.TimeUtils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -275,6 +277,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
     public void onResume() {
         super.onResume();
         socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+        requestDataUpdate();
     }
 
     @Override
@@ -373,7 +376,13 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
             profileList.addAll(profiles.values());
 
             if (current.getDateLoaded() != null) {
-                pelletsCurrentBinding.currentDateLoadedText.setText(current.getDateLoaded());
+                String dateLoaded = "";
+                try {
+                    dateLoaded = TimeUtils.parsePelletsDate(current.getDateLoaded());
+                } catch (ParseException e) {
+                    Timber.w(e, "Failed parsing pellets load date");
+                }
+                pelletsCurrentBinding.currentDateLoadedText.setText(dateLoaded);
             }
 
             if (current.getPelletId() != null) {

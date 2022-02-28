@@ -149,4 +149,9 @@
     <string name="prefs_recipe_db_restore">prefs_recipe_db_restore</string>
     <string name="prefs_recipe_db_clear">prefs_recipe_db_clear</string>
 
+    <string name="prefs_modules_adc">prefs_modules_adc</string>
+    <string name="prefs_modules_display">prefs_modules_display</string>
+    <string name="prefs_modules_distance">prefs_modules_distance</string>
+    <string name="prefs_modules_platform">prefs_modules_platform</string>
+
 </resources>

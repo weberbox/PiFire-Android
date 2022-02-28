@@ -87,12 +87,15 @@ public class MainActivity extends BaseActivity implements
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
-        boolean firstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
+        boolean isFirstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
 
-        if (firstStart) {
+        if (isFirstStart) {
             Intent i = new Intent(MainActivity.this, ServerSetupActivity.class);
             startActivity(i);
             finish();
+        } else if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
+            Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
+            showFragment(new ChangelogFragment());
         }
 
         socket = ((PiFireApplication) getApplication()).getSocket();
@@ -146,11 +149,6 @@ public class MainActivity extends BaseActivity implements
         } else {
             navGrillName.setVisibility(View.VISIBLE);
             navGrillName.setText(grillName);
-        }
-
-        if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
-            Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
-            showFragment(new ChangelogFragment());
         }
 
         mainViewModel.getServerConnected().observe(this, connected -> {

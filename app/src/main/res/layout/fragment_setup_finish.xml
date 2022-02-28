@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,9 +9,9 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dp"
-        android:contentDescription="@string/placeholder_img"
-        android:src="@drawable/ic_setup_finish" />
+        android:layout_marginTop="@dimen/setup_stepper_padding"
+        android:src="@drawable/ic_setup_finish"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,19 +25,16 @@
         android:textSize="24sp" />
 
     <TextView
+        style="@style/Text16Aller"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/aller_regular"
         android:gravity="center"
-        android:letterSpacing="0.01"
         android:lineSpacingExtra="8sp"
         android:text="@string/setup_finish_text"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp" />
+        android:textAlignment="center" />
 
 </LinearLayout>

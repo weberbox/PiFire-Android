@@ -7,6 +7,7 @@
         <changelogtext logType="new">Added Overlapping Panels Navigation with left and right panels. You can open them by scrolling or using the toolbar icons</changelogtext>
         <changelogtext logType="new">Added Keep Warm option toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
         <changelogtext logType="new">Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later</changelogtext>
+        <changelogtext logType="new">Added PiFire modules information to info page</changelogtext>
 	    <changelogtext logType="imp">Moved to OneSignal Push Notifications. Requires PiFire Server v1.2.7 or later</changelogtext>
 	    <changelogtext logType="imp">Replaced most Snackbars with Alerter's for better visibility</changelogtext>
         <changelogtext logType="imp">Various UI improvements including expandable views in the Pellets section</changelogtext>

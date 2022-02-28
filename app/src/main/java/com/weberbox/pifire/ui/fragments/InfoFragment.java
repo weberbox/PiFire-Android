@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -123,6 +124,16 @@ public class InfoFragment extends Fragment {
             appGitBranch.setText(BuildConfig.GIT_BRANCH);
             appGitRev.setText(BuildConfig.GIT_REV);
         }
+
+        TextView adc = binding.modulesCardView.modulesAdc;
+        TextView display = binding.modulesCardView.modulesDisplay;
+        TextView distance = binding.modulesCardView.modulesDist;
+        TextView platform = binding.modulesCardView.modulesPlatform;
+
+        adc.setText(Prefs.getString(getString(R.string.prefs_modules_adc), ""));
+        display.setText(Prefs.getString(getString(R.string.prefs_modules_display), ""));
+        distance.setText(Prefs.getString(getString(R.string.prefs_modules_distance), ""));
+        platform.setText(Prefs.getString(getString(R.string.prefs_modules_platform), ""));
 
         RecyclerView licenseInfo = binding.licensesCardView.infoLicensesRecycler;
         licensesListAdapter = new LicensesListAdapter(true);
@@ -247,19 +258,31 @@ public class InfoFragment extends Fragment {
             String selector = infoDataModel.getInPins().getSelector();
             String version = infoDataModel.getServerVersion();
 
-            StringBuilder cpuString = new StringBuilder();
+            String cpuModel = "";
+            String[] cpuSeparated;
             for (String cpu : cpuInfo) {
-                cpuString.append(cpu.trim()).append("\n");
+                if (cpu.contains("model name")) {
+                    cpuSeparated = cpu.split(":");
+                    cpuModel = cpuSeparated[1].trim();
+                }
             }
 
+            String[] inetSeparated;
             StringBuilder networkString = new StringBuilder();
             for (String network : networkInfo) {
-                networkString.append(network.trim()).append("\n");
+                if (network.contains("netmask")) {
+                    if (!network.contains("127.0.0.1")) {
+                        inetSeparated = network.trim().split(" ");
+                        networkString.append("Address:    ").append(inetSeparated[1]).append("\n\n");
+                        networkString.append("Netmask:    ").append(inetSeparated[4]).append("\n\n");
+                        networkString.append("Broadcast:    ").append(inetSeparated[7]).append("\n");
+                    }
+                }
             }
 
             TransitionManager.beginDelayedTransition(rootContainer, new Fade(Fade.IN));
 
-            this.cpuInfo.setText(cpuString);
+            this.cpuInfo.setText(cpuModel);
             this.networkInfo.setText(networkString);
             this.upTime.setText(upTime);
             this.cpuTemp.setText(cpuTemp);

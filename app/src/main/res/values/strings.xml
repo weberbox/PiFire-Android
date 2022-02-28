@@ -457,8 +457,8 @@
     <string name="settings_recipe_db_import_message">Importing a recipe database will overwrite any existing items. Are you sure you want to import?</string>
 
     <string name="info_system_info">System Information</string>
-    <string name="info_cpu">CPU Info</string>
-    <string name="info_cpu_temp">CPU Temperature</string>
+    <string name="info_cpu">CPU Model</string>
+    <string name="info_cpu_temp">CPU Temp</string>
     <string name="info_network">Network Info</string>
     <string name="info_gpio">GPIO Pin Information</string>
     <string name="info_gpio_output_name">Output Name</string>
@@ -471,10 +471,17 @@
     <string name="info_gpio_input_pin">Input Pin</string>
     <string name="info_gpio_input_selector">Selector</string>
     <string name="info_uptime">Server Uptime</string>
+    <string name="info_modules_head">Module</string>
+    <string name="info_modules_config">Configured</string>
+    <string name="info_modules">Modules</string>
+    <string name="info_modules_adc">ADC</string>
+    <string name="info_modules_display">Display</string>
+    <string name="info_modules_dist">Distance Sensor</string>
+    <string name="info_modules_platform">Platform</string>
     <string name="info_credits">Credits and Licenses</string>
     <string name="info_server_info">Server Info</string>
     <string name="info_server_version">PiFire Version</string>
-    <string name="info_app_info">Android App Info</string>
+    <string name="info_app_info">App Info</string>
     <string name="info_app_version">App Version</string>
     <string name="info_app_version_code">Version Code</string>
     <string name="info_app_build_type">Build Type</string>

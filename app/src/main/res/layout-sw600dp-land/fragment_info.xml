@@ -64,6 +64,21 @@
                     app:layout_constraintTop_toBottomOf="@id/uptime_card_view" />
 
                 <include
+                    android:id="@+id/modules_card_view"
+                    layout="@layout/layout_info_modules"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gpio_card_view"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginTop="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/licenses_card_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/gpio_card_view" />
+
+                <include
                     android:id="@+id/server_version_card_view"
                     layout="@layout/layout_info_server"
                     android:layout_width="0dp"

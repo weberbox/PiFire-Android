@@ -1,9 +1,13 @@
 package com.weberbox.pifire.utils;
 
+import android.annotation.SuppressLint;
 import android.text.format.DateFormat;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +42,18 @@ public class TimeUtils {
     public static Integer getMinutesMillis(long milliseconds) {
         return Math.toIntExact(TimeUnit.MILLISECONDS.toMinutes(milliseconds) -
                 TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds)));
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String parsePelletsDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date newDate = sdf.parse(date);
+        sdf = new SimpleDateFormat("MM/dd h:mm a");
+        if (newDate != null) {
+            return sdf.format(newDate);
+        } else {
+            return "";
+        }
     }
 
     public static String parseRecipeTime(long milliseconds) {

@@ -57,6 +57,7 @@ public class SettingsUtils {
             SmokePlus smokePlus = settingsResponse.getSmokePlus();
             Safety safety = settingsResponse.getSafety();
             PelletLevel pellets = settingsResponse.getPellets();
+            Modules modules = settingsResponse.getModules();
 
             if (probesSettings != null) {
                 Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
@@ -184,6 +185,13 @@ public class SettingsUtils {
                 putIntString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
                 putIntString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
                 putIntString(R.string.prefs_safety_retries, safety.getReigniteRetries());
+            }
+
+            if (modules != null) {
+                putString(R.string.prefs_modules_adc, modules.getAdc());
+                putString(R.string.prefs_modules_display, modules.getDisplay());
+                putString(R.string.prefs_modules_distance, modules.getDist());
+                putString(R.string.prefs_modules_platform, modules.getGrillPlat());
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {

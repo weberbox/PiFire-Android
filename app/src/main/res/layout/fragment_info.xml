@@ -43,11 +43,21 @@
                     android:layout_marginBottom="@dimen/default_spacing" />
 
                 <include
+                    android:id="@+id/modules_card_view"
+                    layout="@layout/layout_info_modules"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gpio_card_view"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing" />
+
+                <include
                     android:id="@+id/uptime_card_view"
                     layout="@layout/layout_info_uptime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/gpio_card_view"
+                    android:layout_below="@+id/modules_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing" />
