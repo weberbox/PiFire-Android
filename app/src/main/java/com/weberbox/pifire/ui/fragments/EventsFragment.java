@@ -75,7 +75,7 @@ public class EventsFragment extends Fragment {
         loadingBar = binding.loadingProgressbar;
         eventsRecycler = binding.eventsList;
 
-        eventsListAdapter = new EventsListAdapter();
+        eventsListAdapter = new EventsListAdapter(requireActivity());
 
         int padding = getResources().getDimensionPixelOffset(R.dimen.recycler_padding);
 

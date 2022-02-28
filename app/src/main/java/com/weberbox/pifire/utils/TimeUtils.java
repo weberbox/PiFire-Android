@@ -45,10 +45,11 @@ public class TimeUtils {
     }
 
     @SuppressLint("SimpleDateFormat")
-    public static String parsePelletsDate(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    public static String parseDate(String date, String inputFormat, String outputFormat)
+            throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(inputFormat);
         Date newDate = sdf.parse(date);
-        sdf = new SimpleDateFormat("MM/dd h:mm a");
+        sdf = new SimpleDateFormat(outputFormat);
         if (newDate != null) {
             return sdf.format(newDate);
         } else {

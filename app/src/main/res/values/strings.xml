@@ -116,6 +116,7 @@
     <string name="dialog_remote">Remote</string>
     <string name="dialog_local">Local</string>
     <string name="dialog_restore_title">Restore Backup</string>
+    <string name="dialog_event">Event Info</string>
 
     <string name="backup_failed">Backup failed! Please try again</string>
     <string name="backup_success">Backup Completed Successfully!</string>
@@ -379,9 +380,13 @@
     <string name="settings_onesignal_id_error_title">Not Registered With OneSignal</string>
     <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole) The registration process can take up to 2 minutes.</string>
     <string name="settings_onesignal_register_title">Not Registered With PiFire</string>
-    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take up to 2 minutes.</string>
+    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take a couple minutes.</string>
     <string name="settings_onesignal_error_title">Error With OneSignal</string>
     <string name="settings_onesignal_error_message">There was an unexpected error with OneSignal. Please try again later.</string>
+    <string name="settings_onesignal_token_title">OneSignal Token Error</string>
+    <string name="settings_onesignal_token_message">OneSignal cannot obtain a push token from Google. If this device does not have Google Play Services installed push notifications will not be available</string>
+    <string name="settings_onesignal_subscribe_title">OneSignal Not Subscribed</string>
+    <string name="settings_onesignal_subscribe_message">This device is not subscribed to OneSignal servers. Verify notifications for this app are not disabled in device settings. If notifications are not disabled the device will now attempt to subscribe</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>
@@ -476,7 +481,7 @@
     <string name="info_modules">Modules</string>
     <string name="info_modules_adc">ADC</string>
     <string name="info_modules_display">Display</string>
-    <string name="info_modules_dist">Distance Sensor</string>
+    <string name="info_modules_dist">Distance</string>
     <string name="info_modules_platform">Platform</string>
     <string name="info_credits">Credits and Licenses</string>
     <string name="info_server_info">Server Info</string>

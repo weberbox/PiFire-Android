@@ -78,7 +78,8 @@ public class OneSignalUtils {
             case Constants.ONESIGNAL_NO_ID:
                 AlertUtils.createOneSignalAlert(activity,
                         R.string.settings_onesignal_id_error_title,
-                        R.string.settings_onesignal_id_error_message);
+                        R.string.settings_onesignal_id_error_message, false);
+                Timber.d("Device has No ID");
                 break;
             case Constants.ONESIGNAL_NO_CONSENT:
                 if (!Prefs.getBoolean(activity.getString(
@@ -87,11 +88,12 @@ public class OneSignalUtils {
                             R.string.settings_onesignal_alert_consent_title,
                             R.string.settings_onesignal_alert_consent_message);
                 }
+                Timber.d("OneSignal does not have consent");
                 break;
             case Constants.ONESIGNAL_NOT_REGISTERED:
                 AlertUtils.createOneSignalAlert(activity,
                         R.string.settings_onesignal_register_title,
-                        R.string.settings_onesignal_register_message);
+                        R.string.settings_onesignal_register_message, false);
                 registerDevice(activity, socket, status);
                 break;
             case Constants.ONESIGNAL_APP_UPDATED:
@@ -101,12 +103,22 @@ public class OneSignalUtils {
             case Constants.ONESIGNAL_DEVICE_ERROR:
                 AlertUtils.createOneSignalAlert(activity,
                         R.string.settings_onesignal_error_title,
-                        R.string.settings_onesignal_error_message);
+                        R.string.settings_onesignal_error_message, true);
+                Timber.d("Device Error");
+                break;
+            case Constants.ONESIGNAL_NULL_TOKEN:
+                AlertUtils.createOneSignalAlert(activity,
+                        R.string.settings_onesignal_token_title,
+                        R.string.settings_onesignal_token_message, true);
+                Timber.d("Device Token Error");
                 break;
             case Constants.ONESIGNAL_REGISTERED:
                 Timber.d("Device already registered with PiFire");
                 break;
             case Constants.ONESIGNAL_NOT_SUBSCRIBED:
+                AlertUtils.createOneSignalAlert(activity,
+                        R.string.settings_onesignal_subscribe_title,
+                        R.string.settings_onesignal_subscribe_message, true);
                 Timber.d("Device is not subscribed");
                 break;
         }
@@ -120,6 +132,8 @@ public class OneSignalUtils {
         OSDeviceState deviceState = OneSignal.getDeviceState();
         if (deviceState == null) {
             return Constants.ONESIGNAL_DEVICE_ERROR;
+        } else if (deviceState.getPushToken() == null) {
+            return Constants.ONESIGNAL_NULL_TOKEN;
         } else if (!deviceState.isSubscribed()) {
             return Constants.ONESIGNAL_NOT_SUBSCRIBED;
         }

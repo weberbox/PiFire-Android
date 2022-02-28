@@ -38,7 +38,7 @@ def vMajor = 1
 def vMinor = 4
 def vPatch = 0
 def vBuild = 4
-def isDev = true
+def isBeta = true
 
 android {
     compileSdk 31
@@ -48,7 +48,7 @@ android {
         minSdk 24
         targetSdk 31
         versionCode vMajor * 1000000 + vMinor * 10000 + vPatch * 100 + vBuild
-        versionName "${vMajor}.${vMinor}.${vPatch}${isDev ? "-dev" + vBuild : ""}"
+        versionName "${vMajor}.${vMinor}.${vPatch}${isBeta ? "-dev" + vBuild : ""}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -67,6 +67,7 @@ android {
             buildConfigField "String", "BUILD_TIME", "\"${currentTime}\""
             buildConfigField "String", "GIT_BRANCH", "\"${getGitBranch}\""
             buildConfigField "String", "GIT_REV", "\"${getGitRevCount}\""
+            buildConfigField "boolean", "IS_BETA", "${isBeta}"
         }
         debug {
             manifestPlaceholders = [appName: "PiFire Debug", environment: "debug"]
@@ -75,6 +76,7 @@ android {
             buildConfigField "String", "BUILD_TIME", "\"${currentTime}\""
             buildConfigField "String", "GIT_BRANCH", "\"${getGitBranch}\""
             buildConfigField "String", "GIT_REV", "\"${getGitRevCount}\""
+            buildConfigField "boolean", "IS_BETA", "${isBeta}"
         }
     }
 
@@ -191,7 +193,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     testImplementation 'junit:junit:4.13.2'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    firebaseImplementation platform('com.google.firebase:firebase-bom:28.4.0')
+    firebaseImplementation platform('com.google.firebase:firebase-bom:29.1.0')
     firebaseImplementation 'com.google.firebase:firebase-messaging'
     firebaseImplementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

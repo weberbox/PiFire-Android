@@ -126,7 +126,8 @@ public class AlertUtils {
                 .show();
     }
 
-    public static void createOneSignalAlert(Activity activity, int title, int message) {
+    public static void createOneSignalAlert(Activity activity, int title, int message,
+                                            boolean infinite) {
         Alerter.create(activity)
                 .setTitle(title)
                 .setText(message)
@@ -135,7 +136,7 @@ public class AlertUtils {
                 .enableSwipeToDismiss()
                 .setTitleAppearance(R.style.Text18AllerBold)
                 .setTextAppearance(R.style.Text14AllerBold)
-                .enableInfiniteDuration(false)
+                .enableInfiniteDuration(infinite)
                 .show();
     }
 

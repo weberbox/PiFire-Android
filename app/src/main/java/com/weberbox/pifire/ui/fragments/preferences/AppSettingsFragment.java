@@ -50,6 +50,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.prefs_app_settings, rootKey);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -92,7 +93,8 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         }
 
         if (updaterCat != null && updaterEnabled != null) {
-            if (getString(R.string.def_app_update_check_url).isEmpty()) {
+            if (getString(R.string.def_app_update_check_url).isEmpty() ||
+                    getString(R.string.def_app_update_check_url_beta).isEmpty()) {
                 updaterCat.setEnabled(false);
                 updaterEnabled.setChecked(false);
                 updaterEnabled.setSummary(getString(R.string.updater_update_disabled));
@@ -110,7 +112,9 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
                             .setForceCheck(true)
                             .setView(view)
                             .setUpdateFrom(UpdateFrom.JSON)
-                            .setUpdateJSON(getString(R.string.def_app_update_check_url));
+                            .setUpdateJSON(AppConfig.IS_BETA ?
+                                    getString(R.string.def_app_update_check_url_beta) :
+                                    getString(R.string.def_app_update_check_url));
                     appUpdater.start();
                 }
                 return true;

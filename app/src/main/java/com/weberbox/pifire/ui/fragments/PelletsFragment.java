@@ -20,6 +20,7 @@ import androidx.transition.TransitionManager;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.JsonSyntaxException;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.skydoves.androidveil.VeilLayout;
 import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.R;
@@ -376,13 +377,19 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
             profileList.addAll(profiles.values());
 
             if (current.getDateLoaded() != null) {
-                String dateLoaded = "";
-                try {
-                    dateLoaded = TimeUtils.parsePelletsDate(current.getDateLoaded());
-                } catch (ParseException e) {
-                    Timber.w(e, "Failed parsing pellets load date");
+                if (Prefs.getString(getString(R.string.prefs_grill_units)).equals("F")) {
+                    String dateLoaded;
+                    try {
+                        dateLoaded = TimeUtils.parseDate(current.getDateLoaded(),
+                                "yyyy-MM-dd hh:mm:ss", "MM/dd h:mm a");
+                    } catch (ParseException e) {
+                        Timber.w(e, "Failed parsing pellets load date");
+                        dateLoaded = current.getDateLoaded();
+                    }
+                    pelletsCurrentBinding.currentDateLoadedText.setText(dateLoaded);
+                } else {
+                    pelletsCurrentBinding.currentDateLoadedText.setText(current.getDateLoaded());
                 }
-                pelletsCurrentBinding.currentDateLoadedText.setText(dateLoaded);
             }
 
             if (current.getPelletId() != null) {

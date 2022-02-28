@@ -176,7 +176,12 @@ public class MainActivity extends BaseActivity implements
 
         connectSocketListenData(socket);
 
-        String updaterUrl = getString(R.string.def_app_update_check_url);
+        String updaterUrl;
+        if (AppConfig.IS_BETA) {
+            updaterUrl = getString(R.string.def_app_update_check_url_beta);
+        } else {
+            updaterUrl = getString(R.string.def_app_update_check_url);
+        }
 
         if (savedInstanceState == null && !updaterUrl.isEmpty()) {
             appUpdater = new AppUpdater(this)
