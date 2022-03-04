@@ -177,7 +177,7 @@ public class EventsFragment extends Fragment {
         if (show && socket != null && socket.connected()) {
             loadingBar.setVisibility(View.VISIBLE);
         } else {
-            loadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -188,7 +188,8 @@ public class EventsFragment extends Fragment {
             JSONObject rootObject = new JSONObject(responseData);
             JSONArray array = rootObject.getJSONArray(ServerConstants.EVENTS_LIST);
 
-            int customAmount = Integer.parseInt(Prefs.getString(getString(R.string.prefs_event_amount),
+            int customAmount = Integer.parseInt(Prefs.getString(
+                    getString(R.string.prefs_event_amount),
                     getString(R.string.def_event_amounts_app)));
             int listAmount = Math.min(customAmount, array.length());
 
@@ -208,7 +209,8 @@ public class EventsFragment extends Fragment {
             eventsRecycler.unVeil();
             eventsRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
 
-        } catch (JSONException | IllegalStateException | JsonSyntaxException | NullPointerException e) {
+        } catch (JSONException | IllegalStateException | JsonSyntaxException |
+                NullPointerException e) {
             Timber.e(e,"Events JSON Error");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_events)), false);

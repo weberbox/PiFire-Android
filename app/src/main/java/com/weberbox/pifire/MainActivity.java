@@ -46,12 +46,14 @@ import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.adapter.MainPagerAdapter;
 import com.weberbox.pifire.ui.fragments.ChangelogFragment;
+import com.weberbox.pifire.ui.fragments.FeedbackFragment;
 import com.weberbox.pifire.ui.fragments.InfoFragment;
 import com.weberbox.pifire.ui.views.NavListItem;
 import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.AlertUtils;
+import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 
@@ -151,6 +153,10 @@ public class MainActivity extends BaseActivity implements
             navGrillName.setText(grillName);
         }
 
+        if (getString(R.string.def_sentry_io_dsn).isEmpty()) {
+            binding.navLayoutPanel.navFeedback.setVisibility(View.GONE);
+        }
+
         mainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(this, connected);
@@ -189,11 +195,11 @@ public class MainActivity extends BaseActivity implements
                     .setButtonDoNotShowAgain(R.string.disable_button)
                     .setUpdateFrom(UpdateFrom.JSON)
                     .setUpdateJSON(updaterUrl)
-                    .showEvery(Integer.parseInt(Prefs.getString(getString(
-                            R.string.prefs_app_updater_frequency),
-                            getString(R.string.def_app_updater_frequency))));
+                    .showEvery(AppConfig.UPDATE_CHECK_FREQ);
             appUpdater.start();
         }
+
+        CrashUtils.checkIfCrashed(this);
     }
 
     @Override
@@ -311,6 +317,12 @@ public class MainActivity extends BaseActivity implements
         public void onNavChangelog() {
             closePanelsDelayed();
             showFragment(new ChangelogFragment());
+        }
+
+        @Override
+        public void onNavFeedback() {
+            closePanelsDelayed();
+            showFragment(new FeedbackFragment());
         }
     };
 

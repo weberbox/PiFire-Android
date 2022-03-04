@@ -24,28 +24,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/uptime_info"
+        <com.skydoves.androidveil.VeilLayout
+            android:id="@+id/uptime_veil_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryLight"
-            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/uptime_card_header">
+            app:layout_constraintTop_toBottomOf="@+id/uptime_card_header"
+            app:veilLayout_baseAlpha="0.6"
+            app:veilLayout_baseColor="@color/colorLighterGrey"
+            app:veilLayout_highlightAlpha="1.0"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
+            app:veilLayout_radius="18dp"
+            app:veilLayout_shimmerEnable="true"
+            app:veilLayout_veiled="true">
 
-            <TextView
-                android:id="@+id/uptime_info_text"
-                style="@style/Text15AllerBold"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/uptime_info"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_spacing"
-                android:maxLines="2"
-                android:textAlignment="center"
-                android:textStyle="normal"
-                app:autoSizeTextType="uniform" />
+                android:background="@color/colorPrimaryLight"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/uptime_info_text"
+                    style="@style/Text15AllerBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_spacing"
+                    android:maxLines="2"
+                    android:minWidth="180dp"
+                    android:textAlignment="center"
+                    android:textStyle="normal" />
 
+            </LinearLayout>
+        </com.skydoves.androidveil.VeilLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

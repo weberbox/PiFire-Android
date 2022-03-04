@@ -84,6 +84,10 @@ public class SettingsUtils {
                     putIntString(R.string.prefs_startup_time, globals.getStartUpTimer());
                 }
 
+                if (globals.getAutoPowerOff() != null) {
+                    putBoolean(R.string.prefs_auto_power_off, globals.getAutoPowerOff());
+                }
+
                 if (globals.getUnits() != null) {
                     putString(R.string.prefs_grill_units, globals.getUnits());
                 }
@@ -104,7 +108,11 @@ public class SettingsUtils {
                     putString(R.string.prefs_grill_probe_one_type, probeTypes.getGrill1type());
                     putString(R.string.prefs_grill_probe_two_type, probeTypes.getGrill2type());
                 } else {
-                    putString(R.string.prefs_grill_probe_type, probeTypes.getGrill0type());
+                    if (VersionUtils.isSupported(com.weberbox.pifire.constants.Versions.V_129)) {
+                        putString(R.string.prefs_grill_probe_type, probeTypes.getGrill1type());
+                    } else {
+                        putString(R.string.prefs_grill_probe_type, probeTypes.getGrill0type());
+                    }
                 }
             }
 
@@ -195,7 +203,7 @@ public class SettingsUtils {
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w(e, "Settings JSON Error");
+            Timber.e(e, "Settings JSON Error");
             return false;
         }
         return true;

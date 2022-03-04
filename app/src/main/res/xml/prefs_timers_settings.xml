@@ -4,7 +4,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_timers">
+        app:title="@string/settings_cat_timers">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_shutdown_time"
@@ -32,6 +32,24 @@
             android:layout="@layout/preference_category_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_startup_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_auto_power_off">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_auto_power_off"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_auto_power_off"
+            app:title="@string/settings_auto_power_off" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_auto_power_off_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>

@@ -191,8 +191,13 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe_type)
                         .equals(preference.getKey())) {
-                    ServerControl.setGrillProbeType(socket,
-                            ((ListPreference) preference).getValue(), this::processPostResponse);
+                    if (VersionUtils.isSupported(Versions.V_129)) {
+                        ServerControl.setGrillProbe1Type(socket,
+                                ((ListPreference) preference).getValue(), this::processPostResponse);
+                    } else {
+                        ServerControl.setGrillProbe0Type(socket,
+                                ((ListPreference) preference).getValue(), this::processPostResponse);
+                    }
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe_one_type)
                         .equals(preference.getKey())) {

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -51,6 +52,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
 
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
+        SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
 
         if (shutdownTime != null && getActivity() != null) {
             shutdownTime.setOnBindEditTextListener(editText -> {
@@ -71,6 +73,14 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 startupTime.setEnabled(false);
                 startupTime.setSummaryProvider(null);
                 startupTime.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
+            }
+        }
+
+        if (autoPowerOff != null) {
+            if (!VersionUtils.isSupported(Versions.V_129)) {
+                autoPowerOff.setEnabled(false);
+                autoPowerOff.setSummaryProvider(null);
+                autoPowerOff.setSummary(getString(R.string.disabled_option_settings, Versions.V_129));
             }
         }
     }
@@ -124,6 +134,14 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                         .equals(preference.getKey())) {
                     ServerControl.sendStartupTime(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+            }
+            if (preference instanceof SwitchPreferenceCompat) {
+                if (preference.getContext().getString(R.string.prefs_auto_power_off)
+                        .equals(preference.getKey())) {
+                    ServerControl.sendAutoPowerOff(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
             }
         }

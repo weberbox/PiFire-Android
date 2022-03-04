@@ -96,29 +96,10 @@
             app:summary="@string/settings_update_download_summary"
             app:title="@string/settings_update_download_title" />
 
-        <ListPreference
-            app:defaultValue="@string/def_app_updater_frequency"
-            app:entries="@array/app_updater_frequency_names"
-            app:entryValues="@array/app_updater_frequency_values"
-            app:key="@string/prefs_app_updater_frequency"
-            app:summary="@string/settings_update_frequency_summary"
-            app:title="@string/settings_update_frequency" />
-
         <Preference
             app:key="@string/prefs_app_updater_check_now"
             app:summary="@string/settings_update_check_now_summary"
             app:title="@string/settings_update_check_now" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:key="@string/prefs_debug_cat"
-        app:title="@string/settings_cat_debug">
-
-        <SwitchPreferenceCompat
-            app:key="@string/prefs_debug_logging"
-            app:summary="@string/settings_debug_logging_summary"
-            app:title="@string/settings_debug_logging" />
 
     </PreferenceCategory>
 
@@ -133,10 +114,18 @@
             android:title="@string/settings_enable_crash" />
 
         <SwitchPreferenceCompat
+            android:defaultValue="@bool/def_crash_dialog"
+            android:key="@string/prefs_crash_dialog"
+            android:summary="@string/settings_crash_dialog_summary"
+            android:title="@string/settings_crash_dialog_title"
+            app:dependency="@string/prefs_crash_enable" />
+
+        <SwitchPreferenceCompat
             android:defaultValue="@bool/def_crash_dev_enabled"
             android:key="@string/prefs_dev_crash_enable"
             android:summary="@string/settings_dev_crash_summary"
-            android:title="@string/settings_enable_crash"
+            android:title="@string/settings_dev_crash_title"
+            app:dependency="@string/prefs_crash_enable"
             app:isPreferenceVisible="false" />
 
         <EditTextPreference

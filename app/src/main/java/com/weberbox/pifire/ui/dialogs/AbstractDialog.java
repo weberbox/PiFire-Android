@@ -110,6 +110,8 @@ public abstract class AbstractDialog implements DialogInterface {
         TextView messageView = binding.materialMessage;
         MaterialButton positiveButtonView = binding.materialPositiveBtn;
         MaterialButton negativeButtonView = binding.materialNegativeBtn;
+        LinearLayout buttonsContainer = binding.materialButtonsContainer;
+        View spacer = binding.materialSpacing;
 
         if (title != null) {
             titleView.setVisibility(View.VISIBLE);
@@ -163,6 +165,11 @@ public abstract class AbstractDialog implements DialogInterface {
             );
         } else {
             negativeButtonView.setVisibility(View.INVISIBLE);
+        }
+
+        if (positiveButton == null && negativeButton == null) {
+            buttonsContainer.setVisibility(View.GONE);
+            spacer.setVisibility(View.VISIBLE);
         }
 
         binding.getRoot().setBackgroundResource(R.drawable.bg_alert_dialog);

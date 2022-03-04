@@ -18,6 +18,9 @@ public class AppConfig {
     // Recycler limited view
     public static final int RECYCLER_LIMIT = 3;
 
+    // App Update Check Frequency
+    public static final int UPDATE_CHECK_FREQ = 5;
+
     // Temp Selector Temps F
     public static final int MIN_GRILL_TEMP_SET_F = 125;
     public static final int MAX_GRILL_TEMP_SET_F = 500;
@@ -33,4 +36,7 @@ public class AppConfig {
     public static final int MIN_PROBE_TEMP_SET_C = 4;
     public static final int MAX_PROBE_TEMP_SET_C = 150;
     public static final int DEFAULT_PROBE_TEMP_SET_C = 55;
+
+    // Sentry
+    public static final String SENTRY_FEEDBACK = "User Feedback";
 }

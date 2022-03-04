@@ -42,7 +42,7 @@ public class EmptyTextListener implements TextWatcher {
         textInputLayout = editText.getRootView().findViewById(R.id.edit_layout);
         if (s.length() == 0) {
             if (positiveButton != null) positiveButton.setEnabled(false);
-            setError(context.getString(R.string.settings_blank_error));
+            setError(context.getString(R.string.text_blank_error));
         } else if (min != null && Double.parseDouble(s.toString()) < min) {
             if (positiveButton != null) positiveButton.setEnabled(false);
             setError(context.getString(R.string.settings_min_error,

@@ -541,6 +541,9 @@ public class SettingsDataModel {
         @SerializedName("startup_timer")
         @Expose
         private Integer startUpTimer;
+        @SerializedName("auto_power_off")
+        @Expose
+        private Boolean autoPowerOff;
         @SerializedName("four_probes")
         @Expose
         private Boolean fourProbes;
@@ -639,6 +642,19 @@ public class SettingsDataModel {
 
         public Globals withStartupTimer(Integer startUpTimer) {
             this.startUpTimer = startUpTimer;
+            return this;
+        }
+
+        public Boolean getAutoPowerOff() {
+            return autoPowerOff;
+        }
+
+        public void setAutoPPowerOff(Boolean powerOff) {
+            this.autoPowerOff = powerOff;
+        }
+
+        public Globals withAutoPowerOff(Boolean powerOff) {
+            this.autoPowerOff = powerOff;
             return this;
         }
 
@@ -1660,12 +1676,22 @@ public class SettingsDataModel {
             this.adc = adc;
         }
 
+        public Modules withAdc(String adc) {
+            this.adc = adc;
+            return this;
+        }
+
         public String getDisplay() {
             return display;
         }
 
         public void setDisplay(String display) {
             this.display = display;
+        }
+
+        public Modules withDisplay(String display) {
+            this.display = display;
+            return this;
         }
 
         public String getDist() {
@@ -1676,12 +1702,22 @@ public class SettingsDataModel {
             this.dist = dist;
         }
 
+        public Modules withDistance(String distance) {
+            this.dist = distance;
+            return this;
+        }
+
         public String getGrillPlat() {
             return grillplat;
         }
 
         public void setGrillPlat(String grillplat) {
             this.grillplat = grillplat;
+        }
+
+        public Modules withPlatform(String platform) {
+            this.grillplat = platform;
+            return this;
         }
 
     }

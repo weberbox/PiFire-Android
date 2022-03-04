@@ -11,6 +11,7 @@ import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.AppSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.HistorySettingsFragment;
+import com.weberbox.pifire.ui.fragments.preferences.ManualSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NameSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NotificationSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.PelletSettingsFragment;
@@ -83,6 +84,9 @@ public class PreferencesActivity extends BaseActivity {
                 break;
             case Constants.FRAG_NOTIF_SETTINGS:
                 launchFragment(new NotificationSettingsFragment());
+                break;
+            case Constants.FRAG_MANUAL_SETTINGS:
+                launchFragment(new ManualSettingsFragment());
                 break;
         }
     }

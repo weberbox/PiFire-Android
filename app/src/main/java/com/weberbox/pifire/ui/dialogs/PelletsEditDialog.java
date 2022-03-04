@@ -36,6 +36,7 @@ public class PelletsEditDialog {
     private final int position;
     private AutoCompleteTextView profileBrandTv, profileWoodTv, profileRatingTv;
     private TextInputEditText profileComments;
+    private TextInputLayout profileBrand, profileWood, profileRating;
 
     public PelletsEditDialog(Activity activity, List<String> brands, List<String> woods,
                              PelletProfileModel pelletProfile, int position,
@@ -62,9 +63,9 @@ public class PelletsEditDialog {
         profileWoodTv = pelletsProfileEdit.pelletEditWoodTv;
         profileRatingTv = pelletsProfileEdit.pelletEditRatingTv;
         profileComments = pelletsProfileEdit.pelletEditCommentsTv;
-        TextInputLayout profileBrand = pelletsProfileEdit.pelletEditBrand;
-        TextInputLayout profileWood = pelletsProfileEdit.pelletEditWood;
-        TextInputLayout profileRating = pelletsProfileEdit.pelletEditRating;
+        profileBrand = pelletsProfileEdit.pelletEditBrand;
+        profileWood = pelletsProfileEdit.pelletEditWood;
+        profileRating = pelletsProfileEdit.pelletEditRating;
 
         if (pelletProfile != null) {
             profileBrandTv.setText(pelletProfile.getBrand());
@@ -99,7 +100,7 @@ public class PelletsEditDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    profileBrand.setError(activity.getString(R.string.settings_blank_error));
+                    profileBrand.setError(activity.getString(R.string.text_blank_error));
                 } else {
                     profileBrand.setError(null);
                 }
@@ -118,7 +119,7 @@ public class PelletsEditDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    profileWood.setError(activity.getString(R.string.settings_blank_error));
+                    profileWood.setError(activity.getString(R.string.text_blank_error));
                 } else {
                     profileWood.setError(null);
                 }
@@ -137,7 +138,7 @@ public class PelletsEditDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    profileRating.setError(activity.getString(R.string.settings_blank_error));
+                    profileRating.setError(activity.getString(R.string.text_blank_error));
                 } else {
                     profileRating.setError(null);
                 }
@@ -149,13 +150,7 @@ public class PelletsEditDialog {
         });
 
         pelletEditSave.setOnClickListener(v -> {
-            if (profileBrandTv.getText().length() == 0) {
-                profileBrand.setError(activity.getString(R.string.settings_blank_error));
-            } else if (profileWoodTv.getText().length() == 0) {
-                profileWood.setError(activity.getString(R.string.settings_blank_error));
-            } else if (profileRatingTv.getText().length() == 0) {
-                profileRating.setError(activity.getString(R.string.settings_blank_error));
-            } else {
+            if (checkRequiredFields()) {
                 if (pelletProfile != null) {
                     callBack.onProfileEdit(buildProfile(pelletProfile), false);
                 } else {
@@ -166,8 +161,10 @@ public class PelletsEditDialog {
         });
 
         pelletEditLoad.setOnClickListener(v -> {
-            callBack.onProfileEdit(buildProfile(null), true);
-            bottomSheetDialog.dismiss();
+            if (checkRequiredFields()) {
+                callBack.onProfileEdit(buildProfile(null), true);
+                bottomSheetDialog.dismiss();
+            }
         });
 
         pelletEditDelete.setOnClickListener(v -> {
@@ -194,6 +191,19 @@ public class PelletsEditDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    private boolean checkRequiredFields() {
+        if (profileBrandTv.getText().length() == 0) {
+            profileBrand.setError(activity.getString(R.string.text_blank_error));
+        } else if (profileWoodTv.getText().length() == 0) {
+            profileWood.setError(activity.getString(R.string.text_blank_error));
+        } else if (profileRatingTv.getText().length() == 0) {
+            profileRating.setError(activity.getString(R.string.text_blank_error));
+        } else {
+            return true;
+        }
+        return false;
     }
 
     private PelletProfileModel buildProfile(PelletProfileModel profile) {

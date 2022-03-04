@@ -320,11 +320,15 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     private void processPostResponse(String response) {
+        processPostResponse(response, true);
+    }
+
+    private void processPostResponse(String response, boolean showSuccess) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
         requireActivity().runOnUiThread(() -> {
             if (result.getResult().equals("error")) {
                 AlertUtils.createErrorAlert(requireActivity(), result.getMessage(), false);
-            } else {
+            } else if (showSuccess) {
                 AlertUtils.createAlert(requireActivity(), R.string.settings_action_success, 1000);
             }
         });
@@ -341,7 +345,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                     if (socket != null && socket.connected()) {
                         ServerControl.setDebugMode(socket,
                                 ((SwitchPreferenceCompat) preference).isChecked(),
-                                this::processPostResponse);
+                                response -> processPostResponse(response, false));
                     }
                 }
             }

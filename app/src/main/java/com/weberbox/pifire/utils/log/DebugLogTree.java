@@ -20,8 +20,10 @@ public class DebugLogTree extends Timber.DebugTree {
     }
 
     @Override
-    protected String createStackElementTag(@NonNull StackTraceElement element) {
-        // Add log statements line number to the log
-        return super.createStackElementTag(element) + " - " + element.getLineNumber();
+    protected String createStackElementTag(StackTraceElement element) {
+        return String.format("(%s:%s) - %s",
+                element.getFileName(),
+                element.getLineNumber(),
+                element.getMethodName());
     }
 }

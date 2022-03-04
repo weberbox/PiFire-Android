@@ -40,6 +40,6 @@
         android:indeterminateTint="@color/colorAccent"
         android:indeterminateTintMode="src_in"
         android:max="100"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

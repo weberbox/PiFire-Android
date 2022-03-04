@@ -95,14 +95,14 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
             eventIcon.setBackgroundColor(ContextCompat.getColor(context, event.getEventIconColor()));
             eventIcon.setText(event.getEventIcon());
             eventText.setText(event.getEventText());
-            if (isFahrenheit) {
+            if (isFahrenheit && !event.getEventTime().equals("--:--:--")) {
                 try {
                     eventTime.setText(TimeUtils.parseDate(
                             event.getEventTime(), "HH:mm:ss", "h:mm a"));
                     eventDate.setText(TimeUtils.parseDate(
                             event.getEventDate(), "yyyy-MM-dd", "MM-dd-yyyy"));
                 } catch (ParseException e) {
-                    Timber.w(e, "Failed parsing event dates");
+                    Timber.e(e, "Failed parsing event dates");
                     eventTime.setText(event.getEventTime());
                     eventDate.setText(event.getEventDate());
                 }

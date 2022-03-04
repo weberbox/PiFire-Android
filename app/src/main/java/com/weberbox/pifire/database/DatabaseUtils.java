@@ -93,11 +93,11 @@ public class DatabaseUtils {
                 }
 
             } catch (Exception e) {
-                Timber.w(e, "Failed to zip recipe files");
+                Timber.e(e, "Failed to zip recipe files");
                 return false;
             }
         } catch (IOException e) {
-            Timber.w(e, "Failed to export recipes db");
+            Timber.e(e, "Failed to export recipes db");
             return false;
         }
         return true;
@@ -147,7 +147,7 @@ public class DatabaseUtils {
             }
             zin.close();
         } catch (Exception e) {
-            Timber.w(e, "Recipe database import failed");
+            Timber.e(e, "Recipe database import failed");
             return false;
         }
         return true;

@@ -73,7 +73,7 @@ public class PelletsAddDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    inputLayout.setError(context.getString(R.string.settings_blank_error));
+                    inputLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     inputLayout.setError(null);

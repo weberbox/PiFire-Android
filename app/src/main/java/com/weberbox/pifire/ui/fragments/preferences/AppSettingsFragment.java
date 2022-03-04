@@ -3,6 +3,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,14 +36,19 @@ import com.weberbox.pifire.updater.AppUpdater;
 import com.weberbox.pifire.updater.enums.Display;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
 import com.weberbox.pifire.utils.AlertUtils;
+import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.util.List;
 
-public class AppSettingsFragment extends PreferenceFragmentCompat {
+import io.sentry.Sentry;
 
+public class AppSettingsFragment extends PreferenceFragmentCompat implements
+        SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private SharedPreferences sharedPreferences;
     private AppUpdater appUpdater;
 
     @Override
@@ -54,6 +60,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
         PreferenceCategory crashCat = findPreference(getString(R.string.prefs_crash_cat));
@@ -149,6 +156,9 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         if (getActivity() != null) {
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_app);
         }
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
@@ -156,6 +166,25 @@ public class AppSettingsFragment extends PreferenceFragmentCompat {
         super.onStop();
         if (appUpdater != null) {
             appUpdater.stop();
+        }
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Preference preference = findPreference(key);
+
+        if (preference != null) {
+            if (preference instanceof SwitchPreferenceCompat) {
+                if (preference.getContext().getString(R.string.prefs_crash_enable)
+                        .equals(preference.getKey())) {
+                    if (((SwitchPreferenceCompat) preference).isChecked() && !Sentry.isEnabled()) {
+                        CrashUtils.initCrashReporting(requireActivity().getApplicationContext());
+                    }
+                }
+            }
         }
     }
 

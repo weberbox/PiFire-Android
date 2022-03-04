@@ -42,6 +42,7 @@ public class Constants {
     public static final int FRAG_SAFETY_SETTINGS = 7;
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
+    public static final int FRAG_MANUAL_SETTINGS = 10;
 
     // Recipe Fragment
     public static final int FRAG_VIEW_RECIPE = 0;
@@ -56,6 +57,7 @@ public class Constants {
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";
     public static final String INTENT_RECIPE_FRAGMENT = "recipe_fragment";
     public static final String INTENT_RECIPE_ID = "recipe_id";
+    public static final String INTENT_CRASHED_ID = "crashed_id";
 
     // Results
     public static final int RESULT_PERMISSIONS = 405;

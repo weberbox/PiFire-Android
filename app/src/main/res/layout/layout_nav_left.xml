@@ -125,6 +125,14 @@
                         app:nav_selected="false"
                         app:nav_title="@string/nav_changelog" />
 
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavFeedback()}'
+                        app:nav_icon="@drawable/ic_menu_feedback"
+                        app:nav_title="@string/feedback" />
+
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>

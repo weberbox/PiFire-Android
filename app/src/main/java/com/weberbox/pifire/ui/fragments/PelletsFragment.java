@@ -338,7 +338,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         if (show && socket != null && socket.connected()) {
             loadingBar.setVisibility(View.VISIBLE);
         } else {
-            loadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -383,7 +383,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
                         dateLoaded = TimeUtils.parseDate(current.getDateLoaded(),
                                 "yyyy-MM-dd hh:mm:ss", "MM/dd h:mm a");
                     } catch (ParseException e) {
-                        Timber.w(e, "Failed parsing pellets load date");
+                        Timber.e(e, "Failed parsing pellets load date");
                         dateLoaded = current.getDateLoaded();
                     }
                     pelletsCurrentBinding.currentDateLoadedText.setText(dateLoaded);
@@ -478,7 +478,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
             toggleLoading(false);
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w(e, "Pellets JSON Error");
+            Timber.e(e, "Pellets JSON Error");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_pellet_manager)), false);
         }

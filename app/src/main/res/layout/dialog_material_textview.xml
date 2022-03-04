@@ -39,11 +39,18 @@
                 android:textSize="15sp"
                 tools:text="Message" />
 
+            <View
+                android:id="@+id/material_spacing"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_below="@+id/material_message"
+                android:visibility="gone" />
+
             <LinearLayout
+                android:id="@+id/material_buttons_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/material_message"
-                android:layout_marginTop="16dp"
                 android:gravity="end"
                 android:orientation="horizontal"
                 android:weightSum="1.0">
@@ -53,6 +60,7 @@
                     style="@style/MaterialDialog.Negative.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center|end"
                     app:iconGravity="textStart"
                     app:rippleColor="@null"
                     tools:text="Negative" />

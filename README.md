@@ -17,24 +17,22 @@ Recipes | Updater | Admin | Drawer
 
 ## Documentation
 
-This application supports two versions of the PiFire server, the main PiFire project and another version that adds the option for a second grill probe with an updated PCB I designed located [here](https://easyeda.com/zipster85/pifire-controller-hat) More discussion on that can be found in the PiFire discussions [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962)
+This application supports both the three probe and four probe versions of PiFire. You can find more information on the four probe PCB I designed located [here](https://github.com/nebhead/PiFire/discussions/28#discussioncomment-1006962) as well as the design located [here](https://easyeda.com/zipster85/pifire-controller-hat)
 
 [Main PiFire branch](https://github.com/nebhead/PiFire)
-
-[Multi Grill Probe version](https://github.com/weberbox/PiFire/tree/fourprobes)
 
 
 There are currently two Android versions that can be downloaded
 
-**Github Firebase** – This supports push notifications directly to the application from PiFire. It was redesigned so it no longer requires custom compiling the Android source and signing up for Firebase or OneSignal. This version requires the device to have Google play services installed.
+**Github Firebase** – This supports push notifications directly to the application from PiFire. It was redesigned and no longer requires custom compiling the Android source and signing up for Firebase or OneSignal. This version requires the device to have Google play services installed.
 
 **Github NonFirebase** – This version does not support mobile push notifications in the Android app. Pushbullet, Pushover, IFTTT, etc are still supported by the server but PiFire Android will not receive push notifications directly. This version does not require Google play services installed.
 
 **Self Compile Option**
 
-There is also another version version that can be self compiled. This is pretty straight forward like any other Android project, just download the source code from here and import the project to Android Studio. There usually will be a few prompts to download any required SDK's or dependencies. Once everything has downloaded you will need to open the Build Variants menu usually located in the lower left corner of Android Studio and change to Compile Non OneSignal
+There is also another version version that can be self compiled. This is pretty straight forward like any other Android project, just download the source code from here and import the project to Android Studio. There usually will be a few prompts to download any required SDK's or dependencies. Once everything has downloaded you will need to open the Build Variants menu usually located in the lower left corner of Android Studio and change to Compile NonFirebase
 
-If you want to self compile and use OneSignal you would need to setup a Google Firebase account, a OneSignal Account and download the google-services.json file as well as get a OneSignal AppID/API Key. The scope of this project will not cover how to do this but it is possible if you desire. You can also utilize the Sentry crash reporting if you sign up for an account and enter your own dsn in defaults.xml
+If you want to self compile and use OneSignal you will need to setup a Google Firebase account, a OneSignal Account and download the google-services.json file as well as get a OneSignal AppID/API Key. The scope of this project will not cover how to do this but it is possible if you desire. You can also utilize the Sentry crash reporting if you sign up for an account and enter your own dsn in defaults.xml
 
 ### Warnings
 

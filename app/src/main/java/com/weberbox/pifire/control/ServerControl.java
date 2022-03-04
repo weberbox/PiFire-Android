@@ -260,7 +260,29 @@ public class ServerControl {
         settingsPostEmit(socket, json, callback);
     }
 
-    // Grill Probe
+    // Auto Power Off
+    public static void sendAutoPowerOff(Socket socket, Boolean autoPowerOff,
+                                       SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withAutoPowerOff(autoPowerOff)));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Grill Probe 0 Type
+    public static void setGrillProbe0Type(Socket socket, String grillProbeType,
+                                          SocketCallback callback) {
+        if (VersionUtils.isSupported(Versions.V_127)) {
+            String json = new Gson().toJson(new SettingsDataModel()
+                    .withProbeTypes(new ProbeTypes().withGrill0type(grillProbeType)));
+            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
+            settingsPostEmit(socket, json, callback);
+            controlPostEmit(socket, json_c, callback);
+        } else {
+            ServerControlDep.setGrillProbeType(socket, grillProbeType);
+        }
+    }
+
+    // (Four Probes) Grill Probe
     public static void setGrillProbe(Socket socket, List<Integer> probesEnabled, String grillProbe,
                                      SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {
@@ -274,21 +296,7 @@ public class ServerControl {
         }
     }
 
-    // Grill Probe 0 Type
-    public static void setGrillProbeType(Socket socket, String grillProbeType,
-                                         SocketCallback callback) {
-        if (VersionUtils.isSupported(Versions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withGrill0type(grillProbeType)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setGrillProbeType(socket, grillProbeType);
-        }
-    }
-
-    // Grill Probe 1 Type
+    // (Four Probes) Grill Probe 1 Type
     public static void setGrillProbe1Type(Socket socket, String grillProbe1Type,
                                           SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {
@@ -302,7 +310,7 @@ public class ServerControl {
         }
     }
 
-    // Grill Probe 2 Type
+    // (Four Probes) Grill Probe 2 Type
     public static void setGrillProbe2Type(Socket socket, String grillProbe2Type,
                                           SocketCallback callback) {
         if (VersionUtils.isSupported(Versions.V_127)) {

@@ -37,7 +37,7 @@ def getGitBranch = { ->
 def vMajor = 1
 def vMinor = 4
 def vPatch = 0
-def vBuild = 4
+def vBuild = 5
 def isBeta = true
 
 android {
@@ -150,8 +150,8 @@ android {
 }
 
 dependencies {
-    def room_version = "2.4.1"
-    def sentry_version = "5.6.1"
+    def room_version = "2.4.2"
+    def sentry_version = "5.6.2"
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

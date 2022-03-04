@@ -12,7 +12,6 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
-import com.weberbox.pifire.utils.log.CrashReportingTree;
 import com.weberbox.pifire.utils.log.DebugLogTree;
 
 import java.net.URI;
@@ -39,16 +38,10 @@ public class PiFireApplication extends Application {
                 .build();
 
         if (!AppConfig.DEBUG || Prefs.getBoolean(getString(R.string.prefs_dev_crash_enable))) {
-            Timber.plant(new CrashReportingTree(getString(R.string.app_name),
-                    Prefs.getBoolean(getString(R.string.prefs_debug_logging))));
-            CrashUtils.initCrashReporting(this,
-                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
-            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+            CrashUtils.initCrashReporting(this);
         } else {
             Timber.plant(new DebugLogTree());
         }
-
-        Timber.tag(getString(R.string.app_name));
 
         Timber.d("Startup - Application Start");
 

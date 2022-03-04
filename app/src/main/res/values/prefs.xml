@@ -23,7 +23,6 @@
     <string name="prefs_app_updater_cat">prefs_app_updater_cat</string>
     <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
     <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
-    <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>
     <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
     <string name="prefs_app_updater_force_checks">prefs_app_updater_force_checks</string>
     <string name="prefs_app_updater_download">prefs_app_updater_download</string>
@@ -33,12 +32,11 @@
     <string name="prefs_crash_enable">prefs_crash_enable</string>
     <string name="prefs_crash_user_email">prefs_crash_user_email</string>
     <string name="prefs_dev_crash_enable">prefs_dev_crash_enable</string>
+    <string name="prefs_crash_event">prefs_crash_event</string>
+    <string name="prefs_crash_dialog">prefs_crash_dialog</string>
 
     <string name="prefs_first_app_start">prefs_first_app_start</string>
     <string name="prefs_show_changelog">prefs_show_changelog</string>
-
-    <string name="prefs_debug_cat">prefs_debug_cat</string>
-    <string name="prefs_debug_logging">prefs_debug_logging</string>
 
     <string name="prefs_four_probe">prefs_four_probe</string>
 
@@ -80,6 +78,7 @@
 
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
     <string name="prefs_startup_time">prefs_startup_time</string>
+    <string name="prefs_auto_power_off">prefs_auto_power_off</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
 

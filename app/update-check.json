@@ -9,10 +9,13 @@
   "releaseNotes": [
     "- Added Recipes Section",
     "- Added Keep Warm options",
+    "- Added Auto Power option",
     "- Added Grill Startup Time",
     "- Added Server Restart option",
     "- Added Viewpager to Dashboard",
     "- Added Changelog",
+    "- Added Modules to Info Page",
+    "- Added Feedback Function",
     "- Changed Nav to Overlapping Panels",
     "- Moved Settings to side panel",
     "- Moved to OneSignal notifications",

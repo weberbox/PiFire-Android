@@ -1,6 +1,7 @@
 package com.weberbox.pifire.utils;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -9,6 +10,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.tapadoo.alerter.OnHideAlertListener;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
 
 @SuppressWarnings("unused")
 public class AlertUtils {
@@ -123,6 +126,27 @@ public class AlertUtils {
                 .setTextAppearance(R.style.Text14AllerBold)
                 .setDuration(duration)
                 .setIconSize(R.dimen.alerter_icon_size_small)
+                .show();
+    }
+
+    public static void createManualAlert(Activity activity, int message,
+                                            boolean infinite) {
+        Alerter.create(activity)
+                .setText(message)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTitleAppearance(R.style.Text18AllerBold)
+                .setTextAppearance(R.style.Text14AllerBold)
+                .enableInfiniteDuration(infinite)
+                .addButton(activity.getString(R.string.open_button), R.style.AlerterButton, v -> {
+                    Intent intent = new Intent(activity, PreferencesActivity.class);
+                    intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT,
+                            Constants.FRAG_MANUAL_SETTINGS);
+                    activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+                    Alerter.hide();
+                })
                 .show();
     }
 

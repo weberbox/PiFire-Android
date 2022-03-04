@@ -8,6 +8,8 @@
         <changelogtext logType="new">Added Keep Warm option toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
         <changelogtext logType="new">Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later</changelogtext>
         <changelogtext logType="new">Added PiFire modules information to info page</changelogtext>
+        <changelogtext logType="new">Added Auto Power Off function to settings</changelogtext>
+        <changelogtext logType="new">Added Feedback function</changelogtext>
 	    <changelogtext logType="imp">Moved to OneSignal Push Notifications. Requires PiFire Server v1.2.7 or later</changelogtext>
 	    <changelogtext logType="imp">Replaced most Snackbars with Alerter's for better visibility</changelogtext>
         <changelogtext logType="imp">Various UI improvements including expandable views in the Pellets section</changelogtext>

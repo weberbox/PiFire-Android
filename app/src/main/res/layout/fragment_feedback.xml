@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.ChangelogFragment">
+
+    <include
+        android:id="@+id/feedback_toolbar"
+        layout="@layout/layout_actionbar" />
+
+    <TextView
+        android:id="@+id/feedback_message"
+        style="@style/Text14Aller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/feedback_toolbar"
+        android:layout_margin="@dimen/large_spacing"
+        android:gravity="center"
+        android:text="@string/feedback_message" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/feedback_email_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/feedback_message"
+        android:layout_marginStart="@dimen/large_spacing"
+        android:layout_marginEnd="@dimen/large_spacing"
+        android:hint="@string/feedback_email"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimary"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:hintTextColor="@color/colorGreyHint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/feedback_email_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aller_regular"
+            android:gravity="start|top"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:textColor="@color/colorWhite" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/feedback_comments_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab_feedback"
+        android:layout_below="@+id/feedback_email_layout"
+        android:layout_margin="@dimen/large_spacing"
+        android:hint="@string/feedback_comments"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimary"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/feedback_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aller_regular"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:minHeight="150dp"
+            android:textColor="@color/colorWhite" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:src="@drawable/ic_arrow_send"
+        app:backgroundTint="@color/colorAccent"
+        app:borderWidth="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay"
+        app:tint="@color/colorWhite"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>

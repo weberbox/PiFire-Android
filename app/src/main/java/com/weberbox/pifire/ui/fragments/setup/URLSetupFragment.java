@@ -333,22 +333,16 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
     }
 
     private void createSocket(String serverURL, IO.Options options) {
-        if (options != null) {
-            try {
+        try {
+            if (options != null) {
                 socket = IO.socket(serverURL, options);
-            } catch (URISyntaxException e) {
-                Timber.w(e, "Socket URI Error");
-                isConnecting = false;
-                serverURLLayout.setError(getString(R.string.setup_error));
-            }
-        } else {
-            try {
+            } else {
                 socket = IO.socket(serverURL);
-            } catch (URISyntaxException e) {
-                Timber.w(e, "Socket URI Error");
-                isConnecting = false;
-                serverURLLayout.setError(getString(R.string.setup_error));
             }
+        } catch (URISyntaxException e) {
+            Timber.w(e, "Socket URI Error");
+            isConnecting = false;
+            serverURLLayout.setError(getString(R.string.setup_error));
         }
     }
 

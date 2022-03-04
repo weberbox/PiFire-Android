@@ -18,7 +18,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
+import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.skydoves.androidveil.VeilLayout;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -59,6 +61,7 @@ public class InfoFragment extends Fragment {
     private ArrayList<LicensesModel> licenses;
     private View gradient;
     private TextView viewAllButton;
+    private VeilLayout systemVeil, GPIOVeil, modulesVeil, uptimeVeil, serverVeil;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -87,6 +90,12 @@ public class InfoFragment extends Fragment {
         rootContainer = binding.infoRootContainer;
         swipeRefresh = binding.infoPullRefresh;
         loadingBar = binding.loadingProgressbar;
+
+        systemVeil = binding.systemCardView.systemVeilLayout;
+        GPIOVeil = binding.gpioCardView.gpioVeilLayout;
+        modulesVeil = binding.modulesCardView.modulesVeilLayout;
+        uptimeVeil = binding.uptimeCardView.uptimeVeilLayout;
+        serverVeil = binding.serverVersionCardView.serverVeilLayout;
 
         cpuInfo = binding.systemCardView.cpuInfoText;
         cpuTemp = binding.systemCardView.tempInfoText;
@@ -232,7 +241,7 @@ public class InfoFragment extends Fragment {
         if (show && socket != null && socket.connected()) {
             loadingBar.setVisibility(View.VISIBLE);
         } else {
-            loadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -284,8 +293,8 @@ public class InfoFragment extends Fragment {
 
             this.cpuInfo.setText(cpuModel);
             this.networkInfo.setText(networkString);
-            this.upTime.setText(upTime);
-            this.cpuTemp.setText(cpuTemp);
+            this.upTime.setText(socket.connected() ? upTime : getString(R.string.offline));
+            this.cpuTemp.setText(socket.connected() ? cpuTemp : getString(R.string.offline));
             this.auger.setText(auger);
             this.fan.setText(fan);
             this.igniter.setText(igniter);
@@ -293,8 +302,14 @@ public class InfoFragment extends Fragment {
             this.selector.setText(selector);
             this.version.setText(version);
 
-        } catch (NullPointerException e) {
-            Timber.w(e, "Info Response Error");
+            systemVeil.unVeil();
+            GPIOVeil.unVeil();
+            modulesVeil.unVeil();
+            uptimeVeil.unVeil();
+            serverVeil.unVeil();
+
+        } catch (JsonSyntaxException | IllegalStateException | NullPointerException e) {
+            Timber.e(e, "Info Response Error");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_info)), false);
         }

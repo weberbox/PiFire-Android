@@ -172,7 +172,6 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             Boolean powerState = manualDataModel.getManual().getPower();
 
             if (manualMode != null && currentMode != null) {
-                manualMode.setEnabled(true);
                 manualMode.setChecked(currentMode.equalsIgnoreCase(ServerConstants.MODE_MANUAL));
             }
 

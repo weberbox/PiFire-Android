@@ -225,7 +225,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                         dialog.show();
                     }
                 } else {
-                    AlertUtils.createErrorAlert(getActivity(), R.string.control_manual_mode, false);
+                    AlertUtils.createManualAlert(getActivity(), R.string.control_manual_mode, false);
                 }
             }
         });
@@ -495,7 +495,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 loadingBar.setVisibility(View.VISIBLE);
             }
         } else {
-            loadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -782,7 +782,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
 
         } catch (IllegalStateException | NullPointerException e) {
-            Timber.w(e, "JSON Error");
+            Timber.e(e, "Dashboard JSON Error");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_dashboard)), false);
         }

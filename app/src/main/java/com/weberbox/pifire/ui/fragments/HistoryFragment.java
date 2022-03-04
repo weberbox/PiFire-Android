@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -243,7 +242,7 @@ public class HistoryFragment extends Fragment {
         if (show && socket != null && socket.connected()) {
             loadingBar.setVisibility(View.VISIBLE);
         } else {
-            loadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -299,14 +298,10 @@ public class HistoryFragment extends Fragment {
                 @SuppressLint("SimpleDateFormat")
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                 dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                try {
-                    Date date = dateFormat.parse(timeList.get(i));
-                    float seconds = (float) date.getTime() / 1000L;
-                    time.add(seconds);
-                } catch (ParseException e) {
-                    Timber.w(e, "Failed to parse time");
-                    return;
-                }
+
+                Date date = dateFormat.parse(timeList.get(i));
+                float seconds = (float) date.getTime() / 1000L;
+                time.add(seconds);
             }
 
             ArrayList<Entry> grillSTArray = new ArrayList<>();
@@ -383,8 +378,9 @@ public class HistoryFragment extends Fragment {
             lineChart.getLineData().setDrawValues(false);
             lineChart.invalidate();
 
-        } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w("JSON Error %s", e.getMessage());
+        } catch (ParseException | IllegalStateException | JsonSyntaxException |
+                NullPointerException e) {
+            Timber.e(e, "Events JSON Error");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_history)), false);
         }
