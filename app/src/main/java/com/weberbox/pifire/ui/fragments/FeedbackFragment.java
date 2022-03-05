@@ -1,12 +1,14 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,9 +125,7 @@ public class FeedbackFragment extends Fragment {
                     }
                     userFeedback.setComments(comments.getText().toString());
                     Sentry.captureUserFeedback(userFeedback);
-                    Toast.makeText(requireActivity(), R.string.feedback_toast,
-                            Toast.LENGTH_SHORT).show();
-                    requireActivity().onBackPressed();
+                    closeFeedbackFragment();
                 }
             }
         });
@@ -153,5 +153,16 @@ public class FeedbackFragment extends Fragment {
                         })
                 .build();
         dialog.show();
+    }
+
+    private void closeFeedbackFragment() {
+        View view = requireActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager manager = (InputMethodManager)
+                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        Toast.makeText(requireActivity(), R.string.feedback_toast, Toast.LENGTH_SHORT).show();
+        requireActivity().onBackPressed();
     }
 }

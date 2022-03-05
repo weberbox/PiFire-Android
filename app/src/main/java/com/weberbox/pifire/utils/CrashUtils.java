@@ -115,7 +115,8 @@ public class CrashUtils {
     }
 
     public static void checkIfCrashed(AppCompatActivity activity) {
-        boolean showDialog = Prefs.getBoolean(activity.getString(R.string.prefs_crash_dialog), true);
+        boolean showDialog = Prefs.getBoolean(activity.getString(R.string.prefs_crash_dialog),
+                activity.getResources().getBoolean(R.bool.def_crash_dialog));
         if (showDialog && sentryEnabled(activity) && sentryDSNSet(activity)) {
             String crashEvent = Prefs.getString(activity.getString(R.string.prefs_crash_event));
             if (!crashEvent.isEmpty()) {

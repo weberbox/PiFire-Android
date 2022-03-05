@@ -649,7 +649,7 @@ public class SettingsDataModel {
             return autoPowerOff;
         }
 
-        public void setAutoPPowerOff(Boolean powerOff) {
+        public void setAutoPowerOff(Boolean powerOff) {
             this.autoPowerOff = powerOff;
         }
 
