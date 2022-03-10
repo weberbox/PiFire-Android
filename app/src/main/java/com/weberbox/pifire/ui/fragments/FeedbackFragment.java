@@ -75,7 +75,7 @@ public class FeedbackFragment extends Fragment {
 
         actionBarText.setText(R.string.feedback);
         navButton.setImageResource(R.drawable.ic_nav_back);
-        navButton.setOnClickListener(v -> closeFeedbackFragment());
+        navButton.setOnClickListener(v -> closeFeedbackFragment(false));
         configButton.setVisibility(View.GONE);
 
         String existingEmail = Prefs.getString(getString(R.string.prefs_crash_user_email));
@@ -126,7 +126,7 @@ public class FeedbackFragment extends Fragment {
                     }
                     userFeedback.setComments(userComments.toString());
                     Sentry.captureUserFeedback(userFeedback);
-                    closeFeedbackFragment();
+                    closeFeedbackFragment(true);
                 }
             }
         });
@@ -156,14 +156,16 @@ public class FeedbackFragment extends Fragment {
         dialog.show();
     }
 
-    private void closeFeedbackFragment() {
+    private void closeFeedbackFragment(boolean showToast) {
         View view = requireActivity().getCurrentFocus();
         if (view != null) {
             InputMethodManager manager = (InputMethodManager)
                     requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             manager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        Toast.makeText(requireActivity(), R.string.feedback_toast, Toast.LENGTH_SHORT).show();
+        if (showToast) {
+            Toast.makeText(requireActivity(), R.string.feedback_toast, Toast.LENGTH_SHORT).show();
+        }
         requireActivity().onBackPressed();
     }
 }
