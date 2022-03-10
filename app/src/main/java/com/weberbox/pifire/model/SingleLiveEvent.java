@@ -13,7 +13,7 @@ import timber.log.Timber;
 
 public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
-    private final AtomicBoolean mPending = new AtomicBoolean(false);
+    private final AtomicBoolean pending = new AtomicBoolean(false);
 
     @MainThread
     public void observe(@NonNull LifecycleOwner owner, @NonNull final Observer<? super T> observer) {
@@ -23,7 +23,7 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
         }
 
         super.observe(owner, t -> {
-            if (mPending.compareAndSet(true, false)) {
+            if (pending.compareAndSet(true, false)) {
                 observer.onChanged(t);
             }
         });
@@ -31,12 +31,12 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
     @MainThread
     public void setValue(@Nullable T t) {
-        mPending.set(true);
+        pending.set(true);
         super.setValue(t);
     }
 
     public void postValue(@Nullable T t) {
-        mPending.set(true);
+        pending.set(true);
         super.postValue(t);
     }
 

@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
-    tools:context=".ui.fragments.ChangelogFragment">
+    tools:context=".ui.fragments.FeedbackFragment">
 
     <include
         android:id="@+id/feedback_toolbar"

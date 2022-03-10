@@ -75,7 +75,7 @@ public class FeedbackFragment extends Fragment {
 
         actionBarText.setText(R.string.feedback);
         navButton.setImageResource(R.drawable.ic_nav_back);
-        navButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        navButton.setOnClickListener(v -> closeFeedbackFragment());
         configButton.setVisibility(View.GONE);
 
         String existingEmail = Prefs.getString(getString(R.string.prefs_crash_user_email));
@@ -109,21 +109,22 @@ public class FeedbackFragment extends Fragment {
 
         fab.setOnClickListener(v -> {
             Editable userComments = comments.getText();
+            Editable userEmail = emailAddress.getText();
             if (userComments != null) {
                 if (userComments.length() == 0) {
                     commentsLayout.setError(getString(R.string.text_blank_error));
+                    comments.requestFocus();
                 } else {
                     if (sentryId == null) {
                         sentryId = Sentry.captureMessage(AppConfig.SENTRY_FEEDBACK).toString();
                     }
                     UserFeedback userFeedback = new UserFeedback(new SentryId(sentryId));
-                    Editable userEmail = emailAddress.getText();
                     if (userEmail != null && !userEmail.toString().isEmpty()) {
                         userFeedback.setEmail(userEmail.toString());
                         Prefs.putString(getString(R.string.prefs_crash_user_email),
                                 userEmail.toString());
                     }
-                    userFeedback.setComments(comments.getText().toString());
+                    userFeedback.setComments(userComments.toString());
                     Sentry.captureUserFeedback(userFeedback);
                     closeFeedbackFragment();
                 }
