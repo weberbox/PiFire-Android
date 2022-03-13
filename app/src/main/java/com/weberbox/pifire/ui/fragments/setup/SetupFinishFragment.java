@@ -10,10 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.pixplicity.easyprefs.library.Prefs;
-import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.MainActivity;
-import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentSetupFinishBinding;
@@ -39,8 +36,6 @@ public class SetupFinishFragment extends Fragment {
                 .get(SetupViewModel.class);
         setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> {
             if (getActivity() != null) {
-                Prefs.putBoolean(getString(R.string.prefs_first_app_start), false);
-                Prefs.putInt(getString(R.string.prefs_installed_version), BuildConfig.VERSION_CODE);
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra(Constants.INTENT_SETUP_RESTART, true);
                 startActivity(intent);

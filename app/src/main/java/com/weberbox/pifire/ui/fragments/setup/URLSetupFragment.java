@@ -292,6 +292,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
                     } else {
                         testSocketConnection(url, credentials);
                     }
+                    response.close();
                 }
             });
         }

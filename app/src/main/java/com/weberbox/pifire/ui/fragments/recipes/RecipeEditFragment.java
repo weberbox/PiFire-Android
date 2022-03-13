@@ -20,7 +20,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.widget.NestedScrollView.OnScrollChangeListener;
 import androidx.databinding.ObservableArrayList;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -63,6 +62,8 @@ import com.weberbox.pifire.utils.TimeUtils;
 import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.yalantis.ucrop.UCrop;
 
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
     private FragmentRecipeEditBinding binding;
     private RecipeEditAdapter instructionsAdapter;
     private RecipeEditAdapter ingredientsAdapter;
-    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton fab;
     private RecipeDatabase recipeDB;
     private RecipesModel recipe;
     private ItemTouchHelper ingredientsTouchHelper;
@@ -128,11 +129,9 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         TextView addInstruction = binding.reInstructionsAddStep;
         TextView addInstructionsSection = binding.reInstructionsAddSection;
 
-        floatingActionButton = binding.fabSaveRecipe;
+        fab = binding.fabSaveRecipe;
 
         textWatcher = getTextWatcher();
-
-        binding.reScrollView.setOnScrollChangeListener(scrollListener);
 
         RecyclerView ingredientsRecycler = binding.reIngredientsRecycler;
         RecyclerView instructionsRecycler = binding.reInstructionsRecycler;
@@ -170,7 +169,7 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             }
         });
 
-        floatingActionButton.setOnClickListener(v -> updateRecipe());
+        fab.setOnClickListener(v -> updateRecipe());
 
         addIngredient.setOnClickListener(v ->
                 ingredientsAdapter.addNewRecipeItem(RecipeEditAdapter.RECIPE_TYPE_ITEM));
@@ -207,6 +206,14 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
             }
             RecipeDiffDialog dialog = new RecipeDiffDialog(requireActivity(), difficulty, this);
             dialog.showDialog();
+        });
+
+        KeyboardVisibilityEvent.setEventListener(requireActivity(), isOpen -> {
+            if (isOpen && fab.isShown()) {
+                fab.hide();
+            } else if (!fab.isShown()) {
+                fab.show();
+            }
         });
 
         if (recipeId != -1) {
@@ -408,21 +415,6 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder holder, int i) {
             instructionsAdapter.removeRecipeItem(holder.getAbsoluteAdapterPosition());
-        }
-    };
-
-    private final OnScrollChangeListener scrollListener = (v, scrollX, scrollY,
-                                                           oldScrollX, oldScrollY) -> {
-        if (scrollY < oldScrollY) {
-            if (!floatingActionButton.isShown()) {
-                floatingActionButton.show();
-            }
-        }
-
-        if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-            if (floatingActionButton.isShown()) {
-                floatingActionButton.hide();
-            }
         }
     };
 

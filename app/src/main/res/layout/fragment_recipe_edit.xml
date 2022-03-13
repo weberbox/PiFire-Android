@@ -75,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:hint="@string/recipes_title_hint"
+                    android:imeOptions="actionDone"
                     android:inputType="textCapWords"
                     android:maxLines="1"
                     android:textColor="@color/colorWhite"

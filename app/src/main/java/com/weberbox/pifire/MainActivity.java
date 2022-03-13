@@ -56,6 +56,7 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -89,9 +90,7 @@ public class MainActivity extends BaseActivity implements
         SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
 
-        boolean isFirstStart = Prefs.getBoolean(getString(R.string.prefs_first_app_start), true);
-
-        if (isFirstStart) {
+        if (VersionUtils.checkFirstRun(this)) {
             Intent i = new Intent(MainActivity.this, ServerSetupActivity.class);
             startActivity(i);
             finish();

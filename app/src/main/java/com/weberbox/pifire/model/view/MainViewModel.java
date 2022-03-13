@@ -19,7 +19,7 @@ public class MainViewModel extends ViewModel {
     private final MutableLiveData<PanelState> endPanelState;
     private final MutableLiveData<Boolean> serverConnected;
 
-    public MainViewModel () {
+    public MainViewModel() {
         serverConnected = new MutableLiveData<>();
         dashData = new MutableLiveData<>();
         eventsData = new MutableLiveData<>();

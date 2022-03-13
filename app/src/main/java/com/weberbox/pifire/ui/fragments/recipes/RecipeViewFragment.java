@@ -75,6 +75,7 @@ public class RecipeViewFragment extends Fragment {
     private TextView recipeNotes;
     private ImageView recipeImage;
     private WebView webViewReference;
+    private View fabClickCatcher;
     private int recipeId;
 
     private boolean fabClicked = false;
@@ -120,6 +121,7 @@ public class RecipeViewFragment extends Fragment {
         fabEdit = binding.recipeViewFab.fabEditRecipe;
         fabPrint = binding.recipeViewFab.fabPrintRecipe;
         fabShare = binding.recipeViewFab.fabShareRecipe;
+        fabClickCatcher = binding.fabClickCatcher;
 
         fabActions.shrink();
 
@@ -170,6 +172,8 @@ public class RecipeViewFragment extends Fragment {
                 shareRecipe();
             }
         });
+
+        fabClickCatcher.setOnClickListener(v -> fabActionsClicked());
 
         if (recipeDB != null && recipeId != -1) {
             AppExecutors.getInstance().diskIO().execute(() -> {
@@ -381,11 +385,15 @@ public class RecipeViewFragment extends Fragment {
             AnimUtils.fabFromBottomAnim(fabEdit);
             AnimUtils.fabFromBottomAnim(fabPrint);
             AnimUtils.fabFromBottomAnim(fabShare);
+            AnimUtils.fadeInAnimation(fabClickCatcher, 300);
+            fabClickCatcher.setClickable(true);
             fabActions.extend();
         } else {
             AnimUtils.fabToBottomAnim(fabEdit);
             AnimUtils.fabToBottomAnim(fabPrint);
             AnimUtils.fabToBottomAnim(fabShare);
+            AnimUtils.fadeOutAnimation(fabClickCatcher, 300);
+            fabClickCatcher.setClickable(false);
             fabActions.shrink();
         }
         fabClicked = !fabClicked;

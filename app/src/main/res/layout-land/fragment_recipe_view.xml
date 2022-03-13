@@ -276,9 +276,18 @@
                     android:textStyle="normal" />
 
             </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:id="@+id/fab_click_catcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:background="@color/colorPrimaryDark"
+        android:clickable="false"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/recipe_view_fab"

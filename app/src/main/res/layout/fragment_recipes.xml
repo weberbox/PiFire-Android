@@ -40,8 +40,6 @@
                 android:id="@+id/recipes_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 app:veilFrame_baseAlpha="0.6"
                 app:veilFrame_baseColor="@color/colorLighterGrey"
                 app:veilFrame_highlightAlpha="1.0"

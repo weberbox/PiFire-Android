@@ -19,11 +19,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.ortiz.touchview.TouchImageView
             android:id="@+id/dialog_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/placeholder_img"
             tools:src="@drawable/ic_recipe_placeholder" />
 
     </androidx.cardview.widget.CardView>
