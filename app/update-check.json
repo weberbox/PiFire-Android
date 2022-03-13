@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.4.0-dev4",
-  "latestVersionCode": "1040004",
+  "latestVersion": "1.4.0-dev5",
+  "latestVersionCode": "1040005",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
@@ -17,8 +17,8 @@
     "- Added Modules to Info Page",
     "- Added Feedback Function",
     "- Changed Nav to Overlapping Panels",
-    "- Moved Settings to side panel",
     "- Moved to OneSignal notifications",
+    "- Added Zoom to Recipe Image",
     "- WebSockets overhaul",
     "- UI improvements",
     "- Misc fixes and updates"
