@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 
+import com.weberbox.pifire.R;
 import com.weberbox.pifire.ui.dialogs.ProgressDialog;
 import com.weberbox.pifire.updater.enums.AppUpdaterError;
 import com.weberbox.pifire.updater.enums.UpdateFrom;
@@ -166,6 +167,7 @@ public class UtilsAsync {
                     if (progressDialog == null) {
                         if (context instanceof Activity) {
                             progressDialog = new ProgressDialog.Builder((Activity) context)
+                                    .setTitle(context.getString(R.string.downloading))
                                     .setMessage("")
                                     .setCancelable(false)
                                     .build();
