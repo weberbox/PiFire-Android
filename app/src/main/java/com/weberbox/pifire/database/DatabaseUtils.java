@@ -137,8 +137,9 @@ public class DatabaseUtils {
 
                 } else {
                     FileOutputStream fos = new FileOutputStream(new File(filePath, ze.getName()));
-                    for (int c = zin.read(); c != -1; c = zin.read()) {
-                        fos.write(c);
+                    int len;
+                    while ((len = zin.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
                     }
 
                     zin.closeEntry();
