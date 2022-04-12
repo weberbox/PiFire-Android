@@ -36,9 +36,9 @@ def getGitBranch = { ->
 
 def vMajor = 1
 def vMinor = 4
-def vPatch = 0
-def vBuild = 6
-def isBeta = true
+def vPatch = 1
+def vBuild = 0
+def isBeta = false
 
 android {
     compileSdk 31

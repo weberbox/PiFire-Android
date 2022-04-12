@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.4.0" changeDate="" currentVersion="true">
+    <changelogversion versionName="1.4.1" changeDate="" currentVersion="true">
 	    <changelogtext logType="new">Added a recipes section with print and share functions</changelogtext>
         <changelogtext logType="new">Added a Viewpager to dash screens so you can now scroll left and right on the main pages</changelogtext>
         <changelogtext logType="new">Added Overlapping Panels Navigation with left and right panels. You can open them by scrolling or using the toolbar icons</changelogtext>

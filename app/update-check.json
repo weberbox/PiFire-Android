@@ -1,6 +1,6 @@
 {
-  "latestVersion": "1.4.0-dev5",
-  "latestVersionCode": "1040005",
+  "latestVersion": "1.4.1",
+  "latestVersionCode": "1040100",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
@@ -11,6 +11,7 @@
     "- Added Keep Warm options",
     "- Added Auto Power option",
     "- Added Grill Startup Time",
+    "- Added Grill Smart Start",
     "- Added Server Restart option",
     "- Added Viewpager to Dashboard",
     "- Added Changelog",
