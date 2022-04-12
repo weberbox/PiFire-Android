@@ -7,23 +7,32 @@
     </style>
 
     <style name="Theme.PiFire" parent="Theme.MaterialComponents">
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
-        <item name="android:actionMenuTextAppearance">@style/Text18Aller</item>
+        <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="colorOfflineStatus">@color/colorAccentRed</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">@color/colorAccent</item>
         <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
         <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
         <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
-
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
     <style name="Theme.PiFire.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.PiFire.Recipes">
+        <item name="actionBarStyle">@style/RecipesActionBar</item>
+        <item name="alertDialogTheme">@style/AlertDialogThemeMaterial</item>
     </style>
 
     <style name="Theme.PiFire.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
@@ -41,17 +50,28 @@
         <item name="android:windowActionBar">true</item>
         <item name="actionBarStyle">@style/PreferencesActionBar</item>
         <item name="android:statusBarColor">@color/colorAccent</item>
+        <item name="colorOfflineStatus">@color/colorAccentRed</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="alertDialogTheme">@style/AlertDialogThemeMaterial</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
         <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
         <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
         <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
-        <item name="background">@color/colorAccent</item>
+    <style name="Theme.Transparent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 </resources>

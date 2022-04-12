@@ -1,8 +1,7 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.res.ColorStateList;
+import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -17,7 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,21 +26,20 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentHistoryBinding;
-import com.weberbox.pifire.interfaces.HistoryCallbackInterface;
-import com.weberbox.pifire.model.HistoryModel;
-import com.weberbox.pifire.ui.dialogs.HistoryDeleteDialog;
-import com.weberbox.pifire.ui.model.MainViewModel;
-import com.weberbox.pifire.ui.utils.AnimUtils;
+import com.weberbox.pifire.model.remote.HistoryDataModel;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
+import com.weberbox.pifire.model.view.MainViewModel;
+import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.utils.LineChartXAxisValueFormatter;
+import com.weberbox.pifire.ui.views.CustomMarkerView;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,257 +49,248 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class HistoryFragment extends Fragment implements HistoryCallbackInterface {
+public class HistoryFragment extends Fragment {
 
-    private FragmentHistoryBinding mBinding;
-    private MainViewModel mMainViewModel;
-    private SwipeRefreshLayout mSwipeRefresh;
-    private ProgressBar mLoadingBar;
-    private LineChart mLineChart;
-    private TextView mRefreshButton;
-    private Handler mHandler;
-    private Socket mSocket;
+    private FragmentHistoryBinding binding;
+    private MainViewModel mainViewModel;
+    private SwipeRefreshLayout swipeRefresh;
+    private ProgressBar loadingBar;
+    private LineChart lineChart;
+    private TextView refreshButton;
+    private Handler handler;
+    private Socket socket;
 
-    private boolean mStarted = false;
-    private boolean mIsLoading = false;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
-        }
-    }
+    private boolean started = false;
+    private boolean isLoading = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        mBinding = FragmentHistoryBinding.inflate(inflater, container, false);
-        return mBinding.getRoot();
+        binding = FragmentHistoryBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mHandler = new Handler();
+        handler = new Handler();
 
-        mLineChart = mBinding.historyLayout.historyLinechart;
-        mLoadingBar = mBinding.loadingProgressbar;
-        mSwipeRefresh = mBinding.historyPullRefresh;
+        lineChart = binding.historyLayout.historyLinechart;
+        loadingBar = binding.loadingProgressbar;
+        swipeRefresh = binding.historyPullRefresh;
 
-
-        mSwipeRefresh.setOnRefreshListener(() -> {
-            if (mSocket != null && mSocket.connected()) {
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (socketConnected()) {
                 forceRefreshData();
             } else {
-                mSwipeRefresh.setRefreshing(false);
-                AnimUtils.shakeOfflineBanner(getActivity());
+                swipeRefresh.setRefreshing(false);
             }
         });
 
-        mRefreshButton = mBinding.historyRefreshButton;
+        refreshButton = binding.historyRefreshButton;
         if (getActivity() != null) {
             if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app), true)) {
-                mRefreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
+                refreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
                         R.drawable.bg_ripple_refresh_on));
-                mRefreshButton.setText(R.string.on);
+                refreshButton.setText(R.string.on);
             } else {
-                mRefreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
+                refreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
                         R.drawable.bg_ripple_refresh_off));
-                mRefreshButton.setText(R.string.off);
+                refreshButton.setText(R.string.off);
             }
         }
 
-        mRefreshButton.setOnClickListener(view1 -> {
+        refreshButton.setOnClickListener(view1 -> {
             if (getActivity() != null) {
                 if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app), true)) {
-                    mRefreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
+                    refreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
                             R.drawable.bg_ripple_refresh_off));
-                    mRefreshButton.setText(R.string.off);
+                    refreshButton.setText(R.string.off);
                     Prefs.putBoolean(getString(R.string.prefs_history_refresh_app), false);
                     stopRefresh();
                 } else {
-                    mRefreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
+                    refreshButton.setBackground(ContextCompat.getDrawable(getActivity(),
                             R.drawable.bg_ripple_refresh_on));
-                    mRefreshButton.setText(R.string.on);
+                    refreshButton.setText(R.string.on);
                     Prefs.putBoolean(getString(R.string.prefs_history_refresh_app), true);
-                    if (!mStarted) {
+                    if (!started) {
                         startRefresh();
                     }
                 }
             }
         });
 
-        ImageView deleteButton = mBinding.historyDeleteButton;
-        deleteButton.setOnClickListener(view12 -> {
-            if (mSocket.connected()) {
-                if (getActivity() != null) {
-                    HistoryDeleteDialog historyActionDialog = new HistoryDeleteDialog(getActivity(),
-                            HistoryFragment.this);
-                    historyActionDialog.showDialog();
-                }
-            } else {
-                AnimUtils.shakeOfflineBanner(getActivity());
+        ImageView deleteButton = binding.historyDeleteButton;
+        deleteButton.setOnClickListener(view2 -> {
+            if (socketConnected()) {
+                BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                        .setTitle(getString(R.string.dialog_confirm_action))
+                        .setMessage(getString(R.string.history_delete_content))
+                        .setAutoDismiss(true)
+                        .setNegativeButton(getString(R.string.cancel),
+                                (dialogInterface, which) -> {
+                                })
+                        .setPositiveButtonWithColor(getString(R.string.delete),
+                                R.color.dialog_positive_button_color_red,
+                                (dialogInterface, which) -> ServerControl.sendHistoryDelete(socket,
+                                        this::processPostResponse))
+                        .build();
+                dialog.show();
             }
         });
 
         if (getActivity() != null) {
-            mMainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mMainViewModel.getHistoryData().observe(getViewLifecycleOwner(), historyData -> {
-                mSwipeRefresh.setRefreshing(false);
+            mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
+            mainViewModel.getHistoryData().observe(getViewLifecycleOwner(), historyData -> {
+                swipeRefresh.setRefreshing(false);
                 if (historyData != null && historyData.getLiveData() != null) {
                     if (historyData.getIsNewData()) {
-                        FileUtils.saveJSONFile(getActivity(), Constants.JSON_HISTORY,
+                        FileUtils.executorSaveJSON(getActivity(), Constants.JSON_HISTORY,
                                 historyData.getLiveData());
                     }
                     updateUIWithData(historyData.getLiveData());
                 }
             });
 
-            mMainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-                if (enabled != null && enabled) {
-                    if (!mIsLoading) {
-                        mIsLoading = true;
-                        if (mSocket != null && mSocket.connected()) {
-                            toggleLoading(true);
-                            requestDataUpdate();
-                        }
-                    }
-                }
+            mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+                toggleLoading(true);
+                requestDataUpdate();
             });
         }
-
-        //checkViewModelData();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBinding = null;
-        stopRefresh();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        stopRefresh();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        checkViewModelData();
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+        requestDataUpdate();
     }
 
     @Override
-    public void onHistoryDelete() {
-        if (mSocket != null) {
-            GrillControl.setHistoryDelete(mSocket);
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        socket = null;
+        stopRefresh();
+    }
+
+    private void showOfflineAlert() {
+        if (getActivity() != null) {
+            AlertUtils.createOfflineAlert(getActivity());
         }
     }
 
-    private void checkViewModelData() {
-        if (mMainViewModel.getEventsData().getValue() == null) {
-            toggleLoading(true);
-            loadStoredDataRequestUpdate();
+    private boolean socketConnected() {
+        if (socket != null && socket.connected()) {
+            return true;
         } else {
-            checkAutoRefreshGraph();
+            showOfflineAlert();
+            return false;
         }
     }
 
     private void requestDataUpdate() {
-        if (mSocket != null && mSocket.connected()) {
-            mIsLoading = true;
-            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setHistoryData(args[0].toString(), true);
-                    mIsLoading = false;
-                }
-            });
+        if (socket != null && socket.connected()) {
+            checkAutoRefreshGraph();
+        } else {
+            loadStoredData();
         }
     }
 
-    private void loadStoredDataRequestUpdate() {
-        if (getActivity() != null) {
-            String jsonData = FileUtils.loadJSONFile(getActivity(), Constants.JSON_HISTORY);
-            if (jsonData != null && mMainViewModel != null) {
-                mMainViewModel.setHistoryData(jsonData, false);
+    private void loadStoredData() {
+        FileUtils.executorLoadJSON(getActivity(), Constants.JSON_HISTORY, jsonString -> {
+            if (jsonString != null && mainViewModel != null) {
+                mainViewModel.setHistoryData(jsonString, false);
+            } else {
+                toggleLoading(false);
             }
-        }
-        checkAutoRefreshGraph();
+        });
     }
 
     private void forceRefreshData() {
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (mMainViewModel != null) {
-                    mMainViewModel.setHistoryData(args[0].toString(), true);
-                }
-            });
-        }
+        isLoading = true;
+        ServerControl.historyGetEmit(socket, response -> {
+            if (mainViewModel != null) {
+                mainViewModel.setHistoryData(response, true);
+            }
+        });
     }
 
     private void checkAutoRefreshGraph() {
         if (Prefs.getBoolean(getString(R.string.prefs_history_refresh_app),
                 getResources().getBoolean(R.bool.def_history_refresh_enabled_app))) {
-            if (!mStarted) {
-                if (!mIsLoading) {
-                    requestDataUpdate();
+            if (!started) {
+                if (!isLoading) {
+                    forceRefreshData();
                 }
                 startRefresh();
             }
-        }
-        if (!mIsLoading) {
-            requestDataUpdate();
+        } else {
+            forceRefreshData();
         }
     }
 
     private void toggleLoading(boolean show) {
-        if (show && mSocket != null && mSocket.connected()) {
-            mLoadingBar.setVisibility(View.VISIBLE);
+        if (show && socket != null && socket.connected()) {
+            loadingBar.setVisibility(View.VISIBLE);
         } else {
-            mLoadingBar.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.INVISIBLE);
         }
     }
 
     private void stopRefresh() {
-        mStarted = false;
-        mHandler.removeCallbacks(runnable);
+        started = false;
+        handler.removeCallbacks(runnable);
     }
 
     private void startRefresh() {
-        mStarted = true;
-        int customAmount = Integer.parseInt(Prefs.getString(
-                getString(R.string.prefs_history_refresh_interval_app),
-                getString(R.string.def_history_refresh_time_app)));
-        mHandler.postDelayed(runnable, customAmount);
+        if (isAdded()) {
+            started = true;
+            int customAmount = Integer.parseInt(Prefs.getString(
+                    getString(R.string.prefs_history_refresh_interval_app),
+                    getString(R.string.def_history_refresh_time_app)));
+            handler.postDelayed(runnable, customAmount);
+        }
     }
 
     private final Runnable runnable = () -> {
         forceRefreshData();
-        if (mStarted) {
+        if (started) {
             startRefresh();
         }
     };
 
-    private void updateUIWithData(String response_data) {
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
+    }
+
+    private void updateUIWithData(String responseData) {
+        isLoading = false;
 
         try {
 
-            HistoryModel historyModel = HistoryModel.parseJSON(response_data);
+            HistoryDataModel historyDataModel = HistoryDataModel.parseJSON(responseData);
 
-            List<String> timeList = historyModel.getLabelTimeList();
-            List<Double> grillSetTemp = historyModel.getGrillSetTempList();
-            List<Double> grillTemp = historyModel.getGrillTempList();
-            List<Double> probe1SetTemp = historyModel.getProbe1SetTempList();
-            List<Double> probe2SetTemp = historyModel.getProbe2SetTempList();
-            List<Double> probe1Temp = historyModel.getProbe1TempList();
-            List<Double> probe2Temp = historyModel.getProbe2TempList();
+            List<String> timeList = historyDataModel.getLabelTimeList();
+            List<Double> grillSetTemp = historyDataModel.getGrillSetTempList();
+            List<Double> grillTemp = historyDataModel.getGrillTempList();
+            List<Double> probe1SetTemp = historyDataModel.getProbe1SetTempList();
+            List<Double> probe2SetTemp = historyDataModel.getProbe2SetTempList();
+            List<Double> probe1Temp = historyDataModel.getProbe1TempList();
+            List<Double> probe2Temp = historyDataModel.getProbe2TempList();
 
             ArrayList<Float> time = new ArrayList<>();
 
@@ -310,14 +298,10 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
                 @SuppressLint("SimpleDateFormat")
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                 dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                try {
-                    Date date = dateFormat.parse(timeList.get(i));
-                    float seconds = (float) date.getTime() / 1000L;
-                    time.add(seconds);
-                } catch (ParseException e) {
-                    Timber.w(e, "Failed to parse time");
-                    return;
-                }
+
+                Date date = dateFormat.parse(timeList.get(i));
+                float seconds = (float) date.getTime() / 1000L;
+                time.add(seconds);
             }
 
             ArrayList<Entry> grillSTArray = new ArrayList<>();
@@ -346,65 +330,69 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             grillTempD.setLineWidth(3.0f);
             grillTempD.setDrawCircles(false);
 
-            LineDataSet Probe1SetD = new LineDataSet(probe1STArray, getString(R.string.history_probe1_set));
-            Probe1SetD.setLineWidth(3.0f);
-            Probe1SetD.setDrawCircles(false);
+            LineDataSet probe1SetD = new LineDataSet(probe1STArray, getString(R.string.history_probe1_set));
+            probe1SetD.setLineWidth(3.0f);
+            probe1SetD.setDrawCircles(false);
 
-            LineDataSet Probe1TempD = new LineDataSet(probe1TArray, getString(R.string.history_probe1_temp));
-            Probe1TempD.setLineWidth(3.0f);
-            Probe1TempD.setDrawCircles(false);
+            LineDataSet probe1TempD = new LineDataSet(probe1TArray, getString(R.string.history_probe1_temp));
+            probe1TempD.setLineWidth(3.0f);
+            probe1TempD.setDrawCircles(false);
 
-            LineDataSet Probe2SetD = new LineDataSet(probe2STArray, getString(R.string.history_probe2_set));
-            Probe2SetD.setLineWidth(3.0f);
-            Probe2SetD.setDrawCircles(false);
+            LineDataSet probe2SetD = new LineDataSet(probe2STArray, getString(R.string.history_probe2_set));
+            probe2SetD.setLineWidth(3.0f);
+            probe2SetD.setDrawCircles(false);
 
-            LineDataSet Probe2TempD = new LineDataSet(probe2TArray, getString(R.string.history_probe2_temp));
-            Probe2TempD.setLineWidth(3.0f);
-            Probe2TempD.setDrawCircles(false);
+            LineDataSet probe2TempD = new LineDataSet(probe2TArray, getString(R.string.history_probe2_temp));
+            probe2TempD.setLineWidth(3.0f);
+            probe2TempD.setDrawCircles(false);
 
             grillSetD.setColor(colors[0]);
-            grillSetD.setCircleColor(colors[0]);
             grillTempD.setColor(colors[1]);
-            grillTempD.setCircleColor(colors[1]);
-            Probe1SetD.setColor(colors[2]);
-            Probe1SetD.setCircleColor(colors[2]);
-            Probe1TempD.setColor(colors[3]);
-            Probe1TempD.setCircleColor(colors[3]);
-            Probe2SetD.setColor(colors[4]);
-            Probe2SetD.setCircleColor(colors[4]);
-            Probe2TempD.setColor(colors[5]);
-            Probe2TempD.setCircleColor(colors[5]);
+            probe1SetD.setColor(colors[2]);
+            probe1TempD.setColor(colors[3]);
+            probe2SetD.setColor(colors[4]);
+            probe2TempD.setColor(colors[5]);
+
             dataSets.add(grillTempD);
             dataSets.add(grillSetD);
-            dataSets.add(Probe1TempD);
-            dataSets.add(Probe1SetD);
-            dataSets.add(Probe2TempD);
-            dataSets.add(Probe2SetD);
+            dataSets.add(probe1TempD);
+            dataSets.add(probe1SetD);
+            dataSets.add(probe2TempD);
+            dataSets.add(probe2SetD);
 
-            mLineChart.setGridBackgroundColor(Color.WHITE);
-            mLineChart.getXAxis().setTextColor(Color.WHITE);
-            mLineChart.getXAxis().setLabelRotationAngle(-45);
+            lineChart.setGridBackgroundColor(Color.WHITE);
+            lineChart.getXAxis().setTextColor(Color.WHITE);
+            lineChart.getXAxis().setLabelRotationAngle(-45);
             //mLineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            mLineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
-            mLineChart.getAxisLeft().setTextColor(Color.WHITE);
-            mLineChart.getLegend().setTextColor(Color.WHITE);
-            mLineChart.getLegend().setWordWrapEnabled(true);
-            mLineChart.getDescription().setEnabled(false);
-            mLineChart.getAxisRight().setEnabled(false);
+            lineChart.getXAxis().setValueFormatter(new LineChartXAxisValueFormatter());
+            lineChart.getAxisLeft().setTextColor(Color.WHITE);
+            lineChart.getLegend().setTextColor(Color.WHITE);
+            lineChart.getLegend().setWordWrapEnabled(true);
+            lineChart.getDescription().setEnabled(false);
+            lineChart.getAxisRight().setEnabled(false);
+            lineChart.setDrawMarkers(true);
+            lineChart.setMarker(markerView(requireActivity()));
 
             LineData data = new LineData(dataSets);
-            mLineChart.setData(data);
-            mLineChart.getLineData().setDrawValues(false);
-            mLineChart.invalidate();
+            lineChart.setData(data);
+            lineChart.getLineData().setDrawValues(false);
+            lineChart.invalidate();
 
-        } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-            Timber.w("JSON Error %s", e.getMessage());
-            if (getActivity() != null) {
-                showSnackBarMessage(getActivity());
-            }
+        } catch (ParseException | IllegalStateException | JsonSyntaxException |
+                NullPointerException e) {
+            Timber.e(e, "Events JSON Error");
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_history)), false);
         }
 
         toggleLoading(false);
+    }
+
+    public CustomMarkerView markerView(Context context) {
+        CustomMarkerView mv = new CustomMarkerView(context, R.layout.layout_custom_marker,
+                16, Color.WHITE);
+        mv.setOffset((float) -mv.getWidth() / 2, -mv.getHeight() - 25);
+        return mv;
     }
 
     private final int[] colors = new int[]{
@@ -421,11 +409,4 @@ public class HistoryFragment extends Fragment implements HistoryCallbackInterfac
             Color.rgb(127, 0, 0), Color.rgb(255, 0, 0),
             Color.rgb(0, 127, 0), Color.rgb(0, 255, 0)
     };
-
-    private void showSnackBarMessage(Activity activity) {
-        Snackbar snack = Snackbar.make(mBinding.getRoot(), R.string.json_error_history, Snackbar.LENGTH_LONG);
-        snack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(R.color.colorAccentRed)));
-        snack.setTextColor(activity.getColor(R.color.colorWhite));
-        snack.show();
-    }
 }

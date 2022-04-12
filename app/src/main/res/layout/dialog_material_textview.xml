@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/material_relative_layout"
+            style="@style/MaterialDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/material_title"
+                style="@style/MaterialDialog.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="20sp"
+                tools:text="Title" />
+
+            <TextView
+                android:id="@+id/material_message"
+                style="@style/MaterialDialog.Message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/material_title"
+                android:gravity="start"
+                android:textSize="15sp"
+                tools:text="Message" />
+
+            <View
+                android:id="@+id/material_spacing"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_below="@+id/material_message"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/material_buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/material_message"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:weightSum="1.0">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/material_negative_btn"
+                    style="@style/MaterialDialog.Negative.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center|end"
+                    app:iconGravity="textStart"
+                    app:rippleColor="@null"
+                    tools:text="Negative" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/material_positive_btn"
+                    style="@style/MaterialDialog.Positive.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:iconGravity="textStart"
+                    app:rippleColor="@null"
+                    tools:text="Positive" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

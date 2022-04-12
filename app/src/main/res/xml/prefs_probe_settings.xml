@@ -6,7 +6,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_grill_probes">
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_selection"
             app:entries="@array/grill_probe_selection_names"
             app:entryValues="@array/grill_probe_selection"
@@ -15,7 +15,7 @@
             app:title="@string/settings_grill_probe_selection"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_one_type"
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types"
@@ -24,7 +24,7 @@
             app:title="@string/settings_grill_probe_one_type"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_two_type"
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types"
@@ -33,7 +33,7 @@
             app:title="@string/settings_grill_probe_two_type"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_probe_type"
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types"
@@ -48,7 +48,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_food_probes">
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_probe_one_type"
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types"
@@ -57,7 +57,7 @@
             app:title="@string/settings_probe_one_type"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_probe_two_type"
             app:entries="@array/probe_type_names"
             app:entryValues="@array/probe_types"
@@ -72,7 +72,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_temp_units">
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_grill_temp_unit"
             app:entries="@array/grill_temp_unit_entries"
             app:entryValues="@array/grill_temp_unit_values"

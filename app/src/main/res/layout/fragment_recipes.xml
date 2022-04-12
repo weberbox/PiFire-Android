@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipes_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.fragments.RecipesFragment">
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_add_recipes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/recipes_add"
+        android:minHeight="56dp"
+        android:text="@string/delete"
+        android:textAppearance="@style/Text18AllerBold"
+        android:textColor="@color/colorWhite"
+        app:backgroundTint="@color/colorAccent"
+        app:borderWidth="0dp"
+        app:icon="@drawable/ic_add_white"
+        app:iconTint="@color/colorWhite"
+        app:shapeAppearanceOverlay="@style/FabRoundedSquareOverlay" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/recipes_pull_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/recipes_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.skydoves.androidveil.VeilRecyclerFrameView
+                android:id="@+id/recipes_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:veilFrame_baseAlpha="0.6"
+                app:veilFrame_baseColor="@color/colorLighterGrey"
+                app:veilFrame_highlightAlpha="1.0"
+                app:veilFrame_highlightColor="@color/colorPlaceholder"
+                app:veilFrame_layout="@layout/item_recipe"
+                app:veilFrame_radius="10dp"
+                app:veilFrame_shimmerEnable="true"
+                app:veilFrame_veiled="true" />
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

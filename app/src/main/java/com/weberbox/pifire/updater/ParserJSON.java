@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 class ParserJSON {
 
-    private final URL mJsonUrl;
+    private final URL jsonUrl;
     private static final String KEY_LATEST_VERSION = "latestVersion";
     private static final String KEY_LATEST_VERSION_CODE = "latestVersionCode";
     private static final String KEY_RELEASE_NOTES = "releaseNotes";
@@ -37,7 +37,7 @@ class ParserJSON {
 
     public ParserJSON(String url) {
         try {
-            mJsonUrl = new URL(url);
+            jsonUrl = new URL(url);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -144,7 +144,7 @@ class ParserJSON {
     }
 
     private JSONObject readJsonFromUrl() throws IOException, JSONException {
-        try (InputStream is = mJsonUrl.openStream()) {
+        try (InputStream is = jsonUrl.openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             return new JSONObject(jsonText);
@@ -152,7 +152,7 @@ class ParserJSON {
     }
 
     private JSONArray readJsonArrayFromUrl() throws IOException, JSONException {
-        try (InputStream is = mJsonUrl.openStream()) {
+        try (InputStream is = jsonUrl.openStream()) {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
             return new JSONArray(jsonText);

@@ -1,108 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/editor_cardview"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="10dp"
-    app:cardPreventCornerOverlap="false"
-    app:contentPadding="0dp">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/editor_inner"
+    <View
+        android:id="@+id/editor_card_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="55dp"
+        android:background="@drawable/bg_card_view_header"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/editor_card_header"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/bg_card_view_header"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/editor_header_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/default_spacing"
+        android:contentDescription="@string/placeholder_img"
+        android:src="@drawable/ic_pellet_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/editor_header_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/default_spacing"
-            android:contentDescription="@string/placeholder_img"
-            android:src="@drawable/ic_pellet_edit"
-            app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/card_header_title"
+        style="@style/Text18AllerBold"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/default_spacing"
+        android:gravity="center"
+        android:text="@string/pellets_editor"
+        app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
+        app:layout_constraintStart_toEndOf="@+id/editor_header_icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            style="@style/Text18AllerNormal"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/default_spacing"
-            android:gravity="center"
-            android:text="@string/pellets_editor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
-            app:layout_constraintStart_toEndOf="@+id/editor_header_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/add_profile_button"
+        style="@style/Text15AllerBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_spacing"
+        android:background="@drawable/bg_ripple_grey_button"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/pellets_add"
+        app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/add_profile_button"
-            style="@style/Text15Aller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_spacing"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="@string/pellets_add"
-            app:layout_constraintBottom_toBottomOf="@+id/editor_card_header"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.skydoves.androidveil.VeilRecyclerFrameView
+        android:id="@+id/editor_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editor_card_header"
+        app:veilFrame_baseAlpha="0.6"
+        app:veilFrame_baseColor="@color/colorLighterGrey"
+        app:veilFrame_highlightAlpha="1.0"
+        app:veilFrame_highlightColor="@color/colorPlaceholder"
+        app:veilFrame_layout="@layout/item_pellets_list"
+        app:veilFrame_radius="10dp"
+        app:veilFrame_shimmerEnable="true"
+        app:veilFrame_veiled="true" />
 
-        <LinearLayout
-            android:id="@+id/pellets_add_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/editor_card_header">
+    <View
+        android:id="@+id/editor_view_all_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="-45dp"
+        android:alpha="0.5"
+        android:background="@drawable/bg_grey_gradient_270"
+        android:clickable="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editor_recycler" />
 
-            <include
-                android:id="@+id/pellets_add_profile_container"
-                layout="@layout/layout_pellets_profile_add" />
+    <TextView
+        android:id="@+id/editor_view_all"
+        style="@style/Text15AllerBold"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:alpha="0.5"
+        android:background="@drawable/bg_ripple_view_all"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/view_all"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editor_view_all_shadow" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/editor_recycler_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLight"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pellets_add_profile">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/editor_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/profile_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editor_card_header">
-
-            <include layout="@layout/layout_pellets_item_holder" />
-
-        </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

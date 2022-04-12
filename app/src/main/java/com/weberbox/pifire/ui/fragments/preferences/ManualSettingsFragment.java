@@ -1,8 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,28 +10,28 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.model.ManualResponseModel;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ManualDataModel;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.utils.AlertUtils;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private SwitchPreferenceCompat mManualMode;
-    private SwitchPreferenceCompat mFanEnable;
-    private SwitchPreferenceCompat mAugerEnable;
-    private SwitchPreferenceCompat mIgniterEnable;
-    private SwitchPreferenceCompat mPowerEnable;
-    private Snackbar mErrorSnack;
-    private Socket mSocket;
+    private SharedPreferences sharedPreferences;
+    private SwitchPreferenceCompat manualMode;
+    private SwitchPreferenceCompat fanEnable;
+    private SwitchPreferenceCompat augerEnable;
+    private SwitchPreferenceCompat igniterEnable;
+    private SwitchPreferenceCompat powerEnable;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -45,30 +43,29 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        mErrorSnack = Snackbar.make(view, R.string.json_error_settings, Snackbar.LENGTH_LONG);
+        manualMode = findPreference(getString(R.string.prefs_manual_mode));
+        fanEnable = findPreference(getString(R.string.prefs_manual_mode_fan));
+        augerEnable = findPreference(getString(R.string.prefs_manual_mode_auger));
+        igniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
+        powerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
 
-        mManualMode = findPreference(getString(R.string.prefs_manual_mode));
-        mFanEnable = findPreference(getString(R.string.prefs_manual_mode_fan));
-        mAugerEnable = findPreference(getString(R.string.prefs_manual_mode_auger));
-        mIgniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
-        mPowerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
-
-        if (mManualMode != null && mFanEnable != null && mAugerEnable != null &&
-                mIgniterEnable != null && mPowerEnable != null) {
-            mManualMode.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (!mManualMode.isChecked()) {
-                    mFanEnable.setChecked(false);
-                    mAugerEnable.setChecked(false);
-                    mIgniterEnable.setChecked(false);
-                    mPowerEnable.setChecked(false);
+        if (manualMode != null && fanEnable != null && augerEnable != null &&
+                igniterEnable != null && powerEnable != null) {
+            manualMode.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (!manualMode.isChecked()) {
+                    fanEnable.setChecked(false);
+                    augerEnable.setChecked(false);
+                    igniterEnable.setChecked(false);
+                    powerEnable.setChecked(false);
                 }
                 return true;
             });
@@ -82,65 +79,83 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_manual);
         }
 
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.REQUEST_MANUAL_DATA, (Ack) args ->
-                    getActivity().runOnUiThread(() ->
-                            updateManualSettings(args[0].toString())));
+        if (socket != null && socket.connected()) {
+            ServerControl.manualGetEmit(socket, response -> {
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> updateManualSettings(response));
+                }
+            });
         }
 
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_manual_mode)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setManualMode(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setManualMode(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
                 if (preference.getContext().getString(R.string.prefs_manual_mode_fan)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setManualFanOutput(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setManualFanOutput(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
                 if (preference.getContext().getString(R.string.prefs_manual_mode_auger)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setManualAugerOutput(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setManualAugerOutput(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
                 if (preference.getContext().getString(R.string.prefs_manual_mode_igniter)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setManualIgniterOutput(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setManualIgniterOutput(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
                 if (preference.getContext().getString(R.string.prefs_manual_mode_power)
                         .equals(preference.getKey())) {
-                    if (mSocket != null && mSocket.connected()) {
-                        GrillControl.setManualPowerOutput(mSocket,
-                                ((SwitchPreferenceCompat) preference).isChecked());
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setManualPowerOutput(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                this::processPostResponse);
                     }
                 }
             }
+        }
+    }
+
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResponse() != null && result.getResponse().getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getResponse().getMessage(), false));
         }
     }
 
@@ -148,46 +163,38 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
         try {
 
-            ManualResponseModel manualResponseModel = ManualResponseModel.parseJSON(response_data);
+            ManualDataModel manualDataModel = ManualDataModel.parseJSON(response_data);
 
-            String currentMode = manualResponseModel.getMode();
-            Boolean fanState = manualResponseModel.getManual().getFan();
-            Boolean augerState = manualResponseModel.getManual().getAuger();
-            Boolean igniterState = manualResponseModel.getManual().getIgniter();
-            Boolean powerState = manualResponseModel.getManual().getPower();
+            String currentMode = manualDataModel.getMode();
+            Boolean fanState = manualDataModel.getManual().getFan();
+            Boolean augerState = manualDataModel.getManual().getAuger();
+            Boolean igniterState = manualDataModel.getManual().getIgniter();
+            Boolean powerState = manualDataModel.getManual().getPower();
 
-            if (mManualMode != null && currentMode != null) {
-                mManualMode.setEnabled(true);
-                mManualMode.setChecked(currentMode.equalsIgnoreCase(ServerConstants.MODE_MANUAL));
+            if (manualMode != null && currentMode != null) {
+                manualMode.setChecked(currentMode.equalsIgnoreCase(ServerConstants.MODE_MANUAL));
             }
 
-            if (mFanEnable != null && fanState != null) {
-                mFanEnable.setChecked(fanState);
+            if (fanEnable != null && fanState != null) {
+                fanEnable.setChecked(fanState);
             }
 
-            if (mAugerEnable != null && augerState != null) {
-                mAugerEnable.setChecked(augerState);
+            if (augerEnable != null && augerState != null) {
+                augerEnable.setChecked(augerState);
             }
 
-            if (mIgniterEnable != null && igniterState != null) {
-                mIgniterEnable.setChecked(igniterState);
+            if (igniterEnable != null && igniterState != null) {
+                igniterEnable.setChecked(igniterState);
             }
 
-            if (mPowerEnable != null && powerState != null) {
-                mPowerEnable.setChecked(powerState);
+            if (powerEnable != null && powerState != null) {
+                powerEnable.setChecked(powerState);
             }
 
         } catch (NullPointerException e) {
-            Timber.w(e, "Response Error");
-            if (getActivity() != null) {
-                showSnackBarMessage(getActivity());
-            }
+            Timber.w(e, "Manual JSON Response Error");
+            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                    getString(R.string.menu_setting)), false);
         }
-    }
-
-    private void showSnackBarMessage(Activity activity) {
-        mErrorSnack.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(
-                R.color.colorAccentRed)));
-        mErrorSnack.show();
     }
 }

@@ -1,46 +1,59 @@
 package com.weberbox.pifire.recycler.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.R;
-import com.weberbox.pifire.recycler.viewholder.PModeViewHolder;
-import com.weberbox.pifire.recycler.viewmodel.PModeViewModel;
+import com.weberbox.pifire.databinding.ItemPmodeDialogBinding;
+import com.weberbox.pifire.model.local.PModeModel;
 
 import java.util.List;
 
+public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.ViewHolder> {
 
-public class PModeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final List<PModeModel> list;
 
-    private final List<PModeViewModel> mModel;
-
-    public PModeViewAdapter(final List<PModeViewModel> viewModel) {
-        mModel = viewModel;
+    public PModeViewAdapter(final List<PModeModel> list) {
+        this.list = list;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new PModeViewHolder(view);
+    public PModeViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(ItemPmodeDialogBinding.inflate(LayoutInflater.from(
+                parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((PModeViewHolder) holder).bindData(mModel.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.bindData(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mModel.size();
+        return list == null ? 0 : list.size();
     }
 
-    @Override
-    public int getItemViewType(final int position) {
-        return R.layout.item_pmode_table;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView pMode;
+        private final TextView augerOn;
+        private final TextView augerOff;
+
+        public ViewHolder(ItemPmodeDialogBinding binding) {
+            super(binding.getRoot());
+            pMode = binding.pmodeItemTv;
+            augerOn = binding.pmodeItemAon;
+            augerOff = binding.pmodeItemAoff;
+        }
+
+        public void bindData(final PModeModel model) {
+            pMode.setText(model.getPMode());
+            augerOn.setText(model.getAugerOn());
+            augerOff.setText(model.getAugerOff());
+        }
     }
 }

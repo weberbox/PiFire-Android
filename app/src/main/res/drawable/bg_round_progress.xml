@@ -18,9 +18,9 @@
             android:useLevel="true">
             <gradient
                 android:angle="0"
-                android:centerColor="@color/timerProgressColor"
-                android:endColor="@color/timerProgressColor"
-                android:startColor="@color/timerProgressColor"
+                android:centerColor="@color/colorTimerProgress"
+                android:endColor="@color/colorTimerProgress"
+                android:startColor="@color/colorTimerProgress"
                 android:type="sweep"
                 android:useLevel="false" />
         </shape>

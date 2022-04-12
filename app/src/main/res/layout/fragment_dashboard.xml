@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,19 +20,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ProgressBar
-                    android:id="@+id/connect_progressbar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/colorAccent"
-                    android:background="@color/colorPrimaryDark"
-                    android:indeterminateTintMode="src_in"
-                    android:max="100"
-                    android:visibility="gone"/>
-
                 <include
                     android:id="@+id/dash_layout"
                     layout="@layout/layout_dashboard_table" />
@@ -42,10 +28,16 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <FrameLayout
-        android:id="@+id/grill_control_container"
+    <ProgressBar
+        android:id="@+id/connect_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@id/nested_scroll_view"
-        app:layout_anchorGravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

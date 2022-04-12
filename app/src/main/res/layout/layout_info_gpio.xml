@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="false"
     app:contentPadding="0dp">
@@ -25,195 +25,221 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TableLayout
-            android:id="@+id/gpio_info"
+        <com.skydoves.androidveil.VeilLayout
+            android:id="@+id/gpio_veil_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="1.0"
-            android:animateLayoutChanges="true"
             android:background="@color/colorPrimaryLight"
-            android:stretchColumns="*"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gpio_card_header">
+            app:layout_constraintTop_toBottomOf="@+id/gpio_card_header"
+            app:veilLayout_baseAlpha="0.6"
+            app:veilLayout_baseColor="@color/colorLighterGrey"
+            app:veilLayout_highlightAlpha="1.0"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
+            app:veilLayout_radius="18dp"
+            app:veilLayout_shimmerEnable="true"
+            app:veilLayout_veiled="true">
 
-            <TableRow>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gpio_card_header">
 
-                <FrameLayout android:layout_width="0dp">
+                <LinearLayout
+                    android:id="@+id/gpio_outputs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryLight"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        tools:ignore="TooDeepLayout,UselessParent">
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
                         <TextView
-                            style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            style="@style/Text15AllerBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="@dimen/default_spacing"
+                            android:minWidth="40dp"
                             android:text="@string/info_gpio_output_name" />
 
                         <TextView
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:text="@string/info_gpio_output_auger"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            android:text="@string/info_gpio_output_auger" />
 
                         <TextView
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:text="@string/info_gpio_output_fan"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            android:text="@string/info_gpio_output_fan" />
 
                         <TextView
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:text="@string/info_gpio_output_igniter"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            android:text="@string/info_gpio_output_igniter" />
 
                         <TextView
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:text="@string/info_gpio_output_power"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            android:text="@string/info_gpio_output_power" />
 
                     </LinearLayout>
-                </FrameLayout>
-
-                <FrameLayout android:layout_width="0dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        tools:ignore="UselessParent">
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
                         <TextView
-                            style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            style="@style/Text15AllerBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="@dimen/default_spacing"
                             android:text="@string/info_gpio_output_pin" />
 
                         <TextView
                             android:id="@+id/gpio_output_auger"
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            tools:text="1" />
 
                         <TextView
                             android:id="@+id/gpio_output_fan"
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            tools:text="1" />
 
                         <TextView
                             android:id="@+id/gpio_output_igniter"
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            tools:text="1" />
 
                         <TextView
                             android:id="@+id/gpio_output_power"
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            tools:text="1" />
 
                     </LinearLayout>
-                </FrameLayout>
-            </TableRow>
 
-            <TableRow>
+                </LinearLayout>
 
-                <FrameLayout android:layout_width="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryLight"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpio_outputs">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        tools:ignore="UselessParent">
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
                         <TextView
-                            style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            style="@style/Text15AllerBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="@dimen/default_spacing"
                             android:text="@string/info_gpio_input_name" />
 
                         <TextView
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:text="@string/info_gpio_input_selector"
-                            android:textStyle="normal" />
+                            android:text="@string/info_gpio_input_selector" />
 
                     </LinearLayout>
-                </FrameLayout>
-
-                <FrameLayout android:layout_width="0dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        tools:ignore="UselessParent">
+                        android:layout_weight="0.5"
+                        android:orientation="vertical">
 
                         <TextView
-                            style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            style="@style/Text15AllerBold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_margin="@dimen/default_spacing"
                             android:text="@string/info_gpio_input_pin" />
 
                         <TextView
                             android:id="@+id/gpio_input_selector"
                             style="@style/Text15Aller"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/default_spacing"
                             android:layout_marginEnd="@dimen/default_spacing"
                             android:layout_marginBottom="@dimen/default_spacing"
-                            android:textStyle="normal" />
+                            android:minWidth="40dp"
+                            tools:text="1" />
 
                     </LinearLayout>
-                </FrameLayout>
-            </TableRow>
-        </TableLayout>
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.skydoves.androidveil.VeilLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

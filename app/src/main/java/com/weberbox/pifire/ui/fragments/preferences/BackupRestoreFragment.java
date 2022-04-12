@@ -3,8 +3,6 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,20 +14,26 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import com.google.android.material.snackbar.Snackbar;
+
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.interfaces.BackupRestoreCallbackInterface;
+import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogRestoreCallback;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.ui.dialogs.BackupRestoreDialog;
+import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
+import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.RestoreListDialog;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,18 +42,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
-import io.socket.client.Ack;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class BackupRestoreFragment extends PreferenceFragmentCompat implements
-        BackupRestoreCallbackInterface {
+        DialogRestoreCallback {
 
-    private Socket mSocket;
-    private Snackbar mSnackBar;
-    private String mJsonData;
-    private String mType;
+    private Socket socket;
+    private String jsonData;
+    private String type;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -61,15 +64,13 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mSnackBar = Snackbar.make(view, R.string.prefs_not_connected, Snackbar.LENGTH_LONG);
 
         Preference backupSettings = findPreference(getString(R.string.prefs_admin_backup_settings));
         Preference restoreSettings = findPreference(getString(R.string.prefs_admin_restore_settings));
@@ -79,28 +80,28 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
 
         if (backupSettings != null) {
             backupSettings.setOnPreferenceClickListener(preference -> {
-                showDialog(Constants.ACTION_BACKUP_SETTINGS);
+                showBackupDialog(Constants.ACTION_BACKUP_SETTINGS);
                 return true;
             });
         }
 
         if (restoreSettings != null) {
             restoreSettings.setOnPreferenceClickListener(preference -> {
-                showDialog(Constants.ACTION_RESTORE_SETTINGS);
+                showRestoreDialog(Constants.ACTION_RESTORE_SETTINGS);
                 return true;
             });
         }
 
         if (backupPelletDB != null) {
             backupPelletDB.setOnPreferenceClickListener(preference -> {
-                showDialog(Constants.ACTION_BACKUP_PELLETDB);
+                showBackupDialog(Constants.ACTION_BACKUP_PELLETDB);
                 return true;
             });
         }
 
         if (restorePelletDB != null) {
             restorePelletDB.setOnPreferenceClickListener(preference -> {
-                showDialog(Constants.ACTION_RESTORE_PELLETDB);
+                showRestoreDialog(Constants.ACTION_RESTORE_PELLETDB);
                 return true;
             });
         }
@@ -114,91 +115,84 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    private void showDialog(int type) {
-        if (getActivity() != null) {
-            if (mSocket != null && mSocket.connected()) {
-                BackupRestoreDialog backupRestore = new BackupRestoreDialog(getActivity(),
-                        this, type);
-                switch (type) {
-                    case Constants.ACTION_BACKUP_SETTINGS:
-                        backupRestore.setMessage(getString(R.string.dialog_backup_message,
-                                getString(R.string.dialog_backup_settings)));
-                        break;
-                    case Constants.ACTION_BACKUP_PELLETDB:
-                        backupRestore.setMessage(getString(R.string.dialog_backup_message,
-                                getString(R.string.dialog_backup_pelletdb)));
-                        break;
-                    case Constants.ACTION_RESTORE_SETTINGS:
-                    case Constants.ACTION_RESTORE_PELLETDB:
-                        backupRestore.setLeftAction(getString(R.string.dialog_remote));
-                        backupRestore.setRightAction(getString(R.string.dialog_local));
-                        backupRestore.setLeftIcon(R.drawable.ic_remote_storage);
-                        backupRestore.setRightIcon(R.drawable.ic_local_storage);
-                        break;
-                }
-                backupRestore.showDialog();
-            } else {
-                showSnackBarMessage(getActivity(), R.string.prefs_not_connected,true);
-            }
+    private void showBackupDialog(int backupType) {
+        if (socket != null && socket.connected()) {
+            BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                    .setAutoDismiss(true)
+                    .setTitle(getString(R.string.dialog_confirm_action))
+                    .setMessage(getString(R.string.dialog_backup_message))
+                    .setNegativeButton(getString(R.string.cancel),
+                            (dialogInterface, which) -> {
+                            })
+                    .setPositiveButton(getString(R.string.backup),
+                            (dialogInterface, which) -> {
+                                switch (backupType) {
+                                    case Constants.ACTION_BACKUP_SETTINGS:
+                                        requestBackupData(socket, Constants.BACKUP_SETTINGS);
+                                        break;
+                                    case Constants.ACTION_BACKUP_PELLETDB:
+                                        requestBackupData(socket, Constants.BACKUP_PELLETDB);
+                                        break;
+                                }
+                            })
+                    .build();
+            dialog.show();
+        } else {
+            AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
         }
     }
 
-    @Override
-    public void onRestoreLocal(int backupType) {
-        if (mSocket != null && mSocket.connected()) {
-            String type = null;
-            switch (backupType) {
-                case Constants.ACTION_RESTORE_SETTINGS:
-                    type = Constants.BACKUP_SETTINGS;
-                    break;
-                case Constants.ACTION_RESTORE_PELLETDB:
-                    type = Constants.BACKUP_PELLETDB;
-                    break;
-            }
-            mType = type;
-            requestPermissionAndBrowseFile();
-        }
-    }
-
-    @Override
-    public void onRestoreRemote(int type) {
-        if (mSocket != null && mSocket.connected()) {
-            switch (type) {
-                case Constants.ACTION_RESTORE_SETTINGS:
-                    requestBackupList(mSocket, Constants.BACKUP_SETTINGS);
-                    break;
-                case Constants.ACTION_RESTORE_PELLETDB:
-                    requestBackupList(mSocket, Constants.BACKUP_PELLETDB);
-                    break;
-            }
-        }
-    }
-
-    @Override
-    public void onBackupData(int type) {
-        if (mSocket != null && mSocket.connected()) {
-            switch (type) {
-                case Constants.ACTION_BACKUP_SETTINGS:
-                    requestBackupData(mSocket, Constants.BACKUP_SETTINGS);
-                    break;
-                case Constants.ACTION_BACKUP_PELLETDB:
-                    requestBackupData(mSocket, Constants.BACKUP_PELLETDB);
-                    break;
-            }
+    private void showRestoreDialog(int restoreType) {
+        if (socket != null && socket.connected()) {
+            BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                    .setAutoDismiss(true)
+                    .setNegativeButton(getString(R.string.dialog_remote),
+                            R.drawable.ic_remote_storage, (dialogInterface, which) -> {
+                                switch (restoreType) {
+                                    case Constants.ACTION_RESTORE_SETTINGS:
+                                        requestBackupList(socket, Constants.BACKUP_SETTINGS);
+                                        break;
+                                    case Constants.ACTION_RESTORE_PELLETDB:
+                                        requestBackupList(socket, Constants.BACKUP_PELLETDB);
+                                        break;
+                                }
+                            })
+                    .setPositiveButton(getString(R.string.dialog_local),
+                            R.drawable.ic_local_storage, (dialogInterface, which) -> {
+                                String type = null;
+                                switch (restoreType) {
+                                    case Constants.ACTION_RESTORE_SETTINGS:
+                                        type = Constants.BACKUP_SETTINGS;
+                                        break;
+                                    case Constants.ACTION_RESTORE_PELLETDB:
+                                        type = Constants.BACKUP_PELLETDB;
+                                        break;
+                                }
+                                this.type = type;
+                                requestPermissionAndBrowseFile();
+                            })
+                    .build();
+            dialog.show();
+        } else {
+            AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
         }
     }
 
     @Override
     public void onFileRestoreRemote(String fileName, String type) {
-        if (mSocket != null && mSocket.connected()) {
-            mSocket.emit(ServerConstants.UPDATE_RESTORE_DATA, type, fileName, (Ack) args -> {
+        if (socket != null && socket.connected()) {
+            ServerControl.backupRestoreRemoteEmit(socket, type, fileName, response -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (args[0] != null) {
-                            if (args[0].toString().equalsIgnoreCase("success")) {
-                                showSnackBarMessage(getActivity(), R.string.restore_success,false);
+                        if (VersionUtils.isSupported(Versions.V_127)) {
+                            ServerResponseModel result = ServerResponseModel.parseJSON(response);
+                            if (result.getResponse() != null &&
+                                    result.getResponse().getResult().equals("success")) {
+                                AlertUtils.createAlert(getActivity(), R.string.restore_success,
+                                        1000);
                             } else {
-                                showSnackBarMessage(getActivity(), R.string.restore_failed,true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
+                                        false);
                             }
                         }
                     });
@@ -208,33 +202,33 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
     }
 
     private void restoreBackupLocal(String jsonData) {
-        if (mSocket != null && mSocket.connected()) {
-            if (mType != null) {
-                mSocket.emit(ServerConstants.UPDATE_RESTORE_DATA, mType, "none",
-                        jsonData, (Ack) args -> {
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> {
-                                    if (args[0] != null) {
-                                        if (args[0].toString().equalsIgnoreCase("success")) {
-                                            showSnackBarMessage(getActivity(),
-                                                    R.string.restore_success,false);
-                                        } else {
-                                            showSnackBarMessage(getActivity(),
-                                                    R.string.restore_failed,true);
-                                        }
-                                    }
-                                });
+        if (socket != null && socket.connected()) {
+            if (type != null) {
+                ServerControl.backupRestoreLocalEmit(socket, type, jsonData, response -> {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            ServerResponseModel result = ServerResponseModel.parseJSON(response);
+                            if (result.getResponse() != null &&
+                                    result.getResponse().getResult().equals("success")) {
+                                AlertUtils.createAlert(getActivity(),
+                                        R.string.restore_success, 1000);
+                            } else {
+                                AlertUtils.createErrorAlert(getActivity(),
+                                        R.string.restore_failed, false);
                             }
                         });
+                    }
+                });
             }
         }
     }
 
     private void requestBackupData(Socket socket, String backupType) {
-        socket.emit(ServerConstants.REQUEST_BACKUP_DATA, backupType, (Ack) args -> {
-            if (getActivity() != null && args[0] != null) {
-                mJsonData = args[0].toString();
-                String currentTime = TimeUtils.getCurrentTime("MM-dd-yy_hhmmss");
+        ServerControl.backupDataGetEmit(socket, backupType, response -> {
+            if (getActivity() != null) {
+                jsonData = response;
+                String currentTime = TimeUtils.getFormattedDate(System.currentTimeMillis(),
+                        "MM-dd-yy_hhmmss");
                 switch (backupType) {
                     case Constants.BACKUP_SETTINGS:
                         createFile(Constants.BACKUP_SETTINGS_FILENAME + currentTime);
@@ -253,36 +247,45 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                 getString(R.string.dialog_restore_title), backupType);
         restoreDialog.showDialog();
 
-        socket.emit(ServerConstants.REQUEST_BACKUP_LIST, backupType, (Ack) args -> {
+        ServerControl.backupListGetEmit(socket, backupType, response -> {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     ArrayList<String> fileNames = new ArrayList<>();
                     try {
-                        JSONArray jsonArray = new JSONArray(args[0].toString());
-                        for (int i = 0 ; i < jsonArray.length() ; i++){
+                        JSONArray jsonArray = new JSONArray(response);
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             fileNames.add(jsonArray.getString(i));
                         }
                         restoreDialog.populateList(fileNames);
                     } catch (JSONException e) {
                         Timber.w(e, "Failed to create file list");
                         restoreDialog.dismiss();
-                        showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                        AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed, false);
                     }
                 });
             }
         });
     }
 
-    private void requestPermissionAndBrowseFile()  {
-        if(getActivity() != null && ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestReadExternalStorage.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
-        } else {
-            openFileBrowser();
-        }
+    private void requestPermissionAndBrowseFile() {
+        TedPermission.create()
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .setPermissionListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        openFileBrowser();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(List<String> deniedPermissions) {
+                        AlertUtils.createErrorAlert(getActivity(), R.string.file_permission_denied,
+                                false);
+                    }
+                })
+                .check();
     }
 
-    private void openFileBrowser()  {
+    private void openFileBrowser() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("application/json");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -304,25 +307,17 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
         createFileResultLauncher.launch(intent);
     }
 
-    private final ActivityResultLauncher<String> requestReadExternalStorage =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    openFileBrowser();
-                } else {
-                    showSnackBarMessage(getActivity(), R.string.file_permission_denied, true);
-                }
-            });
-
     private final ActivityResultLauncher<Intent> pickerResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result != null && result.getResultCode() == Activity.RESULT_OK ) {
+                if (result != null && result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    if(data != null)  {
+                    if (data != null) {
                         Uri fileUri = data.getData();
                         if (getActivity() != null) {
                             try {
-                                InputStream is = getActivity().getContentResolver().openInputStream(fileUri);
+                                InputStream is = getActivity().getContentResolver()
+                                        .openInputStream(fileUri);
                                 if (is != null) {
                                     String jsonData = StringUtils.streamToString(is);
                                     is.close();
@@ -330,7 +325,8 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
                                 }
                             } catch (IOException e) {
                                 Timber.w(e, "Failed to restore backup file");
-                                showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.restore_failed,
+                                        false);
                             }
                         }
                     }
@@ -340,37 +336,27 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
     private final ActivityResultLauncher<Intent> createFileResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result != null && result.getResultCode() == Activity.RESULT_OK ) {
+                if (result != null && result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    if(data != null)  {
+                    if (data != null) {
                         Uri fileUri = data.getData();
                         if (getActivity() != null) {
                             try {
-                                OutputStream os = getActivity().getContentResolver().openOutputStream(fileUri);
-                                if (os != null ) {
-                                    os.write(mJsonData.getBytes());
+                                OutputStream os = getActivity().getContentResolver()
+                                        .openOutputStream(fileUri);
+                                if (os != null) {
+                                    os.write(jsonData.getBytes());
                                     os.close();
                                 }
-                                showSnackBarMessage(getActivity(), R.string.backup_success, false);
+                                AlertUtils.createAlert(getActivity(), R.string.backup_success,
+                                        1000);
                             } catch (IOException e) {
                                 Timber.w(e, "Failed to write backup file");
-                                showSnackBarMessage(getActivity(), R.string.backup_failed, true);
+                                AlertUtils.createErrorAlert(getActivity(), R.string.backup_failed,
+                                        false);
                             }
                         }
                     }
                 }
             });
-
-    private void showSnackBarMessage(Activity activity, int message, boolean error) {
-        if (!mSnackBar.isShown() && activity != null) {
-            int color = R.color.colorPrimaryLight;
-            if (error) {
-                color = R.color.colorAccentRed;
-            }
-            mSnackBar.setBackgroundTintList(ColorStateList.valueOf(activity.getColor(color)));
-            mSnackBar.setTextColor(activity.getColor(R.color.colorWhite));
-            mSnackBar.setText(message);
-            mSnackBar.show();
-        }
-    }
 }

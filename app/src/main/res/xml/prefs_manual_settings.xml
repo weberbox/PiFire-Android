@@ -6,8 +6,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_manual_mode">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
-            app:enabled="false"
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode"
@@ -24,28 +23,28 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_manual_functions">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:dependency="@string/prefs_manual_mode"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_fan"
             app:title="@string/settings_manual_fan" />
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:dependency="@string/prefs_manual_mode"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_auger"
             app:title="@string/settings_manual_auger" />
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:dependency="@string/prefs_manual_mode"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_igniter"
             app:title="@string/settings_manual_igniter" />
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:dependency="@string/prefs_manual_mode"
             app:defaultValue="false"
             app:iconSpaceReserved="false"

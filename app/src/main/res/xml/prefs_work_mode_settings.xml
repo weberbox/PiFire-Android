@@ -6,8 +6,9 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_cycle">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pmode_auger_on"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_auger_on"
             app:title="@string/settings_pmode_auger_on"
@@ -23,7 +24,7 @@
                 android:data="@string/def_pmode_link" />
         </Preference>
 
-        <com.weberbox.pifire.ui.preferences.ListPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_pmode_mode"
             app:entries="@array/pmode_setting_names"
             app:entryValues="@array/pmode_setting"
@@ -43,7 +44,7 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_splus">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_splus_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_enabled"
@@ -55,22 +56,25 @@
             app:summary="@string/settings_splus_note"
             app:title="@string/settings_note" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_fan"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_fan"
             app:title="@string/settings_splus_fan"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_min"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_min"
             app:title="@string/settings_splus_min"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_max"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_max"
             app:title="@string/settings_splus_max"
@@ -82,50 +86,57 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pid">
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_cycle"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_cycle"
             app:title="@string/settings_pid_cycle"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_pb"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_pb"
             app:title="@string/settings_pid_pb"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_ti"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_ti"
             app:title="@string/settings_pid_ti"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_td"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_td"
             app:title="@string/settings_pid_td"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_u_min"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_u_min"
             app:title="@string/settings_pid_u_min"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_u_max"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_u_max"
             app:title="@string/settings_pid_u_max"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pid_center"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_pid_center"
             app:title="@string/settings_pid_center"
@@ -140,6 +151,32 @@
                 android:action="android.intent.action.VIEW"
                 android:data="@string/def_pid_link" />
         </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_keep_warm">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_keep_warm_s_plus"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_keep_warm_s_plus"
+            app:title="@string/settings_keep_warm_s_plus" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_keep_warm_temp"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_keep_warm_temp"
+            app:title="@string/settings_keep_warm_temp"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_keep_warm_note"
+            app:title="@string/settings_note" />
 
     </PreferenceCategory>
 </PreferenceScreen>

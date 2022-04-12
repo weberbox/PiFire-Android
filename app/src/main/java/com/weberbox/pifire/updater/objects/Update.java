@@ -4,96 +4,96 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class Update {
-    private String mVersion;
-    private Integer mVersionCode;
-    private String mReleaseNotes;
-    private Boolean mForceUpdate;
-    private ArrayList<Integer> mForceUpdateVersionCodes;
-    private URL mApk;
+    private String latestVersion;
+    private Integer latestVersionCode;
+    private String releaseNotes;
+    private Boolean forceUpdate;
+    private ArrayList<Integer> forceUpdateVersionCodes;
+    private URL apk;
 
     public Update() {}
 
     public Update(String latestVersion, Integer latestVersionCode) {
-        mVersion = latestVersion;
-        mVersionCode = latestVersionCode;
+        this.latestVersion = latestVersion;
+        this.latestVersionCode = latestVersionCode;
     }
 
     public Update(String latestVersion, URL apk) {
-        mVersion = latestVersion;
-        mApk = apk;
+        this.latestVersion = latestVersion;
+        this.apk = apk;
     }
 
     public Update(String latestVersion, String releaseNotes, URL apk) {
-        mVersion = latestVersion;
-        mApk = apk;
-        mReleaseNotes = releaseNotes;
+        this.latestVersion = latestVersion;
+        this.apk = apk;
+        this.releaseNotes = releaseNotes;
     }
 
     public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk) {
         this(latestVersion, releaseNotes, apk);
-        mVersionCode = latestVersionCode;
+        this.latestVersionCode = latestVersionCode;
     }
 
     public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk,
                   Boolean forceUpdate) {
         this(latestVersion, releaseNotes, apk);
-        mVersionCode = latestVersionCode;
-        mForceUpdate = forceUpdate;
+        this.latestVersionCode = latestVersionCode;
+        this.forceUpdate = forceUpdate;
     }
 
     public Update(String latestVersion, Integer latestVersionCode, String releaseNotes, URL apk,
                   Boolean forceUpdate, ArrayList<Integer> forceUpdateVersionCodes) {
         this(latestVersion, releaseNotes, apk);
-        mVersionCode = latestVersionCode;
-        mForceUpdate = forceUpdate;
-        mForceUpdateVersionCodes = forceUpdateVersionCodes;
+        this.latestVersionCode = latestVersionCode;
+        this.forceUpdate = forceUpdate;
+        this.forceUpdateVersionCodes = forceUpdateVersionCodes;
     }
 
     public String getLatestVersion() {
-        return mVersion;
+        return latestVersion;
     }
 
     public void setLatestVersion(String latestVersion) {
-        mVersion = latestVersion;
+        this.latestVersion = latestVersion;
     }
 
     public Integer getLatestVersionCode() {
-        return mVersionCode;
+        return latestVersionCode;
     }
 
     public void setLatestVersionCode(Integer versionCode) {
-        mVersionCode = versionCode;
+        this.latestVersionCode = versionCode;
     }
 
     public String getReleaseNotes() {
-        return mReleaseNotes;
+        return releaseNotes;
     }
 
     public void setReleaseNotes(String releaseNotes) {
-        mReleaseNotes = releaseNotes;
+        this.releaseNotes = releaseNotes;
     }
 
     public Boolean getForceUpdate() {
-        return mForceUpdate;
+        return forceUpdate;
     }
 
     public void setForceUpdate(Boolean forceUpdate) {
-        mForceUpdate = forceUpdate;
+        this.forceUpdate = forceUpdate;
     }
 
     public ArrayList<Integer> getForceUpdateVersionCodes() {
-        return mForceUpdateVersionCodes;
+        return forceUpdateVersionCodes;
     }
 
     public void setForceUpdateVersionCodes(ArrayList<Integer> forceUpdateVersionCodes) {
-        mForceUpdateVersionCodes = forceUpdateVersionCodes;
+        this.forceUpdateVersionCodes = forceUpdateVersionCodes;
     }
 
     public URL getUrlToDownload() {
-        return mApk;
+        return apk;
     }
 
     public void setUrlToDownload(URL apk) {
-        mApk = apk;
+        this.apk = apk;
     }
 }

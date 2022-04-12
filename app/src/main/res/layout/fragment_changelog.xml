@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.fragments.ChangelogFragment">
+
+    <include
+        android:id="@+id/changelog_toolbar"
+        layout="@layout/layout_actionbar" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@id/animation_view"
+        android:layout_width="370dp"
+        android:layout_height="370dp"
+        android:layout_below="@id/changelog_toolbar"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/changelog_anim"
+        app:lottie_renderMode="hardware"
+        app:lottie_speed="0.9" />
+
+    <com.weberbox.changelibs.library.view.ChangeLogRecyclerView
+        android:id="@+id/changelog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/changelog_toolbar"
+        app:chglib_current_version_color="@color/colorAccent"
+        app:chglib_row_header_layout="@layout/layout_changelog_header"
+        app:chglib_row_layout="@layout/layout_changelog_row" />
+
+</RelativeLayout>

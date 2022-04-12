@@ -13,24 +13,34 @@
         android:requiredFeature="false"
         tools:targetApi="o" />
 
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".application.PiFireApplication"
         android:allowBackup="true"
-        android:fullBackupOnly="true"
+        android:dataExtractionRules="@xml/extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.PiFire"
-        android:networkSecurityConfig="@xml/network_security_config">
+        tools:targetApi="s">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="${appName}"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.PiFire.Starting"
-            android:screenOrientation="locked" >
+            android:screenOrientation="locked"
+            android:theme="@style/Theme.PiFire.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,15 +48,23 @@
         </activity>
         <activity
             android:name=".ui.activities.ServerSetupActivity"
-            android:theme="@style/Theme.PiFire.NoActionBar"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.PiFire.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.activities.PreferencesActivity"
             android:theme="@style/Theme.PiFire.SettingsTheme" />
         <activity
-            android:name=".ui.activities.InfoActivity"
-            android:theme="@style/Theme.PiFire.NoActionBar" />
+            android:name=".ui.activities.RecipeActivity"
+            android:theme="@style/Theme.PiFire.Recipes" />
+        <activity
+            android:name=".ui.activities.ImagePickerActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.PiFire.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
 
         <receiver
             android:name=".receiver.AppUpdateReceiver"
@@ -66,8 +84,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
-        <meta-data android:name="io.sentry.environment" android:value="${environment}" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
+        <meta-data
+            android:name="io.sentry.environment"
+            android:value="${environment}" />
 
     </application>
 

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.gson.Gson;
@@ -18,13 +17,19 @@ import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.model.GrillProbeModel;
-import com.weberbox.pifire.model.ProbeProfileModel;
+import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.GrillProbeModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeProfileModel;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.socket.client.Socket;
@@ -32,12 +37,12 @@ import io.socket.client.Socket;
 public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private SharedPreferences sharedPreferences;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs_probe_settings, rootKey);
-
     }
 
     @Override
@@ -46,14 +51,15 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
+    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         ListPreference tempUnits = findPreference(getString(R.string.prefs_grill_units));
         ListPreference grillProbe = findPreference(getString(R.string.prefs_grill_probe));
@@ -122,77 +128,96 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (tempUnits != null) {
-            if (!VersionUtils.isSupported("1.2.2")) {
+            if (!VersionUtils.isSupported(Versions.V_122)) {
                 tempUnits.setEnabled(false);
                 tempUnits.setSummaryProvider(null);
-                tempUnits.setSummary(getString(R.string.disabled_option_settings, "1.2.2"));
+                tempUnits.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
             }
         }
 
-        return view;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_probe);
+        }
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof ListPreference) {
                 if (preference.getContext().getString(R.string.prefs_grill_units)
                         .equals(preference.getKey())) {
-                    GrillControl.setTempUnits(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setTempUnits(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe)
                         .equals(preference.getKey())) {
-                    GrillControl.setGrillProbe(mSocket,
-                            ((ListPreference) preference).getValue());
+                    String probe = ((ListPreference) preference).getValue();
+                    ServerControl.setGrillProbe(socket, getGrillProbesEnabled(probe), probe,
+                            this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe_type)
                         .equals(preference.getKey())) {
-                    GrillControl.setGrillProbeType(mSocket,
-                            ((ListPreference) preference).getValue());
+                    if (VersionUtils.isSupported(Versions.V_129)) {
+                        ServerControl.setGrillProbe1Type(socket,
+                                ((ListPreference) preference).getValue(), this::processPostResponse);
+                    } else {
+                        ServerControl.setGrillProbe0Type(socket,
+                                ((ListPreference) preference).getValue(), this::processPostResponse);
+                    }
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe_one_type)
                         .equals(preference.getKey())) {
-                    GrillControl.setGrillProbe1Type(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setGrillProbe1Type(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_grill_probe_two_type)
                         .equals(preference.getKey())) {
-                    GrillControl.setGrillProbe2Type(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setGrillProbe2Type(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_probe_one_type)
                         .equals(preference.getKey())) {
-                    GrillControl.setProbe1Type(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setProbe1Type(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_probe_two_type)
                         .equals(preference.getKey())) {
-                    GrillControl.setProbe2Type(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setProbe2Type(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
             }
         }
@@ -201,8 +226,7 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     private HashMap<String, ProbeProfileModel> getProbeProfilesHash() {
         String defValue = new Gson().toJson(new HashMap<String, ProbeProfileModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_probe_profiles), defValue);
-        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<HashMap<String,
-                ProbeProfileModel>>() {
+        TypeToken<HashMap<String, ProbeProfileModel>> token = new TypeToken<>() {
         };
         return new Gson().fromJson(jsonProfiles, token.getType());
     }
@@ -210,9 +234,24 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     private HashMap<String, GrillProbeModel> getGrillProbeHash() {
         String defValue = new Gson().toJson(new HashMap<String, GrillProbeModel>());
         String jsonProfiles = Prefs.getString(getString(R.string.prefs_grill_probes), defValue);
-        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<HashMap<String,
-                GrillProbeModel>>() {
+        TypeToken<HashMap<String, GrillProbeModel>> token = new TypeToken<>() {
         };
         return new Gson().fromJson(jsonProfiles, token.getType());
+    }
+
+    private List<Integer> getGrillProbesEnabled(String probe) {
+        List<Integer> probes = Arrays.asList(1, 0, 0);
+        switch (probe) {
+            case "grill_probe1":
+                probes = Arrays.asList(1, 0, 0);
+                break;
+            case "grill_probe2":
+                probes = Arrays.asList(0, 1, 0);
+                break;
+            case "grill_probe3":
+                probes = Arrays.asList(0, 0, 1);
+                break;
+        }
+        return probes;
     }
 }

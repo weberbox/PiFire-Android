@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryLight">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/server_update_progress"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_spacing"
+        android:visibility="visible"
+        app:cardBackgroundColor="@color/colorLightGrey"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/medium_spacing"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateBehavior="repeat" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text18AllerBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/large_spacing"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/server_updater_checking"
+                app:autoSizeTextType="uniform" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/server_up_to_date"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_spacing"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/colorLightGrey"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Text18AllerBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/large_spacing"
+            android:layout_marginBottom="@dimen/large_spacing"
+            android:drawablePadding="20dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="@dimen/medium_spacing"
+            android:paddingEnd="@dimen/medium_spacing"
+            android:text="@string/server_updater_no_update"
+            app:autoSizeTextType="uniform"
+            app:drawableTint="@color/colorAccent"
+            app:drawableTopCompat="@drawable/ic_server_no_update" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/server_update_error"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_spacing"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/colorLightGrey"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Text18AllerBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/large_spacing"
+            android:layout_marginBottom="@dimen/large_spacing"
+            android:drawablePadding="20dp"
+            android:gravity="center"
+            android:maxLines="2"
+            android:paddingStart="@dimen/medium_spacing"
+            android:paddingEnd="@dimen/medium_spacing"
+            android:text="@string/server_updater_error"
+            app:autoSizeTextType="uniform"
+            app:drawableTint="@color/colorUpdateError"
+            app:drawableTopCompat="@drawable/ic_server_update_error" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/server_update_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_spacing"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/colorLightGrey"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/medium_spacing"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text18AllerBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/medium_spacing"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/server_updater_update_available"
+                app:autoSizeTextType="uniform"
+                app:drawableTint="@color/colorUpdateAvailable"
+                app:drawableTopCompat="@drawable/ic_server_update_available" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/server_update_available_text"
+                style="@style/Text14Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/medium_spacing"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@string/server_updater_update_available_text"
+                app:autoSizeTextType="uniform" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text14Aller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/medium_spacing"
+                android:gravity="center"
+                android:text="@string/server_updater_update_now" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

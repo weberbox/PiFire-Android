@@ -21,10 +21,12 @@ public class AppUpdateReceiver extends BroadcastReceiver {
         if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())) {
             SharedPreferences prefs = context.getSharedPreferences(context.getPackageName() +
                             "_preferences", Context.MODE_PRIVATE);
+
             prefs.edit()
                     .putInt(context.getString(R.string.prefs_app_updater_checks), 0)
                     .putInt(context.getString(R.string.prefs_app_updater_force_checks), 0)
                     .putBoolean(context.getString(R.string.prefs_app_update_required), false)
+                    .putBoolean(context.getString(R.string.prefs_show_changelog), true)
                     .apply();
 
             removeUpdateFile(Uri.parse(context.getCacheDir().getPath() + "/" +

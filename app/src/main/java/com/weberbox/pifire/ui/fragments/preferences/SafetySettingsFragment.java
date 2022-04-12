@@ -3,9 +3,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -17,15 +15,19 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.control.GrillControl;
-import com.weberbox.pifire.ui.preferences.EmptyTextListener;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Socket;
 
 public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference.OnBindEditTextListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private SharedPreferences sharedPreferences;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -38,14 +40,14 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
 
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
         EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
@@ -60,65 +62,76 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         if (maxGrillTemp != null) {
             maxGrillTemp.setOnBindEditTextListener(this);
         }
-
-        return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_safety);
+        }
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onBindEditText(@NonNull EditText editText) {
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.addTextChangedListener(
-                new EmptyTextListener(getActivity(), editText));
+                new EmptyTextListener(getActivity(), 1.0, null, editText));
     }
 
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_safety_min_start)
                         .equals(preference.getKey())) {
-                    GrillControl.setMinStartTemp(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setMinStartTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_safety_max_start)
                         .equals(preference.getKey())) {
-                    GrillControl.setMaxStartTemp(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setMaxStartTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_safety_max_temp)
                         .equals(preference.getKey())) {
-                    GrillControl.setMaxGrillTemp(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setMaxGrillTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }
             if (preference instanceof ListPreference) {
                 if (preference.getContext().getString(R.string.prefs_safety_retries)
                         .equals(preference.getKey())) {
-                    GrillControl.setReigniteRetries(mSocket,
-                            ((ListPreference) preference).getValue());
+                    ServerControl.setReigniteRetries(socket,
+                            ((ListPreference) preference).getValue(), this::processPostResponse);
                 }
             }
         }

@@ -8,10 +8,10 @@ import com.weberbox.pifire.config.AppConfig;
 
 public class TempUtils {
 
-    private final Context mContext;
+    private final Context context;
 
     public TempUtils(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     public static String getTempUnit(Context context) {
@@ -49,7 +49,7 @@ public class TempUtils {
     }
 
     public boolean isFahrenheit() {
-        return Prefs.getString(mContext.getString(R.string.prefs_grill_units), "F")
+        return Prefs.getString(context.getString(R.string.prefs_grill_units), "F")
                 .equalsIgnoreCase("F");
     }
 }

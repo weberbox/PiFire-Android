@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="@android:color/transparent">
+
+    <LinearLayout
+        android:id="@+id/bsd_btn_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/medium_spacing"
+        android:visibility="visible">
+
+        <com.weberbox.pifire.ui.utils.TextViewRichDrawable
+            android:id="@+id/bsd_negative_btn"
+            style="@style/MaterialDialog.IconButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_ripple_trans"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="@dimen/small_spacing"
+            app:autoSizeTextType="uniform"
+            app:compoundDrawableHeight="55dp"
+            app:compoundDrawableWidth="55dp"
+            app:drawableTopVector="@drawable/ic_timer_start"
+            tools:text="Negative" />
+
+        <com.weberbox.pifire.ui.utils.TextViewRichDrawable
+            android:id="@+id/bsd_neutral_btn"
+            style="@style/MaterialDialog.IconButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_ripple_trans"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="@dimen/small_spacing"
+            app:autoSizeTextType="uniform"
+            app:compoundDrawableHeight="55dp"
+            app:compoundDrawableWidth="55dp"
+            app:drawableTopVector="@drawable/ic_grill_monitor"
+            tools:text="Neutral" />
+
+        <com.weberbox.pifire.ui.utils.TextViewRichDrawable
+            android:id="@+id/bsd_positive_btn"
+            style="@style/MaterialDialog.IconButtonText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_ripple_trans"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:padding="@dimen/small_spacing"
+            app:autoSizeTextType="uniform"
+            app:compoundDrawableHeight="55dp"
+            app:compoundDrawableWidth="55dp"
+            app:drawableTopVector="@drawable/ic_timer_stop"
+            tools:text="Positive" />
+
+    </LinearLayout>
+
+    <com.weberbox.pifire.ui.views.SwipeButton
+        android:id="@+id/bsd_swipe_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp"
+        android:visibility="invisible"
+        app:button_background="@drawable/bg_swipe_shape_button"
+        app:button_bottom_padding="20dp"
+        app:button_image_disabled="@drawable/ic_lock_closed"
+        app:button_image_enabled="@drawable/ic_lock_open"
+        app:button_left_padding="20dp"
+        app:button_right_padding="20dp"
+        app:button_top_padding="20dp"
+        app:button_trail_enabled="false"
+        app:initial_state="disabled"
+        app:inner_text="@string/swipe_to_start"
+        app:inner_text_background="@drawable/bg_swipe_shape_rounded"
+        app:inner_text_bottom_padding="18dp"
+        app:inner_text_color="@color/colorWhite"
+        app:inner_text_size="16sp"
+        app:inner_text_top_padding="18dp" />
+
+</RelativeLayout>

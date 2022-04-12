@@ -61,19 +61,22 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_app_shutdown">
+    <PreferenceCategory app:title="@string/settings_cat_app_recipes">
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_probe_shutdown"
-            app:key="@string/prefs_probe_shutdown"
-            app:summary="@string/settings_app_probe_shutdown_summary"
-            app:title="@string/settings_app_probe_shutdown" />
+        <Preference
+            app:key="@string/prefs_recipe_db_backup"
+            app:summary="@string/settings_recipe_db_backup"
+            app:title="@string/settings_recipe_db_backup_title" />
 
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_timer_shutdown"
-            app:key="@string/prefs_timer_shutdown"
-            app:summary="@string/settings_app_timer_shutdown_summary"
-            app:title="@string/settings_app_timer_shutdown" />
+        <Preference
+            app:key="@string/prefs_recipe_db_restore"
+            app:summary="@string/settings_recipe_db_restore"
+            app:title="@string/settings_recipe_db_restore_title" />
+
+        <Preference
+            app:key="@string/prefs_recipe_db_clear"
+            app:summary="@string/settings_recipe_db_clear"
+            app:title="@string/settings_recipe_db_clear_title" />
 
     </PreferenceCategory>
 
@@ -93,34 +96,10 @@
             app:summary="@string/settings_update_download_summary"
             app:title="@string/settings_update_download_title" />
 
-        <ListPreference
-            app:defaultValue="@string/def_app_updater_frequency"
-            app:entries="@array/app_updater_frequency_names"
-            app:entryValues="@array/app_updater_frequency_values"
-            app:key="@string/prefs_app_updater_frequency"
-            app:summary="@string/settings_update_frequency_summary"
-            app:title="@string/settings_update_frequency" />
-
         <Preference
             app:key="@string/prefs_app_updater_check_now"
             app:summary="@string/settings_update_check_now_summary"
             app:title="@string/settings_update_check_now" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:key="@string/prefs_debug_cat"
-        app:title="@string/settings_cat_debug">
-
-        <Preference
-            app:key="@string/prefs_firebase_token"
-            app:summary="@string/settings_firebase_token_summary"
-            app:title="@string/settings_firebase_token" />
-
-        <SwitchPreferenceCompat
-            app:key="@string/prefs_debug_logging"
-            app:summary="@string/settings_debug_logging_summary"
-            app:title="@string/settings_debug_logging" />
 
     </PreferenceCategory>
 
@@ -133,6 +112,21 @@
             android:key="@string/prefs_crash_enable"
             android:summary="@string/settings_crash_summary"
             android:title="@string/settings_enable_crash" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="@bool/def_crash_dialog"
+            android:key="@string/prefs_crash_dialog"
+            android:summary="@string/settings_crash_dialog_summary"
+            android:title="@string/settings_crash_dialog_title"
+            app:dependency="@string/prefs_crash_enable" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="@bool/def_crash_dev_enabled"
+            android:key="@string/prefs_dev_crash_enable"
+            android:summary="@string/settings_dev_crash_summary"
+            android:title="@string/settings_dev_crash_title"
+            app:dependency="@string/prefs_crash_enable"
+            app:isPreferenceVisible="false" />
 
         <EditTextPreference
             android:key="@string/prefs_crash_user_email"

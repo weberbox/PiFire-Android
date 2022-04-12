@@ -1,6 +1,16 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
+        app:title="@string/settings_admin_cat_server_update">
+
+        <Preference
+            app:key="@string/prefs_server_updates_frag"
+            app:summary="@string/settings_admin_server_update_summary"
+            app:title="@string/settings_admin_server_update_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="@string/prefs_manual_mode_cat"
         app:title="@string/settings_cat_manual_functions">
 
@@ -13,7 +23,7 @@
 
     <PreferenceCategory app:title="@string/settings_cat_admin">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:key="@string/prefs_admin_debug"
             app:summary="@string/settings_admin_debug_note"
             app:title="@string/settings_admin_debug" />
@@ -55,6 +65,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_cat_power">
+
+        <Preference
+            app:key="@string/prefs_admin_restart"
+            app:title="@string/settings_admin_restart" />
 
         <Preference
             app:key="@string/prefs_admin_reboot"

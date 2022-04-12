@@ -1,6 +1,10 @@
 {
   "licenses":[
     [
+      "PiFire Android",
+      "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE"
+    ],
+    [
       "PiFire",
       "https://github.com/nebhead/PiFire/blob/main/license.txt"
     ],
@@ -21,10 +25,6 @@
       "https://github.com/Pixplicity/EasyPrefs/blob/master/license.txt"
     ],
     [
-      "PowerSpinner",
-      "https://github.com/skydoves/PowerSpinner/blob/master/LICENSE"
-    ],
-    [
       "MPAndroidChart",
       "https://github.com/PhilJay/MPAndroidChart/blob/master/LICENSE"
     ],
@@ -43,6 +43,66 @@
     [
       "RecyclerViewFastScroller",
       "https://github.com/quiph/RecyclerView-FastScroller/blob/master/LICENSE"
+    ],
+    [
+      "OverlappingPanels",
+      "https://github.com/discord/OverlappingPanels/blob/master/LICENSE"
+    ],
+    [
+      "uCrop",
+      "https://github.com/Yalantis/uCrop"
+    ],
+    [
+      "TedPermission",
+      "https://github.com/ParkSangGwon/TedPermission"
+    ],
+    [
+      "AndroidVeil",
+      "https://github.com/skydoves/AndroidVeil/blob/master/LICENSE"
+    ],
+    [
+      "Alerter",
+      "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
+    ],
+    [
+      "MaterialRatingBar",
+      "https://github.com/zhanghai/MaterialRatingBar"
+    ],
+    [
+      "Glide",
+      "https://github.com/bumptech/glide/blob/master/LICENSE"
+    ],
+    [
+      "OkHttp",
+      "https://github.com/square/okhttp/blob/master/LICENSE.txt"
+    ],
+    [
+      "Android-Stepper",
+      "https://github.com/acefalobi/android-stepper/blob/master/LICENSE"
+    ],
+    [
+      "OneSignal",
+      "https://github.com/OneSignal/OneSignal-Android-SDK/blob/main/LICENSE"
+    ],
+    [
+      "Lottie",
+      "https://github.com/airbnb/lottie-android/blob/master/LICENSE"
+    ],
+    [
+      "Changelog Lib",
+      "https://github.com/weberbox/changeloglib/blob/master/LICENSE"
+    ],
+    [
+      "Material Dialog",
+      "https://github.com/PatilShreyas/MaterialDialog-Android/blob/master/LICENSE"
+    ],
+    [
+      "TouchImageView",
+      "https://github.com/MikeOrtiz/TouchImageView/blob/master/LICENSE.txt"
+    ],
+    [
+      "KeyboardVisibilityEvent",
+      "https://github.com/yshrsmz/KeyboardVisibilityEvent/blob/master/LICENSE"
     ],
     [
       "MaterialDesign Icons",

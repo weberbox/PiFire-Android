@@ -7,5 +7,28 @@
             <corners android:radius="10dp" />
         </shape>
     </item>
-    <item android:drawable="@drawable/bg_refresh_button_off" />
+    <item>
+        <layer-list>
+            <item android:id="@android:id/background">
+                <layer-list>
+                    <item>
+                        <shape>
+                            <solid android:color="@color/colorSmokePlusDisabled" />
+                            <corners android:radius="@dimen/button_corner_radius" />
+                        </shape>
+                    </item>
+                    <item
+                        android:bottom="1dp"
+                        android:left="1dp"
+                        android:right="1dp"
+                        android:top="1dp">
+                        <shape>
+                            <solid android:color="@color/colorLightGrey" />
+                            <corners android:radius="@dimen/button_corner_radius" />
+                        </shape>
+                    </item>
+                </layer-list>
+            </item>
+        </layer-list>
+    </item>
 </ripple>

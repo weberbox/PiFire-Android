@@ -15,8 +15,8 @@ public class SecurityUtils {
 
     private static final String PREFS_NAME = "_encrypted_prefs";
 
-    @SuppressWarnings("unused")
-    public static SharedPreferences getEncryptedSharedPreferences(Context context) throws GeneralSecurityException, IOException {
+    public static SharedPreferences getEncryptedSharedPreferences(Context context)
+            throws GeneralSecurityException, IOException {
         SharedPreferences sharedPreferences;
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
         sharedPreferences = EncryptedSharedPreferences.create(
@@ -30,45 +30,25 @@ public class SecurityUtils {
     }
 
     public static boolean encrypt(Context context, int key, String password) {
-        SharedPreferences sharedPreferences;
-        String masterKeyAlias;
         try {
-            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-            sharedPreferences = EncryptedSharedPreferences.create(
-                    context.getPackageName() + PREFS_NAME,
-                    masterKeyAlias,
-                    context,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-
-            sharedPreferences.edit().putString(context.getString(key), password).apply();
+            getEncryptedSharedPreferences(context).edit().putString(context.getString(key),
+                    password).apply();
         } catch (GeneralSecurityException | IOException e) {
-            Timber.w(e,"Error encrypting password: %s", e.getMessage());
+            Timber.e(e, "Error encrypting password");
             return false;
         }
-
         return true;
     }
 
     public static String decrypt(Context context, int key) {
-        SharedPreferences sharedPreferences;
-        String masterKeyAlias;
         String decryptedPassword;
         try {
-            masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-            sharedPreferences = EncryptedSharedPreferences.create(
-                    context.getPackageName() + PREFS_NAME,
-                    masterKeyAlias,
-                    context,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-
-            decryptedPassword = sharedPreferences.getString(context.getString(key), "");
+            decryptedPassword = getEncryptedSharedPreferences(context).getString(
+                    context.getString(key), "");
         } catch (GeneralSecurityException | IOException e) {
-            Timber.w(e, "Error decrypting password: %s", e.getMessage());
+            Timber.e(e, "Error decrypting password");
             decryptedPassword = "Error decrypting password";
         }
-
         return decryptedPassword;
     }
 }

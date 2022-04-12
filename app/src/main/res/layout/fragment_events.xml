@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".ui.fragments.EventsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,28 +13,37 @@
         android:background="@color/colorPrimaryDark">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/events_nested_scroll_view"
+            android:id="@+id/events_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/events_chart"
+            <com.skydoves.androidveil.VeilRecyclerFrameView
+                android:id="@+id/events_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                app:veilFrame_baseAlpha="0.6"
+                app:veilFrame_baseColor="@color/colorLighterGrey"
+                app:veilFrame_highlightAlpha="1.0"
+                app:veilFrame_highlightColor="@color/colorPlaceholder"
+                app:veilFrame_layout="@layout/item_events_list"
+                app:veilFrame_radius="10dp"
+                app:veilFrame_shimmerEnable="true"
+                app:veilFrame_veiled="true" />
 
-                <include
-                    android:id="@+id/events_layout"
-                    layout="@layout/layout_events" />
-
-            </LinearLayout>
         </androidx.core.widget.NestedScrollView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <FrameLayout
-        android:id="@+id/events_container"
+    <ProgressBar
+        android:id="@+id/loading_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@id/events_nested_scroll_view"
-        app:layout_anchorGravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

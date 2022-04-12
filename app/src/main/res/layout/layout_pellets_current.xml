@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="false"
     app:contentPadding="0dp">
@@ -26,323 +27,176 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/current_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLight"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/load_out_header">
-
-            <LinearLayout
-                android:id="@+id/current_brand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_current_band"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/current_brand_text"
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_brand_holder"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_wood"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_brand">
-
-                <TextView
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_current_wood" />
-
-                <TextView
-                    android:id="@+id/current_wood_text"
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_wood_holder"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_wood">
-
-                <TextView
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_current_rating" />
-
-                <TextView
-                    android:id="@+id/current_rating_text"
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_rating_5"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_date_loaded"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_rating">
-
-                <TextView
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_current_date" />
-
-                <TextView
-                    android:id="@+id/current_date_loaded_text"
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_date_holder"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_comments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_date_loaded">
-
-                <TextView
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:gravity="center"
-                    android:text="@string/pellets_current_comments" />
-
-                <TextView
-                    android:id="@+id/current_comments_text"
-                    style="@style/Text15Aller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/default_spacing"
-                    android:layout_marginEnd="@dimen/default_spacing"
-                    android:layout_marginBottom="@dimen/default_spacing"
-                    android:text="@string/pellets_comments_holder"
-                    android:textStyle="normal" />
-
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.skydoves.androidveil.VeilLayout
             android:id="@+id/current_holder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryLight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/load_out_header">
+            app:layout_constraintTop_toBottomOf="@+id/load_out_header"
+            app:veilLayout_baseAlpha="0.6"
+            app:veilLayout_baseColor="@color/colorLighterGrey"
+            app:veilLayout_highlightAlpha="1.0"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
+            app:veilLayout_radius="18dp"
+            app:veilLayout_shimmerEnable="true"
+            app:veilLayout_veiled="true">
 
-            <LinearLayout
-                android:id="@+id/current_brand_holder"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/current_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorPrimaryLight"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/current_wood_holder"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-                <View
-                    android:layout_width="70dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_wood_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorPrimaryLight"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_brand_holder">
-
-                <View
-                    android:layout_width="70dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_rating_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorPrimaryLight"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_wood_holder">
-
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_date_loaded_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorPrimaryLight"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_rating_holder">
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-                <View
-                    android:layout_width="120dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/current_comments_holder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:background="@color/colorPrimaryLight"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/current_date_loaded_holder">
-
-                <View
-                    android:layout_width="90dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
-
-                <TextView
+                <LinearLayout
+                    android:id="@+id/current_brand"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="@dimen/default_spacing"
-                    android:layout_marginEnd="@dimen/default_spacing"
-                    android:layout_marginBottom="@dimen/default_spacing"
-                    android:alpha="0.5"
-                    android:background="@drawable/bg_event_placeholder" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            </LinearLayout>
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:text="@string/pellets_current_brand"
+                        android:textSize="15sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/current_brand_text"
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_brand_holder" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/current_wood"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_brand">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:text="@string/pellets_current_wood" />
+
+                    <TextView
+                        android:id="@+id/current_wood_text"
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_wood_holder" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/current_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_wood">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:text="@string/pellets_current_rating" />
+
+                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                        android:id="@+id/current_rating_text"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:isIndicator="true"
+                        android:max="5"
+                        android:numStars="5"
+                        android:rating="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/current_date_loaded"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_rating">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:text="@string/pellets_current_date" />
+
+                    <TextView
+                        android:id="@+id/current_date_loaded_text"
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_date_holder" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/current_comments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_date_loaded">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:gravity="center"
+                        android:text="@string/pellets_current_comments" />
+
+                    <TextView
+                        android:id="@+id/current_comments_text"
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        android:textStyle="normal"
+                        tools:text="@string/pellets_comments_holder" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.skydoves.androidveil.VeilLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

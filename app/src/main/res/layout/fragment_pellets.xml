@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimaryDark"
     tools:context=".ui.fragments.PelletsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,7 +13,7 @@
         android:background="@color/colorPrimaryDark">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/pellets_nested_scroll_view"
+            android:id="@+id/pellets_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -22,18 +21,6 @@
                 android:id="@+id/pellets_root_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <ProgressBar
-                    android:id="@+id/loading_progressbar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-7dp"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/colorAccent"
-                    android:indeterminateTintMode="src_in"
-                    android:max="100"
-                    android:visibility="gone" />
 
                 <include
                     android:id="@+id/pellets_layout"
@@ -43,10 +30,16 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <FrameLayout
-        android:id="@+id/pellets_container"
+    <ProgressBar
+        android:id="@+id/loading_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@id/pellets_nested_scroll_view"
-        app:layout_anchorGravity="center" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTintMode="src_in"
+        android:max="100"
+        android:visibility="invisible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

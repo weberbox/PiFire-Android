@@ -2,176 +2,130 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:clickable="true"
-    android:focusableInTouchMode="true"
-    android:focusable="true" >
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/pellet_edit_brand"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_spacing"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:hint="@string/pellets_brand"
+        android:labelFor="@+id/pellet_edit_brand_tv"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimaryLight"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:endIconTint="@color/colorWhite"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            style="@style/Text15Aller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/small_spacing"
-            android:text="@string/pellets_current_band" />
-
-        <com.skydoves.powerspinner.PowerSpinnerView
-            android:id="@+id/pellet_edit_brand_text"
-            style="@style/Text15Aller"
+        <AutoCompleteTextView
+            android:id="@+id/pellet_edit_brand_tv"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:background="@drawable/bg_ripple_spinner_header"
-            android:gravity="center"
-            android:hint="@string/pellets_brand_holder"
-            android:padding="@dimen/small_spacing"
-            android:textColor="@color/colorWhite"
-            android:textStyle="normal"
-            app:spinner_arrow_gravity="end"
-            app:spinner_arrow_padding="8dp"
-            app:spinner_divider_color="@color/colorPrimaryDark"
-            app:spinner_divider_show="true"
-            app:spinner_divider_size="0.5dp"
-            app:spinner_item_array="@array/pellet_profiles"
-            app:spinner_popup_animation="dropdown"
-            app:spinner_popup_background="@color/colorLighterGrey"
-            app:spinner_popup_elevation="4dp" />
+            android:layout_height="match_parent"
+            android:inputType="none" />
 
+    </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/pellet_edit_wood"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_spacing"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:hint="@string/pellets_wood"
+        android:labelFor="@+id/pellet_edit_wood_tv"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimaryLight"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:endIconTint="@color/colorWhite"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pellet_edit_brand">
 
-        <TextView
-            style="@style/Text15Aller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/small_spacing"
-            android:text="@string/pellets_current_wood" />
-
-        <com.skydoves.powerspinner.PowerSpinnerView
-            android:id="@+id/pellet_edit_wood_text"
-            style="@style/Text15Aller"
+        <AutoCompleteTextView
+            android:id="@+id/pellet_edit_wood_tv"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:background="@drawable/bg_ripple_spinner_header"
-            android:gravity="center"
-            android:hint="@string/pellets_wood_holder"
-            android:padding="@dimen/small_spacing"
-            android:textColor="@color/colorWhite"
-            android:textStyle="normal"
-            app:spinner_arrow_gravity="end"
-            app:spinner_arrow_padding="8dp"
-            app:spinner_divider_color="@color/colorPrimaryDark"
-            app:spinner_divider_show="true"
-            app:spinner_divider_size="0.5dp"
-            app:spinner_item_array="@array/pellet_woods"
-            app:spinner_popup_animation="dropdown"
-            app:spinner_popup_background="@color/colorLighterGrey"
-            app:spinner_popup_elevation="5dp" />
+            android:layout_height="match_parent"
+            android:inputType="none" />
 
-    </RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/pellet_edit_rating"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_spacing"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:hint="@string/pellets_rating"
+        android:labelFor="@+id/pellet_edit_wood_tv"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimaryLight"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:endIconTint="@color/colorWhite"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pellet_edit_wood">
 
-        <TextView
-            style="@style/Text15Aller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/small_spacing"
-            android:text="@string/pellets_current_rating" />
-
-        <com.skydoves.powerspinner.PowerSpinnerView
-            android:id="@+id/pellet_edit_rating_text"
-            style="@style/Text15Aller"
+        <AutoCompleteTextView
+            android:id="@+id/pellet_edit_rating_tv"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:background="@drawable/bg_ripple_spinner_header"
-            android:gravity="center"
-            android:hint="@string/pellets_rating_4"
-            android:padding="@dimen/small_spacing"
-            android:textColor="@color/colorAccent"
-            android:textStyle="normal"
-            app:spinner_arrow_gravity="end"
-            app:spinner_arrow_padding="8dp"
-            app:spinner_divider_color="@color/colorPrimaryDark"
-            app:spinner_divider_show="true"
-            app:spinner_divider_size="0.5dp"
-            app:spinner_item_array="@array/pellet_rating"
-            app:spinner_popup_animation="dropdown"
-            app:spinner_popup_background="@color/colorLighterGrey"
-            app:spinner_popup_elevation="5dp" />
+            android:layout_height="match_parent"
+            android:inputType="none"
+            android:textColor="@color/colorAccent" />
 
-    </RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-
-    <RelativeLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/pellet_edit_comments"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="@dimen/small_spacing"
-        android:paddingTop="@dimen/small_spacing"
-        android:paddingEnd="@dimen/small_spacing"
-        android:paddingBottom="@dimen/medium_spacing"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:hint="@string/pellets_comments"
+        android:labelFor="@+id/pellet_edit_wood_tv"
+        android:paddingBottom="20dp"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimaryLight"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:endIconTint="@color/colorWhite"
+        app:hintTextColor="@color/colorGreyHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pellet_edit_rating">
 
-        <TextView
-            android:id="@+id/pellets_edit_comments"
-            style="@style/Text15Aller"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/small_spacing"
-            android:text="@string/pellets_current_comments" />
-
-        <EditText
-            android:id="@+id/pellet_edit_comments_text"
-            style="@style/Text15Aller"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pellet_edit_comments_tv"
+            style="@style/Text14Aller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/pellets_edit_comments"
-            android:layout_marginStart="@dimen/default_spacing"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:background="@drawable/bg_grey_button"
-            android:hint="@string/pellets_comments_hint"
-            android:importantForAutofill="no"
-            android:inputType="textCapSentences|textMultiLine"
-            android:imeOptions="actionDone"
-            android:minHeight="90dp"
-            android:padding="@dimen/small_spacing"
-            android:textAlignment="center"
-            android:textStyle="normal" />
+            android:inputType="textMultiLine"
+            android:minHeight="100dp" />
 
-    </RelativeLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,12 +10,11 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.utils.CrashUtils;
-import com.weberbox.pifire.utils.FirebaseUtils;
+import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
-import com.weberbox.pifire.utils.log.CrashReportingTree;
 import com.weberbox.pifire.utils.log.DebugLogTree;
 
-import java.net.URISyntaxException;
+import java.net.URI;
 import java.util.Collections;
 
 import io.socket.client.IO;
@@ -25,7 +24,7 @@ import timber.log.Timber;
 
 public class PiFireApplication extends Application {
 
-    private Socket mSocket;
+    private Socket socket;
 
     @Override
     public void onCreate() {
@@ -38,46 +37,34 @@ public class PiFireApplication extends Application {
                 .setUseDefaultSharedPreference(true)
                 .build();
 
-        if (!AppConfig.DEBUG) {
-            Timber.plant(new CrashReportingTree(getString(R.string.app_name)));
-            CrashUtils.initCrashReporting(this,
-                    Prefs.getBoolean(getString(R.string.prefs_crash_enable)));
-            CrashUtils.setUserEmail(Prefs.getString(getString(R.string.prefs_crash_user_email)));
+        if (!AppConfig.DEBUG || Prefs.getBoolean(getString(R.string.prefs_dev_crash_enable))) {
+            CrashUtils.initCrashReporting(this);
         } else {
             Timber.plant(new DebugLogTree());
         }
 
-        Timber.tag(getString(R.string.app_name));
-
         Timber.d("Startup - Application Start");
 
-        String serverUrl = getString(R.string.def_firebase_server_url);
+        if (AppConfig.USE_ONESIGNAL) {
+            Timber.d("Init OneSignal");
 
-        if (AppConfig.USE_FIREBASE && !serverUrl.isEmpty()) {
-            Timber.d("Init Firebase");
-
-            FirebaseUtils.initFirebase(this);
-            FirebaseUtils.initNotificationChannels(this);
-            String uuid = Prefs.getString(getString(R.string.prefs_notif_firebase_serveruuid));
-
-            if (Prefs.getBoolean(getString(R.string.prefs_notif_firebase_enabled))
-                    && !uuid.isEmpty()) {
-                FirebaseUtils.toggleFirebaseSubscription(true, uuid);
-            }
+            OneSignalUtils.initNotificationChannels(this);
+            OneSignalUtils.initOneSignal(this);
         }
     }
 
     public Socket getSocket() {
-        if (mSocket == null) {
-            startSocket();
+        if (socket == null) {
+            return socket = startSocket();
         }
-        return mSocket;
+        return socket;
     }
 
-    private void startSocket() {
-        String serverURL = Prefs.getString(getString(R.string.prefs_server_address), ServerConstants.DEFAULT_SOCKET_URL);
+    private Socket startSocket() {
+        URI serverUri = URI.create(Prefs.getString(getString(R.string.prefs_server_address),
+                ServerConstants.DEFAULT_SOCKET_URL));
 
-        Timber.i("Creating Socket connection to: %s", serverURL);
+        Timber.i("Creating Socket connection");
 
         IO.Options options = new IO.Options();
 
@@ -91,36 +78,19 @@ public class PiFireApplication extends Application {
             options.extraHeaders = Collections.singletonMap("Authorization",
                     Collections.singletonList(credentials));
 
-            connectSocket(serverURL, options);
-
+            return IO.socket(serverUri, options);
         } else {
-            connectSocket(serverURL, null);
-        }
-    }
-
-    private void connectSocket(String serverURL, IO.Options options) {
-        if (options != null) {
-            try {
-                mSocket = IO.socket(serverURL, options);
-            } catch (URISyntaxException e) {
-                Timber.w(e, "Socket URI Error");
-            }
-        } else {
-            try {
-                mSocket = IO.socket(serverURL);
-            } catch (URISyntaxException e) {
-                Timber.w(e,"Socket URI Error");
-            }
+            return IO.socket(serverUri);
         }
     }
 
     public void disconnectSocket() {
-        if (mSocket != null) {
+        if (socket != null) {
             Timber.i("Closing Socket");
-            mSocket.disconnect();
-            mSocket.close();
-            mSocket.off();
-            mSocket = null;
+            socket.disconnect();
+            socket.close();
+            socket.off();
+            socket = null;
         }
     }
 

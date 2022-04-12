@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:key="@string/prefs_notif_firebase"
-        app:title="@string/settings_cat_firebase">
+        app:key="@string/prefs_notif_onesignal_cat"
+        app:title="@string/settings_cat_onesignal">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
-            app:defaultValue="@bool/def_notif_firebase_enabled"
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_onesignal_enabled"
             app:iconSpaceReserved="false"
-            app:key="@string/prefs_notif_firebase_enabled"
+            app:key="@string/prefs_notif_onesignal_enabled"
             app:title="@string/enabled" />
+
+        <Preference
+            android:summary="@string/settings_onesignal_consent_summary"
+            android:title="@string/settings_onesignal_consent_title"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_onesignal_consent" />
 
     </PreferenceCategory>
 
@@ -18,14 +25,15 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_ifttt">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_ifttt_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_ifttt_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_ifttt_api"
             app:title="@string/settings_ifttt_api"
@@ -37,28 +45,31 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pushover">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_pushover_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_api"
             app:title="@string/settings_pushover_api"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_keys"
             app:summary="@string/settings_pushover_note"
             app:title="@string/settings_pushover_keys" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushover_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushover_url"
             app:title="@string/settings_pushover_url"
@@ -70,24 +81,70 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pushbullet">
 
-        <com.weberbox.pifire.ui.preferences.SwitchPreferenceCompatSocket
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_notif_pushbullet_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_enabled"
             app:title="@string/enabled" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_api"
             app:title="@string/settings_pushbullet_api"
             app:useSimpleSummaryProvider="true" />
 
-        <com.weberbox.pifire.ui.preferences.EditTextPreferenceSocket
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:dependency="@string/prefs_notif_pushbullet_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_pushbullet_url"
             app:title="@string/settings_pushbullet_url"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_influxdb">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_notif_influxdb_enabled"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_enabled"
+            app:title="@string/enabled" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_url"
+            app:title="@string/settings_influxdb_url"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_token"
+            app:title="@string/settings_influxdb_token"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_org"
+            app:title="@string/settings_influxdb_org"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_notif_influxdb_enabled"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_notif_influxdb_bucket"
+            app:title="@string/settings_influxdb_bucket"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>

@@ -6,27 +6,9 @@
     <application
         android:name="com.weberbox.pifire.application.PiFireApplication"
         tools:ignore="AllowBackup,MissingApplicationIcon">
-        <service
-            android:name=".service.FirebaseNotificationService"
-            android:exported="false"
-            tools:node="merge" >
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
 
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent"
-            tools:node="merge" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_grill"
-            tools:node="merge" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/notification_channel_base"
-            tools:node="merge" />
+        <meta-data android:name="com.onesignal.NotificationServiceExtension"
+            android:value="com.weberbox.pifire.service.NotificationServiceExtension" />
 
     </application>
 

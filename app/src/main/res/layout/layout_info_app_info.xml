@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="false"
     app:contentPadding="0dp">
@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/app_version_header">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -47,7 +47,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_version_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -57,7 +57,7 @@
                 app:autoSizeTextType="uniform" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -68,7 +68,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_version_code_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -78,7 +78,7 @@
                 app:autoSizeTextType="uniform" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -89,7 +89,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_build_type_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -99,7 +99,7 @@
                 app:autoSizeTextType="uniform" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -110,7 +110,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_build_flavor_text"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -120,7 +120,7 @@
                 app:autoSizeTextType="uniform" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -131,7 +131,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/app_build_date"
-                style="@style/Text15Aller"
+                style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_spacing"
@@ -148,7 +148,7 @@
                 android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_spacing"
@@ -159,7 +159,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/app_build_git_branch"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_spacing"
@@ -169,7 +169,7 @@
                     app:autoSizeTextType="uniform" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_spacing"
@@ -180,7 +180,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/app_build_git_rev"
-                    style="@style/Text15Aller"
+                    style="@style/Text15AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_spacing"

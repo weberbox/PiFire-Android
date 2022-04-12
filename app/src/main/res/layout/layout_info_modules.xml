@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+    app:contentPadding="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/modules_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+            android:id="@+id/modules_card_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_icon="@drawable/ic_menu_about"
+            app:header_title="@string/info_modules"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.skydoves.androidveil.VeilLayout
+            android:id="@+id/modules_veil_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/modules_card_header"
+            app:veilLayout_baseAlpha="0.6"
+            app:veilLayout_baseColor="@color/colorLighterGrey"
+            app:veilLayout_highlightAlpha="1.0"
+            app:veilLayout_highlightColor="@color/colorPlaceholder"
+            app:veilLayout_radius="18dp"
+            app:veilLayout_shimmerEnable="true"
+            app:veilLayout_veiled="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryLight"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:text="@string/info_modules_head" />
+
+                    <TextView
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        android:text="@string/info_modules_platform" />
+
+                    <TextView
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        android:text="@string/info_modules_adc" />
+
+                    <TextView
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        android:text="@string/info_modules_display" />
+
+                    <TextView
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        android:text="@string/info_modules_dist" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Text15AllerBold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/default_spacing"
+                        android:text="@string/info_modules_config" />
+
+                    <TextView
+                        android:id="@+id/modules_platform"
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        tools:text="prototype" />
+
+                    <TextView
+                        android:id="@+id/modules_adc"
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        tools:text="prototype" />
+
+                    <TextView
+                        android:id="@+id/modules_display"
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        tools:text="prototype" />
+
+                    <TextView
+                        android:id="@+id/modules_dist"
+                        style="@style/Text15Aller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="@dimen/default_spacing"
+                        android:layout_marginBottom="@dimen/default_spacing"
+                        tools:text="prototype" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.skydoves.androidveil.VeilLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

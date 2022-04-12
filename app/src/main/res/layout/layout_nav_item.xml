@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_item_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_nav_item_selector">
+
+    <View
+        android:id="@+id/nav_item_selected_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="24dp"
+        android:background="@drawable/bg_nav_item_selected"
+        android:backgroundTint="@color/colorNavSelected" />
+
+    <ImageView
+        android:id="@+id/nav_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="1dp"
+        android:alpha="0.8"
+        android:scaleType="centerInside"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_grill" />
+
+    <TextView
+        android:id="@+id/nav_item_title"
+        style="@style/Text15Aller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/nav_item_icon"
+        android:paddingLeft="@dimen/default_spacing"
+        android:paddingRight="12dp"
+        android:singleLine="true"
+        tools:text="Dashboard" />
+
+</RelativeLayout>

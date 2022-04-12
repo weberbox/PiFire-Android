@@ -10,7 +10,6 @@
     </string-array>
 
     <string-array name="refresh_interval">
-        <item>1000</item>
         <item>3000</item>
         <item>12000</item>
         <item>21000</item>
@@ -18,7 +17,6 @@
     </string-array>
 
     <string-array name="refresh_interval_names">
-        <item>1 Seconds</item>
         <item>3 Seconds</item>
         <item>12 Seconds</item>
         <item>21 Seconds</item>
@@ -124,66 +122,23 @@
         <item>10</item>
     </string-array>
 
-    <string-array name="pellet_rating">
-        <item>@string/pellets_rating_1</item>
-        <item>@string/pellets_rating_2</item>
-        <item>@string/pellets_rating_3</item>
-        <item>@string/pellets_rating_4</item>
-        <item>@string/pellets_rating_5</item>
+    <string-array name="items_rating">
+        <item>@string/item_rating_1</item>
+        <item>@string/item_rating_2</item>
+        <item>@string/item_rating_3</item>
+        <item>@string/item_rating_4</item>
+        <item>@string/item_rating_5</item>
     </string-array>
 
-    <string-array name="pellet_profiles">
-        <item>Custom</item>
-        <item>Generic</item>
-    </string-array>
-
-    <string-array name="pellet_woods">
-        <item>Alder</item>
-        <item>Almond</item>
-        <item>Apple</item>
-        <item>Apricot</item>
-        <item>Blend</item>
-        <item>Cherry</item>
-        <item>Chestnut</item>
-        <item>Competition</item>
-        <item>Hickory</item>
-        <item>Lemon</item>
-        <item>Maple</item>
-        <item>Mesquite</item>
-        <item>Mulberry</item>
-        <item>Nectarine</item>
-        <item>Oak</item>
-        <item>Orange</item>
-        <item>Peach</item>
-        <item>Pear</item>
-        <item>Plum</item>
-        <item>Walnut</item>
-    </string-array>
-
-    <string-array name="app_updater_frequency_names">
-        <item>Every Launch</item>
-        <item>Every 2 Launches</item>
-        <item>Every 3 Launches</item>
-        <item>Every 4 Launches</item>
-        <item>Every 5 Launches</item>
-        <item>Every 6 Launches</item>
-        <item>Every 7 Launches</item>
-        <item>Every 8 Launches</item>
-        <item>Every 9 Launches</item>
-        <item>Every 10 Launches</item>
-    </string-array>
-
-    <string-array name="app_updater_frequency_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
+    <integer-array name="licenses_color_list">
+        <item>@color/eventsInfo</item>
+        <item>@color/eventsDebug</item>
+        <item>@color/eventsError</item>
+        <item>@color/eventsModeEnded</item>
+        <item>@color/eventsModeStarted</item>
+        <item>@color/eventsScriptEnded</item>
+        <item>@color/eventsScriptStart</item>
+        <item>@color/eventsWarning</item>
+    </integer-array>
 
 </resources>

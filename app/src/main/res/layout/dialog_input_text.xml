@@ -3,27 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/default_spacing"
     android:paddingStart="@dimen/large_spacing"
+    android:paddingTop="@dimen/default_spacing"
     android:paddingEnd="@dimen/large_spacing">
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_text_input_layout"
         style="@style/TextInputLayoutFilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:boxStrokeColor="@color/selector_stroke_color" >
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_text_input"
+            style="@style/TextInputEditTextFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             android:fontFamily="@font/aller_regular"
+            android:imeOptions="actionDone"
             android:singleLine="true"
             android:textColor="@color/colorWhite"
-            android:imeOptions="actionDone"
-            android:textColorHighlight="@color/colorAccent"
-            android:background="@android:color/transparent" />
+            android:textColorHighlight="@color/colorAccent" />
 
     </com.google.android.material.textfield.TextInputLayout>
 </FrameLayout>

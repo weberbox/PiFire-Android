@@ -5,54 +5,58 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogInputTextBinding;
-import com.weberbox.pifire.interfaces.PelletsCallbackInterface;
+import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 
 public class PelletsAddDialog {
 
-    private final PelletsCallbackInterface mCallBack;
-    private final LayoutInflater mInflater;
-    private final AlertDialog.Builder mDialog;
-    private final Context mContext;
-    private final String mTitle;
-    private final String mType;
-    private String mString;
+    private final PelletsProfileCallback callBack;
+    private final LayoutInflater inflater;
+    private final AlertDialog.Builder dialog;
+    private final Context context;
+    private final String title;
+    private final String type;
+    private String string;
 
     public PelletsAddDialog(Context context, Fragment fragment, String type, String title) {
-        mDialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-        mCallBack = (PelletsCallbackInterface) fragment;
-        mType = type;
-        mTitle = title;
+        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        this.context = context;
+        inflater = LayoutInflater.from(context);
+        callBack = (PelletsProfileCallback) fragment;
+        this.type = type;
+        this.title = title;
     }
 
     public AlertDialog showDialog() {
-        DialogInputTextBinding binding = DialogInputTextBinding.inflate(mInflater);
+        DialogInputTextBinding binding = DialogInputTextBinding.inflate(inflater);
 
-        mDialog.setTitle(mTitle);
+        dialog.setTitle(title);
 
-        final EditText input = binding.dialogTextInput;
+        final TextInputLayout inputLayout = binding.dialogTextInputLayout;
+        final TextInputEditText input = binding.dialogTextInput;
 
-        mDialog.setView(binding.getRoot());
+        dialog.setView(binding.getRoot());
 
-        mDialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            mString = input.getText().toString();
-            if (mString.length() != 0) {
-                mCallBack.onItemAdded(mType, mString);
-                dialog.dismiss();
+        dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            if (input.getText() != null) {
+                string = input.getText().toString();
+                if (string.length() != 0) {
+                    callBack.onItemAdded(type, string);
+                    dialog.dismiss();
+                }
             }
         });
 
-        mDialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
 
-        final AlertDialog alertDialog = mDialog.create();
+        final AlertDialog alertDialog = dialog.create();
 
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
@@ -69,10 +73,10 @@ public class PelletsAddDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                    input.setError(mContext.getString(R.string.settings_blank_error));
+                    inputLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                    input.setError(null);
+                    inputLayout.setError(null);
                 }
             }
 

@@ -7,17 +7,17 @@ import android.view.KeyEvent;
 
 public class ForceUpdateKeyListener implements DialogInterface.OnKeyListener {
 
-    private final Context mContext;
+    private final Context context;
 
     public ForceUpdateKeyListener(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-            if(mContext instanceof Activity) {
-                ((Activity) mContext).finish();
+            if(context instanceof Activity) {
+                ((Activity) context).finish();
             }
         }
         return false;

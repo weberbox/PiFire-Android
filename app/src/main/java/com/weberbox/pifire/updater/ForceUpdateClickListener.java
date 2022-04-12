@@ -8,20 +8,20 @@ import com.weberbox.pifire.updater.objects.Update;
 
 public class ForceUpdateClickListener extends UpdateClickListener {
 
-    private final Context mContext;
-    private final Update mUpdate;
+    private final Context context;
+    private final Update update;
 
     public ForceUpdateClickListener(Context context, Update update) {
         super(context, update);
-        mContext = context;
-        mUpdate = update;
+        this.context = context;
+        this.update = update;
     }
 
     @Override
     public void onClick(final DialogInterface dialog, final int which) {
-        UtilsLibrary.getAppUpdate(mContext, mUpdate);
-        if(mContext instanceof Activity) {
-            ((Activity) mContext).finish();
+        UtilsLibrary.getAppUpdate(context, update);
+        if(context instanceof Activity) {
+            ((Activity) context).finish();
         }
     }
 }

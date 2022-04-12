@@ -17,17 +17,17 @@ public abstract class CountDownTimer implements TimerTickListener {
     private static final int INTERVAL = 1000;
     private static final int MSG = 1;
 
-    private boolean mIsRunning = false;
-    private boolean mIsPaused = false;
-    private boolean mIsActive = false;
+    private boolean isRunning = false;
+    private boolean isPaused = false;
+    private boolean isActive = false;
 
-    private long mStartTime = 0;
-    private long mEndTime = 0;
-    private long mPauseTime = 0;
-    private long mTime;
-    private long mLocalTime;
-    private long mInterval;
-    private Handler mHandler;
+    private long startTime = 0;
+    private long endTime = 0;
+    private long pauseTime = 0;
+    private long time;
+    private long localTime;
+    private long interval;
+    private Handler handler;
 
     public CountDownTimer() {
         init(0, INTERVAL);
@@ -50,18 +50,18 @@ public abstract class CountDownTimer implements TimerTickListener {
     private void initCountDownTimer() {
         Timber.d("initCountDownTimer");
 
-        mHandler = new Handler(Looper.getMainLooper()) {
+        handler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
 
                 if (msg.what == MSG) {
-                    if (mLocalTime <= mTime) {
-                        onDuration(getDuration(mEndTime - mStartTime));
-                        onTimerTick(getCurrentSeconds(mTime - mLocalTime));
-                        onRemainingTime(formatTimeRemaining(mTime - mLocalTime));
-                        mLocalTime += mInterval;
-                        sendMessageDelayed(mHandler.obtainMessage(MSG), mInterval);
+                    if (localTime <= time) {
+                        onDuration(getDuration(endTime - startTime));
+                        onTimerTick(getCurrentSeconds(time - localTime));
+                        onRemainingTime(formatTimeRemaining(time - localTime));
+                        localTime += interval;
+                        sendMessageDelayed(handler.obtainMessage(MSG), interval);
                     } else stopTimer();
                 }
             }
@@ -69,63 +69,63 @@ public abstract class CountDownTimer implements TimerTickListener {
     }
 
     private void startTimer() {
-        if (mIsRunning) {
+        if (isRunning) {
             return;
         }
 
         Timber.d("Starting Timer");
-        mIsRunning = true;
-        mIsActive = true;
-        mIsPaused = false;
-        mLocalTime = 0;
-        mHandler.sendMessage(mHandler.obtainMessage(MSG));
+        isRunning = true;
+        isActive = true;
+        isPaused = false;
+        localTime = 0;
+        handler.sendMessage(handler.obtainMessage(MSG));
     }
 
     public void stopTimer() {
-        if (!mIsActive) {
+        if (!isActive) {
             return;
         }
 
         Timber.d("Stopping Timer");
-        mIsRunning = false;
-        mIsActive = false;
-        mIsPaused = false;
-        mHandler.removeMessages(MSG);
+        isRunning = false;
+        isActive = false;
+        isPaused = false;
+        handler.removeMessages(MSG);
         onFinished();
     }
 
     public boolean isRunning() {
-        return mIsRunning;
+        return isRunning;
     }
 
     public boolean isActive() {
-        return mIsActive;
+        return isActive;
     }
 
     public synchronized boolean isPaused() {
-        return mIsPaused;
+        return isPaused;
     }
 
     public void pauseTimer() {
-        if (!mIsRunning | mIsPaused) {
+        if (!isRunning | isPaused) {
             return;
         }
 
         Timber.d("Pausing Timer");
-        mIsPaused = true;
-        mIsRunning = false;
-        mHandler.removeMessages(MSG);
+        isPaused = true;
+        isRunning = false;
+        handler.removeMessages(MSG);
     }
 
     public void resumeTimer() {
-        if (mIsRunning | !mIsPaused) {
+        if (isRunning | !isPaused) {
             return;
         }
 
         Timber.d("Resuming Timer");
-        mHandler.sendMessage(mHandler.obtainMessage(MSG));
-        mIsRunning = true;
-        mIsPaused = false;
+        handler.sendMessage(handler.obtainMessage(MSG));
+        isRunning = true;
+        isPaused = false;
     }
 
     public void startTimer(long startSeconds, long endSeconds, long pauseSeconds) {
@@ -133,16 +133,16 @@ public abstract class CountDownTimer implements TimerTickListener {
         long endTime = TimeUnit.SECONDS.toMillis(endSeconds);
         long pauseTime = TimeUnit.SECONDS.toMillis(pauseSeconds);
 
-        if (mIsRunning) {
-            if (mEndTime != endTime) {
-                mIsRunning = false;
-                mHandler.removeMessages(MSG);
+        if (isRunning) {
+            if (this.endTime != endTime) {
+                isRunning = false;
+                handler.removeMessages(MSG);
                 startTimer(startSeconds, endSeconds, pauseSeconds);
             }
             return;
         }
 
-        if (mIsPaused) {
+        if (isPaused) {
             return;
         }
 
@@ -153,15 +153,15 @@ public abstract class CountDownTimer implements TimerTickListener {
         if (endTime > System.currentTimeMillis() || pauseTime > 0) {
             long duration = endTime - System.currentTimeMillis();
 
-            if (this.mTime <= 0) {
+            if (this.time <= 0) {
                 if (duration < 0) {
                     duration *= -1;
                 }
             }
-            this.mTime = duration;
-            this.mStartTime = startTime;
-            this.mEndTime = endTime;
-            this.mPauseTime = pauseTime;
+            this.time = duration;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.pauseTime = pauseTime;
 
             startTimer();
 
@@ -169,16 +169,16 @@ public abstract class CountDownTimer implements TimerTickListener {
     }
 
     public void setTime(long timeInMillis) {
-        if (mIsRunning) {
+        if (isRunning) {
             return;
         }
 
-        if (this.mTime <= 0) {
+        if (this.time <= 0) {
             if (timeInMillis < 0) {
                 timeInMillis *= -1;
             }
         }
-        this.mTime = timeInMillis;
+        this.time = timeInMillis;
     }
 
     private int getCurrentSeconds(long millisUntilFinished) {
@@ -198,20 +198,20 @@ public abstract class CountDownTimer implements TimerTickListener {
         }
     }
 
-    public int getDuration(long timeInMillis) {
+    private int getDuration(long timeInMillis) {
         return (int) TimeUnit.MILLISECONDS.toSeconds(timeInMillis);
     }
 
-    public void setInterval(long intervalInMillis) {
-        if (mIsRunning) {
+    private void setInterval(long intervalInMillis) {
+        if (isRunning) {
             return;
         }
 
-        if (this.mInterval <= 0) {
+        if (this.interval <= 0) {
             if (intervalInMillis < 0) {
                 intervalInMillis *= -1;
             }
         }
-        this.mInterval = intervalInMillis;
+        this.interval = intervalInMillis;
     }
 }

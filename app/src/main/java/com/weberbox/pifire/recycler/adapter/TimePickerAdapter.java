@@ -1,45 +1,54 @@
 package com.weberbox.pifire.recycler.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.R;
-import com.weberbox.pifire.recycler.viewholder.TimerPickerViewHolder;
-import com.weberbox.pifire.recycler.viewmodel.TimePickerViewModel;
+import com.weberbox.pifire.databinding.ItemPickerTimerBinding;
+import com.weberbox.pifire.model.local.TimePickerModel;
 
 import java.util.List;
 
-public class TimePickerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TimePickerAdapter extends RecyclerView.Adapter<TimePickerAdapter.ViewHolder> {
 
-    private final List<TimePickerViewModel> mModel;
+    private final List<TimePickerModel> list;
 
-    public TimePickerAdapter(final List<TimePickerViewModel> viewModel) {
-        mModel = viewModel;
+    public TimePickerAdapter(final List<TimePickerModel> list) {
+        this.list = list;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        final View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        return new TimerPickerViewHolder(view);
+    public TimePickerAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
+                                                      final int viewType) {
+        return new ViewHolder(ItemPickerTimerBinding.inflate(LayoutInflater.from(
+                parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
-        ((TimerPickerViewHolder) holder).bindData(mModel.get(position));
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.bindData(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mModel.size();
+        return list == null ? 0 : list.size();
     }
 
-    @Override
-    public int getItemViewType(final int position) {
-        return R.layout.item_picker_timer;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView simpleTextView;
+
+        public ViewHolder(ItemPickerTimerBinding binding) {
+            super(binding.getRoot());
+            simpleTextView = binding.timerItemTextView;
+        }
+
+        public void bindData(final TimePickerModel viewModel) {
+            simpleTextView.setText(viewModel.getTimeText());
+        }
     }
 }

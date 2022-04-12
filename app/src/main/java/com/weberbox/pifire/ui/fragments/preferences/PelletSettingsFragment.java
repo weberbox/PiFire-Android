@@ -2,12 +2,8 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,14 +16,19 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.control.GrillControl;
+import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.model.remote.ServerResponseModel;
+import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Socket;
 
 public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private Socket mSocket;
+    private SharedPreferences sharedPreferences;
+    private Socket socket;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -39,14 +40,14 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         super.onCreate(savedInstanceState);
         if (getActivity() != null) {
             PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            mSocket = app.getSocket();
+            socket = app.getSocket();
         }
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         PreferenceCategory pelletWarnings = findPreference(getString(R.string.prefs_pellet_warning_cat));
         EditTextPreference pelletWarningLevel = findPreference(getString(R.string.prefs_pellet_warning_level));
@@ -61,140 +62,90 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         if (pelletWarningLevel != null) {
             pelletWarningLevel.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, 100.0, editText));
             });
         }
 
         if (pelletsFull != null) {
             pelletsFull.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), null, 100.0, editText));
             });
         }
 
         if (pelletsEmpty != null) {
             pelletsEmpty.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 0) {
-                            editText.setError(getString(R.string.settings_blank_error));
-                        } else if (s.toString().equals("0")) {
-                            editText.setError(getString(R.string.settings_zero_error));
-                        } else if (Integer.parseInt(s.toString()) > 100) {
-                            editText.setError(getString(R.string.settings_max_hundred_error));
-                        } else {
-                            editText.setError(null);
-                        }
-
-                    }
-                });
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, 100.0, editText));
             });
         }
-
-        return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSocket = null;
+        socket = null;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
+        if (getActivity() != null) {
+            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_pellets);
+        }
+        if (sharedPreferences != null) {
+            sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+        if (sharedPreferences != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
     }
 
+    private void processPostResponse(String response) {
+        ServerResponseModel result = ServerResponseModel.parseJSON(response);
+        if (result.getResult().equals("error")) {
+            requireActivity().runOnUiThread(() ->
+                    AlertUtils.createErrorAlert(requireActivity(),
+                            result.getMessage(), false));
+        }
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
 
-        if (preference != null && mSocket != null) {
+        if (preference != null && socket != null) {
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_pellet_warning_enabled)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletWarningEnabled(mSocket,
-                            ((SwitchPreferenceCompat) preference).isChecked());
+                    ServerControl.setPelletWarningEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
                 }
             }
             if (preference instanceof EditTextPreference) {
                 if (preference.getContext().getString(R.string.prefs_pellet_warning_level)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletWarningLevel(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPelletWarningLevel(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_pellet_empty)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsEmpty(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPelletsEmpty(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_pellet_full)
                         .equals(preference.getKey())) {
-                    GrillControl.setPelletsFull(mSocket,
-                            ((EditTextPreference) preference).getText());
+                    ServerControl.setPelletsFull(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }
         }

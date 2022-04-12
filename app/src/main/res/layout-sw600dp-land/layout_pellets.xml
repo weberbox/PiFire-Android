@@ -1,99 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/default_spacing">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/default_spacing">
+    <include
+        android:id="@+id/load_out_card_view"
+        layout="@layout/layout_pellets_current"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_spacing"
+        android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        app:layout_constraintEnd_toStartOf="@+id/logs_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/load_out_card_view"
-            layout="@layout/layout_pellets_current"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_spacing"
-            android:layout_marginTop="@dimen/default_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            app:layout_constraintEnd_toStartOf="@+id/logs_card_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
+        android:id="@+id/woods_card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_spacing"
+        android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/brands_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/load_out_card_view"
+        app:pellets_button_enabled="true"
+        app:pellets_button_text="@string/pellets_add"
+        app:pellets_header_icon="@drawable/ic_pellet_edit"
+        app:pellets_header_title="@string/pellets_woods" />
 
-        <include
-            android:id="@+id/pellets_hopper_level"
-            layout="@layout/layout_pellets_hopper"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_spacing"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
-            app:layout_constraintTop_toTopOf="parent" />
+    <com.weberbox.pifire.ui.views.PelletsEditorRecycler
+        android:id="@+id/editor_card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_spacing"
+        android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:editor_button_enabled="true"
+        app:editor_button_text="@string/pellets_add"
+        app:editor_header_icon="@drawable/ic_pellet_edit"
+        app:editor_header_title="@string/pellets_editor"
+        app:layout_constraintEnd_toStartOf="@+id/brands_card_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/woods_card_view" />
 
-        <include
-            android:id="@+id/logs_card_view"
-            layout="@layout/layout_pellets_logs"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
-            app:layout_constraintTop_toBottomOf="@+id/pellets_hopper_level" />
+    <include
+        android:id="@+id/pellets_hopper_level"
+        layout="@layout/layout_pellets_hopper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_spacing"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-            android:id="@+id/woods_card_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_spacing"
-            android:layout_marginTop="@dimen/default_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:animateLayoutChanges="true"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="10dp"
-            app:cardPreventCornerOverlap="false"
-            app:contentPadding="0dp"
-            app:layout_constraintEnd_toStartOf="@+id/brands_card_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/load_out_card_view"
-            app:pellets_button_enabled="true"
-            app:pellets_button_text="@string/pellets_add"
-            app:pellets_header_icon="@drawable/ic_pellet_edit"
-            app:pellets_header_title="@string/pellets_woods" />
+    <com.weberbox.pifire.ui.views.PelletsLogsRecycler
+        android:id="@+id/logs_card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintTop_toBottomOf="@+id/pellets_hopper_level"
+        app:logs_header_icon="@drawable/ic_menu_history"
+        app:logs_header_title="@string/pellets_log" />
 
-        <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-            android:id="@+id/brands_card_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            android:animateLayoutChanges="true"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="2dp"
-            app:cardElevation="10dp"
-            app:cardPreventCornerOverlap="false"
-            app:contentPadding="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/woods_card_view"
-            app:layout_constraintTop_toBottomOf="@+id/logs_card_view"
-            app:pellets_button_enabled="true"
-            app:pellets_button_text="@string/pellets_add"
-            app:pellets_header_icon="@drawable/ic_pellet_edit"
-            app:pellets_header_title="@string/pellets_brands" />
+    <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
+        android:id="@+id/brands_card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_spacing"
+        android:layout_marginEnd="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/woods_card_view"
+        app:layout_constraintTop_toBottomOf="@+id/logs_card_view"
+        app:pellets_button_enabled="true"
+        app:pellets_button_text="@string/pellets_add"
+        app:pellets_header_icon="@drawable/ic_pellet_edit"
+        app:pellets_header_title="@string/pellets_brands" />
 
-        <include
-            android:id="@+id/editor_card_view"
-            layout="@layout/layout_pellets_editor"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_spacing"
-            android:layout_marginTop="@dimen/default_spacing"
-            android:layout_marginEnd="@dimen/default_spacing"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/woods_card_view"
-            app:layout_constraintTop_toBottomOf="@+id/brands_card_view" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

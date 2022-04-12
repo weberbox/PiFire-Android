@@ -6,26 +6,22 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class PelletLevelView extends View {
 
-    private int mPrimaryColor;
-    private int mSecondaryColor;
-    private int mLevel;
-    private int mDotRadius;
+    private int primaryColor;
+    private int secondaryColor;
+    private int level;
+    private int dotRadius;
 
-    Paint mPaint = new Paint();
-
-    public PelletLevelView(Context context) {
-        super (context);
-    }
+    Paint paint = new Paint();
 
     public PelletLevelView(Context context, AttributeSet attrs) {
         super (context, attrs);
@@ -39,18 +35,18 @@ public class PelletLevelView extends View {
     }
 
     public void setPrimaryColor(int color) {
-        mPrimaryColor = color;
+        primaryColor = color;
         reDrawView();
     }
 
     public void setSecondaryColor(int color) {
-        mSecondaryColor = color;
+        secondaryColor = color;
         reDrawView();
     }
 
     public void setLevel(int level) {
-        if (level >= 0 && level != mLevel) {
-            mLevel = level;
+        if (level >= 0 && level != this.level) {
+            this.level = level;
             reDrawView();
         }
     }
@@ -64,25 +60,20 @@ public class PelletLevelView extends View {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PelletLevelView);
 
-            mPrimaryColor = a.getColor(R.styleable.PelletLevelView_primary_color, Color.WHITE);
-            mSecondaryColor = a.getColor(R.styleable.PelletLevelView_secondary_color,
+            primaryColor = a.getColor(R.styleable.PelletLevelView_primary_color, Color.WHITE);
+            secondaryColor = a.getColor(R.styleable.PelletLevelView_secondary_color,
                     Color.TRANSPARENT);
-            mDotRadius = dpToPx(a.getInt(R.styleable.PelletLevelView_dot_radius, 4));
+            dotRadius = ViewUtils.dpToPx(a.getInt(R.styleable.PelletLevelView_dot_radius, 4));
             setLevel(a.getInt (R.styleable.PelletLevelView_initial_value, 0));
 
             a.recycle();
         }
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         int numDots = 10;
-        int numValue = Math.max(mLevel / 10, 1);
+        int numValue = Math.max(level / 10, 1);
 
         int width = getWidth();
         int height = getHeight();
@@ -91,22 +82,22 @@ public class PelletLevelView extends View {
 
         int rColor;
 
-        rColor = mPrimaryColor;
+        rColor = primaryColor;
 
-        mPaint.setColor(rColor);
+        paint.setColor(rColor);
 
         for (int i = 0; i < numDots; i++){
             for (int j = 0; j < numDots; j++) {
                 if (j < numValue) {
-                    rColor = mPrimaryColor;
+                    rColor = primaryColor;
                 } else {
-                    rColor = mSecondaryColor;
+                    rColor = secondaryColor;
                 }
 
-                mPaint.setColor(rColor);
+                paint.setColor(rColor);
 
                 canvas.drawCircle((i + 0.5f) / numDots * vwf,
-                        (j + 0.5f) / numDots * vhf, mDotRadius, mPaint);
+                        (j + 0.5f) / numDots * vhf, dotRadius, paint);
             }
         }
     }

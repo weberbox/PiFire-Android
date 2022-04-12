@@ -10,10 +10,10 @@ import com.weberbox.pifire.R;
 
 public class MaxHeightLinearLayout extends LinearLayout {
 
-    private int mMaxHeight;
+    private int maxHeight;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final int mDefaultHeight = 200;
+    private final int defaultHeight = 200;
 
     public MaxHeightLinearLayout(Context context) {
         super(context);
@@ -38,8 +38,8 @@ public class MaxHeightLinearLayout extends LinearLayout {
             @SuppressLint("CustomViewStyleable")
             TypedArray styledAttrs = context.obtainStyledAttributes(attrs,
                     R.styleable.MaxHeightLinearLayout);
-            mMaxHeight = styledAttrs.getDimensionPixelSize(
-                    R.styleable.MaxHeightLinearLayout_max_height, mDefaultHeight);
+            maxHeight = styledAttrs.getDimensionPixelSize(
+                    R.styleable.MaxHeightLinearLayout_max_height, defaultHeight);
 
             styledAttrs.recycle();
         }
@@ -47,7 +47,7 @@ public class MaxHeightLinearLayout extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxHeight, MeasureSpec.AT_MOST);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(maxHeight, MeasureSpec.AT_MOST);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.weberbox.pifire.constants.Constants" />
+
+        <variable
+            name="callback"
+            type="com.weberbox.pifire.interfaces.SettingsBindingCallback" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/bg_nav_right"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include layout="@layout/layout_nav_header_right" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/medium_spacing"
+                    android:orientation="vertical">
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_app"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_APP_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_settings_app"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_app" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_probe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PROBE_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_grill_probe"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_probe" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NAME_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_grill"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_grill_name" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_work"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_WORK_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_settings_work"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_work" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_pellet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PELLET_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_grill_pellets"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_pellets" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_timers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_TIMERS_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_grill_shutdown"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_timers" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_history"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_HISTORY_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_menu_history"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_history" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_safety"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_SAFETY_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_settings_safety"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_safety" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_notifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_NOTIF_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_settings_notification"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_notifications" />
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

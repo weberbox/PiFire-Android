@@ -2,28 +2,28 @@ package com.weberbox.pifire.updater.objects;
 
 @SuppressWarnings("unused")
 public class GitHub {
-    private String mGitHubUser;
-    private String mGitHubRepo;
+    private String gitHubUser;
+    private String gitHubRepo;
 
     public GitHub(String gitHubUser, String gitHubRepo) {
-        mGitHubUser = gitHubUser;
-        mGitHubRepo = gitHubRepo;
+        this.gitHubUser = gitHubUser;
+        this.gitHubRepo = gitHubRepo;
     }
 
     public String getGitHubUser() {
-        return mGitHubUser;
+        return gitHubUser;
     }
 
     public void setGitHubUser(String user) {
-        mGitHubUser = user;
+        gitHubUser = user;
     }
 
     public String getGitHubRepo() {
-        return mGitHubRepo;
+        return gitHubRepo;
     }
 
     public void setGitHubRepo(String repo) {
-        mGitHubRepo = repo;
+        gitHubRepo = repo;
     }
 
     public static Boolean isGitHubValid(GitHub gitHub) {

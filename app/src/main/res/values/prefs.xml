@@ -2,11 +2,13 @@
 <resources>
 
     <!-- App Settings -->
+    <string name="prefs_installed_version">prefs_installed_version</string>
     <string name="prefs_server_settings">prefs_server_settings</string>
 
     <string name="prefs_keep_screen_on">prefs_keep_screen_on</string>
 
     <string name="prefs_server_address">prefs_server_address</string>
+    <string name="prefs_server_credentials">prefs_server_credentials</string>
     <string name="prefs_server_basic_auth">prefs_server_basic_auth</string>
     <string name="prefs_server_basic_auth_user">prefs_server_basic_auth_user</string>
     <string name="prefs_server_basic_auth_password">prefs_server_basic_auth_password</string>
@@ -16,10 +18,11 @@
 
     <string name="prefs_event_amount">pref_event_amount</string>
 
+    <string name="prefs_onesignal_consent_dismiss">prefs_onesignal_consent_dismiss</string>
+
     <string name="prefs_app_updater_cat">prefs_app_updater_cat</string>
     <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
     <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
-    <string name="prefs_app_updater_frequency">prefs_app_updater_frequency</string>
     <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
     <string name="prefs_app_updater_force_checks">prefs_app_updater_force_checks</string>
     <string name="prefs_app_updater_download">prefs_app_updater_download</string>
@@ -28,19 +31,15 @@
     <string name="prefs_crash_cat">prefs_crash_cat</string>
     <string name="prefs_crash_enable">prefs_crash_enable</string>
     <string name="prefs_crash_user_email">prefs_crash_user_email</string>
+    <string name="prefs_dev_crash_enable">prefs_dev_crash_enable</string>
+    <string name="prefs_crash_event">prefs_crash_event</string>
+    <string name="prefs_crash_dialog">prefs_crash_dialog</string>
 
-    <string name="prefs_first_app_start">prefs_first_app_start</string>
-
-    <string name="prefs_debug_cat">prefs_debug_cat</string>
-    <string name="prefs_firebase_token">prefs_firebase_token</string>
-    <string name="prefs_debug_logging">prefs_debug_logging</string>
+    <string name="prefs_show_changelog">prefs_show_changelog</string>
 
     <string name="prefs_four_probe">prefs_four_probe</string>
 
     <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
-
-    <string name="prefs_probe_shutdown">prefs_probe_shutdown</string>
-    <string name="prefs_timer_shutdown">prefs_timer_shutdown</string>
 
     <!-- PiFire Settings -->
     <string name="prefs_server_version">prefs_server_version</string>
@@ -73,7 +72,16 @@
     <string name="prefs_work_pid_u_max">prefs_work_pid_u_max</string>
     <string name="prefs_work_pid_center">prefs_work_pid_center</string>
 
+    <string name="prefs_work_keep_warm_temp">prefs_work_keep_warm_temp</string>
+    <string name="prefs_work_keep_warm_s_plus">prefs_work_keep_warm_s_plus</string>
+
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
+    <string name="prefs_startup_time">prefs_startup_time</string>
+    <string name="prefs_auto_power_off">prefs_auto_power_off</string>
+    <string name="prefs_smart_start">prefs_smart_start</string>
+    <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
+    <string name="prefs_smart_start_temp_range">prefs_smart_start_temp_range</string>
+    <string name="prefs_smart_start_profiles">prefs_smart_start_profiles</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
 
@@ -95,14 +103,22 @@
     <string name="prefs_notif_pushover_url">prefs_notif_pushover_url</string>
     <string name="prefs_notif_pushbullet_enabled">prefs_notif_pushbullet_enabled</string>
     <string name="prefs_notif_pushbullet_api">prefs_notif_pushbullet_api</string>
-    <string name="prefs_notif_pushbullet_channel">prefs_notif_pushbullet_channel</string>
     <string name="prefs_notif_pushbullet_url">prefs_notif_pushbullet_url</string>
-    <string name="prefs_notif_firebase">prefs_notif_firebase</string>
-    <string name="prefs_notif_firebase_enabled">prefs_notif_firebase_enabled</string>
-    <string name="prefs_notif_firebase_serveruuid">prefs_notif_firebase_serveruuid</string>
+    <string name="prefs_notif_onesignal_cat">prefs_notif_onesignal_cat</string>
+    <string name="prefs_notif_onesignal_accepted">prefs_notif_onesignal_accepted</string>
+    <string name="prefs_notif_onesignal_device_list">prefs_notif_onesignal_device_list</string>
+    <string name="prefs_notif_onesignal_serveruuid">prefs_notif_onesignal_serveruuid</string>
+    <string name="prefs_notif_onesignal_consent">prefs_notif_onesignal_consent</string>
+    <string name="prefs_notif_onesignal_enabled">prefs_notif_onesignal_enabled</string>
+    <string name="prefs_notif_influxdb_enabled">prefs_notif_influxdb_enabled</string>
+    <string name="prefs_notif_influxdb_url">prefs_notif_influxdb_url</string>
+    <string name="prefs_notif_influxdb_token">prefs_notif_influxdb_token</string>
+    <string name="prefs_notif_influxdb_org">prefs_notif_influxdb_org</string>
+    <string name="prefs_notif_influxdb_bucket">prefs_notif_influxdb_bucket</string>
+
+    <string name="prefs_server_updates_frag">prefs_server_updates_frag</string>
 
     <string name="prefs_admin_debug">prefs_admin_debug</string>
-    <string name="prefs_admin_manual">prefs_admin_manual</string>
     <string name="prefs_admin_backup_restore">prefs_admin_backup_restore</string>
     <string name="prefs_admin_backup_settings">prefs_admin_backup_settings</string>
     <string name="prefs_admin_restore_settings">prefs_admin_restore_settings</string>
@@ -115,14 +131,13 @@
     <string name="prefs_admin_factory_reset">prefs_admin_factory_reset</string>
     <string name="prefs_admin_reboot">prefs_admin_reboot</string>
     <string name="prefs_admin_shutdown">prefs_admin_shutdown</string>
+    <string name="prefs_admin_restart">prefs_admin_restart</string>
 
     <string name="prefs_pellet_warning_cat">prefs_pellet_warning_cat</string>
     <string name="prefs_pellet_warning_enabled">prefs_pellet_warning_enabled</string>
     <string name="prefs_pellet_warning_level">prefs_pellet_warning_level</string>
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
-
-    <string name="prefs_settings_update_time">prefs_settings_update_time</string>
 
     <string name="prefs_manual_mode_cat">prefs_manual_mode_cat</string>
     <string name="prefs_manual_mode_frag">prefs_manual_mode_frag</string>
@@ -131,5 +146,14 @@
     <string name="prefs_manual_mode_auger">prefs_manual_mode_auger</string>
     <string name="prefs_manual_mode_igniter">prefs_manual_mode_igniter</string>
     <string name="prefs_manual_mode_power">prefs_manual_mode_power</string>
+
+    <string name="prefs_recipe_db_backup">prefs_recipe_db_backup</string>
+    <string name="prefs_recipe_db_restore">prefs_recipe_db_restore</string>
+    <string name="prefs_recipe_db_clear">prefs_recipe_db_clear</string>
+
+    <string name="prefs_modules_adc">prefs_modules_adc</string>
+    <string name="prefs_modules_display">prefs_modules_display</string>
+    <string name="prefs_modules_distance">prefs_modules_distance</string>
+    <string name="prefs_modules_platform">prefs_modules_platform</string>
 
 </resources>

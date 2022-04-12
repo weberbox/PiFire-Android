@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/pellets_hopper_level"
@@ -16,7 +17,6 @@
         layout="@layout/layout_pellets_current"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pellets_hopper_level"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
         android:layout_marginBottom="@dimen/default_spacing" />
@@ -25,13 +25,12 @@
         android:id="@+id/brands_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/load_out_card_view"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
         android:layout_marginBottom="@dimen/default_spacing"
         android:animateLayoutChanges="true"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
@@ -44,13 +43,12 @@
         android:id="@+id/woods_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/brands_card_view"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
         android:layout_marginBottom="@dimen/default_spacing"
         android:animateLayoutChanges="true"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="2dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
@@ -59,23 +57,38 @@
         app:pellets_header_icon="@drawable/ic_pellet_edit"
         app:pellets_header_title="@string/pellets_woods" />
 
-    <include
+    <com.weberbox.pifire.ui.views.PelletsEditorRecycler
         android:id="@+id/editor_card_view"
-        layout="@layout/layout_pellets_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/woods_card_view"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
-        android:layout_marginBottom="@dimen/default_spacing" />
+        android:layout_marginBottom="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:editor_button_enabled="true"
+        app:editor_button_text="@string/pellets_add"
+        app:editor_header_icon="@drawable/ic_pellet_edit"
+        app:editor_header_title="@string/pellets_editor" />
 
-    <include
+    <com.weberbox.pifire.ui.views.PelletsLogsRecycler
         android:id="@+id/logs_card_view"
-        layout="@layout/layout_pellets_logs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editor_card_view"
         android:layout_marginStart="@dimen/default_spacing"
         android:layout_marginEnd="@dimen/default_spacing"
-        android:layout_marginBottom="@dimen/default_spacing" />
-</RelativeLayout>
+        android:layout_marginBottom="@dimen/default_spacing"
+        android:animateLayoutChanges="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="0dp"
+        app:logs_header_icon="@drawable/ic_menu_history"
+        app:logs_header_title="@string/pellets_log" />
+
+</LinearLayout>
