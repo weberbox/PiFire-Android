@@ -31,6 +31,7 @@
     <bool name="def_pellet_warning_enabled">true</bool>
     <bool name="def_keep_warm_s_plus">false</bool>
     <bool name="def_auto_power_off">false</bool>
+    <bool name="def_smart_start">true</bool>
 
     <string name="def_grill_temp_unit">F</string>
 

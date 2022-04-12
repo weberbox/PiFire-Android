@@ -11,9 +11,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.databinding.DialogPmodeTableBinding;
-import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
+import com.weberbox.pifire.databinding.DialogPmodeBinding;
 import com.weberbox.pifire.model.local.PModeModel;
+import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class PModeTableDialog {
     }
 
     public BottomSheetDialog showDialog(){
-        DialogPmodeTableBinding binding = DialogPmodeTableBinding.inflate(inflater);
+        DialogPmodeBinding binding = DialogPmodeBinding.inflate(inflater);
 
         RecyclerView recyclerView = binding.pmodeRecycler;
 

@@ -268,6 +268,14 @@ public class ServerControl {
         settingsPostEmit(socket, json, callback);
     }
 
+    // Smart Start
+    public static void setSmartStartEnabled(Socket socket, Boolean enabled,
+                                        SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmartStart(new SmartStart().withEnabled(enabled)));
+        settingsPostEmit(socket, json, callback);
+    }
+
     // Grill Probe 0 Type
     public static void setGrillProbe0Type(Socket socket, String grillProbeType,
                                           SocketCallback callback) {

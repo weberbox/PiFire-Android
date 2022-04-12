@@ -18,6 +18,7 @@ import com.weberbox.pifire.constants.Versions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -52,28 +53,48 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
 
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
+        SwitchPreferenceCompat smartStart = findPreference(getString(R.string.prefs_smart_start_enabled));
+        Preference smartStartSettings = findPreference(getString(R.string.prefs_smart_start));
         SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
 
-        if (shutdownTime != null && getActivity() != null) {
+
+        if (shutdownTime != null) {
             shutdownTime.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(getActivity(), 1.0, null, editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
-        if (startupTime != null && getActivity() != null) {
+        if (startupTime != null) {
             if (VersionUtils.isSupported(Versions.V_127)) {
                 startupTime.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
-                            new EmptyTextListener(getActivity(), 1.0, null, editText));
+                            new EmptyTextListener(requireActivity(), 1.0, null, editText));
                 });
             } else {
                 startupTime.setEnabled(false);
                 startupTime.setSummaryProvider(null);
                 startupTime.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
             }
+        }
+
+        if (smartStart != null) {
+            if (!VersionUtils.isSupported(Versions.V_131)) {
+                smartStart.setChecked(false);
+                smartStart.setEnabled(false);
+                smartStart.setSummaryProvider(null);
+                smartStart.setSummary(getString(R.string.disabled_option_settings, Versions.V_131));
+            }
+        }
+
+        if (smartStartSettings != null) {
+            smartStartSettings.setOnPreferenceClickListener(preference -> {
+                SmartStartDialog dialog = new SmartStartDialog(requireActivity());
+                dialog.showDialog();
+                return false;
+            });
         }
 
         if (autoPowerOff != null) {
@@ -140,6 +161,12 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_auto_power_off)
                         .equals(preference.getKey())) {
                     ServerControl.sendAutoPowerOff(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_smart_start_enabled)
+                        .equals(preference.getKey())) {
+                    ServerControl.setSmartStartEnabled(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
                 }

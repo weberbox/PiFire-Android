@@ -7,11 +7,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.databinding.ItemPmodeTableBinding;
+import com.weberbox.pifire.databinding.ItemPmodeDialogBinding;
 import com.weberbox.pifire.model.local.PModeModel;
 
 import java.util.List;
-
 
 public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.ViewHolder> {
 
@@ -24,7 +23,7 @@ public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.View
     @NonNull
     @Override
     public PModeViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemPmodeTableBinding.inflate(LayoutInflater.from(
+        return new ViewHolder(ItemPmodeDialogBinding.inflate(LayoutInflater.from(
                 parent.getContext()), parent, false));
     }
 
@@ -44,7 +43,7 @@ public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.View
         private final TextView augerOn;
         private final TextView augerOff;
 
-        public ViewHolder(ItemPmodeTableBinding binding) {
+        public ViewHolder(ItemPmodeDialogBinding binding) {
             super(binding.getRoot());
             pMode = binding.pmodeItemTv;
             augerOn = binding.pmodeItemAon;

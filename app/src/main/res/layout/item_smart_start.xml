@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:orientation="horizontal"
+    android:weightSum="4">
+
+    <TextView
+        android:id="@+id/smart_start_range"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/bg_table_content_cell"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="6dp"
+        tools:text="@string/placeholder_number" />
+
+    <TextView
+        android:id="@+id/smart_start_startup"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/bg_table_content_cell"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="6dp"
+        tools:text="@string/placeholder_number" />
+
+    <TextView
+        android:id="@+id/smart_start_auger_on"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/bg_table_content_cell"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="6dp"
+        tools:text="@string/placeholder_number" />
+
+    <TextView
+        android:id="@+id/smart_start_p_mode"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@drawable/bg_table_content_cell"
+        android:gravity="center"
+        android:maxLines="1"
+        android:padding="6dp"
+        tools:text="@string/placeholder_number" />
+
+</LinearLayout>

@@ -58,6 +58,7 @@ public class SettingsUtils {
             Safety safety = settingsResponse.getSafety();
             PelletLevel pellets = settingsResponse.getPellets();
             Modules modules = settingsResponse.getModules();
+            SmartStart smartStart = settingsResponse.getSmartStart();
 
             if (probesSettings != null) {
                 Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
@@ -200,6 +201,14 @@ public class SettingsUtils {
                 putString(R.string.prefs_modules_display, modules.getDisplay());
                 putString(R.string.prefs_modules_distance, modules.getDist());
                 putString(R.string.prefs_modules_platform, modules.getGrillPlat());
+            }
+
+            if (smartStart != null) {
+                putBoolean(R.string.prefs_smart_start_enabled, smartStart.getEnabled());
+                putString(R.string.prefs_smart_start_temp_range,
+                        new Gson().toJson(smartStart.getTempRangeList()));
+                putString(R.string.prefs_smart_start_profiles,
+                        new Gson().toJson(smartStart.getProfiles()));
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {

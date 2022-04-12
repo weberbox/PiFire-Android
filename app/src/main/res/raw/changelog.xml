@@ -7,6 +7,7 @@
         <changelogtext logType="new">Added Overlapping Panels Navigation with left and right panels. You can open them by scrolling or using the toolbar icons</changelogtext>
         <changelogtext logType="new">Added Keep Warm option toggle and settings. Requires PiFire v1.2.7 or later</changelogtext>
         <changelogtext logType="new">Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later</changelogtext>
+        <changelogtext logType="new">Added Grill Smart Start Setting. Requires PiFire v1.3.1 or later</changelogtext>
         <changelogtext logType="new">Added PiFire modules information to info page</changelogtext>
         <changelogtext logType="new">Added Auto Power Off function to settings. Requires PiFire v1.2.9 or later</changelogtext>
         <changelogtext logType="new">Added Feedback function</changelogtext>

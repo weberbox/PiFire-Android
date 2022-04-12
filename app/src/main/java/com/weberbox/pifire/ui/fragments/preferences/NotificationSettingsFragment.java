@@ -83,14 +83,12 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
 
         if (oneSignalConsent != null) {
             oneSignalConsent.setOnPreferenceClickListener(preference -> {
-                if (getActivity() != null) {
-                    final FragmentManager fm = getActivity().getSupportFragmentManager();
-                    final FragmentTransaction ft = fm.beginTransaction();
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .replace(android.R.id.content, new OneSignalRegisterFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
+                final FragmentManager fm = requireActivity().getSupportFragmentManager();
+                final FragmentTransaction ft = fm.beginTransaction();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(android.R.id.content, new OneSignalConsentFragment())
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             });
         }

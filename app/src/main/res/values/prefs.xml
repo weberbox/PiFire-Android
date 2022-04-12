@@ -78,6 +78,10 @@
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
     <string name="prefs_startup_time">prefs_startup_time</string>
     <string name="prefs_auto_power_off">prefs_auto_power_off</string>
+    <string name="prefs_smart_start">prefs_smart_start</string>
+    <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
+    <string name="prefs_smart_start_temp_range">prefs_smart_start_temp_range</string>
+    <string name="prefs_smart_start_profiles">prefs_smart_start_profiles</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
 

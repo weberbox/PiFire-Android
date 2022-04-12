@@ -7,7 +7,8 @@ public class PModeModel {
     private String augerOn;
     private String augerOff;
 
-    public PModeModel(@NonNull final String pMode, @NonNull final  String augerOn, @NonNull final String augerOff) {
+    public PModeModel(@NonNull final String pMode, @NonNull final  String augerOn,
+                      @NonNull final String augerOff) {
         setPMode(pMode);
         setAugerOn(augerOn);
         setAugerOff(augerOff);

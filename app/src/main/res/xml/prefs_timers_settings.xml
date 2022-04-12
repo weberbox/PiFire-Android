@@ -38,6 +38,30 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:title="@string/settings_smart_start">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_smart_start"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_smart_start_enabled"
+            app:title="@string/enabled" />
+
+        <Preference
+            app:key="@string/prefs_smart_start"
+            app:title="@string/settings_smart_start_table"
+            app:dependency="@string/prefs_smart_start_enabled"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_smart_start_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/settings_cat_auto_power_off">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket

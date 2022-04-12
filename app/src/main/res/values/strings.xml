@@ -322,8 +322,8 @@
     <string name="settings_pmode_mode">P-Mode</string>
     <string name="settings_pmode_table">P-Mode Table</string>
     <string name="settings_pmode_summary">Click here a P-Mode chart</string>
-    <string name="settings_pmode_auger_on">Auger ON Time</string>
-    <string name="settings_pmode_auger_off">Auger OFF Time</string>
+    <string name="settings_pmode_auger_on">Auger ON</string>
+    <string name="settings_pmode_auger_off">Auger OFF</string>
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
@@ -355,6 +355,14 @@
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
     <string name="settings_auto_power_off">Auto Power Off</string>
     <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
+    <string name="settings_smart_start">Smart Start</string>
+    <string name="settings_smart_start_table">Smart Start Table</string>
+    <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
+    <string name="settings_smart_start_range">Range</string>
+    <string name="settings_smart_start_action">Action</string>
+    <string name="settings_smart_start_startup">Startup</string>
+    <string name="settings_smart_start_auger_on">AugerOn</string>
+    <string name="settings_smart_start_p_mode">P-Mode</string>
 
     <string name="settings_cat_grill_name">Grill Naming</string>
 

@@ -71,6 +71,9 @@ public class SettingsDataModel {
     @SerializedName("modules")
     @Expose
     private Modules modules;
+    @SerializedName("smartstart")
+    @Expose
+    private SmartStart smartStart;
 
     public Versions getVersions() {
         return versions;
@@ -264,6 +267,19 @@ public class SettingsDataModel {
 
     public SettingsDataModel withSafety(Safety safety) {
         this.safety = safety;
+        return this;
+    }
+
+    public SmartStart getSmartStart() {
+        return smartStart;
+    }
+
+    public void setSmartStart(SmartStart smartStart) {
+        this.smartStart = smartStart;
+    }
+
+    public SettingsDataModel withSmartStart(SmartStart smartStart) {
+        this.smartStart = smartStart;
         return this;
     }
 
@@ -1810,6 +1826,111 @@ public class SettingsDataModel {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+    }
+
+    public static class SmartStart {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("profiles")
+        @Expose
+        private List<Profile> profiles = null;
+        @SerializedName("temp_range_list")
+        @Expose
+        private List<Integer> tempRangeList = null;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public SmartStart withEnabled(Boolean enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        public List<Profile> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<Profile> profiles) {
+            this.profiles = profiles;
+        }
+
+        public SmartStart withProfiles(List<Profile> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public List<Integer> getTempRangeList() {
+            return tempRangeList;
+        }
+
+        public void setTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+        }
+
+        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+            return this;
+        }
+    }
+
+    public static class Profile {
+
+        @SerializedName("augerontime")
+        @Expose
+        private Integer augerOnTime;
+        @SerializedName("p_mode")
+        @Expose
+        private Integer pMode;
+        @SerializedName("startuptime")
+        @Expose
+        private Integer startUpTime;
+
+        public Integer getAugerOnTime() {
+            return augerOnTime;
+        }
+
+        public void setAugerOnTime(Integer augerOnTime) {
+            this.augerOnTime = augerOnTime;
+        }
+
+        public Profile withAugerOnTime(Integer augerOnTime) {
+            this.augerOnTime = augerOnTime;
+            return this;
+        }
+
+        public Integer getPMode() {
+            return pMode;
+        }
+
+        public void setPMode(Integer pMode) {
+            this.pMode = pMode;
+        }
+
+        public Profile withPMode(Integer pMode) {
+            this.pMode = pMode;
+            return this;
+        }
+
+        public Integer getStartUpTime() {
+            return startUpTime;
+        }
+
+        public void setStartUpTime(Integer startUpTime) {
+            this.startUpTime = startUpTime;
+        }
+
+        public Profile withStartUpTime(Integer startUpTime) {
+            this.startUpTime = startUpTime;
+            return this;
         }
 
     }

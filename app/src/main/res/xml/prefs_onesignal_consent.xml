@@ -27,7 +27,7 @@
             app:title="@string/settings_note"
             app:summary="@string/settings_onesignal_consent_3"/>
 
-        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+        <SwitchPreferenceCompat
             app:defaultValue="@bool/def_notif_onesignal_enabled"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_notif_onesignal_accepted"

@@ -18,7 +18,7 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
-public class OneSignalRegisterFragment extends PreferenceFragmentCompat implements
+public class OneSignalConsentFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;

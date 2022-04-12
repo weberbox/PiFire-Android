@@ -182,6 +182,13 @@ public class ServerUpdateFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        socket = null;
+    }
+
     private boolean socketConnected() {
         if (socket != null && socket.connected()) {
             return true;
