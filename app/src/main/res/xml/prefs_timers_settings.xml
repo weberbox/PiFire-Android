@@ -49,7 +49,6 @@
         <Preference
             app:key="@string/prefs_smart_start"
             app:title="@string/settings_smart_start_table"
-            app:dependency="@string/prefs_smart_start_enabled"
             app:iconSpaceReserved="false" />
 
         <Preference

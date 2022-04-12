@@ -54,7 +54,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
         SwitchPreferenceCompat smartStart = findPreference(getString(R.string.prefs_smart_start_enabled));
-        Preference smartStartSettings = findPreference(getString(R.string.prefs_smart_start));
+        Preference smartStartTable = findPreference(getString(R.string.prefs_smart_start));
         SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
 
 
@@ -89,12 +89,16 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
             }
         }
 
-        if (smartStartSettings != null) {
-            smartStartSettings.setOnPreferenceClickListener(preference -> {
-                SmartStartDialog dialog = new SmartStartDialog(requireActivity());
-                dialog.showDialog();
-                return false;
-            });
+        if (smartStartTable != null) {
+            if (VersionUtils.isSupported(Versions.V_131)) {
+                smartStartTable.setOnPreferenceClickListener(preference -> {
+                    SmartStartDialog dialog = new SmartStartDialog(requireActivity());
+                    dialog.showDialog();
+                    return false;
+                });
+            } else {
+                smartStartTable.setEnabled(false);
+            }
         }
 
         if (autoPowerOff != null) {
