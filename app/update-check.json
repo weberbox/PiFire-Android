@@ -1,27 +1,12 @@
 {
-  "latestVersion": "1.4.1",
-  "latestVersionCode": "1040100",
+  "latestVersion": "1.4.2",
+  "latestVersionCode": "1040200",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
     "1"
   ],
   "releaseNotes": [
-    "- Added Recipes Section",
-    "- Added Keep Warm options",
-    "- Added Auto Power option",
-    "- Added Grill Startup Time",
-    "- Added Grill Smart Start",
-    "- Added Server Restart option",
-    "- Added Viewpager to Dashboard",
-    "- Added Changelog",
-    "- Added Modules to Info Page",
-    "- Added Feedback Function",
-    "- Changed Nav to Overlapping Panels",
-    "- Moved to OneSignal notifications",
-    "- Added Zoom to Recipe Image",
-    "- WebSockets overhaul",
-    "- UI improvements",
-    "- Misc fixes and updates"
+    "- Bugfix Timer Crash"
   ]
 }

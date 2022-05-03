@@ -146,9 +146,9 @@ public abstract class CountDownTimer implements TimerTickListener {
             return;
         }
 
-        Timber.d("Start Time %d", startTime);
-        Timber.d("End Time %d", endTime);
-        Timber.d("Pause Time %d", pauseTime);
+        Timber.d("Start Time %s", String.valueOf(startSeconds));
+        Timber.d("End Time %s", String.valueOf(endTime));
+        Timber.d("Pause Time %s", String.valueOf(pauseTime));
 
         if (endTime > System.currentTimeMillis() || pauseTime > 0) {
             long duration = endTime - System.currentTimeMillis();
