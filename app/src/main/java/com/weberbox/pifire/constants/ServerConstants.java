@@ -61,6 +61,7 @@ public class ServerConstants {
     public static final String PE_POST_UPDATER_DATA = "post_updater_data";
     public static final String PT_CHANGE_BRANCH = "change_branch";
     public static final String PT_DO_UPDATE = "do_update";
+    public static final String PT_UPDATE_BRANCHES = "update_remote_branches";
 
     public static final String G_MODE_HOLD = "Hold";
     public static final String G_MODE_START = "Startup";

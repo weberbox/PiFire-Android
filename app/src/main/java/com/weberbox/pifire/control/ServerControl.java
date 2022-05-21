@@ -181,6 +181,7 @@ public class ServerControl {
             switch (probe) {
                 case Constants.PICKER_TYPE_GRILL:
                     json = new Gson().toJson(new ControlDataModel()
+                            .withSetPoints(new SetPoints().withGrill(0))
                             .withNotifyReq(new NotifyReq().withGrill(false)));
                     break;
                 case Constants.PICKER_TYPE_PROBE_ONE:

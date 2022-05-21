@@ -602,6 +602,8 @@
     <string name="server_updater_remote">Remote:</string>
     <string name="server_updater_branches">Branches</string>
     <string name="server_updater_change_branch">Change Branch</string>
+    <string name="server_updater_update_branches">Update Remote Branches</string>
+    <string name="server_updater_updating_branches">Updating Branches</string>
     <string name="server_updater_current_version">Current Version:</string>
     <string name="server_updater_remote_version">Remote Version:</string>
     <string name="server_updater_branch_selector">Branch Selector</string>

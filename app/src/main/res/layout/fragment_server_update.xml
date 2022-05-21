@@ -412,6 +412,26 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/server_updater_branch_select_til" />
 
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/server_updater_update_branches"
+                                style="@style/Text18AllerBold"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginStart="@dimen/medium_spacing"
+                                android:layout_marginEnd="@dimen/medium_spacing"
+                                android:layout_marginBottom="@dimen/medium_spacing"
+                                android:background="@drawable/bg_ripple_grey_button"
+                                android:text="@string/server_updater_update_branches"
+                                android:textAllCaps="false"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="18sp"
+                                android:visibility="visible"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/server_updater_change_branch" />
+
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.skydoves.androidveil.VeilLayout>

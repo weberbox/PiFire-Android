@@ -96,6 +96,7 @@ public class ServerUpdateFragment extends Fragment {
         CardView startRemoteUpdate = binding.layoutStatus.serverUpdateAvailable;
         AppCompatButton checkAgainButton = binding.serverUpdaterCheckButton;
         AppCompatButton changeBranch = binding.serverUpdaterChangeBranch;
+        AppCompatButton updateBranches = binding.serverUpdaterUpdateBranches;
 
         branches = new ArrayList<>();
 
@@ -141,6 +142,12 @@ public class ServerUpdateFragment extends Fragment {
                                 })
                         .build();
                 dialog.show();
+            }
+        });
+
+        updateBranches.setOnClickListener(v -> {
+            if (socketConnected()) {
+                updateRemoteBranches(socket);
             }
         });
 
@@ -207,6 +214,27 @@ public class ServerUpdateFragment extends Fragment {
                             if (getActivity() != null) {
                                 getActivity().runOnUiThread(() ->
                                         updateUIWithData(args[0].toString()));
+                            }
+                        }
+                    });
+        } else {
+            setUpdateError();
+            AlertUtils.createErrorAlert(getActivity(), R.string.server_updater_error_offline, false);
+        }
+    }
+
+    public void requestUpdatedBranchInfo(ProgressDialog progressDialog, String message) {
+        if (socket != null && socket.connected()) {
+            setCheckingForUpdate();
+            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_UPDATER_DATA,
+                    (Ack) args -> {
+                        if (args.length > 0 && args[0] != null) {
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(() -> {
+                                    progressDialog.dismiss();
+                                    AlertUtils.createAlert(getActivity(), message, 3000);
+                                    updateUIWithData(args[0].toString());
+                                });
                             }
                         }
                     });
@@ -341,6 +369,32 @@ public class ServerUpdateFragment extends Fragment {
                         });
                     }
                 });
+    }
+
+    private void updateRemoteBranches(Socket socket) {
+        progressDialog = new ProgressDialog.Builder(requireActivity())
+                .setTitle(getString(R.string.server_updater_updating_branches))
+                .setMessage("")
+                .build();
+        progressDialog.getProgressIndicator().setIndeterminate(true);
+        progressDialog.show();
+        socket.emit(ServerConstants.PE_POST_UPDATER_DATA, ServerConstants.PT_UPDATE_BRANCHES,
+                (Ack) args -> {
+            if (args.length > 0 && args[0] != null) {
+                ServerResponseModel response =
+                        ServerResponseModel.parseJSON(args[0].toString());
+                String result = response.getResult();
+                String message = response.getMessage();
+
+                requireActivity().runOnUiThread(() -> {
+                    if (result.equals("success")) {
+                        requestUpdatedBranchInfo(progressDialog, message);
+                    } else {
+                        AlertUtils.createErrorAlert(getActivity(), message, false);
+                    }
+                });
+            }
+        });
     }
 
     private void startRemoteUpdate(Socket socket, String targetBranch) {
