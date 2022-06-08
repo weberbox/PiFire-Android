@@ -390,6 +390,7 @@ public class ServerUpdateFragment extends Fragment {
                     if (result.equals("success")) {
                         requestUpdatedBranchInfo(progressDialog, message);
                     } else {
+                        if (progressDialog != null) progressDialog.dismiss();
                         AlertUtils.createErrorAlert(getActivity(), message, false);
                     }
                 });
