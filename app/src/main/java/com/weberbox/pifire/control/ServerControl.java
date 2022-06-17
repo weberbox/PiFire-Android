@@ -146,10 +146,17 @@ public class ServerControl {
             String json = null;
             switch (probe) {
                 case Constants.PICKER_TYPE_GRILL:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withGrill(Integer.valueOf(temp)))
-                            .withNotifyReq(new NotifyReq().withGrill(true))
-                            .withUpdated(holdMode));
+                    if (VersionUtils.isSupported(Versions.V_134)) {
+                        json = new Gson().toJson(new ControlDataModel()
+                                .withSetPoints(new SetPoints().withGrillNotify(Integer.valueOf(temp)))
+                                .withNotifyReq(new NotifyReq().withGrill(true))
+                                .withUpdated(holdMode));
+                    } else {
+                        json = new Gson().toJson(new ControlDataModel()
+                                .withSetPoints(new SetPoints().withGrill(Integer.valueOf(temp)))
+                                .withNotifyReq(new NotifyReq().withGrill(true))
+                                .withUpdated(holdMode));
+                    }
                     break;
                 case Constants.PICKER_TYPE_PROBE_ONE:
                     json = new Gson().toJson(new ControlDataModel()
@@ -180,9 +187,14 @@ public class ServerControl {
             String json = null;
             switch (probe) {
                 case Constants.PICKER_TYPE_GRILL:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withGrill(0))
-                            .withNotifyReq(new NotifyReq().withGrill(false)));
+                    if (VersionUtils.isSupported(Versions.V_134)) {
+                        json = new Gson().toJson(new ControlDataModel()
+                                .withSetPoints(new SetPoints().withGrillNotify(0))
+                                .withNotifyReq(new NotifyReq().withGrill(false)));
+                    } else {
+                        json = new Gson().toJson(new ControlDataModel()
+                                .withNotifyReq(new NotifyReq().withGrill(false)));
+                    }
                     break;
                 case Constants.PICKER_TYPE_PROBE_ONE:
                     json = new Gson().toJson(new ControlDataModel()

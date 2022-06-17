@@ -621,6 +621,9 @@ public class ControlDataModel {
         @SerializedName("probe2")
         @Expose
         private Integer probe2;
+        @SerializedName("grill_notify")
+        @Expose
+        private Integer grillNotify;
 
         public Integer getGrill() {
             return grill;
@@ -658,6 +661,19 @@ public class ControlDataModel {
 
         public SetPoints withProbe2(Integer probe2) {
             this.probe2 = probe2;
+            return this;
+        }
+
+        public Integer getGrillNotify() {
+            return grillNotify;
+        }
+
+        public void setGrillNotify(Integer grillNotify) {
+            this.grillNotify = grillNotify;
+        }
+
+        public SetPoints withGrillNotify(Integer grillNotify) {
+            this.grillNotify = grillNotify;
             return this;
         }
 

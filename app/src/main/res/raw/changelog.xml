@@ -3,7 +3,7 @@
 
     <changelogversion versionName="1.4.3" changeDate="" currentVersion="true">
         <changelogtext logType="new">Added remote branch check on updater page</changelogtext>
-        <changelogtext logType="fix">Fixed issue where clearing grill set point would not clear display notification</changelogtext>
+        <changelogtext logType="fix">Update Grill Notify Implementation for Server Versions 1.3.4+</changelogtext>
     </changelogversion>
 
     <changelogversion versionName="1.4.2" changeDate="">

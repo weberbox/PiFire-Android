@@ -52,4 +52,8 @@ public class TempUtils {
         return Prefs.getString(context.getString(R.string.prefs_grill_units), "F")
                 .equalsIgnoreCase("F");
     }
+
+    public Integer cleanTempString(String temp) {
+        return Integer.parseInt(temp.replaceAll(context.getString(R.string.regex_numbers), ""));
+    }
 }

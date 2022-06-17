@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class DashDataModel {
 
@@ -131,18 +133,26 @@ public class DashDataModel {
         @SerializedName("probe2")
         @Expose
         private Integer probe2;
+        @SerializedName("grill_notify")
+        @Expose
+        private Integer grillNotify;
 
         public Integer getGrillTarget() {
-            return grill;
+            return Objects.requireNonNullElse(grill, 0);
         }
 
         public Integer getProbeOneTarget() {
-            return probe1;
+            return Objects.requireNonNullElse(probe1, 0);
         }
 
         public Integer getProbeTwoTarget() {
-            return probe2;
+            return Objects.requireNonNullElse(probe2, 0);
         }
+
+        public Integer getGrillNotifyTarget() {
+            return Objects.requireNonNullElse(grillNotify, 0);
+        }
+
     }
 
     public static class NotifyReq {

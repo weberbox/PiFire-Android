@@ -245,14 +245,10 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 int defaultTemp = tempUtils.getDefaultGrillTemp();
                 if (!grillSetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
-                    String temp = grillSetText.getText().toString()
-                            .replaceAll(getString(R.string.regex_numbers), "");
-                    defaultTemp = Integer.parseInt(temp);
+                    defaultTemp = tempUtils.cleanTempString(grillSetText.getText().toString());
                 } else if (!grillTargetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
-                    String temp = grillTargetText.getText().toString()
-                            .replaceAll(getString(R.string.regex_numbers), "");
-                    defaultTemp = Integer.parseInt(temp);
+                    defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
                 }
                 tempPickerDialog = new TempPickerDialog(getActivity(),
                         DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
@@ -267,9 +263,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 if (!probeOneTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!probeOneTargetText.getText().toString().equals(
                             getString(R.string.placeholder_none))) {
-                        String temp = probeOneTargetText.getText().toString()
-                                .replaceAll(getString(R.string.regex_numbers), "");
-                        defaultTemp = Integer.parseInt(temp);
+                        defaultTemp = tempUtils.cleanTempString(
+                                probeOneTargetText.getText().toString());
+
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_ONE,
@@ -317,9 +313,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 int defaultTemp = tempUtils.getDefaultProbeTemp();
                 if (!probeTwoTempText.getText().toString().equals(getString(R.string.off))) {
                     if (!probeTwoTargetText.getText().toString().equals("--")) {
-                        String temp = probeTwoTargetText.getText().toString()
-                                .replaceAll(getString(R.string.regex_numbers), "");
-                        defaultTemp = Integer.parseInt(temp);
+                        defaultTemp = tempUtils.cleanTempString(
+                                probeTwoTargetText.getText().toString());
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_TWO,
@@ -607,6 +602,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             double probeOneTemp = probeTemps.getProbeOneTemp();
             double probeTwoTemp = probeTemps.getProbeTwoTemp();
             int grillTarget = setPoints.getGrillTarget();
+            int grillNotifyTarget = setPoints.getGrillNotifyTarget();
             int probeOneTarget = setPoints.getProbeOneTarget();
             int probeTwoTarget = setPoints.getProbeTwoTarget();
             int hopperLevel = dashDataModel.getHopperLevel();
@@ -669,11 +665,20 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 }
             }
 
-            if (NullUtils.checkObjectNotNull(grillEnabled, grillNotify, grillTarget, grillTemp)) {
+            if (NullUtils.checkObjectNotNull(grillEnabled, grillNotify, grillTarget,
+                    grillNotifyTarget, grillTemp)) {
                 if (grillEnabled) {
-                    if (grillNotify && grillTarget > 0) {
-                        grillTempProgress.setMax(grillTarget);
-                        grillTargetText.setText(StringUtils.formatTemp(grillTarget, isFahrenheit));
+                    int grillTempTarget;
+                    if (VersionUtils.isSupported(Versions.V_134)) {
+                        grillTempTarget = grillNotifyTarget;
+                    } else {
+                        grillTempTarget = grillTarget;
+                    }
+
+                    if (grillNotify && grillTempTarget > 0) {
+                        grillTempProgress.setMax(grillTempTarget);
+                        grillTargetText.setText(StringUtils.formatTemp(grillTempTarget,
+                                isFahrenheit));
                     } else {
                         grillTempProgress.setMax(tempUtils.getMaxGrillTemp());
                         grillTargetText.setText(R.string.placeholder_none);

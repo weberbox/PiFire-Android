@@ -7,6 +7,7 @@
     "1"
   ],
   "releaseNotes": [
-    "- Bugfix Timer Crash"
+    "- Add Remote Branches Update",
+    "- Update Grill Notify Implementation"
   ]
 }
