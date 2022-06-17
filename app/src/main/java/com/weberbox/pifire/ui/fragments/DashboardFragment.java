@@ -198,7 +198,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                                             this::processPostResponse))
                                     .setNeutralButton(getString(R.string.grill_mode_hold),
                                             R.drawable.ic_grill_hold, (dialogInterface, which) ->
-                                                    showTempPickerDialog())
+                                                    showHoldPickerDialog())
                                     .setPositiveButton(getString(R.string.grill_mode_stop),
                                             R.drawable.ic_timer_stop,
                                             (dialogInterface, which) ->
@@ -214,7 +214,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                                             this::processPostResponse))
                                     .setNeutralButton(getString(R.string.grill_mode_hold),
                                             R.drawable.ic_grill_hold, (dialogInterface, which) ->
-                                                    showTempPickerDialog())
+                                                    showHoldPickerDialog())
                                     .setPositiveButton(getString(R.string.grill_mode_shutdown),
                                             R.drawable.ic_grill_shutdown,
                                             (dialogInterface, which) ->
@@ -243,8 +243,9 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         grillTempBox.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultGrillTemp();
-                if (!grillSetText.getText().toString().equals(getString(
-                        R.string.placeholder_none))) {
+                boolean hold = !grillSetText.getText().toString().equals(getString(
+                        R.string.placeholder_none));
+                if (hold) {
                     defaultTemp = tempUtils.cleanTempString(grillSetText.getText().toString());
                 } else if (!grillTargetText.getText().toString().equals(getString(
                         R.string.placeholder_none))) {
@@ -252,7 +253,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                 }
                 tempPickerDialog = new TempPickerDialog(getActivity(),
                         DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                        defaultTemp, false);
+                        defaultTemp, hold, false);
                 tempPickerDialog.showDialog();
             }
         });
@@ -269,7 +270,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_ONE,
-                            defaultTemp, false);
+                            defaultTemp, false, false);
                     tempPickerDialog.showDialog();
                 }
             }
@@ -318,7 +319,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
                             DashboardFragment.this, Constants.PICKER_TYPE_PROBE_TWO,
-                            defaultTemp, false);
+                            defaultTemp, false, false);
                     tempPickerDialog.showDialog();
                 }
             }
@@ -509,10 +510,10 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         }
     }
 
-    private void showTempPickerDialog() {
+    private void showHoldPickerDialog() {
         TempPickerDialog tempPickerDialog = new TempPickerDialog(requireActivity(),
                 DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                new TempUtils(requireActivity()).getDefaultGrillTemp(), true);
+                new TempUtils(requireActivity()).getDefaultGrillTemp(), true, true);
         tempPickerDialog.showDialog();
     }
 

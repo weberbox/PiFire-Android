@@ -50,17 +50,19 @@ public class TempPickerDialog {
     private final int tempType;
     private final int scrollTemp;
     private final boolean holdMode;
+    private final boolean beginHold;
 
     public TempPickerDialog(Context context, Fragment fragment, int tempType, int defaultTemp,
-                            boolean hold) {
+                            boolean hold, boolean beginHold) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         callBack = (DashboardCallback) fragment;
         this.context = context;
         this.tempType = tempType;
-        scrollTemp = defaultTemp;
-        holdMode = hold;
-        tempUnit = TempUtils.getTempUnit(context);
+        this.scrollTemp = defaultTemp;
+        this.holdMode = hold;
+        this.beginHold = beginHold;
+        this.tempUnit = TempUtils.getTempUnit(context);
     }
 
     public BottomSheetDialog showDialog() {
@@ -178,7 +180,7 @@ public class TempPickerDialog {
             }
         }
 
-        if (holdMode) {
+        if (beginHold) {
             clearButton.setVisibility(View.GONE);
         } else {
             clearButton.setVisibility(View.VISIBLE);
