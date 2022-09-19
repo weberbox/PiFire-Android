@@ -37,6 +37,9 @@ public class ManualDataModel {
         @SerializedName("power")
         @Expose
         private Boolean power;
+        @SerializedName("pwm")
+        @Expose
+        private Integer pwm;
 
         public Boolean getChange() {
             return change;
@@ -56,6 +59,10 @@ public class ManualDataModel {
 
         public Boolean getPower() {
             return power;
+        }
+
+        public Integer getPWM() {
+            return pwm;
         }
 
     }

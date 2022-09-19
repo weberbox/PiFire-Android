@@ -39,18 +39,19 @@ public class EmptyTextListener implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s) {
         Button positiveButton = editText.getRootView().findViewById(android.R.id.button1);
-        textInputLayout = editText.getRootView().findViewById(R.id.edit_layout);
+        textInputLayout = (TextInputLayout) editText.findViewById(
+                editText.getId()).getParent().getParent();
         if (s.length() == 0) {
             if (positiveButton != null) positiveButton.setEnabled(false);
             setError(context.getString(R.string.text_blank_error));
         } else if (min != null && Double.parseDouble(s.toString()) < min) {
             if (positiveButton != null) positiveButton.setEnabled(false);
             setError(context.getString(R.string.settings_min_error,
-                    new DecimalFormat("0.#").format(min)));
+                    new DecimalFormat("0.#").format(min - 1)));
         } else if (max != null && Double.parseDouble(s.toString()) > max) {
             if (positiveButton != null) positiveButton.setEnabled(false);
             setError(context.getString(R.string.settings_max_error,
-                    new DecimalFormat("0.#").format(max)));
+                    new DecimalFormat("0.#").format(max + 1)));
         } else {
             if (positiveButton != null) positiveButton.setEnabled(true);
             setError(null);

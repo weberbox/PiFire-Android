@@ -7,12 +7,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,7 +25,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
@@ -45,6 +44,8 @@ import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
 import com.weberbox.pifire.ui.utils.TextTransition;
+import com.weberbox.pifire.ui.utils.ViewUtils;
+import com.weberbox.pifire.ui.views.DashProbeCard;
 import com.weberbox.pifire.ui.views.PelletLevelView;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.NullUtils;
@@ -66,16 +67,16 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private FragmentDashboardBinding binding;
     private TextView timerCountDownText, grillTempText, probeOneTempText, probeTwoTempText;
     private TextView grillSetText, probeOneTargetText, probeTwoTargetText, pelletLevelText;
-    private TextView currentStatusText, smokePlusText, grillTargetText;
+    private TextView currentModeText, smokePlusText, grillTargetText, pwmControlText;
     private ImageView probeOneShutdown, probeTwoShutdown, timerShutdown;
     private ImageView probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm;
     private ProgressBar grillTempProgress, probeOneProgress, probeTwoProgress, timerProgress;
     private ProgressBar loadingBar;
-    private LinearLayout smokePlusBox;
+    private ConstraintLayout smokePlusBox, pwmControlBox;
     private SwipeRefreshLayout swipeRefresh;
     private TempPickerDialog tempPickerDialog;
     private FrameLayout timerPausedLayout;
-    private TableLayout rootContainer;
+    private ConstraintLayout rootContainer;
     private CountDownTimer countDownTimer;
     private PelletLevelView pelletLevelIndicator;
     private Socket socket;
@@ -85,6 +86,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private boolean probeTwoEnabled = true;
     private boolean isLoading = false;
     private boolean smokePlusEnabled = false;
+    private boolean pwmControlEnabled = false;
 
     private String currentMode = Constants.GRILL_CURRENT_STOP;
 
@@ -105,43 +107,56 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         super.onViewCreated(view, savedInstanceState);
 
         loadingBar = binding.connectProgressbar;
-        rootContainer = binding.dashLayout.grillControlsTable;
+        rootContainer = binding.dashLayout.dashRootContainer;
 
-        timerPausedLayout = binding.dashLayout.grillTimerPauseContainer;
-        timerCountDownText = binding.dashLayout.grillTimerTime;
-        timerProgress = binding.dashLayout.grillTimerProgress;
+        // Mode
+        ConstraintLayout currentModeBox = binding.dashLayout.dashStatusContainer;
+        currentModeText = binding.dashLayout.dashGrillMode;
 
-        probeOneShutdown = binding.dashLayout.probeOneShutdown;
-        probeTwoShutdown = binding.dashLayout.probeTwoShutdown;
-        timerShutdown = binding.dashLayout.timerShutdown;
-        probeOneKeepWarm = binding.dashLayout.probeOneKeepWarm;
-        probeTwoKeepWarm = binding.dashLayout.probeTwoKeepWarm;
-        timerKeepWarm = binding.dashLayout.timerKeepWarm;
+        // Grill Probe
+        DashProbeCard dashGrillProbe = binding.dashLayout.dashGrillProbe;
+        grillTempText = dashGrillProbe.getProbeTemp();
+        grillSetText = dashGrillProbe.getProbeSetTemp();
+        grillTargetText = dashGrillProbe.getProbeTargetTemp();
+        grillTempProgress = dashGrillProbe.getProbeTempProgress();
 
-        grillTempText = binding.dashLayout.controlsGrillTemp;
-        probeOneTempText = binding.dashLayout.controlsProbeOneTemp;
-        probeTwoTempText = binding.dashLayout.controlsProbeTwoTemp;
+        // Probe One
+        DashProbeCard dashProbeOne = binding.dashLayout.dashProbeOne;
+        probeOneShutdown = dashProbeOne.getProbeShutdown();
+        probeOneKeepWarm = dashProbeOne.getProbeKeepWarm();
+        probeOneTempText = dashProbeOne.getProbeTemp();
+        probeOneTargetText = dashProbeOne.getProbeTargetTemp();
+        probeOneProgress = dashProbeOne.getProbeTempProgress();
 
-        grillSetText = binding.dashLayout.controlsGrillSetTemp;
-        grillTargetText = binding.dashLayout.controlsGrillTargetTemp;
-        probeOneTargetText = binding.dashLayout.controlsProbeOneTargetTemp;
-        probeTwoTargetText = binding.dashLayout.controlsProbeTwoTargetTemp;
+        // Probe Two
+        DashProbeCard dashProbeTwo = binding.dashLayout.dashProbeTwo;
+        probeTwoShutdown = dashProbeTwo.getProbeShutdown();
+        probeTwoKeepWarm = dashProbeTwo.getProbeKeepWarm();
+        probeTwoTempText = dashProbeTwo.getProbeTemp();
+        probeTwoTargetText = dashProbeTwo.getProbeTargetTemp();
+        probeTwoProgress = dashProbeTwo.getProbeTempProgress();
 
-        grillTempProgress = binding.dashLayout.controlsGrillTempProgress;
-        probeOneProgress = binding.dashLayout.controlsProbeOneTempProgress;
-        probeTwoProgress = binding.dashLayout.controlsProbeTwoTempProgress;
+        // Timer
+        ConstraintLayout timerBox = binding.dashLayout.dashTimerContainer;
+        timerPausedLayout = binding.dashLayout.dashTimerPauseContainer;
+        timerCountDownText = binding.dashLayout.dashTimerTime;
+        timerProgress = binding.dashLayout.dashTimerProgress;
+        timerShutdown = binding.dashLayout.dashTimerShutdown;
+        timerKeepWarm = binding.dashLayout.dashTimerKeepWarm;
 
-        pelletLevelText = binding.dashLayout.controlsPelletLevel;
-        currentStatusText = binding.dashLayout.controlsGrillMode;
-        smokePlusText = binding.dashLayout.controlsSmokePlus;
-        smokePlusBox = binding.dashLayout.smokePlusStatusContainer;
-        LinearLayout currentModeBox = binding.dashLayout.grillStatusContainer;
-        LinearLayout grillTempBox = binding.dashLayout.grillTempContainer;
-        LinearLayout probeOneTempBox = binding.dashLayout.probeOneContainer;
-        LinearLayout probeTwoTempBox = binding.dashLayout.probeTwoContainer;
-        FrameLayout timerBox = binding.dashLayout.grillTimerContainer;
-        FrameLayout pelletLevelBox = binding.dashLayout.controlsPelletLevelContainer;
-        pelletLevelIndicator = binding.dashLayout.pelletLevelIndicator;
+        // Pellet Level
+        ConstraintLayout pelletLevelBox = binding.dashLayout.dashPelletContainer;
+        pelletLevelText = binding.dashLayout.dashPelletLevel;
+        pelletLevelIndicator = binding.dashLayout.dashPelletLevelIndicator;
+
+        // Smoke Plus
+        TextView smokePlusTitle = binding.dashLayout.dashSmokePlusTitle;
+        smokePlusText = binding.dashLayout.dashSmokePlus;
+        smokePlusBox = binding.dashLayout.dashSmokePlusContainer;
+
+        // PWM Control
+        pwmControlText = binding.dashLayout.dashPwmControl;
+        pwmControlBox = binding.dashLayout.dashPwmContainer;
 
         swipeRefresh = binding.dashPullRefresh;
 
@@ -240,7 +255,25 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
         });
 
-        grillTempBox.setOnClickListener(v -> {
+        if (Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
+            pwmControlBox.setVisibility(View.VISIBLE);
+            if (!ViewUtils.isTablet(requireActivity())) {
+                smokePlusTitle.setText(R.string.grill_smoke_plus_abv);
+            }
+            pwmControlBox.setOnClickListener(v -> {
+                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD)) {
+                    ServerControl.setPWMControl(socket, !pwmControlEnabled,
+                            this::processPostResponse);
+                } else if (!currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
+                    AlertUtils.createAlert(getActivity(), R.string.control_pwm_control_disabled,
+                            1000);
+                }
+            });
+        } else {
+            pwmControlBox.setVisibility(View.GONE);
+        }
+
+        dashGrillProbe.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultGrillTemp();
                 boolean hold = !grillSetText.getText().toString().equals(getString(
@@ -258,7 +291,24 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
         });
 
-        probeOneTempBox.setOnClickListener(v -> {
+        if (VersionUtils.isSupported(ServerVersions.V_134)) {
+            dashGrillProbe.setOnLongClickListener(v -> {
+                if (socketConnected()) {
+                    int defaultTemp = tempUtils.getDefaultGrillTemp();
+                    if (!grillTargetText.getText().toString().equals(getString(
+                            R.string.placeholder_none))) {
+                        defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
+                    }
+                    tempPickerDialog = new TempPickerDialog(getActivity(),
+                            DashboardFragment.this, Constants.PICKER_TYPE_GRILL_NOTIFY,
+                            defaultTemp, false, false);
+                    tempPickerDialog.showDialog();
+                }
+                return true;
+            });
+        }
+
+        dashProbeOne.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultProbeTemp();
                 if (!probeOneTempText.getText().toString().equals(getString(R.string.off))) {
@@ -276,7 +326,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
         });
 
-        probeOneTempBox.setOnLongClickListener(v -> {
+        dashProbeOne.setOnLongClickListener(v -> {
             if (socketConnected()) {
                 BottomIconDialog dialog;
                 if (!probeOneTempText.getText().toString().equals(getString(R.string.off))) {
@@ -309,7 +359,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             return true;
         });
 
-        probeTwoTempBox.setOnClickListener(v -> {
+        dashProbeTwo.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultProbeTemp();
                 if (!probeTwoTempText.getText().toString().equals(getString(R.string.off))) {
@@ -325,7 +375,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             }
         });
 
-        probeTwoTempBox.setOnLongClickListener(v -> {
+        dashProbeTwo.setOnLongClickListener(v -> {
             if (socketConnected()) {
                 BottomIconDialog dialog;
                 if (!probeTwoTempText.getText().toString().equals(getString(R.string.off))) {
@@ -477,7 +527,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
     private void requestForcedDashData(boolean showLoading) {
         toggleLoading(showLoading);
         if (socket != null) {
-            if (VersionUtils.isSupported(Versions.V_127)) {
+            if (VersionUtils.isSupported(ServerVersions.V_127)) {
                 socket.emit(ServerConstants.GE_GET_DASH_DATA, true);
             } else {
                 socket.emit(ServerConstants.REQUEST_GRILL_DATA, true);
@@ -599,27 +649,28 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             long timerStartTime = timerInfo.getTimerStartTime();
             long timerEndTime = timerInfo.getTimerEndTime();
             long timerPauseTime = timerInfo.getTimerPauseTime();
-            double grillTemp = probeTemps.getGrillTemp();
-            double probeOneTemp = probeTemps.getProbeOneTemp();
-            double probeTwoTemp = probeTemps.getProbeTwoTemp();
-            int grillTarget = setPoints.getGrillTarget();
-            int grillNotifyTarget = setPoints.getGrillNotifyTarget();
-            int probeOneTarget = setPoints.getProbeOneTarget();
-            int probeTwoTarget = setPoints.getProbeTwoTarget();
-            int hopperLevel = dashDataModel.getHopperLevel();
-            boolean grillEnabled = probesEnabled.getGrillEnabled();
-            boolean grillNotify = notifyReq.getGrillNotify();
-            boolean probeOneNotify = notifyReq.getProbeOneNotify();
-            boolean probeTwoNotify = notifyReq.getProbeTwoNotify();
-            boolean smokePlus = dashDataModel.getSmokePlus();
-            boolean timerPaused = timerInfo.getTimerPaused();
-            boolean timerActive = timerInfo.getTimerActive();
-            boolean probeOneShutdown = notifyData.getP1Shutdown();
-            boolean probeTwoShutdown = notifyData.getP2Shutdown();
-            boolean timerShutdown = notifyData.getTimerShutdown();
-            boolean probeOneKeepWarm = notifyData.getP1KeepWarm();
-            boolean probeTwoKeepWarm = notifyData.getP2KeepWarm();
-            boolean timerKeepWarm = notifyData.getTimerKeepWarm();
+            Double grillTemp = probeTemps.getGrillTemp();
+            Double probeOneTemp = probeTemps.getProbeOneTemp();
+            Double probeTwoTemp = probeTemps.getProbeTwoTemp();
+            Integer grillTarget = setPoints.getGrillTarget();
+            Integer grillNotifyTarget = setPoints.getGrillNotifyTarget();
+            Integer probeOneTarget = setPoints.getProbeOneTarget();
+            Integer probeTwoTarget = setPoints.getProbeTwoTarget();
+            Integer hopperLevel = dashDataModel.getHopperLevel();
+            Boolean grillEnabled = probesEnabled.getGrillEnabled();
+            Boolean grillNotify = notifyReq.getGrillNotify();
+            Boolean probeOneNotify = notifyReq.getProbeOneNotify();
+            Boolean probeTwoNotify = notifyReq.getProbeTwoNotify();
+            Boolean smokePlus = dashDataModel.getSmokePlus();
+            Boolean pwmControl = dashDataModel.getPwmControl();
+            Boolean timerPaused = timerInfo.getTimerPaused();
+            Boolean timerActive = timerInfo.getTimerActive();
+            Boolean probeOneShutdown = notifyData.getP1Shutdown();
+            Boolean probeTwoShutdown = notifyData.getP2Shutdown();
+            Boolean timerShutdown = notifyData.getTimerShutdown();
+            Boolean probeOneKeepWarm = notifyData.getP1KeepWarm();
+            Boolean probeTwoKeepWarm = notifyData.getP2KeepWarm();
+            Boolean timerKeepWarm = notifyData.getTimerKeepWarm();
             probeOneEnabled = probesEnabled.getProbeOneEnabled();
             probeTwoEnabled = probesEnabled.getProbeTwoEnabled();
 
@@ -628,12 +679,12 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
             if (NullUtils.checkObjectNotNull(currentMode, smokePlus, hopperLevel, grillTarget)) {
                 this.currentMode = currentMode;
                 if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
-                    currentStatusText.setText(R.string.off);
+                    currentModeText.setText(R.string.off);
                     grillTempProgress.setProgress(0);
                     probeOneProgress.setProgress(0);
                     probeTwoProgress.setProgress(0);
                 } else {
-                    currentStatusText.setText(currentMode);
+                    currentModeText.setText(currentMode);
                 }
 
                 if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) |
@@ -645,6 +696,16 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     smokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
                     smokePlusText.setText(R.string.off);
                     smokePlusEnabled = false;
+                }
+
+                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && pwmControl) {
+                    pwmControlBox.setBackgroundResource(R.drawable.bg_ripple_smokep_enabled);
+                    pwmControlText.setText(R.string.on);
+                    pwmControlEnabled = true;
+                } else {
+                    pwmControlBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
+                    pwmControlText.setText(R.string.off);
+                    pwmControlEnabled = false;
                 }
 
                 if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && grillTarget > 0) {
@@ -670,7 +731,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     grillNotifyTarget, grillTemp)) {
                 if (grillEnabled) {
                     int grillTempTarget;
-                    if (VersionUtils.isSupported(Versions.V_134)) {
+                    if (VersionUtils.isSupported(ServerVersions.V_134)) {
                         grillTempTarget = grillNotifyTarget;
                     } else {
                         grillTempTarget = grillTarget;
@@ -686,7 +747,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
 
                     if (grillTemp > 0) {
-                        grillTempProgress.setProgress((int) grillTemp);
+                        grillTempProgress.setProgress(grillTemp.intValue());
                         grillTempText.setText(StringUtils.formatTemp(grillTemp, isFahrenheit));
                     } else {
                         grillTempText.setText(R.string.placeholder_temp);
@@ -711,7 +772,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
 
                     if (probeOneTemp > 0) {
-                        probeOneProgress.setProgress((int) probeOneTemp);
+                        probeOneProgress.setProgress(probeOneTemp.intValue());
                         probeOneTempText.setText(StringUtils.formatTemp(probeOneTemp,
                                 isFahrenheit));
                     } else {
@@ -737,7 +798,7 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                     }
 
                     if (probeTwoTemp > 0) {
-                        probeTwoProgress.setProgress((int) probeTwoTemp);
+                        probeTwoProgress.setProgress(probeTwoTemp.intValue());
                         probeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp,
                                 isFahrenheit));
                     } else {
@@ -823,9 +884,13 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         grillTempProgress.setProgress(0);
         probeOneProgress.setProgress(0);
         probeTwoProgress.setProgress(0);
-        currentStatusText.setText(R.string.off);
+        currentModeText.setText(R.string.off);
         smokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
         smokePlusText.setText(R.string.off);
+        smokePlusEnabled = false;
+        pwmControlBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
+        pwmControlText.setText(R.string.off);
+        pwmControlEnabled = false;
         grillTempText.setText(R.string.placeholder_temp);
         grillSetText.setText(R.string.placeholder_none);
         grillTargetText.setText(R.string.placeholder_none);

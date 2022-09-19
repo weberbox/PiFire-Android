@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+    app:contentPadding="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/gpio_devices_inner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.weberbox.pifire.ui.views.CardViewHeaderButton
+            android:id="@+id/gpio_devices_card_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:header_icon="@drawable/ic_menu_about"
+            app:header_title="@string/info_gpio_device"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gpio_devices_card_header">
+
+            <LinearLayout
+                android:id="@+id/gpio_devices_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    style="@style/Text15AllerBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_spacing"
+                    android:layout_weight="1"
+                    android:text="@string/info_gpio_device_name" />
+
+                <TextView
+                    style="@style/Text15AllerBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_spacing"
+                    android:layout_weight="1"
+                    android:text="@string/info_gpio_device_function" />
+
+                <TextView
+                    style="@style/Text15AllerBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_spacing"
+                    android:layout_weight="1"
+                    android:text="@string/info_gpio_device_pin" />
+
+            </LinearLayout>
+
+            <com.skydoves.androidveil.VeilRecyclerFrameView
+                android:id="@+id/gpio_devices_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gpio_devices_header"
+                app:veilFrame_baseAlpha="0.6"
+                app:veilFrame_baseColor="@color/colorLighterGrey"
+                app:veilFrame_highlightAlpha="1.0"
+                app:veilFrame_highlightColor="@color/colorPlaceholder"
+                app:veilFrame_layout="@layout/item_gpio_device"
+                app:veilFrame_radius="10dp"
+                app:veilFrame_shimmerEnable="true"
+                app:veilFrame_veiled="true" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.4.3" changeDate="" currentVersion="true">
+    <changelogversion versionName="1.4.4" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Added Option to Edit Smart Start Config</changelogtext>
+        <changelogtext logType="new">Added PWM Fan Settings. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added PWM Fan Ramping &amp; Settings. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added PWM Temp Control. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added PWM Duty Cycle to Manual Mode. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added ADC Probe Assignment Settings. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added Pellet Notification Check Time Setting. Requires PiFire v1.3.5 or later</changelogtext>
+        <changelogtext logType="new">Added PWM GPIO Pin Info to Info Page</changelogtext>
+        <changelogtext logType="new">Added Device GPIO Pin Info to Info Page</changelogtext>
+        <changelogtext logType="imp">Dashboard Backend Layout Overhaul. Should Improve Performance and Scale to Different Device Screens Better</changelogtext>
+        <changelogtext logType="imp">Update dependencies</changelogtext>
+        <changelogtext logType="fix">Various typo/bug fixes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.4.3" changeDate="">
         <changelogtext logType="new">Added remote branch check on updater page</changelogtext>
         <changelogtext logType="fix">Update Grill Notify Implementation for Server Versions 1.3.4+</changelogtext>
     </changelogversion>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="def_pid_link">http://engineeredmusings.com/pismoker/</string>
     <string name="def_pmode_link">http://tipsforbbq.com/Definition/Traeger-P-Setting</string>
     <string name="def_onesignal_privacy_link">https://onesignal.com/privacy</string>
@@ -16,9 +16,12 @@
     <bool name="def_crash_dialog">true</bool>
 
     <bool name="def_splus_enabled">false</bool>
+    <bool name="def_splus_fan_ramp">false</bool>
     <bool name="def_history_refresh_enabled_app">true</bool>
     <bool name="def_history_clear">true</bool>
     <bool name="def_history_auto">true</bool>
+
+    <bool name="def_pwm_fan_control">false</bool>
 
     <bool name="def_notif_ifttt_enabled">false</bool>
     <bool name="def_notif_pushover_enabled">false</bool>
@@ -49,6 +52,9 @@
     <string name="def_pmode_auger_on">15</string>
     <string name="def_pmode_mode">2</string>
     <string name="def_splus_fan">10</string>
+    <string name="def_splus_on_time">5</string>
+    <string name="def_splus_off_time">5</string>
+    <string name="def_splus_ramp_dc">75</string>
     <string name="def_splus_min">160</string>
     <string name="def_splus_max">220</string>
     <string name="def_pid_cycle">20</string>
@@ -58,6 +64,11 @@
     <string name="def_pid_u_min">0.15</string>
     <string name="def_pid_u_max">1.0</string>
     <string name="def_pid_center">0.5</string>
+
+    <string name="def_pwm_fan_update_time">10</string>
+    <string name="def_pwm_fan_frequency">30</string>
+    <string name="def_pwm_fan_max_dc">20</string>
+    <string name="def_pwm_fan_min_dc">100</string>
 
     <string name="def_keep_warm_temp">165</string>
 
@@ -74,9 +85,15 @@
 
     <string name="def_pellet_empty">22</string>
     <string name="def_pellet_full">4</string>
+    <string name="def_pellet_warning_time">20</string>
 
     <string name="def_recipe_time">0 min</string>
     <string name="def_recipe_diff">Easy</string>
+
+    <string name="def_adc_grill_probe_one" tools:ignore="Typos">ADC0</string>
+    <string name="def_adc_grill_probe_two" tools:ignore="Typos">ADC3</string>
+    <string name="def_adc_probe_one" tools:ignore="Typos">ADC1</string>
+    <string name="def_adc_probe_two" tools:ignore="Typos">ADC2</string>
 
 
 </resources>

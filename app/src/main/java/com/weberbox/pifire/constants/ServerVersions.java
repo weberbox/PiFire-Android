@@ -1,6 +1,6 @@
 package com.weberbox.pifire.constants;
 
-public class Versions {
+public class ServerVersions {
 
     // PiFire Server Versions
     public static final String V_120 = "1.2.0";
@@ -9,7 +9,8 @@ public class Versions {
     public static final String V_127 = "1.2.7";
     public static final String V_129 = "1.2.9";
     public static final String V_131 = "1.3.1";
-    public static final String V_133 = "1.3.3"; //Released (main)
-    public static final String V_134 = "1.3.4"; //Current (development)
+    public static final String V_133 = "1.3.3";
+    public static final String V_134 = "1.3.4"; //Released (main)
+    public static final String V_135 = "1.3.5"; //Current (development)
 
 }

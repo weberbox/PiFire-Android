@@ -2,6 +2,7 @@ package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -338,7 +339,7 @@ public class ServerUpdateFragment extends Fragment {
     }
 
     private void changeRemoteBranch(Socket socket, String targetBranch) {
-        final Handler handler = new Handler();
+        final Handler handler = new Handler(Looper.getMainLooper());
         progressDialog = new ProgressDialog.Builder(requireActivity())
                 .setTitle(getString(R.string.server_updater_change_dialog_title))
                 .setMessage("")
@@ -399,7 +400,7 @@ public class ServerUpdateFragment extends Fragment {
     }
 
     private void startRemoteUpdate(Socket socket, String targetBranch) {
-        final Handler handler = new Handler();
+        final Handler handler = new Handler(Looper.getMainLooper());
         progressDialog = new ProgressDialog.Builder(requireActivity())
                 .setTitle(getString(R.string.server_updater_update_dialog_title))
                 .setCancelable(false)

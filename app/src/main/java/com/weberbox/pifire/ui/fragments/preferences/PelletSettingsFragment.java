@@ -16,11 +16,13 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -50,6 +52,7 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         PreferenceCategory pelletWarnings = findPreference(getString(R.string.prefs_pellet_warning_cat));
+        EditTextPreference pelletWarningTime = findPreference(getString(R.string.prefs_pellet_warning_time));
         EditTextPreference pelletWarningLevel = findPreference(getString(R.string.prefs_pellet_warning_level));
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
@@ -57,6 +60,21 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
                 "").isEmpty()) {
             pelletWarnings.setVisible(false);
+        }
+
+        if (pelletWarningTime != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                pelletWarningTime.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), 1.0, null, editText));
+                });
+            } else {
+                pelletWarningTime.setEnabled(false);
+                pelletWarningTime.setSummaryProvider(null);
+                pelletWarningTime.setSummary(getString(R.string.disabled_option_settings,
+                        ServerVersions.V_135));
+            }
         }
 
         if (pelletWarningLevel != null) {
@@ -132,6 +150,11 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                 }
             }
             if (preference instanceof EditTextPreference) {
+                if (preference.getContext().getString(R.string.prefs_pellet_warning_time)
+                        .equals(preference.getKey())) {
+                    ServerControl.setPelletWarningTime(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
                 if (preference.getContext().getString(R.string.prefs_pellet_warning_level)
                         .equals(preference.getKey())) {
                     ServerControl.setPelletWarningLevel(socket,

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -48,12 +49,7 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
     private RecipeDatabase database;
     private SwipeRefreshLayout swipeRefresh;
     private ActionMode actionMode;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+    private MenuProvider searchMenu;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -79,6 +75,27 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
             }
         });
 
+        searchMenu = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_search, menu);
+
+                SearchManager searchManager = (SearchManager)
+                        requireActivity().getSystemService(Context.SEARCH_SERVICE);
+                final MenuItem searchItem = menu.findItem(R.id.action_search);
+                SearchView searchView = (SearchView) searchItem.getActionView();
+                searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                        requireActivity().getComponentName()));
+                searchView.setMaxWidth(Integer.MAX_VALUE);
+                searchView.setOnQueryTextListener(RecipesFragment.this);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        };
+
         if (getActivity() != null && getActivity().getApplicationContext() != null) {
             database = RecipeDatabase.getInstance(getActivity().getApplicationContext());
         }
@@ -102,12 +119,18 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
     @Override
     public void onResume() {
         super.onResume();
+        if (searchMenu != null) {
+            requireActivity().addMenuProvider(searchMenu);
+        }
         retrieveRecipes();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        if (searchMenu != null) {
+            requireActivity().removeMenuProvider(searchMenu);
+        }
         if (actionMode != null) {
             actionMode.finish();
         }
@@ -117,21 +140,6 @@ public class RecipesFragment extends Fragment implements OnRecipeItemCallback,
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_search, menu);
-
-        if (getActivity() != null) {
-            SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-            final MenuItem searchItem = menu.findItem(R.id.action_search);
-            SearchView searchView = (SearchView) searchItem.getActionView();
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-            searchView.setMaxWidth(Integer.MAX_VALUE);
-            searchView.setOnQueryTextListener(this);
-        }
     }
 
     @Override

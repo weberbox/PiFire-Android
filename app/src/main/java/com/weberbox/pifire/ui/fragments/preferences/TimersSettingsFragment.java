@@ -14,11 +14,10 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
-import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -54,7 +53,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
         SwitchPreferenceCompat smartStart = findPreference(getString(R.string.prefs_smart_start_enabled));
-        Preference smartStartTable = findPreference(getString(R.string.prefs_smart_start));
+        Preference smartStartTable = findPreference(getString(R.string.prefs_smart_start_table));
         SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
 
 
@@ -67,7 +66,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (startupTime != null) {
-            if (VersionUtils.isSupported(Versions.V_127)) {
+            if (VersionUtils.isSupported(ServerVersions.V_127)) {
                 startupTime.setOnBindEditTextListener(editText -> {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                     editText.addTextChangedListener(
@@ -76,36 +75,31 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
             } else {
                 startupTime.setEnabled(false);
                 startupTime.setSummaryProvider(null);
-                startupTime.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
+                startupTime.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
             }
         }
 
         if (smartStart != null) {
-            if (!VersionUtils.isSupported(Versions.V_131)) {
+            if (!VersionUtils.isSupported(ServerVersions.V_131)) {
                 smartStart.setChecked(false);
                 smartStart.setEnabled(false);
                 smartStart.setSummaryProvider(null);
-                smartStart.setSummary(getString(R.string.disabled_option_settings, Versions.V_131));
+                smartStart.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_131));
             }
         }
 
         if (smartStartTable != null) {
-            if (VersionUtils.isSupported(Versions.V_131)) {
-                smartStartTable.setOnPreferenceClickListener(preference -> {
-                    SmartStartDialog dialog = new SmartStartDialog(requireActivity());
-                    dialog.showDialog();
-                    return false;
-                });
-            } else {
+            if (!VersionUtils.isSupported(ServerVersions.V_131)) {
                 smartStartTable.setEnabled(false);
+                smartStartTable.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_131));
             }
         }
 
         if (autoPowerOff != null) {
-            if (!VersionUtils.isSupported(Versions.V_129)) {
+            if (!VersionUtils.isSupported(ServerVersions.V_129)) {
                 autoPowerOff.setEnabled(false);
                 autoPowerOff.setSummaryProvider(null);
-                autoPowerOff.setSummary(getString(R.string.disabled_option_settings, Versions.V_129));
+                autoPowerOff.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_129));
             }
         }
     }

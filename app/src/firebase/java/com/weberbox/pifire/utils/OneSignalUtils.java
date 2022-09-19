@@ -7,10 +7,12 @@ import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.net.Uri;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +41,10 @@ public class OneSignalUtils {
         OneSignal.setRequiresUserPrivacyConsent(true);
         OneSignal.initWithContext(context);
         OneSignal.setAppId(PushConfig.ONESIGNAL_APP_ID);
+    }
+
+    public static void promptForPushNotifications() {
+        OneSignal.promptForPushNotifications();
     }
 
     public static void provideUserConsent(boolean accepted) {
@@ -190,6 +196,18 @@ public class OneSignalUtils {
         if (result.getResult().equals("error")) {
             Timber.d("Could not complete request %s", result.getResponse().getMessage());
         }
+    }
+
+    @SuppressWarnings("unused")
+    public static boolean checkNotificationPermissionStatus(Context context) {
+        if (android.os.Build.VERSION.SDK_INT < 33 ||
+                context.getApplicationInfo().targetSdkVersion < 33) {
+            NotificationManagerCompat manager = NotificationManagerCompat.from(context);
+            return manager.areNotificationsEnabled();
+        }
+
+        return context.checkSelfPermission("android.permission.POST_NOTIFICATIONS") ==
+                PackageManager.PERMISSION_GRANTED;
     }
 
     @TargetApi(26)

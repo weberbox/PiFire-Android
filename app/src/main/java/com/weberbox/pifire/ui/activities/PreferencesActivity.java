@@ -14,6 +14,7 @@ import com.weberbox.pifire.ui.fragments.preferences.HistorySettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.ManualSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NameSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NotificationSettingsFragment;
+import com.weberbox.pifire.ui.fragments.preferences.PWMSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.PelletSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.ProbeSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.SafetySettingsFragment;
@@ -87,6 +88,9 @@ public class PreferencesActivity extends BaseActivity {
                 break;
             case Constants.FRAG_MANUAL_SETTINGS:
                 launchFragment(new ManualSettingsFragment());
+                break;
+            case Constants.FRAG_PWM_SETTINGS:
+                launchFragment(new PWMSettingsFragment());
                 break;
         }
     }

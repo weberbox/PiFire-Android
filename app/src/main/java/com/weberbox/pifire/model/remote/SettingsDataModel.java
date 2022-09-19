@@ -62,18 +62,15 @@ public class SettingsDataModel {
     @SerializedName("lastupdated")
     @Expose
     private LastUpdated lastUpdated;
-    @SerializedName("inpins")
-    @Expose
-    private InPins inPins;
-    @SerializedName("outpins")
-    @Expose
-    private OutPins outPins;
     @SerializedName("modules")
     @Expose
     private Modules modules;
     @SerializedName("smartstart")
     @Expose
     private SmartStart smartStart;
+    @SerializedName("pwm")
+    @Expose
+    private PWM pwm;
 
     public Versions getVersions() {
         return versions;
@@ -296,22 +293,6 @@ public class SettingsDataModel {
         return this;
     }
 
-    public InPins getInPins() {
-        return inPins;
-    }
-
-    public void InPins(InPins inPins) {
-        this.inPins = inPins;
-    }
-
-    public OutPins getOutPins() {
-        return outPins;
-    }
-
-    public void OutPins(OutPins outPins) {
-        this.outPins = outPins;
-    }
-
     public Modules getModules() {
         return modules;
     }
@@ -326,6 +307,19 @@ public class SettingsDataModel {
 
     public void LastUpdated(LastUpdated lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public PWM getPWM() {
+        return pwm;
+    }
+
+    public void setPWM(PWM pwm) {
+        this.pwm = pwm;
+    }
+
+    public SettingsDataModel withPWM(PWM pwm) {
+        this.pwm = pwm;
+        return this;
     }
 
     public SettingsDataModel withLastUpdated(LastUpdated lastupdated) {
@@ -551,6 +545,9 @@ public class SettingsDataModel {
         @SerializedName("buttonslevel")
         @Expose
         private String buttonsLevel;
+        @SerializedName("disp_rotation")
+        @Expose
+        private Integer displayRotation;
         @SerializedName("shutdown_timer")
         @Expose
         private Integer shutdownTimer;
@@ -563,6 +560,12 @@ public class SettingsDataModel {
         @SerializedName("four_probes")
         @Expose
         private Boolean fourProbes;
+        @SerializedName("dc_fan")
+        @Expose
+        private Boolean dcFan;
+        @SerializedName("standalone")
+        @Expose
+        private Boolean standalone;
         @SerializedName("units")
         @Expose
         private String units;
@@ -713,6 +716,32 @@ public class SettingsDataModel {
             return this;
         }
 
+        public Boolean getDCFan() {
+            return dcFan;
+        }
+
+        public void setDCFan(Boolean dcFan) {
+            this.dcFan = dcFan;
+        }
+
+        public Globals withDCFan(Boolean dcFan) {
+            this.dcFan = dcFan;
+            return this;
+        }
+
+        public Boolean getStandalone() {
+            return standalone;
+        }
+
+        public void setStandalone(Boolean standalone) {
+            this.standalone = standalone;
+        }
+
+        public Globals withStandalone(Boolean standalone) {
+            this.standalone = standalone;
+            return this;
+        }
+
     }
 
     public static class Safety {
@@ -792,6 +821,9 @@ public class SettingsDataModel {
         @SerializedName("warning_level")
         @Expose
         private Integer warningLevel;
+        @SerializedName("warning_time")
+        @Expose
+        private Integer warningTime;
         @SerializedName("empty")
         @Expose
         private Integer empty;
@@ -822,6 +854,19 @@ public class SettingsDataModel {
 
         public PelletLevel withWarningLevel(Integer warningLevel) {
             this.warningLevel = warningLevel;
+            return this;
+        }
+
+        public Integer getWarningTime() {
+            return warningTime;
+        }
+
+        public void setWarningTime(Integer time) {
+            this.warningTime = time;
+        }
+
+        public PelletLevel withWarningTime(Integer time) {
+            this.warningTime = time;
             return this;
         }
 
@@ -1318,6 +1363,9 @@ public class SettingsDataModel {
         @SerializedName("probe_sources")
         @Expose
         private List<String> probeSources = null;
+        @SerializedName("probe_options")
+        @Expose
+        private List<String> probeOptions = null;
 
         public Map<String, ProbeProfileModel> getProbeProfiles() {
             return probeProfiles;
@@ -1355,6 +1403,19 @@ public class SettingsDataModel {
 
         public ProbeSettings withProbeSources(List<String> probeSources) {
             this.probeSources = probeSources;
+            return this;
+        }
+
+        public List<String> getProbeOptions() {
+            return probeOptions;
+        }
+
+        public void setProbeOptions(List<String> probeOptions) {
+            this.probeOptions = probeOptions;
+        }
+
+        public ProbeSettings withProbeOptions(List<String> probeOptions) {
+            this.probeOptions = probeOptions;
             return this;
         }
 
@@ -1496,12 +1557,21 @@ public class SettingsDataModel {
         @SerializedName("cycle")
         @Expose
         private Integer cycle;
+        @SerializedName("on_time")
+        @Expose
+        private Integer onTime;
+        @SerializedName("off_time")
+        @Expose
+        private Integer offTime;
         @SerializedName("frequency")
         @Expose
         private Integer frequency;
         @SerializedName("duty_cycle")
         @Expose
         private Integer dutyCycle;
+        @SerializedName("fan_ramp")
+        @Expose
+        private Boolean fanRamp;
 
         public Boolean getEnabled() {
             return enabled;
@@ -1555,6 +1625,32 @@ public class SettingsDataModel {
             return this;
         }
 
+        public Integer getOnTime() {
+            return onTime;
+        }
+
+        public void setOnTime(Integer onTime) {
+            this.onTime = onTime;
+        }
+
+        public SmokePlus withOnTime(Integer onTime) {
+            this.onTime = onTime;
+            return this;
+        }
+
+        public Integer getOffTime() {
+            return offTime;
+        }
+
+        public void setOffTime(Integer offTime) {
+            this.offTime = offTime;
+        }
+
+        public SmokePlus withOffTime(Integer offTime) {
+            this.offTime = offTime;
+            return this;
+        }
+
         public Integer getFrequency() {
             return frequency;
         }
@@ -1581,69 +1677,134 @@ public class SettingsDataModel {
             return this;
         }
 
-    }
-
-    public static class OutPins {
-
-        @SerializedName("auger")
-        @Expose
-        private Integer auger;
-        @SerializedName("fan")
-        @Expose
-        private Integer fan;
-        @SerializedName("igniter")
-        @Expose
-        private Integer igniter;
-        @SerializedName("power")
-        @Expose
-        private Integer power;
-
-        public Integer getAuger() {
-            return auger;
+        public Boolean getFanRamp() {
+            return fanRamp;
         }
 
-        public void setAuger(Integer auger) {
-            this.auger = auger;
+        public void setFanRamp(Boolean enabled) {
+            this.fanRamp = enabled;
         }
 
-        public Integer getFan() {
-            return fan;
-        }
-
-        public void setFan(Integer fan) {
-            this.fan = fan;
-        }
-
-        public Integer getIgniter() {
-            return igniter;
-        }
-
-        public void setIgniter(Integer igniter) {
-            this.igniter = igniter;
-        }
-
-        public Integer getPower() {
-            return power;
-        }
-
-        public void setPower(Integer power) {
-            this.power = power;
+        public SmokePlus withFanRamp(Boolean enabled) {
+            this.fanRamp = enabled;
+            return this;
         }
 
     }
 
-    public static class InPins {
+    public static class PWM {
 
-        @SerializedName("selector")
+        @SerializedName("pwm_control")
         @Expose
-        private Integer selector;
+        private Boolean pwmControl;
+        @SerializedName("update_time")
+        @Expose
+        private Integer updateTime;
+        @SerializedName("frequency")
+        @Expose
+        private Integer frequency;
+        @SerializedName("min_duty_cycle")
+        @Expose
+        private Integer minDutyCycle;
+        @SerializedName("max_duty_cycle")
+        @Expose
+        private Integer maxDutyCycle;
+        @SerializedName("temp_range_list")
+        @Expose
+        private List<Integer> tempRangeList = null;
+        @SerializedName("profiles")
+        @Expose
+        private List<PWMProfile> profiles = null;
 
-        public Integer getSelector() {
-            return selector;
+        public Boolean getPWMControl() {
+            return pwmControl;
         }
 
-        public void setSelector(Integer selector) {
-            this.selector = selector;
+        public void setPWMControl(Boolean enabled) {
+            this.pwmControl = enabled;
+        }
+
+        public PWM withPWMControl(Boolean enabled) {
+            this.pwmControl = enabled;
+            return this;
+        }
+
+        public Integer getUpdateTime() {
+            return updateTime;
+        }
+
+        public void setUpdateTime(Integer updateTime) {
+            this.updateTime = updateTime;
+        }
+
+        public PWM withUpdateTime(Integer updateTime) {
+            this.updateTime = updateTime;
+            return this;
+        }
+
+        public Integer getFrequency() {
+            return frequency;
+        }
+
+        public void setFrequency(Integer frequency) {
+            this.frequency = frequency;
+        }
+
+        public PWM withFrequency(Integer frequency) {
+            this.frequency = frequency;
+            return this;
+        }
+
+        public Integer getMinDutyCycle() {
+            return minDutyCycle;
+        }
+
+        public void setMinDutyCycle(Integer minDutyCycle) {
+            this.minDutyCycle = minDutyCycle;
+        }
+
+        public PWM withMinDutyCycle(Integer minDutyCycle) {
+            this.minDutyCycle = minDutyCycle;
+            return this;
+        }
+
+        public Integer getMaxDutyCycle() {
+            return maxDutyCycle;
+        }
+
+        public void setMaxDutyCycle(Integer maxDutyCycle) {
+            this.maxDutyCycle = maxDutyCycle;
+        }
+
+        public PWM withMaxDutyCycle(Integer maxDutyCycle) {
+            this.maxDutyCycle = maxDutyCycle;
+            return this;
+        }
+
+        public List<PWMProfile> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<PWMProfile> profiles) {
+            this.profiles = profiles;
+        }
+
+        public PWM withProfiles(List<PWMProfile> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public List<Integer> getTempRangeList() {
+            return tempRangeList;
+        }
+
+        public void setTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+        }
+
+        public PWM withTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+            return this;
         }
 
     }
@@ -1837,7 +1998,7 @@ public class SettingsDataModel {
         private Boolean enabled;
         @SerializedName("profiles")
         @Expose
-        private List<Profile> profiles = null;
+        private List<SSProfile> profiles = null;
         @SerializedName("temp_range_list")
         @Expose
         private List<Integer> tempRangeList = null;
@@ -1855,15 +2016,15 @@ public class SettingsDataModel {
             return this;
         }
 
-        public List<Profile> getProfiles() {
+        public List<SSProfile> getProfiles() {
             return profiles;
         }
 
-        public void setProfiles(List<Profile> profiles) {
+        public void setProfiles(List<SSProfile> profiles) {
             this.profiles = profiles;
         }
 
-        public SmartStart withProfiles(List<Profile> profiles) {
+        public SmartStart withProfiles(List<SSProfile> profiles) {
             this.profiles = profiles;
             return this;
         }
@@ -1882,7 +2043,7 @@ public class SettingsDataModel {
         }
     }
 
-    public static class Profile {
+    public static class SSProfile {
 
         @SerializedName("augerontime")
         @Expose
@@ -1902,7 +2063,7 @@ public class SettingsDataModel {
             this.augerOnTime = augerOnTime;
         }
 
-        public Profile withAugerOnTime(Integer augerOnTime) {
+        public SSProfile withAugerOnTime(Integer augerOnTime) {
             this.augerOnTime = augerOnTime;
             return this;
         }
@@ -1915,7 +2076,7 @@ public class SettingsDataModel {
             this.pMode = pMode;
         }
 
-        public Profile withPMode(Integer pMode) {
+        public SSProfile withPMode(Integer pMode) {
             this.pMode = pMode;
             return this;
         }
@@ -1928,8 +2089,29 @@ public class SettingsDataModel {
             this.startUpTime = startUpTime;
         }
 
-        public Profile withStartUpTime(Integer startUpTime) {
+        public SSProfile withStartUpTime(Integer startUpTime) {
             this.startUpTime = startUpTime;
+            return this;
+        }
+
+    }
+
+    public static class PWMProfile {
+
+        @SerializedName("duty_cycle")
+        @Expose
+        private Integer dutyCycle;
+
+        public Integer getDutyCycle() {
+            return dutyCycle;
+        }
+
+        public void setDutyCycle(Integer dutyCycle) {
+            this.dutyCycle = dutyCycle;
+        }
+
+        public PWMProfile withDutyCycle(Integer dutyCycle) {
+            this.dutyCycle = dutyCycle;
             return this;
         }
 

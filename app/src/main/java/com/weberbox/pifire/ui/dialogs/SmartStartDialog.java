@@ -1,110 +1,135 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.view.LayoutInflater;
+import android.view.WindowManager;
+import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.pixplicity.easyprefs.library.Prefs;
+import com.google.android.material.textfield.TextInputEditText;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogSmartStartBinding;
 import com.weberbox.pifire.model.local.SmartStartModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel;
-import com.weberbox.pifire.recycler.adapter.SmartStartAdapter;
-import com.weberbox.pifire.ui.utils.ViewUtils;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
+import com.weberbox.pifire.ui.utils.EmptyTextListener;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SmartStartDialog {
 
-    private final BottomSheetDialog bottomSheetDialog;
     private final LayoutInflater inflater;
+    private final AlertDialog.Builder dialog;
+    private final DialogSmartStartCallback callback;
     private final Context context;
+    private final String units;
+    private final int title;
+    private final Integer minTemp, maxTemp, setTemp, startUp, augerOn, pMode, position;
+    private final List<SmartStartModel> list;
+    private TextInputEditText tempInput, startUpInput, augerOnInput, pModeInput;
 
-
-    public SmartStartDialog(Context context) {
-        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
+    public SmartStartDialog(Context context, @StringRes int title, Integer position,
+                            Integer minTemp, Integer maxTemp, Integer setTemp, Integer startUp,
+                            Integer augerOn, Integer pMode, String units,
+                            List<SmartStartModel> list, DialogSmartStartCallback callback) {
+        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         inflater = LayoutInflater.from(context);
         this.context = context;
+        this.title = title;
+        this.position = position;
+        this.minTemp = minTemp;
+        this.maxTemp = maxTemp;
+        this.setTemp = setTemp;
+        this.startUp = startUp;
+        this.augerOn = augerOn;
+        this.pMode = pMode;
+        this.units = units;
+        this.list = list;
+        this.callback = callback;
     }
 
-    public BottomSheetDialog showDialog(){
+    public AlertDialog showDialog() {
         DialogSmartStartBinding binding = DialogSmartStartBinding.inflate(inflater);
 
-        List<SmartStartModel> smartStartList = new ArrayList<>();
+        dialog.setTitle(title);
 
-        RecyclerView recycler = binding.smartStartRecycler;
+        TextView dialogNote = binding.dialogSmartStartTempNote;
+        tempInput = binding.dialogSmartStartTempText;
+        startUpInput = binding.dialogSmartStartStartUpText;
+        augerOnInput = binding.dialogSmartStartAugerOnText;
+        pModeInput = binding.dialogSmartStartPModeText;
 
-        String units = Prefs.getString(context.getString(R.string.prefs_grill_units));
-
-        List<Integer> rangeList = new Gson().fromJson(
-                Prefs.getString(context.getString(R.string.prefs_smart_start_temp_range)),
-                new TypeToken<List<Integer>>() {
-                }.getType());
-
-        List<SettingsDataModel.Profile> profileList = new Gson().fromJson(
-                Prefs.getString(context.getString(R.string.prefs_smart_start_profiles)),
-                new TypeToken<List<SettingsDataModel.Profile>>() {
-                }.getType());
-
-        if (rangeList.size() > 0 && profileList.size() > 0) {
-
-            int rangeSize = rangeList.size();
-            Integer min = Collections.min(rangeList);
-            Integer max = Collections.max(rangeList);
-
-            String minTemp = "< " + min + " " + units;
-            String maxTemp = "> " + max + " " + units;
-
-            smartStartList.add(new SmartStartModel(minTemp,
-                    profileList.get(0).getStartUpTime(),
-                    profileList.get(0).getAugerOnTime(),
-                    profileList.get(0).getPMode()));
-
-            for (int i = 1; i < rangeSize; i++) {
-                String temp = rangeList.get(i - 1) + "-" + rangeList.get(i) + " " + units;
-                smartStartList.add(new SmartStartModel(temp,
-                        profileList.get(i).getStartUpTime(),
-                        profileList.get(i).getAugerOnTime(),
-                        profileList.get(i).getPMode()));
-            }
-
-            smartStartList.add(new SmartStartModel(maxTemp,
-                    profileList.get(rangeSize).getStartUpTime(),
-                    profileList.get(rangeSize).getAugerOnTime(),
-                    profileList.get(rangeSize).getPMode()));
-
-            SmartStartAdapter adapter = new SmartStartAdapter(smartStartList);
-
-            recycler.setLayoutManager(new LinearLayoutManager(context));
-            recycler.setAdapter(adapter);
+        String note;
+        if (minTemp == null) {
+            String temp = String.valueOf(setTemp - 1);
+            note = String.format(context.getResources().getString(
+                    R.string.settings_pwm_temp_range_note_max), temp, units);
+            tempInput.addTextChangedListener(
+                    new EmptyTextListener(context, (double) setTemp, 1000.0, tempInput));
+        } else if (maxTemp == null) {
+            note = context.getString(R.string.settings_pwm_temp_range_note_last);
+            tempInput.setEnabled(false);
+        } else {
+            String minTemp = this.minTemp.toString();
+            String maxTemp = this.maxTemp.toString();
+            note = String.format(context.getResources().getString(
+                    R.string.settings_pwm_temp_range_note_range), minTemp, maxTemp, units);
+            tempInput.addTextChangedListener(
+                    new EmptyTextListener(context, (double) this.minTemp, (double) this.maxTemp,
+                            tempInput));
         }
 
-        bottomSheetDialog.setContentView(binding.getRoot());
+        startUpInput.addTextChangedListener(new EmptyTextListener(context, 30.0, null,
+                startUpInput));
 
-        bottomSheetDialog.setOnShowListener(dialog -> {
-            @SuppressWarnings("rawtypes")
-            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        augerOnInput.addTextChangedListener(new EmptyTextListener(context, 1.0, 1000.0,
+                augerOnInput));
+
+        pModeInput.addTextChangedListener(new EmptyTextListener(context, 0.0, 9.0,
+                pModeInput));
+
+        dialogNote.setText(note);
+        tempInput.setText(String.valueOf(setTemp));
+        startUpInput.setText(String.valueOf(startUp));
+        augerOnInput.setText((String.valueOf(augerOn)));
+        pModeInput.setText((String.valueOf(pMode)));
+
+        dialog.setView(binding.getRoot());
+
+        dialog.setPositiveButton(R.string.save, (dialog, which) -> {
+            if (tempInput.getText() != null && startUpInput.getText() != null &&
+                    augerOnInput.getText() != null && pModeInput.getText() != null) {
+                Integer temp = Integer.valueOf(tempInput.getText().toString());
+                Integer start = Integer.valueOf(startUpInput.getText().toString());
+                Integer auger = Integer.valueOf(augerOnInput.getText().toString());
+                Integer pMode = Integer.valueOf(pModeInput.getText().toString());
+                if (position != null) {
+                    if (position == list.size() - 1) {
+                        callback.onDialogEdit(list, position, (temp + 1), start, auger, pMode);
+                    } else {
+                        callback.onDialogEdit(list, position, temp, start, auger, pMode);
+                    }
+                } else {
+                    callback.onDialogAdd(list, temp, start, auger, pMode);
+                }
+            }
         });
 
-        bottomSheetDialog.show();
+        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
 
-        Configuration configuration = context.getResources().getConfiguration();
-        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                configuration.screenWidthDp > 450) {
-            bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+        AlertDialog alertDialog = dialog.create();
+
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        alertDialog.show();
+
+        if (maxTemp == null && position != null) {
+            startUpInput.requestFocus();
+        } else {
+            tempInput.requestFocus();
         }
 
-        return bottomSheetDialog;
+        return alertDialog;
     }
 }
-

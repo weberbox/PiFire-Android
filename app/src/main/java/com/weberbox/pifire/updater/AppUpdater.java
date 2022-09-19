@@ -307,9 +307,9 @@ public class AppUpdater implements IAppUpdater {
                     return;
                 }
 
-                Integer currentInstalledVersionCode = UtilsLibrary.getAppInstalledVersionCode(context);
+                Integer currentInstalledVersionCode = UtilsLibrary.getAppInstalledVersionCode();
 
-                Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(context),
+                Update installedVersion = new Update(UtilsLibrary.getAppInstalledVersion(),
                         currentInstalledVersionCode);
 
                 boolean forceUpdateRequired =  UtilsLibrary.getRequiredUpdate(update,

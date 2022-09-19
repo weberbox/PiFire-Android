@@ -82,6 +82,7 @@
     <string name="no_thanks">No Thanks</string>
     <string name="feedback">Feedback</string>
     <string name="exit">Exit</string>
+    <string name="add_new">Add New</string>
 
     <string name="text_blank_error">Cannot be blank!</string>
 
@@ -93,16 +94,18 @@
     <string name="grill_mode_shutdown">Shutdown</string>
 
     <string name="grill_state_mode">Mode</string>
-    <string name="grill_state_grill">Grill</string>
+    <string name="dash_grill_title">Grill</string>
     <string name="grill_state_current">Current</string>
     <string name="grill_state_target">Target</string>
     <string name="grill_state_set">Set</string>
-    <string name="grill_state_probe_one">Probe 1</string>
-    <string name="grill_state_probe_two">Probe 2</string>
-    <string name="grill_state_timer">Timer</string>
-    <string name="grill_state_pellet">Pellets</string>
-    <string name="grill_state_remaining">Remaining</string>
+    <string name="dash_probe_one_title">Probe 1</string>
+    <string name="dash_probe_two_title">Probe 2</string>
+    <string name="dash_timer_title">Timer</string>
+    <string name="dash_pellets_title">Pellets</string>
+    <string name="dash_remaining_title">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
+    <string name="grill_smoke_plus_abv">S Plus</string>
+    <string name="dash_pwm_control">PWM</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
     <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
@@ -153,6 +156,7 @@
 
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
+    <string name="control_pwm_control_disabled">Only available in Hold mode</string>
     <string name="control_manual_mode">Manual mode must be controlled from Admin Settings</string>
 
     <string name="history_temp_graph">Temp Graph</string>
@@ -230,12 +234,14 @@
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
+    <string name="setup_settings_error">Failed to retrieve settings from Server. Please check your connection and verify your server version is compatible</string>
 
     <string name="settings_server">Server Settings</string>
     <string name="settings_app">App Settings</string>
     <string name="settings_probe">Probe Settings</string>
     <string name="settings_grill_name">Grill Name</string>
     <string name="settings_work">Work Mode</string>
+    <string name="settings_pwm">PWM Settings</string>
     <string name="settings_timers">Startup &amp; Shutdown</string>
     <string name="settings_history">History Settings</string>
     <string name="settings_safety">Safety Settings</string>
@@ -317,6 +323,14 @@
     <string name="settings_probe_one_type">Probe 1 Type</string>
     <string name="settings_probe_two_type">Probe 2 Type</string>
 
+    <string name="settings_cat_adc_assignment">ADC Probe Assignment</string>
+    <string name="settings_adc_grill_probe">Grill Probe</string>
+    <string name="settings_adc_grill_probe_one">Grill Probe One</string>
+    <string name="settings_adc_grill_probe_two">Grill Probe Two</string>
+    <string name="settings_adc_probe_one">Probe One</string>
+    <string name="settings_adc_probe_two">Probe Two</string>
+    <string name="settings_adc_assignment_note">Here you can map the ADC Inputs to the PiFire Probes. Most systems will use the default settings shown. If your probes are wired differently you can set the new values below.</string>
+
     <string name="settings_cat_cycle">Startup / Smoke Mode Cycle Settings</string>
     <string name="settings_pmode_note">P-Mode is used for both Startup and Smoke modes, but not Hold mode. For more information about the P-Mode click here</string>
     <string name="settings_pmode_mode">P-Mode</string>
@@ -331,6 +345,11 @@
     <string name="settings_splus_fan">Fan Cycle Time (s)</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
+    <string name="settings_splus_on_time">Fan On Time</string>
+    <string name="settings_splus_off_time">Fan Off Time</string>
+    <string name="settings_splus_fan_ramp">PWM Fan Ramping</string>
+    <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle</string>
+    <string name="settings_splus_fan_ramp_note">Fan Ramping will ramp the fan from off to the desired duty cycle instead of just turning on to full speed during Smoke Plus cycling. You can control the ramp duration by setting the Fan ON Time below. The desired duty cycle can also be set below.</string>
 
     <string name="settings_cat_pid">PID Settings (HOLD Mode)</string>
     <string name="settings_pid_cycle">Cycle Time</string>
@@ -358,11 +377,19 @@
     <string name="settings_smart_start">Smart Start</string>
     <string name="settings_smart_start_table">Smart Start Table</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
-    <string name="settings_smart_start_range">Range</string>
-    <string name="settings_smart_start_action">Action</string>
+    <string name="settings_smart_start_temp">Temp</string>
     <string name="settings_smart_start_startup">Startup</string>
     <string name="settings_smart_start_auger_on">AugerOn</string>
     <string name="settings_smart_start_p_mode">P-Mode</string>
+    <string name="settings_smart_start_action">Action</string>
+
+    <string name="settings_smart_start_temp_range_add">Add Smart Start Profile</string>
+    <string name="settings_smart_start_temp_range_edit">Edit Smart Start Profile</string>
+    <string name="settings_smart_start_temp_range_delete">Delete Smart Start Profile</string>
+    <string name="settings_smart_start_temp_range_delete_content">Are you sure that you want to permanently delete this item?</string>
+    <string name="settings_smart_start_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
+    <string name="settings_smart_start_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
+    <string name="settings_smart_start_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
 
     <string name="settings_cat_grill_name">Grill Naming</string>
 
@@ -461,6 +488,7 @@
 
     <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
     <string name="settings_pellet_warning_level">Warning Level (%)</string>
+    <string name="settings_pellet_warning_time">Check Time (mins)</string>
     <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications every 20 minutes during a cook</string>
 
     <string name="settings_cat_pellets">Pellet Level Sensor</string>
@@ -474,6 +502,7 @@
     <string name="settings_manual_auger">Toggle Auger</string>
     <string name="settings_manual_igniter">Toggle Igniter</string>
     <string name="settings_manual_power">Toggle Power</string>
+    <string name="settings_manual_pwm">Duty Cycle</string>
 
     <string name="settings_cat_app_recipes">Recipes</string>
     <string name="settings_recipe_db_backup">Backup recipes database</string>
@@ -489,20 +518,42 @@
     <string name="settings_recipe_db_import_button">Import</string>
     <string name="settings_recipe_db_import_message">Importing a recipe database will overwrite any existing items. Are you sure you want to import?</string>
 
+    <string name="settings_cat_pwm_fan_control">Temp Fan Control</string>
+    <string name="settings_pwm_fan_control_enabled">Temp Control Enabled by Default</string>
+    <string name="settings_pwm_fan_control_note">If enabled Temp Fan Control will override Smoke Plus fan ramping. The fan will adjust with temperature and still cycle on and off but will not ramp up to speed.</string>
+    <string name="settings_pwm_fan_table_note">If Current Grill Temp is over Set Temp Fan will be set to Minimum Duty Cycle. If the Grill temp is below the Set Temp the Duty Cycles below will be used. Example: If Current Grill Temp drops below Set Temp by 1–3 ° a 20% PWM will be set. If the Grill Temp drops below the Set Temp by 15° a 75% Duty Cycle will be set.</string>
+    <string name="settings_pwm_fan_update_time">Update Time (s)</string>
+    <string name="settings_cat_fan_settings">General Fan Settings</string>
+    <string name="settings_pwm_frequency">Frequency (Hz)</string>
+    <string name="settings_pwm_min_duty_cycle">Min Duty Cycle</string>
+    <string name="settings_pwm_max_duty_cycle">Max Duty Cycle</string>
+    <string name="settings_pwm_control_temp">Temp</string>
+    <string name="settings_pwm_control_range">Temp Range</string>
+    <string name="settings_pwm_control_duty">Duty Cycle</string>
+    <string name="settings_pwm_control_action">Action</string>
+
+    <string name="settings_pwm_temp_range_add">Add PWM Temp Profile</string>
+    <string name="settings_pwm_temp_range_edit">Edit PWM Temp Profile</string>
+    <string name="settings_pwm_temp_range_delete">Delete PWM Temp Profile</string>
+    <string name="settings_pwm_temp_range_delete_content">Are you sure that you want to permanently delete this item?</string>
+    <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
+    <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
+    <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
+    <string name="settings_pwm_fan_control">PWM Fan Control</string>
+
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Model</string>
     <string name="info_cpu_temp">CPU Temp</string>
     <string name="info_network">Network Info</string>
-    <string name="info_gpio">GPIO Pin Information</string>
+    <string name="info_gpio_in_out">GPIO Input/Output Info</string>
     <string name="info_gpio_output_name">Output Name</string>
     <string name="info_gpio_output_pin">Output Pin</string>
-    <string name="info_gpio_output_auger">Auger</string>
-    <string name="info_gpio_output_fan">Fan</string>
-    <string name="info_gpio_output_igniter">Igniter</string>
-    <string name="info_gpio_output_power">Power</string>
     <string name="info_gpio_input_name">Input Name</string>
     <string name="info_gpio_input_pin">Input Pin</string>
-    <string name="info_gpio_input_selector">Selector</string>
+    <string name="info_gpio_device">GPIO Device Info</string>
+    <string name="info_gpio_device_name">Device</string>
+    <string name="info_gpio_device_function">Function</string>
+    <string name="info_gpio_device_pin">Pin</string>
     <string name="info_uptime">Server Uptime</string>
     <string name="info_modules_head">Module</string>
     <string name="info_modules_config">Configured</string>

@@ -32,7 +32,7 @@ public final class ViewUtils {
     public static void toggleStatusBarColor(Activity activity, int colorFrom, int colorTo) {
         Window window = activity.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
         ValueAnimator anim = ValueAnimator.ofObject(new ArgbEvaluator(),
                 ContextCompat.getColor(activity, colorFrom),
                 ContextCompat.getColor(activity, colorTo));
@@ -48,7 +48,7 @@ public final class ViewUtils {
 
         Window window = activity.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
         TypedValue colorPrimaryTypedValue = new TypedValue();
         TypedValue actionModeBackgroundTypedValue = new TypedValue();
         activity.getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimaryTypedValue, true);

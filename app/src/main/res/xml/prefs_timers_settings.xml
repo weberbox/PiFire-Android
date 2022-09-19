@@ -47,15 +47,14 @@
             app:title="@string/enabled" />
 
         <Preference
-            app:key="@string/prefs_smart_start"
-            app:title="@string/settings_smart_start_table"
-            app:iconSpaceReserved="false" />
-
-        <Preference
             android:layout="@layout/preference_category_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_smart_start_note"
             app:title="@string/settings_note" />
+
+        <com.weberbox.pifire.ui.views.preferences.SmartStartPreference
+            app:key="@string/prefs_smart_start_table"
+            app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
 

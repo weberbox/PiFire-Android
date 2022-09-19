@@ -11,7 +11,7 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/history_linechart"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="@dimen/_400sdp"
         android:layout_marginTop="@dimen/default_spacing"
         android:layout_marginBottom="@dimen/default_spacing" />
 

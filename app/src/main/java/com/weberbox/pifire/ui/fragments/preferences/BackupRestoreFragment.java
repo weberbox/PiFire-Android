@@ -22,7 +22,7 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogRestoreCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
@@ -184,7 +184,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
             ServerControl.backupRestoreRemoteEmit(socket, type, fileName, response -> {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (VersionUtils.isSupported(Versions.V_127)) {
+                        if (VersionUtils.isSupported(ServerVersions.V_127)) {
                             ServerResponseModel result = ServerResponseModel.parseJSON(response);
                             if (result.getResponse() != null &&
                                     result.getResponse().getResult().equals("success")) {

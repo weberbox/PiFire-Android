@@ -30,14 +30,13 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
+import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.dialogs.UserPassDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
-import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
@@ -115,7 +114,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
             serverScheme.setAdapter(schemesAdapter);
         }
 
-        settingsUtils = new SettingsUtils(requireActivity(), null);
+        settingsUtils = new SettingsUtils(requireActivity(), settingsSocketCallback);
 
         serverAddress.addTextChangedListener(new TextWatcher() {
             @Override
@@ -347,7 +346,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
         }
     }
 
-    private final Emitter.Listener onConnect = args -> requestSettings();
+    private final Emitter.Listener onConnect = args -> settingsUtils.requestSettingsData(socket);
 
     private final Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
@@ -365,53 +364,23 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
         }
     };
 
-    private void requestSettings() {
-        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_SETTINGS_DATA,
-                new AckTimeOut(3000) {
-                    @Override
-                    public void call(Object... args) {
-                        if (args.length > 0 && args[0] != null) {
-                            if (args[0].toString().equalsIgnoreCase("timeout")) {
-                                requestSettingsDep();
-                            } else {
-                                cancelTimer();
-                                if (settingsUtils.updateSettingsData(args[0].toString())) {
-                                    completeSetup();
-                                }
-                            }
-                        }
-                    }
+    private final SettingsSocketCallback settingsSocketCallback = result -> {
+        if (result) {
+            completeSetup();
+        } else {
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    Timber.d("Error Connecting to Socket");
+                    connectProgress.setVisibility(View.GONE);
+                    socket.disconnect();
+                    socket.close();
+                    isConnecting = false;
+                    showAlerter(getActivity(),
+                            getString(R.string.setup_settings_error));
                 });
-    }
-
-    private void requestSettingsDep() {
-        socket.emit(ServerConstants.REQUEST_SETTINGS_DATA,
-                new AckTimeOut(3000) {
-                    @Override
-                    public void call(Object... args) {
-                        if (args.length > 0 && args[0] != null) {
-                            if (args[0].toString().equalsIgnoreCase("timeout")) {
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(() -> {
-                                        Timber.d("Error Connecting to Socket");
-                                        connectProgress.setVisibility(View.GONE);
-                                        socket.disconnect();
-                                        socket.close();
-                                        isConnecting = false;
-                                        showAlerter(getActivity(),
-                                                getString(R.string.setup_cannot_connect));
-                                    });
-                                }
-                            } else {
-                                cancelTimer();
-                                if (settingsUtils.updateSettingsData(args[0].toString())) {
-                                    completeSetup();
-                                }
-                            }
-                        }
-                    }
-                });
-    }
+            }
+        }
+    };
 
     private void completeSetup() {
         if (getActivity() != null) {

@@ -141,4 +141,11 @@
         <item>@color/eventsWarning</item>
     </integer-array>
 
+    <string-array name="adc_probe_options">
+        <item tools:ignore="Typos">ADC0</item>
+        <item tools:ignore="Typos">ADC1</item>
+        <item tools:ignore="Typos">ADC2</item>
+        <item tools:ignore="Typos">ADC3</item>
+    </string-array>
+
 </resources>

@@ -14,6 +14,14 @@
             app:title="@string/enabled" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pellet_warning_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_warning_time"
+            app:title="@string/settings_pellet_warning_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_level"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"

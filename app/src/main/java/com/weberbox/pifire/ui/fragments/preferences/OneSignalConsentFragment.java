@@ -12,7 +12,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
@@ -32,9 +32,9 @@ public class OneSignalConsentFragment extends PreferenceFragmentCompat implement
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        if (!VersionUtils.isSupported(Versions.V_127)) {
+        if (!VersionUtils.isSupported(ServerVersions.V_127)) {
             AlertUtils.createErrorAlert(requireActivity(),
-                    getString(R.string.disabled_option_dialog_message, Versions.V_127), 5000);
+                    getString(R.string.disabled_option_dialog_message, ServerVersions.V_127), 5000);
         }
     }
 

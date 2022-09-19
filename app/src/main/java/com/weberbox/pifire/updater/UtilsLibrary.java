@@ -1,12 +1,13 @@
 package com.weberbox.pifire.updater;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -53,33 +54,15 @@ class UtilsLibrary {
         return context.getPackageName();
     }
 
-    public static String getAppInstalledVersion(Context context) {
-        String version = "0.0.0.0";
-
-        try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
-                    .versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.w(e, "Error getting package version");
-        }
-
+    public static String getAppInstalledVersion() {
+        String version = BuildConfig.VERSION_NAME;
         Timber.d("Installed App Version: %s", version);
-
         return version;
     }
 
-    public static Integer getAppInstalledVersionCode(Context context) {
-        int versionCode = 0;
-
-        try {
-            versionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0)
-                    .versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.w(e, "Error getting installed version");
-        }
-
+    public static Integer getAppInstalledVersionCode() {
+        int versionCode = BuildConfig.VERSION_CODE;
         Timber.d("Installed App VersionCode: %s", versionCode);
-
         return versionCode;
     }
 
@@ -253,18 +236,17 @@ class UtilsLibrary {
         return successfulChecks % showEvery == 0;
     }
 
+    @SuppressLint("MissingPermission")
     public static Boolean isNetworkAvailable(Context context) {
-        boolean res = false;
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-            if (networkInfo != null) {
-                res = networkInfo.isConnected();
-            }
-        }
-
-        return res;
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network nw = connectivityManager.getActiveNetwork();
+        if (nw == null) return false;
+        NetworkCapabilities actNw = connectivityManager.getNetworkCapabilities(nw);
+        return actNw != null && (
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
     }
 
     public static void OpenDownloadedFile(Context context, String location, String filename) {

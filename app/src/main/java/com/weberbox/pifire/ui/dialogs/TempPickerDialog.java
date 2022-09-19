@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.model.local.TempPickerModel;
@@ -91,7 +91,8 @@ public class TempPickerDialog {
 
         TempUtils tempUtils = new TempUtils(context);
 
-        if (tempType == Constants.PICKER_TYPE_GRILL) {
+        if (tempType == Constants.PICKER_TYPE_GRILL ||
+                tempType == Constants.PICKER_TYPE_GRILL_NOTIFY) {
             selectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
             tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(tempUnit,
                     tempUtils.getMinGrillTemp(), (tempUtils.getMaxGrillTemp() + 1)));
@@ -136,7 +137,7 @@ public class TempPickerDialog {
             }
         });
 
-        if (VersionUtils.isSupported(Versions.V_127)) {
+        if (VersionUtils.isSupported(ServerVersions.V_127)) {
             warmContainer.setVisibility(View.VISIBLE);
         }
 
@@ -173,7 +174,8 @@ public class TempPickerDialog {
         pickerBottomSheet.setContentView(binding.getRoot());
 
         if (scrollTemp != 0) {
-            if (tempType == Constants.PICKER_TYPE_GRILL) {
+            if (tempType == Constants.PICKER_TYPE_GRILL ||
+                    tempType == Constants.PICKER_TYPE_GRILL_NOTIFY) {
                 setDefaultTemp(scrollTemp - tempUtils.getMinGrillTemp(), false);
             } else {
                 setDefaultTemp(scrollTemp - tempUtils.getMinProbeTemp(), false);

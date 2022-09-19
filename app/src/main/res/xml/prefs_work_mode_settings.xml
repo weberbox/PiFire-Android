@@ -56,12 +56,48 @@
             app:summary="@string/settings_splus_note"
             app:title="@string/settings_note" />
 
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_splus_fan_ramp"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_fan_ramp"
+            app:title="@string/settings_splus_fan_ramp" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_splus_fan_ramp_note"
+            app:title="@string/settings_note" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_splus_ramp_dc"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_ramp_dc"
+            app:title="@string/settings_splus_ramp_dc"
+            app:useSimpleSummaryProvider="true" />
+
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_fan"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_work_splus_fan"
             app:title="@string/settings_splus_fan"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_splus_on_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_on_time"
+            app:title="@string/settings_splus_on_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_splus_off_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_splus_off_time"
+            app:title="@string/settings_splus_off_time"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket

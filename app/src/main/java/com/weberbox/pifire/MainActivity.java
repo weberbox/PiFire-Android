@@ -156,6 +156,10 @@ public class MainActivity extends BaseActivity implements
             binding.navLayoutPanel.navFeedback.setVisibility(View.GONE);
         }
 
+        if (!Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
+            binding.settingsLayoutPanel.settingsPwm.setVisibility(View.GONE);
+        }
+
         mainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(this, connected);

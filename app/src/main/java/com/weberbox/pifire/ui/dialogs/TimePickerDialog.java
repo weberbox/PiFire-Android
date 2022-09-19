@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
@@ -123,7 +123,7 @@ public class TimePickerDialog {
             optionsButton.setVisibility(View.GONE);
         }
 
-        if (VersionUtils.isSupported(Versions.V_127)) {
+        if (VersionUtils.isSupported(ServerVersions.V_127)) {
             warmContainer.setVisibility(View.VISIBLE);
         }
 

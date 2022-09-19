@@ -33,11 +33,21 @@
                     android:layout_margin="@dimen/default_spacing" />
 
                 <include
-                    android:id="@+id/gpio_card_view"
-                    layout="@layout/layout_info_gpio"
+                    android:id="@+id/gpio_in_out_card_view"
+                    layout="@layout/layout_info_gpio_in_out"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/system_card_view"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing" />
+
+                <include
+                    android:id="@+id/gpio_devices_card_view"
+                    layout="@layout/layout_info_gpio_devices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/gpio_in_out_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing" />
@@ -47,7 +57,7 @@
                     layout="@layout/layout_info_modules"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/gpio_card_view"
+                    android:layout_below="@+id/gpio_devices_card_view"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
                     android:layout_marginBottom="@dimen/default_spacing" />

@@ -38,6 +38,8 @@
     <string name="prefs_show_changelog">prefs_show_changelog</string>
 
     <string name="prefs_four_probe">prefs_four_probe</string>
+    <string name="prefs_dc_fan">prefs_dc_fan</string>
+    <string name="prefs_standalone">prefs_standalone</string>
 
     <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
 
@@ -63,6 +65,10 @@
     <string name="prefs_work_splus_fan">prefs_work_splus_fan</string>
     <string name="prefs_work_splus_min">prefs_work_splus_min</string>
     <string name="prefs_work_splus_max">prefs_work_splus_max</string>
+    <string name="prefs_work_splus_on_time">prefs_work_splus_on_time</string>
+    <string name="prefs_work_splus_off_time">prefs_work_splus_off_time</string>
+    <string name="prefs_work_splus_fan_ramp">prefs_work_splus_fan_ramp</string>
+    <string name="prefs_work_splus_ramp_dc">prefs_work_splus_ramp_dc</string>
 
     <string name="prefs_work_pid_cycle">prefs_work_pid_cycle</string>
     <string name="prefs_work_pid_pb">prefs_work_pid_pb</string>
@@ -82,6 +88,7 @@
     <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
     <string name="prefs_smart_start_temp_range">prefs_smart_start_temp_range</string>
     <string name="prefs_smart_start_profiles">prefs_smart_start_profiles</string>
+    <string name="prefs_smart_start_table">prefs_smart_start_table</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
 
@@ -135,6 +142,7 @@
 
     <string name="prefs_pellet_warning_cat">prefs_pellet_warning_cat</string>
     <string name="prefs_pellet_warning_enabled">prefs_pellet_warning_enabled</string>
+    <string name="prefs_pellet_warning_time">prefs_pellet_warning_time</string>
     <string name="prefs_pellet_warning_level">prefs_pellet_warning_level</string>
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
@@ -146,6 +154,7 @@
     <string name="prefs_manual_mode_auger">prefs_manual_mode_auger</string>
     <string name="prefs_manual_mode_igniter">prefs_manual_mode_igniter</string>
     <string name="prefs_manual_mode_power">prefs_manual_mode_power</string>
+    <string name="prefs_manual_mode_pwm">prefs_manual_mode_pwm</string>
 
     <string name="prefs_recipe_db_backup">prefs_recipe_db_backup</string>
     <string name="prefs_recipe_db_restore">prefs_recipe_db_restore</string>
@@ -155,5 +164,22 @@
     <string name="prefs_modules_display">prefs_modules_display</string>
     <string name="prefs_modules_distance">prefs_modules_distance</string>
     <string name="prefs_modules_platform">prefs_modules_platform</string>
+
+    <string name="prefs_pwm_fan_control">prefs_pwm_fan_control</string>
+    <string name="prefs_pwm_fan_update_time">prefs_pwm_fan_update_time</string>
+    <string name="prefs_pwm_frequency">prefs_pwm_frequency</string>
+    <string name="prefs_pwm_min_duty_cycle">prefs_pwm_min_duty_cycle</string>
+    <string name="prefs_pwm_max_duty_cycle">prefs_pwm_max_duty_cycle</string>
+    <string name="prefs_pwm_temp_range">prefs_pwm_temp_range</string>
+    <string name="prefs_pwm_profiles">prefs_pwm_profiles</string>
+    <string name="prefs_pwm_control_table">prefs_pwm_control_table</string>
+
+    <string name="prefs_adc_probe_options">prefs_adc_probe_options</string>
+    <string name="prefs_adc_probe_sources">prefs_adc_probe_sources</string>
+    <string name="prefs_adc_assignment_cat">prefs_adc_assignment_cat</string>
+    <string name="prefs_adc_grill_probe_one">prefs_adc_grill_probe_one</string>
+    <string name="prefs_adc_grill_probe_two">prefs_adc_grill_probe_two</string>
+    <string name="prefs_adc_probe_one">prefs_adc_probe_one</string>
+    <string name="prefs_adc_probe_two">prefs_adc_probe_two</string>
 
 </resources>

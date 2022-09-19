@@ -15,6 +15,12 @@ public class ControlDataModel {
     @SerializedName("s_plus")
     @Expose
     private Boolean sPlus;
+    @SerializedName("pwm_control")
+    @Expose
+    private Boolean pwmControl;
+    @SerializedName("duty_cycle")
+    @Expose
+    private Integer dutyCycle;
     @SerializedName("hopper_check")
     @Expose
     private Boolean hopperCheck;
@@ -27,9 +33,12 @@ public class ControlDataModel {
     @SerializedName("probe_profile_update")
     @Expose
     private Boolean probeProfileUpdate;
-    @SerializedName("grill_probe_update")
+    @SerializedName("settings_update")
     @Expose
-    private Boolean grillProbeUpdate;
+    private Boolean settingsUpdate;
+    @SerializedName("distance_update")
+    @Expose
+    private Boolean distanceUpdate;
     @SerializedName("units_change")
     @Expose
     private Boolean unitsChange;
@@ -101,6 +110,19 @@ public class ControlDataModel {
         return this;
     }
 
+    public Boolean getPWMControl() {
+        return pwmControl;
+    }
+
+    public void setPWMControl(Boolean pwmControl) {
+        this.pwmControl = pwmControl;
+    }
+
+    public ControlDataModel withPWMControl(Boolean pwmControl) {
+        this.pwmControl = pwmControl;
+        return this;
+    }
+
     public Boolean getHopperCheck() {
         return hopperCheck;
     }
@@ -150,19 +172,6 @@ public class ControlDataModel {
 
     public ControlDataModel withProbeProfileUpdate(Boolean probeProfileUpdate) {
         this.probeProfileUpdate = probeProfileUpdate;
-        return this;
-    }
-
-    public Boolean getGrillProbeUpdate() {
-        return grillProbeUpdate;
-    }
-
-    public void setGrillProbeUpdate(Boolean grillProbeUpdate) {
-        this.grillProbeUpdate = grillProbeUpdate;
-    }
-
-    public ControlDataModel withGrillProbeUpdate(Boolean grillProbeUpdate) {
-        this.grillProbeUpdate = grillProbeUpdate;
         return this;
     }
 
@@ -270,6 +279,32 @@ public class ControlDataModel {
         return this;
     }
 
+    public Boolean getSettingsUpdate() {
+        return settingsUpdate;
+    }
+
+    public void setSettingsUpdate(Boolean settingsUpdate) {
+        this.settingsUpdate = settingsUpdate;
+    }
+
+    public ControlDataModel withSettingsUpdate(Boolean settingsUpdate) {
+        this.settingsUpdate = settingsUpdate;
+        return this;
+    }
+
+    public Boolean getDistanceUpdate() {
+        return distanceUpdate;
+    }
+
+    public void setDistanceUpdate(Boolean distanceUpdate) {
+        this.distanceUpdate = distanceUpdate;
+    }
+
+    public ControlDataModel withDistanceUpdate(Boolean distanceUpdate) {
+        this.distanceUpdate = distanceUpdate;
+        return this;
+    }
+
     public static class Manual {
 
         @SerializedName("change")
@@ -287,6 +322,9 @@ public class ControlDataModel {
         @SerializedName("power")
         @Expose
         private Boolean power;
+        @SerializedName("pwm")
+        @Expose
+        private Integer pwm;
 
         public Boolean getChange() {
             return change;
@@ -350,6 +388,19 @@ public class ControlDataModel {
 
         public Manual withPower(Boolean power) {
             this.power = power;
+            return this;
+        }
+
+        public Integer getPWM() {
+            return pwm;
+        }
+
+        public void setPWM(Integer pwm) {
+            this.pwm = pwm;
+        }
+
+        public Manual withPWM(Integer pwm) {
+            this.pwm = pwm;
             return this;
         }
 
