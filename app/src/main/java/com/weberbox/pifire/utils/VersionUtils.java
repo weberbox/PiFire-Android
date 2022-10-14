@@ -6,7 +6,7 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.updater.objects.Version;
+import com.weberbox.pifire.utils.objects.Version;
 
 import timber.log.Timber;
 

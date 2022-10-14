@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -22,12 +23,15 @@ import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.VersionUtils;
 
+import java.util.Objects;
+
 import io.socket.client.Socket;
 
 public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private EditTextPreference startToModeTemp;
     private Socket socket;
 
     @Override
@@ -55,6 +59,8 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         SwitchPreferenceCompat smartStart = findPreference(getString(R.string.prefs_smart_start_enabled));
         Preference smartStartTable = findPreference(getString(R.string.prefs_smart_start_table));
         SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
+        ListPreference startToMode = findPreference(getString(R.string.prefs_startup_goto_mode));
+        startToModeTemp = findPreference(getString(R.string.prefs_startup_goto_temp));
 
 
         if (shutdownTime != null) {
@@ -100,6 +106,31 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 autoPowerOff.setEnabled(false);
                 autoPowerOff.setSummaryProvider(null);
                 autoPowerOff.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_129));
+            }
+        }
+
+        if (startToMode != null && startToModeTemp != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                Double minTemp = Double.parseDouble(
+                        sharedPreferences.getString(getString(R.string.prefs_safety_max_start),
+                                getString(R.string.def_safety_max_start)));
+                Double maxTemp = Double.parseDouble(
+                        sharedPreferences.getString(getString(R.string.prefs_safety_max_temp),
+                                getString(R.string.def_safety_max_temp)));
+                startToModeTemp.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), minTemp, maxTemp, editText));
+                });
+                startToModeTemp.setVisible(
+                        startToMode.getValue().equals(getString(R.string.grill_mode_hold)));
+            } else {
+                startToMode.setEnabled(false);
+                startToMode.setSummaryProvider(null);
+                startToMode.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
+                startToModeTemp.setEnabled(false);
+                startToModeTemp.setSummaryProvider(null);
+                startToModeTemp.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
             }
         }
     }
@@ -154,6 +185,11 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                     ServerControl.sendStartupTime(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
+                if (preference.getContext().getString(R.string.prefs_startup_goto_temp)
+                        .equals(preference.getKey())) {
+                    ServerControl.setStartToModeTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_auto_power_off)
@@ -167,6 +203,15 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                     ServerControl.setSmartStartEnabled(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
+                }
+            }
+            if (preference instanceof ListPreference) {
+                if (preference.getContext().getString(R.string.prefs_startup_goto_mode)
+                        .equals(preference.getKey())) {
+                    String startupMode = ((ListPreference) preference).getValue();
+                    startToModeTemp.setVisible(Objects.equals(startupMode,
+                            getString(R.string.grill_mode_hold)));
+                    ServerControl.setStartToMode(socket, startupMode, this::processPostResponse);
                 }
             }
         }

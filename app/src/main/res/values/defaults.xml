@@ -28,6 +28,7 @@
     <bool name="def_notif_pushbullet_enabled">false</bool>
     <bool name="def_notif_onesignal_enabled">false</bool>
     <bool name="def_notif_influxdb_enabled">false</bool>
+    <bool name="def_notif_apprise_enabled">false</bool>
 
     <bool name="def_grill_swipe_start">true</bool>
     <bool name="def_keep_screen_on">false</bool>
@@ -86,6 +87,7 @@
     <string name="def_pellet_empty">22</string>
     <string name="def_pellet_full">4</string>
     <string name="def_pellet_warning_time">20</string>
+    <string name="def_pellet_auger_rate">0.3</string>
 
     <string name="def_recipe_time">0 min</string>
     <string name="def_recipe_diff">Easy</string>
@@ -94,6 +96,9 @@
     <string name="def_adc_grill_probe_two" tools:ignore="Typos">ADC3</string>
     <string name="def_adc_probe_one" tools:ignore="Typos">ADC1</string>
     <string name="def_adc_probe_two" tools:ignore="Typos">ADC2</string>
+
+    <string name="def_startup_goto_mode">Smoke</string>
+    <string name="def_startup_goto_temp">165</string>
 
 
 </resources>

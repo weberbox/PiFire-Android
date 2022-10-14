@@ -75,6 +75,9 @@ public class PelletDataModel {
         @SerializedName("date_loaded")
         @Expose
         private String dateLoaded;
+        @SerializedName("est_usage")
+        @Expose
+        private Double estUsage;
         @SerializedName("hopper_level")
         @Expose
         private Integer hopperLevel;
@@ -88,6 +91,14 @@ public class PelletDataModel {
 
         public void setDateLoaded(String dateLoaded) {
             this.dateLoaded = dateLoaded;
+        }
+
+        public Double getEstimatedUsage() {
+            return estUsage;
+        }
+
+        public void setEstimatedUsage(Double estUsage) {
+            this.estUsage = estUsage;
         }
 
         public Integer getHopperLevel() {

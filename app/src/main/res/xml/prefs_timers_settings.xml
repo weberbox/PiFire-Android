@@ -4,21 +4,7 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_timers">
-
-        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:defaultValue="@string/def_shutdown_time"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
-            app:key="@string/prefs_shutdown_time"
-            app:title="@string/settings_shutdown_time"
-            app:useSimpleSummaryProvider="true" />
-
-        <Preference
-            android:layout="@layout/preference_category_note"
-            app:iconSpaceReserved="false"
-            app:summary="@string/settings_shutdown_note"
-            app:title="@string/settings_note" />
+        app:title="@string/settings_cat_startup">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_startup_time"
@@ -32,6 +18,30 @@
             android:layout="@layout/preference_category_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_startup_note"
+            app:title="@string/settings_note" />
+
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_startup_goto_mode"
+            app:entries="@array/startup_goto_modes_names"
+            app:entryValues="@array/startup_goto_modes_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_startup_goto_mode"
+            app:title="@string/settings_startup_goto_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_startup_goto_temp"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_startup_goto_temp"
+            app:title="@string/settings_startup_hold_temp"
+            app:dependency="prefs_startup_goto_mode"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_startup_goto_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
@@ -60,7 +70,21 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="@string/settings_cat_auto_power_off">
+        app:title="@string/settings_cat_shutdown">
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_shutdown_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_shutdown_time"
+            app:title="@string/settings_shutdown_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_shutdown_note"
+            app:title="@string/settings_note" />
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_auto_power_off"

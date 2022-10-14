@@ -24,6 +24,7 @@ import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.views.preferences.AppriseLocationPreference;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -34,6 +35,7 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private AppriseLocationPreference appriseLocations;
     private Socket socket;
 
     @Override
@@ -73,6 +75,8 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         SwitchPreferenceCompat oneSignal = findPreference(getString(R.string.prefs_notif_onesignal_enabled));
         Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
         SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
+        SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
+        appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
 
         if (oneSignal != null) {
             if (!VersionUtils.isSupported(ServerVersions.V_127)) {
@@ -82,21 +86,35 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         }
 
         if (oneSignalConsent != null) {
-            oneSignalConsent.setOnPreferenceClickListener(preference -> {
-                final FragmentManager fm = requireActivity().getSupportFragmentManager();
-                final FragmentTransaction ft = fm.beginTransaction();
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(android.R.id.content, new OneSignalConsentFragment())
-                        .addToBackStack(null)
-                        .commit();
-                return true;
-            });
+            if (VersionUtils.isSupported(ServerVersions.V_127)) {
+                oneSignalConsent.setOnPreferenceClickListener(preference -> {
+                    final FragmentManager fm = requireActivity().getSupportFragmentManager();
+                    final FragmentTransaction ft = fm.beginTransaction();
+                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            .replace(android.R.id.content, new OneSignalConsentFragment())
+                            .addToBackStack(null)
+                            .commit();
+                    return true;
+                });
+            } else {
+                oneSignalConsent.setEnabled(false);
+            }
         }
 
-        if (influxDBEnable != null && getActivity() != null) {
+        if (influxDBEnable != null) {
             if (!VersionUtils.isSupported(ServerVersions.V_127)) {
                 influxDBEnable.setEnabled(false);
                 influxDBEnable.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
+            }
+        }
+
+        if (appriseEnabled != null && appriseLocations != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                appriseLocations.setVisible(appriseEnabled.isChecked());
+            } else {
+                appriseLocations.setVisible(false);
+                appriseEnabled.setEnabled(false);
+                appriseEnabled.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
             }
         }
 
@@ -220,6 +238,12 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                     ServerControl.setInfluxDBEnabled(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_notif_apprise_enabled)
+                        .equals(preference.getKey())) {
+                    boolean enabled = ((SwitchPreferenceCompat) preference).isChecked();
+                    appriseLocations.setVisible(enabled);
+                    ServerControl.setAppriseEnabled(socket, enabled, this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_notif_onesignal_enabled)
                         .equals(preference.getKey())) {

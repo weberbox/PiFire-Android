@@ -138,56 +138,48 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
             if (!VersionUtils.isSupported(ServerVersions.V_135)) {
                 adcProbeAssignmentCat.setEnabled(false);
                 adcProbeAssignmentCat.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
-            }
-        }
-
-        ArrayList<String> probeOptions = new ArrayList<>(getADCAssignmentOptions());
-        ArrayList<String> probeSources = new ArrayList<>(getADCAssignmentSources());
-
-        if (adcGrillProbeOne != null) {
-            adcGrillProbeOne.setEntries(probeOptions.toArray(new String[0]));
-            adcGrillProbeOne.setEntryValues(probeOptions.toArray(new String[0]));
-            adcGrillProbeOne.setValue(probeSources.get(0));
-            if (Prefs.getBoolean(getString(R.string.prefs_four_probe))) {
-                adcGrillProbeOne.setTitle(getString(R.string.settings_adc_grill_probe_one));
-            }
-        } else {
-            if (adcProbeAssignmentCat != null) {
-                adcProbeAssignmentCat.setEnabled(false);
-            }
-        }
-
-        if (adcGrillProbeTwo != null) {
-            if (!Prefs.getBoolean(getString(R.string.prefs_four_probe))) {
-                adcGrillProbeTwo.setVisible(false);
             } else {
-                adcGrillProbeTwo.setEntries(probeOptions.toArray(new String[0]));
-                adcGrillProbeTwo.setEntryValues(probeOptions.toArray(new String[0]));
-                adcGrillProbeTwo.setValue(probeSources.get(3));
-            }
-        } else {
-            if (adcProbeAssignmentCat != null) {
-                adcProbeAssignmentCat.setEnabled(false);
-            }
-        }
+                ArrayList<String> probeOptions = new ArrayList<>(getADCAssignmentOptions());
+                ArrayList<String> probeSources = new ArrayList<>(getADCAssignmentSources());
 
-        if (adcProbeOne != null) {
-            adcProbeOne.setEntries(probeOptions.toArray(new String[0]));
-            adcProbeOne.setEntryValues(probeOptions.toArray(new String[0]));
-            adcProbeOne.setValue(probeSources.get(1));
-        } else {
-            if (adcProbeAssignmentCat != null) {
-                adcProbeAssignmentCat.setEnabled(false);
-            }
-        }
+                if (adcGrillProbeOne != null) {
+                    adcGrillProbeOne.setEntries(probeOptions.toArray(new String[0]));
+                    adcGrillProbeOne.setEntryValues(probeOptions.toArray(new String[0]));
+                    adcGrillProbeOne.setValue(probeSources.get(0));
+                    if (Prefs.getBoolean(getString(R.string.prefs_four_probe))) {
+                        adcGrillProbeOne.setTitle(getString(R.string.settings_adc_grill_probe_one));
+                    }
+                } else {
+                    adcProbeAssignmentCat.setEnabled(false);
+                }
 
-        if (adcProbeTwo != null) {
-            adcProbeTwo.setEntries(probeOptions.toArray(new String[0]));
-            adcProbeTwo.setEntryValues(probeOptions.toArray(new String[0]));
-            adcProbeTwo.setValue(probeSources.get(2));
-        } else {
-            if (adcProbeAssignmentCat != null) {
-                adcProbeAssignmentCat.setEnabled(false);
+                if (adcGrillProbeTwo != null) {
+                    if (!Prefs.getBoolean(getString(R.string.prefs_four_probe))) {
+                        adcGrillProbeTwo.setVisible(false);
+                    } else {
+                        adcGrillProbeTwo.setEntries(probeOptions.toArray(new String[0]));
+                        adcGrillProbeTwo.setEntryValues(probeOptions.toArray(new String[0]));
+                        adcGrillProbeTwo.setValue(probeSources.get(3));
+                    }
+                } else {
+                    adcProbeAssignmentCat.setEnabled(false);
+                }
+
+                if (adcProbeOne != null) {
+                    adcProbeOne.setEntries(probeOptions.toArray(new String[0]));
+                    adcProbeOne.setEntryValues(probeOptions.toArray(new String[0]));
+                    adcProbeOne.setValue(probeSources.get(1));
+                } else {
+                    adcProbeAssignmentCat.setEnabled(false);
+                }
+
+                if (adcProbeTwo != null) {
+                    adcProbeTwo.setEntries(probeOptions.toArray(new String[0]));
+                    adcProbeTwo.setEntryValues(probeOptions.toArray(new String[0]));
+                    adcProbeTwo.setValue(probeSources.get(2));
+                } else {
+                    adcProbeAssignmentCat.setEnabled(false);
+                }
             }
         }
 

@@ -508,6 +508,24 @@ public class ServerControl {
         }
     }
 
+    // Set Apprise Enabled
+    public static void setAppriseEnabled(Socket socket, boolean enabled,
+                                           SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withApprise(new Apprise().withEnabled(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Set Apprise Locations
+    public static void setAppriseLocations(Socket socket, List<String> locations,
+                                           SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withApprise(new Apprise().withLocations(locations)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
     // Set OneSignal Enabled
     public static void setOneSignalEnabled(Socket socket, boolean enabled,
                                            SocketCallback callback) {
@@ -950,6 +968,20 @@ public class ServerControl {
         controlSettingsUpdateEmit(socket, callback);
     }
 
+    // Set Start To Mode
+    public static void setStartToMode(Socket socket, String mode, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withStartToMode(new StartToMode().withAfterStartUpMode(mode)));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Start To Mode Temp
+    public static void setStartToModeTemp(Socket socket, String temp, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withStartToMode(new StartToMode().withGrillOneSetPoint(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
+    }
+
     // Set Pellets Warning Enabled
     public static void setPelletWarningEnabled(Socket socket, boolean enabled,
                                                SocketCallback callback) {
@@ -1011,6 +1043,14 @@ public class ServerControl {
         } else {
             ServerControlDep.setPelletsEmpty(socket, empty);
         }
+    }
+
+    // Set Pellets Auger Rate
+    public static void setPelletsAugerRate(Socket socket, String rate, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withAugerRate(Float.parseFloat(rate))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Debug Mode

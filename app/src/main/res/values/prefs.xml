@@ -28,6 +28,8 @@
     <string name="prefs_app_updater_download">prefs_app_updater_download</string>
     <string name="prefs_app_update_required">prefs_app_update_required</string>
 
+    <string name="prefs_inapp_first_show">prefs_inapp_first_show</string>
+
     <string name="prefs_crash_cat">prefs_crash_cat</string>
     <string name="prefs_crash_enable">prefs_crash_enable</string>
     <string name="prefs_crash_user_email">prefs_crash_user_email</string>
@@ -83,6 +85,8 @@
 
     <string name="prefs_shutdown_time">prefs_shutdown_time</string>
     <string name="prefs_startup_time">prefs_startup_time</string>
+    <string name="prefs_startup_goto_mode">prefs_startup_goto_mode</string>
+    <string name="prefs_startup_goto_temp">prefs_startup_goto_temp</string>
     <string name="prefs_auto_power_off">prefs_auto_power_off</string>
     <string name="prefs_smart_start">prefs_smart_start</string>
     <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
@@ -122,6 +126,8 @@
     <string name="prefs_notif_influxdb_token">prefs_notif_influxdb_token</string>
     <string name="prefs_notif_influxdb_org">prefs_notif_influxdb_org</string>
     <string name="prefs_notif_influxdb_bucket">prefs_notif_influxdb_bucket</string>
+    <string name="prefs_notif_apprise_enabled">prefs_notif_apprise_enabled</string>
+    <string name="prefs_notif_apprise_locations">prefs_notif_apprise_locations</string>
 
     <string name="prefs_server_updates_frag">prefs_server_updates_frag</string>
 
@@ -146,6 +152,7 @@
     <string name="prefs_pellet_warning_level">prefs_pellet_warning_level</string>
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
+    <string name="prefs_pellet_auger_rate">prefs_pellet_auger_rate</string>
 
     <string name="prefs_manual_mode_cat">prefs_manual_mode_cat</string>
     <string name="prefs_manual_mode_frag">prefs_manual_mode_frag</string>

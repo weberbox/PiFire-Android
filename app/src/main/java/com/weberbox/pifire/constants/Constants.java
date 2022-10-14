@@ -118,4 +118,8 @@ public class Constants {
     public static final int ONESIGNAL_APP_UPDATED = 6;
     public static final int ONESIGNAL_NULL_TOKEN = 7;
 
+    // In App Updates
+    public static final int FLEXIBLE_REQUEST_CODE = 781;
+    public static final int IMMEDIATE_REQUEST_CODE = 782;
+
 }

@@ -69,6 +69,16 @@
         app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/pellets_usage"
+        layout="@layout/layout_pellets_usage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintTop_toBottomOf="@+id/pellets_hopper_level"/>
+
     <com.weberbox.pifire.ui.views.PelletsLogsRecycler
         android:id="@+id/logs_card_view"
         android:layout_width="0dp"
@@ -83,7 +93,7 @@
         app:contentPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
-        app:layout_constraintTop_toBottomOf="@+id/pellets_hopper_level"
+        app:layout_constraintTop_toBottomOf="@+id/pellets_usage"
         app:logs_header_icon="@drawable/ic_menu_history"
         app:logs_header_title="@string/pellets_log" />
 

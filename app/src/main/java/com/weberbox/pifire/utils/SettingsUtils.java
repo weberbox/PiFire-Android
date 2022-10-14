@@ -53,6 +53,7 @@ public class SettingsUtils {
             Pushover pushOver = settingsResponse.getPushover();
             OneSignalPush oneSignal = settingsResponse.getOneSignal();
             InfluxDB influxDB = settingsResponse.getInfluxDB();
+            Apprise apprise = settingsResponse.getApprise();
             ProbeTypes probeTypes = settingsResponse.getProbeTypes();
             CycleData cycleData = settingsResponse.getCycleData();
             KeepWarm keepWarm = settingsResponse.getKeepWarm();
@@ -62,6 +63,7 @@ public class SettingsUtils {
             PelletLevel pellets = settingsResponse.getPellets();
             Modules modules = settingsResponse.getModules();
             SmartStart smartStart = settingsResponse.getSmartStart();
+            StartToMode startToMode = settingsResponse.getStartToMode();
 
             if (probesSettings != null) {
                 Map<String, ProbeProfileModel> probes = probesSettings.getProbeProfiles();
@@ -138,6 +140,10 @@ public class SettingsUtils {
                     putBoolean(R.string.prefs_standalone, globals.getStandalone());
                 }
 
+                if (globals.getAugerRate() != null) {
+                    putFloatString(R.string.prefs_pellet_auger_rate, globals.getAugerRate());
+                }
+
             }
 
             if (ifttt != null) {
@@ -174,6 +180,12 @@ public class SettingsUtils {
                 putString(R.string.prefs_notif_influxdb_token, influxDB.getToken());
                 putString(R.string.prefs_notif_influxdb_org, influxDB.getOrg());
                 putString(R.string.prefs_notif_influxdb_bucket, influxDB.getBucket());
+            }
+
+            if (apprise != null) {
+                putBoolean(R.string.prefs_notif_apprise_enabled, apprise.getEnabled());
+                putString(R.string.prefs_notif_apprise_locations,
+                        new Gson().toJson(apprise.getLocations()));
             }
 
             if (probeTypes != null) {
@@ -253,6 +265,11 @@ public class SettingsUtils {
                         new Gson().toJson(pwm.getTempRangeList()));
                 putString(R.string.prefs_pwm_profiles,
                         new Gson().toJson(pwm.getProfiles()));
+            }
+
+            if (startToMode != null) {
+                putString(R.string.prefs_startup_goto_mode, startToMode.getAfterStartUpMode());
+                putIntString(R.string.prefs_startup_goto_temp, startToMode.getGrillOneSetPoint());
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {

@@ -56,6 +56,7 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pelletWarningLevel = findPreference(getString(R.string.prefs_pellet_warning_level));
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
+        EditTextPreference augerRate = findPreference(getString(R.string.prefs_pellet_auger_rate));
 
         if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
                 "").isEmpty()) {
@@ -99,6 +100,22 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                 editText.addTextChangedListener(
                         new EmptyTextListener(requireActivity(), 1.0, 100.0, editText));
             });
+        }
+
+        if (augerRate != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                augerRate.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), 0.0, null, editText));
+                });
+            } else {
+                augerRate.setEnabled(false);
+                augerRate.setSummaryProvider(null);
+                augerRate.setSummary(getString(R.string.disabled_option_settings,
+                        ServerVersions.V_135));
+            }
         }
     }
 
@@ -168,6 +185,11 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_pellet_full)
                         .equals(preference.getKey())) {
                     ServerControl.setPelletsFull(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_pellet_auger_rate)
+                        .equals(preference.getKey())) {
+                    ServerControl.setPelletsAugerRate(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -450,7 +451,6 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
         }
     };
 
-    //@SuppressWarnings("depreciation")
     private final ActivityResultLauncher<Intent> requestNewImageUri = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -459,14 +459,12 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                         Intent data = result.getData();
                         if (data != null) {
                             onRecipeUpdated();
-                            // (TODO) For SDK 33 when it is not so buggy
-                            //Uri uri;
-                            //if (Build.VERSION.SDK_INT >= 33) {
-                                //uri = data.getParcelableExtra("path", Uri.class);
-                            //} else {
-                                //uri = data.getParcelableExtra("path");
-                            //}
-                            Uri uri = data.getParcelableExtra("path");
+                            Uri uri;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                uri = data.getParcelableExtra("path", Uri.class);
+                            } else {
+                                uri = data.getParcelableExtra("path");
+                            }
                             recipe.setImage(uri.toString());
                             loadRecipeImage(uri.toString());
                             cleanImageDir(uri);

@@ -32,11 +32,13 @@ import com.weberbox.pifire.databinding.FragmentPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsHopperBinding;
+import com.weberbox.pifire.databinding.LayoutPelletsUsageBinding;
 import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 import com.weberbox.pifire.model.local.PelletItemModel;
 import com.weberbox.pifire.model.local.PelletLogModel;
 import com.weberbox.pifire.model.remote.PelletDataModel;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
+import com.weberbox.pifire.model.remote.PelletDataModel.Current;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.PelletItemsAdapter;
@@ -58,6 +60,7 @@ import com.weberbox.pifire.utils.TimeUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.socket.client.Socket;
@@ -79,10 +82,10 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
     private List<PelletProfileModel> profileList, profileEditList;
     private List<String> brandsList, woodsList;
     private LinearProgressIndicator hopperLevel;
-    private VeilLayout hopperPlaceholder, currentPlaceholder;
+    private VeilLayout hopperPlaceholder, currentPlaceholder, usagePlaceholder;
     private VeilRecyclerFrameView brandsCardViewRecycler, woodsCardViewRecycler;
     private VeilRecyclerFrameView editorRecycler, logsRecycler;
-    private TextView hopperLevelText;
+    private TextView hopperLevelText, pelletUsageOunces, pelletUsageGrams;
     private String currentPelletId;
     private Socket socket;
 
@@ -108,6 +111,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         LayoutPelletsBinding pelletsBinding = binding.pelletsLayout;
         LayoutPelletsCurrentBinding currentBinding = pelletsBinding.loadOutCardView;
         LayoutPelletsHopperBinding hopperBinding = pelletsBinding.pelletsHopperLevel;
+        LayoutPelletsUsageBinding usageBinding = pelletsBinding.pelletsUsage;
         pelletsCurrentBinding = pelletsBinding.loadOutCardView;
 
         rootContainer = binding.pelletsRootContainer;
@@ -117,6 +121,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         hopperLevelText = hopperBinding.hopperLevelText;
         hopperPlaceholder = hopperBinding.hopperHolder;
         currentPlaceholder = currentBinding.currentHolder;
+        usagePlaceholder = usageBinding.pelletsUsageHolder;
 
         CardViewHeaderButton hopperHeader = hopperBinding.hopperLevelHeader;
 
@@ -136,6 +141,9 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
 
         TextView refreshPellets = hopperHeader.getButton();
         TextView loadNewPellets = currentHeader.getButton();
+
+        pelletUsageOunces = usageBinding.pelletsUsageOunces;
+        pelletUsageGrams = usageBinding.pelletsUsageGrams;
 
         pelletBrandsAdapter = new PelletItemsAdapter(brandsEditList, this, true);
 
@@ -364,7 +372,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
         try {
             PelletDataModel pelletDataModel = PelletDataModel.parseJSON(responseData);
 
-            PelletDataModel.Current current = pelletDataModel.getCurrent();
+            Current current = pelletDataModel.getCurrent();
 
             brandsList.addAll(pelletDataModel.getBrands());
             woodsList.addAll(pelletDataModel.getWoods());
@@ -390,6 +398,16 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
                 } else {
                     pelletsCurrentBinding.currentDateLoadedText.setText(current.getDateLoaded());
                 }
+            }
+
+            if (current.getEstimatedUsage() != null) {
+                Double grams = current.getEstimatedUsage();
+                Double ounces = grams * 0.035274;
+                pelletUsageOunces.setText(String.format(Locale.US, "%.2f oz", ounces));
+                pelletUsageGrams.setText(String.format(Locale.US, "%.2f g", grams));
+            } else {
+                pelletUsageOunces.setText(R.string.placeholder_none);
+                pelletUsageGrams.setText(R.string.placeholder_none);
             }
 
             if (current.getPelletId() != null) {
@@ -465,6 +483,7 @@ public class PelletsFragment extends Fragment implements PelletsProfileCallback 
             setProfilesViewLimited(true);
 
             hopperPlaceholder.unVeil();
+            usagePlaceholder.unVeil();
             currentPlaceholder.unVeil();
             brandsCardViewRecycler.unVeil();
             woodsCardViewRecycler.unVeil();

@@ -105,7 +105,7 @@
     <string name="dash_remaining_title">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
     <string name="grill_smoke_plus_abv">S Plus</string>
-    <string name="dash_pwm_control">PWM</string>
+    <string name="dash_pwm_control">Pwm</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
     <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
@@ -366,12 +366,18 @@
     <string name="settings_keep_warm_temp">Keep Warm Temp</string>
     <string name="settings_keep_warm_note">The Keep Warm option will be activated when selected once a probe set point has been achieved or the set timer has expired. The Grill will exit the currently running mode then switch to Hold Mode and attempt to maintain the temperature set above. You can also enable or disable the Smoke Plus feature during Keep Warm</string>
 
-    <string name="settings_cat_timers">Timers Settings</string>
-    <string name="settings_cat_auto_power_off">Power Off Settings</string>
+    <string name="settings_cat_startup">Startup Settings</string>
+    <string name="settings_cat_shutdown">Shutdown Settings</string>
     <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
     <string name="settings_startup_time">Startup Timer (seconds)</string>
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
+    <string name="settings_startup_goto_title">Mode After Startup</string>
+    <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
+    <string name="settings_startup_goto_temp">Hold Temp</string>
+    <string name="settings_startup_smoke_mode">Smoke Mode</string>
+    <string name="settings_startup_hold_mode">Hold Mode</string>
+    <string name="settings_startup_hold_temp">Hold Temp</string>
     <string name="settings_auto_power_off">Auto Power Off</string>
     <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
     <string name="settings_smart_start">Smart Start</string>
@@ -406,23 +412,33 @@
     <string name="settings_safety_warning">Safety features are not infallible and may not prevent safety issues with your grill in all cases. As with any grill, it is the operator\'s responsibility to monitor their equipment to ensure proper operational safety.</string>
 
     <string name="settings_cat_ifttt">IFTTT WebHooks</string>
-    <string name="settings_cat_pushover">PushOver</string>
-    <string name="settings_cat_pushbullet">PushBullet</string>
-    <string name="settings_cat_onesignal">Push Notifications</string>
-    <string name="settings_cat_onesignal_consent">One Signal Consent</string>
-    <string name="settings_cat_influxdb">InfluxDB</string>
-
     <string name="settings_ifttt_api">API Key</string>
+
+    <string name="settings_cat_pushover">PushOver</string>
     <string name="settings_pushover_api">API Key</string>
     <string name="settings_pushover_keys">User Keys</string>
     <string name="settings_pushover_url">Public URL</string>
     <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
+
+    <string name="settings_cat_pushbullet">PushBullet</string>
     <string name="settings_pushbullet_api">API Key</string>
     <string name="settings_pushbullet_url">Public URL</string>
+
+    <string name="settings_cat_influxdb">InfluxDB</string>
     <string name="settings_influxdb_url">URL</string>
     <string name="settings_influxdb_token">Token</string>
     <string name="settings_influxdb_org">Org</string>
     <string name="settings_influxdb_bucket">Bucket</string>
+
+    <string name="settings_cat_apprise">Apprise</string>
+    <string name="settings_apprise_locations">Locations</string>
+    <string name="settings_apprise_add">Add Apprise Location</string>
+    <string name="settings_apprise_edit">Edit Apprise Location</string>
+    <string name="settings_apprise_delete">Delete Apprise Location</string>
+    <string name="settings_apprise_delete_content">Are you sure that you want to permanently delete this location?</string>
+
+    <string name="settings_cat_onesignal">Push Notifications</string>
+    <string name="settings_cat_onesignal_consent">One Signal Consent</string>
     <string name="settings_onesignal_consent_title">OneSignal Consent</string>
     <string name="settings_onesignal_consent_summary">Review OneSignal privacy policy</string>
     <string name="settings_onesignal_consent_1">OneSignal is used to deliver notifications from PiFire. No Personally Identifiable Information is being collected by OneSignal. Notification data sent through OneSignal\'s API will be deleted after ~30 days.</string>
@@ -495,6 +511,10 @@
     <string name="settings_pellet_full">Full Distance (cm)</string>
     <string name="settings_pellet_empty">Empty Distance (cm)</string>
     <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
+
+    <string name="settings_cat_pellets_auger">Auger Rate</string>
+    <string name="settings_pellet_auger_rate">Auger Rate (g/s)</string>
+    <string name="settings_pellet_auger_rate_note">This value is used to calculate how long to run the auger when priming, and to calculate estimated pellet usage. This value can be tuned for your auger speed, by going into manual mode and running the auger for 10 seconds, then weighing the pellets that have been dispensed into the firepot. For example, if you run the auger for 10 seconds and 3 grams of pellets are dispensed, then the calculation would be 3g / 10s = 0.3. That means 0.3 grams are dispensed per second of auger on time.</string>
 
     <string name="settings_cat_manual_mode">Manual Mode</string>
     <string name="settings_cat_manual_functions">Manual Functions</string>
@@ -573,9 +593,10 @@
     <string name="info_app_build_date">Build Date</string>
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
-    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2021\n\nPiFire Android created by James Weber, &#169; 2021</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2022\n\nPiFire Android created by James Weber, &#169; 2022</string>
 
     <string name="pellets_hopper_level">Pellet Level</string>
+    <string name="pellets_usage">Estimated Usage</string>
     <string name="pellets_current_load">Current</string>
     <string name="pellets_current_brand">Brand:</string>
     <string name="pellets_current_wood">Wood:</string>
@@ -635,18 +656,7 @@
 
     <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
 
-    <!-- Local App Updater -->
-    <string name="updater_update_available">New update available!</string>
-    <string name="updater_update_required">Update Required!</string>
     <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
-    <string name="updater_update_available_description_dialog">Update %1$s is available to download. By downloading the latest update you will get the latest features, improvements and bug fixes for %2$s.</string>
-    <string name="updater_update_available_description_dialog_before_release_notes">Update %1$s is available to download.\n\nYou can get these new features:\n%2$s</string>
-    <string name="updater_update_available_description_snackbar">Update %1$s is available!</string>
-    <string name="updater_update_available_description_notification">Update %1$s of %2$s is available to download</string>
-    <string name="updater_update_not_available">No updates available</string>
-    <string name="updater_update_not_available_description">You\'ve got the latest version available of %s!</string>
-    <string name="updater_update_check_failed">Update check failed. Please try again later</string>
-    <string name="updater_update_download_failed">Error downloading update</string>
 
     <!-- Remote Server Updater -->
     <string name="server_updater_branch">Branch:</string>

@@ -13,6 +13,15 @@
         android:layout_margin="@dimen/_10sdp" />
 
     <include
+        android:id="@+id/pellets_usage"
+        layout="@layout/layout_pellets_usage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp" />
+
+    <include
         android:id="@+id/load_out_card_view"
         layout="@layout/layout_pellets_current"
         android:layout_width="match_parent"

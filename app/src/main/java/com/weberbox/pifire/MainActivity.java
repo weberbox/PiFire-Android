@@ -49,9 +49,7 @@ import com.weberbox.pifire.ui.fragments.ChangelogFragment;
 import com.weberbox.pifire.ui.fragments.FeedbackFragment;
 import com.weberbox.pifire.ui.fragments.InfoFragment;
 import com.weberbox.pifire.ui.views.NavListItem;
-import com.weberbox.pifire.updater.AppUpdater;
-import com.weberbox.pifire.updater.enums.Display;
-import com.weberbox.pifire.updater.enums.UpdateFrom;
+import com.weberbox.pifire.update.UpdateUtils;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
@@ -77,7 +75,7 @@ public class MainActivity extends BaseActivity implements
     private ViewPager2 viewPager;
     private TextView actionBarText;
     private FrameLayout startPanel;
-    private AppUpdater appUpdater;
+    private UpdateUtils updateUtils;
     private FrameLayout endPanel;
     private NavListItem navDashboard, navPellets, navHistory, navEvents, navRecipes;
     private Socket socket;
@@ -185,24 +183,20 @@ public class MainActivity extends BaseActivity implements
 
         connectSocketListenData(socket);
 
-        String updaterUrl;
-        if (AppConfig.IS_BETA) {
-            updaterUrl = getString(R.string.def_app_update_check_url_beta);
-        } else {
-            updaterUrl = getString(R.string.def_app_update_check_url);
-        }
-
-        if (savedInstanceState == null && !updaterUrl.isEmpty()) {
-            appUpdater = new AppUpdater(this)
-                    .setDisplay(Display.DIALOG)
-                    .setButtonDoNotShowAgain(R.string.disable_button)
-                    .setUpdateFrom(UpdateFrom.JSON)
-                    .setUpdateJSON(updaterUrl)
-                    .showEvery(AppConfig.UPDATE_CHECK_FREQ);
-            appUpdater.start();
+        updateUtils = new UpdateUtils(this);
+        if (savedInstanceState == null ) {
+            updateUtils.checkForUpdate(false, false);
         }
 
         CrashUtils.checkIfCrashed(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (updateUtils != null) {
+            updateUtils.handleUpdateRequest(requestCode, resultCode);
+        }
     }
 
     @Override
@@ -221,6 +215,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        updateUtils.checkForUpdate(false, true);
         PanelsChildGestureRegionObserver.Provider.get().addGestureRegionsUpdateListener(this);
         panelsLayout.registerStartPanelStateListeners(panelState ->
                 mainViewModel.setStartPanelStateChange(panelState));
@@ -237,9 +232,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        if (appUpdater != null) {
-            appUpdater.stop();
-        }
+        updateUtils.stopAppUpdater();
     }
 
     @Override

@@ -23,6 +23,9 @@ public class SettingsDataModel {
     @SerializedName("globals")
     @Expose
     private Globals globals;
+    @SerializedName("apprise")
+    @Expose
+    private Apprise apprise;
     @SerializedName("ifttt")
     @Expose
     private Ifttt ifttt;
@@ -71,6 +74,9 @@ public class SettingsDataModel {
     @SerializedName("pwm")
     @Expose
     private PWM pwm;
+    @SerializedName("start_to_mode")
+    @Expose
+    private StartToMode startToMode;
 
     public Versions getVersions() {
         return versions;
@@ -121,6 +127,19 @@ public class SettingsDataModel {
 
     public SettingsDataModel withGlobals(Globals globals) {
         this.globals = globals;
+        return this;
+    }
+
+    public Apprise getApprise() {
+        return apprise;
+    }
+
+    public void setApprise(Apprise apprise) {
+        this.apprise = apprise;
+    }
+
+    public SettingsDataModel withApprise(Apprise apprise) {
+        this.apprise = apprise;
         return this;
     }
 
@@ -309,6 +328,11 @@ public class SettingsDataModel {
         this.lastUpdated = lastUpdated;
     }
 
+    public SettingsDataModel withLastUpdated(LastUpdated lastupdated) {
+        this.lastUpdated = lastupdated;
+        return this;
+    }
+
     public PWM getPWM() {
         return pwm;
     }
@@ -322,8 +346,16 @@ public class SettingsDataModel {
         return this;
     }
 
-    public SettingsDataModel withLastUpdated(LastUpdated lastupdated) {
-        this.lastUpdated = lastupdated;
+    public StartToMode getStartToMode() {
+        return startToMode;
+    }
+
+    public void setStartToMode(StartToMode startToMode) {
+        this.startToMode = startToMode;
+    }
+
+    public SettingsDataModel withStartToMode(StartToMode startToMode) {
+        this.startToMode = startToMode;
         return this;
     }
 
@@ -517,6 +549,9 @@ public class SettingsDataModel {
         @SerializedName("server")
         @Expose
         private String server;
+        @SerializedName("cookfile")
+        @Expose
+        private String cookFile;
 
         public String getServerVersion() {
             return server;
@@ -524,6 +559,14 @@ public class SettingsDataModel {
 
         public void setServerVersion(String server) {
             this.server = server;
+        }
+
+        public String getCookFileVersion() {
+            return cookFile;
+        }
+
+        public void setCookFileVersion(String cookFile) {
+            this.cookFile = cookFile;
         }
 
     }
@@ -571,7 +614,7 @@ public class SettingsDataModel {
         private String units;
         @SerializedName("augerrate")
         @Expose
-        private Double augerRate;
+        private Float augerRate;
 
         public String getGrillName() {
             return grillName;
@@ -703,15 +746,15 @@ public class SettingsDataModel {
             return this;
         }
 
-        public Double getAugerRate() {
+        public Float getAugerRate() {
             return augerRate;
         }
 
-        public void setAugerRate(Double augerRate) {
+        public void setAugerRate(Float augerRate) {
             this.augerRate = augerRate;
         }
 
-        public Globals withAugerRate(Double augerRate) {
+        public Globals withAugerRate(Float augerRate) {
             this.augerRate = augerRate;
             return this;
         }
@@ -1225,6 +1268,43 @@ public class SettingsDataModel {
 
         public InfluxDB withBucket(String bucket) {
             this.bucket = bucket;
+            return this;
+        }
+
+    }
+
+    public static class Apprise {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("locations")
+        @Expose
+        private List<String> locations = null;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public Apprise withEnabled(Boolean enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        public List<String> getLocations() {
+            return locations;
+        }
+
+        public void setLocations(List<String> locations) {
+            this.locations = locations;
+        }
+
+        public Apprise withLocations(List<String> locations) {
+            this.locations = locations;
             return this;
         }
 
@@ -2112,6 +2192,43 @@ public class SettingsDataModel {
 
         public PWMProfile withDutyCycle(Integer dutyCycle) {
             this.dutyCycle = dutyCycle;
+            return this;
+        }
+
+    }
+
+    public static class StartToMode {
+
+        @SerializedName("after_startup_mode")
+        @Expose
+        private String afterStartUpMode;
+        @SerializedName("grill1_setpoint")
+        @Expose
+        private Integer grillOneSetPoint;
+
+        public String getAfterStartUpMode() {
+            return afterStartUpMode;
+        }
+
+        public void setAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+        }
+
+        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+            return this;
+        }
+
+        public Integer getGrillOneSetPoint() {
+            return grillOneSetPoint;
+        }
+
+        public void setGrillOneSetPoint(Integer grillOneSetPoint) {
+            this.grillOneSetPoint = grillOneSetPoint;
+        }
+
+        public StartToMode withGrillOneSetPoint(Integer grillOneSetPoint) {
+            this.grillOneSetPoint = grillOneSetPoint;
             return this;
         }
 
