@@ -140,7 +140,8 @@ public class DatabaseUtils {
                     FileOutputStream fos = new FileOutputStream(file);
                     String canonicalPath = file.getCanonicalPath();
                     if (!canonicalPath.startsWith(filePath)) {
-                        Timber.e(new SecurityException("Canonical Path Issue"));
+                        Timber.e(new SecurityException("Canonical Path: " +
+                                canonicalPath + "File Path: " + filePath));
                         break;
                     }
 

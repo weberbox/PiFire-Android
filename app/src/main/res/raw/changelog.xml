@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.5.0" changeDate="" currentVersion="true">
+    <changelogversion versionName="1.5.1" changeDate="" currentVersion="true">
         <changelogtext logType="new">Added Option to Edit Smart Start Config</changelogtext>
         <changelogtext logType="new">Added Pellets Estimated Usage</changelogtext>
         <changelogtext logType="new">Added Pellets Auger Rate to Settings</changelogtext>

@@ -58,13 +58,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:animateLayoutChanges="true"
+                    android:minWidth="@dimen/_60sdp"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/pellets_usage_grams"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="200.00 oz" />
+                    tools:text="@string/placeholder_none" />
 
                 <TextView
                     android:id="@+id/pellets_usage_grams"
@@ -72,13 +73,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:animateLayoutChanges="true"
+                    android:minWidth="@dimen/_60sdp"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toEndOf="@+id/pellets_usage_ounces"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="400.00 g" />
+                    tools:text="@string/placeholder_none" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.skydoves.androidveil.VeilLayout>
