@@ -388,6 +388,15 @@ public class SettingsDataModel {
         @SerializedName("center")
         @Expose
         private Float center;
+        @SerializedName("LidOpenDetectEnabled")
+        @Expose
+        private Boolean lidOpenDetectEnabled;
+        @SerializedName("LidOpenThreshold")
+        @Expose
+        private Integer lidOpenThreshold;
+        @SerializedName("LidOpenPauseTime")
+        @Expose
+        private Integer lidOpenPauseTime;
 
         public Float getPb() {
             return pb;
@@ -503,6 +512,45 @@ public class SettingsDataModel {
 
         public CycleData withCenter(Float center) {
             this.center = center;
+            return this;
+        }
+
+        public Boolean getLidOpenDetectEnabled() {
+            return lidOpenDetectEnabled;
+        }
+
+        public void setLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
+            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
+        }
+
+        public CycleData withLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
+            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
+            return this;
+        }
+
+        public Integer getLidOpenThreshold() {
+            return lidOpenThreshold;
+        }
+
+        public void setLidOpenThreshold(Integer lidOpenThreshold) {
+            this.lidOpenThreshold = lidOpenThreshold;
+        }
+
+        public CycleData withLidOpenThreshold(Integer lidOpenThreshold) {
+            this.lidOpenThreshold = lidOpenThreshold;
+            return this;
+        }
+
+        public Integer getLidOpenPauseTime() {
+            return lidOpenPauseTime;
+        }
+
+        public void setLidOpenPauseTime(Integer lidOpenPauseTime) {
+            this.lidOpenPauseTime = lidOpenPauseTime;
+        }
+
+        public CycleData withLidOpenPauseTime(Integer lidOpenPauseTime) {
+            this.lidOpenPauseTime = lidOpenPauseTime;
             return this;
         }
 

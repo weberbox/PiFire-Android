@@ -192,6 +192,41 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/prefs_work_lid_open_cat"
+        app:title="@string/settings_cat_lid_detection">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_auto_lid_detect"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_lid_open_detect"
+            app:title="@string/settings_lid_open_enabled" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_lid_open_thresh"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_lid_open_thresh"
+            app:title="@string/settings_lid_open_thresh"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_lid_open_pause"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_work_lid_open_pause"
+            app:title="@string/settings_lid_open_pause"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_lid_open_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/settings_cat_keep_warm">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket

@@ -10,7 +10,8 @@ public class ServerVersions {
     public static final String V_129 = "1.2.9";
     public static final String V_131 = "1.3.1";
     public static final String V_133 = "1.3.3";
-    public static final String V_134 = "1.3.4"; //Released (main)
-    public static final String V_135 = "1.3.5"; //Current (development)
+    public static final String V_134 = "1.3.4";
+    public static final String V_135 = "1.3.5"; //Released (main)
+    public static final String V_136 = "1.3.6"; //Current (development)
 
 }

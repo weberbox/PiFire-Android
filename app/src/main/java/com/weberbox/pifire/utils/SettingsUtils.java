@@ -203,6 +203,14 @@ public class SettingsUtils {
                 putFloatString(R.string.prefs_work_pid_u_max, cycleData.getuMax());
                 putFloatString(R.string.prefs_work_pid_u_min, cycleData.getuMin());
                 putFloatString(R.string.prefs_work_pid_center, cycleData.getCenter());
+                if (VersionUtils.isSupported(ServerVersions.V_136)) {
+                    putBoolean(R.string.prefs_work_lid_open_detect,
+                            cycleData.getLidOpenDetectEnabled());
+                    putIntString(R.string.prefs_work_lid_open_thresh,
+                            cycleData.getLidOpenThreshold());
+                    putIntString(R.string.prefs_work_lid_open_pause,
+                            cycleData.getLidOpenPauseTime());
+                }
             }
 
             if (keepWarm != null) {

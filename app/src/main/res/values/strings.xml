@@ -368,6 +368,12 @@
     <string name="settings_pid_center">Center Ratio</string>
     <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
 
+    <string name="settings_cat_lid_detection">Lid Detection</string>
+    <string name="settings_lid_open_enabled">Lid Open Detection</string>
+    <string name="settings_lid_open_thresh">Open Threshold %</string>
+    <string name="settings_lid_open_pause">Open Pause Time (s)</string>
+    <string name="settings_lid_open_note">If enabled, the system will attempt to determine if the lid was opened and temporarily suspend the PID. If the temperature drops below the threshold (percentage of the hold temperature), a lid open event is triggered. Once lid open is detected, it will pause the PID for the specified amount of seconds.</string>
+
     <string name="settings_cat_keep_warm">Keep Warm Settings</string>
     <string name="settings_keep_warm_s_plus">Smoke Plus Enabled</string>
     <string name="settings_keep_warm_temp">Keep Warm Temp</string>

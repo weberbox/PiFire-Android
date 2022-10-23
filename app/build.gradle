@@ -36,7 +36,7 @@ def getGitBranch = { ->
 
 def vMajor = 1
 def vMinor = 5
-def vPatch = 4
+def vPatch = 5
 def vBuild = 0
 def isBeta = false
 

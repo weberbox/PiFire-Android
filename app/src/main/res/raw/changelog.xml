@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.5.4" changeDate="" currentVersion="true">
+    <changelogversion versionName="1.5.5" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Added Lid Open Detection Settings</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.5.4" changeDate="">
         <changelogtext logType="new">Added Prime and Prime &amp; Start Modes</changelogtext>
         <changelogtext logType="new">Added Option to Increment Temps by 5°</changelogtext>
         <changelogtext logType="new">Added Option to Edit Smart Start Config</changelogtext>

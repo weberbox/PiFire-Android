@@ -38,6 +38,7 @@
     <bool name="def_keep_warm_s_plus">false</bool>
     <bool name="def_auto_power_off">false</bool>
     <bool name="def_smart_start">true</bool>
+    <bool name="def_auto_lid_detect">false</bool>
 
     <string name="def_grill_temp_unit">F</string>
 
@@ -67,6 +68,9 @@
     <string name="def_pid_u_min">0.15</string>
     <string name="def_pid_u_max">1.0</string>
     <string name="def_pid_center">0.5</string>
+
+    <string name="def_lid_open_thresh">15</string>
+    <string name="def_lid_open_pause">60</string>
 
     <string name="def_pwm_fan_update_time">10</string>
     <string name="def_pwm_fan_frequency">30</string>

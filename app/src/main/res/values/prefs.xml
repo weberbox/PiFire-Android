@@ -82,6 +82,11 @@
     <string name="prefs_work_pid_u_max">prefs_work_pid_u_max</string>
     <string name="prefs_work_pid_center">prefs_work_pid_center</string>
 
+    <string name="prefs_work_lid_open_cat">prefs_work_lid_open_cat</string>
+    <string name="prefs_work_lid_open_detect">prefs_work_lid_open_detect</string>
+    <string name="prefs_work_lid_open_thresh">prefs_work_lid_open_thresh</string>
+    <string name="prefs_work_lid_open_pause">prefs_work_lid_open_pause</string>
+
     <string name="prefs_work_keep_warm_temp">prefs_work_keep_warm_temp</string>
     <string name="prefs_work_keep_warm_s_plus">prefs_work_keep_warm_s_plus</string>
 

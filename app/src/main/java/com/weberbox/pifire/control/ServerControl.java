@@ -907,6 +907,30 @@ public class ServerControl {
         }
     }
 
+    // Set Lid Open Detect
+    public static void setLidOpenDetect(Socket socket, boolean enabled, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withLidOpenDetectEnabled(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Set Lid Open Threshold
+    public static void setLidOpenThresh(Socket socket, String threshold , SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withLidOpenThreshold(Integer.parseInt(threshold))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Set Lid Open Threshold
+    public static void setLidOpenPause(Socket socket, String pauseTime , SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withLidOpenPauseTime(Integer.parseInt(pauseTime))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
     // Set Keep Warm S Plus
     public static void setKeepWarmSPlus(Socket socket, boolean enabled, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()

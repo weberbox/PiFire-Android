@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
@@ -65,6 +66,9 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_pid_u_max));
         EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_pid_u_min));
         EditTextPreference pidCenter = findPreference(getString(R.string.prefs_work_pid_center));
+        PreferenceCategory lidOpenCat = findPreference(getString(R.string.prefs_work_lid_open_cat));
+        EditTextPreference lidOpenThresh = findPreference(getString(R.string.prefs_work_lid_open_thresh));
+        EditTextPreference lidOpenPause = findPreference(getString(R.string.prefs_work_lid_open_pause));
         SwitchPreferenceCompat keepWarmSPlus = findPreference(getString(R.string.prefs_work_keep_warm_s_plus));
         EditTextPreference keepWarmTemp = findPreference(getString(R.string.prefs_work_keep_warm_temp));
         SwitchPreferenceCompat pwmFanRamp = findPreference(getString(R.string.prefs_work_splus_fan_ramp));
@@ -268,6 +272,36 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             }
         }
 
+        if (lidOpenCat != null) {
+            if (!VersionUtils.isSupported(ServerVersions.V_136)) {
+                lidOpenCat.setEnabled(false);
+                lidOpenCat.setSummary(getString(R.string.disabled_option_settings,
+                        ServerVersions.V_136));
+            }
+        }
+
+        if (lidOpenThresh != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_136)) {
+                lidOpenThresh.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), 1.0, 80.0,
+                                    editText));
+                });
+            }
+        }
+
+        if (lidOpenPause != null) {
+            if (VersionUtils.isSupported(ServerVersions.V_136)) {
+                lidOpenPause.setOnBindEditTextListener(editText -> {
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.addTextChangedListener(
+                            new EmptyTextListener(requireActivity(), 10.0, 1000.0,
+                                    editText));
+                });
+            }
+        }
+
         if (keepWarmSPlus != null) {
             if (!VersionUtils.isSupported(ServerVersions.V_127)) {
                 keepWarmSPlus.setEnabled(false);
@@ -416,6 +450,16 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                     ServerControl.setFanDutyCycle(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
+                if (preference.getContext().getString(R.string.prefs_work_lid_open_thresh)
+                        .equals(preference.getKey())) {
+                    ServerControl.setLidOpenThresh(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_work_lid_open_pause)
+                        .equals(preference.getKey())) {
+                    ServerControl.setLidOpenPause(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
             }
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_work_splus_enabled)
@@ -433,6 +477,12 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_work_keep_warm_s_plus)
                         .equals(preference.getKey())) {
                     ServerControl.setKeepWarmSPlus(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_work_lid_open_detect)
+                        .equals(preference.getKey())) {
+                    ServerControl.setLidOpenDetect(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
                 }
