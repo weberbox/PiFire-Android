@@ -22,7 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
-import com.weberbox.pifire.interfaces.DashboardCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
@@ -39,7 +39,7 @@ import java.util.stream.IntStream;
 public class TimePickerDialog {
 
     private final BottomSheetDialog pickerBottomSheet;
-    private final DashboardCallback dashCallBack;
+    private final DialogDashboardCallback callback;
     private final RecipeEditCallback recipeCallback;
     private RecyclerView hoursList;
     private RecyclerView minutesList;
@@ -50,14 +50,14 @@ public class TimePickerDialog {
     private final int scrollHours;
     private final int scrollMinutes;
 
-    public TimePickerDialog(Context context, DashboardCallback callback) {
+    public TimePickerDialog(Context context, DialogDashboardCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
-        dashCallBack = callback;
-        recipeCallback = null;
-        scrollHours = 0;
-        scrollMinutes = 0;
+        this.callback = callback;
+        this.recipeCallback = null;
+        this.scrollHours = 0;
+        this.scrollMinutes = 0;
     }
 
     public TimePickerDialog(Context context, Integer hours, Integer minutes,
@@ -65,10 +65,10 @@ public class TimePickerDialog {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
-        recipeCallback = callback;
-        dashCallBack = null;
-        scrollHours = hours;
-        scrollMinutes = minutes;
+        this.recipeCallback = callback;
+        this.callback = null;
+        this.scrollHours = hours;
+        this.scrollMinutes = minutes;
     }
 
     public BottomSheetDialog showDialog() {
@@ -110,7 +110,7 @@ public class TimePickerDialog {
         minutesList.setLayoutManager(minsPickerLayoutManager);
         minutesList.setAdapter(minsAdapter);
 
-        if (dashCallBack != null) {
+        if (callback != null) {
             optionsButton.setVisibility(View.VISIBLE);
             optionsButton.setOnClickListener(v -> {
                 if (optionsContainer.getVisibility() == View.GONE) {
@@ -149,8 +149,8 @@ public class TimePickerDialog {
 
         confirmButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
-            if (dashCallBack != null) {
-                dashCallBack.onTimerConfirmClicked(hoursSelected, minutesSelected,
+            if (callback != null) {
+                callback.onTimerConfirmClicked(hoursSelected, minutesSelected,
                         shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
             } else {
                 recipeCallback.onRecipeTime(hoursSelected, minutesSelected);

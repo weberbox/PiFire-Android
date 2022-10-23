@@ -12,6 +12,7 @@ public class Constants {
     public static final String GRILL_CURRENT_SHUTDOWN = "Shutdown";
     public static final String GRILL_CURRENT_MONITOR = "Monitor";
     public static final String GRILL_CURRENT_MANUAL = "Manual";
+    public static final String GRILL_CURRENT_PRIME = "Prime";
 
     // Callback Probe/Grill Types
     public static final int PICKER_TYPE_GRILL = 0;

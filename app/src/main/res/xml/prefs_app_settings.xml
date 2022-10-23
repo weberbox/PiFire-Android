@@ -51,6 +51,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/settings_cat_app_temps">
+
+        <SwitchPreferenceCompat
+            app:defaultValue="@bool/def_increment_temps"
+            app:key="@string/prefs_increment_temps"
+            app:summary="@string/settings_app_increment_temps_summary"
+            app:title="@string/settings_app_increment_temps" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/settings_cat_app_safety">
 
         <SwitchPreferenceCompat

@@ -1,8 +1,8 @@
-package com.weberbox.pifire.interfaces;
+package com.weberbox.pifire.ui.dialogs.interfaces;
 
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 
-public interface PelletsProfileCallback {
+public interface DialogPelletsProfileCallback {
     void onItemDelete(String type, String item, int position);
     void onDeleteConfirmed(String type, String item, int position);
     void onItemAdded(String type, String item);

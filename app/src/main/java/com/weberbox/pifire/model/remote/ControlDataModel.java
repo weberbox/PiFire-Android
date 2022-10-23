@@ -63,6 +63,12 @@ public class ControlDataModel {
     @SerializedName("manual")
     @Expose
     private Manual manual;
+    @SerializedName("prime_amount")
+    @Expose
+    private Integer primeAmount;
+    @SerializedName("next_mode")
+    @Expose
+    private String nextMode;
     @SerializedName("response")
     @Expose
     private ServerResponseModel response;
@@ -94,6 +100,32 @@ public class ControlDataModel {
 
     public ControlDataModel withMode(String mode) {
         this.mode = mode;
+        return this;
+    }
+
+    public Integer getPrimeAmount() {
+        return primeAmount;
+    }
+
+    public void setPrimeAmount(Integer primeAmount) {
+        this.primeAmount = primeAmount;
+    }
+
+    public ControlDataModel withPrimeAmount(Integer primeAmount) {
+        this.primeAmount = primeAmount;
+        return this;
+    }
+
+    public String getNextMode() {
+        return nextMode;
+    }
+
+    public void setNextMode(String nextMode) {
+        this.nextMode = nextMode;
+    }
+
+    public ControlDataModel withNextMode(String nextMode) {
+        this.nextMode = nextMode;
         return this;
     }
 

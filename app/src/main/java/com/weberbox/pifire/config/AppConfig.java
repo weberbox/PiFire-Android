@@ -38,6 +38,10 @@ public class AppConfig {
     public static final int MAX_PROBE_TEMP_SET_C = 150;
     public static final int DEFAULT_PROBE_TEMP_SET_C = 55;
 
+    // Prime Amounts
+    public static final int PRIME_MIN_GRAMS = 10;
+    public static final int PRIME_MAX_GRAMS = 50;
+
     // Sentry
     public static final String SENTRY_FEEDBACK = "User Feedback";
 

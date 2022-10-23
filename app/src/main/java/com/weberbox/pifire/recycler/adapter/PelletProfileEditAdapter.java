@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.ItemPelletsListEditBinding;
-import com.weberbox.pifire.interfaces.PelletsProfileCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 
 import java.util.List;
@@ -20,11 +20,11 @@ public class PelletProfileEditAdapter extends
         RecyclerView.Adapter<PelletProfileEditAdapter.ViewHolder> {
 
     private final List<PelletProfileModel> list;
-    private final PelletsProfileCallback callback;
+    private final DialogPelletsProfileCallback callback;
     private boolean limited;
 
     public PelletProfileEditAdapter(final List<PelletProfileModel> list,
-                                    PelletsProfileCallback callback, boolean limited) {
+                                    DialogPelletsProfileCallback callback, boolean limited) {
         this.list = list;
         this.callback = callback;
         this.limited = limited;

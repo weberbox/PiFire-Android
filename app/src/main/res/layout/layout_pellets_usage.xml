@@ -53,7 +53,7 @@
                 android:paddingBottom="@dimen/default_spacing">
 
                 <TextView
-                    android:id="@+id/pellets_usage_ounces"
+                    android:id="@+id/pellets_usage_imperial"
                     style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,14 +61,14 @@
                     android:minWidth="@dimen/_60sdp"
                     android:textSize="22sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/pellets_usage_grams"
+                    app:layout_constraintEnd_toStartOf="@+id/pellets_usage_metric"
                     app:layout_constraintHorizontal_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/placeholder_none" />
 
                 <TextView
-                    android:id="@+id/pellets_usage_grams"
+                    android:id="@+id/pellets_usage_metric"
                     style="@style/Text18AllerBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toEndOf="@+id/pellets_usage_ounces"
+                    app:layout_constraintStart_toEndOf="@+id/pellets_usage_imperial"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/placeholder_none" />
 

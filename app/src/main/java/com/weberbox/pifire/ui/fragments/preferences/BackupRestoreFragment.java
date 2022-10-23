@@ -243,8 +243,7 @@ public class BackupRestoreFragment extends PreferenceFragmentCompat implements
 
     private void requestBackupList(Socket socket, String backupType) {
         RestoreListDialog restoreDialog = new RestoreListDialog(getActivity(),
-                BackupRestoreFragment.this,
-                getString(R.string.dialog_restore_title), backupType);
+                getString(R.string.dialog_restore_title), backupType, BackupRestoreFragment.this);
         restoreDialog.showDialog();
 
         ServerControl.backupListGetEmit(socket, backupType, response -> {

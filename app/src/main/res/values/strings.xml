@@ -92,6 +92,7 @@
     <string name="grill_mode_smoke">Smoke</string>
     <string name="grill_mode_hold">Hold</string>
     <string name="grill_mode_shutdown">Shutdown</string>
+    <string name="grill_mode_prime">Prime</string>
 
     <string name="grill_state_mode">Mode</string>
     <string name="dash_grill_title">Grill</string>
@@ -105,7 +106,7 @@
     <string name="dash_remaining_title">Remaining</string>
     <string name="grill_smoke_plus">Smoke Plus</string>
     <string name="grill_smoke_plus_abv">S Plus</string>
-    <string name="dash_pwm_control">Pwm</string>
+    <string name="dash_pwm_control">PWM</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
     <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
@@ -117,6 +118,8 @@
     <string name="timer_start">Start</string>
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
+
+    <string name="dialog_prime_startup">Startup Grill After Priming</string>
 
     <string name="dialog_camera">Camera</string>
     <string name="dialog_gallery">Gallery</string>
@@ -305,6 +308,10 @@
     <string name="settings_cat_app_safety">Safety</string>
     <string name="settings_app_safety_start">Swipe to Start</string>
     <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
+
+    <string name="settings_cat_app_temps">Temps</string>
+    <string name="settings_app_increment_temps">Increment Temps</string>
+    <string name="settings_app_increment_temps_summary">Increment Grill and Probe Temps by 5°</string>
 
     <string name="settings_cat_app_screen">Screen</string>
     <string name="settings_app_screen_on_title">Keep Screen On</string>

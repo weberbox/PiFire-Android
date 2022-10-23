@@ -133,6 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dash_pwm_control"
+                android:textSize="@dimen/dash_text_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -250,6 +251,7 @@
             android:layout_marginStart="@dimen/dash_margin"
             android:layout_marginTop="@dimen/dash_margin"
             android:text="@string/dash_timer_title"
+            android:textSize="@dimen/dash_text_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -369,6 +371,7 @@
             android:layout_marginTop="@dimen/dash_margin"
             android:layout_toStartOf="@id/dash_pellet_icon"
             android:text="@string/dash_pellets_title"
+            android:textSize="@dimen/dash_text_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

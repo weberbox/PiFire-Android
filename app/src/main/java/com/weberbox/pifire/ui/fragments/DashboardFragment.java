@@ -28,7 +28,6 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
-import com.weberbox.pifire.interfaces.DashboardCallback;
 import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyReq;
@@ -39,8 +38,10 @@ import com.weberbox.pifire.model.remote.DashDataModel.TimerInfo;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
+import com.weberbox.pifire.ui.dialogs.PrimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
 import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
 import com.weberbox.pifire.ui.utils.TextTransition;
@@ -62,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class DashboardFragment extends Fragment implements DashboardCallback {
+public class DashboardFragment extends Fragment implements DialogDashboardCallback {
 
     private FragmentDashboardBinding binding;
     private TextView timerCountDownText, grillTempText, probeOneTempText, probeTwoTempText;
@@ -175,8 +176,33 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
         currentModeBox.setOnClickListener(v -> {
             if (socketConnected()) {
                 if (!currentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
-                    if (currentMode.equals(Constants.GRILL_CURRENT_STOP) ||
-                            currentMode.equals(Constants.GRILL_CURRENT_MONITOR)) {
+                    if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
+                        boolean swipeEnabled = Prefs.getBoolean(getString(
+                                        R.string.prefs_grill_swipe_start),
+                                getResources().getBoolean(R.bool.def_grill_swipe_start));
+
+                        BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                                .setAutoDismiss(true)
+                                .setNegativeButton(getString(R.string.grill_mode_start),
+                                        R.drawable.ic_timer_start, (dialogInterface, which) ->
+                                                ServerControl.modeStartGrill(socket,
+                                                        this::processPostResponse))
+                                .setNeutralButton(getString(R.string.grill_mode_monitor),
+                                        R.drawable.ic_grill_monitor, (dialogInterface, which) ->
+                                                ServerControl.modeMonitorGrill(socket,
+                                                        this::processPostResponse))
+                                .setPositiveButton(getString(R.string.grill_mode_prime),
+                                        R.drawable.ic_grill_prime, (dialogInterface, which) ->
+                                                showPrimePickerDialog())
+                                .setSwipeButton(getString(R.string.swipe_to_start), swipeEnabled,
+                                        (dialogInterface, active) -> {
+                                            if (active) ServerControl.modeStartGrill(socket,
+                                                    this::processPostResponse);
+                                        })
+                                .build();
+                        dialog.show();
+                    } else if (currentMode.equals(Constants.GRILL_CURRENT_MONITOR) ||
+                                    currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
                                 R.string.prefs_grill_swipe_start),
                                 getResources().getBoolean(R.bool.def_grill_swipe_start));
@@ -284,9 +310,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                         R.string.placeholder_none))) {
                     defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
                 }
-                tempPickerDialog = new TempPickerDialog(getActivity(),
-                        DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                        defaultTemp, hold, false);
+                tempPickerDialog = new TempPickerDialog(getActivity(), Constants.PICKER_TYPE_GRILL,
+                        defaultTemp, hold, false, DashboardFragment.this);
                 tempPickerDialog.showDialog();
             }
         });
@@ -300,8 +325,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                         defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
-                            DashboardFragment.this, Constants.PICKER_TYPE_GRILL_NOTIFY,
-                            defaultTemp, false, false);
+                            Constants.PICKER_TYPE_GRILL_NOTIFY, defaultTemp, false, false,
+                            DashboardFragment.this);
                     tempPickerDialog.showDialog();
                 }
                 return true;
@@ -319,8 +344,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
 
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
-                            DashboardFragment.this, Constants.PICKER_TYPE_PROBE_ONE,
-                            defaultTemp, false, false);
+                            Constants.PICKER_TYPE_PROBE_ONE, defaultTemp, false, false,
+                            DashboardFragment.this);
                     tempPickerDialog.showDialog();
                 }
             }
@@ -368,8 +393,8 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
                                 probeTwoTargetText.getText().toString());
                     }
                     tempPickerDialog = new TempPickerDialog(getActivity(),
-                            DashboardFragment.this, Constants.PICKER_TYPE_PROBE_TWO,
-                            defaultTemp, false, false);
+                            Constants.PICKER_TYPE_PROBE_TWO, defaultTemp, false, false,
+                            DashboardFragment.this);
                     tempPickerDialog.showDialog();
                 }
             }
@@ -562,9 +587,16 @@ public class DashboardFragment extends Fragment implements DashboardCallback {
 
     private void showHoldPickerDialog() {
         TempPickerDialog tempPickerDialog = new TempPickerDialog(requireActivity(),
-                DashboardFragment.this, Constants.PICKER_TYPE_GRILL,
-                new TempUtils(requireActivity()).getDefaultGrillTemp(), true, true);
+                Constants.PICKER_TYPE_GRILL, new TempUtils(requireActivity()).getDefaultGrillTemp(),
+                true, true, DashboardFragment.this);
         tempPickerDialog.showDialog();
+    }
+
+    private void showPrimePickerDialog() {
+        PrimePickerDialog dialog = new PrimePickerDialog(requireActivity(),
+                (amount, nextMode) -> ServerControl.modePrimeGrill(socket, amount, nextMode,
+                        this::processPostResponse));
+        dialog.showDialog();
     }
 
     private CountDownTimer getCountdownTimer() {

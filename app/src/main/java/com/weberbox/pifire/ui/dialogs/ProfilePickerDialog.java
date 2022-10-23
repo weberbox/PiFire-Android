@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -17,10 +16,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogScrollPickerBinding;
-import com.weberbox.pifire.interfaces.PelletsProfileCallback;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.recycler.adapter.PelletProfileAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
@@ -29,47 +28,47 @@ public class ProfilePickerDialog {
 
     private final BottomSheetDialog pickerBottomSheet;
     private final LayoutInflater inflater;
-    private final PelletsProfileCallback callBack;
+    private final DialogPelletsProfileCallback callback;
     private final List<PelletProfileModel> pelletsList;
     private final Context context;
     private RecyclerView profileList;
     private String currentProfile;
     private String currentProfileId;
 
-    public ProfilePickerDialog(Context context, Fragment fragment,
-                               List<PelletProfileModel> pelletList, String currentProfile) {
+    public ProfilePickerDialog(Context context, List<PelletProfileModel> pelletList,
+                               String currentProfile, DialogPelletsProfileCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
-        callBack = (PelletsProfileCallback) fragment;
         this.context = context;
-        pelletsList = pelletList;
-        currentProfileId = currentProfile;
+        this.pelletsList = pelletList;
+        this.currentProfileId = currentProfile;
+        this.callback = callback;
     }
 
     public BottomSheetDialog showDialog() {
         DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(inflater);
 
-        Button confirmButton = binding.setProfileLoad;
+        Button confirmButton = binding.btnItemConfirm;
 
-        PickerLayoutManager pelletPickerLayoutManager = new PickerLayoutManager(context,
+        PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
-        pelletPickerLayoutManager.setChangeAlpha(true);
-        pelletPickerLayoutManager.setScaleDownBy(0.99f);
-        pelletPickerLayoutManager.setScaleDownDistance(1.2f);
+        pickerLayoutManager.setChangeAlpha(true);
+        pickerLayoutManager.setScaleDownBy(0.99f);
+        pickerLayoutManager.setScaleDownDistance(1.2f);
 
-        profileList = binding.profileList;
+        profileList = binding.scrollList;
 
-        SnapHelper profileSnapHelper = new LinearSnapHelper();
-        profileSnapHelper.attachToRecyclerView(profileList);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(profileList);
 
         PelletProfileAdapter profileAdapter = new PelletProfileAdapter(pelletsList);
 
-        profileList.setLayoutManager(pelletPickerLayoutManager);
+        profileList.setLayoutManager(pickerLayoutManager);
         profileList.setAdapter(profileAdapter);
 
         currentProfileId = pelletsList.get(0).getId();
 
-        pelletPickerLayoutManager.setOnScrollStopListener(
+        pickerLayoutManager.setOnScrollStopListener(
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.picker_item_container);
                     RelativeLayout parent_two = parent.findViewById(R.id.picker_item_container_two);
@@ -81,7 +80,7 @@ public class ProfilePickerDialog {
 
         confirmButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
-            callBack.onProfileSelected(currentProfile, currentProfileId);
+            callback.onProfileSelected(currentProfile, currentProfileId);
         });
 
         pickerBottomSheet.setContentView(binding.getRoot());

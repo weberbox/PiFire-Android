@@ -76,6 +76,17 @@ public class ServerControl {
         }
     }
 
+    // Prime Mode
+    public static void modePrimeGrill(Socket socket, Integer primeAmount, String nextMode,
+                                      SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_PRIME)
+                .withPrimeAmount(primeAmount)
+                .withNextMode(nextMode)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
+    }
+
     // Mode Smoke
     public static void modeSmokeGrill(Socket socket, SocketCallback callback) {
         if (VersionUtils.isSupported(ServerVersions.V_127)) {
@@ -283,7 +294,7 @@ public class ServerControl {
 
     // Auto Power Off
     public static void sendAutoPowerOff(Socket socket, Boolean autoPowerOff,
-                                       SocketCallback callback) {
+                                        SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withGlobals(new Globals().withAutoPowerOff(autoPowerOff)));
         settingsPostEmit(socket, json, callback);
@@ -292,7 +303,7 @@ public class ServerControl {
 
     // Smart Start
     public static void setSmartStartEnabled(Socket socket, Boolean enabled,
-                                        SocketCallback callback) {
+                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withSmartStart(new SmartStart().withEnabled(enabled)));
         settingsPostEmit(socket, json, callback);
@@ -390,7 +401,7 @@ public class ServerControl {
 
     // ADC Probe Assignments
     public static void setADCProbeSources(Socket socket, List<String> probeSources,
-                                           SocketCallback callback) {
+                                          SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withProbeSettings(new ProbeSettings().withProbeSources(probeSources)));
         String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
@@ -510,7 +521,7 @@ public class ServerControl {
 
     // Set Apprise Enabled
     public static void setAppriseEnabled(Socket socket, boolean enabled,
-                                           SocketCallback callback) {
+                                         SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withApprise(new Apprise().withEnabled(enabled)));
         settingsPostEmit(socket, json, callback);
@@ -1337,7 +1348,7 @@ public class ServerControl {
 
     // Set Manual PWM Output
     public static void setManualPWMOutput(Socket socket, int dutyCycle,
-                                            SocketCallback callback) {
+                                          SocketCallback callback) {
         String json = new Gson().toJson(new ControlDataModel()
                 .withManual(new Manual().withChange(true).withPWM(dutyCycle)));
         controlPostEmit(socket, json, callback);

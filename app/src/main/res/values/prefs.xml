@@ -45,6 +45,8 @@
 
     <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
 
+    <string name="prefs_increment_temps">prefs_increment_temps</string>
+
     <!-- PiFire Settings -->
     <string name="prefs_server_version">prefs_server_version</string>
 

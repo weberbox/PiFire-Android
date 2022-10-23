@@ -18,7 +18,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPelletsEditBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsEditCardBinding;
-import com.weberbox.pifire.interfaces.PelletsProfileCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.StringUtils;
@@ -29,7 +29,7 @@ public class PelletsEditDialog {
 
     private final BottomSheetDialog bottomSheetDialog;
     private final LayoutInflater inflater;
-    private final PelletsProfileCallback callBack;
+    private final DialogPelletsProfileCallback callback;
     private final PelletProfileModel pelletProfile;
     private final Activity activity;
     private final List<String> brands, woods;
@@ -40,7 +40,7 @@ public class PelletsEditDialog {
 
     public PelletsEditDialog(Activity activity, List<String> brands, List<String> woods,
                              PelletProfileModel pelletProfile, int position,
-                             PelletsProfileCallback callback) {
+                             DialogPelletsProfileCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(activity);
         this.activity = activity;
@@ -48,7 +48,7 @@ public class PelletsEditDialog {
         this.woods = woods;
         this.pelletProfile = pelletProfile;
         this.position = position;
-        this.callBack = callback;
+        this.callback = callback;
     }
 
     public BottomSheetDialog showDialog() {
@@ -152,9 +152,9 @@ public class PelletsEditDialog {
         pelletEditSave.setOnClickListener(v -> {
             if (checkRequiredFields()) {
                 if (pelletProfile != null) {
-                    callBack.onProfileEdit(buildProfile(pelletProfile), false);
+                    callback.onProfileEdit(buildProfile(pelletProfile), false);
                 } else {
-                    callBack.onProfileAdd(buildProfile(null));
+                    callback.onProfileAdd(buildProfile(null));
                 }
                 bottomSheetDialog.dismiss();
             }
@@ -162,14 +162,14 @@ public class PelletsEditDialog {
 
         pelletEditLoad.setOnClickListener(v -> {
             if (checkRequiredFields()) {
-                callBack.onProfileEdit(buildProfile(null), true);
+                callback.onProfileEdit(buildProfile(null), true);
                 bottomSheetDialog.dismiss();
             }
         });
 
         pelletEditDelete.setOnClickListener(v -> {
             if (pelletProfile != null && position != -1) {
-                callBack.onProfileDelete(pelletProfile.getId(), position);
+                callback.onProfileDelete(pelletProfile.getId(), position);
             }
             bottomSheetDialog.dismiss();
         });

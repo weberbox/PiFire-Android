@@ -23,6 +23,8 @@
 
     <bool name="def_pwm_fan_control">false</bool>
 
+    <bool name="def_increment_temps">true</bool>
+
     <bool name="def_notif_ifttt_enabled">false</bool>
     <bool name="def_notif_pushover_enabled">false</bool>
     <bool name="def_notif_pushbullet_enabled">false</bool>
