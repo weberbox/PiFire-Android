@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/large_spacing"
+    android:paddingTop="@dimen/default_spacing"
+    android:paddingEnd="@dimen/large_spacing"
+    android:paddingBottom="@dimen/small_spacing">
+
+    <TextView
+        android:id="@+id/dialog_pwm_temp_note"
+        style="@style/Text14Aller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_pwm_temp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/settings_pwm_temp_range_note_range" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_pwm_temp"
+        style="@style/TextInputLayoutFilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_pwm_duty_cycle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_pwm_temp_note">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_pwm_temp_text"
+            style="@style/TextInputEditTextFilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/aller_regular"
+            android:hint="@string/settings_pwm_control_temp"
+            android:inputType="number"
+            android:textColor="@color/colorWhite"
+            android:textColorHighlight="@color/colorAccent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_pwm_duty_cycle"
+        style="@style/TextInputLayoutFilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_pwm_temp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_pwm_duty_cycle_text"
+            style="@style/TextInputEditTextFilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/aller_regular"
+            android:hint="@string/settings_pwm_control_duty"
+            android:inputType="number"
+            android:textColor="@color/colorWhite"
+            android:textColorHighlight="@color/colorAccent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

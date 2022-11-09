@@ -8,6 +8,7 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,7 @@ public class HistoryFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
 
         lineChart = binding.historyLayout.historyLinechart;
         loadingBar = binding.loadingProgressbar;

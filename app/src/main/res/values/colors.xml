@@ -19,6 +19,8 @@
     <color name="colorGreyHint">#C8C7C7</color>
     <color name="colorGreyAlpha">#DF333333</color>
     <color name="colorNote">#DDC701</color>
+    <color name="colorOrangeButton">#F39C12</color>
+    <color name="colorGreenButton">#00BC8C</color>
     <color name="colorWarning">#BA0101</color>
     <color name="colorRedButton">#A50202</color>
     <color name="colorUpdateAvailable">#11F402</color>
@@ -29,6 +31,7 @@
     <color name="colorSmokePlusDisabled">#57D80C0C</color>
     <color name="colorProbeProgress">#40164DD9</color>
     <color name="colorPlaceholder">#666666</color>
+    <color name="colorTransparent">#6F000000</color>
 
     <color name="eventsScriptStart">#8024D1A6</color>
     <color name="eventsScriptEnded">#ED5A49</color>

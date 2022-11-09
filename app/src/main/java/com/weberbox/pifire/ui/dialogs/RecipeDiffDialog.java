@@ -45,7 +45,7 @@ public class RecipeDiffDialog {
     public BottomSheetDialog showDialog() {
         DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(inflater);
 
-        Button confirmButton = binding.setProfileLoad;
+        Button confirmButton = binding.btnItemConfirm;
 
         PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);
@@ -53,10 +53,10 @@ public class RecipeDiffDialog {
         pickerLayoutManager.setScaleDownBy(0.99f);
         pickerLayoutManager.setScaleDownDistance(1.2f);
 
-        recyclerView = binding.profileList;
+        recyclerView = binding.scrollList;
 
-        SnapHelper profileSnapHelper = new LinearSnapHelper();
-        profileSnapHelper.attachToRecyclerView(recyclerView);
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
 
         List<Integer> difficulties = Arrays.asList(
                 Constants.RECIPE_DIF_BEGIN,

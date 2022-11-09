@@ -1,13 +1,26 @@
 {
-  "latestVersion": "1.4.3",
-  "latestVersionCode": "1040300",
+  "latestVersion": "1.5.5",
+  "latestVersionCode": "1050500",
   "url": "https://github.com/weberbox/PiFire-Android/releases",
   "forceUpdate": "false",
   "forceUpdateVersionCodes": [
     "1"
   ],
   "releaseNotes": [
-    "- Add Remote Branches Update",
-    "- Update Grill Notify Implementation"
+    "- Added Lid Open Detection Settings",
+    "- Added Prime and Prime & Start Modes",
+    "- Added Option to Increment Temps by 5°",
+    "- Added Option to Edit Smart Start Config",
+    "- Added Pellets Estimated Usage",
+    "- Added Pellets Auger Rate to Settings",
+    "- Added Go to Mode After Startup to Settings",
+    "- Added Apprise Notification Settings",
+    "- Added PWM Fan Settings",
+    "- Added PWM Fan Ramping Settings",
+    "- Added PWM Temp Control",
+    "- Added PWM Duty Cycle to Manual Mode",
+    "- Added ADC Probe Assignment Settings",
+    "- Added Pellet Notification Check Time Setting",
+    "- Added Device GPIO Pin Info to Info Page"
   ]
 }

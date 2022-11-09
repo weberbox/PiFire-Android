@@ -34,6 +34,9 @@ public class DashDataModel {
     @SerializedName("smoke_plus")
     @Expose
     private Boolean smokePlus;
+    @SerializedName("pwm_control")
+    @Expose
+    private Boolean pwmControl;
     @SerializedName("hopper_level")
     @Expose
     private Integer hopperLevel;
@@ -44,6 +47,13 @@ public class DashDataModel {
 
     public Boolean getSmokePlus() {
         return smokePlus;
+    }
+
+    public Boolean getPwmControl() {
+        if (pwmControl == null) {
+            return false;
+        }
+        return pwmControl;
     }
 
     public Integer getHopperLevel() {

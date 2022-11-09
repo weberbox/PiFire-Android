@@ -14,7 +14,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.Versions;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
@@ -63,38 +63,38 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
 
         if (serverUpdates != null) {
-            if (VersionUtils.isSupported(Versions.V_127)) {
+            if (VersionUtils.isSupported(ServerVersions.V_127)) {
                 serverUpdates.setOnPreferenceClickListener(preference -> {
                     showFragment(new ServerUpdateFragment());
                     return true;
                 });
             } else {
                 serverUpdates.setEnabled(false);
-                serverUpdates.setSummary(getString(R.string.disabled_option_settings, Versions.V_127));
+                serverUpdates.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
             }
         }
 
         if (backupRestore != null) {
-            if (VersionUtils.isSupported(Versions.V_122)) {
+            if (VersionUtils.isSupported(ServerVersions.V_122)) {
                 backupRestore.setOnPreferenceClickListener(preference -> {
                     showFragment(new BackupRestoreFragment());
                     return true;
                 });
             } else {
                 backupRestore.setEnabled(false);
-                backupRestore.setSummary(getString(R.string.disabled_option_settings, Versions.V_122));
+                backupRestore.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_122));
             }
         }
 
         if (manualCat != null && manualMode != null) {
-            if (VersionUtils.isSupported(Versions.V_121)) {
+            if (VersionUtils.isSupported(ServerVersions.V_121)) {
                 manualMode.setOnPreferenceClickListener(preference -> {
                     showFragment(new ManualSettingsFragment());
                     return true;
                 });
             } else {
                 manualCat.setEnabled(false);
-                manualMode.setSummary(getString(R.string.disabled_option_settings, Versions.V_121));
+                manualMode.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_121));
             }
         }
 
@@ -213,7 +213,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (restartSystem != null) {
-            if (VersionUtils.isSupported(Versions.V_129)) {
+            if (VersionUtils.isSupported(ServerVersions.V_129)) {
                 restartSystem.setOnPreferenceClickListener(preference -> {
                     if (socketConnected()) {
                         BottomButtonDialog dialog = new BottomButtonDialog.Builder(
@@ -239,7 +239,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
             } else {
                 restartSystem.setEnabled(false);
                 restartSystem.setSummary(getString(R.string.disabled_option_settings,
-                        Versions.V_129));
+                        ServerVersions.V_129));
             }
         }
 

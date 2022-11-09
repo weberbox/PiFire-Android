@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/bg_ripple_table_temp">
+
+        <ProgressBar
+            android:id="@+id/dash_probe_temp_progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/bg_grill_progress"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dash_probe_title"
+            style="@style/Text16AllerBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:layout_marginTop="@dimen/dash_margin"
+            android:text="@string/dash_grill_title"
+            android:textSize="@dimen/dash_text_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/dash_probe_icon"
+            android:layout_width="@dimen/dash_icon"
+            android:layout_height="@dimen/dash_icon"
+            android:layout_marginTop="@dimen/dash_margin"
+            android:layout_marginEnd="@dimen/dash_margin_probe_icon"
+            android:src="@drawable/ic_grill_thermometer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/dash_probe_temp"
+            style="@style/Text24Knockout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:text="@string/placeholder_temp"
+            android:textSize="@dimen/dash_text_temps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_title" />
+
+        <TextView
+            android:id="@+id/dash_probe_current_title"
+            style="@style/Text16AllerAlpha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:text="@string/grill_state_current"
+            android:textSize="@dimen/dash_text_hints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_temp" />
+
+        <TextView
+            android:id="@+id/dash_probe_set_temp"
+            style="@style/Text24Knockout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:layout_marginTop="@dimen/dash_half_margin"
+            android:text="@string/placeholder_none"
+            android:textSize="@dimen/dash_text_targets"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_current_title" />
+
+        <TextView
+            android:id="@+id/dash_probe_set_title"
+            style="@style/Text16AllerAlpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:paddingBottom="@dimen/dash_margin"
+            android:text="@string/grill_state_set"
+            android:textSize="@dimen/dash_text_hints"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_set_temp" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/dash_probe_set_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="dash_probe_set_temp, dash_probe_set_title" />
+
+        <TextView
+            android:id="@+id/dash_probe_target"
+            style="@style/Text24Knockout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:layout_marginTop="@dimen/dash_half_margin"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:gravity="end"
+            android:text="@string/placeholder_none"
+            android:textSize="@dimen/dash_text_targets"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_current_title" />
+
+        <TextView
+            android:id="@+id/dash_probe_target_title"
+            style="@style/Text16AllerAlpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dash_margin"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:gravity="end"
+            android:paddingBottom="@dimen/dash_margin"
+            android:text="@string/grill_state_target"
+            android:textSize="@dimen/dash_text_hints"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_target" />
+
+        <ImageView
+            android:id="@+id/dash_probe_shutdown"
+            android:layout_width="@dimen/dash_icon"
+            android:layout_height="@dimen/dash_icon"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:layout_marginBottom="@dimen/dash_margin"
+            android:src="@drawable/ic_flag_shutdown"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/colorRedButton"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/dash_probe_keep_warm"
+            android:layout_width="@dimen/dash_icon"
+            android:layout_height="@dimen/dash_icon"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:layout_marginBottom="@dimen/dash_margin"
+            android:src="@drawable/ic_keep_warm"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/colorRedButton"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

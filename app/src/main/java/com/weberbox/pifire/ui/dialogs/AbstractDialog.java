@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -458,7 +459,7 @@ public abstract class AbstractDialog implements DialogInterface {
             }
 
             if (swipeButton != null && swipeButton.getEnabled()) {
-                handler = new Handler();
+                handler = new Handler(Looper.getMainLooper());
                 runnable = () -> {
                     AnimUtils.fadeAnimation(swipeButtonView, 300, Constants.FADE_OUT);
                     AnimUtils.fadeAnimation(buttonsView, 300, Constants.FADE_IN);

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name="com.weberbox.pifire.application.PiFireApplication"
         tools:ignore="AllowBackup,MissingApplicationIcon">
 
         <meta-data android:name="com.onesignal.NotificationServiceExtension"

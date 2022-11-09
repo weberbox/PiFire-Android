@@ -141,4 +141,21 @@
         <item>@color/eventsWarning</item>
     </integer-array>
 
+    <string-array name="adc_probe_options">
+        <item tools:ignore="Typos">ADC0</item>
+        <item tools:ignore="Typos">ADC1</item>
+        <item tools:ignore="Typos">ADC2</item>
+        <item tools:ignore="Typos">ADC3</item>
+    </string-array>
+
+    <string-array name="startup_goto_modes_names">
+        <item>@string/settings_startup_smoke_mode</item>
+        <item>@string/settings_startup_hold_mode</item>
+    </string-array>
+
+    <string-array name="startup_goto_modes_values">
+        <item>@string/grill_mode_smoke</item>
+        <item>@string/grill_mode_hold</item>
+    </string-array>
+
 </resources>

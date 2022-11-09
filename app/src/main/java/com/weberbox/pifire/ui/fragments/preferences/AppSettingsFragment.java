@@ -32,9 +32,7 @@ import com.weberbox.pifire.model.local.RecipesModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.ProgressDialog;
-import com.weberbox.pifire.updater.AppUpdater;
-import com.weberbox.pifire.updater.enums.Display;
-import com.weberbox.pifire.updater.enums.UpdateFrom;
+import com.weberbox.pifire.update.UpdateUtils;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.FileUtils;
@@ -49,18 +47,18 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
-    private AppUpdater appUpdater;
+    private UpdateUtils updateUtils;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs_app_settings, rootKey);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        updateUtils = new UpdateUtils(requireActivity());
 
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
         PreferenceCategory crashCat = findPreference(getString(R.string.prefs_crash_cat));
@@ -69,6 +67,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         Preference serverSettings = findPreference(getString(R.string.prefs_server_settings));
         PreferenceCategory updaterCat = findPreference(getString(R.string.prefs_app_updater_cat));
         SwitchPreferenceCompat updaterEnabled = findPreference(getString(R.string.prefs_app_updater_enabled));
+        SwitchPreferenceCompat downloadUpdate = findPreference(getString(R.string.prefs_app_updater_download));
         Preference exportRecipes = findPreference(getString(R.string.prefs_recipe_db_backup));
         Preference importRecipes = findPreference(getString(R.string.prefs_recipe_db_restore));
         Preference clearRecipes = findPreference(getString(R.string.prefs_recipe_db_clear));
@@ -99,9 +98,11 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
             }
         }
 
-        if (updaterCat != null && updaterEnabled != null) {
-            if (getString(R.string.def_app_update_check_url).isEmpty() ||
-                    getString(R.string.def_app_update_check_url_beta).isEmpty()) {
+        if (updaterCat != null && updaterEnabled != null && downloadUpdate != null) {
+            if (AppConfig.IN_APP_UPDATES) {
+                updaterEnabled.setVisible(false);
+                downloadUpdate.setVisible(false);
+            } else if (!updateUtils.updaterEnabled()) {
                 updaterCat.setEnabled(false);
                 updaterEnabled.setChecked(false);
                 updaterEnabled.setSummary(getString(R.string.updater_update_disabled));
@@ -111,18 +112,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         if (updateCheck != null) {
             updateCheck.setOnPreferenceClickListener(preference -> {
                 if (getActivity() != null) {
-                    appUpdater = new AppUpdater(getActivity())
-                            .setDisplay(Display.DIALOG)
-                            .setButtonDoNotShowAgain(false)
-                            .showAppUpToDate(true)
-                            .showAppUpdateError(true)
-                            .setForceCheck(true)
-                            .setView(view)
-                            .setUpdateFrom(UpdateFrom.JSON)
-                            .setUpdateJSON(AppConfig.IS_BETA ?
-                                    getString(R.string.def_app_update_check_url_beta) :
-                                    getString(R.string.def_app_update_check_url));
-                    appUpdater.start();
+                    updateUtils.checkForUpdate(true, false);
                 }
                 return true;
             });
@@ -164,9 +154,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStop() {
         super.onStop();
-        if (appUpdater != null) {
-            appUpdater.stop();
-        }
+        updateUtils.stopAppUpdater();
         if (sharedPreferences != null) {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
@@ -291,21 +279,25 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
             });
 
     private void requestPermissionAndBrowseFile() {
-        TedPermission.create()
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted() {
-                        openFileBrowser();
-                    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            openFileBrowser();
+        } else {
+            TedPermission.create()
+                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    .setPermissionListener(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted() {
+                            openFileBrowser();
+                        }
 
-                    @Override
-                    public void onPermissionDenied(List<String> deniedPermissions) {
-                        AlertUtils.createErrorAlert(getActivity(), R.string.file_permission_denied,
-                                false);
-                    }
-                })
-                .check();
+                        @Override
+                        public void onPermissionDenied(List<String> deniedPermissions) {
+                            AlertUtils.createErrorAlert(getActivity(), R.string.file_permission_denied,
+                                    false);
+                        }
+                    })
+                    .check();
+        }
     }
 
     private void openFileBrowser() {

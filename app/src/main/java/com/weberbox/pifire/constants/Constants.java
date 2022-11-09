@@ -12,11 +12,13 @@ public class Constants {
     public static final String GRILL_CURRENT_SHUTDOWN = "Shutdown";
     public static final String GRILL_CURRENT_MONITOR = "Monitor";
     public static final String GRILL_CURRENT_MANUAL = "Manual";
+    public static final String GRILL_CURRENT_PRIME = "Prime";
 
     // Callback Probe/Grill Types
     public static final int PICKER_TYPE_GRILL = 0;
     public static final int PICKER_TYPE_PROBE_ONE = 1;
     public static final int PICKER_TYPE_PROBE_TWO = 2;
+    public static final int PICKER_TYPE_GRILL_NOTIFY = 3;
 
     // Callback Backup/Restore Type
     public static final int ACTION_BACKUP_SETTINGS = 0;
@@ -43,6 +45,7 @@ public class Constants {
     public static final int FRAG_NOTIF_SETTINGS = 8;
     public static final int FRAG_ADMIN_SETTINGS = 9;
     public static final int FRAG_MANUAL_SETTINGS = 10;
+    public static final int FRAG_PWM_SETTINGS = 11;
 
     // Recipe Fragment
     public static final int FRAG_VIEW_RECIPE = 0;
@@ -115,5 +118,9 @@ public class Constants {
     public static final int ONESIGNAL_NOT_SUBSCRIBED = 5;
     public static final int ONESIGNAL_APP_UPDATED = 6;
     public static final int ONESIGNAL_NULL_TOKEN = 7;
+
+    // In App Updates
+    public static final int FLEXIBLE_REQUEST_CODE = 781;
+    public static final int IMMEDIATE_REQUEST_CODE = 782;
 
 }

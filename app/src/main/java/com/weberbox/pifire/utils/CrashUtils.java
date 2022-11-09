@@ -67,6 +67,7 @@ public class CrashUtils {
                 scope.setTag("Variant", BuildConfig.BUILD_TYPE);
                 scope.setTag("Flavor Type", BuildConfig.FLAVOR_type);
                 scope.setTag("Flavor Version", BuildConfig.FLAVOR_version);
+                scope.setTag("Flavor Update", BuildConfig.FLAVOR_update);
                 scope.setTag("Git Branch", BuildConfig.GIT_BRANCH);
                 scope.setTag("Git Revision", BuildConfig.GIT_REV);
                 scope.setTag("Beta Build", String.valueOf(BuildConfig.IS_BETA));

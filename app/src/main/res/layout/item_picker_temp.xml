@@ -19,7 +19,8 @@
             android:layout_height="120dp"
             android:textAlignment="center"
             android:gravity="center"
-            android:textSize="120sp" />
+            android:textSize="120sp"
+            tools:text="125" />
 
         <TextView
             android:id="@+id/temp_item_unit_text_view"
@@ -31,6 +32,7 @@
             android:paddingStart="140dp"
             android:paddingTop="20dp"
             android:paddingEnd="0dp"
-            android:textSize="38sp" />
+            android:textSize="38sp"
+            tools:text="F" />
     </RelativeLayout>
 </LinearLayout>

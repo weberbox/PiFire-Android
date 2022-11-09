@@ -74,6 +74,15 @@
                         app:nav_title="@string/settings_work" />
 
                     <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/settings_pwm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_PWM_SETTINGS)}'
+                        app:nav_icon="@drawable/ic_settings_pwm"
+                        app:nav_selected="false"
+                        app:nav_title="@string/settings_pwm" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_pellet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

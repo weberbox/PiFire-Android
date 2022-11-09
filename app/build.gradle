@@ -35,22 +35,20 @@ def getGitBranch = { ->
 }
 
 def vMajor = 1
-def vMinor = 4
-def vPatch = 3
+def vMinor = 5
+def vPatch = 5
 def vBuild = 0
 def isBeta = false
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.weberbox.pifire"
         minSdk 24
-        targetSdk 31
+        targetSdk 33
         versionCode vMajor * 1000000 + vMinor * 10000 + vPatch * 100 + vBuild
         versionName "${vMajor}.${vMinor}.${vPatch}${isBeta ? "-dev" + vBuild : ""}"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -80,7 +78,7 @@ android {
         }
     }
 
-    flavorDimensions "type", "version"
+    flavorDimensions "type", "version", "update"
     productFlavors {
         nonfirebase {
             dimension "version"
@@ -98,14 +96,31 @@ android {
         github {
             dimension "type"
         }
+        playstore {
+            dimension "type"
+        }
         compile {
             dimension "type"
+        }
+        inapp {
+            dimension "update"
+        }
+        updater {
+            dimension "update"
         }
     }
 
     variantFilter { variant ->
         def names = variant.flavors*.name
-        if (names.contains("dev") && names.contains("nonfirebase")) {
+        if (names.contains("dev") && names.contains("nonfirebase") ||
+                names.contains("dev") && names.contains("inapp") ||
+                names.contains("playstore") && names.contains("nonfirebase") ||
+                names.contains("playstore") && names.contains("updater") ||
+                names.contains("github") && names.contains("playstore") ||
+                names.contains("github") && names.contains("inapp") ||
+                names.contains("compile") && names.contains("playstore") ||
+                names.contains("compile") && names.contains("firebase") ||
+                names.contains("compile") && names.contains("inapp")) {
             setIgnore(true)
         }
     }
@@ -131,11 +146,13 @@ android {
         }
         def dimension_one = variant.productFlavors[0].name
         def dimension_two = variant.productFlavors[1].name
+        def dimension_three = variant.productFlavors[2].name
         def buildType = variant.buildType.name
         def version = variant.versionName
 
         variant.outputs.all { output ->
-            outputFileName = "${appName}-${dimension_one}-${dimension_two}-${buildType}${version}.apk"
+            outputFileName = "${appName}-${dimension_one}-${dimension_two}-${dimension_three}-" +
+                    "${buildType}${version}.apk"
         }
     }
 
@@ -151,19 +168,19 @@ android {
 }
 
 dependencies {
-    def room_version = "2.4.2"
-    def sentry_version = "6.2.1"
+    def room_version = "2.4.3"
+    def sentry_version = "6.5.0"
 
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.8.7'
-    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
@@ -192,18 +209,21 @@ dependencies {
     implementation 'com.github.weberbox:changeloglib:3.1.1'
     implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:3.0.0-RC3'
     implementation 'com.github.MikeOrtiz:TouchImageView:3.1.1'
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'
+    implementation 'com.intuit.ssp:ssp-android:1.1.0'
     annotationProcessor "androidx.room:room-compiler:$room_version"
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-    testImplementation 'junit:junit:4.13.2'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     firebaseImplementation platform('com.google.firebase:firebase-bom:29.1.0')
     firebaseImplementation 'com.google.firebase:firebase-messaging'
     firebaseImplementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    inappImplementation 'com.google.android.play:app-update:2.0.0'
+    inappImplementation 'com.google.firebase:firebase-config:21.2.0'
+    inappImplementation 'com.google.firebase:firebase-analytics:21.2.0'
     implementation ('io.socket:socket.io-client:2.0.1') {
         exclude group: 'org.json', module: 'json'
     }
+    //noinspection GradleDependency
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     afterEvaluate {
         for (flavor in android.productFlavors) {

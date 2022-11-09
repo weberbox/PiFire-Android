@@ -7,17 +7,16 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogInputTextBinding;
-import com.weberbox.pifire.interfaces.PelletsProfileCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 
 public class PelletsAddDialog {
 
-    private final PelletsProfileCallback callBack;
+    private final DialogPelletsProfileCallback callback;
     private final LayoutInflater inflater;
     private final AlertDialog.Builder dialog;
     private final Context context;
@@ -25,13 +24,14 @@ public class PelletsAddDialog {
     private final String type;
     private String string;
 
-    public PelletsAddDialog(Context context, Fragment fragment, String type, String title) {
+    public PelletsAddDialog(Context context, String type, String title,
+                            DialogPelletsProfileCallback callback) {
         dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
-        this.context = context;
         inflater = LayoutInflater.from(context);
-        callBack = (PelletsProfileCallback) fragment;
+        this.context = context;
         this.type = type;
         this.title = title;
+        this.callback = callback;
     }
 
     public AlertDialog showDialog() {
@@ -48,7 +48,7 @@ public class PelletsAddDialog {
             if (input.getText() != null) {
                 string = input.getText().toString();
                 if (string.length() != 0) {
-                    callBack.onItemAdded(type, string);
+                    callback.onItemAdded(type, string);
                     dialog.dismiss();
                 }
             }

@@ -8,16 +8,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ManualDataModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 import timber.log.Timber;
@@ -31,6 +35,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     private SwitchPreferenceCompat augerEnable;
     private SwitchPreferenceCompat igniterEnable;
     private SwitchPreferenceCompat powerEnable;
+    private SeekBarPreference pwmOutput;
     private Socket socket;
 
     @Override
@@ -57,6 +62,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         augerEnable = findPreference(getString(R.string.prefs_manual_mode_auger));
         igniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
         powerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
+        pwmOutput = findPreference(getString(R.string.prefs_manual_mode_pwm));
 
         if (manualMode != null && fanEnable != null && augerEnable != null &&
                 igniterEnable != null && powerEnable != null) {
@@ -69,6 +75,20 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
                 }
                 return true;
             });
+        }
+
+        if (pwmOutput != null) {
+            if (Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
+                if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                    pwmOutput.setUpdatesContinuously(false);
+                } else {
+                    pwmOutput.setEnabled(false);
+                    pwmOutput.setSummaryProvider(null);
+                    pwmOutput.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
+                }
+            } else {
+                pwmOutput.setVisible(false);
+            }
         }
     }
 
@@ -117,6 +137,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_manual_mode_fan)
                         .equals(preference.getKey())) {
                     if (socket != null && socket.connected()) {
+                        pwmOutput.setValue(100);
                         ServerControl.setManualFanOutput(socket,
                                 ((SwitchPreferenceCompat) preference).isChecked(),
                                 this::processPostResponse);
@@ -147,6 +168,16 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
                     }
                 }
             }
+            if (preference instanceof SeekBarPreference) {
+                if (preference.getContext().getString(R.string.prefs_manual_mode_pwm)
+                        .equals(preference.getKey())) {
+                    if (socketConnected()) {
+                        ServerControl.setManualPWMOutput(socket,
+                                ((SeekBarPreference) preference).getValue(),
+                                this::processPostResponse);
+                    }
+                }
+            }
         }
     }
 
@@ -156,6 +187,15 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             requireActivity().runOnUiThread(() ->
                     AlertUtils.createErrorAlert(requireActivity(),
                             result.getResponse().getMessage(), false));
+        }
+    }
+
+    private boolean socketConnected() {
+        if (socket != null && socket.connected()) {
+            return true;
+        } else {
+            AlertUtils.createErrorAlert(requireActivity(), R.string.settings_error_offline, false);
+            return false;
         }
     }
 
@@ -170,6 +210,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
             Boolean augerState = manualDataModel.getManual().getAuger();
             Boolean igniterState = manualDataModel.getManual().getIgniter();
             Boolean powerState = manualDataModel.getManual().getPower();
+            Integer dutyCycle = manualDataModel.getManual().getPWM();
 
             if (manualMode != null && currentMode != null) {
                 manualMode.setChecked(currentMode.equalsIgnoreCase(ServerConstants.MODE_MANUAL));
@@ -189,6 +230,10 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
             if (powerEnable != null && powerState != null) {
                 powerEnable.setChecked(powerState);
+            }
+
+            if (pwmOutput != null && dutyCycle != null) {
+                pwmOutput.setValue(dutyCycle);
             }
 
         } catch (NullPointerException e) {

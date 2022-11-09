@@ -112,7 +112,7 @@ public abstract class AdvancedAsyncTask<INPUT, PROGRESS, OUTPUT> {
      * Work on background
      * @param input Input data
      * @return      Output data
-     * @throws Exception    Any uncought exception which occurred while working in background. If
+     * @throws Exception    Any uncaught exception which occurred while working in background. If
      * any occurs, {@link #onBackgroundError(Exception)} will be executed (on the UI thread)
      */
     protected abstract OUTPUT doInBackground(INPUT input) throws Exception;
@@ -126,7 +126,7 @@ public abstract class AdvancedAsyncTask<INPUT, PROGRESS, OUTPUT> {
     }
 
     /**
-     * Triggered on UI thread if any uncought exception occurred while working in background
+     * Triggered on UI thread if any uncaught exception occurred while working in background
      * @param e Exception
      * @see #doInBackground(Object)
      */

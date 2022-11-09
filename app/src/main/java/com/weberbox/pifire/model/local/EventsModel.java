@@ -1,7 +1,5 @@
 package com.weberbox.pifire.model.local;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.weberbox.pifire.R;

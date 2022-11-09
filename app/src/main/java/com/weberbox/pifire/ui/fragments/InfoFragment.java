@@ -21,21 +21,29 @@ import androidx.transition.TransitionManager;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.skydoves.androidveil.VeilLayout;
+import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentInfoBinding;
+import com.weberbox.pifire.databinding.LayoutInfoGpioDevicesBinding;
+import com.weberbox.pifire.model.local.GPIODevicesModel;
+import com.weberbox.pifire.model.local.GPIOInOutModel;
 import com.weberbox.pifire.model.local.LicensesModel;
 import com.weberbox.pifire.model.remote.InfoDataModel;
 import com.weberbox.pifire.model.view.MainViewModel;
+import com.weberbox.pifire.recycler.adapter.GPIODevicesAdapter;
+import com.weberbox.pifire.recycler.adapter.GPIOInOutAdapter;
 import com.weberbox.pifire.recycler.adapter.LicensesListAdapter;
 import com.weberbox.pifire.recycler.manager.ScrollDisableLayoutManager;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -43,6 +51,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.socket.client.Socket;
 import timber.log.Timber;
@@ -53,15 +62,19 @@ public class InfoFragment extends Fragment {
     private MainViewModel mainViewModel;
     private Socket socket;
     private RelativeLayout rootContainer;
-    private TextView version, cpuInfo, cpuTemp, networkInfo, upTime, auger, fan, igniter, power;
-    private TextView selector;
+    private TextView version, cpuInfo, cpuTemp, networkInfo, upTime;
     private SwipeRefreshLayout swipeRefresh;
     private ProgressBar loadingBar;
     private LicensesListAdapter licensesListAdapter;
     private ArrayList<LicensesModel> licenses;
+    private ArrayList<GPIOInOutModel> inputs, outputs;
+    private ArrayList<GPIODevicesModel> devices;
+    private GPIOInOutAdapter gpioOutputAdapter, gpioInputAdapter;
+    private GPIODevicesAdapter gpioDevicesAdapter;
+    private VeilRecyclerFrameView inputRecycler, outputRecycler, devicesRecycler;
     private View gradient;
     private TextView viewAllButton;
-    private VeilLayout systemVeil, GPIOVeil, modulesVeil, uptimeVeil, serverVeil;
+    private VeilLayout systemVeil, modulesVeil, uptimeVeil, serverVeil;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,13 +99,17 @@ public class InfoFragment extends Fragment {
         configButton.setVisibility(View.GONE);
 
         licenses = new ArrayList<>();
+        inputs = new ArrayList<>();
+        outputs = new ArrayList<>();
+        devices = new ArrayList<>();
 
         rootContainer = binding.infoRootContainer;
         swipeRefresh = binding.infoPullRefresh;
         loadingBar = binding.loadingProgressbar;
 
+        LayoutInfoGpioDevicesBinding devicesLayout = binding.gpioDevicesCardView;
+
         systemVeil = binding.systemCardView.systemVeilLayout;
-        GPIOVeil = binding.gpioCardView.gpioVeilLayout;
         modulesVeil = binding.modulesCardView.modulesVeilLayout;
         uptimeVeil = binding.uptimeCardView.uptimeVeilLayout;
         serverVeil = binding.serverVersionCardView.serverVeilLayout;
@@ -103,11 +120,31 @@ public class InfoFragment extends Fragment {
 
         upTime = binding.uptimeCardView.uptimeInfoText;
 
-        auger = binding.gpioCardView.gpioOutputAuger;
-        fan = binding.gpioCardView.gpioOutputFan;
-        igniter = binding.gpioCardView.gpioOutputIgniter;
-        power = binding.gpioCardView.gpioOutputPower;
-        selector = binding.gpioCardView.gpioInputSelector;
+        inputRecycler = binding.gpioInOutCardView.gpioInputRecycler;
+        outputRecycler = binding.gpioInOutCardView.gpioOutputRecycler;
+        devicesRecycler = binding.gpioDevicesCardView.gpioDevicesRecycler;
+
+        gpioOutputAdapter = new GPIOInOutAdapter(outputs);
+        outputRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
+        outputRecycler.setNestedScrollingEnabled(false);
+        outputRecycler.addVeiledItems(6);
+        outputRecycler.setAdapter(gpioOutputAdapter);
+
+        gpioInputAdapter = new GPIOInOutAdapter(inputs);
+        inputRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
+        inputRecycler.setNestedScrollingEnabled(false);
+        inputRecycler.addVeiledItems(1);
+        inputRecycler.setAdapter(gpioInputAdapter);
+
+        if (VersionUtils.isSupported(ServerVersions.V_135)) {
+            gpioDevicesAdapter = new GPIODevicesAdapter(devices);
+            devicesRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
+            devicesRecycler.setNestedScrollingEnabled(false);
+            devicesRecycler.addVeiledItems(6);
+            devicesRecycler.setAdapter(gpioDevicesAdapter);
+        } else {
+            devicesLayout.getRoot().setVisibility(View.GONE);
+        }
 
         version = binding.serverVersionCardView.serverVersionText;
 
@@ -139,10 +176,10 @@ public class InfoFragment extends Fragment {
         TextView distance = binding.modulesCardView.modulesDist;
         TextView platform = binding.modulesCardView.modulesPlatform;
 
-        adc.setText(Prefs.getString(getString(R.string.prefs_modules_adc), ""));
-        display.setText(Prefs.getString(getString(R.string.prefs_modules_display), ""));
-        distance.setText(Prefs.getString(getString(R.string.prefs_modules_distance), ""));
-        platform.setText(Prefs.getString(getString(R.string.prefs_modules_platform), ""));
+        adc.setText(Prefs.getString(getString(R.string.prefs_modules_adc)));
+        display.setText(Prefs.getString(getString(R.string.prefs_modules_display)));
+        distance.setText(Prefs.getString(getString(R.string.prefs_modules_distance)));
+        platform.setText(Prefs.getString(getString(R.string.prefs_modules_platform)));
 
         RecyclerView licenseInfo = binding.licensesCardView.infoLicensesRecycler;
         licensesListAdapter = new LicensesListAdapter(true);
@@ -254,18 +291,48 @@ public class InfoFragment extends Fragment {
 
         try {
 
+            inputs.clear();
+            outputs.clear();
+            devices.clear();
+
             InfoDataModel infoDataModel = InfoDataModel.parseJSON(responseData);
 
             List<String> cpuInfo = infoDataModel.getCpuInfo();
             String cpuTemp = infoDataModel.getTemp();
             List<String> networkInfo = infoDataModel.getIfConfig();
             String upTime = infoDataModel.getUpTime();
-            String auger = infoDataModel.getOutPins().getAuger();
-            String fan = infoDataModel.getOutPins().getFan();
-            String igniter = infoDataModel.getOutPins().getIgniter();
-            String power = infoDataModel.getOutPins().getPower();
-            String selector = infoDataModel.getInPins().getSelector();
             String version = infoDataModel.getServerVersion();
+
+            boolean dcFan = Prefs.getBoolean(getString(R.string.prefs_dc_fan));
+            infoDataModel.getOutPins().forEach((key, value) -> {
+                if (key.contains("dc_fan") || key.contains("pwm")) {
+                    if (dcFan) {
+                        outputs.add(new GPIOInOutModel(key, value));
+                    }
+                } else {
+                    outputs.add(new GPIOInOutModel(key, value));
+                }
+            });
+
+            infoDataModel.getInPins().forEach((key, value) ->
+                    inputs.add(new GPIOInOutModel(key, value)));
+
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                AtomicInteger cycle = new AtomicInteger();
+                infoDataModel.getDevPins().forEach((key, value) -> {
+                    cycle.getAndSet(1);
+                    value.forEach((function, pin) -> {
+                        if (cycle.intValue() == 1) {
+                            cycle.getAndIncrement();
+                            devices.add(new GPIODevicesModel(key, function, pin));
+                        } else {
+                            devices.add(new GPIODevicesModel("", function, pin));
+                        }
+                        cycle.getAndSet(0);
+                    });
+                });
+                this.gpioDevicesAdapter.setList(devices);
+            }
 
             String cpuModel = "";
             String[] cpuSeparated;
@@ -295,15 +362,14 @@ public class InfoFragment extends Fragment {
             this.networkInfo.setText(networkString);
             this.upTime.setText(socket.connected() ? upTime : getString(R.string.offline));
             this.cpuTemp.setText(socket.connected() ? cpuTemp : getString(R.string.offline));
-            this.auger.setText(auger);
-            this.fan.setText(fan);
-            this.igniter.setText(igniter);
-            this.power.setText(power);
-            this.selector.setText(selector);
+            this.gpioOutputAdapter.setList(outputs);
+            this.gpioInputAdapter.setList(inputs);
             this.version.setText(version);
 
             systemVeil.unVeil();
-            GPIOVeil.unVeil();
+            outputRecycler.unVeil();
+            inputRecycler.unVeil();
+            devicesRecycler.unVeil();
             modulesVeil.unVeil();
             uptimeVeil.unVeil();
             serverVeil.unVeil();

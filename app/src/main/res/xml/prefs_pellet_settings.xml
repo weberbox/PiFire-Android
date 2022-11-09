@@ -14,6 +14,14 @@
             app:title="@string/enabled" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pellet_warning_time"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_warning_time"
+            app:title="@string/settings_pellet_warning_time"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_level"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
@@ -53,6 +61,26 @@
             android:layout="@layout/preference_category_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_note"
+            app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_pellets_auger">
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:defaultValue="@string/def_pellet_auger_rate"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_auger_rate"
+            app:title="@string/settings_pellet_auger_rate"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_pellet_auger_rate_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>

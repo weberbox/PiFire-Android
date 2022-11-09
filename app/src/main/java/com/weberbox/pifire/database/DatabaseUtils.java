@@ -136,7 +136,14 @@ public class DatabaseUtils {
                     zin.closeEntry();
 
                 } else {
-                    FileOutputStream fos = new FileOutputStream(new File(filePath, ze.getName()));
+                    File file = new File(filePath, ze.getName());
+                    FileOutputStream fos = new FileOutputStream(file);
+                    String canonicalPath = file.getCanonicalPath();
+                    if (!canonicalPath.startsWith(filePath)) {
+                        throw new SecurityException("Canonical Path: " +
+                                canonicalPath + "File Path: " + filePath);
+                    }
+
                     int len;
                     while ((len = zin.read(buffer)) > 0) {
                         fos.write(buffer, 0, len);

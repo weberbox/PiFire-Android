@@ -51,6 +51,7 @@
                 style="@style/Text15AllerBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="@dimen/_60sdp"
                 tools:text="@string/placeholder_text_view" />
 
             <TextView
@@ -60,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/event_time_text_holder"
                 android:layout_marginTop="5dp"
+                android:minWidth="@dimen/_80sdp"
                 android:textSize="14sp"
                 tools:text="@string/placeholder_text_view" />
 

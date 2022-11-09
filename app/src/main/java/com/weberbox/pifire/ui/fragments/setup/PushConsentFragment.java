@@ -50,6 +50,9 @@ public class PushConsentFragment extends Fragment {
             isAccepted = isChecked;
             Prefs.putBoolean(getString(R.string.prefs_notif_onesignal_accepted), isChecked);
             OneSignalUtils.provideUserConsent(isChecked);
+            if (isChecked) {
+                OneSignalUtils.promptForPushNotifications();
+            }
         });
 
         SetupViewModel setupViewModel = new ViewModelProvider(requireActivity())

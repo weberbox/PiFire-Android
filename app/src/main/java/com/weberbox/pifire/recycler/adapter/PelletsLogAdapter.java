@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ItemPelletsListLogBinding;
-import com.weberbox.pifire.interfaces.PelletsProfileCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.model.local.PelletLogModel;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import java.util.List;
 public class PelletsLogAdapter extends RecyclerView.Adapter<PelletsLogAdapter.ViewHolder> {
 
     private final List<PelletLogModel> list;
-    private final PelletsProfileCallback callback;
+    private final DialogPelletsProfileCallback callback;
     private boolean limited;
 
-    public PelletsLogAdapter(final List<PelletLogModel> list, PelletsProfileCallback callback,
+    public PelletsLogAdapter(final List<PelletLogModel> list, DialogPelletsProfileCallback callback,
                              boolean limit) {
         this.list = list;
         this.callback = callback;

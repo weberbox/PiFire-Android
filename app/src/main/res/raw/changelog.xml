@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.4.3" changeDate="" currentVersion="true">
+    <changelogversion versionName="1.5.5" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Added Lid Open Detection Settings</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.5.4" changeDate="">
+        <changelogtext logType="new">Added Prime and Prime &amp; Start Modes</changelogtext>
+        <changelogtext logType="new">Added Option to Increment Temps by 5°</changelogtext>
+        <changelogtext logType="new">Added Option to Edit Smart Start Config</changelogtext>
+        <changelogtext logType="new">Added Pellets Estimated Usage</changelogtext>
+        <changelogtext logType="new">Added Pellets Auger Rate to Settings</changelogtext>
+        <changelogtext logType="new">Added Goto Mode After Startup to Settings</changelogtext>
+        <changelogtext logType="new">Added Apprise Notification Settings</changelogtext>
+        <changelogtext logType="new">Added PWM Fan Settings</changelogtext>
+        <changelogtext logType="new">Added PWM Fan Ramping &amp; Settings</changelogtext>
+        <changelogtext logType="new">Added PWM Temp Control</changelogtext>
+        <changelogtext logType="new">Added PWM Duty Cycle to Manual Mode</changelogtext>
+        <changelogtext logType="new">Added ADC Probe Assignment Settings</changelogtext>
+        <changelogtext logType="new">Added Pellet Notification Check Time Setting</changelogtext>
+        <changelogtext logType="new">Added Device GPIO Pin Info to Info Page</changelogtext>
+        <changelogtext logType="imp">Dashboard Backend Layout Overhaul. Should Improve Performance and Scale to Different Device Screens Better</changelogtext>
+        <changelogtext logType="imp">Backend updates for Google Play Version</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+        <changelogtext logType="fix">Fix zip deflating vulnerability</changelogtext>
+        <changelogtext logType="fix">Various typo/bug fixes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.4.3" changeDate="">
         <changelogtext logType="new">Added remote branch check on updater page</changelogtext>
         <changelogtext logType="fix">Update Grill Notify Implementation for Server Versions 1.3.4+</changelogtext>
     </changelogversion>

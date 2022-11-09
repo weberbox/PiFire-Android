@@ -69,6 +69,55 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:key="@string/prefs_adc_assignment_cat"
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_adc_assignment">
+
+        <Preference
+            android:layout="@layout/preference_category_note"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_adc_assignment_note"
+            app:title="@string/settings_note" />
+
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_adc_grill_probe_one"
+            app:entries="@array/adc_probe_options"
+            app:entryValues="@array/adc_probe_options"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_adc_grill_probe_one"
+            app:title="@string/settings_adc_grill_probe"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_adc_grill_probe_two"
+            app:entries="@array/adc_probe_options"
+            app:entryValues="@array/adc_probe_options"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_adc_grill_probe_two"
+            app:title="@string/settings_adc_grill_probe_two"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_adc_probe_one"
+            app:entries="@array/adc_probe_options"
+            app:entryValues="@array/adc_probe_options"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_adc_probe_one"
+            app:title="@string/settings_adc_probe_one"
+            app:useSimpleSummaryProvider="true" />
+
+        <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
+            app:defaultValue="@string/def_adc_probe_two"
+            app:entries="@array/adc_probe_options"
+            app:entryValues="@array/adc_probe_options"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_adc_probe_two"
+            app:title="@string/settings_adc_probe_two"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/settings_cat_temp_units">
 

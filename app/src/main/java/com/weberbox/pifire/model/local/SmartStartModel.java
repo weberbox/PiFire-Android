@@ -4,26 +4,26 @@ import androidx.annotation.NonNull;
 
 public class SmartStartModel {
 
-    private String range;
+    private Integer temp;
     private Integer startUp;
     private Integer augerOn;
     private Integer pMode;
 
-    public SmartStartModel(@NonNull final String range, @NonNull final  Integer startUp,
+    public SmartStartModel(@NonNull final Integer temp, @NonNull final  Integer startUp,
                            @NonNull final Integer augerOn, @NonNull final Integer pMode) {
-        setRange(range);
+        setTemp(temp);
         setStartUp(startUp);
         setAugerOn(augerOn);
         setPMode(pMode);
     }
 
     @NonNull
-    public String getRange() {
-        return range;
+    public Integer getTemp() {
+        return temp;
     }
 
-    public void setRange(@NonNull final String range) {
-        this.range = range;
+    public void setTemp(@NonNull final Integer temp) {
+        this.temp = temp;
     }
 
     @NonNull

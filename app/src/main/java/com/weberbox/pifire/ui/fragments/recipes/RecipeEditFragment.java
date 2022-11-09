@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -458,7 +459,12 @@ public class RecipeEditFragment extends Fragment implements RecipeEditCallback {
                         Intent data = result.getData();
                         if (data != null) {
                             onRecipeUpdated();
-                            Uri uri = data.getParcelableExtra("path");
+                            Uri uri;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                uri = data.getParcelableExtra("path", Uri.class);
+                            } else {
+                                uri = data.getParcelableExtra("path");
+                            }
                             recipe.setImage(uri.toString());
                             loadRecipeImage(uri.toString());
                             cleanImageDir(uri);

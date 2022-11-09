@@ -71,6 +71,7 @@ public class ServerConstants {
     public static final String G_MODE_STOP = "Stop";
     public static final String G_MODE_SMOKE_PLUS = "s_plus";
     public static final String G_MODE_MANUAL = "Manual";
+    public static final String G_MODE_PRIME = "Prime";
 
     // Socket Strings Dep
     public static final String REQUEST_GRILL_DATA = "request_grill_data";

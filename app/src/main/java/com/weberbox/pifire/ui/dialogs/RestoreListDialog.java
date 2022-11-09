@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogListViewBinding;
@@ -19,7 +18,7 @@ import java.util.List;
 
 public class RestoreListDialog {
 
-    private final DialogRestoreCallback callBack;
+    private final DialogRestoreCallback callback;
     private final LayoutInflater inflater;
     private final AlertDialog.Builder dialog;
     private final Context context;
@@ -27,17 +26,18 @@ public class RestoreListDialog {
     private final String type;
     private AlertDialog alertDialog;
     private ProgressBar progressSpinner;
-    private ArrayAdapter<String> filesAdapter;
+    private ArrayAdapter<String> adapter;
     private ListView restoreList;
     private TextView noBackups;
 
-    public RestoreListDialog(Context context, Fragment fragment, String title, String type) {
+    public RestoreListDialog(Context context, String title, String type,
+                             DialogRestoreCallback callback) {
         dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
-        this.context = context;
         inflater = LayoutInflater.from(context);
-        callBack = (DialogRestoreCallback) fragment;
+        this.context = context;
         this.title = title;
         this.type = type;
+        this.callback = callback;
     }
 
     public AlertDialog showDialog() {
@@ -49,8 +49,8 @@ public class RestoreListDialog {
         noBackups = binding.dialogListviewTv;
         restoreList = binding.dialogListview;
 
-        filesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
-        restoreList.setAdapter(filesAdapter);
+        adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1);
+        restoreList.setAdapter(adapter);
 
         dialog.setView(binding.getRoot());
 
@@ -60,7 +60,7 @@ public class RestoreListDialog {
 
         restoreList.setOnItemClickListener((parent, view, position, id) -> {
             alertDialog.dismiss();
-            callBack.onFileRestoreRemote(filesAdapter.getItem(position), type);
+            callback.onFileRestoreRemote(adapter.getItem(position), type);
         });
 
         alertDialog.show();
@@ -74,7 +74,7 @@ public class RestoreListDialog {
             noBackups.setVisibility(View.VISIBLE);
             noBackups.setText(R.string.backups_not_found);
         } else {
-            filesAdapter.addAll(fileNames);
+            adapter.addAll(fileNames);
             restoreList.setVisibility(View.VISIBLE);
         }
     }
