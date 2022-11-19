@@ -36,7 +36,7 @@ def getGitBranch = { ->
 
 def vMajor = 1
 def vMinor = 5
-def vPatch = 5
+def vPatch = 6
 def vBuild = 0
 def isBeta = false
 
@@ -169,18 +169,18 @@ android {
 
 dependencies {
     def room_version = "2.4.3"
-    def sentry_version = "6.5.0"
+    def sentry_version = "6.7.0"
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.8.7'
     implementation 'androidx.core:core-splashscreen:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
@@ -216,7 +216,7 @@ dependencies {
     firebaseImplementation platform('com.google.firebase:firebase-bom:29.1.0')
     firebaseImplementation 'com.google.firebase:firebase-messaging'
     firebaseImplementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
-    inappImplementation 'com.google.android.play:app-update:2.0.0'
+    inappImplementation 'com.google.android.play:app-update:2.0.1'
     inappImplementation 'com.google.firebase:firebase-config:21.2.0'
     inappImplementation 'com.google.firebase:firebase-analytics:21.2.0'
     implementation ('io.socket:socket.io-client:2.0.1') {

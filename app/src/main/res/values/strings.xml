@@ -131,6 +131,8 @@
     <string name="dialog_local">Local</string>
     <string name="dialog_restore_title">Restore Backup</string>
     <string name="dialog_event">Event Info</string>
+    <string name="dialog_probe_title">Probe Title</string>
+    <string name="dialog_max_error">Must be less than %1$s characters</string>
 
     <string name="dialog_crash_title">Oh no! Something went wrong</string>
     <string name="dialog_crash_message">It looks like the app crashed on the last run. Would you be willing to provide additional feedback or comments about the crash?</string>

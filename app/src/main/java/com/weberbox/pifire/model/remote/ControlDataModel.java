@@ -63,6 +63,9 @@ public class ControlDataModel {
     @SerializedName("manual")
     @Expose
     private Manual manual;
+    @SerializedName("probe_titles")
+    @Expose
+    private ProbeTitles probeTitles;
     @SerializedName("prime_amount")
     @Expose
     private Integer primeAmount;
@@ -308,6 +311,19 @@ public class ControlDataModel {
 
     public ControlDataModel withManual(Manual manual) {
         this.manual = manual;
+        return this;
+    }
+
+    public ProbeTitles getProbeTitles() {
+        return probeTitles;
+    }
+
+    public void setManual(ProbeTitles probeTitles) {
+        this.probeTitles = probeTitles;
+    }
+
+    public ControlDataModel withProbeTitles(ProbeTitles probeTitles) {
+        this.probeTitles = probeTitles;
         return this;
     }
 
@@ -619,6 +635,58 @@ public class ControlDataModel {
 
         public NotifyReq withTimer(Boolean timer) {
             this.timer = timer;
+            return this;
+        }
+
+    }
+
+    public static class ProbeTitles {
+        @SerializedName("grill_title")
+        @Expose
+        public String grillTitle;
+        @SerializedName("probe1_title")
+        @Expose
+        public String probeOneTitle;
+        @SerializedName("probe2_title")
+        @Expose
+        public String probeTwoTitle;
+
+        public String getGrillTitle() {
+            return grillTitle;
+        }
+
+        public void setGrillTitle(String grillTitle) {
+            this.grillTitle = grillTitle;
+        }
+
+        public ProbeTitles grillTitle(String grillTitle) {
+            this.grillTitle = grillTitle;
+            return this;
+        }
+
+        public String getProbeOneTitle() {
+            return probeOneTitle;
+        }
+
+        public void setProbeOneTitle(String probeOneTitle) {
+            this.probeOneTitle = probeOneTitle;
+        }
+
+        public ProbeTitles probeOneTitle(String probeOneTitle) {
+            this.probeOneTitle = probeOneTitle;
+            return this;
+        }
+
+        public String getProbeTwoTitle() {
+            return probeTwoTitle;
+        }
+
+        public void setProbeTwoTitle(String probeTwoTitle) {
+            this.probeTwoTitle = probeTwoTitle;
+        }
+
+        public ProbeTitles probeTwoTitle(String probeTwoTitle) {
+            this.probeTwoTitle = probeTwoTitle;
             return this;
         }
 

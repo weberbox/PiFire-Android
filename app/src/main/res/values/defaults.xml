@@ -40,6 +40,8 @@
     <bool name="def_smart_start">true</bool>
     <bool name="def_auto_lid_detect">false</bool>
 
+    <integer name="def_probe_name_limit">12</integer>
+
     <string name="def_grill_temp_unit">F</string>
 
     <string name="def_pellet_warning_level">25</string>

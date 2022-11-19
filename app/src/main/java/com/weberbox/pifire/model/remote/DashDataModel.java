@@ -16,6 +16,9 @@ public class DashDataModel {
     @SerializedName("probes_enabled")
     @Expose
     private ProbesEnabled probesEnabled;
+    @SerializedName("probe_titles")
+    @Expose
+    private ProbeTitles probeTitles;
     @SerializedName("set_points")
     @Expose
     private SetPoints setPoints;
@@ -84,6 +87,10 @@ public class DashDataModel {
         return timerInfo;
     }
 
+    public ProbeTitles getProbeTitles() {
+        return probeTitles;
+    }
+
 
     public static class ProbeTemps {
         @SerializedName("grill_temp")
@@ -131,6 +138,31 @@ public class DashDataModel {
         public Boolean getProbeTwoEnabled() {
             return probe2;
         }
+    }
+
+    public static class ProbeTitles {
+        @SerializedName("grill_title")
+        @Expose
+        public String grillTitle;
+        @SerializedName("probe1_title")
+        @Expose
+        public String probeOneTitle;
+        @SerializedName("probe2_title")
+        @Expose
+        public String probeTwoTitle;
+
+        public String getGrillTitle() {
+            return grillTitle;
+        }
+
+        public String getProbeOneTitle() {
+            return probeOneTitle;
+        }
+
+        public String getProbeTwoTitle() {
+            return probeTwoTitle;
+        }
+
     }
 
     public static class SetPoints {

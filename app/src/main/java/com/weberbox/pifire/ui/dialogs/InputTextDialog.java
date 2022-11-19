@@ -6,31 +6,40 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogInputTextBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogInputTextCallback;
 
-public class PelletsAddDialog {
+import java.text.DecimalFormat;
 
-    private final DialogPelletsProfileCallback callback;
+public class InputTextDialog {
+
+    private final DialogInputTextCallback callback;
     private final LayoutInflater inflater;
     private final AlertDialog.Builder dialog;
     private final Context context;
     private final String title;
     private final String type;
+    private final String initialValue;
+    private final Integer maxLength;
     private String string;
 
-    public PelletsAddDialog(Context context, String type, String title,
-                            DialogPelletsProfileCallback callback) {
+    public InputTextDialog(Context context, @NonNull String title, @Nullable String type,
+                           @Nullable String initialValue, @Nullable Integer maxLength,
+                           DialogInputTextCallback callback) {
         dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
         inflater = LayoutInflater.from(context);
         this.context = context;
-        this.type = type;
         this.title = title;
+        this.type = type;
+        this.initialValue = initialValue;
+        this.maxLength = maxLength;
         this.callback = callback;
     }
 
@@ -42,13 +51,17 @@ public class PelletsAddDialog {
         final TextInputLayout inputLayout = binding.dialogTextInputLayout;
         final TextInputEditText input = binding.dialogTextInput;
 
+        if (initialValue != null) {
+            input.setText(initialValue);
+        }
+
         dialog.setView(binding.getRoot());
 
         dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             if (input.getText() != null) {
                 string = input.getText().toString();
                 if (string.length() != 0) {
-                    callback.onItemAdded(type, string);
+                    callback.onDialogConfirm(type, string);
                     dialog.dismiss();
                 }
             }
@@ -62,7 +75,7 @@ public class PelletsAddDialog {
 
         alertDialog.show();
 
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(initialValue != null);
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,6 +87,10 @@ public class PelletsAddDialog {
                 if (s.length() == 0) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
                     inputLayout.setError(context.getString(R.string.text_blank_error));
+                } else if (maxLength != null && s.length() > maxLength) {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    inputLayout.setError(context.getString(R.string.dialog_max_error,
+                            new DecimalFormat("0.#").format(maxLength + 1)));
                 } else {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                     inputLayout.setError(null);

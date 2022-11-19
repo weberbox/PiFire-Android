@@ -399,6 +399,27 @@ public class ServerControl {
         }
     }
 
+    // Grill Probe Title
+    public static void setGrillProbeTitle(Socket socket, String title, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withProbeTitles(new ProbeTitles().grillTitle(title)));
+        controlPostEmit(socket, json, callback);
+    }
+
+    // Probe One Title
+    public static void setProbeOneTitle(Socket socket, String title, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withProbeTitles(new ProbeTitles().probeOneTitle(title)));
+        controlPostEmit(socket, json, callback);
+    }
+
+    // Probe Two Title
+    public static void setProbeTwoTitle(Socket socket, String title, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withProbeTitles(new ProbeTitles().probeTwoTitle(title)));
+        controlPostEmit(socket, json, callback);
+    }
+
     // ADC Probe Assignments
     public static void setADCProbeSources(Socket socket, List<String> probeSources,
                                           SocketCallback callback) {

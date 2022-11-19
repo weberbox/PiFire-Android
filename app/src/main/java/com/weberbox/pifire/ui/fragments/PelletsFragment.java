@@ -33,21 +33,21 @@ import com.weberbox.pifire.databinding.LayoutPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsHopperBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsUsageBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.model.local.PelletItemModel;
 import com.weberbox.pifire.model.local.PelletLogModel;
 import com.weberbox.pifire.model.remote.PelletDataModel;
-import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.model.remote.PelletDataModel.Current;
+import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.PelletItemsAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletProfileEditAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletsLogAdapter;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
-import com.weberbox.pifire.ui.dialogs.PelletsAddDialog;
+import com.weberbox.pifire.ui.dialogs.InputTextDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsEditDialog;
 import com.weberbox.pifire.ui.dialogs.ProfilePickerDialog;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.views.CardViewHeaderButton;
 import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
 import com.weberbox.pifire.ui.views.PelletsEditorRecycler;
@@ -192,19 +192,19 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
 
         addNewBrand.setOnClickListener(v -> {
             if (socketConnected()) {
-                PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
-                        Constants.PELLET_BRAND, getString(R.string.pellets_add_brand),
-                        PelletsFragment.this);
-                pelletsAddDialog.showDialog();
+                InputTextDialog inputTextDialog = new InputTextDialog(getActivity(),
+                        getString(R.string.pellets_add_brand), Constants.PELLET_BRAND, null, null,
+                        this::onItemAdded);
+                inputTextDialog.showDialog();
             }
         });
 
         addNewWood.setOnClickListener(v -> {
             if (socketConnected()) {
-                PelletsAddDialog pelletsAddDialog = new PelletsAddDialog(getActivity(),
-                        Constants.PELLET_WOOD, getString(R.string.pellets_add_woods),
-                        PelletsFragment.this);
-                pelletsAddDialog.showDialog();
+                InputTextDialog inputTextDialog = new InputTextDialog(getActivity(),
+                        getString(R.string.pellets_add_woods), Constants.PELLET_WOOD, null, null,
+                        this::onItemAdded);
+                inputTextDialog.showDialog();
             }
         });
 

@@ -32,12 +32,14 @@ import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyReq;
 import com.weberbox.pifire.model.remote.DashDataModel.ProbeTemps;
+import com.weberbox.pifire.model.remote.DashDataModel.ProbeTitles;
 import com.weberbox.pifire.model.remote.DashDataModel.ProbesEnabled;
 import com.weberbox.pifire.model.remote.DashDataModel.SetPoints;
 import com.weberbox.pifire.model.remote.DashDataModel.TimerInfo;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
+import com.weberbox.pifire.ui.dialogs.InputTextDialog;
 import com.weberbox.pifire.ui.dialogs.PrimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
 import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
@@ -68,6 +70,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private FragmentDashboardBinding binding;
     private TextView timerCountDownText, grillTempText, probeOneTempText, probeTwoTempText;
     private TextView grillSetText, probeOneTargetText, probeTwoTargetText, pelletLevelText;
+    private TextView grillTitleText, probeOneTitleText, probeTwoTitleText;
     private TextView currentModeText, smokePlusText, grillTargetText, pwmControlText;
     private ImageView probeOneShutdown, probeTwoShutdown, timerShutdown;
     private ImageView probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm;
@@ -116,6 +119,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
         // Grill Probe
         DashProbeCard dashGrillProbe = binding.dashLayout.dashGrillProbe;
+        grillTitleText = dashGrillProbe.getProbeTitle();
         grillTempText = dashGrillProbe.getProbeTemp();
         grillSetText = dashGrillProbe.getProbeSetTemp();
         grillTargetText = dashGrillProbe.getProbeTargetTemp();
@@ -123,6 +127,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
         // Probe One
         DashProbeCard dashProbeOne = binding.dashLayout.dashProbeOne;
+        probeOneTitleText = dashProbeOne.getProbeTitle();
         probeOneShutdown = dashProbeOne.getProbeShutdown();
         probeOneKeepWarm = dashProbeOne.getProbeKeepWarm();
         probeOneTempText = dashProbeOne.getProbeTemp();
@@ -131,6 +136,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
         // Probe Two
         DashProbeCard dashProbeTwo = binding.dashLayout.dashProbeTwo;
+        probeTwoTitleText = dashProbeTwo.getProbeTitle();
         probeTwoShutdown = dashProbeTwo.getProbeShutdown();
         probeTwoKeepWarm = dashProbeTwo.getProbeKeepWarm();
         probeTwoTempText = dashProbeTwo.getProbeTemp();
@@ -202,9 +208,9 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                                 .build();
                         dialog.show();
                     } else if (currentMode.equals(Constants.GRILL_CURRENT_MONITOR) ||
-                                    currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
+                            currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
-                                R.string.prefs_grill_swipe_start),
+                                        R.string.prefs_grill_swipe_start),
                                 getResources().getBoolean(R.bool.def_grill_swipe_start));
 
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
@@ -333,6 +339,20 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             });
         }
 
+        if (VersionUtils.isSupported(ServerVersions.V_136)) {
+            dashGrillProbe.getProbeTitle().setOnClickListener(v -> {
+                if (socketConnected()) {
+                    InputTextDialog dialog = new InputTextDialog(requireActivity(),
+                            getString(R.string.dialog_probe_title), null,
+                            grillTitleText.getText().toString(),
+                            getResources().getInteger(R.integer.def_probe_name_limit),
+                            (type, inputText) -> ServerControl.setGrillProbeTitle(socket, inputText,
+                                    this::processPostResponse));
+                    dialog.showDialog();
+                }
+            });
+        }
+
         dashProbeOne.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultProbeTemp();
@@ -384,6 +404,20 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             return true;
         });
 
+        if (VersionUtils.isSupported(ServerVersions.V_136)) {
+            dashProbeOne.getProbeTitle().setOnClickListener(v -> {
+                if (socketConnected()) {
+                    InputTextDialog dialog = new InputTextDialog(requireActivity(),
+                            getString(R.string.dialog_probe_title), null,
+                            probeOneTitleText.getText().toString(),
+                            getResources().getInteger(R.integer.def_probe_name_limit),
+                            (type, inputText) -> ServerControl.setProbeOneTitle(socket, inputText,
+                                    this::processPostResponse));
+                    dialog.showDialog();
+                }
+            });
+        }
+
         dashProbeTwo.setOnClickListener(v -> {
             if (socketConnected()) {
                 int defaultTemp = tempUtils.getDefaultProbeTemp();
@@ -432,6 +466,20 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             }
             return true;
         });
+
+        if (VersionUtils.isSupported(ServerVersions.V_136)) {
+            dashProbeTwo.getProbeTitle().setOnClickListener(v -> {
+                if (socketConnected()) {
+                    InputTextDialog dialog = new InputTextDialog(requireActivity(),
+                            getString(R.string.dialog_probe_title), null,
+                            probeTwoTitleText.getText().toString(),
+                            getResources().getInteger(R.integer.def_probe_name_limit),
+                            (type, inputText) -> ServerControl.setProbeTwoTitle(socket, inputText,
+                                    this::processPostResponse));
+                    dialog.showDialog();
+                }
+            });
+        }
 
         timerBox.setOnClickListener(v -> {
             if (socketConnected()) {
@@ -672,12 +720,16 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
             ProbeTemps probeTemps = dashDataModel.getProbeTemps();
             ProbesEnabled probesEnabled = dashDataModel.getProbesEnabled();
+            ProbeTitles probeTitles = dashDataModel.getProbeTitles();
             SetPoints setPoints = dashDataModel.getSetPoints();
             NotifyReq notifyReq = dashDataModel.getNotifyReq();
             NotifyData notifyData = dashDataModel.getNotifyData();
             TimerInfo timerInfo = dashDataModel.getTimerInfo();
 
             String currentMode = dashDataModel.getCurrentMode();
+            String grillTitle = probeTitles.getGrillTitle();
+            String probeOneTitle = probeTitles.getProbeOneTitle();
+            String probeTwoTitle = probeTitles.getProbeTwoTitle();
             long timerStartTime = timerInfo.getTimerStartTime();
             long timerEndTime = timerInfo.getTimerEndTime();
             long timerPauseTime = timerInfo.getTimerPauseTime();
@@ -707,6 +759,21 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             probeTwoEnabled = probesEnabled.getProbeTwoEnabled();
 
             TransitionManager.beginDelayedTransition(rootContainer, new TextTransition());
+
+            if (VersionUtils.isSupported(ServerVersions.V_136)) {
+                if (grillTitle != null &&
+                        !grillTitleText.getText().toString().equals(grillTitle)) {
+                    grillTitleText.setText(grillTitle);
+                }
+                if (probeOneTitle != null &&
+                        !probeOneTitleText.getText().toString().equals(probeOneTitle)) {
+                    probeOneTitleText.setText(probeOneTitle);
+                }
+                if (probeTwoTitle != null &&
+                        !probeTwoTitleText.getText().toString().equals(probeTwoTitle)) {
+                    probeTwoTitleText.setText(probeTwoTitle);
+                }
+            }
 
             if (NullUtils.checkObjectNotNull(currentMode, smokePlus, hopperLevel, grillTarget)) {
                 this.currentMode = currentMode;
