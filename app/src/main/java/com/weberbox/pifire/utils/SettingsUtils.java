@@ -182,10 +182,12 @@ public class SettingsUtils {
                 putString(R.string.prefs_notif_influxdb_bucket, influxDB.getBucket());
             }
 
-            if (apprise != null) {
-                putBoolean(R.string.prefs_notif_apprise_enabled, apprise.getEnabled());
-                putString(R.string.prefs_notif_apprise_locations,
-                        new Gson().toJson(apprise.getLocations()));
+            if (VersionUtils.isSupported(ServerVersions.V_135)) {
+                if (apprise != null) {
+                    putBoolean(R.string.prefs_notif_apprise_enabled, apprise.getEnabled());
+                    putString(R.string.prefs_notif_apprise_locations,
+                            new Gson().toJson(apprise.getLocations()));
+                }
             }
 
             if (probeTypes != null) {

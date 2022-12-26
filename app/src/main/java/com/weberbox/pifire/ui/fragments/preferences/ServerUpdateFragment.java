@@ -421,14 +421,16 @@ public class ServerUpdateFragment extends Fragment {
                         String result = response.getResult();
                         String message = response.getMessage();
 
-                        requireActivity().runOnUiThread(() -> {
-                            if (result.equals("success")) {
-                                String cleanMessage = message.replaceAll("((?i)<br*/?>)", "\n");
-                                progressDialog.getProgressMessage().setText(cleanMessage);
-                            } else {
-                                AlertUtils.createErrorAlert(getActivity(), message, false);
-                            }
-                        });
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(() -> {
+                                if (result.equals("success")) {
+                                    String cleanMessage = message.replaceAll("((?i)<br*/?>)", "\n");
+                                    progressDialog.getProgressMessage().setText(cleanMessage);
+                                } else {
+                                    AlertUtils.createErrorAlert(getActivity(), message, false);
+                                }
+                            });
+                        }
                     }
                 });
     }
