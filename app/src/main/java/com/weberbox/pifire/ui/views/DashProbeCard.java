@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,9 +20,12 @@ import com.weberbox.pifire.databinding.LayoutDashProbeFrameBinding;
 @SuppressWarnings("unused")
 public class DashProbeCard extends CardView {
 
-    private TextView probeTitle;
+    private TextView probeName;
     private TextView probeSetTemp;
-    private LinearLayout setTempContainer;
+    private TextView probeTargetTitle;
+    private ImageView shutdown;
+    private ImageView keepWarm;
+    private Group setTempContainer;
     private ProgressBar probeTempProgress;
     private TextView probeTargetTemp;
     private TextView probeTemp;
@@ -54,19 +56,19 @@ public class DashProbeCard extends CardView {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.DashProbeCard);
 
-            String title = typedArray.getString(R.styleable.DashProbeCard_dash_probe_title);
+            String name = typedArray.getString(R.styleable.DashProbeCard_dash_probe_name);
             setTempEnabled = typedArray.getBoolean(R.styleable.DashProbeCard_dash_probe_set_temp,
                     false);
             int icon = typedArray.getResourceId(R.styleable.DashProbeCard_dash_probe_icon,
                     R.drawable.ic_grill_probe);
 
-            title = title == null ? "" : title;
+            name = name == null ? "" : name;
 
-            Group setTempContainer = binding.dashProbeSetGroup;
-            TextView probeTargetTitle = binding.dashProbeTargetTitle;
-            ImageView shutdown = binding.dashProbeShutdown;
-            ImageView keepWarm = binding.dashProbeKeepWarm;
-            probeTitle = binding.dashProbeTitle;
+            setTempContainer = binding.dashProbeSetGroup;
+            probeTargetTitle = binding.dashProbeTargetTitle;
+            shutdown = binding.dashProbeShutdown;
+            keepWarm = binding.dashProbeKeepWarm;
+            probeName = binding.dashProbeName;
             probeTemp = binding.dashProbeTemp;
             probeIcon = binding.dashProbeIcon;
             probeTargetTemp = binding.dashProbeTarget;
@@ -75,30 +77,35 @@ public class DashProbeCard extends CardView {
             probeShutdown = binding.dashProbeShutdown;
             probeKeepWarm = binding.dashProbeKeepWarm;
 
-            probeTitle.setText(title);
+            probeName.setText(name);
             probeIcon.setImageResource(icon);
 
-            if (!setTempEnabled) {
-                setTempContainer.setVisibility(GONE);
-                probeTargetTitle.setGravity(Gravity.START);
-                probeTargetTemp.setGravity(Gravity.START);
-            } else {
-                shutdown.setVisibility(GONE);
-                keepWarm.setVisibility(GONE);
-                probeTargetTitle.setGravity(Gravity.END);
-                probeTargetTemp.setGravity(Gravity.END);
-            }
+            updateSetTemp(setTempEnabled);
 
             typedArray.recycle();
         }
     }
 
-    public TextView getProbeTitle() {
-        return probeTitle;
+    private void updateSetTemp(boolean setTempEnabled) {
+        if (!setTempEnabled) {
+            setTempContainer.setVisibility(GONE);
+            probeTargetTitle.setGravity(Gravity.START);
+            probeTargetTemp.setGravity(Gravity.START);
+        } else {
+            setTempContainer.setVisibility(VISIBLE);
+            shutdown.setVisibility(GONE);
+            keepWarm.setVisibility(GONE);
+            probeTargetTitle.setGravity(Gravity.END);
+            probeTargetTemp.setGravity(Gravity.END);
+        }
     }
 
-    public void setProbeTitle(String text) {
-        probeTitle.setText(text);
+    public TextView getProbeName() {
+        return probeName;
+    }
+
+    public void setProbeName(String text) {
+        probeName.setText(text);
     }
 
     public boolean getSetTempEnabled() {
@@ -107,6 +114,7 @@ public class DashProbeCard extends CardView {
 
     public void setSetTempEnabled(boolean enabled) {
         this.setTempEnabled = enabled;
+        updateSetTemp(setTempEnabled);
     }
 
     public ImageView getProbeIcon() {

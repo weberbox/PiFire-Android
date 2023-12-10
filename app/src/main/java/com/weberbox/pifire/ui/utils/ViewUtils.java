@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.TypedValue;
 import android.view.Window;
@@ -18,6 +19,11 @@ public final class ViewUtils {
 
     public static boolean isTablet(Context context){
         return context.getResources().getBoolean(R.bool.is_tablet);
+    }
+
+    public static boolean isLandscape(Context context) {
+        return context.getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public static float convertPixelsToSp(float px, Context context) {

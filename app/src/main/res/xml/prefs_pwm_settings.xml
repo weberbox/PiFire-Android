@@ -13,7 +13,7 @@
             app:title="@string/settings_pwm_fan_control_enabled" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pwm_fan_control_note"
             app:title="@string/settings_note" />
@@ -27,7 +27,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pwm_fan_table_note"
             app:title="@string/settings_note" />

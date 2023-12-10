@@ -8,18 +8,14 @@
 
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_pellet_manager">Pellets</string>
-    <string name="menu_history">History</string>
     <string name="menu_events">Events</string>
     <string name="menu_setting">Settings</string>
     <string name="menu_info">Info</string>
-    <string name="menu_recipes">Recipes</string>
 
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_pellet_manager">Pellet Manager</string>
-    <string name="nav_history">History</string>
     <string name="nav_events">Event Log</string>
     <string name="nav_admin">Admin</string>
-    <string name="nav_recipes">Recipes</string>
     <string name="nav_changelog">Changelog</string>
 
     <string name="placeholder_img">placeholder_img</string>
@@ -59,18 +55,11 @@
     <string name="https_scheme">https://</string>
     <string name="scheme">Scheme</string>
     <string name="refresh">Refresh</string>
-    <string name="backup">Backup</string>
-    <string name="restore">Restore</string>
     <string name="delete">Delete</string>
-    <string name="drag">Drag</string>
     <string name="save">Save</string>
-    <string name="exporting">Exporting</string>
-    <string name="importing">Importing</string>
     <string name="welcome">Welcome</string>
     <string name="terms">Terms</string>
-    <string name="share">Share</string>
     <string name="edit">Edit</string>
-    <string name="print">Print</string>
     <string name="status">Status</string>
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
@@ -80,7 +69,6 @@
     <string name="offline">Offline</string>
     <string name="sure">Sure</string>
     <string name="no_thanks">No Thanks</string>
-    <string name="feedback">Feedback</string>
     <string name="exit">Exit</string>
     <string name="add_new">Add New</string>
 
@@ -99,8 +87,10 @@
     <string name="grill_state_current">Current</string>
     <string name="grill_state_target">Target</string>
     <string name="grill_state_set">Set</string>
+
     <string name="dash_probe_one_title">Probe 1</string>
     <string name="dash_probe_two_title">Probe 2</string>
+
     <string name="dash_timer_title">Timer</string>
     <string name="dash_pellets_title">Pellets</string>
     <string name="dash_remaining_title">Remaining</string>
@@ -112,50 +102,23 @@
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
     <string name="grill_keep_warm_timer">Keep Warm When Timer Expires</string>
 
-    <string name="probe_disable">Disable</string>
-    <string name="probe_enable">Enable</string>
-
     <string name="timer_start">Start</string>
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
 
     <string name="dialog_prime_startup">Startup Grill After Priming</string>
 
-    <string name="dialog_camera">Camera</string>
-    <string name="dialog_gallery">Gallery</string>
-
     <string name="dialog_confirm_action">Confirm Action</string>
 
-    <string name="dialog_backup_message">Are you sure you want to export a backup?</string>
-    <string name="dialog_remote">Remote</string>
-    <string name="dialog_local">Local</string>
-    <string name="dialog_restore_title">Restore Backup</string>
     <string name="dialog_event">Event Info</string>
-    <string name="dialog_probe_title">Probe Title</string>
+    <string name="dialog_probe_edit">Probe Edit</string>
+    <string name="dialog_probe_name">Probe Name</string>
+    <string name="dialog_probe_profile">Probe Profile</string>
     <string name="dialog_max_error">Must be less than %1$s characters</string>
 
-    <string name="dialog_crash_title">Oh no! Something went wrong</string>
-    <string name="dialog_crash_message">It looks like the app crashed on the last run. Would you be willing to provide additional feedback or comments about the crash?</string>
-
-    <string name="dialog_crash_disabled_title">Reporting Disabled</string>
-    <string name="dialog_crash_disabled_message">Crash Reporting is currently disabled. This feature requires crash reporting to be enabled. Would you like to enable it now?</string>
-
-    <string name="feedback_crash_message">Thanks for taking the time to provide additional information!\n\nPlease describe the crash the best you can as well as any steps you can remember leading up to the crash.</string>
-    <string name="feedback_message">Thank you for taking the time to provide feedback!</string>
-    <string name="feedback_email">Email Address (Optional)</string>
-    <string name="feedback_comments">Comments</string>
-    <string name="feedback_toast">Thanks again for the feedback!</string>
-
-    <string name="backup_failed">Backup failed! Please try again</string>
-    <string name="backup_success">Backup Completed Successfully!</string>
-    <string name="restore_failed">Restore failed! Please try again</string>
-    <string name="restore_success">Restore Completed Successfully!</string>
-
-    <string name="file_picker_text">Choose a file</string>
-    <string name="backups_not_found">No Remote Backups Found</string>
-
-    <string name="file_permission_denied">File permissions are required to use this feature</string>
-    <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
+    <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
+    <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s</string>
+    <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. Please check for an update to this application</string>
 
     <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
 
@@ -164,55 +127,7 @@
     <string name="control_pwm_control_disabled">Only available in Hold mode</string>
     <string name="control_manual_mode">Manual mode must be controlled from Admin Settings</string>
 
-    <string name="history_temp_graph">Temp Graph</string>
-    <string name="history_grill_temp">Grill Temp</string>
-    <string name="history_grill_set">Grill Set</string>
-    <string name="history_probe1_temp">Probe 1 Temp</string>
-    <string name="history_probe1_set">Probe 1 Set</string>
-    <string name="history_probe2_temp">Probe 2 Temp</string>
-    <string name="history_probe2_set">Probe 2 Set</string>
-    <string name="history_delete_content">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
-
     <string name="changelog_title">What\'s New</string>
-
-    <string name="recipes_unsaved_title">Unsaved Changes</string>
-    <string name="recipes_unsaved_message">This recipe has unsaved changes. What would you like to do?</string>
-    <string name="recipes_unsaved_discard">Discard</string>
-    <string name="recipes_unsaved_cancel">Keep Editing</string>
-    <string name="recipes_load_error">There was an error loading the requested recipe!</string>
-    <string name="recipes_add">Add Recipe</string>
-    <string name="recipes_rating">Rating</string>
-    <string name="recipes_actions">Actions</string>
-    <string name="recipes_title_hint">Recipe title</string>
-    <string name="recipes_notes_hint">Notes</string>
-    <string name="recipes_removed">Recipe removed from the list</string>
-    <string name="recipes_level_beginner">Beginner</string>
-    <string name="recipes_level_easy">Easy</string>
-    <string name="recipes_level_mod">Moderate</string>
-    <string name="recipes_level_hard">Hard</string>
-    <string name="recipes_level_v_hard">Challenging</string>
-    <string name="recipes_cooking_time">Cooking time</string>
-    <string name="recipes_difficulty_level">Difficulty level</string>
-    <string name="recipes_created">Date created</string>
-    <string name="recipes_modified">Last modified</string>
-    <string name="recipes_ingredients">Ingredients</string>
-    <string name="recipes_instructions">Instructions</string>
-    <string name="recipes_notes">Notes</string>
-    <string name="recipes_action_view">Recipe View</string>
-    <string name="recipes_item_section">Section</string>
-    <string name="recipes_item_step">Step</string>
-    <string name="recipes_add_step">Add Step</string>
-    <string name="recipes_add_section">Add Section</string>
-    <string name="recipes_add_item">Add Ingredient</string>
-    <string name="recipes_untitled">Untitled Recipe</string>
-    <string name="recipes_item_value">Item</string>
-    <string name="recipes_item_unit">Unit</string>
-    <string name="recipes_item_qty">Qty</string>
-
-    <string name="image_picker_no_intent">Image picker option is missing</string>
-    <string name="image_picker_toolbar_title">Crop Image</string>
-    <string name="image_picker_result_error">There was an error retrieving the image</string>
-    <string name="image_picker_cancelled">Operation Cancelled</string>
 
     <string name="setup_connect">Connect</string>
     <string name="setup_push">Consent</string>
@@ -248,17 +163,17 @@
     <string name="settings_work">Work Mode</string>
     <string name="settings_pwm">PWM Settings</string>
     <string name="settings_timers">Startup &amp; Shutdown</string>
-    <string name="settings_history">History Settings</string>
     <string name="settings_safety">Safety Settings</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_admin">Admin Settings</string>
     <string name="settings_pellets">Pellet Settings</string>
     <string name="settings_manual">Manual Mode</string>
-    <string name="settings_updater">Server Updater</string>
 
     <!-- Settings Preferences -->
+    <string name="settings_info">Info:</string>
     <string name="settings_note">Note:</string>
     <string name="settings_warning">Warning:</string>
+    <string name="settings_danger">Danger:</string>
     <string name="settings_min_error">Value must be greater than %1$s</string>
     <string name="settings_max_error">Value must be less than %1$s</string>
 
@@ -268,12 +183,8 @@
     <string name="settings_server_settings_summary">Setup server address and basic auth</string>
 
     <string name="settings_cat_updates">Update Checking</string>
-    <string name="settings_update_enabled">Enabled</string>
-    <string name="settings_update_enabled_summary">Check for new releases on startup</string>
     <string name="settings_update_check_now">Check Now</string>
     <string name="settings_update_check_now_summary">Check for updates now</string>
-    <string name="settings_update_download_title">Download Update</string>
-    <string name="settings_update_download_summary">Option to download and install update or redirect to Github</string>
 
     <string name="settings_cat_crash">Crash Reporting</string>
     <string name="settings_enable_crash">Enable</string>
@@ -297,12 +208,6 @@
     <string name="settings_credentials_summary">Basic Auth Credentials</string>
     <string name="settings_credentials_error">Error encrypting credentials. Please try again</string>
 
-    <string name="settings_cat_app_history">History</string>
-    <string name="settings_app_history_refresh_title">Auto History Refresh</string>
-    <string name="settings_app_history_refresh_summary">Enable auto refreshing on history page. \nNote this is only for the app not the server</string>
-    <string name="settings_app_history_refresh_interval_title">History Refresh Interval</string>
-    <string name="settings_app_history_refresh_interval_summary">How often the history will refresh in seconds</string>
-
     <string name="settings_cat_events_title">Events</string>
     <string name="settings_app_events_amount_title">Event List Amount</string>
     <string name="settings_app_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
@@ -323,52 +228,39 @@
     <string name="settings_grill_temp_units">Displayed Units</string>
     <string name="settings_units_note">Changing the scale/units will restart the grill controller (stopping any currently running modes) and automatically erase history.</string>
 
-    <string name="settings_cat_grill_probes">Grill Probes</string>
-    <string name="settings_cat_food_probes">Food Probes</string>
-    <string name="settings_grill_probe_selection">Grill Probe Selection</string>
-    <string name="settings_grill_probe_one_type">Grill Probe 1 Type</string>
-    <string name="settings_grill_probe_two_type">Grill Probe 2 Type</string>
-    <string name="settings_grill_probe_type">Grill Probe Type</string>
-    <string name="settings_probe_one_type">Probe 1 Type</string>
-    <string name="settings_probe_two_type">Probe 2 Type</string>
-
-    <string name="settings_cat_adc_assignment">ADC Probe Assignment</string>
-    <string name="settings_adc_grill_probe">Grill Probe</string>
-    <string name="settings_adc_grill_probe_one">Grill Probe One</string>
-    <string name="settings_adc_grill_probe_two">Grill Probe Two</string>
-    <string name="settings_adc_probe_one">Probe One</string>
-    <string name="settings_adc_probe_two">Probe Two</string>
-    <string name="settings_adc_assignment_note">Here you can map the ADC Inputs to the PiFire Probes. Most systems will use the default settings shown. If your probes are wired differently you can set the new values below.</string>
+    <string name="settings_cat_probe_edit">Probe Name &amp; Type</string>
+    <string name="settings_probes_not_found">No Probes Found</string>
 
     <string name="settings_cat_cycle">Startup / Smoke Mode Cycle Settings</string>
+    <string name="settings_pmode_info_one">During Startup and Smoke modes, the cycle time (Auger On Time + Auger Off Time) is fixed, and does not change dynamically based on any other inputs. Effectively, this may allow you to adjust the rough smoke temperature depending other external factors like ambient temperature (seasonal), etc.</string>
+    <string name="settings_pmode_info_two"> If a PMode of greater than zero is selected, the PMode is multiplied by 10s will be added to the Auger Off Time. [For example: Cycle Time = Auger On Time + Auger Off Time + (Pmode * 10)] This calculation is reflected in the table below. If you don\'t want to use PMode to configure the cycle time, then select a PMode of 0.</string>
     <string name="settings_pmode_note">P-Mode is used for both Startup and Smoke modes, but not Hold mode. For more information about the P-Mode click here</string>
     <string name="settings_pmode_mode">P-Mode</string>
     <string name="settings_pmode_table">P-Mode Table</string>
     <string name="settings_pmode_summary">Click here a P-Mode chart</string>
-    <string name="settings_pmode_auger_on">Auger ON</string>
-    <string name="settings_pmode_auger_off">Auger OFF</string>
+    <string name="settings_pmode_auger_on">Auger ON Time</string>
+    <string name="settings_pmode_auger_off">Auger OFF Time</string>
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
-    <string name="settings_splus_note">Fan cycling will only occur between the below min/max temperatures.</string>
+    <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the fan icon button on the dashboard. The icon will be highlighted blue indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the below min/max temperatures.</string>
     <string name="settings_splus_fan">Fan Cycle Time (s)</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
     <string name="settings_splus_on_time">Fan On Time</string>
     <string name="settings_splus_off_time">Fan Off Time</string>
-    <string name="settings_splus_fan_ramp">PWM Fan Ramping</string>
+    <string name="settings_splus_fan_ramp">Fan Ramping Enabled</string>
     <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle</string>
     <string name="settings_splus_fan_ramp_note">Fan Ramping will ramp the fan from off to the desired duty cycle instead of just turning on to full speed during Smoke Plus cycling. You can control the ramp duration by setting the Fan ON Time below. The desired duty cycle can also be set below.</string>
 
-    <string name="settings_cat_pid">PID Settings (HOLD Mode)</string>
-    <string name="settings_pid_cycle">Cycle Time</string>
-    <string name="settings_pid_pb">Proportional Band (PB)</string>
-    <string name="settings_pid_ti">Integral Time (Ti)</string>
-    <string name="settings_pid_td">Derivative Time (Td)</string>
-    <string name="settings_pid_u_min">Minimum Cycle Ratio</string>
-    <string name="settings_pid_u_max">Maximum Cycle Ratio</string>
-    <string name="settings_pid_center">Center Ratio</string>
-    <string name="settings_pid_note">Cycle needs to be restarted before changes will take effect. More information on the PID control settings can be found by clicking here</string>
+    <string name="settings_cat_controller">Controller Cycle Settings</string>
+    <string name="settings_controller_cycle">Cycle Time</string>
+    <string name="settings_controller_cycle_note">Amount of seconds for a complete cycle. At the beginning of each cycle, the controller will check the current temperature and set point to determine the cycle ratio (auger ON time / auger OFF time). [Default=25]</string>
+    <string name="settings_controller_u_min">Minimum Cycle Ratio</string>
+    <string name="settings_controller_u_min_note">Minimum percentage of cycle where the auger is on. This is to prevent flame–out which can happen with a cycle ratio of less than 0.1. (0.0 – 0.99) [Default=0.1]</string>
+    <string name="settings_controller_u_max">Maximum Cycle Ratio</string>
+    <string name="settings_controller_u_max_note">Maximum percentage of cycle where the auger is on. This is to minimize possible overshoots, or overcompensation in temperature. (0.0 – 1.0) [Default=0.9]</string>
+    <string name="settings_controller_note">For each controller, you can set certain cycle settings, like the cycle time (length of time between controller sampling temperature and adjusting the amount of auger ON time). To use the recommended values for the currently selected controller, click on the button in the recommended column.</string>
 
     <string name="settings_cat_lid_detection">Lid Detection</string>
     <string name="settings_lid_open_enabled">Lid Open Detection</string>
@@ -377,9 +269,9 @@
     <string name="settings_lid_open_note">If enabled, the system will attempt to determine if the lid was opened and temporarily suspend the PID. If the temperature drops below the threshold (percentage of the hold temperature), a lid open event is triggered. Once lid open is detected, it will pause the PID for the specified amount of seconds.</string>
 
     <string name="settings_cat_keep_warm">Keep Warm Settings</string>
-    <string name="settings_keep_warm_s_plus">Smoke Plus Enabled</string>
+    <string name="settings_keep_warm_s_plus">Smoke Plus Enabled During \'Keep Warm\'</string>
     <string name="settings_keep_warm_temp">Keep Warm Temp</string>
-    <string name="settings_keep_warm_note">The Keep Warm option will be activated when selected once a probe set point has been achieved or the set timer has expired. The Grill will exit the currently running mode then switch to Hold Mode and attempt to maintain the temperature set above. You can also enable or disable the Smoke Plus feature during Keep Warm</string>
+    <string name="settings_keep_warm_note">The Keep Warm mode is a specified Hold temperature, that you can define, that can be activated by a timer or notification targets. When the grill is active, you can click on the timer dialog and check the Keep Warm box. Or you can click on the Notification Targets for any of the probes and select the Keep Warm box. The Keep Warm function will be activated when a probe notify target has been achieved or the timer has expired. The Grill will exit the currently running mode and switch to Hold Mode then attempt to maintain the temperature set below.</string>
 
     <string name="settings_cat_startup">Startup Settings</string>
     <string name="settings_cat_shutdown">Shutdown Settings</string>
@@ -404,6 +296,9 @@
     <string name="settings_smart_start_p_mode">P-Mode</string>
     <string name="settings_smart_start_action">Action</string>
 
+    <string name="settings_exit_temp">Exit Startup Temperature</string>
+    <string name="settings_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
+
     <string name="settings_smart_start_temp_range_add">Add Smart Start Profile</string>
     <string name="settings_smart_start_temp_range_edit">Edit Smart Start Profile</string>
     <string name="settings_smart_start_temp_range_delete">Delete Smart Start Profile</string>
@@ -413,11 +308,6 @@
     <string name="settings_smart_start_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
 
     <string name="settings_cat_grill_name">Grill Naming</string>
-
-    <string name="settings_history_display">History to Display (mins)</string>
-    <string name="settings_history_points">Data points to Display</string>
-    <string name="settings_history_clear">Clear History on Startup</string>
-    <string name="settings_history_auto">History Auto-Refresh</string>
 
     <string name="settings_safety_min_start">Min Startup Temp</string>
     <string name="settings_safety_max_start">Max Startup Temp</string>
@@ -483,6 +373,7 @@
     <string name="settings_cat_data_manage">Data Management</string>
     <string name="settings_admin_delete_history">History Log</string>
     <string name="settings_admin_delete_history_note">Delete all history logs</string>
+    <string name="settings_admin_delete_history_text">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
     <string name="settings_admin_delete_events">Event Log</string>
     <string name="settings_admin_delete_events_note">Delete all event logs</string>
     <string name="settings_admin_delete_events_text">Are you sure that you want to permanently delete the events log? This operation cannot be undone.</string>
@@ -496,19 +387,6 @@
     <string name="settings_admin_factory_reset_note">Remove all user settings and restore to default</string>
     <string name="settings_admin_factory_reset_text">Are you sure that you want to reset to factory defaults? This operation cannot be undone.</string>
 
-    <string name="settings_admin_cat_server_update">Server Updates</string>
-    <string name="settings_admin_server_update_title">Update Check</string>
-    <string name="settings_admin_server_update_summary">Check for PiFire server updates</string>
-
-    <string name="settings_cat_backup_settings">PiFire Settings</string>
-    <string name="settings_cat_backup_pelletdb">Pellet Database</string>
-    <string name="settings_admin_backup_restore">Backup &amp; Restore</string>
-    <string name="settings_admin_backup_restore_note">Server settings and pelletdb</string>
-    <string name="settings_admin_backup_settings_note">Backup PiFire server settings</string>
-    <string name="settings_admin_restore_settings_note">Restore PiFire server settings</string>
-    <string name="settings_admin_backup_pelletdb_note">Backup PiFire pellet database</string>
-    <string name="settings_admin_restore_pelletdb_note">Restore PiFire pellet database</string>
-
     <string name="settings_cat_power">System Power</string>
     <string name="settings_admin_reboot">Reboot System</string>
     <string name="settings_admin_reboot_text">Are you sure that you want to reboot the system</string>
@@ -517,10 +395,14 @@
     <string name="settings_admin_restart">Restart System</string>
     <string name="settings_admin_restart_text">Are you sure that you want to restart the system</string>
 
+    <string name="settings_cat_boot">Boot Configuration</string>
+    <string name="settings_admin_boot_to_monitor">Boot to Monitor</string>
+    <string name="settings_admin_boot_to_monitor_summary">Enable boot into monitor mode</string>
+
     <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
     <string name="settings_pellet_warning_level">Warning Level (%)</string>
     <string name="settings_pellet_warning_time">Check Time (mins)</string>
-    <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications every 20 minutes during a cook</string>
+    <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications during a cook at the specified check time</string>
 
     <string name="settings_cat_pellets">Pellet Level Sensor</string>
     <string name="settings_pellet_full">Full Distance (cm)</string>
@@ -531,6 +413,10 @@
     <string name="settings_pellet_auger_rate">Auger Rate (g/s)</string>
     <string name="settings_pellet_auger_rate_note">This value is used to calculate how long to run the auger when priming, and to calculate estimated pellet usage. This value can be tuned for your auger speed, by going into manual mode and running the auger for 10 seconds, then weighing the pellets that have been dispensed into the firepot. For example, if you run the auger for 10 seconds and 3 grams of pellets are dispensed, then the calculation would be 3g / 10s = 0.3. That means 0.3 grams are dispensed per second of auger on time.</string>
 
+    <string name="settings_cat_pellets_prime">Prime Settings</string>
+    <string name="settings_pellet_prime_igniter">Start Igniter</string>
+    <string name="settings_pellet_prime_igniter_note">Only enable the igniter during Priming, if you are absolutely sure that you need to do this. Enabling the igniter will ignite pellets and start the firepot, even without the fan enabled. This feature will only turn on the igniter if Prime &amp; Startup is selected. Otherwise, priming without startup will not utilize the igniter.</string>
+
     <string name="settings_cat_manual_mode">Manual Mode</string>
     <string name="settings_cat_manual_functions">Manual Functions</string>
     <string name="settings_manual_fan">Toggle Fan</string>
@@ -538,20 +424,6 @@
     <string name="settings_manual_igniter">Toggle Igniter</string>
     <string name="settings_manual_power">Toggle Power</string>
     <string name="settings_manual_pwm">Duty Cycle</string>
-
-    <string name="settings_cat_app_recipes">Recipes</string>
-    <string name="settings_recipe_db_backup">Backup recipes database</string>
-    <string name="settings_recipe_db_backup_title">Export</string>
-    <string name="settings_recipe_db_restore">Restore recipes database</string>
-    <string name="settings_recipe_db_restore_title">Import</string>
-    <string name="settings_recipe_db_clear">Clear recipes database</string>
-    <string name="settings_recipe_db_clear_title">Delete</string>
-    <string name="settings_recipe_db_cleared">Recipe database cleared</string>
-    <string name="settings_recipe_db_clear_failed">Failed to clear the recipe database!</string>
-    <string name="settings_recipe_db_not_exist">Recipe database already cleared</string>
-    <string name="settings_recipe_db_clear_message">Are you sure you want to delete the recipe database? This action cannot be undone</string>
-    <string name="settings_recipe_db_import_button">Import</string>
-    <string name="settings_recipe_db_import_message">Importing a recipe database will overwrite any existing items. Are you sure you want to import?</string>
 
     <string name="settings_cat_pwm_fan_control">Temp Fan Control</string>
     <string name="settings_pwm_fan_control_enabled">Temp Control Enabled by Default</string>
@@ -593,13 +465,13 @@
     <string name="info_modules_head">Module</string>
     <string name="info_modules_config">Configured</string>
     <string name="info_modules">Modules</string>
-    <string name="info_modules_adc">ADC</string>
     <string name="info_modules_display">Display</string>
     <string name="info_modules_dist">Distance</string>
     <string name="info_modules_platform">Platform</string>
     <string name="info_credits">Credits and Licenses</string>
     <string name="info_server_info">Server Info</string>
     <string name="info_server_version">PiFire Version</string>
+    <string name="info_server_build">PiFire Build</string>
     <string name="info_app_info">App Info</string>
     <string name="info_app_version">App Version</string>
     <string name="info_app_version_code">Version Code</string>
@@ -608,7 +480,7 @@
     <string name="info_app_build_date">Build Date</string>
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
-    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2022\n\nPiFire Android created by James Weber, &#169; 2022</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2023\n\nPiFire Android created by James Weber, &#169; 2023</string>
 
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_usage">Estimated Usage</string>
@@ -671,34 +543,17 @@
 
     <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
 
-    <string name="updater_update_disabled">Updater URL is not set. Option is disabled</string>
+    <!-- Google Play App Updater -->
+    <string name="inapp_update_checking">Checking for App Updates.</string>
+    <string name="inapp_update_downloading">Update is currently downloading.</string>
+    <string name="inapp_update_downloaded">App update has finished downloading. Please restart to install update.</string>
+    <string name="inapp_update_current">App is currently up to date!</string>
+    <string name="inapp_update_check_failed">Checking for Updates Failed. Please try again later.</string>
 
-    <!-- Remote Server Updater -->
-    <string name="server_updater_branch">Branch:</string>
-    <string name="server_updater_remote">Remote:</string>
-    <string name="server_updater_branches">Branches</string>
-    <string name="server_updater_change_branch">Change Branch</string>
-    <string name="server_updater_update_branches">Update Remote Branches</string>
-    <string name="server_updater_updating_branches">Updating Branches</string>
-    <string name="server_updater_current_version">Current Version:</string>
-    <string name="server_updater_remote_version">Remote Version:</string>
-    <string name="server_updater_branch_selector">Branch Selector</string>
-    <string name="server_updater_branch_active">Select active branch:</string>
-    <string name="server_updater_check_button">Check Again</string>
-    <string name="server_updater_logs_button">Show Changes</string>
-    <string name="server_updater_checking">Checking for Updates</string>
-    <string name="server_updater_no_update">You are up to date on this branch</string>
-    <string name="server_updater_error">The update check has failed \nCheck your server logs</string>
-    <string name="server_updater_update_available">An update is available!</string>
-    <string name="server_updater_update_available_text">You are %1$s changes behind on this branch</string>
-    <string name="server_updater_update_now">Click here to update</string>
-    <string name="server_updater_logs_dialog_title">Changelog</string>
-    <string name="server_updater_change_branch_error">Current branch already set to %1$s</string>
-    <string name="server_updater_update_dialog_title">Updating Branch</string>
-    <string name="server_updater_change_dialog_title">Changing Branch</string>
-    <string name="server_updater_change_dialog_message">Changing branches will force a restart of the server. This operation will overwrite the current branch. Are you sure you want to change branches?</string>
-    <string name="server_updater_update_dialog_message">Updating to the latest version will destroy any local code changes that have been made. Settings will be preserved. After the server will be restarted.</string>
-    <string name="server_updater_error_offline">Currently Offline - Cannot check for updates</string>
+    <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
+
+    <string name="error_settings_general">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible</string>
+    <string name="error_settings_section">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Error Section: %1$s</string>
 
 
 </resources>

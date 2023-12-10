@@ -481,12 +481,8 @@ public abstract class AbstractDialog implements DialogInterface {
 
                 swipeButtonView.setOnSwipeTouchListener((view, motionEvent) -> {
                     switch (motionEvent.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            handler.removeCallbacks(runnable);
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            handler.postDelayed(runnable, 3000);
-                            break;
+                        case MotionEvent.ACTION_DOWN -> handler.removeCallbacks(runnable);
+                        case MotionEvent.ACTION_UP -> handler.postDelayed(runnable, 3000);
                     }
                 });
 

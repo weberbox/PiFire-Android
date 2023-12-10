@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemGpioInOutBinding;
 import com.weberbox.pifire.model.local.GPIOInOutModel;
-import com.weberbox.pifire.utils.StringUtils;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class GPIOInOutAdapter extends RecyclerView.Adapter<GPIOInOutAdapter.View
         }
 
         public void bindData(final GPIOInOutModel item) {
-            name.setText(StringUtils.capFirstLetter(item.getName()));
+            name.setText(item.getName());
             pin.setText(item.getPin());
         }
     }

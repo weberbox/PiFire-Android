@@ -5,22 +5,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <uses-feature android:name="android.hardware.camera.any" android:required="false" />
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
     <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
-
-    <queries>
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
-        </intent>
-    </queries>
 
     <application
         android:name=".application.PiFireApplication"
@@ -54,17 +43,6 @@
         <activity
             android:name=".ui.activities.PreferencesActivity"
             android:theme="@style/Theme.PiFire.SettingsTheme" />
-        <activity
-            android:name=".ui.activities.RecipeActivity"
-            android:theme="@style/Theme.PiFire.Recipes" />
-        <activity
-            android:name=".ui.activities.ImagePickerActivity"
-            android:theme="@style/Theme.Transparent" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.PiFire.NoActionBar"
-            tools:ignore="LockedOrientationActivity" />
 
         <receiver
             android:name=".receiver.AppUpdateReceiver"
@@ -74,16 +52,8 @@
             </intent-filter>
         </receiver>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-
+        <meta-data android:name="com.onesignal.NotificationServiceExtension"
+            android:value="com.weberbox.pifire.service.NotificationServiceExtension" />
         <meta-data
             android:name="io.sentry.auto-init"
             android:value="false" />

@@ -123,7 +123,9 @@ public class PrimePickerDialog {
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            if (pickerBottomSheet.getWindow() != null) {
+                pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
         }
 
         return pickerBottomSheet;

@@ -32,10 +32,12 @@ public class InfoDataModel {
     @SerializedName("dev_pins")
     @Expose
     private HashMap<String, HashMap<String, String>> devPins = new HashMap<>();
-
     @SerializedName("server_version")
     @Expose
     private String serverVersion;
+    @SerializedName("server_build")
+    @Expose
+    private String serverBuild;
 
     public List<String> getCpuInfo() {
         return cpuInfo;
@@ -99,6 +101,14 @@ public class InfoDataModel {
 
     public void setServerVersion(String serverVersion) {
         this.serverVersion = serverVersion;
+    }
+
+    public String getServerBuild() {
+        return serverBuild;
+    }
+
+    public void setServerBuild(String serverBuild) {
+        this.serverBuild = serverBuild;
     }
 
     public static InfoDataModel parseJSON(String response) {

@@ -1,16 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="@string/settings_admin_cat_server_update">
-
-        <Preference
-            app:key="@string/prefs_server_updates_frag"
-            app:summary="@string/settings_admin_server_update_summary"
-            app:title="@string/settings_admin_server_update_title" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         app:key="@string/prefs_manual_mode_cat"
         app:title="@string/settings_cat_manual_functions">
 
@@ -31,11 +21,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_cat_data_manage">
-
-        <Preference
-            app:key="@string/prefs_admin_backup_restore"
-            app:summary="@string/settings_admin_backup_restore_note"
-            app:title="@string/settings_admin_backup_restore" />
 
         <Preference
             app:key="@string/prefs_admin_delete_history"
@@ -77,6 +62,15 @@
         <Preference
             app:key="@string/prefs_admin_shutdown"
             app:title="@string/settings_admin_shutdown" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_boot">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:key="@string/prefs_admin_boot_to_monitor"
+            app:summary="@string/settings_admin_boot_to_monitor_summary"
+            app:title="@string/settings_admin_boot_to_monitor" />
 
     </PreferenceCategory>
 </PreferenceScreen>

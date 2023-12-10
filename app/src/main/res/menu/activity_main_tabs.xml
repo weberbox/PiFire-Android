@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_recipes"
-        android:icon="@drawable/ic_menu_recipes"
-        android:title="@string/menu_recipes" />
-    <item
         android:id="@+id/nav_pellet_manager"
         android:icon="@drawable/ic_grill_pellets"
         android:title="@string/menu_pellet_manager" />
@@ -13,10 +9,6 @@
         android:id="@+id/nav_dashboard"
         android:icon="@drawable/ic_grill"
         android:title="@string/menu_dashboard" />
-    <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/ic_menu_history"
-        android:title="@string/menu_history" />
     <item
         android:id="@+id/nav_events"
         android:icon="@drawable/ic_menu_events"

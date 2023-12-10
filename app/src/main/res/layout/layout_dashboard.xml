@@ -7,12 +7,14 @@
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:foreground="@android:color/transparent"
-    android:padding="@dimen/dash_margin">
+    android:paddingBottom="@dimen/dash_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dash_status_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dash_margin"
+        android:layout_marginTop="@dimen/dash_margin"
         android:layout_marginEnd="@dimen/dash_half_margin"
         android:background="@drawable/bg_ripple_table"
         android:clickable="true"
@@ -21,8 +23,8 @@
         android:paddingTop="@dimen/dash_padding_top"
         android:paddingEnd="@dimen/dash_padding_end"
         android:paddingBottom="@dimen/dash_padding_bottom"
-        app:layout_constraintBottom_toTopOf="@+id/dash_smoke_pwm_container"
-        app:layout_constraintEnd_toStartOf="@+id/dash_grill_probe"
+        app:layout_constraintBottom_toTopOf="@+id/dash_probe_recycler"
+        app:layout_constraintEnd_toStartOf="@+id/dash_fan_container"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,20 +56,21 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dash_smoke_pwm_container"
+        android:id="@+id/dash_fan_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dash_half_margin"
         android:layout_marginTop="@dimen/dash_margin"
         android:layout_marginEnd="@dimen/dash_margin"
-        app:layout_constraintBottom_toBottomOf="@+id/dash_grill_probe"
-        app:layout_constraintEnd_toStartOf="@+id/dash_grill_probe"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dash_status_container">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/dash_status_container"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dash_smoke_plus_container"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/dash_margin_functions"
             android:background="@drawable/bg_ripple_smokep_disabled"
             android:clickable="true"
@@ -151,70 +154,27 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.weberbox.pifire.ui.views.DashProbeCard
-        android:id="@+id/dash_grill_probe"
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dash_probe_recycler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dash_half_margin"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        app:cardPreventCornerOverlap="false"
-        app:dash_probe_icon="@drawable/ic_grill_thermometer"
-        app:dash_probe_set_temp="true"
-        app:dash_probe_title="@string/dash_grill_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/dash_status_container"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.weberbox.pifire.ui.views.DashProbeCard
-        android:id="@+id/dash_probe_one"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dash_margin"
+        android:layout_marginTop="@dimen/dash_half_margin"
         android:layout_marginEnd="@dimen/dash_half_margin"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        app:cardPreventCornerOverlap="false"
-        app:dash_probe_icon="@drawable/ic_grill_probe"
-        app:dash_probe_set_temp="false"
-        app:dash_probe_title="@string/dash_probe_one_title"
-        app:layout_constraintEnd_toStartOf="@+id/dash_probe_two"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dash_smoke_pwm_container" />
-
-    <com.weberbox.pifire.ui.views.DashProbeCard
-        android:id="@+id/dash_probe_two"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dash_half_margin"
-        android:layout_marginTop="@dimen/dash_margin"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        app:cardPreventCornerOverlap="false"
-        app:dash_probe_icon="@drawable/ic_grill_probe"
-        app:dash_probe_set_temp="false"
-        app:dash_probe_title="@string/dash_probe_two_title"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/dash_timer_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/dash_probe_one"
-        app:layout_constraintTop_toBottomOf="@+id/dash_grill_probe" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dash_status_container">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dash_timer_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dash_margin"
+        android:layout_marginStart="@dimen/dash_margin"
+        android:layout_marginTop="@dimen/dash_half_margin"
         android:layout_marginEnd="@dimen/dash_half_margin"
         android:background="@drawable/bg_table_item"
         android:clickable="true"
@@ -223,7 +183,7 @@
         app:layout_constraintEnd_toStartOf="@+id/dash_pellet_container"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dash_probe_one">
+        app:layout_constraintTop_toBottomOf="@+id/dash_probe_recycler">
 
         <ProgressBar
             android:id="@+id/dash_timer_progress"
@@ -339,7 +299,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dash_half_margin"
-        android:layout_marginTop="@dimen/dash_margin"
+        android:layout_marginTop="@dimen/dash_half_margin"
+        android:layout_marginEnd="@dimen/dash_margin"
         android:background="@drawable/bg_table_item"
         android:clickable="true"
         android:focusable="true"
@@ -347,7 +308,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@+id/dash_timer_container"
-        app:layout_constraintTop_toBottomOf="@+id/dash_probe_two">
+        app:layout_constraintTop_toBottomOf="@+id/dash_probe_recycler">
 
         <com.weberbox.pifire.ui.views.PelletLevelView
             android:id="@+id/dash_pellet_level_indicator"

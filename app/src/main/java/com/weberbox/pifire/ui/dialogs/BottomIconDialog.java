@@ -71,6 +71,9 @@ public final class BottomIconDialog extends AbstractDialog {
             Configuration configuration = activity.getResources().getConfiguration();
             if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                     configuration.screenWidthDp > 450) {
+                if (this.dialog.getWindow() != null) {
+                    this.dialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+                }
                 this.dialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
             }
         });

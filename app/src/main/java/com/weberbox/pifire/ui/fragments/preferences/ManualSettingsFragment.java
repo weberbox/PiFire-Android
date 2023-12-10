@@ -15,13 +15,11 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ManualDataModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 import timber.log.Timber;
@@ -79,13 +77,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
         if (pwmOutput != null) {
             if (Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
-                if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                    pwmOutput.setUpdatesContinuously(false);
-                } else {
-                    pwmOutput.setEnabled(false);
-                    pwmOutput.setSummaryProvider(null);
-                    pwmOutput.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
-                }
+                pwmOutput.setUpdatesContinuously(false);
             } else {
                 pwmOutput.setVisible(false);
             }

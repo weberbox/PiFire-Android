@@ -30,7 +30,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_warning_note"
             app:title="@string/settings_note" />
@@ -58,7 +58,7 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_note"
             app:title="@string/settings_note" />
@@ -78,10 +78,28 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_auger_rate_note"
             app:title="@string/settings_note" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_cat_pellets_prime">
+
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_pellet_prime_igniter"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_pellet_prime_igniter"
+            app:title="@string/settings_pellet_prime_igniter" />
+
+        <Preference
+            android:layout="@layout/preference_cat_warning"
+            app:iconSpaceReserved="false"
+            app:summary="@string/settings_pellet_prime_igniter_note"
+            app:title="@string/settings_danger" />
 
     </PreferenceCategory>
 </PreferenceScreen>

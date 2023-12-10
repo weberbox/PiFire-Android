@@ -2,6 +2,7 @@
 <resources>
 
     <!-- App Settings -->
+    <string name="prefs_setup_completed">prefs_setup_completed</string>
     <string name="prefs_installed_version">prefs_installed_version</string>
     <string name="prefs_server_settings">prefs_server_settings</string>
 
@@ -13,19 +14,12 @@
     <string name="prefs_server_basic_auth_user">prefs_server_basic_auth_user</string>
     <string name="prefs_server_basic_auth_password">prefs_server_basic_auth_password</string>
 
-    <string name="prefs_history_refresh_app">prefs_history_refresh_app</string>
-    <string name="prefs_history_refresh_interval_app">prefs_history_refresh_interval_app</string>
-
     <string name="prefs_event_amount">pref_event_amount</string>
 
     <string name="prefs_onesignal_consent_dismiss">prefs_onesignal_consent_dismiss</string>
 
     <string name="prefs_app_updater_cat">prefs_app_updater_cat</string>
-    <string name="prefs_app_updater_enabled">prefs_app_updater_enabled</string>
     <string name="prefs_app_updater_check_now">prefs_app_updater_check_now</string>
-    <string name="prefs_app_updater_checks">prefs_app_updater_checks</string>
-    <string name="prefs_app_updater_force_checks">prefs_app_updater_force_checks</string>
-    <string name="prefs_app_updater_download">prefs_app_updater_download</string>
     <string name="prefs_app_update_required">prefs_app_update_required</string>
 
     <string name="prefs_inapp_first_show">prefs_inapp_first_show</string>
@@ -35,33 +29,29 @@
     <string name="prefs_crash_user_email">prefs_crash_user_email</string>
     <string name="prefs_dev_crash_enable">prefs_dev_crash_enable</string>
     <string name="prefs_crash_event">prefs_crash_event</string>
-    <string name="prefs_crash_dialog">prefs_crash_dialog</string>
 
     <string name="prefs_show_changelog">prefs_show_changelog</string>
-
-    <string name="prefs_four_probe">prefs_four_probe</string>
-    <string name="prefs_dc_fan">prefs_dc_fan</string>
-    <string name="prefs_standalone">prefs_standalone</string>
 
     <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
 
     <string name="prefs_increment_temps">prefs_increment_temps</string>
 
     <!-- PiFire Settings -->
-    <string name="prefs_server_version">prefs_server_version</string>
+    <string name="prefs_dc_fan">prefs_dc_fan</string>
+    <string name="prefs_standalone">prefs_standalone</string>
 
-    <string name="prefs_grill_probe">prefs_grill_probe</string>
-    <string name="prefs_grill_probes">prefs_grill_probes</string>
-    <string name="prefs_grill_probe_one_type">prefs_grill_probe_one_type</string>
-    <string name="prefs_grill_probe_two_type">prefs_grill_probe_two_type</string>
-    <string name="prefs_grill_probe_type">prefs_grill_probe_type</string>
-    <string name="prefs_probe_one_type">prefs_probe_one_type</string>
-    <string name="prefs_probe_two_type">prefs_probe_two_type</string>
+    <string name="prefs_server_version">prefs_server_version</string>
+    <string name="prefs_server_build">prefs_server_build</string>
+    <string name="prefs_recipe_version">prefs_recipe_version</string>
+    <string name="prefs_cook_file_version">prefs_cook_file_version</string>
+
     <string name="prefs_probe_profiles">prefs_probe_profiles</string>
+    <string name="prefs_probe_map">prefs_probe_map</string>
 
     <string name="prefs_grill_units">prefs_grill_units</string>
 
     <string name="prefs_work_auger_on">prefs_work_auger_on</string>
+    <string name="prefs_work_auger_off">prefs_work_auger_off</string>
     <string name="prefs_work_pmode_mode">prefs_work_pmode_mode</string>
     <string name="prefs_work_pmode_table">prefs_work_pmode_table</string>
 
@@ -74,13 +64,9 @@
     <string name="prefs_work_splus_fan_ramp">prefs_work_splus_fan_ramp</string>
     <string name="prefs_work_splus_ramp_dc">prefs_work_splus_ramp_dc</string>
 
-    <string name="prefs_work_pid_cycle">prefs_work_pid_cycle</string>
-    <string name="prefs_work_pid_pb">prefs_work_pid_pb</string>
-    <string name="prefs_work_pid_ti">prefs_work_pid_ti</string>
-    <string name="prefs_work_pid_td">prefs_work_pid_td</string>
-    <string name="prefs_work_pid_u_min">prefs_work_pid_u_min</string>
-    <string name="prefs_work_pid_u_max">prefs_work_pid_u_max</string>
-    <string name="prefs_work_pid_center">prefs_work_pid_center</string>
+    <string name="prefs_work_controller_cycle">prefs_work_controller_cycle</string>
+    <string name="prefs_work_controller_u_min">prefs_work_controller_u_min</string>
+    <string name="prefs_work_controller_u_max">prefs_work_controller_u_max</string>
 
     <string name="prefs_work_lid_open_cat">prefs_work_lid_open_cat</string>
     <string name="prefs_work_lid_open_detect">prefs_work_lid_open_detect</string>
@@ -100,13 +86,16 @@
     <string name="prefs_smart_start_temp_range">prefs_smart_start_temp_range</string>
     <string name="prefs_smart_start_profiles">prefs_smart_start_profiles</string>
     <string name="prefs_smart_start_table">prefs_smart_start_table</string>
+    <string name="prefs_smart_start_exit_temp">prefs_smart_start_exit_temp</string>
 
     <string name="prefs_grill_name">prefs_grill_name</string>
-
-    <string name="prefs_history_display">prefs_history_display</string>
-    <string name="prefs_history_points">prefs_history_points</string>
-    <string name="prefs_history_clear">prefs_history_clear</string>
-    <string name="prefs_history_auto">prefs_history_auto</string>
+    <string name="prefs_first_time_setup">prefs_first_time_setup</string>
+    <string name="prefs_global_control">prefs_global_control</string>
+    <string name="prefs_ext_data">prefs_ext_data</string>
+    <string name="prefs_notify_services">prefs_notify_services</string>
+    <string name="prefs_startup_exit_temp">prefs_startup_exit_temp</string>
+    <string name="prefs_venv">prefs_venv</string>
+    <string name="prefs_real_hw">prefs_real_hw</string>
 
     <string name="prefs_safety_min_start">prefs_safety_min_start</string>
     <string name="prefs_safety_max_start">prefs_safety_max_start</string>
@@ -136,14 +125,7 @@
     <string name="prefs_notif_apprise_enabled">prefs_notif_apprise_enabled</string>
     <string name="prefs_notif_apprise_locations">prefs_notif_apprise_locations</string>
 
-    <string name="prefs_server_updates_frag">prefs_server_updates_frag</string>
-
     <string name="prefs_admin_debug">prefs_admin_debug</string>
-    <string name="prefs_admin_backup_restore">prefs_admin_backup_restore</string>
-    <string name="prefs_admin_backup_settings">prefs_admin_backup_settings</string>
-    <string name="prefs_admin_restore_settings">prefs_admin_restore_settings</string>
-    <string name="prefs_admin_backup_pelletdb">prefs_admin_backup_pelletdb</string>
-    <string name="prefs_admin_restore_pelletdb">prefs_admin_restore_pelletdb</string>
     <string name="prefs_admin_delete_history">prefs_admin_delete_history</string>
     <string name="prefs_admin_delete_events">prefs_admin_delete_events</string>
     <string name="prefs_admin_delete_pellets">prefs_admin_delete_pellets</string>
@@ -152,6 +134,7 @@
     <string name="prefs_admin_reboot">prefs_admin_reboot</string>
     <string name="prefs_admin_shutdown">prefs_admin_shutdown</string>
     <string name="prefs_admin_restart">prefs_admin_restart</string>
+    <string name="prefs_admin_boot_to_monitor">prefs_admin_boot_to_monitor</string>
 
     <string name="prefs_pellet_warning_cat">prefs_pellet_warning_cat</string>
     <string name="prefs_pellet_warning_enabled">prefs_pellet_warning_enabled</string>
@@ -160,6 +143,7 @@
     <string name="prefs_pellet_full">prefs_pellet_full</string>
     <string name="prefs_pellet_empty">prefs_pellet_empty</string>
     <string name="prefs_pellet_auger_rate">prefs_pellet_auger_rate</string>
+    <string name="prefs_pellet_prime_igniter">prefs_pellet_prime_igniter</string>
 
     <string name="prefs_manual_mode_cat">prefs_manual_mode_cat</string>
     <string name="prefs_manual_mode_frag">prefs_manual_mode_frag</string>
@@ -170,11 +154,6 @@
     <string name="prefs_manual_mode_power">prefs_manual_mode_power</string>
     <string name="prefs_manual_mode_pwm">prefs_manual_mode_pwm</string>
 
-    <string name="prefs_recipe_db_backup">prefs_recipe_db_backup</string>
-    <string name="prefs_recipe_db_restore">prefs_recipe_db_restore</string>
-    <string name="prefs_recipe_db_clear">prefs_recipe_db_clear</string>
-
-    <string name="prefs_modules_adc">prefs_modules_adc</string>
     <string name="prefs_modules_display">prefs_modules_display</string>
     <string name="prefs_modules_distance">prefs_modules_distance</string>
     <string name="prefs_modules_platform">prefs_modules_platform</string>
@@ -188,12 +167,6 @@
     <string name="prefs_pwm_profiles">prefs_pwm_profiles</string>
     <string name="prefs_pwm_control_table">prefs_pwm_control_table</string>
 
-    <string name="prefs_adc_probe_options">prefs_adc_probe_options</string>
-    <string name="prefs_adc_probe_sources">prefs_adc_probe_sources</string>
-    <string name="prefs_adc_assignment_cat">prefs_adc_assignment_cat</string>
-    <string name="prefs_adc_grill_probe_one">prefs_adc_grill_probe_one</string>
-    <string name="prefs_adc_grill_probe_two">prefs_adc_grill_probe_two</string>
-    <string name="prefs_adc_probe_one">prefs_adc_probe_one</string>
-    <string name="prefs_adc_probe_two">prefs_adc_probe_two</string>
+    <string name="prefs_probe_edit">prefs_probe_edit</string>
 
 </resources>

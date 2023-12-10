@@ -115,7 +115,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
                 startActivity(intent);
                 requireActivity().finish();
             } else {
-                requireActivity().onBackPressed();
+                requireActivity().getOnBackPressedDispatcher().onBackPressed();
             }
         }
     };

@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import androidx.annotation.NonNull;
+
 import com.weberbox.pifire.interfaces.TimerTickListener;
 
 import java.util.concurrent.TimeUnit;
@@ -52,7 +54,7 @@ public abstract class CountDownTimer implements TimerTickListener {
 
         handler = new Handler(Looper.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 super.handleMessage(msg);
 
                 if (msg.what == MSG) {

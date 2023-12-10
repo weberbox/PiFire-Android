@@ -5,29 +5,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class DashDataModel {
 
-    @SerializedName("cur_probe_temps")
+    @SerializedName("probe_info")
     @Expose
-    private ProbeTemps curProbeTemps;
-    @SerializedName("probes_enabled")
-    @Expose
-    private ProbesEnabled probesEnabled;
-    @SerializedName("probe_titles")
-    @Expose
-    private ProbeTitles probeTitles;
-    @SerializedName("set_points")
-    @Expose
-    private SetPoints setPoints;
-    @SerializedName("notify_req")
-    @Expose
-    private NotifyReq notifyReq;
+    private DashProbeInfo dashProbeInfo;
     @SerializedName("notify_data")
     @Expose
-    private NotifyData notifyData;
+    private ArrayList<NotifyData> notifyData;
     @SerializedName("timer_info")
     @Expose
     private TimerInfo timerInfo;
@@ -43,6 +32,18 @@ public class DashDataModel {
     @SerializedName("hopper_level")
     @Expose
     private Integer hopperLevel;
+
+    public DashProbeInfo getDashProbeInfo() {
+        return dashProbeInfo;
+    }
+
+    public ArrayList<NotifyData> getNotifyData() {
+        return notifyData;
+    }
+
+    public TimerInfo getTimerInfo() {
+        return timerInfo;
+    }
 
     public String getCurrentMode() {
         return currentMode;
@@ -63,221 +64,128 @@ public class DashDataModel {
         return hopperLevel;
     }
 
-    public ProbeTemps getProbeTemps() {
-        return curProbeTemps;
-    }
-
-    public ProbesEnabled getProbesEnabled() {
-        return probesEnabled;
-    }
-
-    public SetPoints getSetPoints() {
-        return setPoints;
-    }
-
-    public NotifyReq getNotifyReq() {
-        return notifyReq;
-    }
-
-    public NotifyData getNotifyData() {
-        return notifyData;
-    }
-
-    public TimerInfo getTimerInfo() {
-        return timerInfo;
-    }
-
-    public ProbeTitles getProbeTitles() {
-        return probeTitles;
-    }
-
-
-    public static class ProbeTemps {
-        @SerializedName("grill_temp")
+    public static class DashProbeInfo {
+        @SerializedName("P")
         @Expose
-        private Double grillTemp;
-        @SerializedName("probe1_temp")
+        private Map<String, Double> primaryProbe;
+        @SerializedName("F")
         @Expose
-        private Double probe1Temp;
-        @SerializedName("probe2_temp")
+        private Map<String, Double> foodProbes;
+        @SerializedName("PSP")
         @Expose
-        private Double probe2Temp;
+        private Double primarySetPoint;
+        @SerializedName("NT")
+        @Expose
+        private Map<String, Double> notifyTarget;
 
-        public Double getGrillTemp() {
-            return grillTemp;
+        public Map<String, Double> getPrimaryProbe() {
+            return primaryProbe;
         }
 
-        public Double getProbeOneTemp() {
-            return probe1Temp;
+        public Map<String, Double> getFoodProbes() {
+            return foodProbes;
         }
 
-        public Double getProbeTwoTemp() {
-            return probe2Temp;
-        }
-    }
-
-    public static class ProbesEnabled {
-        @SerializedName("grill")
-        @Expose
-        private Boolean grill;
-        @SerializedName("probe1")
-        @Expose
-        private Boolean probe1;
-        @SerializedName("probe2")
-        @Expose
-        private Boolean probe2;
-
-        public Boolean getGrillEnabled() {
-            return grill;
+        public Double getPrimarySetPoint() {
+            return primarySetPoint;
         }
 
-        public Boolean getProbeOneEnabled() {
-            return probe1;
-        }
-
-        public Boolean getProbeTwoEnabled() {
-            return probe2;
-        }
-    }
-
-    public static class ProbeTitles {
-        @SerializedName("grill_title")
-        @Expose
-        public String grillTitle;
-        @SerializedName("probe1_title")
-        @Expose
-        public String probeOneTitle;
-        @SerializedName("probe2_title")
-        @Expose
-        public String probeTwoTitle;
-
-        public String getGrillTitle() {
-            return grillTitle;
-        }
-
-        public String getProbeOneTitle() {
-            return probeOneTitle;
-        }
-
-        public String getProbeTwoTitle() {
-            return probeTwoTitle;
-        }
-
-    }
-
-    public static class SetPoints {
-        @SerializedName("grill")
-        @Expose
-        private Integer grill;
-        @SerializedName("probe1")
-        @Expose
-        private Integer probe1;
-        @SerializedName("probe2")
-        @Expose
-        private Integer probe2;
-        @SerializedName("grill_notify")
-        @Expose
-        private Integer grillNotify;
-
-        public Integer getGrillTarget() {
-            return Objects.requireNonNullElse(grill, 0);
-        }
-
-        public Integer getProbeOneTarget() {
-            return Objects.requireNonNullElse(probe1, 0);
-        }
-
-        public Integer getProbeTwoTarget() {
-            return Objects.requireNonNullElse(probe2, 0);
-        }
-
-        public Integer getGrillNotifyTarget() {
-            return Objects.requireNonNullElse(grillNotify, 0);
-        }
-
-    }
-
-    public static class NotifyReq {
-        @SerializedName("grill")
-        @Expose
-        private Boolean grill;
-        @SerializedName("probe1")
-        @Expose
-        private Boolean probe1;
-        @SerializedName("probe2")
-        @Expose
-        private Boolean probe2;
-        @SerializedName("timer")
-        @Expose
-        private Boolean timer;
-
-        public Boolean getGrillNotify() {
-            return grill;
-        }
-
-        public Boolean getProbeOneNotify() {
-            return probe1;
-        }
-
-        public Boolean getProbeTwoNotify() {
-            return probe2;
-        }
-
-        public Boolean getTimerNotify() {
-            return timer;
+        public Map<String, Double> getNotifyTarget() {
+            return notifyTarget;
         }
     }
 
     public static class NotifyData {
-        @SerializedName("hopper_low")
-        @Expose
-        private Boolean hopperLow;
-        @SerializedName("p1_shutdown")
-        @Expose
-        private Boolean p1Shutdown;
-        @SerializedName("p2_shutdown")
-        @Expose
-        private Boolean p2Shutdown;
-        @SerializedName("timer_shutdown")
-        @Expose
-        private Boolean timerShutdown;
-        @SerializedName("p1_keep_warm")
-        @Expose
-        private Boolean p1KeepWarm;
-        @SerializedName("p2_keep_warm")
-        @Expose
-        private Boolean p2KeepWarm;
-        @SerializedName("timer_keep_warm")
-        @Expose
-        private Boolean timerKeepWarm;
 
-        public Boolean getHopperLow() {
-            return hopperLow;
+        @SerializedName("label")
+        @Expose
+        private String label;
+        @SerializedName("name")
+        @Expose
+        private String name;
+        @SerializedName("type")
+        @Expose
+        private String type;
+        @SerializedName("req")
+        @Expose
+        private Boolean req;
+        @SerializedName("target")
+        @Expose
+        private Integer target;
+        @SerializedName("shutdown")
+        @Expose
+        private Boolean shutdown;
+        @SerializedName("keep_warm")
+        @Expose
+        private Boolean keepWarm;
+        @SerializedName("last_check")
+        @Expose
+        private Double lastCheck;
+
+        public String getLabel() {
+            return label;
         }
 
-        public Boolean getP1Shutdown() {
-            return p1Shutdown;
+        public void setLabel(String label) {
+            this.label = label;
         }
 
-        public Boolean getP2Shutdown() {
-            return p2Shutdown;
+        public String getName() {
+            return name;
         }
 
-        public Boolean getTimerShutdown() {
-            return timerShutdown;
+        public void setName(String name) {
+            this.name = name;
         }
 
-        public Boolean getP1KeepWarm() {
-            return p1KeepWarm;
+        public String getType() {
+            return type;
         }
 
-        public Boolean getP2KeepWarm() {
-            return p2KeepWarm;
+        public void setType(String type) {
+            this.type = type;
         }
 
-        public Boolean getTimerKeepWarm() {
-            return timerKeepWarm;
+        public Boolean getReq() {
+            return req;
         }
+
+        public void setReq(Boolean req) {
+            this.req = req;
+        }
+
+        public Integer getTarget() {
+            return target;
+        }
+
+        public void setTarget(Integer target) {
+            this.target = target;
+        }
+
+        public Boolean getShutdown() {
+            return shutdown;
+        }
+
+        public void setShutdown(Boolean shutdown) {
+            this.shutdown = shutdown;
+        }
+
+        public Boolean getKeepWarm() {
+            return keepWarm;
+        }
+
+        public void setKeepWarm(Boolean keepWarm) {
+            this.keepWarm = keepWarm;
+        }
+
+        public Double getLastCheck() {
+            return lastCheck;
+        }
+
+        public void setLastCheck(Double lastCheck) {
+            this.lastCheck = lastCheck;
+        }
+
     }
 
     public static class TimerInfo {

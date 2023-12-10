@@ -298,13 +298,13 @@ public class SwipeButton extends RelativeLayout {
                 onSwipeTouchListener.onSwipeTouch(v, event);
             }
             switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_DOWN -> {
                     return !isTouchOutsideInitialPosition(event, swipeButtonInner);
-                case MotionEvent.ACTION_MOVE:
+                }
+                case MotionEvent.ACTION_MOVE -> {
                     if (initialX == 0) {
                         initialX = swipeButtonInner.getX();
                     }
-
                     if (event.getX() > swipeButtonInner.getWidth() / 2 &&
                             event.getX() + swipeButtonInner.getWidth() / 2 < getWidth()) {
                         swipeButtonInner.setX(event.getX() - swipeButtonInner.getWidth() / 2);
@@ -312,18 +312,16 @@ public class SwipeButton extends RelativeLayout {
                                 swipeButtonInner.getWidth()) / getWidth());
                         setTrailingEffect();
                     }
-
                     if (event.getX() + swipeButtonInner.getWidth() / 2 > getWidth() &&
                             swipeButtonInner.getX() + swipeButtonInner.getWidth() / 2 < getWidth()) {
                         swipeButtonInner.setX(getWidth() - swipeButtonInner.getWidth());
                     }
-
                     if (event.getX() < swipeButtonInner.getWidth() / 2) {
                         swipeButtonInner.setX(0);
                     }
-
                     return true;
-                case MotionEvent.ACTION_UP:
+                }
+                case MotionEvent.ACTION_UP -> {
                     if (active) {
                         collapseButton();
                     } else {
@@ -338,8 +336,8 @@ public class SwipeButton extends RelativeLayout {
                             moveButtonBack();
                         }
                     }
-
                     return true;
+                }
             }
 
             return false;

@@ -15,13 +15,11 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.Objects;
 
@@ -56,9 +54,8 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
 
         EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
         EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
-        SwitchPreferenceCompat smartStart = findPreference(getString(R.string.prefs_smart_start_enabled));
-        Preference smartStartTable = findPreference(getString(R.string.prefs_smart_start_table));
-        SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
+        EditTextPreference startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
+        EditTextPreference smartExitTemp = findPreference(getString(R.string.prefs_smart_start_exit_temp));
         ListPreference startToMode = findPreference(getString(R.string.prefs_startup_goto_mode));
         startToModeTemp = findPreference(getString(R.string.prefs_startup_goto_temp));
 
@@ -72,66 +69,43 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (startupTime != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_127)) {
-                startupTime.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), 1.0, null, editText));
-                });
-            } else {
-                startupTime.setEnabled(false);
-                startupTime.setSummaryProvider(null);
-                startupTime.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
-            }
+            startupTime.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
+            });
         }
 
-        if (smartStart != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_131)) {
-                smartStart.setChecked(false);
-                smartStart.setEnabled(false);
-                smartStart.setSummaryProvider(null);
-                smartStart.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_131));
-            }
+        if (startupExitTemp != null) {
+            startupExitTemp.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 0.0, null, editText));
+            });
         }
 
-        if (smartStartTable != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_131)) {
-                smartStartTable.setEnabled(false);
-                smartStartTable.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_131));
-            }
-        }
-
-        if (autoPowerOff != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_129)) {
-                autoPowerOff.setEnabled(false);
-                autoPowerOff.setSummaryProvider(null);
-                autoPowerOff.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_129));
-            }
+        if (smartExitTemp != null) {
+            smartExitTemp.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 0.0, null, editText));
+            });
         }
 
         if (startToMode != null && startToModeTemp != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                Double minTemp = Double.parseDouble(
-                        sharedPreferences.getString(getString(R.string.prefs_safety_max_start),
-                                getString(R.string.def_safety_max_start)));
-                Double maxTemp = Double.parseDouble(
-                        sharedPreferences.getString(getString(R.string.prefs_safety_max_temp),
-                                getString(R.string.def_safety_max_temp)));
-                startToModeTemp.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), minTemp, maxTemp, editText));
-                });
-                startToModeTemp.setVisible(
-                        startToMode.getValue().equals(getString(R.string.grill_mode_hold)));
-            } else {
-                startToMode.setEnabled(false);
-                startToMode.setSummaryProvider(null);
-                startToMode.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
-                startToModeTemp.setEnabled(false);
-                startToModeTemp.setSummaryProvider(null);
-                startToModeTemp.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
-            }
+            Double minTemp = Double.parseDouble(
+                    sharedPreferences.getString(getString(R.string.prefs_safety_max_start),
+                            getString(R.string.def_safety_max_start)));
+            Double maxTemp = Double.parseDouble(
+                    sharedPreferences.getString(getString(R.string.prefs_safety_max_temp),
+                            getString(R.string.def_safety_max_temp)));
+            startToModeTemp.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), minTemp, maxTemp, editText));
+            });
+            startToModeTemp.setVisible(
+                    startToMode.getValue().equals(getString(R.string.grill_mode_hold)));
         }
     }
 
@@ -188,6 +162,16 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_startup_goto_temp)
                         .equals(preference.getKey())) {
                     ServerControl.setStartToModeTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_startup_exit_temp)
+                        .equals(preference.getKey())) {
+                    ServerControl.setStartExitTemp(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_smart_start_exit_temp)
+                        .equals(preference.getKey())) {
+                    ServerControl.setSmartStartExitTemp(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
             }

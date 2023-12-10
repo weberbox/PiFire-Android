@@ -12,7 +12,6 @@ public class MainViewModel extends ViewModel {
 
     private final MutableLiveData<DashDataModel> dashData;
     private final MutableLiveData<DataModel> eventsData;
-    private final MutableLiveData<DataModel> historyData;
     private final MutableLiveData<DataModel> pelletData;
     private final MutableLiveData<DataModel> infoData;
     private final MutableLiveData<PanelState> startPanelState;
@@ -23,7 +22,6 @@ public class MainViewModel extends ViewModel {
         serverConnected = new MutableLiveData<>();
         dashData = new MutableLiveData<>();
         eventsData = new MutableLiveData<>();
-        historyData = new MutableLiveData<>();
         pelletData = new MutableLiveData<>();
         infoData = new MutableLiveData<>();
         startPanelState = new MutableLiveData<>();
@@ -44,14 +42,6 @@ public class MainViewModel extends ViewModel {
 
     public void setEventsData(String eventsData, boolean newData) {
         this.eventsData.postValue(new DataModel(eventsData, newData));
-    }
-
-    public LiveData<DataModel> getHistoryData() {
-        return historyData;
-    }
-
-    public void setHistoryData(String historyData, boolean newData) {
-        this.historyData.postValue(new DataModel(historyData, newData));
     }
 
     public LiveData<DataModel> getPelletData() {

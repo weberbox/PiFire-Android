@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string-array name="grill_temp_unit_entries">
         <item>Fahrenheit</item>
         <item>Celsius</item>
@@ -7,20 +7,6 @@
     <string-array name="grill_temp_unit_values">
         <item>F</item>
         <item>C</item>
-    </string-array>
-
-    <string-array name="refresh_interval">
-        <item>3000</item>
-        <item>12000</item>
-        <item>21000</item>
-        <item>30000</item>
-    </string-array>
-
-    <string-array name="refresh_interval_names">
-        <item>3 Seconds</item>
-        <item>12 Seconds</item>
-        <item>21 Seconds</item>
-        <item>30 Seconds</item>
     </string-array>
 
     <string-array name="event_amounts">
@@ -39,34 +25,6 @@
         <item>40 Items</item>
         <item>50 Items</item>
         <item>60 Items</item>
-    </string-array>
-
-    <string-array name="grill_probe_selection">
-        <item tools:ignore="Typos" >grill_probe1</item>
-        <item>grill_probe2</item>
-    </string-array>
-
-    <string-array name="grill_probe_selection_names">
-        <item>Grill Probe 1</item>
-        <item>Grill Probe 2</item>
-    </string-array>
-
-    <string-array name="probe_types">
-        <item>TWPS00</item>
-        <item>ET73-HM</item>
-        <item>iGrill-HM</item>
-        <item>PT-1000-OEM</item>
-        <item>PT-1000-PiFire</item>
-        <item>ET73-SP</item>
-    </string-array>
-
-    <string-array name="probe_type_names">
-        <item>Thermoworks Pro Series HeaterMeter</item>
-        <item>ET-73 Heatermeter</item>
-        <item>iGrill Heatermeter</item>
-        <item>PT-1000-Grill-Probe-OEM</item>
-        <item>PT-1000-Grill-Probe-PiFire</item>
-        <item tools:ignore="Typos">ET-73 Skyeperry1</item>
     </string-array>
 
     <string-array name="pmode_setting">
@@ -140,13 +98,6 @@
         <item>@color/eventsScriptStart</item>
         <item>@color/eventsWarning</item>
     </integer-array>
-
-    <string-array name="adc_probe_options">
-        <item tools:ignore="Typos">ADC0</item>
-        <item tools:ignore="Typos">ADC1</item>
-        <item tools:ignore="Typos">ADC2</item>
-        <item tools:ignore="Typos">ADC3</item>
-    </string-array>
 
     <string-array name="startup_goto_modes_names">
         <item>@string/settings_startup_smoke_mode</item>

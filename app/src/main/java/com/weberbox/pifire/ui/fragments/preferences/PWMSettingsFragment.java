@@ -14,13 +14,11 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -50,7 +48,6 @@ public class PWMSettingsFragment extends PreferenceFragmentCompat implements
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         EditTextPreference tempFanUpdateTime = findPreference(getString(R.string.prefs_pwm_fan_update_time));
-        SwitchPreferenceCompat autoPowerOff = findPreference(getString(R.string.prefs_auto_power_off));
         EditTextPreference pwmFrequency = findPreference(getString(R.string.prefs_pwm_frequency));
         EditTextPreference pwmMinDutyCycle = findPreference(getString(R.string.prefs_pwm_min_duty_cycle));
         EditTextPreference pwmMaxDutyCycle = findPreference(getString(R.string.prefs_pwm_max_duty_cycle));
@@ -87,13 +84,6 @@ public class PWMSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
-        if (autoPowerOff != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_129)) {
-                autoPowerOff.setEnabled(false);
-                autoPowerOff.setSummaryProvider(null);
-                autoPowerOff.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_129));
-            }
-        }
     }
 
     @Override

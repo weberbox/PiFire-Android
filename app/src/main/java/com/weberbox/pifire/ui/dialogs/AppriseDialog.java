@@ -69,7 +69,10 @@ public class AppriseDialog {
 
         final AlertDialog alertDialog = dialog.create();
 
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        if (alertDialog.getWindow() != null) {
+            alertDialog.getWindow().setSoftInputMode(
+                    WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        }
 
         alertDialog.show();
 

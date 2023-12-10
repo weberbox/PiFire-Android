@@ -40,13 +40,13 @@
             app:useSimpleSummaryProvider="true" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_safety_note"
             app:title="@string/settings_note" />
 
         <Preference
-            android:layout="@layout/preference_category_warning"
+            android:layout="@layout/preference_cat_warning"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_safety_warning"
             app:title="@string/settings_warning" />

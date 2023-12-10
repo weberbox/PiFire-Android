@@ -18,16 +18,13 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.config.PushConfig;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.views.preferences.AppriseLocationPreference;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -54,12 +51,13 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
 
     @NonNull
     @Override
+    @SuppressWarnings("ConstantConditions")
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         PreferenceCategory oneSignalCat = findPreference(getString(R.string.prefs_notif_onesignal_cat));
 
         if (oneSignalCat != null) {
-            if (!AppConfig.USE_ONESIGNAL || PushConfig.ONESIGNAL_APP_ID.isEmpty()) {
+            if (PushConfig.ONESIGNAL_APP_ID.isEmpty()) {
                 oneSignalCat.setVisible(false);
             }
         }
@@ -72,55 +70,27 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        SwitchPreferenceCompat oneSignal = findPreference(getString(R.string.prefs_notif_onesignal_enabled));
         Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
-        SwitchPreferenceCompat influxDBEnable = findPreference(getString(R.string.prefs_notif_influxdb_enabled));
         SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
         appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
 
-        if (oneSignal != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_127)) {
-                oneSignal.setEnabled(false);
-                oneSignal.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
-            }
-        }
-
         if (oneSignalConsent != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_127)) {
-                oneSignalConsent.setOnPreferenceClickListener(preference -> {
-                    final FragmentManager fm = requireActivity().getSupportFragmentManager();
-                    final FragmentTransaction ft = fm.beginTransaction();
-                    ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .replace(android.R.id.content, new OneSignalConsentFragment())
-                            .addToBackStack(null)
-                            .commit();
-                    return true;
-                });
-            } else {
-                oneSignalConsent.setEnabled(false);
-            }
-        }
-
-        if (influxDBEnable != null) {
-            if (!VersionUtils.isSupported(ServerVersions.V_127)) {
-                influxDBEnable.setEnabled(false);
-                influxDBEnable.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
-            }
+            oneSignalConsent.setOnPreferenceClickListener(preference -> {
+                final FragmentManager fm = requireActivity().getSupportFragmentManager();
+                final FragmentTransaction ft = fm.beginTransaction();
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(android.R.id.content, new OneSignalConsentFragment())
+                        .addToBackStack(null)
+                        .commit();
+                return true;
+            });
         }
 
         if (appriseEnabled != null && appriseLocations != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                appriseLocations.setVisible(appriseEnabled.isChecked());
-            } else {
-                appriseLocations.setVisible(false);
-                appriseEnabled.setEnabled(false);
-                appriseEnabled.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_135));
-            }
+            appriseLocations.setVisible(appriseEnabled.isChecked());
         }
 
-        if (AppConfig.USE_ONESIGNAL) {
-            OneSignalUtils.checkOneSignalStatus(requireActivity(), socket);
-        }
+        OneSignalUtils.checkOneSignalStatus(requireActivity(), socket);
     }
 
     @Override

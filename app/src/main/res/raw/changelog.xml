@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="1.5.6" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.1.0" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Overhaul for PiFire 1.7.0 Build 7+ Server Versions</changelogtext>
+        <changelogtext logType="new">Adaptable dashboard. Now supports multiple probes</changelogtext>
+        <changelogtext logType="new">Added Pellet Check Time Setting</changelogtext>
+        <changelogtext logType="new">Added Prime Start Settings</changelogtext>
+        <changelogtext logType="new">Added Boot to Monitor Admin Setting</changelogtext>
+        <changelogtext logType="new">Added PiFire Server Build Info</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+        <changelogtext logType="note">Recipes was removed to avoid confusion now that PiFire supports custom recipe modes</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="1.5.6" changeDate="">
         <changelogtext logType="new">Added Probe Naming</changelogtext>
         <changelogtext logType="imp">Update various dependencies</changelogtext>
     </changelogversion>

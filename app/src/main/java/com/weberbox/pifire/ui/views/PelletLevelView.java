@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
@@ -71,7 +73,7 @@ public class PelletLevelView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         int numDots = 10;
         int numValue = Math.max(level / 10, 1);
 

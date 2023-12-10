@@ -3,6 +3,8 @@ package com.weberbox.pifire.model.remote;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
+import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,42 +16,21 @@ public class SettingsDataModel {
     @SerializedName("versions")
     @Expose
     private Versions versions;
-    @SerializedName("history_page")
-    @Expose
-    private HistoryPage historyPage;
     @SerializedName("probe_settings")
     @Expose
     private ProbeSettings probeSettings;
     @SerializedName("globals")
     @Expose
     private Globals globals;
-    @SerializedName("apprise")
+    @SerializedName("notify_services")
     @Expose
-    private Apprise apprise;
-    @SerializedName("ifttt")
-    @Expose
-    private Ifttt ifttt;
-    @SerializedName("pushbullet")
-    @Expose
-    private PushBullet pushbullet;
-    @SerializedName("pushover")
-    @Expose
-    private Pushover pushover;
-    @SerializedName("onesignal")
-    @Expose
-    private OneSignalPush onesignal;
-    @SerializedName("influxdb")
-    @Expose
-    private InfluxDB influxDB;
-    @SerializedName("probe_types")
-    @Expose
-    private ProbeTypes probeTypes;
-    @SerializedName("grill_probe_settings")
-    @Expose
-    private GrillProbeSettings grillProbeSettings;
+    private NotifyServices notifyServices;
     @SerializedName("cycle_data")
     @Expose
     private CycleData cycleData;
+    @SerializedName("controller")
+    @Expose
+    private Controller controller;
     @SerializedName("keep_warm")
     @Expose
     private KeepWarm keepWarm;
@@ -91,19 +72,6 @@ public class SettingsDataModel {
         return this;
     }
 
-    public HistoryPage getHistoryPage() {
-        return historyPage;
-    }
-
-    public void setHistoryPage(HistoryPage historyPage) {
-        this.historyPage = historyPage;
-    }
-
-    public SettingsDataModel withHistoryPage(HistoryPage historyPage) {
-        this.historyPage = historyPage;
-        return this;
-    }
-
     public ProbeSettings getProbeSettings() {
         return probeSettings;
     }
@@ -130,107 +98,16 @@ public class SettingsDataModel {
         return this;
     }
 
-    public Apprise getApprise() {
-        return apprise;
+    public NotifyServices getNotifyServices() {
+        return notifyServices;
     }
 
-    public void setApprise(Apprise apprise) {
-        this.apprise = apprise;
+    public void setNotifyServices(NotifyServices notifyServices) {
+        this.notifyServices = notifyServices;
     }
 
-    public SettingsDataModel withApprise(Apprise apprise) {
-        this.apprise = apprise;
-        return this;
-    }
-
-    public Ifttt getIfttt() {
-        return ifttt;
-    }
-
-    public void setIfttt(Ifttt ifttt) {
-        this.ifttt = ifttt;
-    }
-
-    public SettingsDataModel withIfttt(Ifttt ifttt) {
-        this.ifttt = ifttt;
-        return this;
-    }
-
-    public PushBullet getPushBullet() {
-        return pushbullet;
-    }
-
-    public void setPushBullet(PushBullet pushbullet) {
-        this.pushbullet = pushbullet;
-    }
-
-    public SettingsDataModel withPushBullet(PushBullet pushbullet) {
-        this.pushbullet = pushbullet;
-        return this;
-    }
-
-    public OneSignalPush getOneSignal() {
-        return onesignal;
-    }
-
-    public void setOneSignal(OneSignalPush onesignal) {
-        this.onesignal = onesignal;
-    }
-
-    public SettingsDataModel withOneSignal(OneSignalPush onesignal) {
-        this.onesignal = onesignal;
-        return this;
-    }
-
-    public Pushover getPushover() {
-        return pushover;
-    }
-
-    public void setPushover(Pushover pushover) {
-        this.pushover = pushover;
-    }
-
-    public SettingsDataModel withPushover(Pushover pushover) {
-        this.pushover = pushover;
-        return this;
-    }
-
-    public InfluxDB getInfluxDB() {
-        return influxDB;
-    }
-
-    public void setInfluxDB(InfluxDB influxDB) {
-        this.influxDB = influxDB;
-    }
-
-    public SettingsDataModel withInfluxdb(InfluxDB influxdb) {
-        this.influxDB = influxdb;
-        return this;
-    }
-
-    public ProbeTypes getProbeTypes() {
-        return probeTypes;
-    }
-
-    public void setProbeTypes(ProbeTypes probeTypes) {
-        this.probeTypes = probeTypes;
-    }
-
-    public SettingsDataModel withProbeTypes(ProbeTypes probeTypes) {
-        this.probeTypes = probeTypes;
-        return this;
-    }
-
-    public GrillProbeSettings getGrillProbeSettings() {
-        return grillProbeSettings;
-    }
-
-    public void setGrillProbeSettings(GrillProbeSettings grillProbeSettings) {
-        this.grillProbeSettings = grillProbeSettings;
-    }
-
-    public SettingsDataModel withGrillProbeSettings(GrillProbeSettings grillProbeSettings) {
-        this.grillProbeSettings = grillProbeSettings;
+    public SettingsDataModel withNotifyServices(NotifyServices notifyServices) {
+        this.notifyServices = notifyServices;
         return this;
     }
 
@@ -244,6 +121,19 @@ public class SettingsDataModel {
 
     public SettingsDataModel withCycleData(CycleData cycleData) {
         this.cycleData = cycleData;
+        return this;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public SettingsDataModel withController(Controller controller) {
+        this.controller = controller;
         return this;
     }
 
@@ -359,239 +249,6 @@ public class SettingsDataModel {
         return this;
     }
 
-    public static class CycleData {
-
-        @SerializedName("PB")
-        @Expose
-        private Float pb;
-        @SerializedName("Ti")
-        @Expose
-        private Float ti;
-        @SerializedName("Td")
-        @Expose
-        private Float td;
-        @SerializedName("HoldCycleTime")
-        @Expose
-        private Integer holdCycleTime;
-        @SerializedName("SmokeCycleTime")
-        @Expose
-        private Integer smokeCycleTime;
-        @SerializedName("PMode")
-        @Expose
-        private Integer pMode;
-        @SerializedName("u_min")
-        @Expose
-        private Float uMin;
-        @SerializedName("u_max")
-        @Expose
-        private Float uMax;
-        @SerializedName("center")
-        @Expose
-        private Float center;
-        @SerializedName("LidOpenDetectEnabled")
-        @Expose
-        private Boolean lidOpenDetectEnabled;
-        @SerializedName("LidOpenThreshold")
-        @Expose
-        private Integer lidOpenThreshold;
-        @SerializedName("LidOpenPauseTime")
-        @Expose
-        private Integer lidOpenPauseTime;
-
-        public Float getPb() {
-            return pb;
-        }
-
-        public void setPb(Float pb) {
-            this.pb = pb;
-        }
-
-        public CycleData withPb(Float pb) {
-            this.pb = pb;
-            return this;
-        }
-
-        public Float getTi() {
-            return ti;
-        }
-
-        public void setTi(Float ti) {
-            this.ti = ti;
-        }
-
-        public CycleData withTi(Float ti) {
-            this.ti = ti;
-            return this;
-        }
-
-        public Float getTd() {
-            return td;
-        }
-
-        public void setTd(Float td) {
-            this.td = td;
-        }
-
-        public CycleData withTd(Float td) {
-            this.td = td;
-            return this;
-        }
-
-        public Integer getHoldCycleTime() {
-            return holdCycleTime;
-        }
-
-        public void setHoldCycleTime(Integer holdCycleTime) {
-            this.holdCycleTime = holdCycleTime;
-        }
-
-        public CycleData withHoldCycleTime(Integer holdCycleTime) {
-            this.holdCycleTime = holdCycleTime;
-            return this;
-        }
-
-        public Integer getSmokeCycleTime() {
-            return smokeCycleTime;
-        }
-
-        public void setSmokeCycleTime(Integer smokeCycleTime) {
-            this.smokeCycleTime = smokeCycleTime;
-        }
-
-        public CycleData withSmokeCycleTime(Integer smokeCycleTime) {
-            this.smokeCycleTime = smokeCycleTime;
-            return this;
-        }
-
-        public Integer getPMode() {
-            return pMode;
-        }
-
-        public void setPMode(Integer pMode) {
-            this.pMode = pMode;
-        }
-
-        public CycleData withPMode(Integer pMode) {
-            this.pMode = pMode;
-            return this;
-        }
-
-        public Float getuMin() {
-            return uMin;
-        }
-
-        public void setuMin(Float uMin) {
-            this.uMin = uMin;
-        }
-
-        public CycleData withuMin(Float uMin) {
-            this.uMin = uMin;
-            return this;
-        }
-
-        public Float getuMax() {
-            return uMax;
-        }
-
-        public void setuMax(Float uMax) {
-            this.uMax = uMax;
-        }
-
-        public CycleData withuMax(Float uMax) {
-            this.uMax = uMax;
-            return this;
-        }
-
-        public Float getCenter() {
-            return center;
-        }
-
-        public void setCenter(Float center) {
-            this.center = center;
-        }
-
-        public CycleData withCenter(Float center) {
-            this.center = center;
-            return this;
-        }
-
-        public Boolean getLidOpenDetectEnabled() {
-            return lidOpenDetectEnabled;
-        }
-
-        public void setLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
-            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
-        }
-
-        public CycleData withLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
-            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
-            return this;
-        }
-
-        public Integer getLidOpenThreshold() {
-            return lidOpenThreshold;
-        }
-
-        public void setLidOpenThreshold(Integer lidOpenThreshold) {
-            this.lidOpenThreshold = lidOpenThreshold;
-        }
-
-        public CycleData withLidOpenThreshold(Integer lidOpenThreshold) {
-            this.lidOpenThreshold = lidOpenThreshold;
-            return this;
-        }
-
-        public Integer getLidOpenPauseTime() {
-            return lidOpenPauseTime;
-        }
-
-        public void setLidOpenPauseTime(Integer lidOpenPauseTime) {
-            this.lidOpenPauseTime = lidOpenPauseTime;
-        }
-
-        public CycleData withLidOpenPauseTime(Integer lidOpenPauseTime) {
-            this.lidOpenPauseTime = lidOpenPauseTime;
-            return this;
-        }
-
-    }
-
-    public static class KeepWarm {
-
-        @SerializedName("temp")
-        @Expose
-        private Integer temp;
-        @SerializedName("s_plus")
-        @Expose
-        private Boolean sPlus;
-
-        public Integer getTemp() {
-            return temp;
-        }
-
-        public void setTemp(Integer temp) {
-            this.temp = temp;
-        }
-
-        public KeepWarm withTemp(Integer temp) {
-            this.temp = temp;
-            return this;
-        }
-
-        public Boolean getSPlus() {
-            return sPlus;
-        }
-
-        public void setSPlus(Boolean sPlus) {
-            this.sPlus = sPlus;
-        }
-
-        public KeepWarm withSPlus(Boolean sPlus) {
-            this.sPlus = sPlus;
-            return this;
-        }
-    }
-
     public static class Versions {
 
         @SerializedName("server")
@@ -600,6 +257,12 @@ public class SettingsDataModel {
         @SerializedName("cookfile")
         @Expose
         private String cookFile;
+        @SerializedName("recipe")
+        @Expose
+        private String recipe;
+        @SerializedName("build")
+        @Expose
+        private String build;
 
         public String getServerVersion() {
             return server;
@@ -615,6 +278,59 @@ public class SettingsDataModel {
 
         public void setCookFileVersion(String cookFile) {
             this.cookFile = cookFile;
+        }
+
+        public String getRecipeVersion() {
+            return recipe;
+        }
+
+        public void setRecipeVersion(String recipe) {
+            this.recipe = recipe;
+        }
+
+        public String getServerBuild() {
+            return build;
+        }
+
+        public void setServerBuild(String build) {
+            this.build = build;
+        }
+
+    }
+
+    public static class ProbeSettings {
+
+        @SerializedName("probe_map")
+        @Expose
+        private ProbeMap probeMap;
+        @SerializedName("probe_profiles")
+        @Expose
+        private Map<String, ProbeProfileModel> probeProfiles = new HashMap<>();
+
+        public ProbeMap getProbeMap() {
+            return probeMap;
+        }
+
+        public void setProbeMap(ProbeMap probeMap) {
+            this.probeMap = probeMap;
+        }
+
+        public ProbeSettings withProbeMap(ProbeMap probeMap) {
+            this.probeMap = probeMap;
+            return this;
+        }
+
+        public Map<String, ProbeProfileModel> getProbeProfiles() {
+            return probeProfiles;
+        }
+
+        public void setProbeProfiles(Map<String, ProbeProfileModel> probeProfiles) {
+            this.probeProfiles = probeProfiles;
+        }
+
+        public ProbeSettings withProbeProfiles(Map<String, ProbeProfileModel> probeProfiles) {
+            this.probeProfiles = probeProfiles;
+            return this;
         }
 
     }
@@ -639,18 +355,24 @@ public class SettingsDataModel {
         @SerializedName("disp_rotation")
         @Expose
         private Integer displayRotation;
+        @SerializedName("prime_ignition")
+        @Expose
+        private Boolean primeIgnition;
         @SerializedName("shutdown_timer")
         @Expose
         private Integer shutdownTimer;
         @SerializedName("startup_timer")
         @Expose
         private Integer startUpTimer;
+        @SerializedName("startup_exit_temp")
+        @Expose
+        private Integer startExitTemp;
         @SerializedName("auto_power_off")
         @Expose
         private Boolean autoPowerOff;
-        @SerializedName("four_probes")
+        @SerializedName("boot_to_monitor")
         @Expose
-        private Boolean fourProbes;
+        private Boolean bootToMonitor;
         @SerializedName("dc_fan")
         @Expose
         private Boolean dcFan;
@@ -663,6 +385,24 @@ public class SettingsDataModel {
         @SerializedName("augerrate")
         @Expose
         private Float augerRate;
+        @SerializedName("first_time_setup")
+        @Expose
+        private Boolean firstTimeSetup;
+        @SerializedName("ext_data")
+        @Expose
+        private Boolean extData;
+        @SerializedName("global_control_panel")
+        @Expose
+        private Boolean globalControlPanel;
+        @SerializedName("updated_message")
+        @Expose
+        private Boolean updatedMessage;
+        @SerializedName("venv")
+        @Expose
+        private Boolean venv;
+        @SerializedName("real_hw")
+        @Expose
+        private Boolean realHw;
 
         public String getGrillName() {
             return grillName;
@@ -729,6 +469,19 @@ public class SettingsDataModel {
             return this;
         }
 
+        public Boolean getPrimeIgnition() {
+            return primeIgnition;
+        }
+
+        public void setPrimeIgnition(Boolean primeIgnition) {
+            this.primeIgnition = primeIgnition;
+        }
+
+        public Globals withPrimeIgnition(Boolean primeIgnition) {
+            this.primeIgnition = primeIgnition;
+            return this;
+        }
+
         public Integer getShutdownTimer() {
             return shutdownTimer;
         }
@@ -755,6 +508,19 @@ public class SettingsDataModel {
             return this;
         }
 
+        public Integer getStartExitTemp() {
+            return startExitTemp;
+        }
+
+        public void setStartExitTemp(Integer startExitTemp) {
+            this.startExitTemp = startExitTemp;
+        }
+
+        public Globals withStartExitTemp(Integer startExitTemp) {
+            this.startExitTemp = startExitTemp;
+            return this;
+        }
+
         public Boolean getAutoPowerOff() {
             return autoPowerOff;
         }
@@ -768,16 +534,16 @@ public class SettingsDataModel {
             return this;
         }
 
-        public Boolean getFourProbes() {
-            return fourProbes;
+        public Boolean getBootToMonitor() {
+            return bootToMonitor;
         }
 
-        public void setFourProbes(Boolean fourProbes) {
-            this.fourProbes = fourProbes;
+        public void setBootToMonitor(Boolean bootToMonitor) {
+            this.bootToMonitor = bootToMonitor;
         }
 
-        public Globals withFourProbes(Boolean fourProbes) {
-            this.fourProbes = fourProbes;
+        public Globals withBootToMonitor(Boolean bootToMonitor) {
+            this.bootToMonitor = bootToMonitor;
             return this;
         }
 
@@ -830,6 +596,538 @@ public class SettingsDataModel {
 
         public Globals withStandalone(Boolean standalone) {
             this.standalone = standalone;
+            return this;
+        }
+
+        public Boolean getFirstTimeSetup() {
+            return firstTimeSetup;
+        }
+
+        public void setFirstTimeSetup(Boolean firstTimeSetup) {
+            this.firstTimeSetup = firstTimeSetup;
+        }
+
+        public Globals withFirstTimeSetup(Boolean firstTimeSetup) {
+            this.firstTimeSetup = firstTimeSetup;
+            return this;
+        }
+
+        public Boolean getExtData() {
+            return extData;
+        }
+
+        public void setExtData(Boolean extData) {
+            this.extData = extData;
+        }
+
+        public Globals withExtData(Boolean extData) {
+            this.extData = extData;
+            return this;
+        }
+
+        public Boolean getGlobalControlPanel() {
+            return globalControlPanel;
+        }
+
+        public void setGlobalControlPanel(Boolean globalControlPanel) {
+            this.globalControlPanel = globalControlPanel;
+        }
+
+        public Globals withGlobalControlPanel(Boolean globalControlPanel) {
+            this.globalControlPanel = globalControlPanel;
+            return this;
+        }
+
+        public Boolean getUpdatedMessage() {
+            return updatedMessage;
+        }
+
+        public void setUpdatedMessage(Boolean updatedMessage) {
+            this.updatedMessage = updatedMessage;
+        }
+
+        public Globals withUpdatedMessage(Boolean updatedMessage) {
+            this.updatedMessage = updatedMessage;
+            return this;
+        }
+
+        public Boolean getVenv() {
+            return venv;
+        }
+
+        public void setVenv(Boolean venv) {
+            this.venv = venv;
+        }
+
+        public Globals withVenv(Boolean venv) {
+            this.venv = venv;
+            return this;
+        }
+
+        public Boolean getRealHw() {
+            return realHw;
+        }
+
+        public void setRealHw(Boolean realHw) {
+            this.realHw = realHw;
+        }
+
+        public Globals withRealHw(Boolean realHw) {
+            this.realHw = realHw;
+            return this;
+        }
+
+    }
+
+    public static class NotifyServices {
+
+        @SerializedName("apprise")
+        @Expose
+        private Apprise apprise;
+        @SerializedName("ifttt")
+        @Expose
+        private Ifttt ifttt;
+        @SerializedName("pushbullet")
+        @Expose
+        private PushBullet pushbullet;
+        @SerializedName("pushover")
+        @Expose
+        private Pushover pushover;
+        @SerializedName("onesignal")
+        @Expose
+        private OneSignalPush onesignal;
+        @SerializedName("influxdb")
+        @Expose
+        private InfluxDB influxDB;
+
+        public Apprise getApprise() {
+            return apprise;
+        }
+
+        public void setApprise(Apprise apprise) {
+            this.apprise = apprise;
+        }
+
+        public NotifyServices withApprise(Apprise apprise) {
+            this.apprise = apprise;
+            return this;
+        }
+
+        public Ifttt getIfttt() {
+            return ifttt;
+        }
+
+        public void setIfttt(Ifttt ifttt) {
+            this.ifttt = ifttt;
+        }
+
+        public NotifyServices withIfttt(Ifttt ifttt) {
+            this.ifttt = ifttt;
+            return this;
+        }
+
+        public PushBullet getPushBullet() {
+            return pushbullet;
+        }
+
+        public void setPushBullet(PushBullet pushbullet) {
+            this.pushbullet = pushbullet;
+        }
+
+        public NotifyServices withPushBullet(PushBullet pushbullet) {
+            this.pushbullet = pushbullet;
+            return this;
+        }
+
+        public OneSignalPush getOneSignal() {
+            return onesignal;
+        }
+
+        public void setOneSignal(OneSignalPush onesignal) {
+            this.onesignal = onesignal;
+        }
+
+        public NotifyServices withOneSignal(OneSignalPush onesignal) {
+            this.onesignal = onesignal;
+            return this;
+        }
+
+        public Pushover getPushover() {
+            return pushover;
+        }
+
+        public void setPushover(Pushover pushover) {
+            this.pushover = pushover;
+        }
+
+        public NotifyServices withPushover(Pushover pushover) {
+            this.pushover = pushover;
+            return this;
+        }
+
+        public InfluxDB getInfluxDB() {
+            return influxDB;
+        }
+
+        public void setInfluxDB(InfluxDB influxDB) {
+            this.influxDB = influxDB;
+        }
+
+        public NotifyServices withInfluxdb(InfluxDB influxdb) {
+            this.influxDB = influxdb;
+            return this;
+        }
+
+    }
+
+    public static class CycleData {
+
+        @SerializedName("HoldCycleTime")
+        @Expose
+        private Integer holdCycleTime;
+        @SerializedName("SmokeOnCycleTime")
+        @Expose
+        private Integer smokeOnCycleTime;
+        @SerializedName("SmokeOffCycleTime")
+        @Expose
+        private Integer smokeOffCycleTime;
+        @SerializedName("PMode")
+        @Expose
+        private Integer pMode;
+        @SerializedName("u_min")
+        @Expose
+        private Float uMin;
+        @SerializedName("u_max")
+        @Expose
+        private Float uMax;
+        @SerializedName("LidOpenDetectEnabled")
+        @Expose
+        private Boolean lidOpenDetectEnabled;
+        @SerializedName("LidOpenThreshold")
+        @Expose
+        private Integer lidOpenThreshold;
+        @SerializedName("LidOpenPauseTime")
+        @Expose
+        private Integer lidOpenPauseTime;
+
+        public Integer getHoldCycleTime() {
+            return holdCycleTime;
+        }
+
+        public void setHoldCycleTime(Integer holdCycleTime) {
+            this.holdCycleTime = holdCycleTime;
+        }
+
+        public CycleData withHoldCycleTime(Integer holdCycleTime) {
+            this.holdCycleTime = holdCycleTime;
+            return this;
+        }
+
+        public Integer getSmokeOnCycleTime() {
+            return smokeOnCycleTime;
+        }
+
+        public void setSmokeOnCycleTime(Integer smokeOnCycleTime) {
+            this.smokeOnCycleTime = smokeOnCycleTime;
+        }
+
+        public CycleData withSmokeOnCycleTime(Integer smokeOnCycleTime) {
+            this.smokeOnCycleTime = smokeOnCycleTime;
+            return this;
+        }
+
+        public Integer getSmokeOffCycleTime() {
+            return smokeOffCycleTime;
+        }
+
+        public void setSmokeOffCycleTime(Integer smokeOffCycleTime) {
+            this.smokeOffCycleTime = smokeOffCycleTime;
+        }
+
+        public CycleData withSmokeOffCycleTime(Integer smokeOffCycleTime) {
+            this.smokeOffCycleTime = smokeOffCycleTime;
+            return this;
+        }
+
+        public Integer getPMode() {
+            return pMode;
+        }
+
+        public void setPMode(Integer pMode) {
+            this.pMode = pMode;
+        }
+
+        public CycleData withPMode(Integer pMode) {
+            this.pMode = pMode;
+            return this;
+        }
+
+        public Float getuMin() {
+            return uMin;
+        }
+
+        public void setuMin(Float uMin) {
+            this.uMin = uMin;
+        }
+
+        public CycleData withuMin(Float uMin) {
+            this.uMin = uMin;
+            return this;
+        }
+
+        public Float getuMax() {
+            return uMax;
+        }
+
+        public void setuMax(Float uMax) {
+            this.uMax = uMax;
+        }
+
+        public CycleData withuMax(Float uMax) {
+            this.uMax = uMax;
+            return this;
+        }
+
+        public Boolean getLidOpenDetectEnabled() {
+            return lidOpenDetectEnabled;
+        }
+
+        public void setLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
+            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
+        }
+
+        public CycleData withLidOpenDetectEnabled(Boolean lidOpenDetectEnabled) {
+            this.lidOpenDetectEnabled = lidOpenDetectEnabled;
+            return this;
+        }
+
+        public Integer getLidOpenThreshold() {
+            return lidOpenThreshold;
+        }
+
+        public void setLidOpenThreshold(Integer lidOpenThreshold) {
+            this.lidOpenThreshold = lidOpenThreshold;
+        }
+
+        public CycleData withLidOpenThreshold(Integer lidOpenThreshold) {
+            this.lidOpenThreshold = lidOpenThreshold;
+            return this;
+        }
+
+        public Integer getLidOpenPauseTime() {
+            return lidOpenPauseTime;
+        }
+
+        public void setLidOpenPauseTime(Integer lidOpenPauseTime) {
+            this.lidOpenPauseTime = lidOpenPauseTime;
+        }
+
+        public CycleData withLidOpenPauseTime(Integer lidOpenPauseTime) {
+            this.lidOpenPauseTime = lidOpenPauseTime;
+            return this;
+        }
+
+    }
+
+    public static class Controller {
+        @SerializedName("selected")
+        @Expose
+        private String selected;
+
+        public String getController() {
+            return selected;
+        }
+
+        public void setController(String selected) {
+            this.selected = selected;
+        }
+
+        public Controller withController(String selected) {
+            this.selected = selected;
+            return this;
+        }
+    }
+
+    public static class KeepWarm {
+
+        @SerializedName("temp")
+        @Expose
+        private Integer temp;
+        @SerializedName("s_plus")
+        @Expose
+        private Boolean sPlus;
+
+        public Integer getTemp() {
+            return temp;
+        }
+
+        public void setTemp(Integer temp) {
+            this.temp = temp;
+        }
+
+        public KeepWarm withTemp(Integer temp) {
+            this.temp = temp;
+            return this;
+        }
+
+        public Boolean getSPlus() {
+            return sPlus;
+        }
+
+        public void setSPlus(Boolean sPlus) {
+            this.sPlus = sPlus;
+        }
+
+        public KeepWarm withSPlus(Boolean sPlus) {
+            this.sPlus = sPlus;
+            return this;
+        }
+    }
+
+    public static class SmokePlus {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("min_temp")
+        @Expose
+        private Integer minTemp;
+        @SerializedName("max_temp")
+        @Expose
+        private Integer maxTemp;
+        @SerializedName("cycle")
+        @Expose
+        private Integer cycle;
+        @SerializedName("on_time")
+        @Expose
+        private Integer onTime;
+        @SerializedName("off_time")
+        @Expose
+        private Integer offTime;
+        @SerializedName("frequency")
+        @Expose
+        private Integer frequency;
+        @SerializedName("duty_cycle")
+        @Expose
+        private Integer dutyCycle;
+        @SerializedName("fan_ramp")
+        @Expose
+        private Boolean fanRamp;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public SmokePlus withEnabled(Boolean enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        public Integer getMinTemp() {
+            return minTemp;
+        }
+
+        public void setMinTemp(Integer minTemp) {
+            this.minTemp = minTemp;
+        }
+
+        public SmokePlus withMinTemp(Integer minTemp) {
+            this.minTemp = minTemp;
+            return this;
+        }
+
+        public Integer getMaxTemp() {
+            return maxTemp;
+        }
+
+        public void setMaxTemp(Integer maxTemp) {
+            this.maxTemp = maxTemp;
+        }
+
+        public SmokePlus withMaxTemp(Integer maxTemp) {
+            this.maxTemp = maxTemp;
+            return this;
+        }
+
+        public Integer getCycle() {
+            return cycle;
+        }
+
+        public void setCycle(Integer cycle) {
+            this.cycle = cycle;
+        }
+
+        public SmokePlus withCycle(Integer cycle) {
+            this.cycle = cycle;
+            return this;
+        }
+
+        public Integer getOnTime() {
+            return onTime;
+        }
+
+        public void setOnTime(Integer onTime) {
+            this.onTime = onTime;
+        }
+
+        public SmokePlus withOnTime(Integer onTime) {
+            this.onTime = onTime;
+            return this;
+        }
+
+        public Integer getOffTime() {
+            return offTime;
+        }
+
+        public void setOffTime(Integer offTime) {
+            this.offTime = offTime;
+        }
+
+        public SmokePlus withOffTime(Integer offTime) {
+            this.offTime = offTime;
+            return this;
+        }
+
+        public Integer getFrequency() {
+            return frequency;
+        }
+
+        public void setFrequency(Integer frequency) {
+            this.frequency = frequency;
+        }
+
+        public SmokePlus withFrequency(Integer frequency) {
+            this.frequency = frequency;
+            return this;
+        }
+
+        public Integer getDutyCycle() {
+            return dutyCycle;
+        }
+
+        public void setDutyCycle(Integer dutyCycle) {
+            this.dutyCycle = dutyCycle;
+        }
+
+        public SmokePlus withDutyCycle(Integer dutyCycle) {
+            this.dutyCycle = dutyCycle;
+            return this;
+        }
+
+        public Boolean getFanRamp() {
+            return fanRamp;
+        }
+
+        public void setFanRamp(Boolean enabled) {
+            this.fanRamp = enabled;
+        }
+
+        public SmokePlus withFanRamp(Boolean enabled) {
+            this.fanRamp = enabled;
             return this;
         }
 
@@ -988,6 +1286,305 @@ public class SettingsDataModel {
         }
 
     }
+
+    public static class LastUpdated {
+
+        @SerializedName("time")
+        @Expose
+        private Integer time;
+
+        public Integer getTime() {
+            return time;
+        }
+
+        public void setTime(Integer time) {
+            this.time = time;
+        }
+
+        public LastUpdated withTime(Integer time) {
+            this.time = time;
+            return this;
+        }
+
+    }
+
+    public static class Modules {
+
+        @SerializedName("display")
+        @Expose
+        private String display;
+        @SerializedName("dist")
+        @Expose
+        private String dist;
+        @SerializedName("grillplat")
+        @Expose
+        private String grillplat;
+
+        public String getDisplay() {
+            return display;
+        }
+
+        public void setDisplay(String display) {
+            this.display = display;
+        }
+
+        public Modules withDisplay(String display) {
+            this.display = display;
+            return this;
+        }
+
+        public String getDist() {
+            return dist;
+        }
+
+        public void setDist(String dist) {
+            this.dist = dist;
+        }
+
+        public Modules withDistance(String distance) {
+            this.dist = distance;
+            return this;
+        }
+
+        public String getGrillPlat() {
+            return grillplat;
+        }
+
+        public void setGrillPlat(String grillplat) {
+            this.grillplat = grillplat;
+        }
+
+        public Modules withPlatform(String platform) {
+            this.grillplat = platform;
+            return this;
+        }
+
+    }
+
+    public static class SmartStart {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("exit_temp")
+        @Expose
+        private Integer exitTemp;
+        @SerializedName("profiles")
+        @Expose
+        private List<SSProfile> profiles = null;
+        @SerializedName("temp_range_list")
+        @Expose
+        private List<Integer> tempRangeList = null;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public SmartStart withEnabled(Boolean enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        public Integer getExitTemp() {
+            return exitTemp;
+        }
+
+        public void setExitTemp(Integer exitTemp) {
+            this.exitTemp = exitTemp;
+        }
+
+        public SmartStart withExitTemp(Integer exitTemp) {
+            this.exitTemp = exitTemp;
+            return this;
+        }
+
+        public List<SSProfile> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<SSProfile> profiles) {
+            this.profiles = profiles;
+        }
+
+        public SmartStart withProfiles(List<SSProfile> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public List<Integer> getTempRangeList() {
+            return tempRangeList;
+        }
+
+        public void setTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+        }
+
+        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+            return this;
+        }
+
+    }
+
+    public static class PWM {
+
+        @SerializedName("pwm_control")
+        @Expose
+        private Boolean pwmControl;
+        @SerializedName("update_time")
+        @Expose
+        private Integer updateTime;
+        @SerializedName("frequency")
+        @Expose
+        private Integer frequency;
+        @SerializedName("min_duty_cycle")
+        @Expose
+        private Integer minDutyCycle;
+        @SerializedName("max_duty_cycle")
+        @Expose
+        private Integer maxDutyCycle;
+        @SerializedName("temp_range_list")
+        @Expose
+        private List<Integer> tempRangeList = null;
+        @SerializedName("profiles")
+        @Expose
+        private List<PWMProfile> profiles = null;
+
+        public Boolean getPWMControl() {
+            return pwmControl;
+        }
+
+        public void setPWMControl(Boolean enabled) {
+            this.pwmControl = enabled;
+        }
+
+        public PWM withPWMControl(Boolean enabled) {
+            this.pwmControl = enabled;
+            return this;
+        }
+
+        public Integer getUpdateTime() {
+            return updateTime;
+        }
+
+        public void setUpdateTime(Integer updateTime) {
+            this.updateTime = updateTime;
+        }
+
+        public PWM withUpdateTime(Integer updateTime) {
+            this.updateTime = updateTime;
+            return this;
+        }
+
+        public Integer getFrequency() {
+            return frequency;
+        }
+
+        public void setFrequency(Integer frequency) {
+            this.frequency = frequency;
+        }
+
+        public PWM withFrequency(Integer frequency) {
+            this.frequency = frequency;
+            return this;
+        }
+
+        public Integer getMinDutyCycle() {
+            return minDutyCycle;
+        }
+
+        public void setMinDutyCycle(Integer minDutyCycle) {
+            this.minDutyCycle = minDutyCycle;
+        }
+
+        public PWM withMinDutyCycle(Integer minDutyCycle) {
+            this.minDutyCycle = minDutyCycle;
+            return this;
+        }
+
+        public Integer getMaxDutyCycle() {
+            return maxDutyCycle;
+        }
+
+        public void setMaxDutyCycle(Integer maxDutyCycle) {
+            this.maxDutyCycle = maxDutyCycle;
+        }
+
+        public PWM withMaxDutyCycle(Integer maxDutyCycle) {
+            this.maxDutyCycle = maxDutyCycle;
+            return this;
+        }
+
+        public List<PWMProfile> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<PWMProfile> profiles) {
+            this.profiles = profiles;
+        }
+
+        public PWM withProfiles(List<PWMProfile> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public List<Integer> getTempRangeList() {
+            return tempRangeList;
+        }
+
+        public void setTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+        }
+
+        public PWM withTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+            return this;
+        }
+
+    }
+
+    public static class StartToMode {
+
+        @SerializedName("after_startup_mode")
+        @Expose
+        private String afterStartUpMode;
+        @SerializedName("primary_setpoint")
+        @Expose
+        private Integer primarySetPoint;
+
+        public String getAfterStartUpMode() {
+            return afterStartUpMode;
+        }
+
+        public void setAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+        }
+
+        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+            return this;
+        }
+
+        public Integer getPrimarySetPoint() {
+            return primarySetPoint;
+        }
+
+        public void setPrimarySetPoint(Integer primarySetPoint) {
+            this.primarySetPoint = primarySetPoint;
+        }
+
+        public StartToMode withPrimarySetPoint(Integer primarySetPoint) {
+            this.primarySetPoint = primarySetPoint;
+            return this;
+        }
+
+    }
+
+    // Notify Services Helpers
 
     public static class Pushover {
 
@@ -1395,781 +1992,7 @@ public class SettingsDataModel {
 
     }
 
-    public static class ProbeTypes {
-
-        @SerializedName("grill0type")
-        @Expose
-        private String grill0type;
-        @SerializedName("grill1type")
-        @Expose
-        private String grill1type;
-        @SerializedName("grill2type")
-        @Expose
-        private String grill2type;
-        @SerializedName("probe1type")
-        @Expose
-        private String probe1type;
-        @SerializedName("probe2type")
-        @Expose
-        private String probe2type;
-
-        public String getGrill0type() {
-            return grill0type;
-        }
-
-        public void setGrill0type(String grill0type) {
-            this.grill0type = grill0type;
-        }
-
-        public ProbeTypes withGrill0type(String grill0type) {
-            this.grill0type = grill0type;
-            return this;
-        }
-
-        public String getGrill1type() {
-            return grill1type;
-        }
-
-        public void setGrill1type(String grill1type) {
-            this.grill1type = grill1type;
-        }
-
-        public ProbeTypes withGrill1type(String grill1type) {
-            this.grill1type = grill1type;
-            return this;
-        }
-
-        public String getGrill2type() {
-            return grill2type;
-        }
-
-        public void setGrill2type(String grill2type) {
-            this.grill2type = grill2type;
-        }
-
-        public ProbeTypes withGrill2type(String grill2type) {
-            this.grill2type = grill2type;
-            return this;
-        }
-
-        public String getProbe1type() {
-            return probe1type;
-        }
-
-        public void setProbe1type(String probe1type) {
-            this.probe1type = probe1type;
-        }
-
-        public ProbeTypes withProbe1type(String probe1type) {
-            this.probe1type = probe1type;
-            return this;
-        }
-
-        public String getProbe2type() {
-            return probe2type;
-        }
-
-        public void setProbe2type(String probe2type) {
-            this.probe2type = probe2type;
-        }
-
-        public ProbeTypes withProbe2type(String probe2type) {
-            this.probe2type = probe2type;
-            return this;
-        }
-
-    }
-
-    public static class ProbeSettings {
-
-        @SerializedName("probes_enabled")
-        @Expose
-        private List<Integer> probesEnabled = null;
-        @SerializedName("probe_profiles")
-        @Expose
-        private Map<String, ProbeProfileModel> probeProfiles = new HashMap<>();
-        @SerializedName("probe_sources")
-        @Expose
-        private List<String> probeSources = null;
-        @SerializedName("probe_options")
-        @Expose
-        private List<String> probeOptions = null;
-
-        public Map<String, ProbeProfileModel> getProbeProfiles() {
-            return probeProfiles;
-        }
-
-        public void setProbeProfiles(Map<String, ProbeProfileModel> probeProfiles) {
-            this.probeProfiles = probeProfiles;
-        }
-
-        public ProbeSettings withProbeProfiles(Map<String, ProbeProfileModel> probeProfiles) {
-            this.probeProfiles = probeProfiles;
-            return this;
-        }
-
-        public List<Integer> getProbesEnabled() {
-            return probesEnabled;
-        }
-
-        public void setProbesEnabled(List<Integer> probesEnabled) {
-            this.probesEnabled = probesEnabled;
-        }
-
-        public ProbeSettings withProbesEnabled(List<Integer> probesEnabled) {
-            this.probesEnabled = probesEnabled;
-            return this;
-        }
-
-        public List<String> getProbeSources() {
-            return probeSources;
-        }
-
-        public void setProbeSources(List<String> probeSources) {
-            this.probeSources = probeSources;
-        }
-
-        public ProbeSettings withProbeSources(List<String> probeSources) {
-            this.probeSources = probeSources;
-            return this;
-        }
-
-        public List<String> getProbeOptions() {
-            return probeOptions;
-        }
-
-        public void setProbeOptions(List<String> probeOptions) {
-            this.probeOptions = probeOptions;
-        }
-
-        public ProbeSettings withProbeOptions(List<String> probeOptions) {
-            this.probeOptions = probeOptions;
-            return this;
-        }
-
-    }
-
-    public static class HistoryPage {
-
-        @SerializedName("minutes")
-        @Expose
-        private Integer minutes;
-        @SerializedName("clearhistoryonstart")
-        @Expose
-        private Boolean clearHistoryOnStart;
-        @SerializedName("autorefresh")
-        @Expose
-        private String autoRefresh;
-        @SerializedName("datapoints")
-        @Expose
-        private Integer dataPoints;
-
-        public Integer getMinutes() {
-            return minutes;
-        }
-
-        public void setMinutes(Integer minutes) {
-            this.minutes = minutes;
-        }
-
-        public HistoryPage withMinutes(Integer minutes) {
-            this.minutes = minutes;
-            return this;
-        }
-
-        public Boolean getClearHistoryOnStart() {
-            return clearHistoryOnStart;
-        }
-
-        public void setClearHistoryOnStart(Boolean clearHistoryOnStart) {
-            this.clearHistoryOnStart = clearHistoryOnStart;
-        }
-
-        public HistoryPage withClearHistoryOnStart(Boolean clearHistoryOnStart) {
-            this.clearHistoryOnStart = clearHistoryOnStart;
-            return this;
-        }
-
-        public String getAutoRefresh() {
-            return autoRefresh;
-        }
-
-        public void setAutoRefresh(String autoRefresh) {
-            this.autoRefresh = autoRefresh;
-        }
-
-        public HistoryPage withAutoRefresh(String autoRefresh) {
-            this.autoRefresh = autoRefresh;
-            return this;
-        }
-
-        public Integer getDataPoints() {
-            return dataPoints;
-        }
-
-        public void setDataPoints(Integer dataPoints) {
-            this.dataPoints = dataPoints;
-        }
-
-        public HistoryPage withDataPoints(Integer dataPoints) {
-            this.dataPoints = dataPoints;
-            return this;
-        }
-
-    }
-
-    public static class GrillProbeSettings {
-
-        @SerializedName("grill_probes")
-        @Expose
-        private Map<String, GrillProbeModel> grillProbes = new HashMap<>();
-        @SerializedName("grill_probe")
-        @Expose
-        private String grillProbe;
-        @SerializedName("grill_probe_enabled")
-        @Expose
-        private List<Integer> grillProbeEnabled = null;
-
-        public Map<String, GrillProbeModel> getGrillProbes() {
-            return grillProbes;
-        }
-
-        public void setGrillProbes(Map<String, GrillProbeModel> grillProbes) {
-            this.grillProbes = grillProbes;
-        }
-
-        public GrillProbeSettings withGrillProbes(Map<String, GrillProbeModel> grillProbes) {
-            this.grillProbes = grillProbes;
-            return this;
-        }
-
-        public String getGrillProbe() {
-            return grillProbe;
-        }
-
-        public void setGrillProbe(String grillProbe) {
-            this.grillProbe = grillProbe;
-        }
-
-        public GrillProbeSettings withGrillProbe(String grillProbe) {
-            this.grillProbe = grillProbe;
-            return this;
-        }
-
-        public List<Integer> getGrillProbeEnabled() {
-            return grillProbeEnabled;
-        }
-
-        public void setGrillProbeEnabled(List<Integer> grillProbeEnabled) {
-            this.grillProbeEnabled = grillProbeEnabled;
-        }
-
-        public GrillProbeSettings withGrillProbeEnabled(List<Integer> grillProbeEnabled) {
-            this.grillProbeEnabled = grillProbeEnabled;
-            return this;
-        }
-
-    }
-
-    public static class SmokePlus {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("min_temp")
-        @Expose
-        private Integer minTemp;
-        @SerializedName("max_temp")
-        @Expose
-        private Integer maxTemp;
-        @SerializedName("cycle")
-        @Expose
-        private Integer cycle;
-        @SerializedName("on_time")
-        @Expose
-        private Integer onTime;
-        @SerializedName("off_time")
-        @Expose
-        private Integer offTime;
-        @SerializedName("frequency")
-        @Expose
-        private Integer frequency;
-        @SerializedName("duty_cycle")
-        @Expose
-        private Integer dutyCycle;
-        @SerializedName("fan_ramp")
-        @Expose
-        private Boolean fanRamp;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public SmokePlus withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public Integer getMinTemp() {
-            return minTemp;
-        }
-
-        public void setMinTemp(Integer minTemp) {
-            this.minTemp = minTemp;
-        }
-
-        public SmokePlus withMinTemp(Integer minTemp) {
-            this.minTemp = minTemp;
-            return this;
-        }
-
-        public Integer getMaxTemp() {
-            return maxTemp;
-        }
-
-        public void setMaxTemp(Integer maxTemp) {
-            this.maxTemp = maxTemp;
-        }
-
-        public SmokePlus withMaxTemp(Integer maxTemp) {
-            this.maxTemp = maxTemp;
-            return this;
-        }
-
-        public Integer getCycle() {
-            return cycle;
-        }
-
-        public void setCycle(Integer cycle) {
-            this.cycle = cycle;
-        }
-
-        public SmokePlus withCycle(Integer cycle) {
-            this.cycle = cycle;
-            return this;
-        }
-
-        public Integer getOnTime() {
-            return onTime;
-        }
-
-        public void setOnTime(Integer onTime) {
-            this.onTime = onTime;
-        }
-
-        public SmokePlus withOnTime(Integer onTime) {
-            this.onTime = onTime;
-            return this;
-        }
-
-        public Integer getOffTime() {
-            return offTime;
-        }
-
-        public void setOffTime(Integer offTime) {
-            this.offTime = offTime;
-        }
-
-        public SmokePlus withOffTime(Integer offTime) {
-            this.offTime = offTime;
-            return this;
-        }
-
-        public Integer getFrequency() {
-            return frequency;
-        }
-
-        public void setFrequency(Integer frequency) {
-            this.frequency = frequency;
-        }
-
-        public SmokePlus withFrequency(Integer frequency) {
-            this.frequency = frequency;
-            return this;
-        }
-
-        public Integer getDutyCycle() {
-            return dutyCycle;
-        }
-
-        public void setDutyCycle(Integer dutyCycle) {
-            this.dutyCycle = dutyCycle;
-        }
-
-        public SmokePlus withDutyCycle(Integer dutyCycle) {
-            this.dutyCycle = dutyCycle;
-            return this;
-        }
-
-        public Boolean getFanRamp() {
-            return fanRamp;
-        }
-
-        public void setFanRamp(Boolean enabled) {
-            this.fanRamp = enabled;
-        }
-
-        public SmokePlus withFanRamp(Boolean enabled) {
-            this.fanRamp = enabled;
-            return this;
-        }
-
-    }
-
-    public static class PWM {
-
-        @SerializedName("pwm_control")
-        @Expose
-        private Boolean pwmControl;
-        @SerializedName("update_time")
-        @Expose
-        private Integer updateTime;
-        @SerializedName("frequency")
-        @Expose
-        private Integer frequency;
-        @SerializedName("min_duty_cycle")
-        @Expose
-        private Integer minDutyCycle;
-        @SerializedName("max_duty_cycle")
-        @Expose
-        private Integer maxDutyCycle;
-        @SerializedName("temp_range_list")
-        @Expose
-        private List<Integer> tempRangeList = null;
-        @SerializedName("profiles")
-        @Expose
-        private List<PWMProfile> profiles = null;
-
-        public Boolean getPWMControl() {
-            return pwmControl;
-        }
-
-        public void setPWMControl(Boolean enabled) {
-            this.pwmControl = enabled;
-        }
-
-        public PWM withPWMControl(Boolean enabled) {
-            this.pwmControl = enabled;
-            return this;
-        }
-
-        public Integer getUpdateTime() {
-            return updateTime;
-        }
-
-        public void setUpdateTime(Integer updateTime) {
-            this.updateTime = updateTime;
-        }
-
-        public PWM withUpdateTime(Integer updateTime) {
-            this.updateTime = updateTime;
-            return this;
-        }
-
-        public Integer getFrequency() {
-            return frequency;
-        }
-
-        public void setFrequency(Integer frequency) {
-            this.frequency = frequency;
-        }
-
-        public PWM withFrequency(Integer frequency) {
-            this.frequency = frequency;
-            return this;
-        }
-
-        public Integer getMinDutyCycle() {
-            return minDutyCycle;
-        }
-
-        public void setMinDutyCycle(Integer minDutyCycle) {
-            this.minDutyCycle = minDutyCycle;
-        }
-
-        public PWM withMinDutyCycle(Integer minDutyCycle) {
-            this.minDutyCycle = minDutyCycle;
-            return this;
-        }
-
-        public Integer getMaxDutyCycle() {
-            return maxDutyCycle;
-        }
-
-        public void setMaxDutyCycle(Integer maxDutyCycle) {
-            this.maxDutyCycle = maxDutyCycle;
-        }
-
-        public PWM withMaxDutyCycle(Integer maxDutyCycle) {
-            this.maxDutyCycle = maxDutyCycle;
-            return this;
-        }
-
-        public List<PWMProfile> getProfiles() {
-            return profiles;
-        }
-
-        public void setProfiles(List<PWMProfile> profiles) {
-            this.profiles = profiles;
-        }
-
-        public PWM withProfiles(List<PWMProfile> profiles) {
-            this.profiles = profiles;
-            return this;
-        }
-
-        public List<Integer> getTempRangeList() {
-            return tempRangeList;
-        }
-
-        public void setTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-        }
-
-        public PWM withTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-            return this;
-        }
-
-    }
-
-    public static class LastUpdated {
-
-        @SerializedName("time")
-        @Expose
-        private Integer time;
-
-        public Integer getTime() {
-            return time;
-        }
-
-        public void setTime(Integer time) {
-            this.time = time;
-        }
-
-        public LastUpdated withTime(Integer time) {
-            this.time = time;
-            return this;
-        }
-
-    }
-
-    public static class Modules {
-
-        @SerializedName("adc")
-        @Expose
-        private String adc;
-        @SerializedName("display")
-        @Expose
-        private String display;
-        @SerializedName("dist")
-        @Expose
-        private String dist;
-        @SerializedName("grillplat")
-        @Expose
-        private String grillplat;
-
-        public String getAdc() {
-            return adc;
-        }
-
-        public void setAdc(String adc) {
-            this.adc = adc;
-        }
-
-        public Modules withAdc(String adc) {
-            this.adc = adc;
-            return this;
-        }
-
-        public String getDisplay() {
-            return display;
-        }
-
-        public void setDisplay(String display) {
-            this.display = display;
-        }
-
-        public Modules withDisplay(String display) {
-            this.display = display;
-            return this;
-        }
-
-        public String getDist() {
-            return dist;
-        }
-
-        public void setDist(String dist) {
-            this.dist = dist;
-        }
-
-        public Modules withDistance(String distance) {
-            this.dist = distance;
-            return this;
-        }
-
-        public String getGrillPlat() {
-            return grillplat;
-        }
-
-        public void setGrillPlat(String grillplat) {
-            this.grillplat = grillplat;
-        }
-
-        public Modules withPlatform(String platform) {
-            this.grillplat = platform;
-            return this;
-        }
-
-    }
-
-    public static class GrillProbeModel {
-
-        @SerializedName("name")
-        @Expose
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public GrillProbeModel withName(String name) {
-            this.name = name;
-            return this;
-        }
-
-    }
-
-    public static class ProbeProfileModel {
-
-        @SerializedName("Vs")
-        @Expose
-        private Float vs;
-        @SerializedName("Rd")
-        @Expose
-        private Integer rd;
-        @SerializedName("A")
-        @Expose
-        private Float a;
-        @SerializedName("B")
-        @Expose
-        private Float b;
-        @SerializedName("C")
-        @Expose
-        private Float c;
-        @SerializedName("name")
-        @Expose
-        private String name;
-
-        public Float getVs() {
-            return vs;
-        }
-
-        public void setVs(Float vs) {
-            this.vs = vs;
-        }
-
-        public Integer getRd() {
-            return rd;
-        }
-
-        public void setRd(Integer rd) {
-            this.rd = rd;
-        }
-
-        public Float getA() {
-            return a;
-        }
-
-        public void setA(Float a) {
-            this.a = a;
-        }
-
-        public Float getB() {
-            return b;
-        }
-
-        public void setB(Float b) {
-            this.b = b;
-        }
-
-        public Float getC() {
-            return c;
-        }
-
-        public void setC(Float c) {
-            this.c = c;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-    }
-
-    public static class SmartStart {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("profiles")
-        @Expose
-        private List<SSProfile> profiles = null;
-        @SerializedName("temp_range_list")
-        @Expose
-        private List<Integer> tempRangeList = null;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public SmartStart withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public List<SSProfile> getProfiles() {
-            return profiles;
-        }
-
-        public void setProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-        }
-
-        public SmartStart withProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-            return this;
-        }
-
-        public List<Integer> getTempRangeList() {
-            return tempRangeList;
-        }
-
-        public void setTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-        }
-
-        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-            return this;
-        }
-    }
+    // Smart Start Helpers
 
     public static class SSProfile {
 
@@ -2224,6 +2047,8 @@ public class SettingsDataModel {
 
     }
 
+    // PWM Helpers
+
     public static class PWMProfile {
 
         @SerializedName("duty_cycle")
@@ -2240,43 +2065,6 @@ public class SettingsDataModel {
 
         public PWMProfile withDutyCycle(Integer dutyCycle) {
             this.dutyCycle = dutyCycle;
-            return this;
-        }
-
-    }
-
-    public static class StartToMode {
-
-        @SerializedName("after_startup_mode")
-        @Expose
-        private String afterStartUpMode;
-        @SerializedName("grill1_setpoint")
-        @Expose
-        private Integer grillOneSetPoint;
-
-        public String getAfterStartUpMode() {
-            return afterStartUpMode;
-        }
-
-        public void setAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-        }
-
-        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-            return this;
-        }
-
-        public Integer getGrillOneSetPoint() {
-            return grillOneSetPoint;
-        }
-
-        public void setGrillOneSetPoint(Integer grillOneSetPoint) {
-            this.grillOneSetPoint = grillOneSetPoint;
-        }
-
-        public StartToMode withGrillOneSetPoint(Integer grillOneSetPoint) {
-            this.grillOneSetPoint = grillOneSetPoint;
             return this;
         }
 

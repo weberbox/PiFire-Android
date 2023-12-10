@@ -78,15 +78,6 @@
                         android:layout_marginStart="@dimen/default_spacing"
                         android:layout_marginEnd="@dimen/default_spacing"
                         android:layout_marginBottom="@dimen/default_spacing"
-                        android:text="@string/info_modules_adc" />
-
-                    <TextView
-                        style="@style/Text15Aller"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_spacing"
-                        android:layout_marginEnd="@dimen/default_spacing"
-                        android:layout_marginBottom="@dimen/default_spacing"
                         android:text="@string/info_modules_display" />
 
                     <TextView
@@ -115,16 +106,6 @@
 
                     <TextView
                         android:id="@+id/modules_platform"
-                        style="@style/Text15Aller"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/default_spacing"
-                        android:layout_marginEnd="@dimen/default_spacing"
-                        android:layout_marginBottom="@dimen/default_spacing"
-                        tools:text="prototype" />
-
-                    <TextView
-                        android:id="@+id/modules_adc"
                         style="@style/Text15Aller"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

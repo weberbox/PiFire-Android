@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -19,7 +20,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.aceinteract.android.stepper.StepperNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
@@ -46,24 +46,18 @@ public class ServerSetupActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        getOnBackPressedDispatcher().addCallback(this, onBackCallback);
+
         setupFab = binding.fabSetup;
         connectProgress = binding.setupLayout.connectProgressbar;
         stepper = binding.setupLayout.setupStepper;
 
-        if (AppConfig.USE_ONESIGNAL) {
-            appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_setup_welcome,
-                    R.id.nav_setup_address,
-                    R.id.nav_setup_push,
-                    R.id.nav_setup_finish)
-                    .build();
-        } else {
-            appBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_setup_welcome,
-                    R.id.nav_setup_address,
-                    R.id.nav_setup_finish)
-                    .build();
-        }
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_setup_welcome,
+                R.id.nav_setup_address,
+                R.id.nav_setup_push,
+                R.id.nav_setup_finish)
+                .build();
 
         NavController navController = Navigation.findNavController(this,
                 R.id.server_setup_fragment);
@@ -96,20 +90,22 @@ public class ServerSetupActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (stepper.getCurrentStep() == 0) {
-            super.onBackPressed();
-        } else {
-            onSupportNavigateUp();
-        }
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(Navigation.findNavController(this,
                 R.id.server_setup_fragment), appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private final OnBackPressedCallback onBackCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (stepper.getCurrentStep() == 0) {
+                finish();
+            } else {
+                onSupportNavigateUp();
+            }
+        }
+    };
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

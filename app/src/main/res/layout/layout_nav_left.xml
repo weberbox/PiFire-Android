@@ -60,16 +60,6 @@
                         app:nav_adjust_text="true" />
 
                     <com.weberbox.pifire.ui.views.NavListItem
-                        android:id="@+id/nav_history"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_HISTORY)}'
-                        app:nav_icon="@drawable/ic_menu_history"
-                        app:nav_selected="false"
-                        app:nav_title="@string/nav_history"
-                        app:nav_adjust_text="true" />
-
-                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/nav_events"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -77,16 +67,6 @@
                         app:nav_icon="@drawable/ic_menu_events"
                         app:nav_selected="false"
                         app:nav_title="@string/nav_events"
-                        app:nav_adjust_text="true" />
-
-                    <com.weberbox.pifire.ui.views.NavListItem
-                        android:id="@+id/nav_recipes"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:onClick='@{() -> callback.onNavItemClick(Constants.FRAG_RECIPES)}'
-                        app:nav_icon="@drawable/ic_menu_recipes"
-                        app:nav_selected="false"
-                        app:nav_title="@string/nav_recipes"
                         app:nav_adjust_text="true" />
 
                     <View
@@ -124,14 +104,6 @@
                         app:nav_icon="@drawable/ic_menu_changelog"
                         app:nav_selected="false"
                         app:nav_title="@string/nav_changelog" />
-
-                    <com.weberbox.pifire.ui.views.NavListItem
-                        android:id="@+id/nav_feedback"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick='@{() -> callback.onNavFeedback()}'
-                        app:nav_icon="@drawable/ic_menu_feedback"
-                        app:nav_title="@string/feedback" />
 
                 </LinearLayout>
             </ScrollView>

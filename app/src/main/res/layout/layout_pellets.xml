@@ -22,7 +22,7 @@
         android:layout_marginBottom="@dimen/_10sdp" />
 
     <include
-        android:id="@+id/load_out_card_view"
+        android:id="@+id/pellets_current"
         layout="@layout/layout_pellets_current"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:layout_marginBottom="@dimen/_10sdp" />
 
     <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-        android:id="@+id/brands_card_view"
+        android:id="@+id/pellets_brands"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -49,7 +49,7 @@
         app:pellets_header_title="@string/pellets_brands" />
 
     <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-        android:id="@+id/woods_card_view"
+        android:id="@+id/pellets_woods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -67,7 +67,7 @@
         app:pellets_header_title="@string/pellets_woods" />
 
     <com.weberbox.pifire.ui.views.PelletsEditorRecycler
-        android:id="@+id/editor_card_view"
+        android:id="@+id/pellets_editor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -85,7 +85,7 @@
         app:editor_header_title="@string/pellets_editor" />
 
     <com.weberbox.pifire.ui.views.PelletsLogsRecycler
-        android:id="@+id/logs_card_view"
+        android:id="@+id/pellets_logs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"

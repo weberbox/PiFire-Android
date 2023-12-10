@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.interfaces.SmartStartCallback;
 import com.weberbox.pifire.model.local.SmartStartModel;
@@ -26,7 +25,6 @@ import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,38 +73,35 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
         super.onBindViewHolder(holder);
         holder.itemView.setClickable(false);
 
-        if (VersionUtils.isSupported(ServerVersions.V_131)) {
+        List<SmartStartModel> smartStartList = new ArrayList<>();
 
-            List<SmartStartModel> smartStartList = new ArrayList<>();
+        RecyclerView recycler = (RecyclerView) holder.findViewById(R.id.smart_start_recycler);
 
-            RecyclerView recycler = (RecyclerView) holder.findViewById(R.id.smart_start_recycler);
+        List<Integer> rangeList = new Gson().fromJson(
+                Prefs.getString(context.getString(R.string.prefs_smart_start_temp_range)),
+                new TypeToken<List<Integer>>() {
+                }.getType());
 
-            List<Integer> rangeList = new Gson().fromJson(
-                    Prefs.getString(context.getString(R.string.prefs_smart_start_temp_range)),
-                    new TypeToken<List<Integer>>() {
-                    }.getType());
+        List<SSProfile> profileList = new Gson().fromJson(
+                Prefs.getString(context.getString(R.string.prefs_smart_start_profiles)),
+                new TypeToken<List<SSProfile>>() {
+                }.getType());
 
-            List<SSProfile> profileList = new Gson().fromJson(
-                    Prefs.getString(context.getString(R.string.prefs_smart_start_profiles)),
-                    new TypeToken<List<SSProfile>>() {
-                    }.getType());
+        if (rangeList.size() > 0 && profileList.size() > 0) {
 
-            if (rangeList.size() > 0 && profileList.size() > 0) {
+            rangeList.add(rangeList.get(rangeList.size() - 1) + 1);
 
-                rangeList.add(rangeList.get(rangeList.size() - 1) + 1);
-
-                for (int i = 0; i < rangeList.size(); i++) {
-                    smartStartList.add(new SmartStartModel(rangeList.get(i),
-                            profileList.get(i).getStartUpTime(),
-                            profileList.get(i).getAugerOnTime(),
-                            profileList.get(i).getPMode()));
-                }
-
-                adapter = new SmartStartAdapter(smartStartList, units, this);
-
-                recycler.setLayoutManager(new LinearLayoutManager(context));
-                recycler.setAdapter(adapter);
+            for (int i = 0; i < rangeList.size(); i++) {
+                smartStartList.add(new SmartStartModel(rangeList.get(i),
+                        profileList.get(i).getStartUpTime(),
+                        profileList.get(i).getAugerOnTime(),
+                        profileList.get(i).getPMode()));
             }
+
+            adapter = new SmartStartAdapter(smartStartList, units, this);
+
+            recycler.setLayoutManager(new LinearLayoutManager(context));
+            recycler.setAdapter(adapter);
         }
     }
 

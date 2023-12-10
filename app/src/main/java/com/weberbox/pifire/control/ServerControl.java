@@ -3,22 +3,42 @@ package com.weberbox.pifire.control;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.interfaces.SocketCallback;
+import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
 import com.weberbox.pifire.model.remote.ControlDataModel;
-import com.weberbox.pifire.model.remote.ControlDataModel.*;
+import com.weberbox.pifire.model.remote.ControlDataModel.Manual;
+import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.model.remote.PostDataModel;
-import com.weberbox.pifire.model.remote.PostDataModel.*;
+import com.weberbox.pifire.model.remote.PostDataModel.OneSignalDevice;
+import com.weberbox.pifire.model.remote.PostDataModel.PelletsAction;
+import com.weberbox.pifire.model.remote.PostDataModel.TimerAction;
+import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.*;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Apprise;
+import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Ifttt;
+import com.weberbox.pifire.model.remote.SettingsDataModel.InfluxDB;
+import com.weberbox.pifire.model.remote.SettingsDataModel.KeepWarm;
+import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalDeviceInfo;
+import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PWM;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PWMProfile;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PelletLevel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
+import com.weberbox.pifire.model.remote.SettingsDataModel.SSProfile;
+import com.weberbox.pifire.model.remote.SettingsDataModel.SmartStart;
+import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
+import com.weberbox.pifire.model.remote.SettingsDataModel.StartToMode;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.SettingsUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,50 +50,34 @@ public class ServerControl {
 
     // Start Grill
     public static void modeStartGrill(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(ServerConstants.G_MODE_START)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.modeStartGrill(socket);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_START)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Monitor Grill
     public static void modeMonitorGrill(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(ServerConstants.G_MODE_MONITOR)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.modeMonitorGrill(socket);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_MONITOR)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Stop Grill
     public static void modeStopGrill(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(ServerConstants.G_MODE_STOP)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.modeStopGrill(socket);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_STOP)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Shutdown Grill
     public static void modeShutdownGrill(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(ServerConstants.G_MODE_SHUTDOWN)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.modeShutdownGrill(socket);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_SHUTDOWN)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Prime Mode
@@ -89,198 +93,85 @@ public class ServerControl {
 
     // Mode Smoke
     public static void modeSmokeGrill(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(ServerConstants.G_MODE_SMOKE)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.modeSmokeGrill(socket);
-        }
-    }
-
-    // Probe One Enable/Disable
-    public static void probeOneToggle(Socket socket, List<Integer> probesEnabled,
-                                      SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeSettings(new ProbeSettings()
-                            .withProbesEnabled(probesEnabled)));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            boolean enabled = probesEnabled.get(1) == 1;
-            ServerControlDep.probeOneToggle(socket, enabled);
-        }
-    }
-
-    // Probe Two Enable/Disable
-    public static void probeTwoToggle(Socket socket, List<Integer> probesEnabled,
-                                      SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeSettings(new ProbeSettings()
-                            .withProbesEnabled(probesEnabled)));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            boolean enabled = probesEnabled.get(2) == 1;
-            ServerControlDep.probeTwoToggle(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(ServerConstants.G_MODE_SMOKE)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Smoke Plus Enable/Disable
     public static void setSmokePlus(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel().withsPlus(enabled));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setSmokePlus(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel().withsPlus(enabled));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Grill Temp
-    public static void setGrillTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withSetPoints(new SetPoints().withGrill(Integer.valueOf(temp)))
-                    .withUpdated(true)
-                    .withMode(ServerConstants.G_MODE_HOLD));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setGrillTemp(socket, temp);
-        }
+    public static void setGrillHoldTemp(Socket socket, String temp, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withUpdated(true)
+                .withMode(ServerConstants.G_MODE_HOLD)
+                .withPrimarySetPoint(Integer.valueOf(temp)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Temp Notify
-    public static void setProbeNotify(Socket socket, int probe, String temp, boolean holdMode,
-                                      boolean shutdown, boolean keepWarm, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = null;
-            switch (probe) {
-                case Constants.PICKER_TYPE_GRILL:
-                    if (VersionUtils.isSupported(ServerVersions.V_134)) {
-                        json = new Gson().toJson(new ControlDataModel()
-                                .withSetPoints(new SetPoints().withGrillNotify(Integer.valueOf(temp)))
-                                .withNotifyReq(new NotifyReq().withGrill(true))
-                                .withUpdated(holdMode));
-                    } else {
-                        json = new Gson().toJson(new ControlDataModel()
-                                .withSetPoints(new SetPoints().withGrill(Integer.valueOf(temp)))
-                                .withNotifyReq(new NotifyReq().withGrill(true))
-                                .withUpdated(holdMode));
-                    }
-                    break;
-                case Constants.PICKER_TYPE_GRILL_NOTIFY:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withGrillNotify(Integer.valueOf(temp)))
-                            .withNotifyReq(new NotifyReq().withGrill(true)));
-                    break;
-                case Constants.PICKER_TYPE_PROBE_ONE:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withProbe1(Integer.valueOf(temp)))
-                            .withNotifyReq(new NotifyReq().withProbe1(true))
-                            .withNotifyData(new NotifyData().withP1Shutdown(shutdown)
-                                    .withP1KeepWarm(keepWarm)));
-                    break;
-                case Constants.PICKER_TYPE_PROBE_TWO:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withProbe2(Integer.valueOf(temp)))
-                            .withNotifyReq(new NotifyReq().withProbe2(true))
-                            .withNotifyData(new NotifyData().withP2Shutdown(shutdown)
-                                    .withP2KeepWarm(keepWarm)));
-                    break;
+    public static void setProbeNotify(Socket socket, DashProbe probe,
+                                      ArrayList<NotifyData> notifyData, String temp,
+                                      boolean holdMode, SocketCallback callback) {
+        for (NotifyData notify : notifyData) {
+            if (notify.getLabel().equals(probe.getLabel())) {
+                notify.setTarget(Integer.valueOf(temp));
+                notify.setKeepWarm(probe.getKeepWarm());
+                notify.setShutdown(probe.getShutdown());
+                notify.setReq(true);
             }
-            if (json != null) {
-                controlPostEmit(socket, json, callback);
-            }
-        } else {
-            ServerControlDep.setProbeNotify(socket, probe, temp, shutdown);
         }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withNotifyData(notifyData)
+                .withUpdated(holdMode));
+        controlPostEmit(socket, json, callback);
     }
 
     // Clear Temp Notify
-    public static void clearProbeNotify(Socket socket, int probe, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = null;
-            switch (probe) {
-                case Constants.PICKER_TYPE_GRILL:
-                case Constants.PICKER_TYPE_GRILL_NOTIFY:
-                    if (VersionUtils.isSupported(ServerVersions.V_134)) {
-                        json = new Gson().toJson(new ControlDataModel()
-                                .withSetPoints(new SetPoints().withGrillNotify(0))
-                                .withNotifyReq(new NotifyReq().withGrill(false)));
-                    } else {
-                        json = new Gson().toJson(new ControlDataModel()
-                                .withNotifyReq(new NotifyReq().withGrill(false)));
-                    }
-                    break;
-                case Constants.PICKER_TYPE_PROBE_ONE:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withProbe1(0))
-                            .withNotifyReq(new NotifyReq().withProbe1(false))
-                            .withNotifyData(new NotifyData().withP1Shutdown(false)
-                                    .withP1KeepWarm(false)));
-                    break;
-                case Constants.PICKER_TYPE_PROBE_TWO:
-                    json = new Gson().toJson(new ControlDataModel()
-                            .withSetPoints(new SetPoints().withProbe2(0))
-                            .withNotifyReq(new NotifyReq().withProbe2(false))
-                            .withNotifyData(new NotifyData().withP2Shutdown(false)
-                                    .withP2KeepWarm(false)));
-                    break;
+    public static void clearProbeNotify(Socket socket, DashProbe probe,
+                                        ArrayList<NotifyData> notifyData, SocketCallback callback) {
+        for (NotifyData notify : notifyData) {
+            if (notify.getLabel().equals(probe.getLabel())) {
+                notify.setTarget(0);
+                notify.setKeepWarm(false);
+                notify.setShutdown(false);
+                notify.setReq(false);
             }
-            if (json != null) {
-                controlPostEmit(socket, json, callback);
-            }
-        } else {
-            ServerControlDep.clearProbeNotify(socket, probe);
         }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withNotifyData(notifyData));
+        controlPostEmit(socket, json, callback);
     }
 
     // Timer Start/Stop
     public static void sendTimerAction(Socket socket, String action, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            timerPostEmit(socket, action, null, callback);
-        } else {
-            ServerControlDep.setTimerAction(socket, action);
-        }
+        timerPostEmit(socket, action, null, callback);
     }
 
     // Timer Set Time
     public static void sendTimerTime(Socket socket, String hours, String minutes, boolean shutdown,
                                      boolean keepWarm, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withTimerAction(new TimerAction()
-                            .withHours(Integer.parseInt(hours))
-                            .withMinutes(Integer.parseInt(minutes))
-                            .withShutdown(shutdown)
-                            .withKeepWarm(keepWarm)));
-            timerPostEmit(socket, ServerConstants.PT_TIMER_START, json, callback);
-        } else {
-            ServerControlDep.setTimerTime(socket, hours, minutes, shutdown);
-        }
-    }
-
-    // History Refresh
-    public static void sendHistoryDelete(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_CLEAR_HISTORY, callback);
-        } else {
-            ServerControlDep.setHistoryDelete(socket);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withTimerAction(new TimerAction()
+                        .withHours(Integer.parseInt(hours))
+                        .withMinutes(Integer.parseInt(minutes))
+                        .withShutdown(shutdown)
+                        .withKeepWarm(keepWarm)));
+        timerPostEmit(socket, ServerConstants.PT_TIMER_START, json, callback);
     }
 
     // Shutdown Timer
     public static void sendShutdownTime(Socket socket, String shutDownTime,
                                         SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withGlobals(new Globals().withShutdownTimer(Integer.parseInt(shutDownTime))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setShutdownTime(socket, shutDownTime);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withShutdownTimer(Integer.parseInt(shutDownTime))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Startup Timer
@@ -288,6 +179,15 @@ public class ServerControl {
                                        SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withGlobals(new Globals().withStartupTimer(Integer.parseInt(startUpTime))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Startup Exit Temp
+    public static void setStartExitTemp(Socket socket, String exitTemp,
+                                       SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withStartExitTemp(Integer.parseInt(exitTemp))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -309,242 +209,120 @@ public class ServerControl {
         settingsPostEmit(socket, json, callback);
     }
 
-    // Set Smart Start Items
+    // Smart Start Exit Temp
+    public static void setSmartStartExitTemp(Socket socket, String temp,
+                                            SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmartStart(new SmartStart().withExitTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Smart Start Table
     public static void setSmartStartTable(Socket socket, List<Integer> tempRange,
                                           List<SSProfile> profiles, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withSmartStart(new SmartStart().withTempRangeList(tempRange).withProfiles(profiles)));
+                .withSmartStart(new SmartStart().withTempRangeList(tempRange)
+                        .withProfiles(profiles)));
         settingsPostEmit(socket, json, callback);
     }
 
-    // Grill Probe 0 Type
-    public static void setGrillProbe0Type(Socket socket, String grillProbeType,
-                                          SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withGrill0type(grillProbeType)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setGrillProbeType(socket, grillProbeType);
-        }
-    }
-
-    // (Four Probes) Grill Probe
-    public static void setGrillProbe(Socket socket, List<Integer> probesEnabled, String grillProbe,
-                                     SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withGrillProbeSettings(new GrillProbeSettings()
-                            .withGrillProbe(grillProbe)
-                            .withGrillProbeEnabled(probesEnabled)));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setGrillProbe(socket, grillProbe);
-        }
-    }
-
-    // (Four Probes) Grill Probe 1 Type
-    public static void setGrillProbe1Type(Socket socket, String grillProbe1Type,
-                                          SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withGrill1type(grillProbe1Type)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setGrillProbe1Type(socket, grillProbe1Type);
-        }
-    }
-
-    // (Four Probes) Grill Probe 2 Type
-    public static void setGrillProbe2Type(Socket socket, String grillProbe2Type,
-                                          SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withGrill2type(grillProbe2Type)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setGrillProbe2Type(socket, grillProbe2Type);
-        }
-    }
-
-    // Probe One Type
-    public static void setProbe1Type(Socket socket, String probe1Type, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withProbe1type(probe1Type)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setProbe1Type(socket, probe1Type);
-        }
-    }
-
-    // Probe Two Type
-    public static void setProbe2Type(Socket socket, String probe2Type, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withProbeTypes(new ProbeTypes().withProbe2type(probe2Type)));
-            String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
-            settingsPostEmit(socket, json, callback);
-            controlPostEmit(socket, json_c, callback);
-        } else {
-            ServerControlDep.setProbe2Type(socket, probe2Type);
-        }
-    }
-
-    // Grill Probe Title
-    public static void setGrillProbeTitle(Socket socket, String title, SocketCallback callback) {
-        String json = new Gson().toJson(new ControlDataModel()
-                .withProbeTitles(new ProbeTitles().grillTitle(title)));
-        controlPostEmit(socket, json, callback);
-    }
-
-    // Probe One Title
-    public static void setProbeOneTitle(Socket socket, String title, SocketCallback callback) {
-        String json = new Gson().toJson(new ControlDataModel()
-                .withProbeTitles(new ProbeTitles().probeOneTitle(title)));
-        controlPostEmit(socket, json, callback);
-    }
-
-    // Probe Two Title
-    public static void setProbeTwoTitle(Socket socket, String title, SocketCallback callback) {
-        String json = new Gson().toJson(new ControlDataModel()
-                .withProbeTitles(new ProbeTitles().probeTwoTitle(title)));
-        controlPostEmit(socket, json, callback);
-    }
-
-    // ADC Probe Assignments
-    public static void setADCProbeSources(Socket socket, List<String> probeSources,
+    // Set Updated Probe Map
+    public static void sendUpdatedProbeMap(Socket socket, ProbeMap probeMap,
                                           SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withProbeSettings(new ProbeSettings().withProbeSources(probeSources)));
-        String json_c = new Gson().toJson(new ControlDataModel().withProbeProfileUpdate(true));
+                .withProbeSettings(new SettingsDataModel.ProbeSettings().withProbeMap(probeMap)));
         settingsPostEmit(socket, json, callback);
-        controlPostEmit(socket, json_c, callback);
     }
 
     // Enable IFTTT
     public static void setIFTTTEnabled(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withIfttt(new Ifttt().withEnabled(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setIFTTTEnabled(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                        .withIfttt(new Ifttt().withEnabled(enabled))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set IFTTT APIKey
     public static void setIFTTTAPIKey(Socket socket, String apiKey, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withIfttt(new Ifttt().withAPIKey(apiKey)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setIFTTTAPIKey(socket, apiKey);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withIfttt(new Ifttt().withAPIKey(apiKey))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Enable PushOver
     public static void setPushOverEnabled(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushover(new Pushover().withEnabled(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushOverEnabled(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushover(new Pushover().withEnabled(enabled))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set PushOver APIKey
     public static void setPushOverAPIKey(Socket socket, String apiKey, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushover(new Pushover().withAPIKey(apiKey)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushOverAPIKey(socket, apiKey);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushover(new Pushover().withAPIKey(apiKey))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set PushOver UserKeys
     public static void setPushOverUserKeys(Socket socket, String userKeys,
                                            SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushover(new Pushover().withUserKeys(userKeys)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushOverUserKeys(socket, userKeys);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushover(new Pushover().withUserKeys(userKeys))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set PushOver PublicURL
     public static void setPushOverURL(Socket socket, String url, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushover(new Pushover().withPublicURL(url)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushOverURL(socket, url);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushover(new Pushover().withPublicURL(url))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Enable PushBullet
     public static void setPushBulletEnabled(Socket socket, boolean enabled,
                                             SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushBullet(new PushBullet().withEnabled(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushBulletEnabled(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                        .withPushBullet(new PushBullet().withEnabled(enabled))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set PushBullet APIKey
     public static void setPushBulletAPIKey(Socket socket, String apiKey, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushBullet(new PushBullet().withAPIKey(apiKey)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushBulletAPIKey(socket, apiKey);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushBullet(new PushBullet().withAPIKey(apiKey))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set PushBullet URL
     public static void setPushBulletURL(Socket socket, String url, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPushBullet(new PushBullet().withPublicURL(url)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPushBulletURL(socket, url);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withNotifyServices(new NotifyServices()
+                    .withPushBullet(new PushBullet().withPublicURL(url))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Apprise Enabled
     public static void setAppriseEnabled(Socket socket, boolean enabled,
                                          SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withApprise(new Apprise().withEnabled(enabled)));
+                .withNotifyServices(new NotifyServices()
+                    .withApprise(new Apprise().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -553,7 +331,8 @@ public class ServerControl {
     public static void setAppriseLocations(Socket socket, List<String> locations,
                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withApprise(new Apprise().withLocations(locations)));
+                .withNotifyServices(new NotifyServices()
+                    .withApprise(new Apprise().withLocations(locations))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -562,7 +341,8 @@ public class ServerControl {
     public static void setOneSignalEnabled(Socket socket, boolean enabled,
                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withOneSignal(new OneSignalPush().withEnabled(enabled)));
+                .withNotifyServices(new NotifyServices()
+                        .withOneSignal(new OneSignalPush().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -570,7 +350,8 @@ public class ServerControl {
     // Set OneSignal App ID
     public static void setOneSignalAppID(Socket socket, String appID, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withOneSignal(new OneSignalPush().withAppId(appID)));
+                .withNotifyServices(new NotifyServices()
+                    .withOneSignal(new OneSignalPush().withAppId(appID))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -579,7 +360,9 @@ public class ServerControl {
     public static void registerOneSignalDevice(Context context, Socket socket,
                                                Map<String, OneSignalDeviceInfo> device) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withOneSignal(new SettingsDataModel.OneSignalPush().withOneSignalDevices(device)));
+                .withNotifyServices(new NotifyServices()
+                    .withOneSignal(new SettingsDataModel.OneSignalPush()
+                            .withOneSignalDevices(device))));
         socket.emit(ServerConstants.PE_POST_APP_DATA, ServerConstants.PA_UPDATE_ACTION,
                 ServerConstants.PT_SETTINGS, json, (Ack) args -> {
                     if (args.length > 0 && args[0] != null) {
@@ -607,7 +390,8 @@ public class ServerControl {
     // Set InfluxDB Enabled
     public static void setInfluxDBEnabled(Socket socket, boolean enabled, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withInfluxdb(new InfluxDB().withEnabled(enabled)));
+                .withNotifyServices(new NotifyServices()
+                    .withInfluxdb(new InfluxDB().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -615,7 +399,8 @@ public class ServerControl {
     // Set InfluxDB URL
     public static void setInfluxDBUrl(Socket socket, String url, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withInfluxdb(new InfluxDB().withUrl(url)));
+                .withNotifyServices(new NotifyServices()
+                    .withInfluxdb(new InfluxDB().withUrl(url))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -623,7 +408,8 @@ public class ServerControl {
     // Set InfluxDB Token
     public static void setInfluxDBToken(Socket socket, String token, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withInfluxdb(new InfluxDB().withToken(token)));
+                .withNotifyServices(new NotifyServices()
+                        .withInfluxdb(new InfluxDB().withToken(token))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -631,7 +417,8 @@ public class ServerControl {
     // Set InfluxDB Org
     public static void setInfluxDBOrg(Socket socket, String org, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withInfluxdb(new InfluxDB().withOrg(org)));
+                .withNotifyServices(new NotifyServices()
+                    .withInfluxdb(new InfluxDB().withOrg(org))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -639,148 +426,81 @@ public class ServerControl {
     // Set InfluxDB Bucket
     public static void setInfluxDBBucket(Socket socket, String bucket, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withInfluxdb(new InfluxDB().withBucket(bucket)));
+                .withNotifyServices(new NotifyServices()
+                    .withInfluxdb(new InfluxDB().withBucket(bucket))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
 
-    // Set History Auto Refresh
-    public static void setHistoryRefresh(Socket socket, boolean refresh, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withHistoryPage(new HistoryPage().withAutoRefresh(refresh ? "on" : "off")));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setHistoryRefresh(socket, refresh);
-        }
-    }
-
-    // Set History Clear on Start
-    public static void sendHistoryClear(Socket socket, boolean clear, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withHistoryPage(new HistoryPage().withClearHistoryOnStart(clear)));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setHistoryClear(socket, clear);
-        }
-    }
-
-    // Set History to Display
-    public static void setHistoryMins(Socket socket, String mins, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withHistoryPage(new HistoryPage().withMinutes(Integer.parseInt(mins))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setHistoryMins(socket, mins);
-        }
-    }
-
-    // Set History Points
-    public static void setHistoryPoints(Socket socket, String points, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withHistoryPage(new HistoryPage().withDataPoints(Integer.parseInt(points))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setHistoryPoints(socket, points);
-        }
-    }
-
     // Set Min Start Temp
     public static void setMinStartTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSafety(new SettingsDataModel.Safety().
-                            withMinStartupTemp(Integer.parseInt(temp))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setMinStartTemp(socket, temp);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSafety(new SettingsDataModel.Safety().
+                        withMinStartupTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Max Start Temp
     public static void setMaxStartTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSafety(new SettingsDataModel.Safety().
-                            withMaxStartupTemp(Integer.parseInt(temp))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setMaxStartTemp(socket, temp);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSafety(new SettingsDataModel.Safety().
+                        withMaxStartupTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Reignite Retries
     public static void setReigniteRetries(Socket socket, String retries, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSafety(new SettingsDataModel.Safety().
-                            withReigniteRetries(Integer.parseInt(retries))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setReigniteRetries(socket, retries);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSafety(new SettingsDataModel.Safety().
+                        withReigniteRetries(Integer.parseInt(retries))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Max Temp
     public static void setMaxGrillTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSafety(new SettingsDataModel.Safety().
-                            withMaxTemp(Integer.parseInt(temp))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setMaxGrillTemp(socket, temp);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSafety(new SettingsDataModel.Safety().
+                        withMaxTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Grill Name
     public static void setGrillName(Socket socket, String name, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withGlobals(new Globals().withGrillName(name)));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setGrillName(socket, name);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withGrillName(name)));
+        settingsPostEmit(socket, json, callback);
     }
 
-    // Set Auger Time
-    public static void setAugerTime(Socket socket, String time, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withSmokeCycleTime(Integer.parseInt(time))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setAugerTime(socket, time);
-        }
+    // Set Auger On Time
+    public static void setAugerOnTime(Socket socket, String time, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withSmokeOnCycleTime(Integer.parseInt(time))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Set Auger Off Time
+    public static void setAugerOffTime(Socket socket, String time, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withSmokeOffCycleTime(Integer.parseInt(time))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set P-Mode
     public static void setPMode(Socket socket, String mode, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withPMode(Integer.parseInt(mode))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPMode(socket, mode);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withPMode(Integer.parseInt(mode))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Smoke Plus Default
     public static void setSmokePlusDefault(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSmokePlus(new SmokePlus().withEnabled(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setSmokePlusDefault(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmokePlus(new SmokePlus().withEnabled(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Smoke Fan Ramp
@@ -817,115 +537,47 @@ public class ServerControl {
 
     // Set Smoke Fan Cycle Time
     public static void setSmokeFan(Socket socket, String time, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSmokePlus(new SmokePlus().withCycle(Integer.parseInt(time))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setSmokeFan(socket, time);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmokePlus(new SmokePlus().withCycle(Integer.parseInt(time))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Smoke Min Temp
     public static void setSmokeMinTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSmokePlus(new SmokePlus().withMinTemp(Integer.parseInt(temp))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setSmokeMinTemp(socket, temp);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmokePlus(new SmokePlus().withMinTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Smoke Max Temp
     public static void setSmokeMaxTemp(Socket socket, String temp, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withSmokePlus(new SmokePlus().withMaxTemp(Integer.parseInt(temp))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setSmokeMaxTemp(socket, temp);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withSmokePlus(new SmokePlus().withMaxTemp(Integer.parseInt(temp))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
-    // Set PID Cycle Time
-    public static void setPIDTime(Socket socket, String time, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withSmokeCycleTime(Integer.parseInt(time))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDTime(socket, time);
-        }
+    // Set Controller Cycle Time
+    public static void setControllerTime(Socket socket, String time, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withHoldCycleTime(Integer.parseInt(time))));
+        settingsPostEmit(socket, json, callback);
     }
 
-    // Set PID PB
-    public static void setPIDPB(Socket socket, String pb, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withPb(Float.parseFloat(pb))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDPB(socket, pb);
-        }
+    // Set Controller U Min
+    public static void setControlleruMin(Socket socket, String uMin, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withuMin(Float.parseFloat(uMin))));
+        settingsPostEmit(socket, json, callback);
     }
 
-    // Set PID Ti
-    public static void setPIDTi(Socket socket, String ti, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withTi(Float.parseFloat(ti))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDTi(socket, ti);
-        }
-    }
-
-    // Set PID Td
-    public static void setPIDTd(Socket socket, String td, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withTd(Float.parseFloat(td))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDTd(socket, td);
-        }
-    }
-
-    // Set PID U Min
-    public static void setPIDuMin(Socket socket, String uMin, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withuMin(Float.parseFloat(uMin))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDuMin(socket, uMin);
-        }
-    }
-
-    // Set PID U Max
-    public static void setPIDuMax(Socket socket, String uMax, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withuMax(Float.parseFloat(uMax))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDuMax(socket, uMax);
-        }
-    }
-
-    // Set PID Center Ratio
-    public static void setPIDCenter(Socket socket, String center, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withCycleData(new CycleData().withCenter(Float.parseFloat(center))));
-            settingsPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setPIDCenter(socket, center);
-        }
+    // Set Controller U Max
+    public static void setControlleruMax(Socket socket, String uMax, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withCycleData(new CycleData().withuMax(Float.parseFloat(uMax))));
+        settingsPostEmit(socket, json, callback);
     }
 
     // Set Lid Open Detect
@@ -1034,33 +686,25 @@ public class ServerControl {
     // Set Start To Mode Temp
     public static void setStartToModeTemp(Socket socket, String temp, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withStartToMode(new StartToMode().withGrillOneSetPoint(Integer.parseInt(temp))));
+                .withStartToMode(new StartToMode().withPrimarySetPoint(Integer.parseInt(temp))));
         settingsPostEmit(socket, json, callback);
     }
 
     // Set Pellets Warning Enabled
     public static void setPelletWarningEnabled(Socket socket, boolean enabled,
                                                SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPelletLevel(new PelletLevel().withWarningEnabled(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPelletWarningEnabled(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withPelletLevel(new PelletLevel().withWarningEnabled(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Pellets Warning Level
     public static void setPelletWarningLevel(Socket socket, String level, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPelletLevel(new PelletLevel().withWarningLevel(Integer.parseInt(level))));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setPelletWarningLevel(socket, level);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withPelletLevel(new PelletLevel().withWarningLevel(Integer.parseInt(level))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Set Pellets Warning Time
@@ -1073,32 +717,20 @@ public class ServerControl {
 
     // Set Pellets Full
     public static void setPelletsFull(Socket socket, String full, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPelletLevel(new PelletLevel().withFull(Integer.parseInt(full))));
-            settingsPostEmit(socket, json, callback);
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                String json_c = new Gson().toJson(new ControlDataModel().withDistanceUpdate(true));
-                controlPostEmit(socket, json_c, callback);
-            }
-        } else {
-            ServerControlDep.setPelletsFull(socket, full);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withPelletLevel(new PelletLevel().withFull(Integer.parseInt(full))));
+        settingsPostEmit(socket, json, callback);
+        String json_c = new Gson().toJson(new ControlDataModel().withDistanceUpdate(true));
+        controlPostEmit(socket, json_c, callback);
     }
 
     // Set Pellets Empty
     public static void setPelletsEmpty(Socket socket, String empty, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withPelletLevel(new PelletLevel().withEmpty(Integer.parseInt(empty))));
-            settingsPostEmit(socket, json, callback);
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                String json_c = new Gson().toJson(new ControlDataModel().withDistanceUpdate(true));
-                controlPostEmit(socket, json_c, callback);
-            }
-        } else {
-            ServerControlDep.setPelletsEmpty(socket, empty);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withPelletLevel(new PelletLevel().withEmpty(Integer.parseInt(empty))));
+        settingsPostEmit(socket, json, callback);
+        String json_c = new Gson().toJson(new ControlDataModel().withDistanceUpdate(true));
+        controlPostEmit(socket, json_c, callback);
     }
 
     // Set Pellets Auger Rate
@@ -1109,61 +741,54 @@ public class ServerControl {
         controlSettingsUpdateEmit(socket, callback);
     }
 
+    // Set Pellets Prime Ignition
+    public static void setPelletPrimeIgnition(Socket socket, boolean enabled,
+                                               SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withPrimeIgnition(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
     // Set Debug Mode
     public static void setDebugMode(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new SettingsDataModel()
-                    .withGlobals(new Globals().withDebugMode(enabled)));
-            settingsPostEmit(socket, json, callback);
-            controlSettingsUpdateEmit(socket, callback);
-        } else {
-            ServerControlDep.setDebugMode(socket, enabled);
-        }
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withDebugMode(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Set Boot To Monitor
+    public static void setBootToMonitor(Socket socket, boolean enabled, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withGlobals(new Globals().withBootToMonitor(enabled)));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
     }
 
     // Delete History
     public static void sendDeleteHistory(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_CLEAR_HISTORY, callback);
-        } else {
-            ServerControlDep.setDeleteHistory(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_CLEAR_HISTORY, callback);
     }
 
     // Delete Events
     public static void sendDeleteEvents(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_CLEAR_EVENTS, callback);
-        } else {
-            ServerControlDep.setDeleteEvents(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_CLEAR_EVENTS, callback);
     }
 
     // Delete Pellets
     public static void sendDeletePellets(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_CLEAR_PELLETS, callback);
-        } else {
-            ServerControlDep.setDeletePellets(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_CLEAR_PELLETS, callback);
     }
 
     // Delete Pellets Log
     public static void sendDeletePelletsLog(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_CLEAR_PELLETS_LOG, callback);
-        } else {
-            ServerControlDep.setDeletePelletsLog(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_CLEAR_PELLETS_LOG, callback);
     }
 
     // Factory Reset
     public static void sendFactoryReset(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_FACTORY_DEFAULTS, callback);
-        } else {
-            ServerControlDep.setFactoryReset(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_FACTORY_DEFAULTS, callback);
     }
 
     // Restart System
@@ -1173,222 +798,150 @@ public class ServerControl {
 
     // Reboot System
     public static void sendRebootSystem(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_REBOOT, callback);
-        } else {
-            ServerControlDep.setRebootSystem(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_REBOOT, callback);
     }
 
     // Shutdown System
     public static void sendShutdownSystem(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            adminPostEmit(socket, ServerConstants.PT_SHUTDOWN, callback);
-        } else {
-            ServerControlDep.setShutdownSystem(socket);
-        }
+        adminPostEmit(socket, ServerConstants.PT_SHUTDOWN, callback);
     }
 
     // Delete Pellet Profile
     public static void sendDeletePelletProfile(Socket socket, String pelletId,
                                                SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withProfile(pelletId)));
-            pelletsPostEmit(socket, ServerConstants.PT_DELETE_PROFILE, json, callback);
-        } else {
-            ServerControlDep.setDeletePelletProfile(socket, pelletId);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withProfile(pelletId)));
+        pelletsPostEmit(socket, ServerConstants.PT_DELETE_PROFILE, json, callback);
     }
 
     // Add Pellet Profile
     public static void sendAddPelletProfile(Socket socket, PelletProfileModel profile,
                                             SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction()
-                            .withProfile(profile.getId())
-                            .withAddAndLoad(false)
-                            .withBrandName(profile.getBrand())
-                            .withWoodType(profile.getWood())
-                            .withRating(profile.getRating())
-                            .withComments(profile.getComments())));
-            pelletsPostEmit(socket, ServerConstants.PT_ADD_PROFILE, json, callback);
-        } else {
-            ServerControlDep.setAddPelletProfile(socket, profile);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction()
+                        .withProfile(profile.getId())
+                        .withAddAndLoad(false)
+                        .withBrandName(profile.getBrand())
+                        .withWoodType(profile.getWood())
+                        .withRating(profile.getRating())
+                        .withComments(profile.getComments())));
+        pelletsPostEmit(socket, ServerConstants.PT_ADD_PROFILE, json, callback);
     }
 
     // Add Pellet Profile Load
     public static void sendAddPelletProfileLoad(Socket socket, PelletProfileModel profile,
                                                 SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction()
-                            .withProfile(profile.getId())
-                            .withAddAndLoad(true)
-                            .withBrandName(profile.getBrand())
-                            .withWoodType(profile.getWood())
-                            .withRating(profile.getRating())
-                            .withComments(profile.getComments())));
-            pelletsPostEmit(socket, ServerConstants.PT_ADD_PROFILE, json, callback);
-        } else {
-            ServerControlDep.setAddPelletProfileLoad(socket, profile);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction()
+                        .withProfile(profile.getId())
+                        .withAddAndLoad(true)
+                        .withBrandName(profile.getBrand())
+                        .withWoodType(profile.getWood())
+                        .withRating(profile.getRating())
+                        .withComments(profile.getComments())));
+        pelletsPostEmit(socket, ServerConstants.PT_ADD_PROFILE, json, callback);
     }
 
     // Edit Pellet Profile
     public static void sendEditPelletProfile(Socket socket, PelletProfileModel profile,
                                              SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction()
-                            .withProfile(profile.getId())
-                            .withBrandName(profile.getBrand())
-                            .withWoodType(profile.getWood())
-                            .withRating(profile.getRating())
-                            .withComments(profile.getComments())));
-            pelletsPostEmit(socket, ServerConstants.PT_EDIT_PROFILE, json, callback);
-        } else {
-            ServerControlDep.setEditPelletProfile(socket, profile);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction()
+                        .withProfile(profile.getId())
+                        .withBrandName(profile.getBrand())
+                        .withWoodType(profile.getWood())
+                        .withRating(profile.getRating())
+                        .withComments(profile.getComments())));
+        pelletsPostEmit(socket, ServerConstants.PT_EDIT_PROFILE, json, callback);
     }
 
     // Load Pellet Profile
     public static void sendLoadPelletProfile(Socket socket, String pelletId,
                                              SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withProfile(pelletId)));
-            pelletsPostEmit(socket, ServerConstants.PT_LOAD_PROFILE, json, callback);
-        } else {
-            ServerControlDep.setLoadPelletProfile(socket, pelletId);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withProfile(pelletId)));
+        pelletsPostEmit(socket, ServerConstants.PT_LOAD_PROFILE, json, callback);
     }
 
     // Delete Pellet Wood
     public static void sendDeletePelletWood(Socket socket, String wood, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withDeleteWood(wood)));
-            pelletsPostEmit(socket, ServerConstants.PT_EDIT_WOODS, json, callback);
-        } else {
-            ServerControlDep.setDeletePelletWood(socket, wood);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withDeleteWood(wood)));
+        pelletsPostEmit(socket, ServerConstants.PT_EDIT_WOODS, json, callback);
     }
 
     // Add Pellet Wood
     public static void sendAddPelletWood(Socket socket, String wood, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withNewWood(wood)));
-            pelletsPostEmit(socket, ServerConstants.PT_EDIT_WOODS, json, callback);
-        } else {
-            ServerControlDep.setAddPelletWood(socket, wood);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withNewWood(wood)));
+        pelletsPostEmit(socket, ServerConstants.PT_EDIT_WOODS, json, callback);
     }
 
     // Delete Pellet Brands
     public static void sendDeletePelletBrand(Socket socket, String brand, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withDeleteBrand(brand)));
-            pelletsPostEmit(socket, ServerConstants.PT_EDIT_BRANDS, json, callback);
-        } else {
-            ServerControlDep.setDeletePelletBrand(socket, brand);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withDeleteBrand(brand)));
+        pelletsPostEmit(socket, ServerConstants.PT_EDIT_BRANDS, json, callback);
     }
 
     // Add Pellet Brands
     public static void sendAddPelletBrand(Socket socket, String brand, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withNewBrand(brand)));
-            pelletsPostEmit(socket, ServerConstants.PT_EDIT_BRANDS, json, callback);
-        } else {
-            ServerControlDep.setAddPelletBrand(socket, brand);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withNewBrand(brand)));
+        pelletsPostEmit(socket, ServerConstants.PT_EDIT_BRANDS, json, callback);
     }
 
     // Delete Pellet Log
     public static void sendDeletePelletLog(Socket socket, String log, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new PostDataModel()
-                    .withPelletsAction(new PelletsAction().withLogItem(log)));
-            pelletsPostEmit(socket, ServerConstants.PT_DELETE_LOG, json, callback);
-        } else {
-            ServerControlDep.setDeletePelletLog(socket, log);
-        }
+        String json = new Gson().toJson(new PostDataModel()
+                .withPelletsAction(new PelletsAction().withLogItem(log)));
+        pelletsPostEmit(socket, ServerConstants.PT_DELETE_LOG, json, callback);
     }
 
     // Check Hopper Level
     public static void sendCheckHopperLevel(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            pelletsPostEmit(socket, ServerConstants.PT_HOPPER_CHECK, null, callback);
-        } else {
-            ServerControlDep.setCheckHopperLevel(socket);
-        }
+        pelletsPostEmit(socket, ServerConstants.PT_HOPPER_CHECK, null, callback);
     }
 
     // Set Manual Mode
     public static void setManualMode(Socket socket, boolean enabled, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withMode(enabled ? ServerConstants.G_MODE_MANUAL :
-                            ServerConstants.G_MODE_STOP)
-                    .withUpdated(true));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setManualMode(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withMode(enabled ? ServerConstants.G_MODE_MANUAL :
+                        ServerConstants.G_MODE_STOP)
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Manual Fan Output
     public static void setManualFanOutput(Socket socket, boolean enabled,
                                           SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withManual(new Manual().withChange(true).withFan(enabled)));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setManualFanOutput(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withManual(new Manual().withChange(true).withFan(enabled)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Manual Auger Output
     public static void setManualAugerOutput(Socket socket, boolean enabled,
                                             SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withManual(new Manual().withChange(true).withAuger(enabled)));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setManualAugerOutput(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withManual(new Manual().withChange(true).withAuger(enabled)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Manual Igniter Output
     public static void setManualIgniterOutput(Socket socket, boolean enabled,
                                               SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withManual(new Manual().withChange(true).withIgniter(enabled)));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setManualIgniterOutput(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withManual(new Manual().withChange(true).withIgniter(enabled)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Manual Power Output
     public static void setManualPowerOutput(Socket socket, boolean enabled,
                                             SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            String json = new Gson().toJson(new ControlDataModel()
-                    .withManual(new Manual().withChange(true).withPower(enabled)));
-            controlPostEmit(socket, json, callback);
-        } else {
-            ServerControlDep.setManualPowerOutput(socket, enabled);
-        }
+        String json = new Gson().toJson(new ControlDataModel()
+                .withManual(new Manual().withChange(true).withPower(enabled)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Set Manual PWM Output
@@ -1401,17 +954,13 @@ public class ServerControl {
 
     // Grill Temp Units
     public static void setTempUnits(Socket socket, String units, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.PE_POST_APP_DATA, ServerConstants.PA_UNITS_ACTION,
-                    units.equals("F") ? ServerConstants.PT_UNITS_F : ServerConstants.PT_UNITS_C,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            ServerControlDep.setTempUnits(socket, units);
-        }
+        socket.emit(ServerConstants.PE_POST_APP_DATA, ServerConstants.PA_UNITS_ACTION,
+                units.equals("F") ? ServerConstants.PT_UNITS_F : ServerConstants.PT_UNITS_C,
+                (Ack) args -> {
+                    if (args.length > 0 && args[0] != null && callback != null) {
+                        callback.onResponse(args[0].toString());
+                    }
+                });
     }
 
     private static void controlPostEmit(Socket socket, String json, SocketCallback callback) {
@@ -1475,173 +1024,48 @@ public class ServerControl {
     }
 
     public static void pelletsGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_PELLETS_DATA,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_PELLET_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
+        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_PELLETS_DATA,
+                (Ack) args -> {
+                    if (args.length > 0 && args[0] != null && callback != null) {
+                        callback.onResponse(args[0].toString());
+                    }
+                });
     }
 
     public static void infoGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_INFO_DATA,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_INFO_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
+        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_INFO_DATA,
+                (Ack) args -> {
+                    if (args.length > 0 && args[0] != null && callback != null) {
+                        callback.onResponse(args[0].toString());
+                    }
+                });
     }
 
     public static void eventsGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_EVENTS_DATA,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_EVENT_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
-    }
-
-    public static void historyGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_HISTORY_DATA,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_HISTORY_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
+        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_EVENTS_DATA,
+                (Ack) args -> {
+                    if (args.length > 0 && args[0] != null && callback != null) {
+                        callback.onResponse(args[0].toString());
+                    }
+                });
     }
 
     public static void manualGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_MANUAL_DATA,
-                    (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_MANUAL_DATA, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
-    }
-
-    public static void backupListGetEmit(Socket socket, String type, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_BACKUP_LIST,
-                    type, (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_BACKUP_LIST, type, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
-    }
-
-    public static void backupDataGetEmit(Socket socket, String type, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_BACKUP_DATA,
-                    type, (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.REQUEST_BACKUP_DATA, type, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
-    }
-
-    public static void backupRestoreRemoteEmit(Socket socket, String type, String fileName,
-                                               SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.PE_POST_RESTORE_DATA, type, fileName, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        } else {
-            socket.emit(ServerConstants.UPDATE_RESTORE_DATA, type, fileName, (Ack) args -> {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    callback.onResponse(args[0].toString());
-                }
-            });
-        }
-    }
-
-    public static void backupRestoreLocalEmit(Socket socket, String type, String jsonData,
-                                              SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            socket.emit(ServerConstants.PE_POST_RESTORE_DATA, type, "none",
-                    jsonData, (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        } else {
-            socket.emit(ServerConstants.UPDATE_RESTORE_DATA, type, "none",
-                    jsonData, (Ack) args -> {
-                        if (args.length > 0 && args[0] != null && callback != null) {
-                            callback.onResponse(args[0].toString());
-                        }
-                    });
-        }
+        socket.emit(ServerConstants.GE_GET_APP_DATA, ServerConstants.GA_MANUAL_DATA,
+                (Ack) args -> {
+                    if (args.length > 0 && args[0] != null && callback != null) {
+                        callback.onResponse(args[0].toString());
+                    }
+                });
     }
 
     public static void settingsGetEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            settingsEmit(socket, callback);
-        } else {
-            settingsEmitDep(socket, callback);
-        }
+        settingsEmit(socket, callback);
     }
 
     public static void controlSettingsUpdateEmit(Socket socket, SocketCallback callback) {
-        if (VersionUtils.isSupported(ServerVersions.V_135)) {
-            String json_c = new Gson().toJson(new ControlDataModel().withSettingsUpdate(true));
-            controlPostEmit(socket, json_c, callback);
-        }
+        String json_c = new Gson().toJson(new ControlDataModel().withSettingsUpdate(true));
+        controlPostEmit(socket, json_c, callback);
     }
 
     private static void settingsEmit(Socket socket, SocketCallback callback) {
@@ -1650,30 +1074,10 @@ public class ServerControl {
                     @Override
                     public void call(Object... args) {
                         if (args.length > 0 && args[0] != null && callback != null) {
-                            if (args[0].toString().equalsIgnoreCase("timeout")) {
-                                settingsEmitDep(socket, callback);
-                            } else {
-                                cancelTimer();
-                                callback.onResponse(args[0].toString());
-                            }
+                            cancelTimer();
+                            callback.onResponse(args[0].toString());
                         }
                     }
                 });
-    }
-
-    private static void settingsEmitDep(Socket socket, SocketCallback callback) {
-        socket.emit(ServerConstants.REQUEST_SETTINGS_DATA, new AckTimeOut(4000) {
-            @Override
-            public void call(Object... args) {
-                if (args.length > 0 && args[0] != null && callback != null) {
-                    if (args[0].toString().equalsIgnoreCase("timeout")) {
-                        settingsEmit(socket, callback);
-                    } else {
-                        cancelTimer();
-                        callback.onResponse(args[0].toString());
-                    }
-                }
-            }
-        });
     }
 }

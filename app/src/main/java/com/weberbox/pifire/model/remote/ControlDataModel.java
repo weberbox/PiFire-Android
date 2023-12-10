@@ -2,6 +2,9 @@ package com.weberbox.pifire.model.remote;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
+
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class ControlDataModel {
@@ -12,6 +15,9 @@ public class ControlDataModel {
     @SerializedName("mode")
     @Expose
     private String mode;
+    @SerializedName("next_mode")
+    @Expose
+    private String nextMode;
     @SerializedName("s_plus")
     @Expose
     private Boolean sPlus;
@@ -26,7 +32,7 @@ public class ControlDataModel {
     private Boolean hopperCheck;
     @SerializedName("recipe")
     @Expose
-    private String recipe;
+    private Recipe recipe;
     @SerializedName("status")
     @Expose
     private String status;
@@ -48,30 +54,24 @@ public class ControlDataModel {
     @SerializedName("safety")
     @Expose
     private Safety safety;
-    @SerializedName("setpoints")
+    @SerializedName("primary_setpoint")
     @Expose
-    private SetPoints setpoints;
-    @SerializedName("notify_req")
-    @Expose
-    private NotifyReq notifyReq;
+    private Integer primarySetPoint;
     @SerializedName("notify_data")
     @Expose
-    private NotifyData notifyData;
+    private ArrayList<NotifyData> notifyData;
     @SerializedName("timer")
     @Expose
     private Timer timer;
     @SerializedName("manual")
     @Expose
     private Manual manual;
-    @SerializedName("probe_titles")
-    @Expose
-    private ProbeTitles probeTitles;
     @SerializedName("prime_amount")
     @Expose
     private Integer primeAmount;
-    @SerializedName("next_mode")
+    @SerializedName("smartstart")
     @Expose
-    private String nextMode;
+    private SmartStart smartStart;
     @SerializedName("response")
     @Expose
     private ServerResponseModel response;
@@ -103,19 +103,6 @@ public class ControlDataModel {
 
     public ControlDataModel withMode(String mode) {
         this.mode = mode;
-        return this;
-    }
-
-    public Integer getPrimeAmount() {
-        return primeAmount;
-    }
-
-    public void setPrimeAmount(Integer primeAmount) {
-        this.primeAmount = primeAmount;
-    }
-
-    public ControlDataModel withPrimeAmount(Integer primeAmount) {
-        this.primeAmount = primeAmount;
         return this;
     }
 
@@ -158,6 +145,19 @@ public class ControlDataModel {
         return this;
     }
 
+    public Integer getDutyCycle() {
+        return dutyCycle;
+    }
+
+    public void setDutyCycle(Integer dutyCycle) {
+        this.dutyCycle = dutyCycle;
+    }
+
+    public ControlDataModel withDutyCycle(Integer dutyCycle) {
+        this.dutyCycle = dutyCycle;
+        return this;
+    }
+
     public Boolean getHopperCheck() {
         return hopperCheck;
     }
@@ -171,15 +171,15 @@ public class ControlDataModel {
         return this;
     }
 
-    public String getRecipe() {
+    public Recipe getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(String recipe) {
+    public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
 
-    public ControlDataModel withRecipe(String recipe) {
+    public ControlDataModel withRecipe(Recipe recipe) {
         this.recipe = recipe;
         return this;
     }
@@ -207,6 +207,32 @@ public class ControlDataModel {
 
     public ControlDataModel withProbeProfileUpdate(Boolean probeProfileUpdate) {
         this.probeProfileUpdate = probeProfileUpdate;
+        return this;
+    }
+
+    public Boolean getSettingsUpdate() {
+        return settingsUpdate;
+    }
+
+    public void setSettingsUpdate(Boolean settingsUpdate) {
+        this.settingsUpdate = settingsUpdate;
+    }
+
+    public ControlDataModel withSettingsUpdate(Boolean settingsUpdate) {
+        this.settingsUpdate = settingsUpdate;
+        return this;
+    }
+
+    public Boolean getDistanceUpdate() {
+        return distanceUpdate;
+    }
+
+    public void setDistanceUpdate(Boolean distanceUpdate) {
+        this.distanceUpdate = distanceUpdate;
+    }
+
+    public ControlDataModel withDistanceUpdate(Boolean distanceUpdate) {
+        this.distanceUpdate = distanceUpdate;
         return this;
     }
 
@@ -249,41 +275,28 @@ public class ControlDataModel {
         return this;
     }
 
-    public SetPoints getSetPoints() {
-        return setpoints;
+    public Integer getPrimarySetPoint() {
+        return primarySetPoint;
     }
 
-    public void setSetPoints(SetPoints setpoints) {
-        this.setpoints = setpoints;
+    public void setPrimarySetPoint(Integer primarySetPoint) {
+        this.primarySetPoint = primarySetPoint;
     }
 
-    public ControlDataModel withSetPoints(SetPoints setpoints) {
-        this.setpoints = setpoints;
+    public ControlDataModel withPrimarySetPoint(Integer primarySetPoint) {
+        this.primarySetPoint = primarySetPoint;
         return this;
     }
 
-    public NotifyReq getNotifyReq() {
-        return notifyReq;
-    }
-
-    public void setNotifyReq(NotifyReq notifyReq) {
-        this.notifyReq = notifyReq;
-    }
-
-    public ControlDataModel withNotifyReq(NotifyReq notifyReq) {
-        this.notifyReq = notifyReq;
-        return this;
-    }
-
-    public NotifyData getNotifyData() {
+    public ArrayList<NotifyData> getNotifyData() {
         return notifyData;
     }
 
-    public void setNotifyData(NotifyData notifyData) {
+    public void setNotifyData(ArrayList<NotifyData> notifyData) {
         this.notifyData = notifyData;
     }
 
-    public ControlDataModel withNotifyData(NotifyData notifyData) {
+    public ControlDataModel withNotifyData(ArrayList<NotifyData> notifyData) {
         this.notifyData = notifyData;
         return this;
     }
@@ -314,43 +327,206 @@ public class ControlDataModel {
         return this;
     }
 
-    public ProbeTitles getProbeTitles() {
-        return probeTitles;
+    public Integer getPrimeAmount() {
+        return primeAmount;
     }
 
-    public void setManual(ProbeTitles probeTitles) {
-        this.probeTitles = probeTitles;
+    public void setPrimeAmount(Integer primeAmount) {
+        this.primeAmount = primeAmount;
     }
 
-    public ControlDataModel withProbeTitles(ProbeTitles probeTitles) {
-        this.probeTitles = probeTitles;
+    public ControlDataModel withPrimeAmount(Integer primeAmount) {
+        this.primeAmount = primeAmount;
         return this;
     }
 
-    public Boolean getSettingsUpdate() {
-        return settingsUpdate;
+    public static class Safety {
+
+        @SerializedName("startuptemp")
+        @Expose
+        private Integer startupTemp;
+        @SerializedName("afterstarttemp")
+        @Expose
+        private Integer afterStartTemp;
+        @SerializedName("reigniteretries")
+        @Expose
+        private Integer reigniteRetries;
+        @SerializedName("reignitelaststate")
+        @Expose
+        private String reigniteLastState;
+
+        public Integer getStartupTemp() {
+            return startupTemp;
+        }
+
+        public void setStartupTemp(Integer startupTemp) {
+            this.startupTemp = startupTemp;
+        }
+
+        public Safety withStartupTemp(Integer startupTemp) {
+            this.startupTemp = startupTemp;
+            return this;
+        }
+
+        public Integer getAfterStartTemp() {
+            return afterStartTemp;
+        }
+
+        public void setAfterStartTemp(Integer afterStartTemp) {
+            this.afterStartTemp = afterStartTemp;
+        }
+
+        public Safety withAfterStartTemp(Integer afterStartTemp) {
+            this.afterStartTemp = afterStartTemp;
+            return this;
+        }
+
+        public Integer getReigniteRetries() {
+            return reigniteRetries;
+        }
+
+        public void setReigniteRetries(Integer reigniteRetries) {
+            this.reigniteRetries = reigniteRetries;
+        }
+
+        public Safety withReigniteRetries(Integer reigniteRetries) {
+            this.reigniteRetries = reigniteRetries;
+            return this;
+        }
+
+        public String getReigniteLastState() {
+            return reigniteLastState;
+        }
+
+        public void setReigniteLastState(String reigniteLastState) {
+            this.reigniteLastState = reigniteLastState;
+        }
+
+        public Safety withReigniteLastState(String reigniteLastState) {
+            this.reigniteLastState = reigniteLastState;
+            return this;
+        }
+
     }
 
-    public void setSettingsUpdate(Boolean settingsUpdate) {
-        this.settingsUpdate = settingsUpdate;
+    public static class Recipe {
+        @SerializedName("filename")
+        @Expose
+        private String fileName;
+        @SerializedName("start_step")
+        @Expose
+        private Integer smartStep;
+        @SerializedName("step")
+        @Expose
+        private Integer step;
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileName = fileName;
+        }
+
+        public Recipe withFileName(String fileName) {
+            this.fileName = fileName;
+            return this;
+        }
+
+        public Integer getSmartStep() {
+            return smartStep;
+        }
+
+        public void setSmartStep(Integer smartStep) {
+            this.smartStep = smartStep;
+        }
+
+        public Recipe withSmartStep(Integer smartStep) {
+            this.smartStep = smartStep;
+            return this;
+        }
+
+        public Integer getStep() {
+            return step;
+        }
+
+        public void setStep(Integer step) {
+            this.step = step;
+        }
+
+        public Recipe withStep(Integer step) {
+            this.step = step;
+            return this;
+        }
     }
 
-    public ControlDataModel withSettingsUpdate(Boolean settingsUpdate) {
-        this.settingsUpdate = settingsUpdate;
-        return this;
-    }
+    public static class Timer {
 
-    public Boolean getDistanceUpdate() {
-        return distanceUpdate;
-    }
+        @SerializedName("start")
+        @Expose
+        private Float start;
+        @SerializedName("paused")
+        @Expose
+        private Float paused;
+        @SerializedName("end")
+        @Expose
+        private Float end;
+        @SerializedName("shutdown")
+        @Expose
+        private Boolean shutdown;
 
-    public void setDistanceUpdate(Boolean distanceUpdate) {
-        this.distanceUpdate = distanceUpdate;
-    }
+        public Float getStart() {
+            return start;
+        }
 
-    public ControlDataModel withDistanceUpdate(Boolean distanceUpdate) {
-        this.distanceUpdate = distanceUpdate;
-        return this;
+        public void setStart(Float start) {
+            this.start = start;
+        }
+
+        public Timer withStart(Float start) {
+            this.start = start;
+            return this;
+        }
+
+        public Float getPaused() {
+            return paused;
+        }
+
+        public void setPaused(Float paused) {
+            this.paused = paused;
+        }
+
+        public Timer withPaused(Float paused) {
+            this.paused = paused;
+            return this;
+        }
+
+        public Float getEnd() {
+            return end;
+        }
+
+        public void setEnd(Float end) {
+            this.end = end;
+        }
+
+        public Timer withEnd(Float end) {
+            this.end = end;
+            return this;
+        }
+
+        public Boolean getShutdown() {
+            return shutdown;
+        }
+
+        public void setShutdown(Boolean shutdown) {
+            this.shutdown = shutdown;
+        }
+
+        public Timer withShutdown(Boolean shutdown) {
+            this.shutdown = shutdown;
+            return this;
+        }
+
     }
 
     public static class Manual {
@@ -454,258 +630,14 @@ public class ControlDataModel {
 
     }
 
-    public static class NotifyData {
-
-        @SerializedName("hopper_low")
-        @Expose
-        private Boolean hopperLow;
-        @SerializedName("p1_shutdown")
-        @Expose
-        private Boolean p1Shutdown;
-        @SerializedName("p2_shutdown")
-        @Expose
-        private Boolean p2Shutdown;
-        @SerializedName("timer_shutdown")
-        @Expose
-        private Boolean timerShutdown;
-        @SerializedName("p1_keep_warm")
-        @Expose
-        private Boolean p1KeepWarm;
-        @SerializedName("p2_keep_warm")
-        @Expose
-        private Boolean p2KeepWarm;
-        @SerializedName("timer_keep_warm")
-        @Expose
-        private Boolean timerKeepWarm;
-
-        public Boolean getHopperLow() {
-            return hopperLow;
-        }
-
-        public void setHopperLow(Boolean hopperLow) {
-            this.hopperLow = hopperLow;
-        }
-
-        public NotifyData withHopperLow(Boolean hopperLow) {
-            this.hopperLow = hopperLow;
-            return this;
-        }
-
-        public Boolean getP1Shutdown() {
-            return p1Shutdown;
-        }
-
-        public void setP1Shutdown(Boolean p1Shutdown) {
-            this.p1Shutdown = p1Shutdown;
-        }
-
-        public NotifyData withP1Shutdown(Boolean p1Shutdown) {
-            this.p1Shutdown = p1Shutdown;
-            return this;
-        }
-
-        public Boolean getP2Shutdown() {
-            return p2Shutdown;
-        }
-
-        public void setP2Shutdown(Boolean p2Shutdown) {
-            this.p2Shutdown = p2Shutdown;
-        }
-
-        public NotifyData withP2Shutdown(Boolean p2Shutdown) {
-            this.p2Shutdown = p2Shutdown;
-            return this;
-        }
-
-        public Boolean getTimerShutdown() {
-            return timerShutdown;
-        }
-
-        public void setTimerShutdown(Boolean timerShutdown) {
-            this.timerShutdown = timerShutdown;
-        }
-
-        public NotifyData withTimerShutdown(Boolean timerShutdown) {
-            this.timerShutdown = timerShutdown;
-            return this;
-        }
-
-        public Boolean getP1KeepWarm() {
-            return p1KeepWarm;
-        }
-
-        public void setP1KeepWarm(Boolean p1KeepWarm) {
-            this.p1KeepWarm = p1KeepWarm;
-        }
-
-        public NotifyData withP1KeepWarm(Boolean p1KeepWarm) {
-            this.p1KeepWarm = p1KeepWarm;
-            return this;
-        }
-
-        public Boolean getP2KeepWarm() {
-            return p2KeepWarm;
-        }
-
-        public void setP2KeepWarm(Boolean p2KeepWarm) {
-            this.p2KeepWarm = p2KeepWarm;
-        }
-
-        public NotifyData withP2KeepWarm(Boolean p2KeepWarm) {
-            this.p2KeepWarm = p2KeepWarm;
-            return this;
-        }
-
-        public Boolean getTimerKeepWarm() {
-            return timerKeepWarm;
-        }
-
-        public void setTimerKeepWarm(Boolean timerKeepWarm) {
-            this.timerKeepWarm = timerKeepWarm;
-        }
-
-        public NotifyData withTimerKeepWarm(Boolean timerKeepWarm) {
-            this.timerKeepWarm = timerKeepWarm;
-            return this;
-        }
-
-    }
-
-    public static class NotifyReq {
-
-        @SerializedName("grill")
-        @Expose
-        private Boolean grill;
-        @SerializedName("probe1")
-        @Expose
-        private Boolean probe1;
-        @SerializedName("probe2")
-        @Expose
-        private Boolean probe2;
-        @SerializedName("timer")
-        @Expose
-        private Boolean timer;
-
-        public Boolean getGrill() {
-            return grill;
-        }
-
-        public void setGrill(Boolean grill) {
-            this.grill = grill;
-        }
-
-        public NotifyReq withGrill(Boolean grill) {
-            this.grill = grill;
-            return this;
-        }
-
-        public Boolean getProbe1() {
-            return probe1;
-        }
-
-        public void setProbe1(Boolean probe1) {
-            this.probe1 = probe1;
-        }
-
-        public NotifyReq withProbe1(Boolean probe1) {
-            this.probe1 = probe1;
-            return this;
-        }
-
-        public Boolean getProbe2() {
-            return probe2;
-        }
-
-        public void setProbe2(Boolean probe2) {
-            this.probe2 = probe2;
-        }
-
-        public NotifyReq withProbe2(Boolean probe2) {
-            this.probe2 = probe2;
-            return this;
-        }
-
-        public Boolean getTimer() {
-            return timer;
-        }
-
-        public void setTimer(Boolean timer) {
-            this.timer = timer;
-        }
-
-        public NotifyReq withTimer(Boolean timer) {
-            this.timer = timer;
-            return this;
-        }
-
-    }
-
-    public static class ProbeTitles {
-        @SerializedName("grill_title")
-        @Expose
-        public String grillTitle;
-        @SerializedName("probe1_title")
-        @Expose
-        public String probeOneTitle;
-        @SerializedName("probe2_title")
-        @Expose
-        public String probeTwoTitle;
-
-        public String getGrillTitle() {
-            return grillTitle;
-        }
-
-        public void setGrillTitle(String grillTitle) {
-            this.grillTitle = grillTitle;
-        }
-
-        public ProbeTitles grillTitle(String grillTitle) {
-            this.grillTitle = grillTitle;
-            return this;
-        }
-
-        public String getProbeOneTitle() {
-            return probeOneTitle;
-        }
-
-        public void setProbeOneTitle(String probeOneTitle) {
-            this.probeOneTitle = probeOneTitle;
-        }
-
-        public ProbeTitles probeOneTitle(String probeOneTitle) {
-            this.probeOneTitle = probeOneTitle;
-            return this;
-        }
-
-        public String getProbeTwoTitle() {
-            return probeTwoTitle;
-        }
-
-        public void setProbeTwoTitle(String probeTwoTitle) {
-            this.probeTwoTitle = probeTwoTitle;
-        }
-
-        public ProbeTitles probeTwoTitle(String probeTwoTitle) {
-            this.probeTwoTitle = probeTwoTitle;
-            return this;
-        }
-
-    }
-
-    public static class Safety {
+    public static class SmartStart {
 
         @SerializedName("startuptemp")
         @Expose
         private Integer startupTemp;
-        @SerializedName("afterstarttemp")
+        @SerializedName("profile_selected")
         @Expose
-        private Integer afterStartTemp;
-        @SerializedName("reigniteretries")
-        @Expose
-        private Integer reigniteRetries;
-        @SerializedName("reignitelaststate")
-        @Expose
-        private String reigniteLastState;
+        private Integer profileSelected;
 
         public Integer getStartupTemp() {
             return startupTemp;
@@ -715,187 +647,22 @@ public class ControlDataModel {
             this.startupTemp = startupTemp;
         }
 
-        public Safety withStartupTemp(Integer startupTemp) {
+        public SmartStart withStartupTemp(Integer startupTemp) {
             this.startupTemp = startupTemp;
             return this;
         }
 
-        public Integer getAfterStartTemp() {
-            return afterStartTemp;
+        public Integer getProfileSelected() {
+            return profileSelected;
         }
 
-        public void setAfterStartTemp(Integer afterStartTemp) {
-            this.afterStartTemp = afterStartTemp;
+        public void setProfileSelected(Integer profileSelected) {
+            this.profileSelected = profileSelected;
         }
 
-        public Safety withAfterStartTemp(Integer afterStartTemp) {
-            this.afterStartTemp = afterStartTemp;
+        public SmartStart withProfileSelected(Integer profileSelected) {
+            this.profileSelected = profileSelected;
             return this;
         }
-
-        public Integer getReigniteRetries() {
-            return reigniteRetries;
-        }
-
-        public void setReigniteRetries(Integer reigniteRetries) {
-            this.reigniteRetries = reigniteRetries;
-        }
-
-        public Safety withReigniteRetries(Integer reigniteRetries) {
-            this.reigniteRetries = reigniteRetries;
-            return this;
-        }
-
-        public String getReigniteLastState() {
-            return reigniteLastState;
-        }
-
-        public void setReigniteLastState(String reigniteLastState) {
-            this.reigniteLastState = reigniteLastState;
-        }
-
-        public Safety withReigniteLastState(String reigniteLastState) {
-            this.reigniteLastState = reigniteLastState;
-            return this;
-        }
-
-    }
-
-    public static class SetPoints {
-
-        @SerializedName("grill")
-        @Expose
-        private Integer grill;
-        @SerializedName("probe1")
-        @Expose
-        private Integer probe1;
-        @SerializedName("probe2")
-        @Expose
-        private Integer probe2;
-        @SerializedName("grill_notify")
-        @Expose
-        private Integer grillNotify;
-
-        public Integer getGrill() {
-            return grill;
-        }
-
-        public void setGrill(Integer grill) {
-            this.grill = grill;
-        }
-
-        public SetPoints withGrill(Integer grill) {
-            this.grill = grill;
-            return this;
-        }
-
-        public Integer getProbe1() {
-            return probe1;
-        }
-
-        public void setProbe1(Integer probe1) {
-            this.probe1 = probe1;
-        }
-
-        public SetPoints withProbe1(Integer probe1) {
-            this.probe1 = probe1;
-            return this;
-        }
-
-        public Integer getProbe2() {
-            return probe2;
-        }
-
-        public void setProbe2(Integer probe2) {
-            this.probe2 = probe2;
-        }
-
-        public SetPoints withProbe2(Integer probe2) {
-            this.probe2 = probe2;
-            return this;
-        }
-
-        public Integer getGrillNotify() {
-            return grillNotify;
-        }
-
-        public void setGrillNotify(Integer grillNotify) {
-            this.grillNotify = grillNotify;
-        }
-
-        public SetPoints withGrillNotify(Integer grillNotify) {
-            this.grillNotify = grillNotify;
-            return this;
-        }
-
-    }
-
-    public static class Timer {
-
-        @SerializedName("start")
-        @Expose
-        private Float start;
-        @SerializedName("paused")
-        @Expose
-        private Float paused;
-        @SerializedName("end")
-        @Expose
-        private Float end;
-        @SerializedName("shutdown")
-        @Expose
-        private Boolean shutdown;
-
-        public Float getStart() {
-            return start;
-        }
-
-        public void setStart(Float start) {
-            this.start = start;
-        }
-
-        public Timer withStart(Float start) {
-            this.start = start;
-            return this;
-        }
-
-        public Float getPaused() {
-            return paused;
-        }
-
-        public void setPaused(Float paused) {
-            this.paused = paused;
-        }
-
-        public Timer withPaused(Float paused) {
-            this.paused = paused;
-            return this;
-        }
-
-        public Float getEnd() {
-            return end;
-        }
-
-        public void setEnd(Float end) {
-            this.end = end;
-        }
-
-        public Timer withEnd(Float end) {
-            this.end = end;
-            return this;
-        }
-
-        public Boolean getShutdown() {
-            return shutdown;
-        }
-
-        public void setShutdown(Boolean shutdown) {
-            this.shutdown = shutdown;
-        }
-
-        public Timer withShutdown(Boolean shutdown) {
-            this.shutdown = shutdown;
-            return this;
-        }
-
     }
 }

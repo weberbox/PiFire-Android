@@ -27,6 +27,7 @@ public class TextViewRichDrawable extends AppCompatTextView implements DrawableE
         init(context, attrs, defStyleAttr, 0);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         mRichDrawableHelper = new RichDrawableHelper(context, attrs, defStyleAttr, defStyleRes);
         mRichDrawableHelper.apply(this);

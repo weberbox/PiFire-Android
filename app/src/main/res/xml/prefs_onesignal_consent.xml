@@ -7,7 +7,7 @@
         app:title="@string/settings_cat_onesignal_consent">
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_onesignal_consent_1">
             <intent
@@ -16,13 +16,13 @@
         </Preference>
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_onesignal_consent_2">
         </Preference>
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:title="@string/settings_note"
             app:summary="@string/settings_onesignal_consent_3"/>

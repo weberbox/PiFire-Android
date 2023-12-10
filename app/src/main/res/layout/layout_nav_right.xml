@@ -101,15 +101,6 @@
                         app:nav_title="@string/settings_timers" />
 
                     <com.weberbox.pifire.ui.views.NavListItem
-                        android:id="@+id/settings_history"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick='@{() -> callback.onSettingsClick(Constants.FRAG_HISTORY_SETTINGS)}'
-                        app:nav_icon="@drawable/ic_menu_history"
-                        app:nav_selected="false"
-                        app:nav_title="@string/settings_history" />
-
-                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/settings_safety"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

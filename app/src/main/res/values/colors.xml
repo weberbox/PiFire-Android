@@ -18,6 +18,7 @@
     <color name="colorLightGrey">#FF333333</color>
     <color name="colorGreyHint">#C8C7C7</color>
     <color name="colorGreyAlpha">#DF333333</color>
+    <color name="colorInfo">#3498DB</color>
     <color name="colorNote">#DDC701</color>
     <color name="colorOrangeButton">#F39C12</color>
     <color name="colorGreenButton">#00BC8C</color>

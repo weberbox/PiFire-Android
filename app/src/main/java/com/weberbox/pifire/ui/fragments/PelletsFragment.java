@@ -109,10 +109,9 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         profileEditList = new ArrayList<>();
 
         LayoutPelletsBinding pelletsBinding = binding.pelletsLayout;
-        LayoutPelletsCurrentBinding currentBinding = pelletsBinding.loadOutCardView;
         LayoutPelletsHopperBinding hopperBinding = pelletsBinding.pelletsHopperLevel;
         LayoutPelletsUsageBinding usageBinding = pelletsBinding.pelletsUsage;
-        pelletsCurrentBinding = pelletsBinding.loadOutCardView;
+        pelletsCurrentBinding = pelletsBinding.pelletsCurrent;
 
         rootContainer = binding.pelletsRootContainer;
         swipeRefresh = binding.pelletsPullRefresh;
@@ -120,16 +119,16 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         hopperLevel = hopperBinding.hopperLevel;
         hopperLevelText = hopperBinding.hopperLevelText;
         hopperPlaceholder = hopperBinding.hopperHolder;
-        currentPlaceholder = currentBinding.currentHolder;
+        currentPlaceholder = pelletsCurrentBinding.currentHolder;
         usagePlaceholder = usageBinding.pelletsUsageHolder;
 
         CardViewHeaderButton hopperHeader = hopperBinding.hopperLevelHeader;
 
-        CardViewHeaderButton currentHeader = currentBinding.loadOutHeader;
-        PelletsCardViewRecycler brandsCardView = pelletsBinding.brandsCardView;
-        PelletsCardViewRecycler woodsCardView = pelletsBinding.woodsCardView;
-        PelletsLogsRecycler logsCardView = pelletsBinding.logsCardView;
-        PelletsEditorRecycler editorCardView = pelletsBinding.editorCardView;
+        CardViewHeaderButton currentHeader = pelletsCurrentBinding.loadOutHeader;
+        PelletsCardViewRecycler brandsCardView = pelletsBinding.pelletsBrands;
+        PelletsCardViewRecycler woodsCardView = pelletsBinding.pelletsWoods;
+        PelletsLogsRecycler logsCardView = pelletsBinding.pelletsLogs;
+        PelletsEditorRecycler editorCardView = pelletsBinding.pelletsEditor;
 
         TextView addNewProfile = editorCardView.getHeaderButton();
         TextView addNewBrand = brandsCardView.getHeaderButton();
@@ -514,25 +513,25 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
 
     private void setWoodsViewLimited(boolean limited) {
         if (pelletWoodsAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.woodsCardView.setViewAll(limited && woodsList.size() > 3);
+            binding.pelletsLayout.pelletsWoods.setViewAll(limited && woodsList.size() > 3);
         }
     }
 
     private void setBrandsViewLimited(boolean limited) {
         if (pelletBrandsAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.brandsCardView.setViewAll(limited && brandsList.size() > 3);
+            binding.pelletsLayout.pelletsBrands.setViewAll(limited && brandsList.size() > 3);
         }
     }
 
     private void setLogsViewLimited(boolean limited) {
         if (pelletsLogAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.logsCardView.setViewAll(limited && logsList.size() > 3);
+            binding.pelletsLayout.pelletsLogs.setViewAll(limited && logsList.size() > 3);
         }
     }
 
     private void setProfilesViewLimited(boolean limited) {
         if (profileEditAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.editorCardView.setViewAll(limited && profileList.size() > 3);
+            binding.pelletsLayout.pelletsEditor.setViewAll(limited && profileList.size() > 3);
         }
     }
 
@@ -575,27 +574,25 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     public void onDeleteConfirmed(String type, String item, int position) {
         if (socketConnected()) {
             switch (type) {
-                case Constants.PELLET_WOOD:
+                case Constants.PELLET_WOOD -> {
                     ServerControl.sendDeletePelletWood(socket, item, this::processPostResponse);
                     woodsEditList.remove(position);
                     pelletWoodsAdapter.notifyItemRemoved(position);
                     pelletWoodsAdapter.notifyItemRangeChanged(position, woodsEditList.size());
-                    break;
-                case Constants.PELLET_BRAND:
+                }
+                case Constants.PELLET_BRAND -> {
                     ServerControl.sendDeletePelletBrand(socket, item, this::processPostResponse);
                     brandsEditList.remove(position);
                     pelletBrandsAdapter.notifyItemRemoved(position);
                     pelletBrandsAdapter.notifyItemRangeChanged(position, brandsEditList.size());
-                    break;
-                case Constants.PELLET_PROFILE:
-                    deletePelletProfile(item, position);
-                    break;
-                case Constants.PELLET_LOG:
+                }
+                case Constants.PELLET_PROFILE -> deletePelletProfile(item, position);
+                case Constants.PELLET_LOG -> {
                     ServerControl.sendDeletePelletLog(socket, item, this::processPostResponse);
                     logsList.remove(position);
                     pelletsLogAdapter.notifyItemRemoved(position);
                     pelletsLogAdapter.notifyItemRangeChanged(position, logsList.size());
-                    break;
+                }
             }
         }
     }
@@ -604,14 +601,14 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     public void onItemAdded(String type, String item) {
         if (socketConnected()) {
             switch (type) {
-                case Constants.PELLET_WOOD:
+                case Constants.PELLET_WOOD -> {
                     ServerControl.sendAddPelletWood(socket, item, this::processPostResponse);
                     forceRefreshData();
-                    break;
-                case Constants.PELLET_BRAND:
+                }
+                case Constants.PELLET_BRAND -> {
                     ServerControl.sendAddPelletBrand(socket, item, this::processPostResponse);
                     forceRefreshData();
-                    break;
+                }
             }
         }
     }

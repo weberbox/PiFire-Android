@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.enums.SettingsResult;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.AppSettingsFragment;
-import com.weberbox.pifire.ui.fragments.preferences.HistorySettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.ManualSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NameSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.NotificationSettingsFragment;
@@ -50,48 +50,24 @@ public class PreferencesActivity extends BaseActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        getOnBackPressedDispatcher().onBackPressed();
         return true;
     }
 
     private void startSettingsFragment(int fragment) {
         switch (fragment) {
-            case Constants.FRAG_ADMIN_SETTINGS:
-                launchFragment(new AdminSettingsFragment());
-                break;
-            case Constants.FRAG_APP_SETTINGS:
-                launchFragment(new AppSettingsFragment());
-                break;
-            case Constants.FRAG_PROBE_SETTINGS:
-                launchFragment(new ProbeSettingsFragment());
-                break;
-            case Constants.FRAG_NAME_SETTINGS:
-                launchFragment(new NameSettingsFragment());
-                break;
-            case Constants.FRAG_WORK_SETTINGS:
-                launchFragment(new WorkSettingsFragment());
-                break;
-            case Constants.FRAG_PELLET_SETTINGS:
-                launchFragment(new PelletSettingsFragment());
-                break;
-            case Constants.FRAG_TIMERS_SETTINGS:
-                launchFragment(new TimersSettingsFragment());
-                break;
-            case Constants.FRAG_HISTORY_SETTINGS:
-                launchFragment(new HistorySettingsFragment());
-                break;
-            case Constants.FRAG_SAFETY_SETTINGS:
-                launchFragment(new SafetySettingsFragment());
-                break;
-            case Constants.FRAG_NOTIF_SETTINGS:
-                launchFragment(new NotificationSettingsFragment());
-                break;
-            case Constants.FRAG_MANUAL_SETTINGS:
-                launchFragment(new ManualSettingsFragment());
-                break;
-            case Constants.FRAG_PWM_SETTINGS:
-                launchFragment(new PWMSettingsFragment());
-                break;
+            case Constants.FRAG_ADMIN_SETTINGS -> launchFragment(new AdminSettingsFragment());
+            case Constants.FRAG_APP_SETTINGS -> launchFragment(new AppSettingsFragment());
+            case Constants.FRAG_PROBE_SETTINGS -> launchFragment(new ProbeSettingsFragment());
+            case Constants.FRAG_NAME_SETTINGS -> launchFragment(new NameSettingsFragment());
+            case Constants.FRAG_WORK_SETTINGS -> launchFragment(new WorkSettingsFragment());
+            case Constants.FRAG_PELLET_SETTINGS -> launchFragment(new PelletSettingsFragment());
+            case Constants.FRAG_TIMERS_SETTINGS -> launchFragment(new TimersSettingsFragment());
+            case Constants.FRAG_SAFETY_SETTINGS -> launchFragment(new SafetySettingsFragment());
+            case Constants.FRAG_NOTIF_SETTINGS ->
+                    launchFragment(new NotificationSettingsFragment());
+            case Constants.FRAG_MANUAL_SETTINGS -> launchFragment(new ManualSettingsFragment());
+            case Constants.FRAG_PWM_SETTINGS -> launchFragment(new PWMSettingsFragment());
         }
     }
 
@@ -109,6 +85,6 @@ public class PreferencesActivity extends BaseActivity {
     }
 
     private final SettingsSocketCallback settingsSocketCallback = result -> {
-        if (!result) Timber.d("Update Settings Failed");
+        if (result != SettingsResult.SUCCESS) Timber.d("%s Settings Update Failed", result);
     };
 }
