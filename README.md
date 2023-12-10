@@ -17,7 +17,7 @@ The creator of this project takes no responsibility for any damage that you may 
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021.
+Android Application created by James Weber, copyright 2021-2023.
 
 This app used the following open-source libraries and/or code inspired from these projects.
 
