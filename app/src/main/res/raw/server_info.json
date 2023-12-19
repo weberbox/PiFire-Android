@@ -1,5 +1,16 @@
 [
   {
+    "appVersionCode": 2010100,
+    "minServerInfo": {
+      "version": "1.7.0",
+      "build": "7"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
     "appVersionCode": 2010000,
     "minServerInfo": {
       "version": "1.7.0",

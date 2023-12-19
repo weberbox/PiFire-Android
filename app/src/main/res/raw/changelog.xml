@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="2.1.0" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.1.1" changeDate="" currentVersion="true">
+        <changelogtext logType="fix">BugFix for ProbeMap Settings</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="2.1.0" changeDate="">
         <changelogtext logType="new">Overhaul for PiFire 1.7.0 Build 7+ Server Versions</changelogtext>
         <changelogtext logType="new">Adaptable dashboard. Now supports multiple probes</changelogtext>
         <changelogtext logType="new">Added Pellet Check Time Setting</changelogtext>
