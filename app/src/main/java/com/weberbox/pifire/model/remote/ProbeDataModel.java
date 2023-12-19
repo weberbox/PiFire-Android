@@ -44,28 +44,11 @@ public class ProbeDataModel {
         }
     }
 
-    public static class ProbeDevices {
-
-        @SerializedName("probe_devices")
-        @Expose
-        private List<ProbeDevice> probeDevices;
-
-        public List<ProbeDevice> getProbeDevices() {
-            return probeDevices;
-        }
-
-        public void setProbeDevice(List<ProbeDevice> probeDevices) {
-            this.probeDevices = probeDevices;
-        }
-
-        public ProbeDevices withProbeDevice(List<ProbeDevice> probeDevices) {
-            this.probeDevices = probeDevices;
-            return this;
-        }
-    }
-
     public static class ProbeDevice {
 
+        @SerializedName("config")
+        @Expose
+        private Config config;
         @SerializedName("device")
         @Expose
         private String device;
@@ -75,6 +58,19 @@ public class ProbeDataModel {
         @SerializedName("ports")
         @Expose
         private List<String> ports;
+
+        public Config getConfig() {
+            return config;
+        }
+
+        public void setConfig(Config config) {
+            this.config = config;
+        }
+
+        public ProbeDevice withConfig(Config config) {
+            this.config = config;
+            return this;
+        }
 
         public String getDevice() {
             return device;
@@ -289,6 +285,132 @@ public class ProbeDataModel {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+    }
+
+    public static class Config {
+
+        @SerializedName("ADC0_rd")
+        @Expose
+        private String adc0Rd;
+        @SerializedName("ADC1_rd")
+        @Expose
+        private String adc1Rd;
+        @SerializedName("ADC2_rd")
+        @Expose
+        private String adc2Rd;
+        @SerializedName("ADC3_rd")
+        @Expose
+        private String adc3Rd;
+        @SerializedName("i2c_bus_addr")
+        @Expose
+        private String i2cBusAddr;
+        @SerializedName("voltage_ref")
+        @Expose
+        private String voltageRef;
+        @SerializedName("cs")
+        @Expose
+        private String cs;
+        @SerializedName("ref_resistor")
+        @Expose
+        private String refResistor;
+        @SerializedName("rtd_nominal")
+        @Expose
+        private String rtdNominal;
+        @SerializedName("wires")
+        @Expose
+        private String wires;
+        @SerializedName("probes_list")
+        @Expose
+        private List<String> probesList;
+
+        public String getAdc0Rd() {
+            return adc0Rd;
+        }
+
+        public void setAdc0Rd(String adc0Rd) {
+            this.adc0Rd = adc0Rd;
+        }
+
+        public String getAdc1Rd() {
+            return adc1Rd;
+        }
+
+        public void setAdc1Rd(String adc1Rd) {
+            this.adc1Rd = adc1Rd;
+        }
+
+        public String getAdc2Rd() {
+            return adc2Rd;
+        }
+
+        public void setAdc2Rd(String adc2Rd) {
+            this.adc2Rd = adc2Rd;
+        }
+
+        public String getAdc3Rd() {
+            return adc3Rd;
+        }
+
+        public void setAdc3Rd(String adc3Rd) {
+            this.adc3Rd = adc3Rd;
+        }
+
+        public String getI2cBusAddr() {
+            return i2cBusAddr;
+        }
+
+        public void setI2cBusAddr(String i2cBusAddr) {
+            this.i2cBusAddr = i2cBusAddr;
+        }
+
+        public String getVoltageRef() {
+            return voltageRef;
+        }
+
+        public void setVoltageRef(String voltageRef) {
+            this.voltageRef = voltageRef;
+        }
+
+        public String getCs() {
+            return cs;
+        }
+
+        public void setCs(String cs) {
+            this.cs = cs;
+        }
+
+        public String getRefResistor() {
+            return refResistor;
+        }
+
+        public void setRefResistor(String refResistor) {
+            this.refResistor = refResistor;
+        }
+
+        public String getRtdNominal() {
+            return rtdNominal;
+        }
+
+        public void setRtdNominal(String rtdNominal) {
+            this.rtdNominal = rtdNominal;
+        }
+
+        public String getWires() {
+            return wires;
+        }
+
+        public void setWires(String wires) {
+            this.wires = wires;
+        }
+
+        public List<String> getProbesList() {
+            return probesList;
+        }
+
+        public void setProbesList(List<String> probesList) {
+            this.probesList = probesList;
         }
 
     }

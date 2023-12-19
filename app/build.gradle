@@ -37,8 +37,7 @@ def getGitBranch = { ->
 
 def vMajor = 2
 def vMinor = 1
-def vPatch = 0
-def vBuild = 0
+def vPatch = 1
 
 android {
     compileSdk 34
@@ -46,10 +45,9 @@ android {
     defaultConfig {
         applicationId "com.weberbox.pifire"
         minSdk 24
-        //noinspection OldTargetApi
-        targetSdk 33
-        versionCode vMajor * 1000000 + vMinor * 10000 + vPatch * 100 + vBuild
-        versionName "${vMajor}.${vMinor}.${vPatch}${vBuild : ""}"
+        targetSdk 34
+        versionCode vMajor * 1000000 + vMinor * 10000 + vPatch * 100
+        versionName "${vMajor}.${vMinor}.${vPatch}"
 
     }
 
@@ -128,15 +126,15 @@ dependencies {
     def sentry_version = "7.0.0"
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta02'

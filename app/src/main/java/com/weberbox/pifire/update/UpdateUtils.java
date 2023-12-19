@@ -1,12 +1,15 @@
 package com.weberbox.pifire.update;
 
 import android.app.Activity;
-import android.content.IntentSender;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
 import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
@@ -18,7 +21,6 @@ import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.model.local.UpdateInfo;
 
 import java.util.ArrayList;
@@ -32,11 +34,14 @@ public class UpdateUtils {
     private final Activity activity;
     private final AppUpdateManager appUpdateManager;
     private final FirebaseRemoteConfig firebaseRemoteConfig;
+    private final ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
     private final HashMap<String, Object> defaults = new HashMap<>();
     private Alerter downloadAlerter;
 
-    public UpdateUtils(Activity activity) {
+    public UpdateUtils(Activity activity,
+                       ActivityResultLauncher<IntentSenderRequest> activityResultLauncher) {
         this.activity = activity;
+        this.activityResultLauncher = activityResultLauncher;
         this.appUpdateManager = AppUpdateManagerFactory.create(activity);
         this.firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
     }
@@ -52,20 +57,14 @@ public class UpdateUtils {
         removeInstallStateUpdateListener();
     }
 
-    public void handleUpdateRequest(int requestCode, int resultCode) {
-        if (requestCode == Constants.FLEXIBLE_REQUEST_CODE ||
-                requestCode == Constants.IMMEDIATE_REQUEST_CODE) {
-            if (resultCode == android.app.Activity.RESULT_CANCELED) {
+    public void handleUpdateRequest(int resultCode) {
+        switch (resultCode) {
+            case Activity.RESULT_OK -> Timber.d("Update Success!");
+            case Activity.RESULT_CANCELED -> {
                 Timber.d("Update Canceled by User!");
-                if (requestCode == Constants.IMMEDIATE_REQUEST_CODE) {
-                    Timber.d("Exiting App");
-                    activity.finishAndRemoveTask();
-                }
-            } else if (resultCode == android.app.Activity.RESULT_OK) {
-                Timber.d("Update Success!");
-            } else {
-                Timber.d("Update Failed!");
+                activity.finishAndRemoveTask();
             }
+            default -> Timber.d("Update Failed!");
         }
     }
 
@@ -177,24 +176,15 @@ public class UpdateUtils {
     }
 
     private void startAppUpdate(AppUpdateInfo appUpdateInfo, Integer updateType) {
-        int requestCode;
-        if (updateType == AppUpdateType.IMMEDIATE) {
-            requestCode = Constants.IMMEDIATE_REQUEST_CODE;
-        } else {
+        if (updateType != AppUpdateType.IMMEDIATE) {
             Prefs.putBoolean(activity.getString(R.string.prefs_inapp_first_show), false);
             appUpdateManager.registerListener(listener);
-            requestCode = Constants.FLEXIBLE_REQUEST_CODE;
         }
 
-        try {
-            appUpdateManager.startUpdateFlowForResult(
-                    appUpdateInfo,
-                    updateType,
-                    activity,
-                    requestCode);
-        } catch (IntentSender.SendIntentException e) {
-            Timber.e(e, "startAppUpdate SendIntentException");
-        }
+        appUpdateManager.startUpdateFlowForResult(
+                appUpdateInfo,
+                activityResultLauncher,
+                AppUpdateOptions.newBuilder(updateType).build());
     }
 
     private int getUpdatePriority(ArrayList<UpdateInfo> info) {

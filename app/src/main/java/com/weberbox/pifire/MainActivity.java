@@ -15,6 +15,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -187,7 +190,7 @@ public class MainActivity extends BaseActivity implements
         VersionUtils.checkSupportedServerVersion(this);
 
         if (AppConfig.IS_PLAY_BUILD) {
-            updateUtils = new UpdateUtils(this);
+            updateUtils = new UpdateUtils(this, activityResultLauncher);
             if (savedInstanceState == null) {
                 updateUtils.checkForUpdate(false, false);
             }
@@ -196,17 +199,9 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (updateUtils != null) {
-            updateUtils.handleUpdateRequest(requestCode, resultCode);
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        if (AppConfig.IS_PLAY_BUILD) {
+        if (AppConfig.IS_PLAY_BUILD && updateUtils != null) {
             updateUtils.checkForUpdate(false, true);
         }
         PanelsChildGestureRegionObserver.Provider.get().addGestureRegionsUpdateListener(this);
@@ -225,7 +220,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        if (AppConfig.IS_PLAY_BUILD) {
+        if (AppConfig.IS_PLAY_BUILD && updateUtils != null) {
             updateUtils.stopAppUpdater();
         }
     }
@@ -505,6 +500,14 @@ public class MainActivity extends BaseActivity implements
             }
         }
     };
+
+    private final ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(),
+            result -> {
+                if (result != null && updateUtils != null) {
+                    updateUtils.handleUpdateRequest(result.getResultCode());
+                }
+            });
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

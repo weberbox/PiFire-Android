@@ -4,6 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
@@ -35,7 +38,7 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        updateUtils = new UpdateUtils(requireActivity());
+        updateUtils = new UpdateUtils(requireActivity(), activityResultLauncher);
 
         Preference updateCheck = findPreference(getString(R.string.prefs_app_updater_check_now));
         PreferenceCategory crashCat = findPreference(getString(R.string.prefs_crash_cat));
@@ -96,11 +99,21 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStop() {
         super.onStop();
-        updateUtils.stopAppUpdater();
+        if (updateUtils != null) {
+            updateUtils.stopAppUpdater();
+        }
         if (sharedPreferences != null) {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
+
+    private final ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(),
+                    result -> {
+                        if (result != null && updateUtils != null) {
+                            updateUtils.handleUpdateRequest(result.getResultCode());
+                        }
+                    });
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

@@ -68,8 +68,4 @@ public class Constants {
     // Update
     public static final String UPDATE_FILENAME = "app-update.apk";
 
-    // In App Updates
-    public static final int FLEXIBLE_REQUEST_CODE = 781;
-    public static final int IMMEDIATE_REQUEST_CODE = 782;
-
 }
