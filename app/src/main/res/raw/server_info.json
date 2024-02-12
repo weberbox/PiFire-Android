@@ -1,13 +1,24 @@
 [
   {
+    "appVersionCode": 2010200,
+    "minServerInfo": {
+      "version": "1.7.0",
+      "build": "46"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
     "appVersionCode": 2010100,
     "minServerInfo": {
       "version": "1.7.0",
       "build": "7"
     },
     "maxServerInfo": {
-      "version": "",
-      "build": ""
+      "version": "1.7.0",
+      "build": "45"
     }
   },
   {
@@ -17,8 +28,8 @@
       "build": "7"
     },
     "maxServerInfo": {
-      "version": "",
-      "build": ""
+      "version": "1.7.0",
+      "build": "45"
     }
   }
 ]

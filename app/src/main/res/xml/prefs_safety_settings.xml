@@ -6,6 +6,12 @@
         app:iconSpaceReserved="false"
         app:title="@string/settings_safety">
 
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_safety_startup_check"
+            app:key="@string/prefs_safety_startup_check"
+            app:summary="@string/settings_safety_startup_check_summary"
+            app:title="@string/settings_safety_startup_check" />
+
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_min_start"
             app:dialogLayout="@layout/dialog_text_input_pref"

@@ -32,6 +32,8 @@ import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SSProfile;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmartStart;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Shutdown;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
 import com.weberbox.pifire.model.remote.SettingsDataModel.StartToMode;
 import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices;
@@ -166,19 +168,28 @@ public class ServerControl {
     }
 
     // Shutdown Timer
-    public static void sendShutdownTime(Socket socket, String shutDownTime,
-                                        SocketCallback callback) {
+    public static void sendShutdownDuration(Socket socket, String duration,
+                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withGlobals(new Globals().withShutdownTimer(Integer.parseInt(shutDownTime))));
+                .withShutdown(new Shutdown().withDuration(Integer.parseInt(duration))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
 
     // Startup Timer
-    public static void sendStartupTime(Socket socket, String startUpTime,
-                                       SocketCallback callback) {
+    public static void sendStartupDuration(Socket socket, String duration,
+                                           SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withGlobals(new Globals().withStartupTimer(Integer.parseInt(startUpTime))));
+                .withStartup(new Startup().withDuration(Integer.parseInt(duration))));
+        settingsPostEmit(socket, json, callback);
+        controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Prime On Startup
+    public static void sendPrimeOnStartup(Socket socket, String amount,
+                                           SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withStartup(new Startup().withPrimeOnStartup(Integer.parseInt(amount))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -187,7 +198,7 @@ public class ServerControl {
     public static void setStartExitTemp(Socket socket, String exitTemp,
                                        SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withGlobals(new Globals().withStartExitTemp(Integer.parseInt(exitTemp))));
+                .withStartup(new Startup().withStartExitTemp(Integer.parseInt(exitTemp))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -196,7 +207,7 @@ public class ServerControl {
     public static void sendAutoPowerOff(Socket socket, Boolean autoPowerOff,
                                         SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withGlobals(new Globals().withAutoPowerOff(autoPowerOff)));
+                .withShutdown(new Shutdown().withAutoPowerOff(autoPowerOff)));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -205,7 +216,8 @@ public class ServerControl {
     public static void setSmartStartEnabled(Socket socket, Boolean enabled,
                                             SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withSmartStart(new SmartStart().withEnabled(enabled)));
+                .withStartup(new Startup().withSmartStart(
+                        new SmartStart().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
     }
 
@@ -213,7 +225,8 @@ public class ServerControl {
     public static void setSmartStartExitTemp(Socket socket, String temp,
                                             SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withSmartStart(new SmartStart().withExitTemp(Integer.parseInt(temp))));
+                .withStartup(new Startup().withSmartStart(
+                        new SmartStart().withExitTemp(Integer.parseInt(temp)))));
         settingsPostEmit(socket, json, callback);
     }
 
@@ -221,8 +234,24 @@ public class ServerControl {
     public static void setSmartStartTable(Socket socket, List<Integer> tempRange,
                                           List<SSProfile> profiles, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
-                .withSmartStart(new SmartStart().withTempRangeList(tempRange)
-                        .withProfiles(profiles)));
+                .withStartup(new Startup().withSmartStart(
+                        new SmartStart().withTempRangeList(tempRange).withProfiles(profiles))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Start To Mode
+    public static void setStartToMode(Socket socket, String mode, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withStartup(new Startup().withStartToMode(
+                        new StartToMode().withAfterStartUpMode(mode))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Start To Mode Temp
+    public static void setStartToModeTemp(Socket socket, String temp, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withStartup(new Startup().withStartToMode(
+                        new StartToMode().withPrimarySetPoint(Integer.parseInt(temp)))));
         settingsPostEmit(socket, json, callback);
     }
 
@@ -674,20 +703,6 @@ public class ServerControl {
                 .withPWM(new PWM().withTempRangeList(tempRange).withProfiles(profiles)));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
-    }
-
-    // Set Start To Mode
-    public static void setStartToMode(Socket socket, String mode, SocketCallback callback) {
-        String json = new Gson().toJson(new SettingsDataModel()
-                .withStartToMode(new StartToMode().withAfterStartUpMode(mode)));
-        settingsPostEmit(socket, json, callback);
-    }
-
-    // Set Start To Mode Temp
-    public static void setStartToModeTemp(Socket socket, String temp, SocketCallback callback) {
-        String json = new Gson().toJson(new SettingsDataModel()
-                .withStartToMode(new StartToMode().withPrimarySetPoint(Integer.parseInt(temp))));
-        settingsPostEmit(socket, json, callback);
     }
 
     // Set Pellets Warning Enabled

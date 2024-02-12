@@ -21,7 +21,6 @@
     <bool name="def_notif_influxdb_enabled">false</bool>
     <bool name="def_notif_apprise_enabled">false</bool>
 
-    <bool name="def_grill_swipe_start">true</bool>
     <bool name="def_keep_screen_on">false</bool>
     <bool name="def_pellet_warning_enabled">true</bool>
     <bool name="def_keep_warm_s_plus">false</bool>
@@ -34,7 +33,10 @@
     <bool name="def_venv">false</bool>
     <bool name="def_real_hw">false</bool>
 
-    <string name="def_startup_exit_temp">0</string>
+    <bool name="def_safety_startup_check">true</bool>
+
+    <string name="def_startup_exit_temp">140</string>
+    <string name="def_prime_on_startup">10</string>
     <string name="def_ss_exit_temp">120</string>
 
     <string name="def_grill_temp_unit">F</string>

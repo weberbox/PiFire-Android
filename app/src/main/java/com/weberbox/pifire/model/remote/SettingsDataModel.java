@@ -40,6 +40,12 @@ public class SettingsDataModel {
     @SerializedName("safety")
     @Expose
     private Safety safety;
+    @SerializedName("startup")
+    @Expose
+    private Startup startup;
+    @SerializedName("shutdown")
+    @Expose
+    protected Shutdown shutdown;
     @SerializedName("pelletlevel")
     @Expose
     private PelletLevel pelletLevel;
@@ -49,15 +55,9 @@ public class SettingsDataModel {
     @SerializedName("modules")
     @Expose
     private Modules modules;
-    @SerializedName("smartstart")
-    @Expose
-    private SmartStart smartStart;
     @SerializedName("pwm")
     @Expose
     private PWM pwm;
-    @SerializedName("start_to_mode")
-    @Expose
-    private StartToMode startToMode;
 
     public Versions getVersions() {
         return versions;
@@ -176,16 +176,29 @@ public class SettingsDataModel {
         return this;
     }
 
-    public SmartStart getSmartStart() {
-        return smartStart;
+    public Shutdown getShutdown() {
+        return shutdown;
     }
 
-    public void setSmartStart(SmartStart smartStart) {
-        this.smartStart = smartStart;
+    public void setShutdown(Shutdown shutdown) {
+        this.shutdown = shutdown;
     }
 
-    public SettingsDataModel withSmartStart(SmartStart smartStart) {
-        this.smartStart = smartStart;
+    public SettingsDataModel withShutdown(Shutdown shutdown) {
+        this.shutdown = shutdown;
+        return this;
+    }
+
+    public Startup getStartup() {
+        return startup;
+    }
+
+    public void setStartup(Startup startup) {
+        this.startup = startup;
+    }
+
+    public SettingsDataModel withStartup(Startup startup) {
+        this.startup = startup;
         return this;
     }
 
@@ -233,19 +246,6 @@ public class SettingsDataModel {
 
     public SettingsDataModel withPWM(PWM pwm) {
         this.pwm = pwm;
-        return this;
-    }
-
-    public StartToMode getStartToMode() {
-        return startToMode;
-    }
-
-    public void setStartToMode(StartToMode startToMode) {
-        this.startToMode = startToMode;
-    }
-
-    public SettingsDataModel withStartToMode(StartToMode startToMode) {
-        this.startToMode = startToMode;
         return this;
     }
 
@@ -358,18 +358,6 @@ public class SettingsDataModel {
         @SerializedName("prime_ignition")
         @Expose
         private Boolean primeIgnition;
-        @SerializedName("shutdown_timer")
-        @Expose
-        private Integer shutdownTimer;
-        @SerializedName("startup_timer")
-        @Expose
-        private Integer startUpTimer;
-        @SerializedName("startup_exit_temp")
-        @Expose
-        private Integer startExitTemp;
-        @SerializedName("auto_power_off")
-        @Expose
-        private Boolean autoPowerOff;
         @SerializedName("boot_to_monitor")
         @Expose
         private Boolean bootToMonitor;
@@ -479,58 +467,6 @@ public class SettingsDataModel {
 
         public Globals withPrimeIgnition(Boolean primeIgnition) {
             this.primeIgnition = primeIgnition;
-            return this;
-        }
-
-        public Integer getShutdownTimer() {
-            return shutdownTimer;
-        }
-
-        public void setShutdownTimer(Integer shutdownTimer) {
-            this.shutdownTimer = shutdownTimer;
-        }
-
-        public Globals withShutdownTimer(Integer shutdownTimer) {
-            this.shutdownTimer = shutdownTimer;
-            return this;
-        }
-
-        public Integer getStartUpTimer() {
-            return startUpTimer;
-        }
-
-        public void setStartUpTimer(Integer startUpTimer) {
-            this.startUpTimer = startUpTimer;
-        }
-
-        public Globals withStartupTimer(Integer startUpTimer) {
-            this.startUpTimer = startUpTimer;
-            return this;
-        }
-
-        public Integer getStartExitTemp() {
-            return startExitTemp;
-        }
-
-        public void setStartExitTemp(Integer startExitTemp) {
-            this.startExitTemp = startExitTemp;
-        }
-
-        public Globals withStartExitTemp(Integer startExitTemp) {
-            this.startExitTemp = startExitTemp;
-            return this;
-        }
-
-        public Boolean getAutoPowerOff() {
-            return autoPowerOff;
-        }
-
-        public void setAutoPowerOff(Boolean powerOff) {
-            this.autoPowerOff = powerOff;
-        }
-
-        public Globals withAutoPowerOff(Boolean powerOff) {
-            this.autoPowerOff = powerOff;
             return this;
         }
 
@@ -1147,6 +1083,9 @@ public class SettingsDataModel {
         @SerializedName("reigniteretries")
         @Expose
         private Integer reigniteRetries;
+        @SerializedName("startup_check")
+        @Expose
+        private Boolean startupCheck;
 
         public Integer getMinStartupTemp() {
             return minStartupTemp;
@@ -1200,6 +1139,137 @@ public class SettingsDataModel {
             return this;
         }
 
+        public Boolean getStartupCheck() {
+            return startupCheck;
+        }
+
+        public void setStartupCheck(Boolean startupCheck) {
+            this.startupCheck = startupCheck;
+        }
+
+        public Safety withStartupCheck(Boolean startupCheck) {
+            this.startupCheck = startupCheck;
+            return this;
+        }
+
+    }
+
+    public static class Startup {
+        @SerializedName("duration")
+        @Expose
+        private Integer duration;
+        @SerializedName("prime_on_startup")
+        @Expose
+        private Integer primeOnStartup;
+        @SerializedName("startup_exit_temp")
+        @Expose
+        private Integer startExitTemp;
+        @SerializedName("start_to_mode")
+        @Expose
+        private StartToMode startToMode;
+        @SerializedName("smartstart")
+        @Expose
+        private SmartStart smartStart;
+
+        public Integer getDuration() {
+            return duration;
+        }
+
+        public void setDuration(Integer duration) {
+            this.duration = duration;
+        }
+
+        public Startup withDuration(Integer duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Integer getPrimeOnStartup() {
+            return primeOnStartup;
+        }
+
+        public void setPrimeOnStartup(Integer primeOnStartup) {
+            this.primeOnStartup = primeOnStartup;
+        }
+
+        public Startup withPrimeOnStartup(Integer primeOnStartup) {
+            this.primeOnStartup = primeOnStartup;
+            return this;
+        }
+
+        public Integer getStartExitTemp() {
+            return startExitTemp;
+        }
+
+        public void setStartExitTemp(Integer startExitTemp) {
+            this.startExitTemp = startExitTemp;
+        }
+
+        public Startup withStartExitTemp(Integer startExitTemp) {
+            this.startExitTemp = startExitTemp;
+            return this;
+        }
+
+        public StartToMode getStartToMode() {
+            return startToMode;
+        }
+
+        public void setStartToMode(StartToMode startToMode) {
+            this.startToMode = startToMode;
+        }
+
+        public Startup withStartToMode(StartToMode startToMode) {
+            this.startToMode = startToMode;
+            return this;
+        }
+
+        public SmartStart getSmartStart() {
+            return smartStart;
+        }
+
+        public void setSmartStart(SmartStart smartStart) {
+            this.smartStart = smartStart;
+        }
+
+        public Startup withSmartStart(SmartStart smartStart) {
+            this.smartStart = smartStart;
+            return this;
+        }
+    }
+
+    public static class Shutdown {
+        @SerializedName("shutdown_duration")
+        @Expose
+        private Integer duration;
+        @SerializedName("auto_power_off")
+        @Expose
+        private Boolean autoPowerOff;
+
+        public Integer getDuration() {
+            return duration;
+        }
+
+        public void setDuration(Integer duration) {
+            this.duration = duration;
+        }
+
+        public Shutdown withDuration(Integer duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Boolean getAutoPowerOff() {
+            return autoPowerOff;
+        }
+
+        public void setAutoPowerOff(Boolean powerOff) {
+            this.autoPowerOff = powerOff;
+        }
+
+        public Shutdown withAutoPowerOff(Boolean powerOff) {
+            this.autoPowerOff = powerOff;
+            return this;
+        }
     }
 
     public static class PelletLevel {
@@ -1361,75 +1431,6 @@ public class SettingsDataModel {
 
     }
 
-    public static class SmartStart {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("exit_temp")
-        @Expose
-        private Integer exitTemp;
-        @SerializedName("profiles")
-        @Expose
-        private List<SSProfile> profiles = null;
-        @SerializedName("temp_range_list")
-        @Expose
-        private List<Integer> tempRangeList = null;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public SmartStart withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public Integer getExitTemp() {
-            return exitTemp;
-        }
-
-        public void setExitTemp(Integer exitTemp) {
-            this.exitTemp = exitTemp;
-        }
-
-        public SmartStart withExitTemp(Integer exitTemp) {
-            this.exitTemp = exitTemp;
-            return this;
-        }
-
-        public List<SSProfile> getProfiles() {
-            return profiles;
-        }
-
-        public void setProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-        }
-
-        public SmartStart withProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-            return this;
-        }
-
-        public List<Integer> getTempRangeList() {
-            return tempRangeList;
-        }
-
-        public void setTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-        }
-
-        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-            return this;
-        }
-
-    }
-
     public static class PWM {
 
         @SerializedName("pwm_control")
@@ -1542,43 +1543,6 @@ public class SettingsDataModel {
 
         public PWM withTempRangeList(List<Integer> tempRangeList) {
             this.tempRangeList = tempRangeList;
-            return this;
-        }
-
-    }
-
-    public static class StartToMode {
-
-        @SerializedName("after_startup_mode")
-        @Expose
-        private String afterStartUpMode;
-        @SerializedName("primary_setpoint")
-        @Expose
-        private Integer primarySetPoint;
-
-        public String getAfterStartUpMode() {
-            return afterStartUpMode;
-        }
-
-        public void setAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-        }
-
-        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-            return this;
-        }
-
-        public Integer getPrimarySetPoint() {
-            return primarySetPoint;
-        }
-
-        public void setPrimarySetPoint(Integer primarySetPoint) {
-            this.primarySetPoint = primarySetPoint;
-        }
-
-        public StartToMode withPrimarySetPoint(Integer primarySetPoint) {
-            this.primarySetPoint = primarySetPoint;
             return this;
         }
 
@@ -1992,7 +1956,113 @@ public class SettingsDataModel {
 
     }
 
+    // Startup Helpers
+    public static class StartToMode {
+
+        @SerializedName("after_startup_mode")
+        @Expose
+        private String afterStartUpMode;
+        @SerializedName("primary_setpoint")
+        @Expose
+        private Integer primarySetPoint;
+
+        public String getAfterStartUpMode() {
+            return afterStartUpMode;
+        }
+
+        public void setAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+        }
+
+        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
+            this.afterStartUpMode = afterStartUpMode;
+            return this;
+        }
+
+        public Integer getPrimarySetPoint() {
+            return primarySetPoint;
+        }
+
+        public void setPrimarySetPoint(Integer primarySetPoint) {
+            this.primarySetPoint = primarySetPoint;
+        }
+
+        public StartToMode withPrimarySetPoint(Integer primarySetPoint) {
+            this.primarySetPoint = primarySetPoint;
+            return this;
+        }
+
+    }
+
     // Smart Start Helpers
+    public static class SmartStart {
+
+        @SerializedName("enabled")
+        @Expose
+        private Boolean enabled;
+        @SerializedName("exit_temp")
+        @Expose
+        private Integer exitTemp;
+        @SerializedName("profiles")
+        @Expose
+        private List<SSProfile> profiles = null;
+        @SerializedName("temp_range_list")
+        @Expose
+        private List<Integer> tempRangeList = null;
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public SmartStart withEnabled(Boolean enabled) {
+            this.enabled = enabled;
+            return this;
+        }
+
+        public Integer getExitTemp() {
+            return exitTemp;
+        }
+
+        public void setExitTemp(Integer exitTemp) {
+            this.exitTemp = exitTemp;
+        }
+
+        public SmartStart withExitTemp(Integer exitTemp) {
+            this.exitTemp = exitTemp;
+            return this;
+        }
+
+        public List<SSProfile> getProfiles() {
+            return profiles;
+        }
+
+        public void setProfiles(List<SSProfile> profiles) {
+            this.profiles = profiles;
+        }
+
+        public SmartStart withProfiles(List<SSProfile> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public List<Integer> getTempRangeList() {
+            return tempRangeList;
+        }
+
+        public void setTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+        }
+
+        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
+            this.tempRangeList = tempRangeList;
+            return this;
+        }
+
+    }
 
     public static class SSProfile {
 

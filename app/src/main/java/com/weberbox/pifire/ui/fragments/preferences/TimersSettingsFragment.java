@@ -19,6 +19,7 @@ import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
-    private EditTextPreference startToModeTemp;
+    private EditTextPreference startToModeTemp, primeOnStartup, startupExitTemp;
     private Socket socket;
 
     @Override
@@ -52,31 +53,58 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        EditTextPreference shutdownTime = findPreference(getString(R.string.prefs_shutdown_time));
-        EditTextPreference startupTime = findPreference(getString(R.string.prefs_startup_time));
-        EditTextPreference startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
+        SwitchPreferenceCompatSocket startupExitTempEnabled = findPreference(getString(R.string.prefs_startup_exit_temp_enabled));
+        SwitchPreferenceCompatSocket startupPrimeEnabled = findPreference(getString(R.string.prefs_prime_on_startup_enabled));
+        EditTextPreference shutdownDuration = findPreference(getString(R.string.prefs_shutdown_duration));
+        EditTextPreference startupDuration = findPreference(getString(R.string.prefs_startup_duration));
         EditTextPreference smartExitTemp = findPreference(getString(R.string.prefs_smart_start_exit_temp));
         ListPreference startToMode = findPreference(getString(R.string.prefs_startup_goto_mode));
         startToModeTemp = findPreference(getString(R.string.prefs_startup_goto_temp));
+        primeOnStartup = findPreference(getString(R.string.prefs_prime_on_startup));
+        startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
 
 
-        if (shutdownTime != null) {
-            shutdownTime.setOnBindEditTextListener(editText -> {
+        if (shutdownDuration != null) {
+            shutdownDuration.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
                         new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
-        if (startupTime != null) {
-            startupTime.setOnBindEditTextListener(editText -> {
+        if (startupDuration != null) {
+            startupDuration.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
                         new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
+        }
+
+        if (startupPrimeEnabled != null) {
+            String prime = sharedPreferences.getString(getString(R.string.prefs_prime_on_startup),
+                    getString(R.string.def_prime_on_startup));
+            startupPrimeEnabled.setChecked(!prime.equals("0"));
+        }
+
+        if (primeOnStartup != null) {
+            primeOnStartup.setVisible(sharedPreferences.getBoolean(
+                    getString(R.string.prefs_prime_on_startup_enabled), false));
+            primeOnStartup.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 0.0, null, editText));
+            });
+        }
+
+        if (startupExitTempEnabled != null) {
+            String extTemp = sharedPreferences.getString(getString(R.string.prefs_startup_exit_temp),
+                    getString(R.string.def_startup_exit_temp));
+            startupExitTempEnabled.setChecked(!extTemp.equals("0"));
         }
 
         if (startupExitTemp != null) {
+            startupExitTemp.setVisible(sharedPreferences.getBoolean(
+                    getString(R.string.prefs_startup_exit_temp_enabled), false));
             startupExitTemp.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
@@ -149,14 +177,19 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
 
         if (preference != null && socket != null) {
             if (preference instanceof EditTextPreference) {
-                if (preference.getContext().getString(R.string.prefs_shutdown_time)
+                if (preference.getContext().getString(R.string.prefs_shutdown_duration)
                         .equals(preference.getKey())) {
-                    ServerControl.sendShutdownTime(socket,
+                    ServerControl.sendShutdownDuration(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
-                if (preference.getContext().getString(R.string.prefs_startup_time)
+                if (preference.getContext().getString(R.string.prefs_startup_duration)
                         .equals(preference.getKey())) {
-                    ServerControl.sendStartupTime(socket,
+                    ServerControl.sendStartupDuration(socket,
+                            ((EditTextPreference) preference).getText(), this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_prime_on_startup)
+                        .equals(preference.getKey())) {
+                    ServerControl.sendPrimeOnStartup(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_startup_goto_temp)
@@ -187,6 +220,34 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                     ServerControl.setSmartStartEnabled(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_prime_on_startup_enabled)
+                        .equals(preference.getKey())) {
+                    boolean isChecked = ((SwitchPreferenceCompat) preference).isChecked();
+                    primeOnStartup.setVisible(isChecked);
+                    if (isChecked) {
+                        ServerControl.sendPrimeOnStartup(socket,
+                                getString(R.string.def_prime_on_startup),
+                                this::processPostResponse);
+                        primeOnStartup.setText(getString(R.string.def_prime_on_startup));
+                    } else {
+                        ServerControl.sendPrimeOnStartup(socket, "0",
+                                this::processPostResponse);
+                    }
+                }
+                if (preference.getContext().getString(R.string.prefs_startup_exit_temp_enabled)
+                        .equals(preference.getKey())) {
+                    boolean isChecked = ((SwitchPreferenceCompat) preference).isChecked();
+                    startupExitTemp.setVisible(isChecked);
+                    if (isChecked) {
+                        ServerControl.setStartExitTemp(socket,
+                                getString(R.string.def_startup_exit_temp),
+                                this::processPostResponse);
+                        startupExitTemp.setText(getString(R.string.def_startup_exit_temp));
+                    } else {
+                        ServerControl.setStartExitTemp(socket, "0",
+                                this::processPostResponse);
+                    }
                 }
             }
             if (preference instanceof ListPreference) {

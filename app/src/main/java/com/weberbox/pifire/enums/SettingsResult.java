@@ -17,9 +17,9 @@ public enum SettingsResult {
     SMOKE_PLUS,
     PWM,
     SAFETY,
+    SHUTDOWN,
+    STARTUP,
     PELLET_LEVEL,
-    MODULES,
-    SMART_START,
-    START_TO_MODE
+    MODULES
 
 }

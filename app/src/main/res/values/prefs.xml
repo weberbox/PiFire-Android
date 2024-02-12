@@ -32,8 +32,6 @@
 
     <string name="prefs_show_changelog">prefs_show_changelog</string>
 
-    <string name="prefs_grill_swipe_start">prefs_grill_swipe_start</string>
-
     <string name="prefs_increment_temps">prefs_increment_temps</string>
 
     <!-- PiFire Settings -->
@@ -76,10 +74,14 @@
     <string name="prefs_work_keep_warm_temp">prefs_work_keep_warm_temp</string>
     <string name="prefs_work_keep_warm_s_plus">prefs_work_keep_warm_s_plus</string>
 
-    <string name="prefs_shutdown_time">prefs_shutdown_time</string>
-    <string name="prefs_startup_time">prefs_startup_time</string>
+    <string name="prefs_shutdown_duration">prefs_shutdown_duration</string>
+    <string name="prefs_startup_duration">prefs_startup_duration</string>
     <string name="prefs_startup_goto_mode">prefs_startup_goto_mode</string>
     <string name="prefs_startup_goto_temp">prefs_startup_goto_temp</string>
+    <string name="prefs_startup_exit_temp">prefs_startup_exit_temp</string>
+    <string name="prefs_startup_exit_temp_enabled">prefs_startup_exit_temp_enabled</string>
+    <string name="prefs_prime_on_startup_enabled">prefs_prime_on_startup_enabled</string>
+    <string name="prefs_prime_on_startup">prefs_prime_on_startup</string>
     <string name="prefs_auto_power_off">prefs_auto_power_off</string>
     <string name="prefs_smart_start">prefs_smart_start</string>
     <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
@@ -93,10 +95,10 @@
     <string name="prefs_global_control">prefs_global_control</string>
     <string name="prefs_ext_data">prefs_ext_data</string>
     <string name="prefs_notify_services">prefs_notify_services</string>
-    <string name="prefs_startup_exit_temp">prefs_startup_exit_temp</string>
     <string name="prefs_venv">prefs_venv</string>
     <string name="prefs_real_hw">prefs_real_hw</string>
 
+    <string name="prefs_safety_startup_check">prefs_safety_startup_check</string>
     <string name="prefs_safety_min_start">prefs_safety_min_start</string>
     <string name="prefs_safety_max_start">prefs_safety_max_start</string>
     <string name="prefs_safety_retries">prefs_safety_retries</string>

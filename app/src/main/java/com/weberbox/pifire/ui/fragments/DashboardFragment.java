@@ -153,8 +153,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 if (!currentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
                     if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
-                                        R.string.prefs_grill_swipe_start),
-                                getResources().getBoolean(R.bool.def_grill_swipe_start));
+                                        R.string.prefs_safety_startup_check),
+                                getResources().getBoolean(R.bool.def_safety_startup_check));
 
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)
@@ -179,8 +179,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                     } else if (currentMode.equals(Constants.GRILL_CURRENT_MONITOR) ||
                             currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
-                                        R.string.prefs_grill_swipe_start),
-                                getResources().getBoolean(R.bool.def_grill_swipe_start));
+                                        R.string.prefs_safety_startup_check),
+                                getResources().getBoolean(R.bool.def_safety_startup_check));
 
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)

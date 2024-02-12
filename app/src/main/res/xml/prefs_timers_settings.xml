@@ -10,8 +10,8 @@
             app:defaultValue="@string/def_startup_time"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
-            app:key="@string/prefs_startup_time"
-            app:title="@string/settings_startup_time"
+            app:key="@string/prefs_startup_duration"
+            app:title="@string/settings_startup_duration"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
@@ -44,19 +44,35 @@
             app:summary="@string/settings_startup_goto_note"
             app:title="@string/settings_note" />
 
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_smart_start"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_startup_exit_temp_enabled"
+            app:title="@string/settings_startup_exit_temp" />
+
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_startup_exit_temp_enabled"
             app:defaultValue="@string/def_startup_exit_temp"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_startup_exit_temp"
-            app:title="@string/settings_exit_temp"
+            app:title="@string/settings_startup_exit_temp_value"
             app:useSimpleSummaryProvider="true" />
 
-        <Preference
-            android:layout="@layout/preference_cat_note"
+        <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
+            app:defaultValue="@bool/def_smart_start"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_exit_temp_note"
-            app:title="@string/settings_note" />
+            app:key="@string/prefs_prime_on_startup_enabled"
+            app:title="@string/settings_startup_prime" />
+
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
+            app:dependency="@string/prefs_prime_on_startup_enabled"
+            app:defaultValue="@string/def_prime_on_startup"
+            app:dialogLayout="@layout/dialog_text_input_pref"
+            app:iconSpaceReserved="false"
+            app:key="@string/prefs_prime_on_startup"
+            app:title="@string/settings_startup_prime_value"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -85,13 +101,13 @@
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
             app:key="@string/prefs_smart_start_exit_temp"
-            app:title="@string/settings_exit_temp"
+            app:title="@string/settings_smart_start_exit_temp"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
-            app:summary="@string/settings_exit_temp_note"
+            app:summary="@string/settings_smart_start_exit_temp_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
@@ -104,8 +120,8 @@
             app:defaultValue="@string/def_shutdown_time"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"
-            app:key="@string/prefs_shutdown_time"
-            app:title="@string/settings_shutdown_time"
+            app:key="@string/prefs_shutdown_duration"
+            app:title="@string/settings_shutdown_duration"
             app:useSimpleSummaryProvider="true" />
 
         <Preference

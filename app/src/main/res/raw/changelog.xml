@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="2.1.1" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.1.2" changeDate="" currentVersion="true">
+        <changelogtext logType="fix">Update Startup &amp; Shutdown due to PiFire backend Changes</changelogtext>
+        <changelogtext logType="new">Added Prime on Startup Setting</changelogtext>
+        <changelogtext logType="new">Added Startup Check Setting &amp; combined app setting with PiFire server setting. Startup Check now applies to both the app and PiFire WebUI</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="2.1.1" changeDate="">
         <changelogtext logType="fix">BugFix for ProbeMap Settings</changelogtext>
         <changelogtext logType="imp">Update various dependencies</changelogtext>
     </changelogversion>

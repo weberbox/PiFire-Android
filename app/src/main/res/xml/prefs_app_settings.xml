@@ -42,16 +42,6 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_app_safety">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_grill_swipe_start"
-            app:key="@string/prefs_grill_swipe_start"
-            app:summary="@string/settings_app_safety_start_summary"
-            app:title="@string/settings_app_safety_start" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory
         app:key="@string/prefs_app_updater_cat"
         app:title="@string/settings_cat_updates">

@@ -26,6 +26,8 @@ import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeSettings;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Safety;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Shutdown;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmartStart;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
 import com.weberbox.pifire.model.remote.SettingsDataModel.StartToMode;
@@ -82,10 +84,6 @@ public class SettingsUtils {
                     putString(R.string.prefs_grill_name, globals.getGrillName());
                     putBoolean(R.string.prefs_admin_debug, globals.getDebugMode());
                     putBoolean(R.string.prefs_admin_boot_to_monitor, globals.getBootToMonitor());
-                    putIntString(R.string.prefs_shutdown_time, globals.getShutdownTimer());
-                    putIntString(R.string.prefs_startup_time, globals.getStartUpTimer());
-                    putIntString(R.string.prefs_startup_exit_temp, globals.getStartExitTemp());
-                    putBoolean(R.string.prefs_auto_power_off, globals.getAutoPowerOff());
                     putString(R.string.prefs_grill_units, globals.getUnits());
                     putBoolean(R.string.prefs_first_time_setup, globals.getFirstTimeSetup());
                     putBoolean(R.string.prefs_ext_data, globals.getExtData());
@@ -259,6 +257,7 @@ public class SettingsUtils {
             try {
                 Safety safety = settingsResponse.getSafety();
                 if (safety != null) {
+                    putBoolean(R.string.prefs_safety_startup_check, safety.getStartupCheck());
                     putIntString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
                     putIntString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
                     putIntString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
@@ -267,6 +266,45 @@ public class SettingsUtils {
             } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
                 Timber.e(e, "Safety JSON Error");
                 result = SettingsResult.SAFETY;
+            }
+
+            try {
+                Shutdown shutdown = settingsResponse.getShutdown();
+                if (shutdown != null) {
+                    putIntString(R.string.prefs_shutdown_duration, shutdown.getDuration());
+                    putBoolean(R.string.prefs_auto_power_off, shutdown.getAutoPowerOff());
+                }
+            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
+                Timber.e(e, "Shutdown JSON Error");
+                result = SettingsResult.SHUTDOWN;
+            }
+
+            try {
+                Startup startup = settingsResponse.getStartup();
+                if (startup != null) {
+                    putIntString(R.string.prefs_startup_duration, startup.getDuration());
+                    putIntString(R.string.prefs_prime_on_startup, startup.getPrimeOnStartup());
+                    putIntString(R.string.prefs_startup_exit_temp, startup.getStartExitTemp());
+
+                    StartToMode startToMode = startup.getStartToMode();
+                    if (startToMode != null) {
+                        putString(R.string.prefs_startup_goto_mode, startToMode.getAfterStartUpMode());
+                        putIntString(R.string.prefs_startup_goto_temp, startToMode.getPrimarySetPoint());
+                    }
+
+                    SmartStart smartStart = startup.getSmartStart();
+                    if (smartStart != null) {
+                        putBoolean(R.string.prefs_smart_start_enabled, smartStart.getEnabled());
+                        putIntString(R.string.prefs_smart_start_exit_temp, smartStart.getExitTemp());
+                        putString(R.string.prefs_smart_start_temp_range,
+                                new Gson().toJson(smartStart.getTempRangeList()));
+                        putString(R.string.prefs_smart_start_profiles,
+                                new Gson().toJson(smartStart.getProfiles()));
+                    }
+                }
+            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
+                Timber.e(e, "Startup JSON Error");
+                result = SettingsResult.STARTUP;
             }
 
             try {
@@ -293,32 +331,6 @@ public class SettingsUtils {
             } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
                 Timber.e(e, "Modules JSON Error");
                 result = SettingsResult.MODULES;
-            }
-
-            try {
-                SmartStart smartStart = settingsResponse.getSmartStart();
-                if (smartStart != null) {
-                    putBoolean(R.string.prefs_smart_start_enabled, smartStart.getEnabled());
-                    putIntString(R.string.prefs_smart_start_exit_temp, smartStart.getExitTemp());
-                    putString(R.string.prefs_smart_start_temp_range,
-                            new Gson().toJson(smartStart.getTempRangeList()));
-                    putString(R.string.prefs_smart_start_profiles,
-                            new Gson().toJson(smartStart.getProfiles()));
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "SmartStart JSON Error");
-                result = SettingsResult.SMART_START;
-            }
-
-            try {
-                StartToMode startToMode = settingsResponse.getStartToMode();
-                if (startToMode != null) {
-                    putString(R.string.prefs_startup_goto_mode, startToMode.getAfterStartUpMode());
-                    putIntString(R.string.prefs_startup_goto_temp, startToMode.getPrimarySetPoint());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "StartToMode JSON Error");
-                result = SettingsResult.START_TO_MODE;
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {

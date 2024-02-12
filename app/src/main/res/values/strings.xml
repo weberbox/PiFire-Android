@@ -212,10 +212,6 @@
     <string name="settings_app_events_amount_title">Event List Amount</string>
     <string name="settings_app_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
 
-    <string name="settings_cat_app_safety">Safety</string>
-    <string name="settings_app_safety_start">Swipe to Start</string>
-    <string name="settings_app_safety_start_summary">Require a swipe to start grill</string>
-
     <string name="settings_cat_app_temps">Temps</string>
     <string name="settings_app_increment_temps">Increment Temps</string>
     <string name="settings_app_increment_temps_summary">Increment Grill and Probe Temps by 5°</string>
@@ -274,10 +270,7 @@
     <string name="settings_keep_warm_note">The Keep Warm mode is a specified Hold temperature, that you can define, that can be activated by a timer or notification targets. When the grill is active, you can click on the timer dialog and check the Keep Warm box. Or you can click on the Notification Targets for any of the probes and select the Keep Warm box. The Keep Warm function will be activated when a probe notify target has been achieved or the timer has expired. The Grill will exit the currently running mode and switch to Hold Mode then attempt to maintain the temperature set below.</string>
 
     <string name="settings_cat_startup">Startup Settings</string>
-    <string name="settings_cat_shutdown">Shutdown Settings</string>
-    <string name="settings_shutdown_time">Shutdown Timer (seconds)</string>
-    <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
-    <string name="settings_startup_time">Startup Timer (seconds)</string>
+    <string name="settings_startup_duration">Startup Timer (seconds)</string>
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
     <string name="settings_startup_goto_title">Mode After Startup</string>
     <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
@@ -285,8 +278,11 @@
     <string name="settings_startup_smoke_mode">Smoke Mode</string>
     <string name="settings_startup_hold_mode">Hold Mode</string>
     <string name="settings_startup_hold_temp">Hold Temp</string>
-    <string name="settings_auto_power_off">Auto Power Off</string>
-    <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
+    <string name="settings_startup_exit_temp">Exit Startup @ Temperature</string>
+    <string name="settings_startup_exit_temp_value">Temperature</string>
+    <string name="settings_startup_prime">Always Prime on Startup</string>
+    <string name="settings_startup_prime_value">Amount (grams)</string>
+
     <string name="settings_smart_start">Smart Start</string>
     <string name="settings_smart_start_table">Smart Start Table</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
@@ -295,9 +291,8 @@
     <string name="settings_smart_start_auger_on">AugerOn</string>
     <string name="settings_smart_start_p_mode">P-Mode</string>
     <string name="settings_smart_start_action">Action</string>
-
-    <string name="settings_exit_temp">Exit Startup Temperature</string>
-    <string name="settings_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
+    <string name="settings_smart_start_exit_temp">Exit Startup Temperature</string>
+    <string name="settings_smart_start_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
 
     <string name="settings_smart_start_temp_range_add">Add Smart Start Profile</string>
     <string name="settings_smart_start_temp_range_edit">Edit Smart Start Profile</string>
@@ -307,8 +302,16 @@
     <string name="settings_smart_start_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_smart_start_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
 
+    <string name="settings_cat_shutdown">Shutdown Settings</string>
+    <string name="settings_shutdown_duration">Shutdown Timer (seconds)</string>
+    <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
+    <string name="settings_auto_power_off">Auto Power Off</string>
+    <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
+
     <string name="settings_cat_grill_name">Grill Naming</string>
 
+    <string name="settings_safety_startup_check">Enable Startup Check</string>
+    <string name="settings_safety_startup_check_summary">Enables an additional check after clicking startup, to prevent accidental startup</string>
     <string name="settings_safety_min_start">Min Startup Temp</string>
     <string name="settings_safety_max_start">Max Startup Temp</string>
     <string name="settings_safety_retries">Reignite Retries</string>
