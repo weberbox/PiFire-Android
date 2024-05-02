@@ -103,7 +103,6 @@
             android:layout_height="30dp"
             android:layout_below="@id/probe_shutdown_container"
             android:layout_marginBottom="@dimen/small_spacing"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

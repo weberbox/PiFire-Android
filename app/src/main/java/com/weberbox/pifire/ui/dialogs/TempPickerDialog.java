@@ -23,8 +23,9 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
+import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
+import com.weberbox.pifire.model.local.ProbeOptionsModel;
 import com.weberbox.pifire.model.local.TempPickerModel;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
@@ -32,7 +33,6 @@ import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.TempUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,17 +47,19 @@ public class TempPickerDialog {
     private final DialogDashboardCallback callback;
     private final Context context;
     private final String tempUnit;
-    private final int tempType;
+    private final DashProbe probe;
+    private final ProbeOptionsModel probeOptionsModel;
     private final int scrollTemp;
     private final boolean holdMode;
     private final boolean beginHold;
 
-    public TempPickerDialog(Context context, int tempType, int defaultTemp, boolean hold,
+    public TempPickerDialog(Context context, final DashProbe probe, ProbeOptionsModel probeOptionsModel, int defaultTemp, boolean hold,
                             boolean beginHold, DialogDashboardCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
-        this.tempType = tempType;
+        this.probe = probe;
+        this.probeOptionsModel = probeOptionsModel;
         this.scrollTemp = defaultTemp;
         this.holdMode = hold;
         this.beginHold = beginHold;
@@ -68,7 +70,6 @@ public class TempPickerDialog {
     public BottomSheetDialog showDialog() {
         DialogTempPickerBinding binding = DialogTempPickerBinding.inflate(inflater);
 
-        RelativeLayout warmContainer = binding.probeWarmContainer;
         ConstraintLayout probeOptions = binding.probeOptionsContainer;
         SwitchCompat shutdownSwitch = binding.probeShutdownSwitch;
         SwitchCompat keepWarmSwitch = binding.probeKeepWarmSwitch;
@@ -91,8 +92,7 @@ public class TempPickerDialog {
 
         TempUtils tempUtils = new TempUtils(context);
 
-        if (tempType == Constants.PICKER_TYPE_GRILL ||
-                tempType == Constants.PICKER_TYPE_GRILL_NOTIFY) {
+        if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
             selectedTemp = String.valueOf(tempUtils.getDefaultGrillTemp());
             tempPickerAdapter = new TempPickerAdapter(generateTemperatureList(context, tempUnit,
                     tempUtils.getMinGrillTemp(), (tempUtils.getMaxGrillTemp() + 1)));
@@ -137,15 +137,17 @@ public class TempPickerDialog {
             }
         });
 
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            warmContainer.setVisibility(View.VISIBLE);
-        }
+        shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            probeOptionsModel.setShutdown(isChecked);
+            probeOptionsModel.setKeepWarm(!isChecked);
+            keepWarmSwitch.setEnabled(!isChecked);
+        });
 
-        shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                keepWarmSwitch.setEnabled(!isChecked));
-
-        keepWarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                shutdownSwitch.setEnabled(!isChecked));
+        keepWarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            probeOptionsModel.setKeepWarm(isChecked);
+            probeOptionsModel.setShutdown(!isChecked);
+            shutdownSwitch.setEnabled(!isChecked);
+        });
 
         optionButton.setOnClickListener(v -> {
             if (probeOptions.getVisibility() == View.GONE) {
@@ -157,13 +159,12 @@ public class TempPickerDialog {
 
         confirmButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
-            callback.onTempConfirmClicked(tempType, selectedTemp, holdMode,
-                    shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
+            callback.onTempConfirmClicked(probe, probeOptionsModel, selectedTemp, holdMode);
         });
 
         clearButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
-            callback.onTempClearClicked(tempType);
+            callback.onTempClearClicked(probe);
         });
 
 
@@ -174,8 +175,7 @@ public class TempPickerDialog {
         pickerBottomSheet.setContentView(binding.getRoot());
 
         if (scrollTemp != 0) {
-            if (tempType == Constants.PICKER_TYPE_GRILL ||
-                    tempType == Constants.PICKER_TYPE_GRILL_NOTIFY) {
+            if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
                 setDefaultTemp(scrollTemp - tempUtils.getMinGrillTemp(), false);
             } else {
                 setDefaultTemp(scrollTemp - tempUtils.getMinProbeTemp(), false);
@@ -199,7 +199,9 @@ public class TempPickerDialog {
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            if (pickerBottomSheet.getWindow() != null) {
+                pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
         }
 
         return pickerBottomSheet;

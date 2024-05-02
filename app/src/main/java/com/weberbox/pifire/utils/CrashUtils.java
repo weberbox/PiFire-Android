@@ -2,18 +2,13 @@ package com.weberbox.pifire.utils;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Bundle;
 
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Modules;
-import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
-import com.weberbox.pifire.ui.fragments.FeedbackFragment;
 
 import java.util.ArrayList;
 
@@ -30,6 +25,7 @@ public class CrashUtils {
         if (sentryEnabled(context) && sentryDSNSet(context)) {
             SentryAndroid.init(context, options -> {
                 options.setEnableNdk(false);
+                options.setAttachScreenshot(true);
                 options.setEnableAutoSessionTracking(true);
                 options.setEnableDeduplication(true);
                 options.setDsn(context.getString(R.string.def_sentry_io_dsn));
@@ -49,8 +45,8 @@ public class CrashUtils {
                 options.setBeforeSend((event, hint) -> {
                     event.setExtra("PiFire Version",
                             getPrefString(context, R.string.prefs_server_version));
-                    event.setExtra("Four Probes",
-                            getPrefBoolean(context, R.string.prefs_four_probe));
+                    event.setExtra("PiFire Build",
+                            getPrefString(context, R.string.prefs_server_build));
                     event.setExtra("Temp Units",
                             getPrefString(context, R.string.prefs_grill_units));
                     event.setExtra("Modules", getServerModules(context));
@@ -65,12 +61,9 @@ public class CrashUtils {
             Sentry.configureScope(scope -> {
                 scope.setTag("Application Name", context.getString(R.string.app_name));
                 scope.setTag("Variant", BuildConfig.BUILD_TYPE);
-                scope.setTag("Flavor Type", BuildConfig.FLAVOR_type);
-                scope.setTag("Flavor Version", BuildConfig.FLAVOR_version);
-                scope.setTag("Flavor Update", BuildConfig.FLAVOR_update);
+                scope.setTag("Flavor Type", BuildConfig.FLAVOR);
                 scope.setTag("Git Branch", BuildConfig.GIT_BRANCH);
                 scope.setTag("Git Revision", BuildConfig.GIT_REV);
-                scope.setTag("Beta Build", String.valueOf(BuildConfig.IS_BETA));
             });
 
             setUserEmail(getPrefString(context, R.string.prefs_crash_user_email));
@@ -89,7 +82,6 @@ public class CrashUtils {
         ArrayList<Modules> arrayList = new ArrayList<>();
         arrayList.add(new Modules()
                 .withPlatform(getPrefString(ctx, R.string.prefs_modules_platform))
-                .withAdc(getPrefString(ctx, R.string.prefs_modules_adc))
                 .withDisplay(getPrefString(ctx, R.string.prefs_modules_display))
                 .withDistance(getPrefString(ctx, R.string.prefs_modules_distance)));
         return arrayList;
@@ -107,48 +99,12 @@ public class CrashUtils {
         return Prefs.getString(ctx.getString(preference), "Unknown");
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static Boolean getPrefBoolean(Context ctx, @StringRes int preference) {
         return Prefs.getBoolean(ctx.getString(preference), false);
     }
 
     private static void storeCrashEvent(Context context, String sentryId) {
         Prefs.putString(context.getString(R.string.prefs_crash_event), sentryId);
-    }
-
-    public static void checkIfCrashed(AppCompatActivity activity) {
-        boolean showDialog = Prefs.getBoolean(activity.getString(R.string.prefs_crash_dialog),
-                activity.getResources().getBoolean(R.bool.def_crash_dialog));
-        if (showDialog && sentryEnabled(activity) && sentryDSNSet(activity)) {
-            String crashEvent = Prefs.getString(activity.getString(R.string.prefs_crash_event));
-            if (!crashEvent.isEmpty()) {
-                MaterialDialogText dialog = new MaterialDialogText.Builder(activity)
-                        .setTitle(activity.getString(R.string.dialog_crash_title))
-                        .setMessage(activity.getString(R.string.dialog_crash_message))
-                        .setNegativeButton(activity.getString(R.string.no_thanks),
-                                (dialogInterface, which) -> dialogInterface.dismiss())
-                        .setPositiveButton(activity.getString(R.string.sure),
-                                (dialogInterface, which) -> {
-                                    launchFeedbackFragment(activity, crashEvent);
-                                    dialogInterface.dismiss();
-                                })
-                        .build();
-                dialog.setOnDismissListener(dialogInterface ->
-                        Prefs.putString(activity.getString(R.string.prefs_crash_event), ""));
-                dialog.show();
-            }
-        }
-    }
-
-    private static void launchFeedbackFragment(AppCompatActivity activity, String crashId) {
-        FeedbackFragment fragment = new FeedbackFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.INTENT_CRASHED_ID, crashId);
-        fragment.setArguments(bundle);
-        activity.getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
-                .replace(android.R.id.content, fragment)
-                .addToBackStack(null)
-                .commit();
     }
 }

@@ -14,24 +14,14 @@ public class Constants {
     public static final String GRILL_CURRENT_MANUAL = "Manual";
     public static final String GRILL_CURRENT_PRIME = "Prime";
 
-    // Callback Probe/Grill Types
-    public static final int PICKER_TYPE_GRILL = 0;
-    public static final int PICKER_TYPE_PROBE_ONE = 1;
-    public static final int PICKER_TYPE_PROBE_TWO = 2;
-    public static final int PICKER_TYPE_GRILL_NOTIFY = 3;
-
-    // Callback Backup/Restore Type
-    public static final int ACTION_BACKUP_SETTINGS = 0;
-    public static final int ACTION_BACKUP_PELLETDB = 1;
-    public static final int ACTION_RESTORE_SETTINGS = 2;
-    public static final int ACTION_RESTORE_PELLETDB = 3;
+    // Probe Types
+    public static final String DASH_PROBE_PRIMARY = "Primary";
+    public static final String DASH_PROBE_FOOD = "Food";
 
     // Main Fragments
-    public static final int FRAG_RECIPES = 0;
-    public static final int FRAG_PELLETS = 1;
-    public static final int FRAG_DASHBOARD = 2;
-    public static final int FRAG_HISTORY = 3;
-    public static final int FRAG_EVENTS = 4;
+    public static final int FRAG_PELLETS = 0;
+    public static final int FRAG_DASHBOARD = 1;
+    public static final int FRAG_EVENTS = 2;
 
     // Settings Fragment
     public static final int FRAG_APP_SETTINGS = 0;
@@ -40,16 +30,11 @@ public class Constants {
     public static final int FRAG_WORK_SETTINGS = 3;
     public static final int FRAG_PELLET_SETTINGS = 4;
     public static final int FRAG_TIMERS_SETTINGS = 5;
-    public static final int FRAG_HISTORY_SETTINGS = 6;
-    public static final int FRAG_SAFETY_SETTINGS = 7;
-    public static final int FRAG_NOTIF_SETTINGS = 8;
-    public static final int FRAG_ADMIN_SETTINGS = 9;
-    public static final int FRAG_MANUAL_SETTINGS = 10;
-    public static final int FRAG_PWM_SETTINGS = 11;
-
-    // Recipe Fragment
-    public static final int FRAG_VIEW_RECIPE = 0;
-    public static final int FRAG_EDIT_RECIPE = 1;
+    public static final int FRAG_SAFETY_SETTINGS = 6;
+    public static final int FRAG_NOTIF_SETTINGS = 7;
+    public static final int FRAG_ADMIN_SETTINGS = 8;
+    public static final int FRAG_MANUAL_SETTINGS = 9;
+    public static final int FRAG_PWM_SETTINGS = 10;
 
     // Fade Directions
     public static final int FADE_OUT = 0;
@@ -58,20 +43,12 @@ public class Constants {
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";
-    public static final String INTENT_RECIPE_FRAGMENT = "recipe_fragment";
-    public static final String INTENT_RECIPE_ID = "recipe_id";
-    public static final String INTENT_CRASHED_ID = "crashed_id";
-
-    // Results
-    public static final int RESULT_PERMISSIONS = 405;
 
     // JSON File Names
     public static final String JSON_EVENTS = "events.json";
-    public static final String JSON_HISTORY = "history.json";
     public static final String JSON_PELLETS = "pellets.json";
-    public static final String JSON_SETTINGS = "settings.json";
     public static final String JSON_INFO = "info.json";
-    public static final String JSON_RECIPES = "recipes.json";
+    public static final String JSON_SERVER_INFO = "server_info.json";
 
     // Licenses
     public static final String LICENSES_LIST = "licenses";
@@ -88,39 +65,7 @@ public class Constants {
     public static final String ITEM_RATING_2 = "★ ★";
     public static final String ITEM_RATING_1 = "★";
 
-    // Recipe Difficulties
-    public static final int RECIPE_DIF_BEGIN = 0;
-    public static final int RECIPE_DIF_EASY = 1;
-    public static final int RECIPE_DIF_MOD = 2;
-    public static final int RECIPE_DIF_HARD = 3;
-    public static final int RECIPE_DIF_V_HARD = 4;
-
     // Update
     public static final String UPDATE_FILENAME = "app-update.apk";
-
-    // PiFire Backup
-    public static final String BACKUP_SETTINGS = "settings";
-    public static final String BACKUP_PELLETDB = "pelletdb";
-    public static final String BACKUP_SETTINGS_FILENAME = "PiFire_";
-    public static final String BACKUP_PELLETDB_FILENAME = "PelletDB_";
-
-    // Database
-    public static final String DB_RECIPES_TABLE = "recipes";
-    public static final String DB_RECIPES = "recipes.db";
-    public static final String DB_RECIPES_BACKUP_FILENAME = "Recipes_";
-
-    // One Signal Status
-    public static final int ONESIGNAL_NO_ID = 0;
-    public static final int ONESIGNAL_NO_CONSENT = 1;
-    public static final int ONESIGNAL_NOT_REGISTERED = 2;
-    public static final int ONESIGNAL_DEVICE_ERROR = 3;
-    public static final int ONESIGNAL_REGISTERED = 4;
-    public static final int ONESIGNAL_NOT_SUBSCRIBED = 5;
-    public static final int ONESIGNAL_APP_UPDATED = 6;
-    public static final int ONESIGNAL_NULL_TOKEN = 7;
-
-    // In App Updates
-    public static final int FLEXIBLE_REQUEST_CODE = 781;
-    public static final int IMMEDIATE_REQUEST_CODE = 782;
 
 }

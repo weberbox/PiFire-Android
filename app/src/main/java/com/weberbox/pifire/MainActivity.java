@@ -14,6 +14,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -30,13 +34,17 @@ import com.discord.panels.OverlappingPanelsLayout.Panel;
 import com.discord.panels.PanelsChildGestureRegionObserver;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
 import com.weberbox.pifire.databinding.LayoutNavHeaderLeftBinding;
+import com.weberbox.pifire.enums.OneSignalResult;
+import com.weberbox.pifire.enums.ServerSupport;
 import com.weberbox.pifire.interfaces.NavBindingCallback;
+import com.weberbox.pifire.interfaces.ServerInfoCallback;
 import com.weberbox.pifire.interfaces.SettingsBindingCallback;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.remote.DashDataModel;
@@ -45,13 +53,12 @@ import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.adapter.MainPagerAdapter;
+import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
 import com.weberbox.pifire.ui.fragments.ChangelogFragment;
-import com.weberbox.pifire.ui.fragments.FeedbackFragment;
 import com.weberbox.pifire.ui.fragments.InfoFragment;
 import com.weberbox.pifire.ui.views.NavListItem;
 import com.weberbox.pifire.update.UpdateUtils;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -65,7 +72,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements
-        PanelsChildGestureRegionObserver.GestureRegionsListener {
+        PanelsChildGestureRegionObserver.GestureRegionsListener, ServerInfoCallback {
 
     private OverlappingPanelsLayout panelsLayout;
     private ActivityMainPanelsBinding binding;
@@ -77,7 +84,7 @@ public class MainActivity extends BaseActivity implements
     private FrameLayout startPanel;
     private UpdateUtils updateUtils;
     private FrameLayout endPanel;
-    private NavListItem navDashboard, navPellets, navHistory, navEvents, navRecipes;
+    private NavListItem navDashboard, navPellets, navEvents;
     private Socket socket;
     private int downX;
 
@@ -92,10 +99,15 @@ public class MainActivity extends BaseActivity implements
             Intent i = new Intent(MainActivity.this, ServerSetupActivity.class);
             startActivity(i);
             finish();
-        } else if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
+            return;
+        }
+
+        if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
             Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
             showFragment(new ChangelogFragment());
         }
+
+        getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 
         socket = ((PiFireApplication) getApplication()).getSocket();
 
@@ -120,9 +132,7 @@ public class MainActivity extends BaseActivity implements
 
         navDashboard = binding.navLayoutPanel.navDashboard;
         navPellets = binding.navLayoutPanel.navPellets;
-        navHistory = binding.navLayoutPanel.navHistory;
         navEvents = binding.navLayoutPanel.navEvents;
-        navRecipes = binding.navLayoutPanel.navRecipes;
 
         bottomBar = binding.appBarMainPanel.contentMain.bottomBar;
         viewPager = binding.appBarMainPanel.contentMain.viewPager;
@@ -150,10 +160,6 @@ public class MainActivity extends BaseActivity implements
             navGrillName.setText(grillName);
         }
 
-        if (getString(R.string.def_sentry_io_dsn).isEmpty()) {
-            binding.navLayoutPanel.navFeedback.setVisibility(View.GONE);
-        }
-
         if (!Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
             binding.settingsLayoutPanel.settingsPwm.setVisibility(View.GONE);
         }
@@ -162,14 +168,12 @@ public class MainActivity extends BaseActivity implements
             if (connected != null) {
                 AlertUtils.toggleOfflineAlert(this, connected);
 
-                if (AppConfig.USE_ONESIGNAL) {
-                    if (connected && firstLaunch) {
-                        firstLaunch = false;
-                        int registrationResult = OneSignalUtils.checkRegistration(this);
-                        if (registrationResult == Constants.ONESIGNAL_NOT_REGISTERED ||
-                                registrationResult == Constants.ONESIGNAL_APP_UPDATED) {
-                            OneSignalUtils.registerDevice(this, socket, registrationResult);
-                        }
+                if (connected && firstLaunch) {
+                    firstLaunch = false;
+                    OneSignalResult registrationResult = OneSignalUtils.checkRegistration(this);
+                    if (registrationResult == OneSignalResult.ONESIGNAL_NOT_REGISTERED ||
+                            registrationResult == OneSignalResult.ONESIGNAL_APP_UPDATED) {
+                        OneSignalUtils.registerDevice(this, socket, registrationResult);
                     }
                 }
             }
@@ -183,39 +187,23 @@ public class MainActivity extends BaseActivity implements
 
         connectSocketListenData(socket);
 
-        updateUtils = new UpdateUtils(this);
-        if (savedInstanceState == null ) {
-            updateUtils.checkForUpdate(false, false);
+        VersionUtils.checkSupportedServerVersion(this);
+
+        if (AppConfig.IS_PLAY_BUILD) {
+            updateUtils = new UpdateUtils(this, activityResultLauncher);
+            if (savedInstanceState == null) {
+                updateUtils.checkForUpdate(false, false);
+            }
         }
 
-        CrashUtils.checkIfCrashed(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (updateUtils != null) {
-            updateUtils.handleUpdateRequest(requestCode, resultCode);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else if (startPanel.isShown() || endPanel.isShown()) {
-            panelsLayout.closePanels();
-        } else if (viewPager.getCurrentItem() != Constants.FRAG_DASHBOARD) {
-            viewPager.setCurrentItem(Constants.FRAG_DASHBOARD);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateUtils.checkForUpdate(false, true);
+        if (AppConfig.IS_PLAY_BUILD && updateUtils != null) {
+            updateUtils.checkForUpdate(false, true);
+        }
         PanelsChildGestureRegionObserver.Provider.get().addGestureRegionsUpdateListener(this);
         panelsLayout.registerStartPanelStateListeners(panelState ->
                 mainViewModel.setStartPanelStateChange(panelState));
@@ -232,18 +220,26 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        updateUtils.stopAppUpdater();
+        if (AppConfig.IS_PLAY_BUILD && updateUtils != null) {
+            updateUtils.stopAppUpdater();
+        }
     }
 
     @Override
     public void onDestroy() {
-        binding = null;
-        socket.disconnect();
-        socket.off(Socket.EVENT_CONNECT, onConnect);
-        socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-        socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
-        PanelsChildGestureRegionObserver.Provider.get().unregister(viewPager);
+        if (binding != null) {
+            binding = null;
+        }
+        if (socket != null) {
+            socket.disconnect();
+            socket.off(Socket.EVENT_CONNECT, onConnect);
+            socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
+            socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+        }
+        if (viewPager != null) {
+            PanelsChildGestureRegionObserver.Provider.get().unregister(viewPager);
+        }
         super.onDestroy();
     }
 
@@ -276,8 +272,77 @@ public class MainActivity extends BaseActivity implements
     }
 
     private final SettingsSocketCallback settingsSocketCallback = result -> {
-        if (!result) Timber.d("Update Settings Failed");
+        switch (result) {
+            case GENERAL -> showSettingsError(getString(R.string.error_settings_general));
+            case PROBES, GLOBALS, VERSIONS, IFTTT, PUSHBULLET, PUSHOVER, ONESIGNAL, INFLUXDB,
+                    APPRISE, CYCLE_DATA, KEEP_WARM, SMOKE_PLUS, PWM, SAFETY, PELLET_LEVEL,
+                    MODULES ->
+                    showSettingsError(getString(R.string.error_settings_section, result));
+            default -> {
+            }
+        }
     };
+
+    private void showSettingsError(String error) {
+        runOnUiThread(() -> Alerter.create(MainActivity.this)
+                .setText(error)
+                .setIcon(R.drawable.ic_error)
+                .setBackgroundColorRes(R.color.colorAccentRed)
+                .enableSwipeToDismiss()
+                .setTextAppearance(R.style.Text14AllerBold)
+                .enableInfiniteDuration(true)
+                .setIconSize(R.dimen.alerter_icon_size_small)
+                .show());
+    }
+
+    private final OnBackPressedCallback onBackCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else if (startPanel.isShown() || endPanel.isShown()) {
+                panelsLayout.closePanels();
+            } else if (viewPager.getCurrentItem() != Constants.FRAG_DASHBOARD) {
+                viewPager.setCurrentItem(Constants.FRAG_DASHBOARD);
+            } else {
+                finish();
+            }
+        }
+    };
+
+    @Override
+    public void onServerInfo(ServerSupport result, String version, String build) {
+        switch (result) {
+            case SUPPORTED -> Timber.d("Server Version Supported");
+            case UNSUPPORTED_MIN -> {
+                Timber.d("Min Server Version Unsupported");
+                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_min_message,
+                        version, build.isBlank() ? "0" : build));
+            }
+            case UNSUPPORTED_MAX -> {
+                Timber.d("Max Server Version Unsupported");
+                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_max_message,
+                        version, build.isBlank() ? "0" : build));
+            }
+            case FAILED -> VersionUtils.getRawSupportedVersion(this, this);
+        }
+    }
+
+    private void showUnsupportedDialog(String message) {
+        runOnUiThread(() -> {
+            MaterialDialogText dialog = new MaterialDialogText.Builder(MainActivity.this)
+                    .setTitle(getString(R.string.dialog_unsupported_server_version_title))
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.exit),
+                            (dialogInterface, which) -> {
+                                dialogInterface.dismiss();
+                                finish();
+                            })
+                    .build();
+            dialog.show();
+        });
+    }
 
     private final SettingsBindingCallback settingsBindingCallback = fragment -> {
         closePanelsDelayed();
@@ -314,12 +379,6 @@ public class MainActivity extends BaseActivity implements
             closePanelsDelayed();
             showFragment(new ChangelogFragment());
         }
-
-        @Override
-        public void onNavFeedback() {
-            closePanelsDelayed();
-            showFragment(new FeedbackFragment());
-        }
     };
 
     private final OnPageChangeCallback onPageChangeCallback = new OnPageChangeCallback() {
@@ -341,9 +400,7 @@ public class MainActivity extends BaseActivity implements
             }
             navDashboard.setNavSelected(position == Constants.FRAG_DASHBOARD);
             navPellets.setNavSelected(position == Constants.FRAG_PELLETS);
-            navHistory.setNavSelected(position == Constants.FRAG_HISTORY);
             navEvents.setNavSelected(position == Constants.FRAG_EVENTS);
-            navRecipes.setNavSelected(position == Constants.FRAG_RECIPES);
         }
 
         @Override
@@ -443,6 +500,14 @@ public class MainActivity extends BaseActivity implements
             }
         }
     };
+
+    private final ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(),
+            result -> {
+                if (result != null && updateUtils != null) {
+                    updateUtils.handleUpdateRequest(result.getResultCode());
+                }
+            });
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

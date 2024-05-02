@@ -29,8 +29,10 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
+import com.weberbox.pifire.enums.ServerSupport;
+import com.weberbox.pifire.enums.SettingsResult;
+import com.weberbox.pifire.interfaces.ServerInfoCallback;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
@@ -41,6 +43,7 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +66,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import timber.log.Timber;
 
-public class URLSetupFragment extends Fragment implements DialogAuthCallback {
+public class URLSetupFragment extends Fragment implements DialogAuthCallback, ServerInfoCallback {
 
     private FragmentSetupUrlBinding binding;
     private TextInputEditText serverAddress;
@@ -322,11 +325,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
     private void storeValidURL() {
         if (validURL != null) {
             Prefs.putString(getString(R.string.prefs_server_address), validURL);
-            if (AppConfig.USE_ONESIGNAL) {
-                navController.navigate(R.id.nav_setup_push);
-            } else {
-                navController.navigate(R.id.nav_setup_finish);
-            }
+            navController.navigate(R.id.nav_setup_push);
         } else {
             showAlerter(getActivity(), getString(R.string.setup_error));
         }
@@ -365,8 +364,8 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
     };
 
     private final SettingsSocketCallback settingsSocketCallback = result -> {
-        if (result) {
-            completeSetup();
+        if (result == SettingsResult.SUCCESS) {
+            VersionUtils.checkSupportedServerVersion(this);
         } else {
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
@@ -381,6 +380,42 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback {
             }
         }
     };
+
+    @Override
+    public void onServerInfo(ServerSupport result, String version, String build) {
+        switch (result) {
+            case SUPPORTED -> completeSetup();
+            case UNSUPPORTED_MIN -> {
+                Timber.d("Min Server Version Unsupported");
+                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_min_message,
+                        version, build.isBlank() ? "0" : build));
+            }
+            case UNSUPPORTED_MAX -> {
+                Timber.d("Max Server Version Unsupported");
+                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_max_message,
+                        version, build.isBlank() ? "0" : build));
+            }
+            case FAILED -> VersionUtils.getRawSupportedVersion(requireActivity(), this);
+        }
+    }
+
+    private void showUnsupportedDialog(String message) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                connectProgress.setVisibility(View.GONE);
+                socket.disconnect();
+                socket.close();
+                isConnecting = false;
+                MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
+                        .setTitle(getString(R.string.dialog_unsupported_server_version_title))
+                        .setMessage(message)
+                        .setPositiveButton(getString(android.R.string.ok),
+                                (dialogInterface, which) -> dialogInterface.dismiss())
+                        .build();
+                dialog.show();
+            });
+        }
+    }
 
     private void completeSetup() {
         if (getActivity() != null) {

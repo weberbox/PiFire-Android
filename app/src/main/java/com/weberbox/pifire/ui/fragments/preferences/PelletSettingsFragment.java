@@ -16,13 +16,11 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -64,18 +62,11 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (pelletWarningTime != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                pelletWarningTime.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), 1.0, null, editText));
-                });
-            } else {
-                pelletWarningTime.setEnabled(false);
-                pelletWarningTime.setSummaryProvider(null);
-                pelletWarningTime.setSummary(getString(R.string.disabled_option_settings,
-                        ServerVersions.V_135));
-            }
+            pelletWarningTime.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
+            });
         }
 
         if (pelletWarningLevel != null) {
@@ -103,19 +94,12 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (augerRate != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_135)) {
-                augerRate.setOnBindEditTextListener(editText -> {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                            InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                    editText.addTextChangedListener(
-                            new EmptyTextListener(requireActivity(), 0.0, null, editText));
-                });
-            } else {
-                augerRate.setEnabled(false);
-                augerRate.setSummaryProvider(null);
-                augerRate.setSummary(getString(R.string.disabled_option_settings,
-                        ServerVersions.V_135));
-            }
+            augerRate.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 0.0, null, editText));
+            });
         }
     }
 
@@ -162,6 +146,12 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_pellet_warning_enabled)
                         .equals(preference.getKey())) {
                     ServerControl.setPelletWarningEnabled(socket,
+                            ((SwitchPreferenceCompat) preference).isChecked(),
+                            this::processPostResponse);
+                }
+                if (preference.getContext().getString(R.string.prefs_pellet_prime_igniter)
+                        .equals(preference.getKey())) {
+                    ServerControl.setPelletPrimeIgnition(socket,
                             ((SwitchPreferenceCompat) preference).isChecked(),
                             this::processPostResponse);
                 }

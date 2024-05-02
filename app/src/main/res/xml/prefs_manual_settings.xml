@@ -13,7 +13,7 @@
             app:title="@string/enabled" />
 
         <Preference
-            android:layout="@layout/preference_category_note"
+            android:layout="@layout/preference_cat_note"
             app:iconSpaceReserved="false"
             app:summary="@string/settings_admin_manual_note"
             app:title="@string/settings_note" />

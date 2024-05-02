@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.weberbox.pifire.ui.views.DashProbeCard xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dash_probe"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dash_half_margin"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    app:cardPreventCornerOverlap="false"
+    tools:dash_probe_icon="@drawable/ic_grill_thermometer"
+    tools:dash_probe_set_temp="true"
+    tools:dash_probe_name="@string/dash_grill_title" >
+
+</com.weberbox.pifire.ui.views.DashProbeCard>

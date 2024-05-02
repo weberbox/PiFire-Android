@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
@@ -20,16 +19,13 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
-import com.weberbox.pifire.interfaces.RecipeEditCallback;
 import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +36,6 @@ public class TimePickerDialog {
 
     private final BottomSheetDialog pickerBottomSheet;
     private final DialogDashboardCallback callback;
-    private final RecipeEditCallback recipeCallback;
     private RecyclerView hoursList;
     private RecyclerView minutesList;
     private String hoursSelected = "00";
@@ -55,26 +50,13 @@ public class TimePickerDialog {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.callback = callback;
-        this.recipeCallback = null;
         this.scrollHours = 0;
         this.scrollMinutes = 0;
-    }
-
-    public TimePickerDialog(Context context, Integer hours, Integer minutes,
-                            RecipeEditCallback callback) {
-        pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
-        inflater = LayoutInflater.from(context);
-        this.context = context;
-        this.recipeCallback = callback;
-        this.callback = null;
-        this.scrollHours = hours;
-        this.scrollMinutes = minutes;
     }
 
     public BottomSheetDialog showDialog() {
         DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(inflater);
 
-        RelativeLayout warmContainer = binding.timerWarmContainer;
         ConstraintLayout optionsContainer = binding.timerOptionsContainer;
         SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
         SwitchCompat keepWarmSwitch = binding.timerKeepWarmSwitch;
@@ -123,10 +105,6 @@ public class TimePickerDialog {
             optionsButton.setVisibility(View.GONE);
         }
 
-        if (VersionUtils.isSupported(ServerVersions.V_127)) {
-            warmContainer.setVisibility(View.VISIBLE);
-        }
-
         shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
                 keepWarmSwitch.setEnabled(!isChecked));
 
@@ -152,8 +130,6 @@ public class TimePickerDialog {
             if (callback != null) {
                 callback.onTimerConfirmClicked(hoursSelected, minutesSelected,
                         shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
-            } else {
-                recipeCallback.onRecipeTime(hoursSelected, minutesSelected);
             }
         });
 
@@ -188,7 +164,9 @@ public class TimePickerDialog {
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            if (pickerBottomSheet.getWindow() != null) {
+                pickerBottomSheet.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
         }
 
         return pickerBottomSheet;

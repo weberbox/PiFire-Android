@@ -14,13 +14,11 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.utils.AlertUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import io.socket.client.Socket;
 
@@ -50,9 +48,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
-        Preference serverUpdates = findPreference(getString(R.string.prefs_server_updates_frag));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
-        Preference backupRestore = findPreference(getString(R.string.prefs_admin_backup_restore));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
         Preference eventsDelete = findPreference(getString(R.string.prefs_admin_delete_events));
         Preference pelletsDelete = findPreference(getString(R.string.prefs_admin_delete_pellets));
@@ -62,40 +58,11 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
         Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
 
-        if (serverUpdates != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_127)) {
-                serverUpdates.setOnPreferenceClickListener(preference -> {
-                    showFragment(new ServerUpdateFragment());
-                    return true;
-                });
-            } else {
-                serverUpdates.setEnabled(false);
-                serverUpdates.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_127));
-            }
-        }
-
-        if (backupRestore != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_122)) {
-                backupRestore.setOnPreferenceClickListener(preference -> {
-                    showFragment(new BackupRestoreFragment());
-                    return true;
-                });
-            } else {
-                backupRestore.setEnabled(false);
-                backupRestore.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_122));
-            }
-        }
-
         if (manualCat != null && manualMode != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_121)) {
-                manualMode.setOnPreferenceClickListener(preference -> {
-                    showFragment(new ManualSettingsFragment());
-                    return true;
-                });
-            } else {
-                manualCat.setEnabled(false);
-                manualMode.setSummary(getString(R.string.disabled_option_settings, ServerVersions.V_121));
-            }
+            manualMode.setOnPreferenceClickListener(preference -> {
+                showFragment(new ManualSettingsFragment());
+                return true;
+            });
         }
 
         if (historyDelete != null) {
@@ -103,7 +70,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                 if (socketConnected()) {
                     BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
                             .setTitle(getString(R.string.dialog_confirm_action))
-                            .setMessage(getString(R.string.history_delete_content))
+                            .setMessage(getString(R.string.settings_admin_delete_history_text))
                             .setAutoDismiss(true)
                             .setNegativeButton(getString(R.string.cancel),
                                     (dialogInterface, which) -> {
@@ -213,34 +180,28 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         }
 
         if (restartSystem != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_129)) {
-                restartSystem.setOnPreferenceClickListener(preference -> {
-                    if (socketConnected()) {
-                        BottomButtonDialog dialog = new BottomButtonDialog.Builder(
-                                requireActivity())
-                                .setTitle(getString(R.string.dialog_confirm_action))
-                                .setMessage(getString(R.string.settings_admin_restart_text))
-                                .setAutoDismiss(true)
-                                .setNegativeButton(getString(R.string.cancel),
-                                        (dialogInterface, which) -> {
-                                        })
-                                .setPositiveButtonWithColor(getString(R.string.restart),
-                                        R.color.dialog_positive_button_color_red,
-                                        (dialogInterface, which) -> {
-                                            ServerControl.sendRestartSystem(socket,
-                                                    this::processPostResponse);
-                                            dialogInterface.dismiss();
-                                        })
-                                .build();
-                        dialog.show();
-                    }
-                    return false;
-                });
-            } else {
-                restartSystem.setEnabled(false);
-                restartSystem.setSummary(getString(R.string.disabled_option_settings,
-                        ServerVersions.V_129));
-            }
+            restartSystem.setOnPreferenceClickListener(preference -> {
+                if (socketConnected()) {
+                    BottomButtonDialog dialog = new BottomButtonDialog.Builder(
+                            requireActivity())
+                            .setTitle(getString(R.string.dialog_confirm_action))
+                            .setMessage(getString(R.string.settings_admin_restart_text))
+                            .setAutoDismiss(true)
+                            .setNegativeButton(getString(R.string.cancel),
+                                    (dialogInterface, which) -> {
+                                    })
+                            .setPositiveButtonWithColor(getString(R.string.restart),
+                                    R.color.dialog_positive_button_color_red,
+                                    (dialogInterface, which) -> {
+                                        ServerControl.sendRestartSystem(socket,
+                                                this::processPostResponse);
+                                        dialogInterface.dismiss();
+                                    })
+                            .build();
+                    dialog.show();
+                }
+                return false;
+            });
         }
 
         if (rebootSystem != null) {
@@ -344,6 +305,14 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
                         .equals(preference.getKey())) {
                     if (socket != null && socket.connected()) {
                         ServerControl.setDebugMode(socket,
+                                ((SwitchPreferenceCompat) preference).isChecked(),
+                                response -> processPostResponse(response, false));
+                    }
+                }
+                if (preference.getContext().getString(R.string.prefs_admin_boot_to_monitor)
+                        .equals(preference.getKey())) {
+                    if (socket != null && socket.connected()) {
+                        ServerControl.setBootToMonitor(socket,
                                 ((SwitchPreferenceCompat) preference).isChecked(),
                                 response -> processPostResponse(response, false));
                     }

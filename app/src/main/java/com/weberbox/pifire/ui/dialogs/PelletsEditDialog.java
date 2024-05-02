@@ -187,7 +187,9 @@ public class PelletsEditDialog {
         Configuration configuration = activity.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
-            bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            if (bottomSheetDialog.getWindow() != null) {
+                bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
         }
 
         return bottomSheetDialog;

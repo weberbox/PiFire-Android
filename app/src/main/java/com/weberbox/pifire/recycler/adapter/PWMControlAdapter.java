@@ -47,15 +47,13 @@ public class PWMControlAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         try {
-            if (holder instanceof ItemsViewHolder) {
-                ItemsViewHolder vh = (ItemsViewHolder) holder;
+            if (holder instanceof ItemsViewHolder vh) {
                 vh.edit.setOnClickListener(view ->
                         callback.onPWMControlEdit(position));
                 vh.delete.setOnClickListener(view ->
                         callback.onPWMControlDelete(position));
                 vh.bindData(list, position, units);
-            } else if (holder instanceof FooterViewHolder) {
-                FooterViewHolder vh = (FooterViewHolder) holder;
+            } else if (holder instanceof FooterViewHolder vh) {
                 vh.addItem.setOnClickListener(view ->
                         callback.onPWMControlAdd());
             }

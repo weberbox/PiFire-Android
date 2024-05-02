@@ -15,6 +15,7 @@ import com.weberbox.pifire.ui.dialogs.model.DialogMessage;
 import com.weberbox.pifire.ui.dialogs.model.DialogSwipeButton;
 import com.weberbox.pifire.ui.dialogs.model.DialogTitle;
 
+@SuppressWarnings("unused")
 public final class MaterialDialogList extends AbstractDialog {
 
     @SuppressWarnings("rawtypes")

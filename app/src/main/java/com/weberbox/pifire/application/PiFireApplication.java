@@ -12,7 +12,7 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
-import com.weberbox.pifire.utils.log.DebugLogTree;
+import com.weberbox.pifire.utils.TimberUtils;
 
 import java.net.URI;
 import java.util.Collections;
@@ -40,17 +40,13 @@ public class PiFireApplication extends Application {
         if (!AppConfig.DEBUG || Prefs.getBoolean(getString(R.string.prefs_dev_crash_enable))) {
             CrashUtils.initCrashReporting(this);
         } else {
-            Timber.plant(new DebugLogTree());
+            TimberUtils.configTimber();
         }
 
         Timber.d("Startup - Application Start");
 
-        if (AppConfig.USE_ONESIGNAL) {
-            Timber.d("Init OneSignal");
-
-            OneSignalUtils.initNotificationChannels(this);
-            OneSignalUtils.initOneSignal(this);
-        }
+        OneSignalUtils.initNotificationChannels(this);
+        OneSignalUtils.initOneSignal(this);
     }
 
     public Socket getSocket() {

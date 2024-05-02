@@ -25,14 +25,6 @@
       "https://github.com/Pixplicity/EasyPrefs/blob/master/license.txt"
     ],
     [
-      "MPAndroidChart",
-      "https://github.com/PhilJay/MPAndroidChart/blob/master/LICENSE"
-    ],
-    [
-      "AppUpdater",
-      "https://github.com/javiersantos/AppUpdater/blob/master/LICENSE"
-    ],
-    [
       "Sentry",
       "https://github.com/getsentry/sentry-java/blob/main/LICENSE"
     ],
@@ -49,10 +41,6 @@
       "https://github.com/discord/OverlappingPanels/blob/master/LICENSE"
     ],
     [
-      "uCrop",
-      "https://github.com/Yalantis/uCrop"
-    ],
-    [
       "TedPermission",
       "https://github.com/ParkSangGwon/TedPermission"
     ],
@@ -67,10 +55,6 @@
     [
       "MaterialRatingBar",
       "https://github.com/zhanghai/MaterialRatingBar"
-    ],
-    [
-      "Glide",
-      "https://github.com/bumptech/glide/blob/master/LICENSE"
     ],
     [
       "OkHttp",
@@ -95,10 +79,6 @@
     [
       "Material Dialog",
       "https://github.com/PatilShreyas/MaterialDialog-Android/blob/master/LICENSE"
-    ],
-    [
-      "TouchImageView",
-      "https://github.com/MikeOrtiz/TouchImageView/blob/master/LICENSE.txt"
     ],
     [
       "KeyboardVisibilityEvent",

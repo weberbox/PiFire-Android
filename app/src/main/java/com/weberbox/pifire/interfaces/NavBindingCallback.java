@@ -5,5 +5,4 @@ public interface NavBindingCallback {
     void onNavAdmin();
     void onNavInfo();
     void onNavChangelog();
-    void onNavFeedback();
 }

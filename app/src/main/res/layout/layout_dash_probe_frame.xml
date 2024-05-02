@@ -24,14 +24,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/dash_probe_title"
+            android:id="@+id/dash_probe_name"
             style="@style/Text16AllerBold"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dash_margin"
             android:layout_marginTop="@dimen/dash_margin"
             android:text="@string/dash_grill_title"
             android:textSize="@dimen/dash_text_title"
+            app:layout_constraintEnd_toStartOf="@+id/dash_probe_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +56,7 @@
             android:text="@string/placeholder_temp"
             android:textSize="@dimen/dash_text_temps"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dash_probe_title" />
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_name" />
 
         <TextView
             android:id="@+id/dash_probe_current_title"

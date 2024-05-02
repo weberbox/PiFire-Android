@@ -42,15 +42,13 @@ public class AppriseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         try {
-            if (holder instanceof ItemsViewHolder) {
-                ItemsViewHolder vh = (ItemsViewHolder) holder;
+            if (holder instanceof ItemsViewHolder vh) {
                 vh.edit.setOnClickListener(view ->
                         callback.onLocationEdit(position));
                 vh.delete.setOnClickListener(view ->
                         callback.onLocationDelete(position));
                 vh.bindData(list, position);
-            } else if (holder instanceof FooterViewHolder) {
-                FooterViewHolder vh = (FooterViewHolder) holder;
+            } else if (holder instanceof FooterViewHolder vh) {
                 vh.addItem.setOnClickListener(view ->
                         callback.onLocationAdd());
             }

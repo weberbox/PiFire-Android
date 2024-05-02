@@ -6,19 +6,19 @@
     android:layout_marginBottom="@dimen/_10sdp">
 
     <include
-        android:id="@+id/load_out_card_view"
+        android:id="@+id/pellets_current"
         layout="@layout/layout_pellets_current"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintEnd_toStartOf="@+id/logs_card_view"
+        app:layout_constraintEnd_toStartOf="@+id/pellets_logs"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-        android:id="@+id/woods_card_view"
+        android:id="@+id/pellets_woods"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -30,16 +30,16 @@
         app:cardElevation="10dp"
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/brands_card_view"
+        app:layout_constraintEnd_toStartOf="@+id/pellets_brands"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/load_out_card_view"
+        app:layout_constraintTop_toBottomOf="@+id/pellets_current"
         app:pellets_button_enabled="true"
         app:pellets_button_text="@string/pellets_add"
         app:pellets_header_icon="@drawable/ic_pellet_edit"
         app:pellets_header_title="@string/pellets_woods" />
 
     <com.weberbox.pifire.ui.views.PelletsEditorRecycler
-        android:id="@+id/editor_card_view"
+        android:id="@+id/pellets_editor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
@@ -55,9 +55,9 @@
         app:editor_button_text="@string/pellets_add"
         app:editor_header_icon="@drawable/ic_pellet_edit"
         app:editor_header_title="@string/pellets_editor"
-        app:layout_constraintEnd_toStartOf="@+id/brands_card_view"
+        app:layout_constraintEnd_toStartOf="@+id/pellets_brands"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/woods_card_view" />
+        app:layout_constraintTop_toBottomOf="@+id/pellets_woods" />
 
     <include
         android:id="@+id/pellets_hopper_level"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintStart_toEndOf="@+id/pellets_current"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
@@ -76,11 +76,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintStart_toEndOf="@+id/pellets_current"
         app:layout_constraintTop_toBottomOf="@+id/pellets_hopper_level"/>
 
     <com.weberbox.pifire.ui.views.PelletsLogsRecycler
-        android:id="@+id/logs_card_view"
+        android:id="@+id/pellets_logs"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
@@ -92,13 +92,13 @@
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/load_out_card_view"
+        app:layout_constraintStart_toEndOf="@+id/pellets_current"
         app:layout_constraintTop_toBottomOf="@+id/pellets_usage"
         app:logs_header_icon="@drawable/ic_menu_history"
         app:logs_header_title="@string/pellets_log" />
 
     <com.weberbox.pifire.ui.views.PelletsCardViewRecycler
-        android:id="@+id/brands_card_view"
+        android:id="@+id/pellets_brands"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
@@ -110,8 +110,8 @@
         app:cardPreventCornerOverlap="false"
         app:contentPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/woods_card_view"
-        app:layout_constraintTop_toBottomOf="@+id/logs_card_view"
+        app:layout_constraintStart_toEndOf="@+id/pellets_woods"
+        app:layout_constraintTop_toBottomOf="@+id/pellets_logs"
         app:pellets_button_enabled="true"
         app:pellets_button_text="@string/pellets_add"
         app:pellets_header_icon="@drawable/ic_pellet_edit"

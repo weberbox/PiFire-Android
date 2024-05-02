@@ -86,7 +86,7 @@
     </declare-styleable>
 
     <declare-styleable name="DashProbeCard">
-        <attr name="dash_probe_title" format="string" />
+        <attr name="dash_probe_name" format="string" />
         <attr name="dash_probe_set_temp" format="boolean" />
         <attr name="dash_probe_icon" format="reference" />
     </declare-styleable>

@@ -1,12 +1,11 @@
 package com.weberbox.pifire.utils;
 
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.annotation.RawRes;
 
-import com.weberbox.pifire.utils.executors.AppExecutors;
 import com.weberbox.pifire.interfaces.ExecutorCallback;
+import com.weberbox.pifire.utils.executors.AppExecutors;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,7 +14,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class FileUtils {
 
@@ -34,6 +32,10 @@ public class FileUtils {
     public static void executorLoadRawJson(Context context, int file, ExecutorCallback callback) {
         AppExecutors.getInstance().diskIO().execute(() ->
                 callback.onDataLoaded(readRawJSONFile(context, file)));
+    }
+
+    public static String getJSONString(Context context, String filename) {
+        return loadJSONFile(context, filename);
     }
 
     private static void saveJSONFile(Context context, String filename, String jsonString) {
@@ -115,62 +117,5 @@ public class FileUtils {
         String path = context.getCacheDir().getAbsolutePath() + "/" + fileName;
         File file = new File(path);
         return file.exists();
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public static boolean deleteFile(Uri uri) {
-        File file = new File(uri.getPath());
-        if (file.exists()) {
-            return file.delete();
-        }
-        return false;
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public static boolean dirChecker(String dir) {
-        File f = new File(dir);
-        if (!f.isDirectory()) {
-            return f.mkdirs();
-        }
-        return false;
-    }
-
-    public static void cleanImgDir(Context context, ArrayList<Uri> uris) {
-        File imgDir = new File(context.getFilesDir(), "img");
-        File[] files = imgDir.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                Uri imgUri = Uri.fromFile(file);
-                if (!uris.contains(imgUri)) {
-                    deleteFile(imgUri);
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void clearImgDir(Context context) {
-        File path = new File(context.getFilesDir(), "img");
-        if (path.exists() && path.isDirectory()) {
-            File[] files = path.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    file.delete();
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "unused"})
-    public static void clearCache(Context context, String child) {
-        File path = new File(context.getCacheDir(), child);
-        if (path.exists() && path.isDirectory()) {
-            File[] files = path.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    file.delete();
-                }
-            }
-        }
     }
 }

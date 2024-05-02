@@ -65,10 +65,32 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_spacing"
                     android:layout_marginEnd="@dimen/default_spacing"
-                    android:layout_marginBottom="@dimen/small_spacing"
+                    android:minWidth="120dp"
                     android:textStyle="normal"
-                    app:autoSizeTextType="uniform"
-                    android:minWidth="120dp"/>
+                    app:autoSizeTextType="uniform" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/Text15AllerBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginTop="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/small_spacing"
+                    android:text="@string/info_server_build"
+                    app:autoSizeTextType="uniform" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/server_build_text"
+                    style="@style/Text15AllerBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/small_spacing"
+                    android:minWidth="120dp"
+                    android:textStyle="normal"
+                    app:autoSizeTextType="uniform" />
 
             </LinearLayout>
         </com.skydoves.androidveil.VeilLayout>

@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+@SuppressWarnings("unused")
 public class ScrollDisableLayoutManager extends LinearLayoutManager {
 
     private boolean isScrollEnabled = false;

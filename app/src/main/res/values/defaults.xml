@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="def_pid_link">http://engineeredmusings.com/pismoker/</string>
     <string name="def_pmode_link">http://tipsforbbq.com/Definition/Traeger-P-Setting</string>
     <string name="def_onesignal_privacy_link">https://onesignal.com/privacy</string>
 
-    <string name="def_app_update_check_url">https://raw.githubusercontent.com/weberbox/PiFire-Android/master/app/update-check.json</string>
-    <string name="def_app_update_check_url_beta">https://raw.githubusercontent.com/weberbox/PiFire-Android/development/app/update-check.json</string>
-    <string name="def_github_api_url">https://api.github.com/repos/weberbox/PiFire-Android/releases</string>
-
-    <bool name="def_app_updater_enabled">true</bool>
-    <bool name="def_app_updater_download">true</bool>
-
     <bool name="def_crash_enabled">true</bool>
     <bool name="def_crash_dev_enabled">false</bool>
-    <bool name="def_crash_dialog">true</bool>
 
     <bool name="def_splus_enabled">false</bool>
     <bool name="def_splus_fan_ramp">false</bool>
-    <bool name="def_history_refresh_enabled_app">true</bool>
-    <bool name="def_history_clear">true</bool>
-    <bool name="def_history_auto">true</bool>
 
     <bool name="def_pwm_fan_control">false</bool>
 
@@ -32,26 +21,28 @@
     <bool name="def_notif_influxdb_enabled">false</bool>
     <bool name="def_notif_apprise_enabled">false</bool>
 
-    <bool name="def_grill_swipe_start">true</bool>
     <bool name="def_keep_screen_on">false</bool>
     <bool name="def_pellet_warning_enabled">true</bool>
     <bool name="def_keep_warm_s_plus">false</bool>
     <bool name="def_auto_power_off">false</bool>
-    <bool name="def_smart_start">true</bool>
+    <bool name="def_smart_start">false</bool>
     <bool name="def_auto_lid_detect">false</bool>
+    <bool name="def_pellet_prime_igniter">false</bool>
+
+    <bool name="def_updated_message">false</bool>
+    <bool name="def_venv">false</bool>
+    <bool name="def_real_hw">false</bool>
+
+    <bool name="def_safety_startup_check">true</bool>
+
+    <string name="def_startup_exit_temp">140</string>
+    <string name="def_prime_on_startup">10</string>
+    <string name="def_ss_exit_temp">120</string>
 
     <string name="def_grill_temp_unit">F</string>
 
-    <string name="def_pellet_warning_level">25</string>
     <string name="def_history_refresh_time_app">3000</string>
     <string name="def_event_amounts_app">20</string>
-
-    <string name="def_grill_probe_selection">grill1probe</string>
-    <string name="def_grill_probe_one_type">PT-1000-OEM</string>
-    <string name="def_grill_probe_two_type">TWPS00</string>
-    <string name="def_grill_probe_type">PT-1000-OEM</string>
-    <string name="def_probe_one_type">TWPS00</string>
-    <string name="def_probe_two_type">TWPS00</string>
 
     <string name="def_pmode_auger_on">15</string>
     <string name="def_pmode_mode">2</string>
@@ -61,19 +52,16 @@
     <string name="def_splus_ramp_dc">75</string>
     <string name="def_splus_min">160</string>
     <string name="def_splus_max">220</string>
-    <string name="def_pid_cycle">20</string>
-    <string name="def_pid_pb">60.0</string>
-    <string name="def_pid_ti">180.0</string>
-    <string name="def_pid_td">45.0</string>
-    <string name="def_pid_u_min">0.15</string>
-    <string name="def_pid_u_max">1.0</string>
-    <string name="def_pid_center">0.5</string>
+
+    <string name="def_pid_cycle">25</string>
+    <string name="def_pid_u_min">0.1</string>
+    <string name="def_pid_u_max">0.9</string>
 
     <string name="def_lid_open_thresh">15</string>
     <string name="def_lid_open_pause">60</string>
 
     <string name="def_pwm_fan_update_time">10</string>
-    <string name="def_pwm_fan_frequency">30</string>
+    <string name="def_pwm_fan_frequency">25000</string>
     <string name="def_pwm_fan_max_dc">20</string>
     <string name="def_pwm_fan_min_dc">100</string>
 
@@ -93,18 +81,13 @@
     <string name="def_pellet_empty">22</string>
     <string name="def_pellet_full">4</string>
     <string name="def_pellet_warning_time">20</string>
+    <string name="def_pellet_warning_level">25</string>
     <string name="def_pellet_auger_rate">0.3</string>
 
     <string name="def_recipe_time">0 min</string>
     <string name="def_recipe_diff">Easy</string>
 
-    <string name="def_adc_grill_probe_one" tools:ignore="Typos">ADC0</string>
-    <string name="def_adc_grill_probe_two" tools:ignore="Typos">ADC3</string>
-    <string name="def_adc_probe_one" tools:ignore="Typos">ADC1</string>
-    <string name="def_adc_probe_two" tools:ignore="Typos">ADC2</string>
-
     <string name="def_startup_goto_mode">Smoke</string>
     <string name="def_startup_goto_temp">165</string>
-
 
 </resources>

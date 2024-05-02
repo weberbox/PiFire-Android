@@ -23,6 +23,7 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/aller_regular"
             android:imeOptions="actionDone"
+            android:inputType="textCapWords"
             android:singleLine="true"
             android:textColor="@color/colorWhite"
             android:textColorHighlight="@color/colorAccent" />

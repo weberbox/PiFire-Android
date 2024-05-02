@@ -20,25 +20,6 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_app_history">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_history_refresh_enabled_app"
-            app:key="@string/prefs_history_refresh_app"
-            app:summary="@string/settings_app_history_refresh_summary"
-            app:title="@string/settings_app_history_refresh_title" />
-
-        <ListPreference
-            app:defaultValue="@string/def_history_refresh_time_app"
-            app:dependency="@string/prefs_history_refresh_app"
-            app:entries="@array/refresh_interval_names"
-            app:entryValues="@array/refresh_interval"
-            app:key="@string/prefs_history_refresh_interval_app"
-            app:summary="@string/settings_app_history_refresh_interval_summary"
-            app:title="@string/settings_app_history_refresh_interval_title" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory app:title="@string/settings_cat_events_title">
 
         <ListPreference
@@ -61,50 +42,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_app_safety">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_grill_swipe_start"
-            app:key="@string/prefs_grill_swipe_start"
-            app:summary="@string/settings_app_safety_start_summary"
-            app:title="@string/settings_app_safety_start" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory app:title="@string/settings_cat_app_recipes">
-
-        <Preference
-            app:key="@string/prefs_recipe_db_backup"
-            app:summary="@string/settings_recipe_db_backup"
-            app:title="@string/settings_recipe_db_backup_title" />
-
-        <Preference
-            app:key="@string/prefs_recipe_db_restore"
-            app:summary="@string/settings_recipe_db_restore"
-            app:title="@string/settings_recipe_db_restore_title" />
-
-        <Preference
-            app:key="@string/prefs_recipe_db_clear"
-            app:summary="@string/settings_recipe_db_clear"
-            app:title="@string/settings_recipe_db_clear_title" />
-
-    </PreferenceCategory>
-
     <PreferenceCategory
         app:key="@string/prefs_app_updater_cat"
         app:title="@string/settings_cat_updates">
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_app_updater_enabled"
-            app:key="@string/prefs_app_updater_enabled"
-            app:summary="@string/settings_update_enabled_summary"
-            app:title="@string/settings_update_enabled" />
-
-        <SwitchPreferenceCompat
-            app:defaultValue="@bool/def_app_updater_download"
-            app:key="@string/prefs_app_updater_download"
-            app:summary="@string/settings_update_download_summary"
-            app:title="@string/settings_update_download_title" />
 
         <Preference
             app:key="@string/prefs_app_updater_check_now"
@@ -122,13 +62,6 @@
             android:key="@string/prefs_crash_enable"
             android:summary="@string/settings_crash_summary"
             android:title="@string/settings_enable_crash" />
-
-        <SwitchPreferenceCompat
-            android:defaultValue="@bool/def_crash_dialog"
-            android:key="@string/prefs_crash_dialog"
-            android:summary="@string/settings_crash_dialog_summary"
-            android:title="@string/settings_crash_dialog_title"
-            app:dependency="@string/prefs_crash_enable" />
 
         <SwitchPreferenceCompat
             android:defaultValue="@bool/def_crash_dev_enabled"

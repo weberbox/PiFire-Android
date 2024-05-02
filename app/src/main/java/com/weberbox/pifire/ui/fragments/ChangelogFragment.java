@@ -48,7 +48,8 @@ public class ChangelogFragment extends Fragment {
 
         actionBarText.setText(R.string.changelog_title);
         navButton.setImageResource(R.drawable.ic_nav_back);
-        navButton.setOnClickListener(v -> requireActivity().onBackPressed());
+        navButton.setOnClickListener(v ->
+                requireActivity().getOnBackPressedDispatcher().onBackPressed());
         configButton.setVisibility(View.GONE);
 
     }
@@ -61,7 +62,7 @@ public class ChangelogFragment extends Fragment {
 
     private final Animator.AnimatorListener listener = new Animator.AnimatorListener() {
         @Override
-        public void onAnimationStart(Animator animation) {
+        public void onAnimationStart(@NonNull Animator animation) {
             changeLogView.animate()
                     .alpha(1.0f)
                     .setInterpolator(new DecelerateInterpolator())
@@ -76,15 +77,15 @@ public class ChangelogFragment extends Fragment {
         }
 
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(@NonNull Animator animation) {
         }
 
         @Override
-        public void onAnimationCancel(Animator animation) {
+        public void onAnimationCancel(@NonNull Animator animation) {
         }
 
         @Override
-        public void onAnimationRepeat(Animator animation) {
+        public void onAnimationRepeat(@NonNull Animator animation) {
         }
     };
 }

@@ -23,8 +23,6 @@ public class AppUpdateReceiver extends BroadcastReceiver {
                             "_preferences", Context.MODE_PRIVATE);
 
             prefs.edit()
-                    .putInt(context.getString(R.string.prefs_app_updater_checks), 0)
-                    .putInt(context.getString(R.string.prefs_app_updater_force_checks), 0)
                     .putBoolean(context.getString(R.string.prefs_app_update_required), false)
                     .putBoolean(context.getString(R.string.prefs_inapp_first_show), true)
                     .putBoolean(context.getString(R.string.prefs_show_changelog), true)
@@ -37,10 +35,12 @@ public class AppUpdateReceiver extends BroadcastReceiver {
 
     @SuppressLint("LogNotTimber")
     private void removeUpdateFile(Uri uri) {
-        File fileDelete = new File(uri.getPath());
-        if (fileDelete.exists()) {
-            if (!fileDelete.delete()) {
-                Log.d(TAG, "Update file delete error");
+        if (uri.getPath() != null) {
+            File fileDelete = new File(uri.getPath());
+            if (fileDelete.exists()) {
+                if (!fileDelete.delete()) {
+                    Log.d(TAG, "Update file delete error");
+                }
             }
         }
     }

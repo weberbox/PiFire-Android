@@ -1,5 +1,6 @@
 package com.weberbox.pifire.constants;
 
+@SuppressWarnings("unused")
 public class ServerVersions {
 
     // PiFire Server Versions
@@ -11,7 +12,13 @@ public class ServerVersions {
     public static final String V_131 = "1.3.1";
     public static final String V_133 = "1.3.3";
     public static final String V_134 = "1.3.4";
-    public static final String V_135 = "1.3.5"; //Released (main)
-    public static final String V_136 = "1.3.6"; //Current (development)
+    public static final String V_135 = "1.3.5";
+    public static final String V_136 = "1.3.6";
+    public static final String V_150 = "1.5.0";
+    public static final String V_151 = "1.5.1";
+    public static final String V_152 = "1.5.2";
+    public static final String V_160 = "1.6.0"; // Main
+
+    public static final String V_170 = "1.7.0"; // Development
 
 }

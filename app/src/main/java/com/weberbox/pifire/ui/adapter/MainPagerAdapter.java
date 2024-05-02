@@ -8,13 +8,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.fragments.DashboardFragment;
 import com.weberbox.pifire.ui.fragments.EventsFragment;
-import com.weberbox.pifire.ui.fragments.HistoryFragment;
 import com.weberbox.pifire.ui.fragments.PelletsFragment;
-import com.weberbox.pifire.ui.fragments.RecipesFragment;
 
 public class MainPagerAdapter extends FragmentStateAdapter {
 
-    private static final int NUM_PAGES = 5;
+    private static final int NUM_PAGES = 3;
 
     public MainPagerAdapter(FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -23,19 +21,11 @@ public class MainPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position) {
-            case Constants.FRAG_RECIPES:
-                return new RecipesFragment();
-            case Constants.FRAG_PELLETS:
-                return new PelletsFragment();
-            case Constants.FRAG_DASHBOARD:
-                return new DashboardFragment();
-            case Constants.FRAG_HISTORY:
-                return new HistoryFragment();
-            case Constants.FRAG_EVENTS:
-                return new EventsFragment();
-        }
-        return new DashboardFragment();
+        return switch (position) {
+            case Constants.FRAG_PELLETS -> new PelletsFragment();
+            case Constants.FRAG_EVENTS -> new EventsFragment();
+            default -> new DashboardFragment();
+        };
     }
 
     @Override

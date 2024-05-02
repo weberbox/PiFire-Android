@@ -10,9 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 
 import androidx.core.view.ViewCompat;
@@ -42,31 +40,14 @@ public class AnimUtils {
 
     public static void fadeViewInvisible(View view, int duration, int direction) {
         switch (direction) {
-            case Constants.FADE_IN:
+            case Constants.FADE_IN -> {
                 fadeView(view, 0.0f, 1.0f, duration);
                 view.setVisibility(View.VISIBLE);
-                break;
-            case Constants.FADE_OUT:
+            }
+            case Constants.FADE_OUT -> {
                 fadeView(view, 1.0f, 0.0f, duration);
                 view.setVisibility(View.INVISIBLE);
-                break;
-        }
-    }
-
-    public static void fadeViewGone(View view, int duration, int direction) {
-        switch (direction) {
-            case Constants.FADE_IN:
-                if (view.getVisibility() == View.GONE) {
-                    fadeView(view, 0.0f, 1.0f, duration);
-                    view.setVisibility(View.VISIBLE);
-                }
-                break;
-            case Constants.FADE_OUT:
-                if (view.getVisibility() == View.VISIBLE) {
-                    fadeView(view, 1.0f, 0.0f, duration);
-                    view.setVisibility(View.GONE);
-                }
-                break;
+            }
         }
     }
 
@@ -78,12 +59,8 @@ public class AnimUtils {
 
     public static void fadeAnimation(View view, int duration, int direction) {
         switch (direction) {
-            case Constants.FADE_IN:
-                fadeInAnimation(view, duration);
-                break;
-            case Constants.FADE_OUT:
-                fadeOutAnimation(view, duration);
-                break;
+            case Constants.FADE_IN -> fadeInAnimation(view, duration);
+            case Constants.FADE_OUT -> fadeOutAnimation(view, duration);
         }
     }
 
@@ -135,95 +112,6 @@ public class AnimUtils {
             });
             view.startAnimation(animation);
         }
-    }
-
-    public static void fabHideAnimation(View view) {
-        Animation scaleDown = new ScaleAnimation(1f, 0f, 1f, 0f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleDown.setInterpolator(new LinearInterpolator());
-        scaleDown.setDuration(150);
-        AnimationSet animation = new AnimationSet(false);
-        animation.addAnimation(scaleDown);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-        view.startAnimation(animation);
-    }
-
-    public static void fabShowAnimation(View view) {
-        Animation scaleUp = new ScaleAnimation(0f, 1f, 0f, 1f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleUp.setInterpolator(new LinearInterpolator());
-        scaleUp.setDuration(150);
-        AnimationSet animation = new AnimationSet(false);
-        animation.addAnimation(scaleUp);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-            }
-        });
-        view.startAnimation(animation);
-    }
-
-    public static void fabFromBottomAnim(FloatingActionButton fab) {
-        AnimationSet animation = new AnimationSet(true);
-        Animation alpha = new AlphaAnimation(0f, 1f);
-        Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 1.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f);
-        Animation scale = new ScaleAnimation(Animation.RELATIVE_TO_SELF, 0.8f,
-                Animation.RELATIVE_TO_SELF, 0.8f, 0.5f, 0.5f);
-        scale.setInterpolator(new LinearInterpolator());
-        trans.setDuration(300);
-        alpha.setDuration(500);
-        animation.addAnimation(trans);
-        animation.addAnimation(scale);
-        animation.addAnimation(alpha);
-        animation.setFillAfter(true);
-        fab.setVisibility(View.VISIBLE);
-        fab.setClickable(true);
-        fab.startAnimation(animation);
-    }
-
-    public static void fabToBottomAnim(FloatingActionButton fab) {
-        AnimationSet animation = new AnimationSet(true);
-        Animation alpha = new AlphaAnimation(1f, 0f);
-        Animation trans = new TranslateAnimation(Animation.RELATIVE_TO_SELF,0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 1.0f);
-        Animation scaleUp = new ScaleAnimation(0.8f, 0.8f, 0.8f, 0.8f, 0.5f, 0.5f);
-        scaleUp.setInterpolator(new LinearInterpolator());
-        trans.setDuration(300);
-        alpha.setDuration(100);
-        animation.addAnimation(trans);
-        animation.addAnimation(scaleUp);
-        animation.addAnimation(alpha);
-        animation.setFillAfter(false);
-        fab.startAnimation(animation);
-        fab.setVisibility(View.GONE);
-        fab.setClickable(false);
     }
 
     @SuppressWarnings("unused")

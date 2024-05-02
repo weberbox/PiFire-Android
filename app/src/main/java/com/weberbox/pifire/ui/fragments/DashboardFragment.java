@@ -15,9 +15,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.transition.TransitionManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
@@ -25,18 +28,20 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
-import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
+import com.weberbox.pifire.interfaces.DashProbeCallback;
+import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
+import com.weberbox.pifire.model.local.ProbeOptionsModel;
 import com.weberbox.pifire.model.remote.DashDataModel;
+import com.weberbox.pifire.model.remote.DashDataModel.DashProbeInfo;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
-import com.weberbox.pifire.model.remote.DashDataModel.NotifyReq;
-import com.weberbox.pifire.model.remote.DashDataModel.ProbeTemps;
-import com.weberbox.pifire.model.remote.DashDataModel.ProbesEnabled;
-import com.weberbox.pifire.model.remote.DashDataModel.SetPoints;
 import com.weberbox.pifire.model.remote.DashDataModel.TimerInfo;
+import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeInfo;
+import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
+import com.weberbox.pifire.recycler.adapter.DashProbeAdapter;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.PrimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
@@ -44,47 +49,44 @@ import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
-import com.weberbox.pifire.ui.utils.TextTransition;
 import com.weberbox.pifire.ui.utils.ViewUtils;
-import com.weberbox.pifire.ui.views.DashProbeCard;
 import com.weberbox.pifire.ui.views.PelletLevelView;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TempUtils;
-import com.weberbox.pifire.utils.VersionUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.socket.client.Socket;
 import timber.log.Timber;
 
-public class DashboardFragment extends Fragment implements DialogDashboardCallback {
+public class DashboardFragment extends Fragment implements DialogDashboardCallback,
+        DashProbeCallback {
 
     private FragmentDashboardBinding binding;
-    private TextView timerCountDownText, grillTempText, probeOneTempText, probeTwoTempText;
-    private TextView grillSetText, probeOneTargetText, probeTwoTargetText, pelletLevelText;
-    private TextView currentModeText, smokePlusText, grillTargetText, pwmControlText;
-    private ImageView probeOneShutdown, probeTwoShutdown, timerShutdown;
-    private ImageView probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm;
-    private ProgressBar grillTempProgress, probeOneProgress, probeTwoProgress, timerProgress;
-    private ProgressBar loadingBar;
+    private TextView timerCountDownText, pelletLevelText;
+    private TextView currentModeText, smokePlusText, pwmControlText;
+    private ImageView timerShutdown, timerKeepWarm;
+    private ProgressBar loadingBar, timerProgress;
     private ConstraintLayout smokePlusBox, pwmControlBox;
     private SwipeRefreshLayout swipeRefresh;
     private TempPickerDialog tempPickerDialog;
     private FrameLayout timerPausedLayout;
-    private ConstraintLayout rootContainer;
     private CountDownTimer countDownTimer;
     private PelletLevelView pelletLevelIndicator;
     private Socket socket;
     private TempUtils tempUtils;
-    private boolean isFahrenheit;
-    private boolean probeOneEnabled = true;
-    private boolean probeTwoEnabled = true;
+    private DashProbeAdapter dashAdapter;
+    private ArrayList<NotifyData> notifyData;
+
+    private List<ProbeInfo> probeInfo;
     private boolean isLoading = false;
     private boolean smokePlusEnabled = false;
     private boolean pwmControlEnabled = false;
@@ -108,34 +110,19 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         super.onViewCreated(view, savedInstanceState);
 
         loadingBar = binding.connectProgressbar;
-        rootContainer = binding.dashLayout.dashRootContainer;
+        swipeRefresh = binding.dashPullRefresh;
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (socketConnected()) {
+                requestForcedDashData(false);
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
 
         // Mode
         ConstraintLayout currentModeBox = binding.dashLayout.dashStatusContainer;
         currentModeText = binding.dashLayout.dashGrillMode;
-
-        // Grill Probe
-        DashProbeCard dashGrillProbe = binding.dashLayout.dashGrillProbe;
-        grillTempText = dashGrillProbe.getProbeTemp();
-        grillSetText = dashGrillProbe.getProbeSetTemp();
-        grillTargetText = dashGrillProbe.getProbeTargetTemp();
-        grillTempProgress = dashGrillProbe.getProbeTempProgress();
-
-        // Probe One
-        DashProbeCard dashProbeOne = binding.dashLayout.dashProbeOne;
-        probeOneShutdown = dashProbeOne.getProbeShutdown();
-        probeOneKeepWarm = dashProbeOne.getProbeKeepWarm();
-        probeOneTempText = dashProbeOne.getProbeTemp();
-        probeOneTargetText = dashProbeOne.getProbeTargetTemp();
-        probeOneProgress = dashProbeOne.getProbeTempProgress();
-
-        // Probe Two
-        DashProbeCard dashProbeTwo = binding.dashLayout.dashProbeTwo;
-        probeTwoShutdown = dashProbeTwo.getProbeShutdown();
-        probeTwoKeepWarm = dashProbeTwo.getProbeKeepWarm();
-        probeTwoTempText = dashProbeTwo.getProbeTemp();
-        probeTwoTargetText = dashProbeTwo.getProbeTargetTemp();
-        probeTwoProgress = dashProbeTwo.getProbeTempProgress();
 
         // Timer
         ConstraintLayout timerBox = binding.dashLayout.dashTimerContainer;
@@ -159,27 +146,15 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         pwmControlText = binding.dashLayout.dashPwmControl;
         pwmControlBox = binding.dashLayout.dashPwmContainer;
 
-        swipeRefresh = binding.dashPullRefresh;
-
         tempUtils = new TempUtils(getContext());
-
-        isFahrenheit = tempUtils.isFahrenheit();
-
-        swipeRefresh.setOnRefreshListener(() -> {
-            if (socketConnected()) {
-                requestForcedDashData(false);
-            } else {
-                swipeRefresh.setRefreshing(false);
-            }
-        });
 
         currentModeBox.setOnClickListener(v -> {
             if (socketConnected()) {
                 if (!currentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
                     if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
-                                        R.string.prefs_grill_swipe_start),
-                                getResources().getBoolean(R.bool.def_grill_swipe_start));
+                                        R.string.prefs_safety_startup_check),
+                                getResources().getBoolean(R.bool.def_safety_startup_check));
 
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)
@@ -202,10 +177,10 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                                 .build();
                         dialog.show();
                     } else if (currentMode.equals(Constants.GRILL_CURRENT_MONITOR) ||
-                                    currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
+                            currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
                         boolean swipeEnabled = Prefs.getBoolean(getString(
-                                R.string.prefs_grill_swipe_start),
-                                getResources().getBoolean(R.bool.def_grill_swipe_start));
+                                        R.string.prefs_safety_startup_check),
+                                getResources().getBoolean(R.bool.def_safety_startup_check));
 
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)
@@ -299,140 +274,6 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             pwmControlBox.setVisibility(View.GONE);
         }
 
-        dashGrillProbe.setOnClickListener(v -> {
-            if (socketConnected()) {
-                int defaultTemp = tempUtils.getDefaultGrillTemp();
-                boolean hold = !grillSetText.getText().toString().equals(getString(
-                        R.string.placeholder_none));
-                if (hold) {
-                    defaultTemp = tempUtils.cleanTempString(grillSetText.getText().toString());
-                } else if (!grillTargetText.getText().toString().equals(getString(
-                        R.string.placeholder_none))) {
-                    defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
-                }
-                tempPickerDialog = new TempPickerDialog(getActivity(), Constants.PICKER_TYPE_GRILL,
-                        defaultTemp, hold, false, DashboardFragment.this);
-                tempPickerDialog.showDialog();
-            }
-        });
-
-        if (VersionUtils.isSupported(ServerVersions.V_134)) {
-            dashGrillProbe.setOnLongClickListener(v -> {
-                if (socketConnected()) {
-                    int defaultTemp = tempUtils.getDefaultGrillTemp();
-                    if (!grillTargetText.getText().toString().equals(getString(
-                            R.string.placeholder_none))) {
-                        defaultTemp = tempUtils.cleanTempString(grillTargetText.getText().toString());
-                    }
-                    tempPickerDialog = new TempPickerDialog(getActivity(),
-                            Constants.PICKER_TYPE_GRILL_NOTIFY, defaultTemp, false, false,
-                            DashboardFragment.this);
-                    tempPickerDialog.showDialog();
-                }
-                return true;
-            });
-        }
-
-        dashProbeOne.setOnClickListener(v -> {
-            if (socketConnected()) {
-                int defaultTemp = tempUtils.getDefaultProbeTemp();
-                if (!probeOneTempText.getText().toString().equals(getString(R.string.off))) {
-                    if (!probeOneTargetText.getText().toString().equals(
-                            getString(R.string.placeholder_none))) {
-                        defaultTemp = tempUtils.cleanTempString(
-                                probeOneTargetText.getText().toString());
-
-                    }
-                    tempPickerDialog = new TempPickerDialog(getActivity(),
-                            Constants.PICKER_TYPE_PROBE_ONE, defaultTemp, false, false,
-                            DashboardFragment.this);
-                    tempPickerDialog.showDialog();
-                }
-            }
-        });
-
-        dashProbeOne.setOnLongClickListener(v -> {
-            if (socketConnected()) {
-                BottomIconDialog dialog;
-                if (!probeOneTempText.getText().toString().equals(getString(R.string.off))) {
-                    dialog = new BottomIconDialog.Builder(requireActivity())
-                            .setAutoDismiss(true)
-                            .setNegativeButton(getString(R.string.cancel),
-                                    R.drawable.ic_probe_cancel, (dialogInterface, which) -> {
-                                    })
-                            .setPositiveButton(getString(R.string.probe_disable),
-                                    R.drawable.ic_probe_disable, (dialogInterface, which) ->
-                                            ServerControl.probeOneToggle(socket,
-                                                    getProbesEnabled(false, probeTwoEnabled),
-                                                    this::processPostResponse))
-                            .build();
-                } else {
-                    dialog = new BottomIconDialog.Builder(requireActivity())
-                            .setAutoDismiss(true)
-                            .setNegativeButton(getString(R.string.cancel),
-                                    R.drawable.ic_probe_cancel, (dialogInterface, which) -> {
-                                    })
-                            .setPositiveButton(getString(R.string.probe_enable),
-                                    R.drawable.ic_grill_monitor, (dialogInterface, which) ->
-                                            ServerControl.probeOneToggle(socket,
-                                                    getProbesEnabled(true, probeTwoEnabled),
-                                                    this::processPostResponse))
-                            .build();
-                }
-                dialog.show();
-            }
-            return true;
-        });
-
-        dashProbeTwo.setOnClickListener(v -> {
-            if (socketConnected()) {
-                int defaultTemp = tempUtils.getDefaultProbeTemp();
-                if (!probeTwoTempText.getText().toString().equals(getString(R.string.off))) {
-                    if (!probeTwoTargetText.getText().toString().equals("--")) {
-                        defaultTemp = tempUtils.cleanTempString(
-                                probeTwoTargetText.getText().toString());
-                    }
-                    tempPickerDialog = new TempPickerDialog(getActivity(),
-                            Constants.PICKER_TYPE_PROBE_TWO, defaultTemp, false, false,
-                            DashboardFragment.this);
-                    tempPickerDialog.showDialog();
-                }
-            }
-        });
-
-        dashProbeTwo.setOnLongClickListener(v -> {
-            if (socketConnected()) {
-                BottomIconDialog dialog;
-                if (!probeTwoTempText.getText().toString().equals(getString(R.string.off))) {
-                    dialog = new BottomIconDialog.Builder(requireActivity())
-                            .setAutoDismiss(true)
-                            .setNegativeButton(getString(R.string.cancel),
-                                    R.drawable.ic_probe_cancel, (dialogInterface, which) -> {
-                                    })
-                            .setPositiveButton(getString(R.string.probe_disable),
-                                    R.drawable.ic_probe_disable, (dialogInterface, which) ->
-                                            ServerControl.probeTwoToggle(socket,
-                                                    getProbesEnabled(probeOneEnabled, false),
-                                                    this::processPostResponse))
-                            .build();
-                } else {
-                    dialog = new BottomIconDialog.Builder(requireActivity())
-                            .setAutoDismiss(true)
-                            .setNegativeButton(getString(R.string.cancel),
-                                    R.drawable.ic_probe_cancel, (dialogInterface, which) -> {
-                                    })
-                            .setPositiveButton(getString(R.string.probe_enable),
-                                    R.drawable.ic_grill_monitor, (dialogInterface, which) ->
-                                            ServerControl.probeTwoToggle(socket,
-                                                    getProbesEnabled(probeOneEnabled, true),
-                                                    this::processPostResponse))
-                            .build();
-                }
-                dialog.show();
-            }
-            return true;
-        });
-
         timerBox.setOnClickListener(v -> {
             if (socketConnected()) {
                 if (countDownTimer != null && countDownTimer.isActive()) {
@@ -482,6 +323,20 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             }
         });
 
+        RecyclerView dashProbeRecycler = binding.dashLayout.dashProbeRecycler;
+        if (dashProbeRecycler.getItemAnimator() != null) {
+            dashProbeRecycler.getItemAnimator().setChangeDuration(0);
+        }
+
+        probeInfo = getProbeInfoList();
+
+        dashAdapter = new DashProbeAdapter(getProbeList(probeInfo), tempUtils,this);
+
+        int spanCount = ViewUtils.isLandscape(requireActivity()) ?
+                AppConfig.DASH_RECYCLER_LAND : AppConfig.DASH_RECYCLER_PORT;
+        dashProbeRecycler.setLayoutManager(new GridLayoutManager(requireActivity(), spanCount));
+        dashProbeRecycler.setAdapter(dashAdapter);
+
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                 MainViewModel.class);
         mainViewModel.getDashData().observe(getViewLifecycleOwner(), dashData -> {
@@ -510,6 +365,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         super.onResume();
         socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
         requestDataUpdate();
+        updateProbeNames();
         checkForceScreenOn();
     }
 
@@ -542,6 +398,44 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         }
     }
 
+    private void updateProbeNames() {
+        if (probeInfo != null && probeInfo.size() > 0 && dashAdapter != null) {
+            for (DashProbe cProbe : dashAdapter.getDashProbes()) {
+                for (DashProbe nProbe : getProbeList(getProbeInfoList())) {
+                    if (Objects.equals(cProbe.getLabel(), nProbe.getLabel())) {
+                        cProbe.setName(nProbe.getName());
+                        dashAdapter.updateProbe(cProbe);
+                    }
+                }
+            }
+        }
+    }
+
+    private List<ProbeInfo> getProbeInfoList() {
+        ProbeMap probeMap = new Gson().fromJson(
+                Prefs.getString(getString(R.string.prefs_probe_map)),
+                new TypeToken<ProbeMap>() {}.getType());
+        return probeMap.getProbeInfo();
+    }
+
+    private List<DashProbe> getProbeList(List<ProbeInfo> probeInfo) {
+        List<DashProbe> list = new ArrayList<>();
+        if (probeInfo != null && probeInfo.size() > 0) {
+            for (ProbeInfo probe : probeInfo) {
+                list.add(new DashProbe(
+                        probe.getLabel(),
+                        probe.getName(),
+                        probe.getType(),
+                        0.0,
+                        0,
+                        0.0,
+                        false,
+                        false));
+            }
+        }
+        return list;
+    }
+
     private void requestDataUpdate() {
         if (socket != null && !isLoading) {
             isLoading = true;
@@ -552,11 +446,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private void requestForcedDashData(boolean showLoading) {
         toggleLoading(showLoading);
         if (socket != null) {
-            if (VersionUtils.isSupported(ServerVersions.V_127)) {
-                socket.emit(ServerConstants.GE_GET_DASH_DATA, true);
-            } else {
-                socket.emit(ServerConstants.REQUEST_GRILL_DATA, true);
-            }
+            socket.emit(ServerConstants.GE_GET_DASH_DATA, true);
         }
     }
 
@@ -586,10 +476,16 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     }
 
     private void showHoldPickerDialog() {
-        TempPickerDialog tempPickerDialog = new TempPickerDialog(requireActivity(),
-                Constants.PICKER_TYPE_GRILL, new TempUtils(requireActivity()).getDefaultGrillTemp(),
-                true, true, DashboardFragment.this);
-        tempPickerDialog.showDialog();
+        if (dashAdapter != null) {
+            DashProbe grillProbe = dashAdapter.getGrillProbe();
+            ProbeOptionsModel optionsModel = new ProbeOptionsModel(false, false);
+            if (grillProbe != null) {
+                tempPickerDialog = new TempPickerDialog(requireActivity(), grillProbe, optionsModel,
+                        tempUtils.getDefaultGrillTemp(), true, true,
+                        DashboardFragment.this);
+                tempPickerDialog.showDialog();
+            }
+        }
     }
 
     private void showPrimePickerDialog() {
@@ -630,21 +526,23 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     }
 
     @Override
-    public void onTempConfirmClicked(int type, String temp, boolean hold, boolean shutdown,
-                                     boolean keepWarm) {
-        if (socket != null) {
-            if (hold && type == Constants.PICKER_TYPE_GRILL) {
-                ServerControl.setGrillTemp(socket, temp, this::processPostResponse);
+    public void onTempConfirmClicked(DashProbe probe, ProbeOptionsModel probeOptions, String temp,
+                                     boolean hold) {
+        if (socket != null && notifyData != null) {
+            if (hold) {
+                ServerControl.setGrillHoldTemp(socket, temp, this::processPostResponse);
             }
-            ServerControl.setProbeNotify(socket, type, temp, hold, shutdown, keepWarm,
+            probe.setKeepWarm(probeOptions.getKeepWarm());
+            probe.setShutdown(probeOptions.getShutdown());
+            ServerControl.setProbeNotify(socket, probe, notifyData, temp, hold,
                     this::processPostResponse);
         }
     }
 
     @Override
-    public void onTempClearClicked(int type) {
-        if (socket != null) {
-            ServerControl.clearProbeNotify(socket, type, this::processPostResponse);
+    public void onTempClearClicked(DashProbe probe) {
+        if (socket != null && notifyData != null) {
+            ServerControl.clearProbeNotify(socket, probe, notifyData, this::processPostResponse);
         }
     }
 
@@ -654,6 +552,55 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         if (socket != null) {
             ServerControl.sendTimerTime(socket, hours, minutes, shutdown, keepWarm,
                     this::processPostResponse);
+        }
+    }
+
+    @Override
+    public void onProbeClick(DashProbe probe) {
+        switch (probe.getType()) {
+            case Constants.DASH_PROBE_PRIMARY -> {
+                if (socketConnected()) {
+                    int defaultTemp = tempUtils.getDefaultGrillTemp();
+                    boolean hold = probe.getSetTemp() > 0.0;
+                    if (hold) {
+                        defaultTemp = probe.getSetTemp().intValue();
+                    } else if (probe.getTarget() > 0) {
+                        defaultTemp = probe.getTarget();
+                    }
+                    ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
+                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, probeOptions,
+                            defaultTemp, hold, false, DashboardFragment.this);
+                    tempPickerDialog.showDialog();
+                }
+            }
+            case Constants.DASH_PROBE_FOOD -> {
+                if (socketConnected()) {
+                    int defaultTemp = tempUtils.getDefaultProbeTemp();
+                    if (probe.getTarget() > 0) {
+                        defaultTemp = probe.getTarget();
+                    }
+                    ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
+                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, probeOptions,
+                            defaultTemp, false, false, DashboardFragment.this);
+                    tempPickerDialog.showDialog();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onProbeLongClick(DashProbe probe) {
+        if (socketConnected()) {
+            if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
+                int defaultTemp = tempUtils.getDefaultGrillTemp();
+                if (probe.getValue() > 0) {
+                    defaultTemp = probe.getTarget();
+                }
+                ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
+                tempPickerDialog = new TempPickerDialog(getActivity(), probe, probeOptions, defaultTemp,
+                        false, false, DashboardFragment.this);
+                tempPickerDialog.showDialog();
+            }
         }
     }
 
@@ -670,51 +617,78 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
         try {
 
-            ProbeTemps probeTemps = dashDataModel.getProbeTemps();
-            ProbesEnabled probesEnabled = dashDataModel.getProbesEnabled();
-            SetPoints setPoints = dashDataModel.getSetPoints();
-            NotifyReq notifyReq = dashDataModel.getNotifyReq();
-            NotifyData notifyData = dashDataModel.getNotifyData();
+            DashProbeInfo dashProbeInfo = dashDataModel.getDashProbeInfo();
             TimerInfo timerInfo = dashDataModel.getTimerInfo();
+            notifyData = dashDataModel.getNotifyData();
 
             String currentMode = dashDataModel.getCurrentMode();
+            Double grillTarget = dashProbeInfo.getPrimarySetPoint();
             long timerStartTime = timerInfo.getTimerStartTime();
             long timerEndTime = timerInfo.getTimerEndTime();
             long timerPauseTime = timerInfo.getTimerPauseTime();
-            Double grillTemp = probeTemps.getGrillTemp();
-            Double probeOneTemp = probeTemps.getProbeOneTemp();
-            Double probeTwoTemp = probeTemps.getProbeTwoTemp();
-            Integer grillTarget = setPoints.getGrillTarget();
-            Integer grillNotifyTarget = setPoints.getGrillNotifyTarget();
-            Integer probeOneTarget = setPoints.getProbeOneTarget();
-            Integer probeTwoTarget = setPoints.getProbeTwoTarget();
             Integer hopperLevel = dashDataModel.getHopperLevel();
-            Boolean grillEnabled = probesEnabled.getGrillEnabled();
-            Boolean grillNotify = notifyReq.getGrillNotify();
-            Boolean probeOneNotify = notifyReq.getProbeOneNotify();
-            Boolean probeTwoNotify = notifyReq.getProbeTwoNotify();
             Boolean smokePlus = dashDataModel.getSmokePlus();
             Boolean pwmControl = dashDataModel.getPwmControl();
             Boolean timerPaused = timerInfo.getTimerPaused();
             Boolean timerActive = timerInfo.getTimerActive();
-            Boolean probeOneShutdown = notifyData.getP1Shutdown();
-            Boolean probeTwoShutdown = notifyData.getP2Shutdown();
-            Boolean timerShutdown = notifyData.getTimerShutdown();
-            Boolean probeOneKeepWarm = notifyData.getP1KeepWarm();
-            Boolean probeTwoKeepWarm = notifyData.getP2KeepWarm();
-            Boolean timerKeepWarm = notifyData.getTimerKeepWarm();
-            probeOneEnabled = probesEnabled.getProbeOneEnabled();
-            probeTwoEnabled = probesEnabled.getProbeTwoEnabled();
 
-            TransitionManager.beginDelayedTransition(rootContainer, new TextTransition());
+            List<DashProbe> probes = dashAdapter.getDashProbes();
+
+            for (DashProbe probe : probes) {
+                // Grill Probe
+                for (Map.Entry<String, Double> gProbe : dashProbeInfo.getPrimaryProbe().entrySet()) {
+                    if (gProbe.getKey() != null && gProbe.getKey().equals(probe.getLabel())) {
+                        probe.setValue(gProbe.getValue());
+                        probe.setSetTemp(dashProbeInfo.getPrimarySetPoint());
+                        dashAdapter.updateProbe(probe);
+                    }
+                }
+
+                // Food Probes
+                for (Map.Entry<String, Double> fProbe : dashProbeInfo.getFoodProbes().entrySet()) {
+                    if (fProbe.getKey() != null && fProbe.getKey().equals(probe.getLabel())) {
+                        probe.setValue(fProbe.getValue());
+                        dashAdapter.updateProbe(probe);
+                    }
+                }
+
+                // Target/Notification Temps
+                for (NotifyData notifyData : dashDataModel.getNotifyData()) {
+                    if (notifyData.getType().equals("probe")) {
+                        if (notifyData.getLabel().equals(probe.getLabel())) {
+                            if (!probe.getTarget().equals((notifyData.getTarget()))) {
+                                probe.setTarget(notifyData.getTarget());
+                            }
+                            if (probe.getShutdown() != notifyData.getShutdown()) {
+                                probe.setShutdown(notifyData.getShutdown());
+                            }
+                            if (probe.getKeepWarm() != notifyData.getKeepWarm()) {
+                                probe.setKeepWarm(notifyData.getKeepWarm());
+                            }
+                            dashAdapter.updateProbe(probe);
+                        }
+                    }
+                }
+            }
+
+            // Timer Notifications
+            for (NotifyData notifyData : notifyData) {
+                if (notifyData.getType().equals("timer")) {
+                    if (notifyData.getLabel().equals("Timer")) {
+                        AnimUtils.fadeAnimation(timerShutdown, 300,
+                                notifyData.getShutdown() ?
+                                        Constants.FADE_IN : Constants.FADE_OUT);
+                        AnimUtils.fadeAnimation(timerKeepWarm, 300,
+                                notifyData.getKeepWarm() ?
+                                        Constants.FADE_IN : Constants.FADE_OUT);
+                    }
+                }
+            }
 
             if (NullUtils.checkObjectNotNull(currentMode, smokePlus, hopperLevel, grillTarget)) {
                 this.currentMode = currentMode;
                 if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
                     currentModeText.setText(R.string.off);
-                    grillTempProgress.setProgress(0);
-                    probeOneProgress.setProgress(0);
-                    probeTwoProgress.setProgress(0);
                 } else {
                     currentModeText.setText(currentMode);
                 }
@@ -740,12 +714,6 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                     pwmControlEnabled = false;
                 }
 
-                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && grillTarget > 0) {
-                    grillSetText.setText(StringUtils.formatTemp(grillTarget, isFahrenheit));
-                } else {
-                    grillSetText.setText(R.string.placeholder_none);
-                }
-
                 if (hopperLevel >= 0) {
                     pelletLevelIndicator.setLevel(hopperLevel);
                     pelletLevelText.setText(StringUtils.formatPercentage(hopperLevel));
@@ -756,90 +724,6 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                     }
                 } else {
                     pelletLevelText.setText(R.string.placeholder_percentage);
-                }
-            }
-
-            if (NullUtils.checkObjectNotNull(grillEnabled, grillNotify, grillTarget,
-                    grillNotifyTarget, grillTemp)) {
-                if (grillEnabled) {
-                    int grillTempTarget;
-                    if (VersionUtils.isSupported(ServerVersions.V_134)) {
-                        grillTempTarget = grillNotifyTarget;
-                    } else {
-                        grillTempTarget = grillTarget;
-                    }
-
-                    if (grillNotify && grillTempTarget > 0) {
-                        grillTempProgress.setMax(grillTempTarget);
-                        grillTargetText.setText(StringUtils.formatTemp(grillTempTarget,
-                                isFahrenheit));
-                    } else {
-                        grillTempProgress.setMax(tempUtils.getMaxGrillTemp());
-                        grillTargetText.setText(R.string.placeholder_none);
-                    }
-
-                    if (grillTemp > 0) {
-                        grillTempProgress.setProgress(grillTemp.intValue());
-                        grillTempText.setText(StringUtils.formatTemp(grillTemp, isFahrenheit));
-                    } else {
-                        grillTempText.setText(R.string.placeholder_temp);
-                    }
-                } else {
-                    grillTempProgress.setMax(0);
-                    grillTargetText.setText(R.string.placeholder_none);
-                    grillTempText.setText(R.string.off);
-                }
-            }
-
-            if (NullUtils.checkObjectNotNull(probeOneEnabled, probeOneNotify, probeOneTarget,
-                    probeOneTemp)) {
-                if (probeOneEnabled) {
-                    if (probeOneNotify && probeOneTarget > 0) {
-                        probeOneProgress.setMax(probeOneTarget);
-                        probeOneTargetText.setText(StringUtils.formatTemp(probeOneTarget,
-                                isFahrenheit));
-                    } else {
-                        probeOneProgress.setMax(tempUtils.getMaxProbeTemp());
-                        probeOneTargetText.setText(R.string.placeholder_none);
-                    }
-
-                    if (probeOneTemp > 0) {
-                        probeOneProgress.setProgress(probeOneTemp.intValue());
-                        probeOneTempText.setText(StringUtils.formatTemp(probeOneTemp,
-                                isFahrenheit));
-                    } else {
-                        probeOneTempText.setText(R.string.placeholder_temp);
-                    }
-                } else {
-                    probeOneProgress.setMax(0);
-                    probeOneTargetText.setText(R.string.placeholder_none);
-                    probeOneTempText.setText(R.string.off);
-                }
-            }
-
-            if (NullUtils.checkObjectNotNull(probeTwoEnabled, probeTwoNotify, probeTwoTarget,
-                    probeTwoTemp)) {
-                if (probeTwoEnabled) {
-                    if (probeTwoNotify && probeTwoTarget > 0) {
-                        probeTwoProgress.setMax(probeTwoTarget);
-                        probeTwoTargetText.setText(StringUtils.formatTemp(probeTwoTarget,
-                                isFahrenheit));
-                    } else {
-                        probeTwoProgress.setMax(tempUtils.getMaxProbeTemp());
-                        probeTwoTargetText.setText(R.string.placeholder_none);
-                    }
-
-                    if (probeTwoTemp > 0) {
-                        probeTwoProgress.setProgress(probeTwoTemp.intValue());
-                        probeTwoTempText.setText(StringUtils.formatTemp(probeTwoTemp,
-                                isFahrenheit));
-                    } else {
-                        probeTwoTempText.setText(R.string.placeholder_temp);
-                    }
-                } else {
-                    probeTwoProgress.setMax(0);
-                    probeTwoTargetText.setText(R.string.placeholder_none);
-                    probeTwoTempText.setText(R.string.off);
                 }
             }
 
@@ -860,24 +744,6 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 } else {
                     stopTimer();
                 }
-            }
-
-            if (NullUtils.checkObjectNotNull(probeOneShutdown, probeTwoShutdown, timerShutdown)) {
-                AnimUtils.fadeAnimation(this.probeOneShutdown, 300, probeOneShutdown ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
-                AnimUtils.fadeAnimation(this.probeTwoShutdown, 300, probeTwoShutdown ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
-                AnimUtils.fadeAnimation(this.timerShutdown, 300, timerShutdown ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
-            }
-
-            if (NullUtils.checkObjectNotNull(probeOneKeepWarm, probeTwoKeepWarm, timerKeepWarm)) {
-                AnimUtils.fadeAnimation(this.probeOneKeepWarm, 300, probeOneKeepWarm ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
-                AnimUtils.fadeAnimation(this.probeTwoKeepWarm, 300, probeTwoKeepWarm ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
-                AnimUtils.fadeAnimation(this.timerKeepWarm, 300, timerKeepWarm ?
-                        Constants.FADE_IN : Constants.FADE_OUT);
             }
 
         } catch (IllegalStateException | NullPointerException e) {
@@ -906,16 +772,20 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         }
     }
 
-    private List<Integer> getProbesEnabled(boolean probeOne, boolean probeTwo) {
-        return Arrays.asList(1, probeOne ? 1 : 0, probeTwo ? 1 : 0);
-    }
-
     private void setOfflineMode() {
+        if (dashAdapter != null) {
+            for (DashProbe probe : dashAdapter.getDashProbes()) {
+                probe.setSetTemp(0.0);
+                probe.setTarget(0);
+                probe.setValue(0.0);
+                probe.setKeepWarm(false);
+                probe.setShutdown(false);
+                dashAdapter.updateProbe(probe);
+            }
+        }
+
         stopTimer();
         currentMode = Constants.GRILL_CURRENT_STOP;
-        grillTempProgress.setProgress(0);
-        probeOneProgress.setProgress(0);
-        probeTwoProgress.setProgress(0);
         currentModeText.setText(R.string.off);
         smokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
         smokePlusText.setText(R.string.off);
@@ -923,20 +793,11 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         pwmControlBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
         pwmControlText.setText(R.string.off);
         pwmControlEnabled = false;
-        grillTempText.setText(R.string.placeholder_temp);
-        grillSetText.setText(R.string.placeholder_none);
-        grillTargetText.setText(R.string.placeholder_none);
-        probeOneTargetText.setText(R.string.placeholder_none);
-        probeOneTempText.setText(R.string.placeholder_temp);
-        probeTwoTargetText.setText(R.string.placeholder_none);
-        probeTwoTempText.setText(R.string.placeholder_temp);
         timerCountDownText.setText(R.string.placeholder_time);
         pelletLevelText.setText(R.string.placeholder_percentage);
         if (getActivity() != null) {
             pelletLevelText.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
         }
-        AnimUtils.fadeAnimation(probeOneShutdown, 300, Constants.FADE_OUT);
-        AnimUtils.fadeAnimation(probeTwoShutdown, 300, Constants.FADE_OUT);
         AnimUtils.fadeAnimation(timerShutdown, 300, Constants.FADE_OUT);
     }
 }
