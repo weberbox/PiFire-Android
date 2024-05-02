@@ -483,7 +483,7 @@
     <string name="info_app_build_date">Build Date</string>
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
-    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2023\n\nPiFire Android created by James Weber, &#169; 2023</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2024\n\nPiFire Android created by James Weber, &#169; 2024</string>
 
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_usage">Estimated Usage</string>
