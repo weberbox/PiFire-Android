@@ -23,9 +23,6 @@ public class AppConfig {
     // Dash Recycler Landscape
     public static final int DASH_RECYCLER_LAND = 4;
 
-    // App Update Check Frequency
-    public static final int UPDATE_CHECK_FREQ = 5;
-
     // Temp Selector Temps F
     public static final int MIN_GRILL_TEMP_SET_F = 125;
     public static final int MAX_GRILL_TEMP_SET_F = 600;
@@ -45,9 +42,6 @@ public class AppConfig {
     // Prime Amounts
     public static final int PRIME_MIN_GRAMS = 10;
     public static final int PRIME_MAX_GRAMS = 50;
-
-    // Sentry
-    public static final String SENTRY_FEEDBACK = "User Feedback";
 
     // In App Updates
     public static final String INAPP_FIREBASE_INFO = "play_update_info";
