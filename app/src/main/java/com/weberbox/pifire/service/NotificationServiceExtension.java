@@ -42,9 +42,6 @@ public class NotificationServiceExtension implements OSRemoteNotificationReceive
             return builder;
         });
 
-        //JSONObject data = notification.getAdditionalData();
-        //Timber.d( "Received Notification Data: %s", data);
-
         receivedEvent.complete(mutableNotification);
     }
 }
