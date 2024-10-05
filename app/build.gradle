@@ -37,7 +37,7 @@ def getGitBranch = { ->
 
 def vMajor = 2
 def vMinor = 2
-def vPatch = 0
+def vPatch = 1
 
 android {
     compileSdk 34

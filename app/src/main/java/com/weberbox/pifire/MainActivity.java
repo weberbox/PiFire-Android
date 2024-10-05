@@ -317,12 +317,16 @@ public class MainActivity extends BaseActivity implements
             case UNSUPPORTED_MIN -> {
                 Timber.d("Min Server Version Unsupported");
                 showUnsupportedDialog(getString(R.string.dialog_unsupported_server_min_message,
-                        version, build.isBlank() ? "0" : build));
+                        version, build.isBlank() ? "0" : build,
+                        Prefs.getString("prefs_server_version", "1.0.0"),
+                        Prefs.getString("prefs_server_build", "0")));
             }
             case UNSUPPORTED_MAX -> {
                 Timber.d("Max Server Version Unsupported");
                 showUnsupportedDialog(getString(R.string.dialog_unsupported_server_max_message,
-                        version, build.isBlank() ? "0" : build));
+                        version, build.isBlank() ? "0" : build,
+                        Prefs.getString("prefs_server_version", "1.0.0"),
+                        Prefs.getString("prefs_server_build", "0")));
             }
             case FAILED -> VersionUtils.getRawSupportedVersion(this, this);
             case UNTESTED -> {

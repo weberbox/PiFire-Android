@@ -11,6 +11,7 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.enums.ServerSupport;
+import com.weberbox.pifire.enums.VersionResults;
 import com.weberbox.pifire.interfaces.ServerInfoCallback;
 import com.weberbox.pifire.model.local.ServerInfo;
 import com.weberbox.pifire.model.local.ServerInfo.VersionBuild;
@@ -113,13 +114,22 @@ public class VersionUtils {
         String minVersion = versionBuild.getVersion();
         String minBuild = versionBuild.getBuild();
         if (!minVersion.isBlank()) {
-            if (isSupportedServerMin(minVersion)) {
-                if (!minBuild.isBlank()) {
-                    return isSupportedBuildMin(minBuild);
+            String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
+            switch (isSupportedResults(serverVersion, minVersion)) {
+                case GREATER -> {
+                    return true;
                 }
-                return true;
+                case LESS, ERROR -> {
+                    return false;
+                }
+                case SAME -> {
+                    if (!minBuild.isBlank()) {
+                        return isSupportedBuildMin(minBuild);
+                    } else {
+                        return true;
+                    }
+                }
             }
-            return false;
         }
         return true;
     }
@@ -128,25 +138,41 @@ public class VersionUtils {
         String maxVersion = versionBuild.getVersion();
         String maxBuild = versionBuild.getBuild();
         if (!maxVersion.isBlank()) {
-            if (isSupportedServerMax(maxVersion)) {
-                if (!maxBuild.isBlank()) {
-                    return isSupportedBuildMax(maxBuild);
+            String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
+            switch (isSupportedResults(serverVersion, maxVersion)) {
+                case GREATER, ERROR -> {
+                    return false;
                 }
-                return true;
+                case LESS -> {
+                    return true;
+                }
+                case SAME -> {
+                    if (!maxBuild.isBlank()) {
+                        return isSupportedBuildMax(maxBuild);
+                    } else {
+                        return true;
+                    }
+                }
             }
-            return false;
         }
         return true;
     }
 
-    private static boolean isSupportedServerMin(String requiredVersion) {
-        String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
-        return isSupportedMinMax(serverVersion, requiredVersion, true);
-    }
-
-    private static boolean isSupportedServerMax(String requiredVersion) {
-        String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
-        return isSupportedMinMax(serverVersion, requiredVersion, false);
+    private static VersionResults isSupportedResults(String currentVersion, String requiredVersion) {
+        try {
+            final Version storedVersion = new Version(currentVersion);
+            final Version required = new Version(requiredVersion);
+            if (storedVersion.compareTo(required) == 0) {
+                return VersionResults.SAME;
+            } else if (storedVersion.compareTo(required) > 0) {
+                return VersionResults.GREATER;
+            } else {
+                return VersionResults.LESS;
+            }
+        } catch (Exception e) {
+            Timber.w(e, "Failed comparing versions");
+            return VersionResults.ERROR;
+        }
     }
 
     private static boolean isSupportedBuildMax(String requiredVersion) {
