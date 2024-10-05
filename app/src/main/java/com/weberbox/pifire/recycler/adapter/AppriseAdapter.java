@@ -61,7 +61,7 @@ public class AppriseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         if (list == null) {
             return 0;
-        } else if (list.size() == 0) {
+        } else if (list.isEmpty()) {
             return 1;
         } else {
             return list.size() + 1;
@@ -110,7 +110,7 @@ public class AppriseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         public void bindData(final List<String> list, int position) {
-            if (list.size() > 0) {
+            if (!list.isEmpty()) {
                 location.setText(list.get(position));
             }
         }

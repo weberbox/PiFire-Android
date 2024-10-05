@@ -66,7 +66,7 @@ public class SmartStartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public int getItemCount() {
         if (list == null) {
             return 0;
-        } else if (list.size() == 0) {
+        } else if (list.isEmpty()) {
             return 1;
         } else {
             return list.size() + 1;
@@ -114,7 +114,7 @@ public class SmartStartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public List<SmartStartModel> getSmartStartItems() {
-        return list.size() == 0 ? null : list;
+        return list.isEmpty() ? null : list;
     }
 
     public static class ItemsViewHolder extends RecyclerView.ViewHolder {

@@ -207,7 +207,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
     }
 
     private void verifyURLAndTestConnect(String address) {
-        if (address.length() != 0) {
+        if (!address.isEmpty()) {
             if (isValidUrl(address)) {
                 String scheme = String.valueOf(serverScheme.getText());
                 String url = scheme + address;
@@ -396,6 +396,10 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                         version, build.isBlank() ? "0" : build));
             }
             case FAILED -> VersionUtils.getRawSupportedVersion(requireActivity(), this);
+            case UNTESTED -> {
+                Timber.d("Unlisted Version in ServerInfo");
+                showUntestedDialog(getString(R.string.dialog_untested_app_version_message));
+            }
         }
     }
 
@@ -411,6 +415,27 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                         .setMessage(message)
                         .setPositiveButton(getString(android.R.string.ok),
                                 (dialogInterface, which) -> dialogInterface.dismiss())
+                        .build();
+                dialog.show();
+            });
+        }
+    }
+
+    private void showUntestedDialog(String message) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                connectProgress.setVisibility(View.GONE);
+                socket.disconnect();
+                socket.close();
+                isConnecting = false;
+                MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
+                        .setTitle(getString(R.string.dialog_untested_app_version_title))
+                        .setMessage(message)
+                        .setPositiveButton(getString(android.R.string.ok),
+                                (dialogInterface, which) -> {
+                                    dialogInterface.dismiss();
+                                    completeSetup();
+                                })
                         .build();
                 dialog.show();
             });

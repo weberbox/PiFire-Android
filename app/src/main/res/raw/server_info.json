@@ -1,13 +1,24 @@
 [
   {
+    "appVersionCode": 2020000,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
     "appVersionCode": 2010300,
     "minServerInfo": {
       "version": "1.7.0",
       "build": "46"
     },
     "maxServerInfo": {
-      "version": "1.7.1",
-      "build": "58"
+      "version": "1.7.2",
+      "build": "59"
     }
   },
   {

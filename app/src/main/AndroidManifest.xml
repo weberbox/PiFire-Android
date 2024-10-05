@@ -29,7 +29,8 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="locked"
-            android:theme="@style/Theme.PiFire.Starting">
+            android:theme="@style/Theme.PiFire.Starting"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +40,7 @@
             android:name=".ui.activities.ServerSetupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.PiFire.NoActionBar"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".ui.activities.PreferencesActivity"
             android:theme="@style/Theme.PiFire.SettingsTheme" />

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="def_pid_link">http://engineeredmusings.com/pismoker/</string>
     <string name="def_pmode_link">http://tipsforbbq.com/Definition/Traeger-P-Setting</string>
     <string name="def_onesignal_privacy_link">https://onesignal.com/privacy</string>
 
@@ -29,7 +28,6 @@
     <bool name="def_auto_lid_detect">false</bool>
     <bool name="def_pellet_prime_igniter">false</bool>
 
-    <bool name="def_updated_message">false</bool>
     <bool name="def_venv">false</bool>
     <bool name="def_real_hw">false</bool>
 
@@ -41,7 +39,6 @@
 
     <string name="def_grill_temp_unit">F</string>
 
-    <string name="def_history_refresh_time_app">3000</string>
     <string name="def_event_amounts_app">20</string>
 
     <string name="def_pmode_auger_on">15</string>
@@ -70,9 +67,6 @@
     <string name="def_shutdown_time">60</string>
     <string name="def_startup_time">240</string>
 
-    <string name="def_history_display">60</string>
-    <string name="def_history_points">60</string>
-
     <string name="def_safety_min_start">75</string>
     <string name="def_safety_max_start">100</string>
     <string name="def_safety_retries">1</string>
@@ -83,9 +77,6 @@
     <string name="def_pellet_warning_time">20</string>
     <string name="def_pellet_warning_level">25</string>
     <string name="def_pellet_auger_rate">0.3</string>
-
-    <string name="def_recipe_time">0 min</string>
-    <string name="def_recipe_diff">Easy</string>
 
     <string name="def_startup_goto_mode">Smoke</string>
     <string name="def_startup_goto_temp">165</string>

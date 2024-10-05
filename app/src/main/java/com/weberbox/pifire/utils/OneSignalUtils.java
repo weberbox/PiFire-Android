@@ -25,7 +25,7 @@ import com.weberbox.pifire.config.PushConfig;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.enums.OneSignalResult;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalDeviceInfo;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.OneSignalPush.OneSignalDeviceInfo;
 
 import java.util.HashMap;
 import java.util.Map;

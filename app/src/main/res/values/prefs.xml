@@ -83,7 +83,6 @@
     <string name="prefs_prime_on_startup_enabled">prefs_prime_on_startup_enabled</string>
     <string name="prefs_prime_on_startup">prefs_prime_on_startup</string>
     <string name="prefs_auto_power_off">prefs_auto_power_off</string>
-    <string name="prefs_smart_start">prefs_smart_start</string>
     <string name="prefs_smart_start_enabled">prefs_smart_start_enabled</string>
     <string name="prefs_smart_start_temp_range">prefs_smart_start_temp_range</string>
     <string name="prefs_smart_start_profiles">prefs_smart_start_profiles</string>
@@ -92,9 +91,7 @@
 
     <string name="prefs_grill_name">prefs_grill_name</string>
     <string name="prefs_first_time_setup">prefs_first_time_setup</string>
-    <string name="prefs_global_control">prefs_global_control</string>
     <string name="prefs_ext_data">prefs_ext_data</string>
-    <string name="prefs_notify_services">prefs_notify_services</string>
     <string name="prefs_venv">prefs_venv</string>
     <string name="prefs_real_hw">prefs_real_hw</string>
 

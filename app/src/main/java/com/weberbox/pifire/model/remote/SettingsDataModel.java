@@ -58,6 +58,9 @@ public class SettingsDataModel {
     @SerializedName("pwm")
     @Expose
     private PWM pwm;
+    @SerializedName("platform")
+    @Expose
+    private Platform platform;
 
     public Versions getVersions() {
         return versions;
@@ -249,6 +252,19 @@ public class SettingsDataModel {
         return this;
     }
 
+    public Platform getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(Platform platform) {
+        this.platform = platform;
+    }
+
+    public SettingsDataModel withPlatform(Platform platform) {
+        this.platform = platform;
+        return this;
+    }
+
     public static class Versions {
 
         @SerializedName("server")
@@ -343,18 +359,6 @@ public class SettingsDataModel {
         @SerializedName("debug_mode")
         @Expose
         private Boolean debugMode;
-        @SerializedName("page_theme")
-        @Expose
-        private String pageTheme;
-        @SerializedName("triggerlevel")
-        @Expose
-        private String triggerLevel;
-        @SerializedName("buttonslevel")
-        @Expose
-        private String buttonsLevel;
-        @SerializedName("disp_rotation")
-        @Expose
-        private Integer displayRotation;
         @SerializedName("prime_ignition")
         @Expose
         private Boolean primeIgnition;
@@ -379,9 +383,6 @@ public class SettingsDataModel {
         @SerializedName("ext_data")
         @Expose
         private Boolean extData;
-        @SerializedName("global_control_panel")
-        @Expose
-        private Boolean globalControlPanel;
         @SerializedName("updated_message")
         @Expose
         private Boolean updatedMessage;
@@ -415,45 +416,6 @@ public class SettingsDataModel {
 
         public Globals withDebugMode(Boolean debugMode) {
             this.debugMode = debugMode;
-            return this;
-        }
-
-        public String getPageTheme() {
-            return pageTheme;
-        }
-
-        public void setPageTheme(String pageTheme) {
-            this.pageTheme = pageTheme;
-        }
-
-        public Globals withPageTheme(String pageTheme) {
-            this.pageTheme = pageTheme;
-            return this;
-        }
-
-        public String getTriggerLevel() {
-            return triggerLevel;
-        }
-
-        public void setTriggerLevel(String triggerLevel) {
-            this.triggerLevel = triggerLevel;
-        }
-
-        public Globals withTriggerLevel(String triggerLevel) {
-            this.triggerLevel = triggerLevel;
-            return this;
-        }
-
-        public String getButtonsLevel() {
-            return buttonsLevel;
-        }
-
-        public void setButtonsLevel(String buttonsLevel) {
-            this.buttonsLevel = buttonsLevel;
-        }
-
-        public Globals withButtonsLevel(String buttonsLevel) {
-            this.buttonsLevel = buttonsLevel;
             return this;
         }
 
@@ -558,19 +520,6 @@ public class SettingsDataModel {
 
         public Globals withExtData(Boolean extData) {
             this.extData = extData;
-            return this;
-        }
-
-        public Boolean getGlobalControlPanel() {
-            return globalControlPanel;
-        }
-
-        public void setGlobalControlPanel(Boolean globalControlPanel) {
-            this.globalControlPanel = globalControlPanel;
-        }
-
-        public Globals withGlobalControlPanel(Boolean globalControlPanel) {
-            this.globalControlPanel = globalControlPanel;
             return this;
         }
 
@@ -712,6 +661,412 @@ public class SettingsDataModel {
         public NotifyServices withInfluxdb(InfluxDB influxdb) {
             this.influxDB = influxdb;
             return this;
+        }
+
+        public static class Pushover {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("APIKey")
+            @Expose
+            private String aPIKey;
+            @SerializedName("UserKeys")
+            @Expose
+            private String userKeys;
+            @SerializedName("PublicURL")
+            @Expose
+            private String publicURL;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public Pushover withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public String getAPIKey() {
+                return aPIKey;
+            }
+
+            public void setAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+            }
+
+            public Pushover withAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+                return this;
+            }
+
+            public String getUserKeys() {
+                return userKeys;
+            }
+
+            public void setUserKeys(String userKeys) {
+                this.userKeys = userKeys;
+            }
+
+            public Pushover withUserKeys(String userKeys) {
+                this.userKeys = userKeys;
+                return this;
+            }
+
+            public String getPublicURL() {
+                return publicURL;
+            }
+
+            public void setPublicURL(String publicURL) {
+                this.publicURL = publicURL;
+            }
+
+            public Pushover withPublicURL(String publicURL) {
+                this.publicURL = publicURL;
+                return this;
+            }
+
+        }
+
+        public static class PushBullet {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("APIKey")
+            @Expose
+            private String aPIKey;
+            @SerializedName("PublicURL")
+            @Expose
+            private String publicURL;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public PushBullet withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public String getAPIKey() {
+                return aPIKey;
+            }
+
+            public void setAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+            }
+
+            public PushBullet withAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+                return this;
+            }
+
+            public String getPublicURL() {
+                return publicURL;
+            }
+
+            public void setPublicURL(String publicURL) {
+                this.publicURL = publicURL;
+            }
+
+            public PushBullet withPublicURL(String publicURL) {
+                this.publicURL = publicURL;
+                return this;
+            }
+
+        }
+
+        public static class OneSignalPush {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("uuid")
+            @Expose
+            private String uuid;
+            @SerializedName("app_id")
+            @Expose
+            private String appID;
+            @SerializedName("devices")
+            @Expose
+            private Map<String, OneSignalDeviceInfo> devices = new HashMap<>();
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public OneSignalPush withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public String getServerUUID() {
+                return uuid;
+            }
+
+            public void setServerUUID(String uuid) {
+                this.uuid = uuid;
+            }
+
+            public OneSignalPush withUuid(String uuid) {
+                this.uuid = uuid;
+                return this;
+            }
+
+            public String getAppID() {
+                return appID;
+            }
+
+            public void setAppID(String appID) {
+                this.appID = appID;
+            }
+
+            public OneSignalPush withAppId(String appID) {
+                this.appID = appID;
+                return this;
+            }
+
+            public Map<String, OneSignalDeviceInfo> getOneSignalDevices() {
+                return devices;
+            }
+
+            public void setOneSignalDevices(Map<String, OneSignalDeviceInfo> devices) {
+                this.devices = devices;
+            }
+
+            public OneSignalPush withOneSignalDevices(Map<String, OneSignalDeviceInfo> devices) {
+                this.devices = devices;
+                return this;
+            }
+
+            public static OneSignalPush parseJSON(String response) {
+                return new Gson().fromJson(response, OneSignalPush.class);
+            }
+
+            public static class OneSignalDeviceInfo {
+
+                @SerializedName("device_name")
+                @Expose
+                private String deviceName;
+                @SerializedName("friendly_name")
+                @Expose
+                private String friendlyName = "";
+                @SerializedName("app_version")
+                @Expose
+                private String appVersion;
+
+                public String getDeviceName() {
+                    return deviceName;
+                }
+
+                public void setDeviceName(String deviceName) {
+                    this.deviceName = deviceName;
+                }
+
+                public OneSignalDeviceInfo withDeviceName(String deviceName) {
+                    this.deviceName = deviceName;
+                    return this;
+                }
+
+                public String getFriendlyName() {
+                    return friendlyName;
+                }
+
+                public void setFriendlyName(String friendlyName) {
+                    this.friendlyName = friendlyName;
+                }
+
+                public OneSignalDeviceInfo withFriendlyName(String friendlyName) {
+                    this.friendlyName = friendlyName;
+                    return this;
+                }
+
+                public String getAppVersion() {
+                    return appVersion;
+                }
+
+                public void setAppVersion(String appVersion) {
+                    this.appVersion = appVersion;
+                }
+
+                public OneSignalDeviceInfo withAppVersion(String appVersion) {
+                    this.appVersion = appVersion;
+                    return this;
+                }
+
+            }
+        }
+
+        public static class InfluxDB {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("url")
+            @Expose
+            private String url;
+            @SerializedName("token")
+            @Expose
+            private String token;
+            @SerializedName("org")
+            @Expose
+            private String org;
+            @SerializedName("bucket")
+            @Expose
+            private String bucket;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public InfluxDB withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+
+            public InfluxDB withUrl(String url) {
+                this.url = url;
+                return this;
+            }
+
+            public String getToken() {
+                return token;
+            }
+
+            public void setToken(String token) {
+                this.token = token;
+            }
+
+            public InfluxDB withToken(String token) {
+                this.token = token;
+                return this;
+            }
+
+            public String getOrg() {
+                return org;
+            }
+
+            public void setOrg(String org) {
+                this.org = org;
+            }
+
+            public InfluxDB withOrg(String org) {
+                this.org = org;
+                return this;
+            }
+
+            public String getBucket() {
+                return bucket;
+            }
+
+            public void setBucket(String bucket) {
+                this.bucket = bucket;
+            }
+
+            public InfluxDB withBucket(String bucket) {
+                this.bucket = bucket;
+                return this;
+            }
+
+        }
+
+        public static class Apprise {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("locations")
+            @Expose
+            private List<String> locations = null;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public Apprise withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public List<String> getLocations() {
+                return locations;
+            }
+
+            public void setLocations(List<String> locations) {
+                this.locations = locations;
+            }
+
+            public Apprise withLocations(List<String> locations) {
+                this.locations = locations;
+                return this;
+            }
+
+        }
+
+        public static class Ifttt {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("APIKey")
+            @Expose
+            private String aPIKey;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public Ifttt withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public String getAPIKey() {
+                return aPIKey;
+            }
+
+            public void setAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+            }
+
+            public Ifttt withAPIKey(String aPIKey) {
+                this.aPIKey = aPIKey;
+                return this;
+            }
+
         }
 
     }
@@ -1235,6 +1590,165 @@ public class SettingsDataModel {
             this.smartStart = smartStart;
             return this;
         }
+
+        public static class StartToMode {
+
+            @SerializedName("after_startup_mode")
+            @Expose
+            private String afterStartUpMode;
+            @SerializedName("primary_setpoint")
+            @Expose
+            private Integer primarySetPoint;
+
+            public String getAfterStartUpMode() {
+                return afterStartUpMode;
+            }
+
+            public void setAfterStartUpMode(String afterStartUpMode) {
+                this.afterStartUpMode = afterStartUpMode;
+            }
+
+            public StartToMode withAfterStartUpMode(String afterStartUpMode) {
+                this.afterStartUpMode = afterStartUpMode;
+                return this;
+            }
+
+            public Integer getPrimarySetPoint() {
+                return primarySetPoint;
+            }
+
+            public void setPrimarySetPoint(Integer primarySetPoint) {
+                this.primarySetPoint = primarySetPoint;
+            }
+
+            public StartToMode withPrimarySetPoint(Integer primarySetPoint) {
+                this.primarySetPoint = primarySetPoint;
+                return this;
+            }
+
+        }
+
+        public static class SmartStart {
+
+            @SerializedName("enabled")
+            @Expose
+            private Boolean enabled;
+            @SerializedName("exit_temp")
+            @Expose
+            private Integer exitTemp;
+            @SerializedName("profiles")
+            @Expose
+            private List<SSProfile> profiles = null;
+            @SerializedName("temp_range_list")
+            @Expose
+            private List<Integer> tempRangeList = null;
+
+            public Boolean getEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(Boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public SmartStart withEnabled(Boolean enabled) {
+                this.enabled = enabled;
+                return this;
+            }
+
+            public Integer getExitTemp() {
+                return exitTemp;
+            }
+
+            public void setExitTemp(Integer exitTemp) {
+                this.exitTemp = exitTemp;
+            }
+
+            public SmartStart withExitTemp(Integer exitTemp) {
+                this.exitTemp = exitTemp;
+                return this;
+            }
+
+            public List<SSProfile> getProfiles() {
+                return profiles;
+            }
+
+            public void setProfiles(List<SSProfile> profiles) {
+                this.profiles = profiles;
+            }
+
+            public SmartStart withProfiles(List<SSProfile> profiles) {
+                this.profiles = profiles;
+                return this;
+            }
+
+            public List<Integer> getTempRangeList() {
+                return tempRangeList;
+            }
+
+            public void setTempRangeList(List<Integer> tempRangeList) {
+                this.tempRangeList = tempRangeList;
+            }
+
+            public SmartStart withTempRangeList(List<Integer> tempRangeList) {
+                this.tempRangeList = tempRangeList;
+                return this;
+            }
+
+            public static class SSProfile {
+
+                @SerializedName("augerontime")
+                @Expose
+                private Integer augerOnTime;
+                @SerializedName("p_mode")
+                @Expose
+                private Integer pMode;
+                @SerializedName("startuptime")
+                @Expose
+                private Integer startUpTime;
+
+                public Integer getAugerOnTime() {
+                    return augerOnTime;
+                }
+
+                public void setAugerOnTime(Integer augerOnTime) {
+                    this.augerOnTime = augerOnTime;
+                }
+
+                public SSProfile withAugerOnTime(Integer augerOnTime) {
+                    this.augerOnTime = augerOnTime;
+                    return this;
+                }
+
+                public Integer getPMode() {
+                    return pMode;
+                }
+
+                public void setPMode(Integer pMode) {
+                    this.pMode = pMode;
+                }
+
+                public SSProfile withPMode(Integer pMode) {
+                    this.pMode = pMode;
+                    return this;
+                }
+
+                public Integer getStartUpTime() {
+                    return startUpTime;
+                }
+
+                public void setStartUpTime(Integer startUpTime) {
+                    this.startUpTime = startUpTime;
+                }
+
+                public SSProfile withStartUpTime(Integer startUpTime) {
+                    this.startUpTime = startUpTime;
+                    return this;
+                }
+
+            }
+
+        }
     }
 
     public static class Shutdown {
@@ -1546,599 +2060,539 @@ public class SettingsDataModel {
             return this;
         }
 
-    }
+        public static class PWMProfile {
 
-    // Notify Services Helpers
+            @SerializedName("duty_cycle")
+            @Expose
+            private Integer dutyCycle;
 
-    public static class Pushover {
+            public Integer getDutyCycle() {
+                return dutyCycle;
+            }
 
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("APIKey")
-        @Expose
-        private String aPIKey;
-        @SerializedName("UserKeys")
-        @Expose
-        private String userKeys;
-        @SerializedName("PublicURL")
-        @Expose
-        private String publicURL;
+            public void setDutyCycle(Integer dutyCycle) {
+                this.dutyCycle = dutyCycle;
+            }
 
-        public Boolean getEnabled() {
-            return enabled;
-        }
+            public PWMProfile withDutyCycle(Integer dutyCycle) {
+                this.dutyCycle = dutyCycle;
+                return this;
+            }
 
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public Pushover withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public String getAPIKey() {
-            return aPIKey;
-        }
-
-        public void setAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-        }
-
-        public Pushover withAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-            return this;
-        }
-
-        public String getUserKeys() {
-            return userKeys;
-        }
-
-        public void setUserKeys(String userKeys) {
-            this.userKeys = userKeys;
-        }
-
-        public Pushover withUserKeys(String userKeys) {
-            this.userKeys = userKeys;
-            return this;
-        }
-
-        public String getPublicURL() {
-            return publicURL;
-        }
-
-        public void setPublicURL(String publicURL) {
-            this.publicURL = publicURL;
-        }
-
-        public Pushover withPublicURL(String publicURL) {
-            this.publicURL = publicURL;
-            return this;
         }
 
     }
 
-    public static class PushBullet {
+    public static class Platform {
 
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("APIKey")
-        @Expose
-        private String aPIKey;
-        @SerializedName("PublicURL")
-        @Expose
-        private String publicURL;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public PushBullet withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public String getAPIKey() {
-            return aPIKey;
-        }
-
-        public void setAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-        }
-
-        public PushBullet withAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-            return this;
-        }
-
-        public String getPublicURL() {
-            return publicURL;
-        }
-
-        public void setPublicURL(String publicURL) {
-            this.publicURL = publicURL;
-        }
-
-        public PushBullet withPublicURL(String publicURL) {
-            this.publicURL = publicURL;
-            return this;
-        }
-
-    }
-
-    public static class OneSignalPush {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("uuid")
-        @Expose
-        private String uuid;
-        @SerializedName("app_id")
-        @Expose
-        private String appID;
         @SerializedName("devices")
         @Expose
-        private Map<String, OneSignalDeviceInfo> devices = new HashMap<>();
+        private Devices devices;
+        @SerializedName("inputs")
+        @Expose
+        private Inputs inputs;
+        @SerializedName("outputs")
+        @Expose
+        private Outputs outputs;
+        @SerializedName("system")
+        @Expose
+        private System system;
+        @SerializedName("current")
+        @Expose
+        private String current;
+        @SerializedName("dc_fan")
+        @Expose
+        private Boolean dcFan;
+        @SerializedName("triggerlevel")
+        @Expose
+        private String triggerLevel;
+        @SerializedName("buttonslevel")
+        @Expose
+        private String buttonsLevel;
+        @SerializedName("standalone")
+        @Expose
+        private Boolean standalone;
+        @SerializedName("real_hw")
+        @Expose
+        private Boolean realHw;
+        @SerializedName("system_type")
+        @Expose
+        private String systemType;
 
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public OneSignalPush withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public String getServerUUID() {
-            return uuid;
-        }
-
-        public void setServerUUID(String uuid) {
-            this.uuid = uuid;
-        }
-
-        public OneSignalPush withUuid(String uuid) {
-            this.uuid = uuid;
-            return this;
-        }
-
-        public String getAppID() {
-            return appID;
-        }
-
-        public void setAppID(String appID) {
-            this.appID = appID;
-        }
-
-        public OneSignalPush withAppId(String appID) {
-            this.appID = appID;
-            return this;
-        }
-
-        public Map<String, OneSignalDeviceInfo> getOneSignalDevices() {
+        public Devices getDevices() {
             return devices;
         }
 
-        public void setOneSignalDevices(Map<String, OneSignalDeviceInfo> devices) {
+        public void setDevices(Devices devices) {
             this.devices = devices;
         }
 
-        public OneSignalPush withOneSignalDevices(Map<String, OneSignalDeviceInfo> devices) {
+        public Platform withDevices(Devices devices) {
             this.devices = devices;
             return this;
         }
 
-        public static OneSignalPush parseJSON(String response) {
-            return new Gson().fromJson(response, OneSignalPush.class);
+        public Inputs getInputs() {
+            return inputs;
         }
+
+        public void setInputs(Inputs inputs) {
+            this.inputs = inputs;
+        }
+
+        public Platform withInputs(Inputs inputs) {
+            this.inputs = inputs;
+            return this;
+        }
+
+        public Outputs getOutputs() {
+            return outputs;
+        }
+
+        public void setOutputs(Outputs outputs) {
+            this.outputs = outputs;
+        }
+
+        public Platform withOutputs(Outputs outputs) {
+            this.outputs = outputs;
+            return this;
+        }
+
+        public System getSystem() {
+            return system;
+        }
+
+        public void setSystem(System system) {
+            this.system = system;
+        }
+
+        public Platform withSystem(System system) {
+            this.system = system;
+            return this;
+        }
+
+        public String getCurrent() {
+            return current;
+        }
+
+        public void setCurrent(String current) {
+            this.current = current;
+        }
+
+        public Platform withCurrent(String current) {
+            this.current = current;
+            return this;
+        }
+
+        public Boolean getDcFan() {
+            return dcFan;
+        }
+
+        public void setDcFan(Boolean dcFan) {
+            this.dcFan = dcFan;
+        }
+
+        public Platform withDcFan(Boolean dcFan) {
+            this.dcFan = dcFan;
+            return this;
+        }
+
+        public String getTriggerLevel() {
+            return triggerLevel;
+        }
+
+        public void setTriggerLevel(String triggerLevel) {
+            this.triggerLevel = triggerLevel;
+        }
+
+        public Platform withTriggerLevel(String triggerLevel) {
+            this.triggerLevel = triggerLevel;
+            return this;
+        }
+
+        public String getButtonsLevel() {
+            return buttonsLevel;
+        }
+
+        public void setButtonsLevel(String buttonsLevel) {
+            this.buttonsLevel = buttonsLevel;
+        }
+
+        public Platform withButtonsLevel(String buttonsLevel) {
+            this.buttonsLevel = buttonsLevel;
+            return this;
+        }
+
+        public Boolean getStandalone() {
+            return standalone;
+        }
+
+        public void setStandalone(Boolean standalone) {
+            this.standalone = standalone;
+        }
+
+        public Platform withStandalone(Boolean standalone) {
+            this.standalone = standalone;
+            return this;
+        }
+
+        public Boolean getRealHw() {
+            return standalone;
+        }
+
+        public void setRealHw(Boolean realHw) {
+            this.realHw = realHw;
+        }
+
+        public Platform withRealHw(Boolean realHw) {
+            this.realHw = realHw;
+            return this;
+        }
+
+        public String getSystemType() {
+            return systemType;
+        }
+
+        public void setSystemType(String systemType) {
+            this.systemType = systemType;
+        }
+
+        public Platform withSystemType(String systemType) {
+            this.systemType = systemType;
+            return this;
+        }
+
+        public static class Devices {
+
+            @SerializedName("display")
+            @Expose
+            private Display display;
+            @SerializedName("distance")
+            @Expose
+            private Distance distance;
+            @SerializedName("input")
+            @Expose
+            private Input input;
+
+            public Display getDisplay() {
+                return display;
+            }
+
+            public void setDisplay(Display display) {
+                this.display = display;
+            }
+
+            public Devices withDisplay(Display display) {
+                this.display = display;
+                return this;
+            }
+
+            public Distance getDistance() {
+                return distance;
+            }
+
+            public void setDistance(Distance distance) {
+                this.distance = distance;
+            }
+
+            public Devices withDistance(Distance distance) {
+                this.distance = distance;
+                return this;
+            }
+
+            public Input getInput() {
+                return input;
+            }
+
+            public void setInput(Input input) {
+                this.input = input;
+            }
+
+            public Devices withInput(Input input) {
+                this.input = input;
+                return this;
+            }
+
+            public static class Display {
+
+                @SerializedName("dc")
+                @Expose
+                private Integer dc;
+                @SerializedName("led")
+                @Expose
+                private Integer led;
+                @SerializedName("rst")
+                @Expose
+                private Integer rst;
+
+                public Integer getDc() {
+                    return dc;
+                }
+
+                public void setDc(Integer dc) {
+                    this.dc = dc;
+                }
+
+                public Display withDc(Integer dc) {
+                    this.dc = dc;
+                    return this;
+                }
+
+                public Integer getLed() {
+                    return led;
+                }
+
+                public void setLed(Integer led) {
+                    this.led = led;
+                }
+
+                public Display withLed(Integer led) {
+                    this.led = led;
+                    return this;
+                }
+
+                public Integer getRst() {
+                    return rst;
+                }
+
+                public void setRst(Integer rst) {
+                    this.rst = rst;
+                }
+
+                public Display withRst(Integer rst) {
+                    this.rst = rst;
+                    return this;
+                }
+            }
+
+            public static class Distance {
+
+                @SerializedName("echo")
+                @Expose
+                private Integer echo;
+                @SerializedName("trig")
+                @Expose
+                private Integer trig;
+
+                public Integer getEcho() {
+                    return echo;
+                }
+
+                public void setEcho(Integer echo) {
+                    this.echo = echo;
+                }
+
+                public Distance withEcho(Integer echo) {
+                    this.echo = echo;
+                    return this;
+                }
+
+                public Integer getTrig() {
+                    return trig;
+                }
+
+                public void setTrig(Integer trig) {
+                    this.trig = trig;
+                }
+
+                public Distance withTrig(Integer trig) {
+                    this.trig = trig;
+                    return this;
+                }
+            }
+
+            public static class Input {
+
+                @SerializedName("down_dt")
+                @Expose
+                private Integer downDt;
+                @SerializedName("enter_sw")
+                @Expose
+                private Integer enterSw;
+                @SerializedName("up_clk")
+                @Expose
+                private Integer upClk;
+
+                public Integer getDownDt() {
+                    return downDt;
+                }
+
+                public void setDownDt(Integer downDt) {
+                    this.downDt = downDt;
+                }
+
+                public Input withDownDt(Integer downDt) {
+                    this.downDt = downDt;
+                    return this;
+                }
+
+                public Integer getEnterSw() {
+                    return enterSw;
+                }
+
+                public void setEnterSw(Integer enterSw) {
+                    this.enterSw = enterSw;
+                }
+
+                public Input withEnterSw(Integer enterSw) {
+                    this.enterSw = enterSw;
+                    return this;
+                }
+
+                public Integer getUpClk() {
+                    return upClk;
+                }
+
+                public void setUpClk(Integer upClk) {
+                    this.upClk = upClk;
+                }
+
+                public Input withUpClk(Integer upClk) {
+                    this.upClk = upClk;
+                    return this;
+                }
+            }
+
+        }
+
+        public static class Inputs {
+
+            @SerializedName("selector")
+            @Expose
+            private Integer selector;
+            @SerializedName("shutdown")
+            @Expose
+            private Integer shutdown;
+
+            public Integer getSelector() {
+                return selector;
+            }
+
+            public void setSelector(Integer selector) {
+                this.selector = selector;
+            }
+
+            public Inputs withSelector(Integer selector) {
+                this.selector = selector;
+                return this;
+            }
+
+            public Integer getShutdown() {
+                return shutdown;
+            }
+
+            public void setShutdown(Integer shutdown) {
+                this.shutdown = shutdown;
+            }
+
+            public Inputs withShutdown(Integer shutdown) {
+                this.shutdown = shutdown;
+                return this;
+            }
+        }
+
+        public static class Outputs {
+
+            @SerializedName("auger")
+            @Expose
+            private Integer auger;
+            @SerializedName("dc_fan")
+            @Expose
+            private Integer dcFan;
+            @SerializedName("fan")
+            @Expose
+            private Integer fan;
+            @SerializedName("igniter")
+            @Expose
+            private Integer igniter;
+            @SerializedName("power")
+            @Expose
+            private Integer power;
+            @SerializedName("pwm")
+            @Expose
+            private Integer pwm;
+
+            public Integer getAuger() {
+                return auger;
+            }
+
+            public void setAuger(Integer auger) {
+                this.auger = auger;
+            }
+
+            public Outputs withAuger(Integer auger) {
+                this.auger = auger;
+                return this;
+            }
+
+            public Integer getDcFan() {
+                return dcFan;
+            }
+
+            public void setDcFan(Integer dcFan) {
+                this.dcFan = dcFan;
+            }
+
+            public Outputs withDcFan(Integer dcFan) {
+                this.dcFan = dcFan;
+                return this;
+            }
+
+            public Integer getFan() {
+                return fan;
+            }
+
+            public void setFan(Integer fan) {
+                this.fan = fan;
+            }
+
+            public Outputs withFan(Integer fan) {
+                this.fan = fan;
+                return this;
+            }
+
+            public Integer getIgniter() {
+                return igniter;
+            }
+
+            public void setIgniter(Integer igniter) {
+                this.igniter = igniter;
+            }
+
+            public Outputs witIgniter(Integer igniter) {
+                this.igniter = igniter;
+                return this;
+            }
+
+            public Integer getPower() {
+                return power;
+            }
+
+            public void setPower(Integer power) {
+                this.power = power;
+            }
+
+            public Outputs witPower(Integer power) {
+                this.power = power;
+                return this;
+            }
+
+            public Integer getPwm() {
+                return pwm;
+            }
+
+            public void setPwm(Integer pwm) {
+                this.pwm = pwm;
+            }
+
+            public Outputs witPwm(Integer pwm) {
+                this.pwm = pwm;
+                return this;
+            }
+        }
+
     }
 
-    public static class OneSignalDeviceInfo {
-
-        @SerializedName("device_name")
-        @Expose
-        private String deviceName;
-        @SerializedName("friendly_name")
-        @Expose
-        private String friendlyName = "";
-        @SerializedName("app_version")
-        @Expose
-        private String appVersion;
-
-        public String getDeviceName() {
-            return deviceName;
-        }
-
-        public void setDeviceName(String deviceName) {
-            this.deviceName = deviceName;
-        }
-
-        public OneSignalDeviceInfo withDeviceName(String deviceName) {
-            this.deviceName = deviceName;
-            return this;
-        }
-
-        public String getFriendlyName() {
-            return friendlyName;
-        }
-
-        public void setFriendlyName(String friendlyName) {
-            this.friendlyName = friendlyName;
-        }
-
-        public OneSignalDeviceInfo withFriendlyName(String friendlyName) {
-            this.friendlyName = friendlyName;
-            return this;
-        }
-
-        public String getAppVersion() {
-            return appVersion;
-        }
-
-        public void setAppVersion(String appVersion) {
-            this.appVersion = appVersion;
-        }
-
-        public OneSignalDeviceInfo withAppVersion(String appVersion) {
-            this.appVersion = appVersion;
-            return this;
-        }
-
-    }
-
-    public static class InfluxDB {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("url")
-        @Expose
-        private String url;
-        @SerializedName("token")
-        @Expose
-        private String token;
-        @SerializedName("org")
-        @Expose
-        private String org;
-        @SerializedName("bucket")
-        @Expose
-        private String bucket;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public InfluxDB withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public InfluxDB withUrl(String url) {
-            this.url = url;
-            return this;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
-        }
-
-        public InfluxDB withToken(String token) {
-            this.token = token;
-            return this;
-        }
-
-        public String getOrg() {
-            return org;
-        }
-
-        public void setOrg(String org) {
-            this.org = org;
-        }
-
-        public InfluxDB withOrg(String org) {
-            this.org = org;
-            return this;
-        }
-
-        public String getBucket() {
-            return bucket;
-        }
-
-        public void setBucket(String bucket) {
-            this.bucket = bucket;
-        }
-
-        public InfluxDB withBucket(String bucket) {
-            this.bucket = bucket;
-            return this;
-        }
-
-    }
-
-    public static class Apprise {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("locations")
-        @Expose
-        private List<String> locations = null;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public Apprise withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public List<String> getLocations() {
-            return locations;
-        }
-
-        public void setLocations(List<String> locations) {
-            this.locations = locations;
-        }
-
-        public Apprise withLocations(List<String> locations) {
-            this.locations = locations;
-            return this;
-        }
-
-    }
-
-    public static class Ifttt {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("APIKey")
-        @Expose
-        private String aPIKey;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public Ifttt withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public String getAPIKey() {
-            return aPIKey;
-        }
-
-        public void setAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-        }
-
-        public Ifttt withAPIKey(String aPIKey) {
-            this.aPIKey = aPIKey;
-            return this;
-        }
-
-    }
-
-    // Startup Helpers
-    public static class StartToMode {
-
-        @SerializedName("after_startup_mode")
-        @Expose
-        private String afterStartUpMode;
-        @SerializedName("primary_setpoint")
-        @Expose
-        private Integer primarySetPoint;
-
-        public String getAfterStartUpMode() {
-            return afterStartUpMode;
-        }
-
-        public void setAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-        }
-
-        public StartToMode withAfterStartUpMode(String afterStartUpMode) {
-            this.afterStartUpMode = afterStartUpMode;
-            return this;
-        }
-
-        public Integer getPrimarySetPoint() {
-            return primarySetPoint;
-        }
-
-        public void setPrimarySetPoint(Integer primarySetPoint) {
-            this.primarySetPoint = primarySetPoint;
-        }
-
-        public StartToMode withPrimarySetPoint(Integer primarySetPoint) {
-            this.primarySetPoint = primarySetPoint;
-            return this;
-        }
-
-    }
-
-    // Smart Start Helpers
-    public static class SmartStart {
-
-        @SerializedName("enabled")
-        @Expose
-        private Boolean enabled;
-        @SerializedName("exit_temp")
-        @Expose
-        private Integer exitTemp;
-        @SerializedName("profiles")
-        @Expose
-        private List<SSProfile> profiles = null;
-        @SerializedName("temp_range_list")
-        @Expose
-        private List<Integer> tempRangeList = null;
-
-        public Boolean getEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(Boolean enabled) {
-            this.enabled = enabled;
-        }
-
-        public SmartStart withEnabled(Boolean enabled) {
-            this.enabled = enabled;
-            return this;
-        }
-
-        public Integer getExitTemp() {
-            return exitTemp;
-        }
-
-        public void setExitTemp(Integer exitTemp) {
-            this.exitTemp = exitTemp;
-        }
-
-        public SmartStart withExitTemp(Integer exitTemp) {
-            this.exitTemp = exitTemp;
-            return this;
-        }
-
-        public List<SSProfile> getProfiles() {
-            return profiles;
-        }
-
-        public void setProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-        }
-
-        public SmartStart withProfiles(List<SSProfile> profiles) {
-            this.profiles = profiles;
-            return this;
-        }
-
-        public List<Integer> getTempRangeList() {
-            return tempRangeList;
-        }
-
-        public void setTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-        }
-
-        public SmartStart withTempRangeList(List<Integer> tempRangeList) {
-            this.tempRangeList = tempRangeList;
-            return this;
-        }
-
-    }
-
-    public static class SSProfile {
-
-        @SerializedName("augerontime")
-        @Expose
-        private Integer augerOnTime;
-        @SerializedName("p_mode")
-        @Expose
-        private Integer pMode;
-        @SerializedName("startuptime")
-        @Expose
-        private Integer startUpTime;
-
-        public Integer getAugerOnTime() {
-            return augerOnTime;
-        }
-
-        public void setAugerOnTime(Integer augerOnTime) {
-            this.augerOnTime = augerOnTime;
-        }
-
-        public SSProfile withAugerOnTime(Integer augerOnTime) {
-            this.augerOnTime = augerOnTime;
-            return this;
-        }
-
-        public Integer getPMode() {
-            return pMode;
-        }
-
-        public void setPMode(Integer pMode) {
-            this.pMode = pMode;
-        }
-
-        public SSProfile withPMode(Integer pMode) {
-            this.pMode = pMode;
-            return this;
-        }
-
-        public Integer getStartUpTime() {
-            return startUpTime;
-        }
-
-        public void setStartUpTime(Integer startUpTime) {
-            this.startUpTime = startUpTime;
-        }
-
-        public SSProfile withStartUpTime(Integer startUpTime) {
-            this.startUpTime = startUpTime;
-            return this;
-        }
-
-    }
-
-    // PWM Helpers
-
-    public static class PWMProfile {
-
-        @SerializedName("duty_cycle")
-        @Expose
-        private Integer dutyCycle;
-
-        public Integer getDutyCycle() {
-            return dutyCycle;
-        }
-
-        public void setDutyCycle(Integer dutyCycle) {
-            this.dutyCycle = dutyCycle;
-        }
-
-        public PWMProfile withDutyCycle(Integer dutyCycle) {
-            this.dutyCycle = dutyCycle;
-            return this;
-        }
-
-    }
 
     public static SettingsDataModel parseJSON(String response) {
         return new Gson().fromJson(response, SettingsDataModel.class);

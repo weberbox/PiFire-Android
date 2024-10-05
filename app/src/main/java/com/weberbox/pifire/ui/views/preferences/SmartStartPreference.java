@@ -19,7 +19,7 @@ import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.interfaces.SmartStartCallback;
 import com.weberbox.pifire.model.local.SmartStartModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.SSProfile;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart.SSProfile;
 import com.weberbox.pifire.recycler.adapter.SmartStartAdapter;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
@@ -87,7 +87,7 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
                 new TypeToken<List<SSProfile>>() {
                 }.getType());
 
-        if (rangeList.size() > 0 && profileList.size() > 0) {
+        if (!rangeList.isEmpty() && !profileList.isEmpty()) {
 
             rangeList.add(rangeList.get(rangeList.size() - 1) + 1);
 

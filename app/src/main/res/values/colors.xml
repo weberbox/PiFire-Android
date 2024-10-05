@@ -24,12 +24,9 @@
     <color name="colorGreenButton">#00BC8C</color>
     <color name="colorWarning">#BA0101</color>
     <color name="colorRedButton">#A50202</color>
-    <color name="colorUpdateAvailable">#11F402</color>
-    <color name="colorUpdateError">#C13B3B</color>
     <color name="colorNavSelector">#40164DD9</color>
     <color name="colorNavSelected">#811942DA</color>
     <color name="colorTimerProgress">#ff414243</color>
-    <color name="colorSmokePlusDisabled">#57D80C0C</color>
     <color name="colorProbeProgress">#40164DD9</color>
     <color name="colorPlaceholder">#666666</color>
     <color name="colorTransparent">#6F000000</color>
@@ -45,14 +42,6 @@
 
     <color name="colorPelletDanger">#C8B10000</color>
     <color name="colorPelletDangerBG">#70B62929</color>
-
-    <color name="ucrop_color_statusbar" tools:override="true">@color/colorPrimary</color>
-    <color name="ucrop_color_toolbar" tools:override="true">@color/colorPrimary</color>
-    <color name="ucrop_color_toolbar_widget" tools:override="true">@color/colorWhite</color>
-    <color name="ucrop_color_blaze_orange" tools:override="true">@color/colorAccent</color>
-    <color name="ucrop_color_ebony_clay" tools:override="true">@color/colorPrimary</color>
-    <color name="ucrop_color_crop_background" tools:override="true">@color/colorPrimaryDark</color>
-    <color name="ucrop_color_widget" tools:override="true">@color/colorWhite</color>
 
     <color name="chglib_version_text_color" tools:override="true">@color/colorPrimaryLighter</color>
 

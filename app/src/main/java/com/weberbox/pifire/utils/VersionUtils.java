@@ -73,8 +73,10 @@ public class VersionUtils {
                             callback.onServerInfo(ServerSupport.UNSUPPORTED_MIN,
                                     minSupport.getVersion(), minSupport.getBuild());
                         }
+                        return;
                     }
                 }
+                callback.onServerInfo(ServerSupport.UNTESTED, null, null);
             } else {
                 callback.onServerInfo(ServerSupport.FAILED, null, null);
             }

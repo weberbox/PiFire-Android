@@ -20,6 +20,7 @@ public enum SettingsResult {
     SHUTDOWN,
     STARTUP,
     PELLET_LEVEL,
-    MODULES
+    MODULES,
+    PLATFORM
 
 }

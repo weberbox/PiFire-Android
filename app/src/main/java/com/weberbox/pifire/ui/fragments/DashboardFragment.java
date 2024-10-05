@@ -399,7 +399,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     }
 
     private void updateProbeNames() {
-        if (probeInfo != null && probeInfo.size() > 0 && dashAdapter != null) {
+        if (probeInfo != null && !probeInfo.isEmpty() && dashAdapter != null) {
             for (DashProbe cProbe : dashAdapter.getDashProbes()) {
                 for (DashProbe nProbe : getProbeList(getProbeInfoList())) {
                     if (Objects.equals(cProbe.getLabel(), nProbe.getLabel())) {
@@ -420,7 +420,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
     private List<DashProbe> getProbeList(List<ProbeInfo> probeInfo) {
         List<DashProbe> list = new ArrayList<>();
-        if (probeInfo != null && probeInfo.size() > 0) {
+        if (probeInfo != null && !probeInfo.isEmpty()) {
             for (ProbeInfo probe : probeInfo) {
                 list.add(new DashProbe(
                         probe.getLabel(),

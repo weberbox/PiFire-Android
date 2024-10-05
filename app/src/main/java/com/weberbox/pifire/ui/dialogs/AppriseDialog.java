@@ -54,7 +54,7 @@ public class AppriseDialog {
         dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             if (input.getText() != null) {
                 string = input.getText().toString();
-                if (string.length() != 0) {
+                if (!string.isEmpty()) {
                     if (position != null) {
                         callback.onDialogEdit(position, string);
                     } else {

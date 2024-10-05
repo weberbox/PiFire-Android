@@ -118,22 +118,7 @@ public class RichDrawableHelper implements DrawableEnriched {
                         drawable.getIntrinsicHeight());
                 float actualDrawableWidth = realBounds.width();
                 float actualDrawableHeight = realBounds.height();
-                float actualDrawableRatio = actualDrawableHeight / actualDrawableWidth;
-
-                float scale;
-                // check if both width and height defined then adjust drawable size according to the ratio
-                if (mDrawableHeight > 0 && mDrawableWidth > 0) {
-                    float placeholderRatio = mDrawableHeight / (float) mDrawableWidth;
-                    if (placeholderRatio > actualDrawableRatio) {
-                        scale = mDrawableWidth / actualDrawableWidth;
-                    } else {
-                        scale = mDrawableHeight / actualDrawableHeight;
-                    }
-                } else if (mDrawableHeight > 0) { // only height defined
-                    scale = mDrawableHeight / actualDrawableHeight;
-                } else { // only width defined
-                    scale = mDrawableWidth / actualDrawableWidth;
-                }
+                float scale = getScale(actualDrawableHeight, actualDrawableWidth);
 
                 actualDrawableWidth = actualDrawableWidth * scale;
                 actualDrawableHeight = actualDrawableHeight * scale;
@@ -153,6 +138,26 @@ public class RichDrawableHelper implements DrawableEnriched {
                         drawable.getIntrinsicHeight()));
             }
         }
+    }
+
+    private float getScale(float actualDrawableHeight, float actualDrawableWidth) {
+        float actualDrawableRatio = actualDrawableHeight / actualDrawableWidth;
+
+        float scale;
+        // check if both width and height defined then adjust drawable size according to the ratio
+        if (mDrawableHeight > 0 && mDrawableWidth > 0) {
+            float placeholderRatio = mDrawableHeight / (float) mDrawableWidth;
+            if (placeholderRatio > actualDrawableRatio) {
+                scale = mDrawableWidth / actualDrawableWidth;
+            } else {
+                scale = mDrawableHeight / actualDrawableHeight;
+            }
+        } else if (mDrawableHeight > 0) { // only height defined
+            scale = mDrawableHeight / actualDrawableHeight;
+        } else { // only width defined
+            scale = mDrawableWidth / actualDrawableWidth;
+        }
+        return scale;
     }
 
     private void tint(Drawable[] drawables) {

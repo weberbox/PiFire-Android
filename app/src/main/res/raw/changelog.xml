@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="2.1.3" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.2.0" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Added support for PiFire v1.8.0+</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="2.1.3" changeDate="">
         <changelogtext logType="imp">Update various dependencies</changelogtext>
     </changelogversion>
 

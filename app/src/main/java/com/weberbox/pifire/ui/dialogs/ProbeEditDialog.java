@@ -80,7 +80,7 @@ public class ProbeEditDialog {
             if (probeNameTv.getText() != null) {
                 name = probeNameTv.getText().toString();
                 profile = probeProfileTv.getText().toString();
-                if (name.length() != 0) {
+                if (!name.isEmpty()) {
                     callback.onProbeUpdated(position, name, profile);
                     dialog.dismiss();
                 }
