@@ -364,6 +364,14 @@ public class SwipeButton extends RelativeLayout {
         });
 
 
+        AnimatorSet animatorSet = getAnimatorSet();
+
+        animatorSet.playTogether(positionAnimator, widthAnimator);
+        animatorSet.start();
+    }
+
+    @NonNull
+    private AnimatorSet getAnimatorSet() {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -382,9 +390,7 @@ public class SwipeButton extends RelativeLayout {
                 }
             }
         });
-
-        animatorSet.playTogether(positionAnimator, widthAnimator);
-        animatorSet.start();
+        return animatorSet;
     }
 
     private void moveButtonBack() {

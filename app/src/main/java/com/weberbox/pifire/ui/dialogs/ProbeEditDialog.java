@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,24 +50,7 @@ public class ProbeEditDialog {
         dialog.setTitle(R.string.dialog_probe_edit);
 
         final TextInputEditText probeNameTv = binding.probeEditNameTv;
-        final AutoCompleteTextView probeProfileTv = binding.probeEditProfileTv;
-
-        List<String> profileNames = new ArrayList<>();
-
-        ProbeProfileModel probeProfile = probeInfo.getProbeProfile();
-
-        if (probeProfile != null) {
-            probeProfileTv.setText(probeProfile.getName());
-        }
-
-        for (ProbeProfileModel profile : profiles) {
-            profileNames.add(profile.getName());
-        }
-
-        ArrayAdapter<String> profileAdapter = new ArrayAdapter<>(context,
-                R.layout.item_menu_popup, profileNames);
-
-        probeProfileTv.setAdapter(profileAdapter);
+        final AutoCompleteTextView probeProfileTv = getAutoCompleteTextView(binding);
 
         String probeName = probeInfo.getName();
 
@@ -118,6 +102,29 @@ public class ProbeEditDialog {
         probeNameTv.requestFocus();
 
         return alertDialog;
+    }
+
+    @NonNull
+    private AutoCompleteTextView getAutoCompleteTextView(DialogProbeEditBinding binding) {
+        final AutoCompleteTextView probeProfileTv = binding.probeEditProfileTv;
+
+        List<String> profileNames = new ArrayList<>();
+
+        ProbeProfileModel probeProfile = probeInfo.getProbeProfile();
+
+        if (probeProfile != null) {
+            probeProfileTv.setText(probeProfile.getName());
+        }
+
+        for (ProbeProfileModel profile : profiles) {
+            profileNames.add(profile.getName());
+        }
+
+        ArrayAdapter<String> profileAdapter = new ArrayAdapter<>(context,
+                R.layout.item_menu_popup, profileNames);
+
+        probeProfileTv.setAdapter(profileAdapter);
+        return probeProfileTv;
     }
 }
 

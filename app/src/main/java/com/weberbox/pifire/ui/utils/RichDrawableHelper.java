@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
@@ -12,7 +13,6 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.ViewCompat;
 
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.interfaces.DrawableEnriched;
@@ -89,7 +89,7 @@ public class RichDrawableHelper implements DrawableEnriched {
     private void inflateVectors(TextView textView, int drawableStartVectorId,
                                 int drawableTopVectorId, int drawableEndVectorId,
                                 int drawableBottomVectorId, Drawable[] drawables) {
-        boolean rtl = ViewCompat.getLayoutDirection(textView) == ViewCompat.LAYOUT_DIRECTION_RTL;
+        boolean rtl = textView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
 
         if (drawableStartVectorId != UNDEFINED) {
             drawables[rtl ? RIGHT_DRAWABLE_INDEX : LEFT_DRAWABLE_INDEX] =

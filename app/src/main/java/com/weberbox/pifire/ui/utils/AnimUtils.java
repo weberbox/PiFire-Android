@@ -13,15 +13,13 @@ import android.view.animation.LayoutAnimationController;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
 
-import androidx.core.view.ViewCompat;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.weberbox.pifire.constants.Constants;
 
 public class AnimUtils {
 
     public static void rotateFabBackwards(FloatingActionButton fab) {
-        ViewCompat.animate(fab)
+        fab.animate()
                 .rotation(180)
                 .withLayer()
                 .setDuration(300L)
@@ -30,7 +28,7 @@ public class AnimUtils {
     }
 
     public static void rotateFabForwards(FloatingActionButton fab) {
-        ViewCompat.animate(fab)
+        fab.animate()
                 .rotation(0)
                 .withLayer()
                 .setDuration(300L)
