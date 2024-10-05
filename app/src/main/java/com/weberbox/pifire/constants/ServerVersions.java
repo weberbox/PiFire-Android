@@ -17,8 +17,12 @@ public class ServerVersions {
     public static final String V_150 = "1.5.0";
     public static final String V_151 = "1.5.1";
     public static final String V_152 = "1.5.2";
-    public static final String V_160 = "1.6.0"; // Main
-
-    public static final String V_170 = "1.7.0"; // Development
+    public static final String V_160 = "1.6.0";
+    public static final String V_170 = "1.7.0";
+    public static final String V_171 = "1.7.1";
+    public static final String V_172 = "1.7.2";
+    public static final String V_180 = "1.8.0";
+    public static final String V_181 = "1.8.1";
+    public static final String V_182 = "1.8.2";
 
 }

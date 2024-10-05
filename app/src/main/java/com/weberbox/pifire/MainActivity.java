@@ -325,6 +325,10 @@ public class MainActivity extends BaseActivity implements
                         version, build.isBlank() ? "0" : build));
             }
             case FAILED -> VersionUtils.getRawSupportedVersion(this, this);
+            case UNTESTED -> {
+                Timber.d("Unlisted Version in ServerInfo");
+                showUntestedDialog(getString(R.string.dialog_untested_app_version_message));
+            }
         }
     }
 
@@ -339,6 +343,19 @@ public class MainActivity extends BaseActivity implements
                                 dialogInterface.dismiss();
                                 finish();
                             })
+                    .build();
+            dialog.show();
+        });
+    }
+
+    private void showUntestedDialog(String message) {
+        runOnUiThread(() -> {
+            MaterialDialogText dialog = new MaterialDialogText.Builder(MainActivity.this)
+                    .setTitle(getString(R.string.dialog_untested_app_version_title))
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.close),
+                            (dialogInterface, which) -> dialogInterface.dismiss())
                     .build();
             dialog.show();
         });

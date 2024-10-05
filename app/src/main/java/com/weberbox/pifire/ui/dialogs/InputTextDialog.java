@@ -60,7 +60,7 @@ public class InputTextDialog {
         dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             if (input.getText() != null) {
                 string = input.getText().toString();
-                if (string.length() != 0) {
+                if (!string.isEmpty()) {
                     callback.onDialogConfirm(type, string);
                     dialog.dismiss();
                 }

@@ -4,8 +4,6 @@
     <string name="nav_app_title_one">Pi</string>
     <string name="nav_app_title_two">Fire\u00A0</string>
 
-    <string name="action_item_selected">%1$s Selected</string>
-
     <string name="menu_dashboard">Dashboard</string>
     <string name="menu_pellet_manager">Pellets</string>
     <string name="menu_events">Events</string>
@@ -43,14 +41,9 @@
     <string name="cancel">Cancel</string>
     <string name="view_all">View All</string>
     <string name="enabled">Enabled</string>
-    <string name="search">Search</string>
-    <string name="undo">Undo</string>
     <string name="swipe_to_start">Swipe to start</string>
-    <string name="disable_button">Disable</string>
-    <string name="update_button">Update</string>
     <string name="dismiss_button">Dismiss</string>
     <string name="open_button">Open</string>
-    <string name="downloading">Downloading</string>
     <string name="http_scheme">http://</string>
     <string name="https_scheme">https://</string>
     <string name="scheme">Scheme</string>
@@ -59,18 +52,13 @@
     <string name="save">Save</string>
     <string name="welcome">Welcome</string>
     <string name="terms">Terms</string>
-    <string name="edit">Edit</string>
-    <string name="status">Status</string>
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
     <string name="restart">Restart</string>
     <string name="shutdown">Shutdown</string>
     <string name="options">Options</string>
     <string name="offline">Offline</string>
-    <string name="sure">Sure</string>
-    <string name="no_thanks">No Thanks</string>
     <string name="exit">Exit</string>
-    <string name="add_new">Add New</string>
 
     <string name="text_blank_error">Cannot be blank!</string>
 
@@ -87,9 +75,6 @@
     <string name="grill_state_current">Current</string>
     <string name="grill_state_target">Target</string>
     <string name="grill_state_set">Set</string>
-
-    <string name="dash_probe_one_title">Probe 1</string>
-    <string name="dash_probe_two_title">Probe 2</string>
 
     <string name="dash_timer_title">Timer</string>
     <string name="dash_pellets_title">Pellets</string>
@@ -119,6 +104,8 @@
     <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
     <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s</string>
     <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. Please check for an update to this application</string>
+    <string name="dialog_untested_app_version_title">Untested Version</string>
+    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected.</string>
 
     <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
 
@@ -189,8 +176,6 @@
     <string name="settings_cat_crash">Crash Reporting</string>
     <string name="settings_enable_crash">Enable</string>
     <string name="settings_enable_crash_disabled">Sentry DSN is not set. Option is disabled</string>
-    <string name="settings_crash_dialog_title">Crash Dialogs</string>
-    <string name="settings_crash_dialog_summary">Show feedback dialog after a crash</string>
     <string name="settings_crash_summary">If the application crashes this will send a report to the developer</string>
     <string name="settings_dev_crash_title">Debug Crash</string>
     <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
@@ -274,7 +259,6 @@
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
     <string name="settings_startup_goto_title">Mode After Startup</string>
     <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
-    <string name="settings_startup_goto_temp">Hold Temp</string>
     <string name="settings_startup_smoke_mode">Smoke Mode</string>
     <string name="settings_startup_hold_mode">Hold Mode</string>
     <string name="settings_startup_hold_temp">Hold Temp</string>
@@ -284,7 +268,6 @@
     <string name="settings_startup_prime_value">Amount (grams)</string>
 
     <string name="settings_smart_start">Smart Start</string>
-    <string name="settings_smart_start_table">Smart Start Table</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
     <string name="settings_smart_start_temp">Temp</string>
     <string name="settings_smart_start_startup">Startup</string>
@@ -299,8 +282,6 @@
     <string name="settings_smart_start_temp_range_delete">Delete Smart Start Profile</string>
     <string name="settings_smart_start_temp_range_delete_content">Are you sure that you want to permanently delete this item?</string>
     <string name="settings_smart_start_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
-    <string name="settings_smart_start_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
-    <string name="settings_smart_start_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
 
     <string name="settings_cat_shutdown">Shutdown Settings</string>
     <string name="settings_shutdown_duration">Shutdown Timer (seconds)</string>
@@ -449,7 +430,6 @@
     <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
     <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
-    <string name="settings_pwm_fan_control">PWM Fan Control</string>
 
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Model</string>
@@ -530,21 +510,17 @@
     <string name="notification_channel_timer">pifire_timer_alerts</string>
     <string name="notification_channel_error">pifire_error_alerts</string>
     <string name="notification_channel_pellets">pifire_pellet_alerts</string>
-    <string name="notification_channel_updates">pifire_update_alerts</string>
     <string name="notification_channel_base_name">General Alerts</string>
     <string name="notification_channel_temp_name">Temp Alerts</string>
     <string name="notification_channel_timer_name">Timer Alerts</string>
     <string name="notification_channel_error_name">Error Alerts</string>
     <string name="notification_channel_pellets_name">Pellet Alerts</string>
-    <string name="notification_channel_updates_name">Update Alerts</string>
     <string name="notification_desc_base">Shows general grill alerts</string>
     <string name="notification_desc_temp">Shows grill temp alerts</string>
     <string name="notification_desc_timer">Shows grill timer alerts</string>
     <string name="notification_desc_error">Shows grill error alerts</string>
     <string name="notification_desc_pellets">Shows grill pellet alerts</string>
-    <string name="notification_desc_updates">Shows app update notifications</string>
 
-    <string name="regex_numbers" tools:ignore="TypographyDashes">[^0-9]</string>
 
     <!-- Google Play App Updater -->
     <string name="inapp_update_checking">Checking for App Updates.</string>

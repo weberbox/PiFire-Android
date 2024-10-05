@@ -6,31 +6,33 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.enums.SettingsResult;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Apprise;
 import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Ifttt;
-import com.weberbox.pifire.model.remote.SettingsDataModel.InfluxDB;
 import com.weberbox.pifire.model.remote.SettingsDataModel.KeepWarm;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Modules;
-import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Apprise;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Ifttt;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.InfluxDB;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Pushover;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PWM;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PelletLevel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Platform;
 import com.weberbox.pifire.model.remote.SettingsDataModel.ProbeSettings;
-import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Safety;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Shutdown;
-import com.weberbox.pifire.model.remote.SettingsDataModel.SmartStart;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
-import com.weberbox.pifire.model.remote.SettingsDataModel.StartToMode;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.StartToMode;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Versions;
 
 import java.util.Map;
@@ -65,6 +67,19 @@ public class SettingsUtils {
             SettingsDataModel settingsResponse = SettingsDataModel.parseJSON(response);
 
             try {
+                Versions versions = settingsResponse.getVersions();
+                if (versions != null) {
+                    putString(R.string.prefs_server_version, versions.getServerVersion());
+                    putString(R.string.prefs_recipe_version, versions.getRecipeVersion());
+                    putString(R.string.prefs_cook_file_version, versions.getCookFileVersion());
+                    putString(R.string.prefs_server_build, versions.getServerBuild());
+                }
+            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
+                Timber.e(e, "Versions JSON Error");
+                result = SettingsResult.VERSIONS;
+            }
+
+            try {
                 ProbeSettings probesSettings = settingsResponse.getProbeSettings();
                 if (probesSettings != null) {
                     Map<String, ProbeProfileModel> probeProfiles = probesSettings.getProbeProfiles();
@@ -87,30 +102,32 @@ public class SettingsUtils {
                     putString(R.string.prefs_grill_units, globals.getUnits());
                     putBoolean(R.string.prefs_first_time_setup, globals.getFirstTimeSetup());
                     putBoolean(R.string.prefs_ext_data, globals.getExtData());
-                    putBoolean(R.string.prefs_global_control, globals.getGlobalControlPanel());
-                    putBoolean(R.string.prefs_dc_fan, globals.getDCFan());
-                    putBoolean(R.string.prefs_standalone, globals.getStandalone());
                     putBoolean(R.string.prefs_pellet_prime_igniter, globals.getPrimeIgnition());
                     putBoolean(R.string.prefs_venv, globals.getVenv());
-                    putBoolean(R.string.prefs_real_hw, globals.getRealHw());
                     putFloatString(R.string.prefs_pellet_auger_rate, globals.getAugerRate());
+                    if (!VersionUtils.isSupported(ServerVersions.V_180)) {
+                        putBoolean(R.string.prefs_dc_fan, globals.getDCFan());
+                        putBoolean(R.string.prefs_standalone, globals.getStandalone());
+                        putBoolean(R.string.prefs_real_hw, globals.getRealHw());
+                    }
                 }
             } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
                 Timber.e(e, "Globals JSON Error");
                 result = SettingsResult.GLOBALS;
             }
 
-            try {
-                Versions versions = settingsResponse.getVersions();
-                if (versions != null) {
-                    putString(R.string.prefs_server_version, versions.getServerVersion());
-                    putString(R.string.prefs_recipe_version, versions.getRecipeVersion());
-                    putString(R.string.prefs_cook_file_version, versions.getCookFileVersion());
-                    putString(R.string.prefs_server_build, versions.getServerBuild());
+            if (VersionUtils.isSupported(ServerVersions.V_180)) {
+                try {
+                    Platform platform = settingsResponse.getPlatform();
+                    if (platform != null) {
+                        putBoolean(R.string.prefs_dc_fan, platform.getDcFan());
+                        putBoolean(R.string.prefs_standalone, platform.getStandalone());
+                        putBoolean(R.string.prefs_real_hw, platform.getRealHw());
+                    }
+                } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
+                    Timber.e(e, "Platform JSON Error");
+                    result = SettingsResult.PLATFORM;
                 }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Versions JSON Error");
-                result = SettingsResult.VERSIONS;
             }
 
             try {

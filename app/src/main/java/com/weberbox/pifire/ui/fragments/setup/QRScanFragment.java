@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
@@ -21,8 +20,6 @@ import com.weberbox.pifire.databinding.FragmentSetupQrScanBinding;
 import com.weberbox.pifire.model.view.SetupViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class QRScanFragment extends Fragment {
 
@@ -88,10 +85,6 @@ public class QRScanFragment extends Fragment {
             }
         }
 
-        @Override
-        public void possibleResultPoints(List<ResultPoint> resultPoints) {
-
-        }
     };
 
     private void forceScreenOn() {

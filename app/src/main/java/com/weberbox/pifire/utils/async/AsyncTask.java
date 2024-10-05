@@ -2,6 +2,8 @@ package com.weberbox.pifire.utils.async;
 
 import java.util.concurrent.ExecutorService;
 
+import timber.log.Timber;
+
 @SuppressWarnings("unused")
 public abstract class AsyncTask<INPUT, PROGRESS, OUTPUT> {
     private boolean cancelled = false;
@@ -30,7 +32,7 @@ public abstract class AsyncTask<INPUT, PROGRESS, OUTPUT> {
                 final OUTPUT output = doInBackground(input);
                 AsyncWorker.getInstance().getHandler().post(() -> onPostExecute(output));
             } catch (final Exception e) {
-                e.printStackTrace();
+                Timber.e(e);
 
                 AsyncWorker.getInstance().getHandler().post(() -> onBackgroundError(e));
             }

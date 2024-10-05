@@ -17,26 +17,26 @@ import com.weberbox.pifire.model.remote.PostDataModel.TimerAction;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Apprise;
 import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Ifttt;
-import com.weberbox.pifire.model.remote.SettingsDataModel.InfluxDB;
 import com.weberbox.pifire.model.remote.SettingsDataModel.KeepWarm;
-import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalDeviceInfo;
-import com.weberbox.pifire.model.remote.SettingsDataModel.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Apprise;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Ifttt;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.InfluxDB;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.OneSignalPush;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.OneSignalPush.OneSignalDeviceInfo;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.PushBullet;
+import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices.Pushover;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PWM;
-import com.weberbox.pifire.model.remote.SettingsDataModel.PWMProfile;
+import com.weberbox.pifire.model.remote.SettingsDataModel.PWM.PWMProfile;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PelletLevel;
-import com.weberbox.pifire.model.remote.SettingsDataModel.PushBullet;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Pushover;
-import com.weberbox.pifire.model.remote.SettingsDataModel.SSProfile;
-import com.weberbox.pifire.model.remote.SettingsDataModel.SmartStart;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Shutdown;
 import com.weberbox.pifire.model.remote.SettingsDataModel.SmokePlus;
-import com.weberbox.pifire.model.remote.SettingsDataModel.StartToMode;
-import com.weberbox.pifire.model.remote.SettingsDataModel.NotifyServices;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart.SSProfile;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.StartToMode;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.SettingsUtils;
 
@@ -187,7 +187,7 @@ public class ServerControl {
 
     // Prime On Startup
     public static void sendPrimeOnStartup(Socket socket, String amount,
-                                           SocketCallback callback) {
+                                          SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withStartup(new Startup().withPrimeOnStartup(Integer.parseInt(amount))));
         settingsPostEmit(socket, json, callback);
@@ -196,7 +196,7 @@ public class ServerControl {
 
     // Startup Exit Temp
     public static void setStartExitTemp(Socket socket, String exitTemp,
-                                       SocketCallback callback) {
+                                        SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withStartup(new Startup().withStartExitTemp(Integer.parseInt(exitTemp))));
         settingsPostEmit(socket, json, callback);
@@ -223,7 +223,7 @@ public class ServerControl {
 
     // Smart Start Exit Temp
     public static void setSmartStartExitTemp(Socket socket, String temp,
-                                            SocketCallback callback) {
+                                             SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withStartup(new Startup().withSmartStart(
                         new SmartStart().withExitTemp(Integer.parseInt(temp)))));
@@ -257,7 +257,7 @@ public class ServerControl {
 
     // Set Updated Probe Map
     public static void sendUpdatedProbeMap(Socket socket, ProbeMap probeMap,
-                                          SocketCallback callback) {
+                                           SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withProbeSettings(new SettingsDataModel.ProbeSettings().withProbeMap(probeMap)));
         settingsPostEmit(socket, json, callback);
@@ -276,7 +276,7 @@ public class ServerControl {
     public static void setIFTTTAPIKey(Socket socket, String apiKey, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withIfttt(new Ifttt().withAPIKey(apiKey))));
+                        .withIfttt(new Ifttt().withAPIKey(apiKey))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -285,7 +285,7 @@ public class ServerControl {
     public static void setPushOverEnabled(Socket socket, boolean enabled, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushover(new Pushover().withEnabled(enabled))));
+                        .withPushover(new Pushover().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -294,7 +294,7 @@ public class ServerControl {
     public static void setPushOverAPIKey(Socket socket, String apiKey, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushover(new Pushover().withAPIKey(apiKey))));
+                        .withPushover(new Pushover().withAPIKey(apiKey))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -304,7 +304,7 @@ public class ServerControl {
                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushover(new Pushover().withUserKeys(userKeys))));
+                        .withPushover(new Pushover().withUserKeys(userKeys))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -313,7 +313,7 @@ public class ServerControl {
     public static void setPushOverURL(Socket socket, String url, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushover(new Pushover().withPublicURL(url))));
+                        .withPushover(new Pushover().withPublicURL(url))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -332,7 +332,7 @@ public class ServerControl {
     public static void setPushBulletAPIKey(Socket socket, String apiKey, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushBullet(new PushBullet().withAPIKey(apiKey))));
+                        .withPushBullet(new PushBullet().withAPIKey(apiKey))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -341,7 +341,7 @@ public class ServerControl {
     public static void setPushBulletURL(Socket socket, String url, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withPushBullet(new PushBullet().withPublicURL(url))));
+                        .withPushBullet(new PushBullet().withPublicURL(url))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -351,7 +351,7 @@ public class ServerControl {
                                          SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withApprise(new Apprise().withEnabled(enabled))));
+                        .withApprise(new Apprise().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -361,7 +361,7 @@ public class ServerControl {
                                            SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withApprise(new Apprise().withLocations(locations))));
+                        .withApprise(new Apprise().withLocations(locations))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -380,7 +380,7 @@ public class ServerControl {
     public static void setOneSignalAppID(Socket socket, String appID, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withOneSignal(new OneSignalPush().withAppId(appID))));
+                        .withOneSignal(new OneSignalPush().withAppId(appID))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -390,8 +390,7 @@ public class ServerControl {
                                                Map<String, OneSignalDeviceInfo> device) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withOneSignal(new SettingsDataModel.OneSignalPush()
-                            .withOneSignalDevices(device))));
+                        .withOneSignal(new OneSignalPush().withOneSignalDevices(device))));
         socket.emit(ServerConstants.PE_POST_APP_DATA, ServerConstants.PA_UPDATE_ACTION,
                 ServerConstants.PT_SETTINGS, json, (Ack) args -> {
                     if (args.length > 0 && args[0] != null) {
@@ -420,7 +419,7 @@ public class ServerControl {
     public static void setInfluxDBEnabled(Socket socket, boolean enabled, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withInfluxdb(new InfluxDB().withEnabled(enabled))));
+                        .withInfluxdb(new InfluxDB().withEnabled(enabled))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -429,7 +428,7 @@ public class ServerControl {
     public static void setInfluxDBUrl(Socket socket, String url, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withInfluxdb(new InfluxDB().withUrl(url))));
+                        .withInfluxdb(new InfluxDB().withUrl(url))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -447,7 +446,7 @@ public class ServerControl {
     public static void setInfluxDBOrg(Socket socket, String org, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withInfluxdb(new InfluxDB().withOrg(org))));
+                        .withInfluxdb(new InfluxDB().withOrg(org))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -456,7 +455,7 @@ public class ServerControl {
     public static void setInfluxDBBucket(Socket socket, String bucket, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withNotifyServices(new NotifyServices()
-                    .withInfluxdb(new InfluxDB().withBucket(bucket))));
+                        .withInfluxdb(new InfluxDB().withBucket(bucket))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
     }
@@ -618,7 +617,7 @@ public class ServerControl {
     }
 
     // Set Lid Open Threshold
-    public static void setLidOpenThresh(Socket socket, String threshold , SocketCallback callback) {
+    public static void setLidOpenThresh(Socket socket, String threshold, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withCycleData(new CycleData().withLidOpenThreshold(Integer.parseInt(threshold))));
         settingsPostEmit(socket, json, callback);
@@ -626,7 +625,7 @@ public class ServerControl {
     }
 
     // Set Lid Open Threshold
-    public static void setLidOpenPause(Socket socket, String pauseTime , SocketCallback callback) {
+    public static void setLidOpenPause(Socket socket, String pauseTime, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withCycleData(new CycleData().withLidOpenPauseTime(Integer.parseInt(pauseTime))));
         settingsPostEmit(socket, json, callback);
@@ -758,7 +757,7 @@ public class ServerControl {
 
     // Set Pellets Prime Ignition
     public static void setPelletPrimeIgnition(Socket socket, boolean enabled,
-                                               SocketCallback callback) {
+                                              SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withGlobals(new Globals().withPrimeIgnition(enabled)));
         settingsPostEmit(socket, json, callback);

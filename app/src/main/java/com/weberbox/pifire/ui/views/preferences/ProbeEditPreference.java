@@ -93,7 +93,7 @@ public class ProbeEditPreference extends Preference implements DialogProbeCallba
 
         List<ProbeInfo> probeInfo = probeMap.getProbeInfo();
 
-        if (probeInfo != null && probeInfo.size() > 0) {
+        if (probeInfo != null && !probeInfo.isEmpty()) {
             adapter = new ProbeEditAdapter(probeInfo, profiles, this);
             recycler.setLayoutManager(new LinearLayoutManager(context));
             recycler.setAdapter(adapter);
