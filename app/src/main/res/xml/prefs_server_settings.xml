@@ -22,4 +22,21 @@
             app:summary="@string/settings_credentials_summary" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_cat_extra_headers_title">
+
+        <SwitchPreferenceCompat
+            app:key="@string/prefs_server_extra_headers"
+            app:summary="@string/settings_extra_headers_summary"
+            app:title="@string/enabled" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+
+        <com.weberbox.pifire.ui.views.preferences.ExtraHeadersPreference
+            app:key="@string/prefs_server_headers_table"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

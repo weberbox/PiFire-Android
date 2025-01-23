@@ -9,13 +9,18 @@ import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.model.local.ExtraHeadersModel;
 import com.weberbox.pifire.utils.CrashUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.TimberUtils;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -62,17 +67,38 @@ public class PiFireApplication extends Application {
 
         Timber.i("Creating Socket connection");
 
-        IO.Options options = new IO.Options();
+        if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth)) ||
+                Prefs.getBoolean(getString(R.string.prefs_server_extra_headers))) {
 
-        if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth))) {
+            IO.Options options = new IO.Options();
 
-            String username = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_user);
-            String password = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_password);
+            Map<String, List<String>> headersMap = new HashMap<>();
 
-            String credentials = Credentials.basic(username, password);
+            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth))) {
 
-            options.extraHeaders = Collections.singletonMap("Authorization",
-                    Collections.singletonList(credentials));
+                String username = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_user);
+                String password = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_password);
+
+                String credentials = Credentials.basic(username, password);
+
+                headersMap.put("Authorization", Collections.singletonList(credentials));
+            }
+
+            if (Prefs.getBoolean(getString(R.string.prefs_server_extra_headers))) {
+
+                String headers = SecurityUtils.decrypt(this, R.string.prefs_server_headers);
+
+                ArrayList<ExtraHeadersModel> extraHeaders = ExtraHeadersModel.parseJSON(headers);
+
+                if (extraHeaders != null) {
+                    for (ExtraHeadersModel header : extraHeaders) {
+                        headersMap.put(header.getHeaderKey(),
+                                Collections.singletonList(header.getHeaderValue()));
+                    }
+                }
+            }
+
+            options.extraHeaders = headersMap;
 
             return IO.socket(serverUri, options);
         } else {

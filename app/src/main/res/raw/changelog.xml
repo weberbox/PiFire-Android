@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="2.2.1" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.3.0" changeDate="" currentVersion="true">
+        <changelogtext logType="new">Added support for custom headers in http requests, can be used for services like Cloudflare Access etc.</changelogtext>
+        <changelogtext logType="fix">Visual fixes for Android 15 Api 35</changelogtext>
+        <changelogtext logType="imp">Update various dependencies</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="2.2.1" changeDate="" currentVersion="">
         <changelogtext logType="fix">Fix for unsupported dialogs showing incorrect information</changelogtext>
     </changelogversion>
 

@@ -1,5 +1,9 @@
 package com.weberbox.pifire.utils;
 
+import com.weberbox.pifire.model.local.ExtraHeadersModel;
+
+import java.util.ArrayList;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -12,14 +16,17 @@ public class HTTPUtils {
                 .build();
     }
 
-    public static Request createHttpRequest(String url, String credentials) {
-        Request request;
+    public static Request createHttpRequest(String url, String credentials, String headers) {
+        Request.Builder builder = new Request.Builder();
         if (credentials != null) {
-            request = new Request.Builder()
-                    .header("Authorization", credentials).url(url).build();
-        } else {
-            request = new Request.Builder().url(url).build();
+            builder.header("Authorization", credentials);
         }
-        return request;
+        if (headers != null) {
+            ArrayList<ExtraHeadersModel> extraHeaders = ExtraHeadersModel.parseJSON(headers);
+            for (ExtraHeadersModel header : extraHeaders) {
+                builder.header(header.getHeaderKey(), header.getHeaderValue());
+            }
+        }
+        return builder.url(url).build();
     }
 }

@@ -60,6 +60,9 @@
     <string name="offline">Offline</string>
     <string name="exit">Exit</string>
 
+    <string name="add_extra_header">Add New Header</string>
+    <string name="extra_headers_note">Manage custom headers. Each of the headers you add will be added to every API request</string>
+
     <string name="text_blank_error">Cannot be blank!</string>
 
     <string name="grill_mode_start">Start</string>
@@ -185,13 +188,21 @@
     <string name="settings_cat_server_title">Server</string>
     <string name="settings_server_address">Server Address</string>
 
-    <string name="settings_cat_basic_auth_title">Server Authentication</string>
-    <string name="settings_basic_auth_summary">Use authentication if the server is behind a reverse proxy</string>
+    <string name="settings_cat_basic_auth_title">Basic Authentication</string>
+    <string name="settings_basic_auth_summary">Use basic authentication if the server is behind a reverse proxy</string>
     <string name="settings_credentials_title">Credentials</string>
     <string name="settings_username">Username</string>
     <string name="settings_password">Password</string>
     <string name="settings_credentials_summary">Basic Auth Credentials</string>
     <string name="settings_credentials_error">Error encrypting credentials. Please try again</string>
+
+    <string name="settings_cat_extra_headers_title">Custom Headers</string>
+    <string name="settings_extra_headers_summary">Add custom headers to all HTTP requests</string>
+    <string name="settings_extra_headers_dialog">Extra Headers</string>
+    <string name="settings_headers_key">Header Key</string>
+    <string name="settings_headers_value">Header Value</string>
+    <string name="settings_extra_headers_editor">Custom Header Editor</string>
+    <string name="settings_extra_headers_error">There was an error saving your custom headers, please try again</string>
 
     <string name="settings_cat_events_title">Events</string>
     <string name="settings_app_events_amount_title">Event List Amount</string>
@@ -463,7 +474,7 @@
     <string name="info_app_build_date">Build Date</string>
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
-    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; 2024\n\nPiFire Android created by James Weber, &#169; 2024</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; %1$s\n\nPiFire Android created by James Weber, &#169; %1$s</string>
 
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_usage">Estimated Usage</string>
