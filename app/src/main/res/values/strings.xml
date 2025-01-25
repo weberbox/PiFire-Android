@@ -170,7 +170,7 @@
     <string name="settings_action_success">Action completed successfully</string>
 
     <string name="settings_server_settings_title">Server Settings</string>
-    <string name="settings_server_settings_summary">Setup server address and basic auth</string>
+    <string name="settings_server_settings_summary">Setup server address and authentication</string>
 
     <string name="settings_cat_updates">Update Checking</string>
     <string name="settings_update_check_now">Check Now</string>
