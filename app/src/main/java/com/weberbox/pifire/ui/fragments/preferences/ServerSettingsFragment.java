@@ -1,6 +1,9 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.View;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -33,6 +37,10 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
+        if (getContext() != null) {
+            LocalBroadcastManager.getInstance(getContext()).registerReceiver(messageReceiver,
+                    new IntentFilter("extra-headers-update"));
+        }
     }
 
     @Override
@@ -85,10 +93,20 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStop() {
         super.onStop();
+        if (getContext() != null) {
+            LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(messageReceiver);
+        }
         if (sharedPreferences != null) {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         }
     }
+
+    private final BroadcastReceiver messageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            reloadRequired = true;
+        }
+    };
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -97,6 +115,10 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         if (preference != null) {
             if (preference instanceof SwitchPreferenceCompat) {
                 if (preference.getContext().getString(R.string.prefs_server_basic_auth)
+                        .equals(preference.getKey())) {
+                    reloadRequired = true;
+                }
+                if (preference.getContext().getString(R.string.prefs_server_extra_headers)
                         .equals(preference.getKey())) {
                     reloadRequired = true;
                 }

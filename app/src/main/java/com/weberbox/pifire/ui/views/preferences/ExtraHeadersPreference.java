@@ -2,10 +2,12 @@ package com.weberbox.pifire.ui.views.preferences;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -125,6 +127,8 @@ public class ExtraHeadersPreference extends Preference implements ExtraHeadersCa
     }
 
     private boolean saveExtraHeaders(ArrayList<ExtraHeadersModel> headers) {
+        Intent intent = new Intent("extra-headers-update");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         return !SecurityUtils.encrypt(context, R.string.prefs_server_headers,
                 new Gson().toJson(headers));
     }

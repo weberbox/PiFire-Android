@@ -17,38 +17,36 @@ public class SecurityUtils {
 
     public static SharedPreferences getEncryptedSharedPreferences(Context context)
             throws GeneralSecurityException, IOException {
-        SharedPreferences sharedPreferences;
         String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-        sharedPreferences = EncryptedSharedPreferences.create(
+        return EncryptedSharedPreferences.create(
                 context.getPackageName() + PREFS_NAME,
                 masterKeyAlias,
                 context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         );
-        return sharedPreferences;
     }
 
-    public static boolean encrypt(Context context, int key, String password) {
+    public static boolean encrypt(Context context, int key, String preference) {
         try {
             getEncryptedSharedPreferences(context).edit().putString(context.getString(key),
-                    password).apply();
+                    preference).apply();
         } catch (GeneralSecurityException | IOException e) {
-            Timber.e(e, "Error encrypting password");
+            Timber.e(e, "Error encrypting preference");
             return false;
         }
         return true;
     }
 
     public static String decrypt(Context context, int key) {
-        String decryptedPassword;
+        String decryptedPreference;
         try {
-            decryptedPassword = getEncryptedSharedPreferences(context).getString(
+            decryptedPreference = getEncryptedSharedPreferences(context).getString(
                     context.getString(key), "");
         } catch (GeneralSecurityException | IOException e) {
-            Timber.e(e, "Error decrypting password");
-            decryptedPassword = "Error decrypting password";
+            Timber.e(e, "Error decrypting preference");
+            decryptedPreference = "Error decrypting preference";
         }
-        return decryptedPassword;
+        return decryptedPreference;
     }
 }
