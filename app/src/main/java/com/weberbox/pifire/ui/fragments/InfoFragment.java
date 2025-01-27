@@ -47,6 +47,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -175,6 +176,9 @@ public class InfoFragment extends Fragment {
         RecyclerView licenseInfo = binding.licensesCardView.infoLicensesRecycler;
         licensesListAdapter = new LicensesListAdapter(true);
 
+        TextView licenseCredits = binding.licensesCardView.licenseCredits;
+        licenseCredits.setText(getString(R.string.info_credits_text,
+                String.valueOf(Calendar.getInstance().get(Calendar.YEAR))));
         licenseInfo.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         licenseInfo.setAdapter(licensesListAdapter);
 

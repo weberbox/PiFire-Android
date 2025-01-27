@@ -11,6 +11,14 @@
         <item name="android:textSize">24sp</item>
     </style>
 
+    <style name="Text10Aller" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/aller_font_family</item>
+        <item name="fontFamily">@font/aller_font_family</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="Text14Aller" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
@@ -96,6 +104,14 @@
     <style name="MainButtonAccent" parent="@style/MainButtonPrimary">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:background">@drawable/bg_main_button_accent_selector</item>
+    </style>
+
+    <style name="HeadersButton" parent="@style/TextAppearance.AppCompat.Widget.Button">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@drawable/bg_headers_button</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/knockout_regular</item>
     </style>
 
     <style name="BottomSheetDialogFloating" parent="Theme.Design.Light.BottomSheetDialog">

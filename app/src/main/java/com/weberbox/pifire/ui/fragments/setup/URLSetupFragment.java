@@ -225,6 +225,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         if (!isConnecting) {
             connectProgress.setVisibility(View.VISIBLE);
             String credentials;
+            String extraHeaders;
 
             if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
                 String username = SecurityUtils.decrypt(getActivity(),
@@ -236,8 +237,14 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                 credentials = null;
             }
 
+            if (Prefs.getBoolean(getString(R.string.prefs_server_extra_headers), false)) {
+                extraHeaders = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_headers);
+            } else {
+                extraHeaders = null;
+            }
+
             OkHttpClient client = HTTPUtils.createHttpClient(true, true);
-            Request request = HTTPUtils.createHttpRequest(url, credentials);
+            Request request = HTTPUtils.createHttpRequest(url, credentials, extraHeaders);
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
