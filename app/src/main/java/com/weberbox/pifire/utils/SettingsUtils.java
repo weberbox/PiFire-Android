@@ -8,7 +8,6 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.enums.SettingsResult;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
@@ -35,6 +34,8 @@ import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.StartToMode;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Versions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import io.socket.client.Socket;
@@ -44,6 +45,7 @@ public class SettingsUtils {
 
     private final Context context;
     private final SettingsSocketCallback callback;
+    private final List<String> errors = new ArrayList<>();
 
     public SettingsUtils(Context context, SettingsSocketCallback callback) {
         this.context = context;
@@ -53,347 +55,312 @@ public class SettingsUtils {
     public void requestSettingsData(Socket socket) {
         if (socket != null && socket.connected()) {
             ServerControl.settingsGetEmit(socket, response -> {
-                SettingsResult result = updateSettingsData(response);
+                List<String> results = updateSettingsData(response);
                 if (callback != null) {
-                    callback.onSettingsResult(result);
+                    callback.onSettingsResult(results);
                 }
             });
         }
     }
 
-    public SettingsResult updateSettingsData(String response) {
-        SettingsResult result = SettingsResult.SUCCESS;
+    public List<String> updateSettingsData(String response) {
         try {
             SettingsDataModel settingsResponse = SettingsDataModel.parseJSON(response);
 
-            try {
-                Versions versions = settingsResponse.getVersions();
-                if (versions != null) {
-                    putString(R.string.prefs_server_version, versions.getServerVersion());
-                    putString(R.string.prefs_recipe_version, versions.getRecipeVersion());
-                    putString(R.string.prefs_cook_file_version, versions.getCookFileVersion());
-                    putString(R.string.prefs_server_build, versions.getServerBuild());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Versions JSON Error");
-                result = SettingsResult.VERSIONS;
+            Versions versions = settingsResponse.getVersions();
+            if (versions != null) {
+                putString(R.string.prefs_server_version, versions.getServerVersion(), "Server Version");
+                putString(R.string.prefs_recipe_version, versions.getRecipeVersion(), "Recipe Version");
+                putString(R.string.prefs_cook_file_version, versions.getCookFileVersion(), "Cookfile Version");
+                putString(R.string.prefs_server_build, versions.getServerBuild(), "Server Build");
+            } else {
+                errors.add("Versions");
             }
 
-            try {
-                ProbeSettings probesSettings = settingsResponse.getProbeSettings();
-                if (probesSettings != null) {
-                    Map<String, ProbeProfileModel> probeProfiles = probesSettings.getProbeProfiles();
-                    putString(R.string.prefs_probe_profiles, new Gson().toJson(probeProfiles));
+            ProbeSettings probesSettings = settingsResponse.getProbeSettings();
+            if (probesSettings != null) {
+                Map<String, ProbeProfileModel> probeProfiles = probesSettings.getProbeProfiles();
+                putString(R.string.prefs_probe_profiles, new Gson().toJson(probeProfiles), "ProbeSettings Probe Profiles");
 
-                    ProbeMap probeMap = probesSettings.getProbeMap();
-                    putString(R.string.prefs_probe_map, new Gson().toJson(probeMap));
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "ProbeSettings JSON Error");
-                result = SettingsResult.PROBES;
+                ProbeMap probeMap = probesSettings.getProbeMap();
+                putString(R.string.prefs_probe_map, new Gson().toJson(probeMap), "ProbeSettings Probe Map");
+            } else {
+                errors.add("Probe Settings");
             }
 
-            try {
-                Globals globals = settingsResponse.getGlobals();
-                if (globals != null) {
-                    putString(R.string.prefs_grill_name, globals.getGrillName());
-                    putBoolean(R.string.prefs_admin_debug, globals.getDebugMode());
-                    putBoolean(R.string.prefs_admin_boot_to_monitor, globals.getBootToMonitor());
-                    putString(R.string.prefs_grill_units, globals.getUnits());
-                    putBoolean(R.string.prefs_first_time_setup, globals.getFirstTimeSetup());
-                    putBoolean(R.string.prefs_ext_data, globals.getExtData());
-                    putBoolean(R.string.prefs_pellet_prime_igniter, globals.getPrimeIgnition());
-                    putBoolean(R.string.prefs_venv, globals.getVenv());
-                    putFloatString(R.string.prefs_pellet_auger_rate, globals.getAugerRate());
-                    if (!VersionUtils.isSupported(ServerVersions.V_180)) {
-                        putBoolean(R.string.prefs_dc_fan, globals.getDCFan());
-                        putBoolean(R.string.prefs_standalone, globals.getStandalone());
-                        putBoolean(R.string.prefs_real_hw, globals.getRealHw());
-                    }
+            Globals globals = settingsResponse.getGlobals();
+            if (globals != null) {
+                putString(R.string.prefs_grill_name, globals.getGrillName(), "Globals Grill Name");
+                putBoolean(R.string.prefs_admin_debug, globals.getDebugMode(), "Globals Debug Mode");
+                putBoolean(R.string.prefs_admin_boot_to_monitor, globals.getBootToMonitor(), "Globals Boot to Monitor");
+                putString(R.string.prefs_grill_units, globals.getUnits(), "Globals Units");
+                putBoolean(R.string.prefs_first_time_setup, globals.getFirstTimeSetup(), "Globals First Time Setup");
+                putBoolean(R.string.prefs_ext_data, globals.getExtData(), "Globals Ext Data");
+                putBoolean(R.string.prefs_pellet_prime_igniter, globals.getPrimeIgnition(), "Globals Prime Ignition");
+                putBoolean(R.string.prefs_venv, globals.getVenv(), "Globals Venv");
+                putFloatString(R.string.prefs_pellet_auger_rate, globals.getAugerRate(), "Globals Auger Rate");
+                if (!VersionUtils.isSupported(ServerVersions.V_180)) {
+                    putBoolean(R.string.prefs_dc_fan, globals.getDCFan(), "Globals DC Fan");
+                    putBoolean(R.string.prefs_standalone, globals.getStandalone(), "Globals Standalone");
+                    putBoolean(R.string.prefs_real_hw, globals.getRealHw(), "Globals Real HW");
                 }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Globals JSON Error");
-                result = SettingsResult.GLOBALS;
+            } else {
+                errors.add("Globals");
             }
 
             if (VersionUtils.isSupported(ServerVersions.V_180)) {
-                try {
-                    Platform platform = settingsResponse.getPlatform();
-                    if (platform != null) {
-                        putBoolean(R.string.prefs_dc_fan, platform.getDcFan());
-                        putBoolean(R.string.prefs_standalone, platform.getStandalone());
-                        putBoolean(R.string.prefs_real_hw, platform.getRealHw());
-                    }
-                } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                    Timber.e(e, "Platform JSON Error");
-                    result = SettingsResult.PLATFORM;
+                Platform platform = settingsResponse.getPlatform();
+                if (platform != null) {
+                    putBoolean(R.string.prefs_dc_fan, platform.getDcFan(), "Platform DC Fan");
+                    putBoolean(R.string.prefs_standalone, platform.getStandalone(), "Platform Standalone");
+                    putBoolean(R.string.prefs_real_hw, platform.getRealHw(), "Platform Real HW");
+                } else {
+                    errors.add("Platform");
                 }
             }
 
-            try {
-                Ifttt ifttt = settingsResponse.getNotifyServices().getIfttt();
-                if (ifttt != null) {
-                    putBoolean(R.string.prefs_notif_ifttt_enabled, ifttt.getEnabled());
-                    putString(R.string.prefs_notif_ifttt_api, ifttt.getAPIKey());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Ifttt JSON Error");
-                result = SettingsResult.IFTTT;
+            Ifttt ifttt = settingsResponse.getNotifyServices().getIfttt();
+            if (ifttt != null) {
+                putBoolean(R.string.prefs_notif_ifttt_enabled, ifttt.getEnabled(), "Ifttt Enabled");
+                putString(R.string.prefs_notif_ifttt_api, ifttt.getAPIKey(), "Ifttt API Key");
+            } else {
+                errors.add("Ifttt");
             }
 
-            try {
-                PushBullet pushBullet = settingsResponse.getNotifyServices().getPushBullet();
-                if (pushBullet != null) {
-                    putBoolean(R.string.prefs_notif_pushbullet_enabled, pushBullet.getEnabled());
-                    putString(R.string.prefs_notif_pushbullet_api, pushBullet.getAPIKey());
-                    putString(R.string.prefs_notif_pushbullet_url, pushBullet.getPublicURL());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "PushBullet JSON Error");
-                result = SettingsResult.PUSHBULLET;
+            PushBullet pushBullet = settingsResponse.getNotifyServices().getPushBullet();
+            if (pushBullet != null) {
+                putBoolean(R.string.prefs_notif_pushbullet_enabled, pushBullet.getEnabled(), "PushBullet Enabled");
+                putString(R.string.prefs_notif_pushbullet_api, pushBullet.getAPIKey(), "PushBullet API Key");
+                putString(R.string.prefs_notif_pushbullet_url, pushBullet.getPublicURL(), "PushBullet URL");
+            } else {
+                errors.add("PushBullet");
             }
 
-            try {
-                Pushover pushOver = settingsResponse.getNotifyServices().getPushover();
-                if (pushOver != null) {
-                    putBoolean(R.string.prefs_notif_pushover_enabled, pushOver.getEnabled());
-                    putString(R.string.prefs_notif_pushover_api, pushOver.getAPIKey());
-                    putString(R.string.prefs_notif_pushover_keys, pushOver.getUserKeys());
-                    putString(R.string.prefs_notif_pushover_url, pushOver.getPublicURL());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Pushover JSON Error");
-                result = SettingsResult.PUSHOVER;
+            Pushover pushOver = settingsResponse.getNotifyServices().getPushover();
+            if (pushOver != null) {
+                putBoolean(R.string.prefs_notif_pushover_enabled, pushOver.getEnabled(), "Pushover Enabled");
+                putString(R.string.prefs_notif_pushover_api, pushOver.getAPIKey(), "Pushover API Key");
+                putString(R.string.prefs_notif_pushover_keys, pushOver.getUserKeys(), "Pushover User Keys");
+                putString(R.string.prefs_notif_pushover_url, pushOver.getPublicURL(), "Pushover URL");
+            } else {
+                errors.add("Pushover");
             }
 
-            try {
-                OneSignalPush oneSignal = settingsResponse.getNotifyServices().getOneSignal();
-                if (oneSignal != null) {
-                    putBoolean(R.string.prefs_notif_onesignal_enabled, oneSignal.getEnabled());
-                    putString(R.string.prefs_notif_onesignal_serveruuid, oneSignal.getServerUUID());
-                    if (oneSignal.getOneSignalDevices() != null) {
-                        putString(R.string.prefs_notif_onesignal_device_list,
-                                new Gson().toJson(oneSignal.getOneSignalDevices()));
-                    }
+            OneSignalPush oneSignal = settingsResponse.getNotifyServices().getOneSignal();
+            if (oneSignal != null) {
+                putBoolean(R.string.prefs_notif_onesignal_enabled, oneSignal.getEnabled(), "Onesignal Enabled");
+                putString(R.string.prefs_notif_onesignal_serveruuid, oneSignal.getServerUUID(), "Onesignal Server UUID");
+                if (oneSignal.getOneSignalDevices() != null) {
+                    putString(R.string.prefs_notif_onesignal_device_list,
+                            new Gson().toJson(oneSignal.getOneSignalDevices()), "Onesignal Devices");
                 }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "OneSignalPush JSON Error");
-                result = SettingsResult.ONESIGNAL;
+            } else {
+                errors.add("OneSignalPush");
             }
 
-            try {
-                InfluxDB influxDB = settingsResponse.getNotifyServices().getInfluxDB();
-                if (influxDB != null) {
-                    putBoolean(R.string.prefs_notif_influxdb_enabled, influxDB.getEnabled());
-                    putString(R.string.prefs_notif_influxdb_url, influxDB.getUrl());
-                    putString(R.string.prefs_notif_influxdb_token, influxDB.getToken());
-                    putString(R.string.prefs_notif_influxdb_org, influxDB.getOrg());
-                    putString(R.string.prefs_notif_influxdb_bucket, influxDB.getBucket());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "InfluxDB JSON Error");
-                result = SettingsResult.INFLUXDB;
+            InfluxDB influxDB = settingsResponse.getNotifyServices().getInfluxDB();
+            if (influxDB != null) {
+                putBoolean(R.string.prefs_notif_influxdb_enabled, influxDB.getEnabled(), "InfluxDB Enabled");
+                putString(R.string.prefs_notif_influxdb_url, influxDB.getUrl(), "InfluxDB URL");
+                putString(R.string.prefs_notif_influxdb_token, influxDB.getToken(), "InfluxDB Token");
+                putString(R.string.prefs_notif_influxdb_org, influxDB.getOrg(), "InfluxDB Org");
+                putString(R.string.prefs_notif_influxdb_bucket, influxDB.getBucket(), "InfluxDB Bucket");
+            } else {
+                errors.add("InfluxDB");
             }
 
-            try {
-                Apprise apprise = settingsResponse.getNotifyServices().getApprise();
-                if (apprise != null) {
-                    putBoolean(R.string.prefs_notif_apprise_enabled, apprise.getEnabled());
-                    putString(R.string.prefs_notif_apprise_locations,
-                            new Gson().toJson(apprise.getLocations()));
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Apprise JSON Error");
-                result = SettingsResult.APPRISE;
+            Apprise apprise = settingsResponse.getNotifyServices().getApprise();
+            if (apprise != null) {
+                putBoolean(R.string.prefs_notif_apprise_enabled, apprise.getEnabled(), "Apprise Enabled");
+                putString(R.string.prefs_notif_apprise_locations,
+                        new Gson().toJson(apprise.getLocations()), "Apprise Locations");
+            } else {
+                errors.add("Apprise");
             }
 
-            try {
-                CycleData cycleData = settingsResponse.getCycleData();
-                if (cycleData != null) {
-                    putIntString(R.string.prefs_work_controller_cycle, cycleData.getHoldCycleTime());
-                    putIntString(R.string.prefs_work_auger_on, cycleData.getSmokeOnCycleTime());
-                    putIntString(R.string.prefs_work_auger_off, cycleData.getSmokeOffCycleTime());
-                    putIntString(R.string.prefs_work_pmode_mode, cycleData.getPMode());
-                    putFloatString(R.string.prefs_work_controller_u_max, cycleData.getuMax());
-                    putFloatString(R.string.prefs_work_controller_u_min, cycleData.getuMin());
-                    putBoolean(R.string.prefs_work_lid_open_detect, cycleData.getLidOpenDetectEnabled());
-                    putIntString(R.string.prefs_work_lid_open_thresh, cycleData.getLidOpenThreshold());
-                    putIntString(R.string.prefs_work_lid_open_pause, cycleData.getLidOpenPauseTime());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "CycleData JSON Error");
-                result = SettingsResult.CYCLE_DATA;
+            CycleData cycleData = settingsResponse.getCycleData();
+            if (cycleData != null) {
+                putIntString(R.string.prefs_work_controller_cycle, cycleData.getHoldCycleTime(), "CycleData HoldCycleTime");
+                putIntString(R.string.prefs_work_auger_on, cycleData.getSmokeOnCycleTime(), "CycleData SmokeOnCycleTime");
+                putIntString(R.string.prefs_work_auger_off, cycleData.getSmokeOffCycleTime(), "CycleData SmokeOffCycleTime");
+                putIntString(R.string.prefs_work_pmode_mode, cycleData.getPMode(), "CycleData PMode");
+                putFloatString(R.string.prefs_work_controller_u_max, cycleData.getuMax(), "CycleData uMax");
+                putFloatString(R.string.prefs_work_controller_u_min, cycleData.getuMin(), "CycleData uMin");
+                putBoolean(R.string.prefs_work_lid_open_detect, cycleData.getLidOpenDetectEnabled(), "CycleData LidDetection");
+                putIntString(R.string.prefs_work_lid_open_thresh, cycleData.getLidOpenThreshold(), "CycleData LidOpenThreshold");
+                putIntString(R.string.prefs_work_lid_open_pause, cycleData.getLidOpenPauseTime(), "CycleData LidOpenPauseTme");
+            } else {
+                errors.add("CycleData");
             }
 
-            try {
-                KeepWarm keepWarm = settingsResponse.getKeepWarm();
-                if (keepWarm != null) {
-                    putIntString(R.string.prefs_work_keep_warm_temp, keepWarm.getTemp());
-                    putBoolean(R.string.prefs_work_keep_warm_s_plus, keepWarm.getSPlus());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "KeepWarm JSON Error");
-                result = SettingsResult.KEEP_WARM;
+            KeepWarm keepWarm = settingsResponse.getKeepWarm();
+            if (keepWarm != null) {
+                putIntString(R.string.prefs_work_keep_warm_temp, keepWarm.getTemp(), "KeepWarm Enabled");
+                putBoolean(R.string.prefs_work_keep_warm_s_plus, keepWarm.getSPlus(), "KeepWarm SPlus");
+            } else {
+                errors.add("KeepWarm");
             }
 
-            try {
-                SmokePlus smokePlus = settingsResponse.getSmokePlus();
-                if (smokePlus != null) {
-                    putBoolean(R.string.prefs_work_splus_enabled, smokePlus.getEnabled());
-                    putIntString(R.string.prefs_work_splus_min, smokePlus.getMinTemp());
-                    putIntString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp());
-                    putIntString(R.string.prefs_work_splus_fan, smokePlus.getCycle());
-                    putIntString(R.string.prefs_work_splus_on_time, smokePlus.getOnTime());
-                    putIntString(R.string.prefs_work_splus_off_time, smokePlus.getOffTime());
-                    putIntString(R.string.prefs_work_splus_ramp_dc, smokePlus.getDutyCycle());
-                    putBoolean(R.string.prefs_work_splus_fan_ramp, smokePlus.getFanRamp());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "SmokePlus JSON Error");
-                result = SettingsResult.SMOKE_PLUS;
+            SmokePlus smokePlus = settingsResponse.getSmokePlus();
+            if (smokePlus != null) {
+                putBoolean(R.string.prefs_work_splus_enabled, smokePlus.getEnabled(), "SmokePlus Enabled");
+                putIntString(R.string.prefs_work_splus_min, smokePlus.getMinTemp(), "SmokePlus MinTemp");
+                putIntString(R.string.prefs_work_splus_max, smokePlus.getMaxTemp(), "SmokePlus MaxTemp");
+                putIntString(R.string.prefs_work_splus_on_time, smokePlus.getOnTime(), "SmokePlus OnTime");
+                putIntString(R.string.prefs_work_splus_off_time, smokePlus.getOffTime(), "SmokePlus OffTime");
+                putIntString(R.string.prefs_work_splus_ramp_dc, smokePlus.getDutyCycle(), "SmokePlus DutyCycle");
+                putBoolean(R.string.prefs_work_splus_fan_ramp, smokePlus.getFanRamp(), "SmokePlus FanRamp");
+            } else {
+                errors.add("SmokePlus");
             }
 
-            try {
-                PWM pwm = settingsResponse.getPWM();
-                if (pwm != null) {
-                    putBoolean(R.string.prefs_pwm_fan_control, pwm.getPWMControl());
-                    putIntString(R.string.prefs_pwm_fan_update_time, pwm.getUpdateTime());
-                    putIntString(R.string.prefs_pwm_frequency, pwm.getFrequency());
-                    putIntString(R.string.prefs_pwm_min_duty_cycle, pwm.getMinDutyCycle());
-                    putIntString(R.string.prefs_pwm_max_duty_cycle, pwm.getMaxDutyCycle());
-                    putString(R.string.prefs_pwm_temp_range,
-                            new Gson().toJson(pwm.getTempRangeList()));
-                    putString(R.string.prefs_pwm_profiles,
-                            new Gson().toJson(pwm.getProfiles()));
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "PWM JSON Error");
-                result = SettingsResult.PWM;
+            PWM pwm = settingsResponse.getPWM();
+            if (pwm != null) {
+                putBoolean(R.string.prefs_pwm_fan_control, pwm.getPWMControl(), "PWM Control");
+                putIntString(R.string.prefs_pwm_fan_update_time, pwm.getUpdateTime(), "PWM UpdateTime");
+                putIntString(R.string.prefs_pwm_frequency, pwm.getFrequency(), "PWM Frequency");
+                putIntString(R.string.prefs_pwm_min_duty_cycle, pwm.getMinDutyCycle(), "PWM MinDutyCycle");
+                putIntString(R.string.prefs_pwm_max_duty_cycle, pwm.getMaxDutyCycle(), "PWM MaxDutyCycle");
+                putString(R.string.prefs_pwm_temp_range,
+                        new Gson().toJson(pwm.getTempRangeList()), "PWM Temp Range");
+                putString(R.string.prefs_pwm_profiles,
+                        new Gson().toJson(pwm.getProfiles()), "PWM Profiles");
+            } else {
+                errors.add("PWM");
             }
 
-            try {
-                Safety safety = settingsResponse.getSafety();
-                if (safety != null) {
-                    putBoolean(R.string.prefs_safety_startup_check, safety.getStartupCheck());
-                    putIntString(R.string.prefs_safety_min_start, safety.getMinStartupTemp());
-                    putIntString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp());
-                    putIntString(R.string.prefs_safety_max_temp, safety.getMaxTemp());
-                    putIntString(R.string.prefs_safety_retries, safety.getReigniteRetries());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Safety JSON Error");
-                result = SettingsResult.SAFETY;
+            Safety safety = settingsResponse.getSafety();
+            if (safety != null) {
+                putBoolean(R.string.prefs_safety_startup_check, safety.getStartupCheck(), "Safety Startup Check");
+                putIntString(R.string.prefs_safety_min_start, safety.getMinStartupTemp(), "Safety MinStartupTemp");
+                putIntString(R.string.prefs_safety_max_start, safety.getMaxStartupTemp(), "Safety MaxStartupTemp");
+                putIntString(R.string.prefs_safety_max_temp, safety.getMaxTemp(), "Safety MaxTemp");
+                putIntString(R.string.prefs_safety_retries, safety.getReigniteRetries(), "Safety ReigniteRetries");
+            } else {
+                errors.add("Safety");
             }
 
-            try {
-                Shutdown shutdown = settingsResponse.getShutdown();
-                if (shutdown != null) {
-                    putIntString(R.string.prefs_shutdown_duration, shutdown.getDuration());
-                    putBoolean(R.string.prefs_auto_power_off, shutdown.getAutoPowerOff());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Shutdown JSON Error");
-                result = SettingsResult.SHUTDOWN;
+            Shutdown shutdown = settingsResponse.getShutdown();
+            if (shutdown != null) {
+                putIntString(R.string.prefs_shutdown_duration, shutdown.getDuration(), "Shutdown Duration");
+                putBoolean(R.string.prefs_auto_power_off, shutdown.getAutoPowerOff(), "Shutdown AutoPowerOff");
+            } else {
+                errors.add("Shutdown");
             }
 
-            try {
-                Startup startup = settingsResponse.getStartup();
-                if (startup != null) {
-                    putIntString(R.string.prefs_startup_duration, startup.getDuration());
-                    putIntString(R.string.prefs_prime_on_startup, startup.getPrimeOnStartup());
-                    putIntString(R.string.prefs_startup_exit_temp, startup.getStartExitTemp());
+            Startup startup = settingsResponse.getStartup();
+            if (startup != null) {
+                putIntString(R.string.prefs_startup_duration, startup.getDuration(), "Startup Duration");
+                putIntString(R.string.prefs_prime_on_startup, startup.getPrimeOnStartup(), "Startup Prime");
+                putIntString(R.string.prefs_startup_exit_temp, startup.getStartExitTemp(), "Startup ExitTemp");
 
-                    StartToMode startToMode = startup.getStartToMode();
-                    if (startToMode != null) {
-                        putString(R.string.prefs_startup_goto_mode, startToMode.getAfterStartUpMode());
-                        putIntString(R.string.prefs_startup_goto_temp, startToMode.getPrimarySetPoint());
-                    }
-
-                    SmartStart smartStart = startup.getSmartStart();
-                    if (smartStart != null) {
-                        putBoolean(R.string.prefs_smart_start_enabled, smartStart.getEnabled());
-                        putIntString(R.string.prefs_smart_start_exit_temp, smartStart.getExitTemp());
-                        putString(R.string.prefs_smart_start_temp_range,
-                                new Gson().toJson(smartStart.getTempRangeList()));
-                        putString(R.string.prefs_smart_start_profiles,
-                                new Gson().toJson(smartStart.getProfiles()));
-                    }
+                StartToMode startToMode = startup.getStartToMode();
+                if (startToMode != null) {
+                    putString(R.string.prefs_startup_goto_mode, startToMode.getAfterStartUpMode(), "StartToMode AfterMode");
+                    putIntString(R.string.prefs_startup_goto_temp, startToMode.getPrimarySetPoint(), "StartToMode SetPoint");
+                } else {
+                    errors.add("StartToMode");
                 }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Startup JSON Error");
-                result = SettingsResult.STARTUP;
+
+                SmartStart smartStart = startup.getSmartStart();
+                if (smartStart != null) {
+                    putBoolean(R.string.prefs_smart_start_enabled, smartStart.getEnabled(), "SmartStart Enabled");
+                    putIntString(R.string.prefs_smart_start_exit_temp, smartStart.getExitTemp(), "SmartStart ExitTemp");
+                    putString(R.string.prefs_smart_start_temp_range,
+                            new Gson().toJson(smartStart.getTempRangeList()), "SmartStart RangeList");
+                    putString(R.string.prefs_smart_start_profiles,
+                            new Gson().toJson(smartStart.getProfiles()), "SmartStart Profiles");
+                } else {
+                    errors.add("SmartStart");
+                }
+            } else {
+                errors.add("Startup");
             }
 
-            try {
-                PelletLevel pellets = settingsResponse.getPellets();
-                if (pellets != null) {
-                    putIntString(R.string.prefs_pellet_empty, pellets.getEmpty());
-                    putIntString(R.string.prefs_pellet_full, pellets.getFull());
-                    putBoolean(R.string.prefs_pellet_warning_enabled, pellets.getWarningEnabled());
-                    putIntString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel());
-                    putIntString(R.string.prefs_pellet_warning_time, pellets.getWarningTime());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "PelletLevel JSON Error");
-                result = SettingsResult.PELLET_LEVEL;
+            PelletLevel pellets = settingsResponse.getPellets();
+            if (pellets != null) {
+                putIntString(R.string.prefs_pellet_empty, pellets.getEmpty(), "PelletLevel Empty");
+                putIntString(R.string.prefs_pellet_full, pellets.getFull(), "PelletLevel Full");
+                putBoolean(R.string.prefs_pellet_warning_enabled, pellets.getWarningEnabled(), "PelletLevel Warning Enabled");
+                putIntString(R.string.prefs_pellet_warning_level, pellets.getWarningLevel(), "PelletLevel Warning Level");
+                putIntString(R.string.prefs_pellet_warning_time, pellets.getWarningTime(), "PelletLevel Warning Time");
+            } else {
+                errors.add("PelletLevel");
             }
 
-            try {
-                Modules modules = settingsResponse.getModules();
-                if (modules != null) {
-                    putString(R.string.prefs_modules_display, modules.getDisplay());
-                    putString(R.string.prefs_modules_distance, modules.getDist());
-                    putString(R.string.prefs_modules_platform, modules.getGrillPlat());
-                }
-            } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
-                Timber.e(e, "Modules JSON Error");
-                result = SettingsResult.MODULES;
+            Modules modules = settingsResponse.getModules();
+            if (modules != null) {
+                putString(R.string.prefs_modules_display, modules.getDisplay(), "Modules Display");
+                putString(R.string.prefs_modules_distance, modules.getDist(), "Modules Dist");
+                putString(R.string.prefs_modules_platform, modules.getGrillPlat(), "Modules GrillPlat");
+            } else {
+                errors.add("Modules");
             }
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.e(e, "Settings JSON Error");
-            result = SettingsResult.GENERAL;
+            errors.add("General Settings Error");
         }
-        return result;
+        return errors;
     }
 
-    private void putString(int key, String value) {
+    private void putString(int key, String value, String item) {
         if (value != null) {
             if (!Prefs.getString(context.getString(key)).equals(value)) {
                 Prefs.putString(context.getString(key), value);
             }
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
+            }
         }
     }
 
-    private void putBoolean(int key, Boolean value) {
+    private void putBoolean(int key, Boolean value, String item) {
         if (value != null) {
             if (Prefs.getBoolean(context.getString(key)) != value) {
                 Prefs.putBoolean(context.getString(key), value);
+            }
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
             }
         }
     }
 
     @SuppressWarnings("unused")
-    private void putInt(int key, Integer value) {
+    private void putInt(int key, Integer value, String item) {
         if (value != null) {
             if (Prefs.getInt(context.getString(key)) != value) {
                 Prefs.putInt(context.getString(key), value);
             }
-        }
-    }
-
-    private void putIntString(int key, Integer value) {
-        if (value != null) {
-            if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
-                Prefs.putString(context.getString(key), String.valueOf(value));
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
             }
         }
     }
 
-    private void putFloatString(int key, Float value) {
+    private void putIntString(int key, Integer value, String item) {
         if (value != null) {
             if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
                 Prefs.putString(context.getString(key), String.valueOf(value));
+            }
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
+            }
+        }
+    }
+
+    private void putFloatString(int key, Float value, String item) {
+        if (value != null) {
+            if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
+                Prefs.putString(context.getString(key), String.valueOf(value));
+            }
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
             }
         }
     }

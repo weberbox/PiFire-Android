@@ -271,15 +271,9 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    private final SettingsSocketCallback settingsSocketCallback = result -> {
-        switch (result) {
-            case GENERAL -> showSettingsError(getString(R.string.error_settings_general));
-            case PROBES, GLOBALS, VERSIONS, IFTTT, PUSHBULLET, PUSHOVER, ONESIGNAL, INFLUXDB,
-                    APPRISE, CYCLE_DATA, KEEP_WARM, SMOKE_PLUS, PWM, SAFETY, PELLET_LEVEL,
-                    MODULES ->
-                    showSettingsError(getString(R.string.error_settings_section, result));
-            default -> {
-            }
+    private final SettingsSocketCallback settingsSocketCallback = results -> {
+        if (!results.isEmpty()) {
+            showSettingsError(getString(R.string.error_settings_errors, results));
         }
     };
 

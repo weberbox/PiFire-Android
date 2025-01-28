@@ -1,7 +1,7 @@
 package com.weberbox.pifire.interfaces;
 
-import com.weberbox.pifire.enums.SettingsResult;
+import java.util.List;
 
 public interface SettingsSocketCallback {
-    void onSettingsResult(SettingsResult result);
+    void onSettingsResult(List<String> results);
 }

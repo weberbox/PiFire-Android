@@ -1,10 +1,12 @@
 package com.weberbox.pifire.model.remote;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
+import com.weberbox.pifire.utils.adapters.CustomTypeAdapterFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -1286,9 +1288,6 @@ public class SettingsDataModel {
         @SerializedName("max_temp")
         @Expose
         private Integer maxTemp;
-        @SerializedName("cycle")
-        @Expose
-        private Integer cycle;
         @SerializedName("on_time")
         @Expose
         private Integer onTime;
@@ -1341,19 +1340,6 @@ public class SettingsDataModel {
 
         public SmokePlus withMaxTemp(Integer maxTemp) {
             this.maxTemp = maxTemp;
-            return this;
-        }
-
-        public Integer getCycle() {
-            return cycle;
-        }
-
-        public void setCycle(Integer cycle) {
-            this.cycle = cycle;
-        }
-
-        public SmokePlus withCycle(Integer cycle) {
-            this.cycle = cycle;
             return this;
         }
 
@@ -2595,6 +2581,10 @@ public class SettingsDataModel {
 
 
     public static SettingsDataModel parseJSON(String response) {
-        return new Gson().fromJson(response, SettingsDataModel.class);
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .registerTypeAdapterFactory(new CustomTypeAdapterFactory())
+                .create();
+        return gson.fromJson(response, SettingsDataModel.class);
     }
 }

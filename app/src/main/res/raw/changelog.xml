@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog bulletedList="false">
 
-    <changelogversion versionName="2.3.0" changeDate="" currentVersion="true">
+    <changelogversion versionName="2.3.1" changeDate="" currentVersion="true">
+        <changelogtext logType="imp">Update setup to check server version via api before attempting to fetch full settings via socket. This will make the errors to the user clearer if the server version is not supported by the app. </changelogtext>
+        <changelogtext logType="imp">Add improved server settings errors, when an issues occurs saving settings it will be displayed in a popup message</changelogtext>
+    </changelogversion>
+
+    <changelogversion versionName="2.3.0" changeDate="" currentVersion="">
         <changelogtext logType="new">Added support for custom headers in http requests, can be used for services like Cloudflare Access etc.</changelogtext>
         <changelogtext logType="fix">Visual fixes for Android 15 Api 35</changelogtext>
         <changelogtext logType="imp">Update various dependencies</changelogtext>

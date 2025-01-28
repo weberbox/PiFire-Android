@@ -43,7 +43,6 @@
 
     <string name="def_pmode_auger_on">15</string>
     <string name="def_pmode_mode">2</string>
-    <string name="def_splus_fan">10</string>
     <string name="def_splus_on_time">5</string>
     <string name="def_splus_off_time">5</string>
     <string name="def_splus_ramp_dc">75</string>

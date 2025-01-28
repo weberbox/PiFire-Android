@@ -563,14 +563,6 @@ public class ServerControl {
         controlSettingsUpdateEmit(socket, callback);
     }
 
-    // Set Smoke Fan Cycle Time
-    public static void setSmokeFan(Socket socket, String time, SocketCallback callback) {
-        String json = new Gson().toJson(new SettingsDataModel()
-                .withSmokePlus(new SmokePlus().withCycle(Integer.parseInt(time))));
-        settingsPostEmit(socket, json, callback);
-        controlSettingsUpdateEmit(socket, callback);
-    }
-
     // Set Smoke Min Temp
     public static void setSmokeMinTemp(Socket socket, String temp, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()

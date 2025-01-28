@@ -58,7 +58,6 @@
     <string name="prefs_work_pmode_table">prefs_work_pmode_table</string>
 
     <string name="prefs_work_splus_enabled">prefs_work_splus_enabled</string>
-    <string name="prefs_work_splus_fan">prefs_work_splus_fan</string>
     <string name="prefs_work_splus_min">prefs_work_splus_min</string>
     <string name="prefs_work_splus_max">prefs_work_splus_max</string>
     <string name="prefs_work_splus_on_time">prefs_work_splus_on_time</string>

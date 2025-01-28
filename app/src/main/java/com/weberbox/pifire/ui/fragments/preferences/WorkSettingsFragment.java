@@ -54,7 +54,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
         EditTextPreference augerOffTime = findPreference(getString(R.string.prefs_work_auger_off));
-        EditTextPreference fanCycleTime = findPreference(getString(R.string.prefs_work_splus_fan));
         EditTextPreference minSmokeTemp = findPreference(getString(R.string.prefs_work_splus_min));
         EditTextPreference maxSmokeTemp = findPreference(getString(R.string.prefs_work_splus_max));
         EditTextPreference pidCycle = findPreference(getString(R.string.prefs_work_controller_cycle));
@@ -130,14 +129,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 editText.addTextChangedListener(
                         new EmptyTextListener(requireActivity(), 1.0, null,
                                 editText));
-            });
-        }
-
-        if (fanCycleTime != null) {
-            fanCycleTime.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -270,11 +261,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                         .equals(preference.getKey())) {
                     ServerControl.setAugerOffTime(socket, (
                             (EditTextPreference) preference).getText(), this::processPostResponse);
-                }
-                if (preference.getContext().getString(R.string.prefs_work_splus_fan)
-                        .equals(preference.getKey())) {
-                    ServerControl.setSmokeFan(socket,
-                            ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_splus_min)
                         .equals(preference.getKey())) {

@@ -99,14 +99,6 @@
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:defaultValue="@string/def_splus_fan"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
-            app:key="@string/prefs_work_splus_fan"
-            app:title="@string/settings_splus_fan"
-            app:useSimpleSummaryProvider="true" />
-
-        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_splus_on_time"
             app:dialogLayout="@layout/dialog_text_input_pref"
             app:iconSpaceReserved="false"

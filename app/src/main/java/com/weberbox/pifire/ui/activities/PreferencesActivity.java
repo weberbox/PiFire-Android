@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.enums.SettingsResult;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.AppSettingsFragment;
@@ -84,7 +83,7 @@ public class PreferencesActivity extends BaseActivity {
         }
     }
 
-    private final SettingsSocketCallback settingsSocketCallback = result -> {
-        if (result != SettingsResult.SUCCESS) Timber.d("%s Settings Update Failed", result);
+    private final SettingsSocketCallback settingsSocketCallback = results -> {
+        if (!results.isEmpty()) Timber.d("%s Settings Update Failed", results);
     };
 }

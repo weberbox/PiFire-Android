@@ -4,6 +4,7 @@ import com.weberbox.pifire.model.local.ExtraHeadersModel;
 
 import java.util.ArrayList;
 
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -14,6 +15,13 @@ public class HTTPUtils {
                 .followRedirects(redirects)
                 .followSslRedirects(sslRedirects)
                 .build();
+    }
+
+    public static void createHttpGet(String url, String credentials, String extraHeaders,
+                                     Callback callback) {
+        OkHttpClient client = HTTPUtils.createHttpClient(true, true);
+        Request request = HTTPUtils.createHttpRequest(url, credentials, extraHeaders);
+        client.newCall(request).enqueue(callback);
     }
 
     public static Request createHttpRequest(String url, String credentials, String headers) {

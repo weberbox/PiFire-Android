@@ -24,6 +24,7 @@ import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonSyntaxException;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -31,9 +32,10 @@ import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
 import com.weberbox.pifire.enums.ServerSupport;
-import com.weberbox.pifire.enums.SettingsResult;
 import com.weberbox.pifire.interfaces.ServerInfoCallback;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
+import com.weberbox.pifire.model.local.ExtraHeadersModel;
+import com.weberbox.pifire.model.remote.VersionsDataModel;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
@@ -50,8 +52,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,6 +66,7 @@ import io.socket.emitter.Emitter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Credentials;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -75,10 +81,13 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
     private SettingsUtils settingsUtils;
     private ProgressBar connectProgress;
     private NavController navController;
+    private String url;
     private Socket socket;
     private String validURL;
     private String secure;
     private String unSecure;
+    private String credentials;
+    private String extraHeaders;
 
     private boolean isConnecting = false;
 
@@ -222,10 +231,9 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
     }
 
     private void testServerConnection(String url) {
+        this.url = url;
         if (!isConnecting) {
             connectProgress.setVisibility(View.VISIBLE);
-            String credentials;
-            String extraHeaders;
 
             if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
                 String username = SecurityUtils.decrypt(getActivity(),
@@ -299,7 +307,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                             }
                         }
                     } else {
-                        testSocketConnection(url, credentials);
+                        getServerVersion(url, credentials, extraHeaders);
                     }
                     response.close();
                 }
@@ -307,22 +315,90 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         }
     }
 
-    private void testSocketConnection(String Url, String credentials) {
+    private void getServerVersion(String baseUrl, String credentials, String extraHeaders) {
+        HttpUrl parsedUrl = HttpUrl.parse(baseUrl);
+        if (parsedUrl != null) {
+
+            HttpUrl.Builder urlBuilder = parsedUrl.newBuilder();
+            urlBuilder.addPathSegment("api");
+            urlBuilder.addPathSegment("settings");
+            String url = urlBuilder.build().toString();
+            HTTPUtils.createHttpGet(url, credentials, extraHeaders, new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    showHTTPRequestError(e.getMessage(), "HTTP Request onFailure");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response)
+                        throws IOException {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            VersionsDataModel versionsDataModel =
+                                    VersionsDataModel.parseJSON(response.body().string());
+                            try {
+                                VersionsDataModel.Versions versions =
+                                        versionsDataModel.getSettings().getVersions();
+                                if (versions != null) {
+                                    Prefs.putString(getString(R.string.prefs_server_version),
+                                            versions.getServerVersion());
+                                    Prefs.putString(getString(R.string.prefs_server_build),
+                                            versions.getServerBuild());
+                                    VersionUtils.checkSupportedServerVersion(
+                                            URLSetupFragment.this);
+                                } else {
+                                    showHTTPRequestError(getString(R.string.setup_versions_null),
+                                            "Setup Versions Null");
+                                }
+
+                            } catch (IllegalStateException | JsonSyntaxException |
+                                     NullPointerException e) {
+                                showHTTPRequestError(getString(R.string.setup_versions_error),
+                                        "Versions JSON Error");
+                            }
+                        } else {
+                            showHTTPRequestError(getString(R.string.setup_versions_response),
+                                    "Response Body Null");
+                        }
+                    } else {
+                        showHTTPRequestError(getString(R.string.setup_server_connect_error,
+                                String.valueOf(response.code()), response.message()),
+                                "Response Unsuccessful");
+                    }
+                }
+            });
+        } else {
+            showHTTPRequestError(getString(R.string.setup_versions_parse_error),
+                    "Parsed URL Error");
+        }
+    }
+
+    private void getFullSettingsData() {
         if (!isConnecting) {
             IO.Options options = new IO.Options();
+            Map<String, List<String>> headersMap = new HashMap<>();
 
             isConnecting = true;
 
             if (credentials != null) {
-                options.extraHeaders = Collections.singletonMap("Authorization",
-                        Collections.singletonList(credentials));
-
-                createSocket(Url, options);
-            } else {
-                createSocket(Url, null);
+                headersMap.put("Authorization", Collections.singletonList(credentials));
+            }
+            if (extraHeaders != null) {
+                ArrayList<ExtraHeadersModel> headers = ExtraHeadersModel.parseJSON(extraHeaders);
+                for (ExtraHeadersModel header : headers) {
+                    headersMap.put(header.getHeaderKey(),
+                            Collections.singletonList(header.getHeaderValue()));
+                }
             }
 
-            validURL = Url;
+            if (headersMap.isEmpty()) {
+                createSocket(url, null);
+            } else {
+                options.extraHeaders = headersMap;
+                createSocket(url, options);
+            }
+
+            validURL = url;
             socket.connect();
             socket.on(Socket.EVENT_CONNECT, onConnect);
             socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
@@ -370,28 +446,18 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         }
     };
 
-    private final SettingsSocketCallback settingsSocketCallback = result -> {
-        if (result == SettingsResult.SUCCESS) {
-            VersionUtils.checkSupportedServerVersion(this);
+    private final SettingsSocketCallback settingsSocketCallback = results -> {
+        if (!results.isEmpty()) {
+            showSettingsError(getString(R.string.error_settings_errors, results));
         } else {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    Timber.d("Error Connecting to Socket");
-                    connectProgress.setVisibility(View.GONE);
-                    socket.disconnect();
-                    socket.close();
-                    isConnecting = false;
-                    showAlerter(getActivity(),
-                            getString(R.string.setup_settings_error));
-                });
-            }
+            completeSetup();
         }
     };
 
     @Override
     public void onServerInfo(ServerSupport result, String version, String build) {
         switch (result) {
-            case SUPPORTED -> completeSetup();
+            case SUPPORTED -> getFullSettingsData();
             case UNSUPPORTED_MIN -> {
                 Timber.d("Min Server Version Unsupported");
                 showUnsupportedDialog(getString(R.string.dialog_unsupported_server_min_message,
@@ -418,9 +484,6 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
                 connectProgress.setVisibility(View.GONE);
-                socket.disconnect();
-                socket.close();
-                isConnecting = false;
                 MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
                         .setTitle(getString(R.string.dialog_unsupported_server_version_title))
                         .setMessage(message)
@@ -436,19 +499,39 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
                 connectProgress.setVisibility(View.GONE);
-                socket.disconnect();
-                socket.close();
-                isConnecting = false;
                 MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
                         .setTitle(getString(R.string.dialog_untested_app_version_title))
                         .setMessage(message)
                         .setPositiveButton(getString(android.R.string.ok),
                                 (dialogInterface, which) -> {
                                     dialogInterface.dismiss();
-                                    completeSetup();
+                                    getFullSettingsData();
                                 })
                         .build();
                 dialog.show();
+            });
+        }
+    }
+
+    private void showHTTPRequestError(String string, String logMessage) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                Timber.d(logMessage);
+                connectProgress.setVisibility(View.GONE);
+                showAlerter(getActivity(), string);
+            });
+        }
+    }
+
+    private void showSettingsError(String error) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                Timber.d(error);
+                connectProgress.setVisibility(View.GONE);
+                socket.disconnect();
+                socket.close();
+                isConnecting = false;
+                showAlerter(getActivity(), error);
             });
         }
     }
@@ -477,7 +560,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
     }
 
     private void showAlerter(Activity activity, String message) {
-        AlertUtils.createErrorAlert(activity, message, false);
+        AlertUtils.createErrorAlert(activity, message, true);
     }
 
     public boolean cameraAvailable() {

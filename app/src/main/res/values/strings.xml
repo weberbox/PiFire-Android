@@ -144,7 +144,11 @@
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
-    <string name="setup_settings_error">Failed to retrieve settings from Server. Please check your connection and verify your server version is compatible</string>
+    <string name="setup_settings_error">Failed to retrieve settings from server. Please check your connection and verify your server version is compatible</string>
+    <string name="setup_versions_error">Failed to retrieve PiFire version info from server. Please check your connection and verify your server version is compatible</string>
+    <string name="setup_versions_null">The PiFire versions fetched from the server had an issue parsing. Please check your PiFire server and verify server version is compatible</string>
+    <string name="setup_versions_response">Did not receive a proper response from the PiFire server. Please check your connection and verify your server version is compatible</string>
+    <string name="setup_versions_parse_error">There was an error parsing the server url. Please check the entered server url</string>
 
     <string name="settings_server">Server Settings</string>
     <string name="settings_app">App Settings</string>
@@ -236,7 +240,6 @@
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
     <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the fan icon button on the dashboard. The icon will be highlighted blue indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the below min/max temperatures.</string>
-    <string name="settings_splus_fan">Fan Cycle Time (s)</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
     <string name="settings_splus_on_time">Fan On Time</string>
@@ -542,8 +545,7 @@
 
     <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
 
-    <string name="error_settings_general">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible</string>
-    <string name="error_settings_section">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Error Section: %1$s</string>
+    <string name="error_settings_errors">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Errors: %1$s</string>
 
 
 </resources>
