@@ -3,65 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_pwm_fan_control">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_pwm_fan_control"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pwm_fan_control"
             app:title="@string/settings_pwm_fan_control_enabled" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pwm_fan_control_note"
             app:title="@string/settings_note" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pwm_fan_update_time"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pwm_fan_update_time"
             app:title="@string/settings_pwm_fan_update_time"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pwm_fan_table_note"
             app:title="@string/settings_note" />
 
         <com.weberbox.pifire.ui.views.preferences.PWMControlPreference
-            app:key="@string/prefs_pwm_control_table"
-            app:iconSpaceReserved="false" />
+            app:key="@string/prefs_pwm_control_table" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_fan_settings">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pwm_fan_frequency"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pwm_frequency"
             app:title="@string/settings_pwm_frequency"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pwm_fan_min_dc"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pwm_min_duty_cycle"
             app:title="@string/settings_pwm_min_duty_cycle"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pwm_fan_max_dc"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pwm_max_duty_cycle"
             app:title="@string/settings_pwm_max_duty_cycle"
             app:useSimpleSummaryProvider="true" />

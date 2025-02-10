@@ -47,6 +47,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
+        <ImageView
+            android:id="@+id/dash_probe_notifications"
+            android:layout_width="@dimen/dash_icon"
+            android:layout_height="@dimen/dash_icon"
+            android:layout_marginTop="@dimen/dash_margin"
+            android:layout_marginEnd="@dimen/_40sdp"
+            android:src="@drawable/ic_grill_bell"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
         <TextView
             android:id="@+id/dash_probe_temp"
             style="@style/Text24Knockout"
@@ -59,6 +70,19 @@
             app:layout_constraintTop_toBottomOf="@+id/dash_probe_name" />
 
         <TextView
+            android:id="@+id/dash_probe_eta"
+            style="@style/Text24Knockout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dash_half_margin"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:gravity="end"
+            android:text="@string/placeholder_none"
+            android:textSize="@dimen/_22sdp"
+            app:layout_constraintBottom_toTopOf="@+id/dash_probe_eta_title"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
             android:id="@+id/dash_probe_current_title"
             style="@style/Text16AllerAlpha"
             android:layout_width="wrap_content"
@@ -68,6 +92,19 @@
             android:textSize="@dimen/dash_text_hints"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dash_probe_temp" />
+
+        <TextView
+            android:id="@+id/dash_probe_eta_title"
+            style="@style/Text16AllerAlpha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dash_margin"
+            android:gravity="end"
+            android:text="@string/grill_state_eta"
+            android:textSize="@dimen/dash_text_hints"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/dash_probe_temp"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/dash_probe_set_temp"

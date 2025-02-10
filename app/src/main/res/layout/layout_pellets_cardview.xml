@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_spacing"
-        android:background="@drawable/bg_ripple_grey_button"
+        android:background="@drawable/bg_ripple_primary_button"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"

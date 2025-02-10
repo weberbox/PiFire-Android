@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -18,6 +20,8 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
+import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket;
 import com.weberbox.pifire.utils.AlertUtils;
@@ -63,6 +67,8 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         primeOnStartup = findPreference(getString(R.string.prefs_prime_on_startup));
         startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
 
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         if (shutdownDuration != null) {
             shutdownDuration.setOnBindEditTextListener(editText -> {
@@ -260,5 +266,22 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                 }
             }
         }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof EditTextPreference) {
+            if (getContext() != null) {
+                new PrefsEditDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        if (preference instanceof ListPreference) {
+            if (getContext() != null) {
+                new PrefsListDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        super.onDisplayPreferenceDialog(preference);
     }
 }

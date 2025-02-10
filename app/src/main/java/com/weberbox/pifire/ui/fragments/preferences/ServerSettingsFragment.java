@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -23,7 +25,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
-import com.weberbox.pifire.ui.dialogs.UserPassDialog;
+import com.weberbox.pifire.ui.dialogs.CredentialsDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
@@ -56,6 +58,9 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
         Preference credentials = findPreference(getString(R.string.prefs_server_credentials));
 
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(preference -> {
                 if (getActivity() != null) {
@@ -71,9 +76,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
 
         if (credentials != null) {
             credentials.setOnPreferenceClickListener(preference -> {
-                UserPassDialog dialog = new UserPassDialog(requireActivity(),
-                        R.string.settings_credentials_title, callback);
-                dialog.showDialog();
+                new CredentialsDialog(requireActivity(), callback).showDialog();
                 return false;
             });
         }

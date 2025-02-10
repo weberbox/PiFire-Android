@@ -87,8 +87,14 @@
 
     <declare-styleable name="DashProbeCard">
         <attr name="dash_probe_name" format="string" />
-        <attr name="dash_probe_set_temp" format="boolean" />
+        <attr name="dash_probe_is_primary" format="boolean" />
+        <attr name="dash_probe_eta" format="boolean" />
         <attr name="dash_probe_icon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="ProbeTypeCard">
+        <attr name="probe_type_title" format="string" />
+        <attr name="probe_type_icon" format="reference" />
     </declare-styleable>
 
 </resources>

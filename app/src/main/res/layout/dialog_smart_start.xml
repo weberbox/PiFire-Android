@@ -1,136 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="@dimen/large_spacing"
-    android:paddingTop="@dimen/default_spacing"
-    android:paddingEnd="@dimen/large_spacing"
-    android:paddingBottom="@dimen/small_spacing">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-    <TextView
-        android:id="@+id/dialog_smart_start_temp_note"
-        style="@style/Text14Aller"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_temp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/settings_smart_start_temp_range_note_range" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_smart_start_temp"
-        style="@style/TextInputLayoutFilledBox"
+        android:id="@+id/dialog_editor_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/selector_stroke_color"
-        app:errorEnabled="true"
-        app:hintTextColor="@color/colorGreyHint"
-        app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_start_up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_temp_note">
+        android:background="@drawable/bg_bottom_sheet_dialog">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_smart_start_temp_text"
-            style="@style/TextInputEditTextFilledBox"
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
-            android:hint="@string/settings_smart_start_temp"
-            android:inputType="number"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/dialog_smart_start_header_title"
+            style="@style/Text16OpenSans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/placeholder_text_view" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_smart_start_start_up"
-        style="@style/TextInputLayoutFilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/selector_stroke_color"
-        app:errorEnabled="true"
-        app:hintTextColor="@color/colorGreyHint"
-        app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_auger_on"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_temp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_smart_start_start_up_text"
-            style="@style/TextInputEditTextFilledBox"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialog_smart_start_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
-            android:hint="@string/settings_smart_start_startup"
-            android:inputType="number"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent" />
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingTop="@dimen/default_spacing"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_header_title">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/dialog_smart_start_temp_note"
+                style="@style/Text14OpenSans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/large_spacing"
+                android:paddingEnd="@dimen/large_spacing"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_temp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/settings_smart_start_temp_range_note_range" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_smart_start_auger_on"
-        style="@style/TextInputLayoutFilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/selector_stroke_color"
-        app:errorEnabled="true"
-        app:hintTextColor="@color/colorGreyHint"
-        app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_p_mode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_start_up">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dialog_smart_start_temp"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_spacing"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/large_spacing"
+                android:gravity="center"
+                android:hint="@string/settings_smart_start_temp"
+                android:labelFor="@+id/dialog_smart_start_temp_text"
+                android:paddingBottom="5dp"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:endIconTint="@color/colorWhite"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_start_up"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_temp_note">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_smart_start_auger_on_text"
-            style="@style/TextInputEditTextFilledBox"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_smart_start_temp_text"
+                    style="@style/Text14OpenSans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dialog_smart_start_start_up"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_spacing"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/large_spacing"
+                android:gravity="center"
+                android:hint="@string/settings_smart_start_startup"
+                android:labelFor="@+id/dialog_smart_start_start_up_text"
+                android:paddingBottom="5dp"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:endIconTint="@color/colorWhite"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_auger_on"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_temp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_smart_start_start_up_text"
+                    style="@style/Text14OpenSans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dialog_smart_start_auger_on"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_spacing"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/large_spacing"
+                android:gravity="center"
+                android:hint="@string/settings_smart_start_auger_on"
+                android:labelFor="@+id/dialog_smart_start_auger_on_text"
+                android:paddingBottom="5dp"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:endIconTint="@color/colorWhite"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_smart_start_p_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_start_up">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_smart_start_auger_on_text"
+                    style="@style/Text14OpenSans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dialog_smart_start_p_mode"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_spacing"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/large_spacing"
+                android:gravity="center"
+                android:hint="@string/settings_smart_start_p_mode"
+                android:labelFor="@+id/dialog_smart_start_p_mode_text"
+                android:paddingBottom="5dp"
+                android:textColorHint="@color/colorWhite"
+                android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:boxStrokeColor="@color/selector_stroke_color"
+                app:endIconTint="@color/colorWhite"
+                app:errorEnabled="true"
+                app:hintTextColor="@color/colorGreyHint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_auger_on">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dialog_smart_start_p_mode_text"
+                    style="@style/Text14OpenSans"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
-            android:hint="@string/settings_smart_start_auger_on"
-            android:inputType="number"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent" />
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/default_spacing"
+            android:paddingTop="@dimen/small_spacing"
+            android:paddingEnd="@dimen/default_spacing"
+            android:paddingBottom="@dimen/default_spacing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_edit">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_button"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.33"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/delete"
+                app:backgroundTint="@color/dialog_positive_button_color_red" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_smart_start_p_mode"
-        style="@style/TextInputLayoutFilledBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/selector_stroke_color"
-        app:errorEnabled="true"
-        app:hintTextColor="@color/colorGreyHint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_smart_start_auger_on">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel_button"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="0.33"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/cancel"
+                app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dialog_smart_start_p_mode_text"
-            style="@style/TextInputEditTextFilledBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/aller_regular"
-            android:hint="@string/settings_smart_start_p_mode"
-            android:inputType="number"
-            android:textColor="@color/colorWhite"
-            android:textColorHighlight="@color/colorAccent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_button"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.33"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/save"
+                app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

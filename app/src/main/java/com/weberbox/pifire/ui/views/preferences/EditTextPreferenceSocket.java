@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.preference.EditTextPreference;
-
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.utils.AlertUtils;

@@ -6,12 +6,17 @@
     android:layout_height="wrap_content"
     android:foreground="@android:color/transparent">
 
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/bsd_btn_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/medium_spacing"
+        android:paddingTop="20dp"
         android:visibility="visible">
 
         <com.weberbox.pifire.ui.utils.TextViewRichDrawable

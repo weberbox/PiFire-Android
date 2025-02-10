@@ -3,7 +3,6 @@ package com.weberbox.pifire.ui.dialogs;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
@@ -48,8 +48,8 @@ public class PrimePickerDialog {
         DialogPrimePickerBinding binding = DialogPrimePickerBinding.inflate(inflater);
 
         SwitchCompat startupSwitch = binding.primeStartupSwitch;
-        Button confirmButton = binding.setPrimeConfirm;
-        Button cancelButton = binding.setPrimeCancel;
+        MaterialButton confirmButton = binding.setPrimeConfirm;
+        MaterialButton cancelButton = binding.setPrimeCancel;
 
         PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, true);

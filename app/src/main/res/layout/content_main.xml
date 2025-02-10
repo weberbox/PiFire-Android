@@ -20,7 +20,7 @@
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         app:abb_indicatorAppearance="round"
         app:abb_indicatorColor="@color/colorAccent"
         app:abb_indicatorHeight="4dp"
@@ -30,7 +30,7 @@
         app:abb_selectedTabType="text"
         app:abb_tabAnimation="slide"
         app:abb_tabColor="@color/colorWhite"
-        app:abb_tabColorSelected="@color/colorAccent"
+        app:abb_tabColorSelected="@color/colorWhite"
         app:abb_tabs="@menu/activity_main_tabs"
         app:layout_constraintBottom_toBottomOf="parent" />
 

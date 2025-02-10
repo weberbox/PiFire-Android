@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -17,6 +20,8 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
+import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import io.socket.client.Socket;
@@ -48,6 +53,13 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                              @Nullable Bundle savedInstanceState) {
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
     }
 
     @Override
@@ -97,6 +109,23 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
                 }
             }
         }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof EditTextPreference) {
+            if (getContext() != null) {
+                new PrefsEditDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        if (preference instanceof ListPreference) {
+            if (getContext() != null) {
+                new PrefsListDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        super.onDisplayPreferenceDialog(preference);
     }
 
 }

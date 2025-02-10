@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_grill_name">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_grill_name"
             app:title="@string/settings_grill_name"
             app:useSimpleSummaryProvider="true" />

@@ -3,101 +3,85 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
+        android:layout="@layout/preference_cat"
         app:key="@string/prefs_pellet_warning_cat"
-        app:iconSpaceReserved="false"
         app:title="@string/settings_cat_pellet_warning">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_pellet_warning_enabled"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_enabled"
             app:title="@string/enabled" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_time"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_time"
             app:title="@string/settings_pellet_warning_time"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_warning_level"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_warning_level"
             app:title="@string/settings_pellet_warning_level"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_warning_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_pellets">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_full"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_full"
             app:title="@string/settings_pellet_full"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_empty"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_empty"
             app:title="@string/settings_pellet_empty"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_pellets_auger">
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pellet_auger_rate"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_auger_rate"
             app:title="@string/settings_pellet_auger_rate"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_auger_rate_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_pellets_prime">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="@bool/def_pellet_prime_igniter"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_pellet_prime_igniter"
             app:title="@string/settings_pellet_prime_igniter" />
 
         <Preference
             android:layout="@layout/preference_cat_warning"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_pellet_prime_igniter_note"
             app:title="@string/settings_danger" />
 

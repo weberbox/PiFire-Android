@@ -20,12 +20,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:id="@+id/drag_handle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/animation_view"
-                android:background="@color/colorWhite"
                 android:layout_width="match_parent"
                 android:layout_height="175dp"
-                android:layout_alignParentTop="true"
+                android:layout_marginTop="30dp"
+                android:background="@color/colorWhite"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
                 app:lottie_autoPlay="true"
@@ -39,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/animation_view"
+                android:paddingTop="10dp"
                 tools:text="Title" />
 
             <TextView
@@ -56,26 +62,30 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="16dp"
-                android:weightSum="1.0">
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_negative"
-                    style="@style/MaterialDialog.NegativeButton"
+                    style="@style/MaterialButtonPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
                     android:layout_weight="0.5"
+                    android:background="@drawable/bg_ripple_primary_button"
+                    app:backgroundTint="@color/dialog_positive_button_color_grey"
                     app:iconGravity="textStart"
                     tools:text="Negative" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/button_positive"
-                    style="@style/MaterialDialog.PositiveButton"
+                    style="@style/MaterialButtonPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:background="@drawable/bg_ripple_primary_button"
+                    app:backgroundTint="@color/dialog_positive_button_color_grey"
                     app:iconGravity="textStart"
                     tools:text="Positive" />
 

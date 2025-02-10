@@ -1,7 +1,6 @@
 package com.weberbox.pifire.model.local;
 
 import androidx.annotation.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public class DashProbeModel {
@@ -24,24 +23,26 @@ public class DashProbeModel {
     public static class DashProbe {
         private String label;
         private String name;
-        private String type;
-        private Double value;
+        private String probeType;
+        private Double probeTemp;
         private Integer target;
         private Double setTemp;
         private Boolean shutdown;
         private Boolean keepWarm;
+        private Boolean notifications;
+        private String eta;
 
-        public DashProbe(@NonNull String label, @NonNull String name, @NonNull String type,
-                         @NonNull Double value, @NonNull Integer target, @NonNull Double setTemp,
-                         @NotNull Boolean shutdown, @NotNull Boolean keepWarm) {
+        public DashProbe(@NonNull String label, @NonNull String name, @NonNull String probeType) {
             this.label = label;
             this.name = name;
-            this.type = type;
-            this.value = value;
-            this.target = target;
-            this.setTemp = setTemp;
-            this.shutdown = shutdown;
-            this.keepWarm = keepWarm;
+            this.probeType = probeType;
+            this.probeTemp = 0.0;
+            this.target = 0;
+            this.setTemp = 0.0;
+            this.shutdown = false;
+            this.keepWarm = false;
+            this.notifications = false;
+            this.eta = null;
         }
 
         public String getLabel() {
@@ -60,20 +61,20 @@ public class DashProbeModel {
             this.name = name;
         }
 
-        public String getType() {
-            return type;
+        public String getProbeType() {
+            return probeType;
         }
 
-        public void setType(String type) {
-            this.type = type;
+        public void setProbeType(String probeType) {
+            this.probeType = probeType;
         }
 
-        public Double getValue() {
-            return value;
+        public Double getProbeTemp() {
+            return probeTemp;
         }
 
-        public void setValue(Double value) {
-            this.value = value;
+        public void setProbeTemp(Double probeTemp) {
+            this.probeTemp = probeTemp;
         }
 
         public Integer getTarget() {
@@ -106,6 +107,22 @@ public class DashProbeModel {
 
         public void setKeepWarm(Boolean keepWarm) {
             this.keepWarm = keepWarm;
+        }
+
+        public Boolean getNotifications() {
+            return notifications;
+        }
+
+        public void setNotifications(Boolean notifications) {
+            this.notifications = notifications;
+        }
+
+        public String getEta() {
+            return eta;
+        }
+
+        public void setEta(String eta) {
+            this.eta = eta;
         }
     }
 }

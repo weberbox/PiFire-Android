@@ -13,7 +13,8 @@
     app:cardElevation="10dp"
     app:cardPreventCornerOverlap="false"
     tools:dash_probe_icon="@drawable/ic_grill_thermometer"
-    tools:dash_probe_set_temp="true"
+    tools:dash_probe_is_primary="true"
+    tools:dash_probe_eta="true"
     tools:dash_probe_name="@string/dash_grill_title" >
 
 </com.weberbox.pifire.ui.views.DashProbeCard>

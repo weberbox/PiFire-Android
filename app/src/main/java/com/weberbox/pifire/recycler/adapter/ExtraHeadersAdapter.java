@@ -14,9 +14,7 @@ import com.weberbox.pifire.model.local.ExtraHeadersModel;
 
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
-public class ExtraHeadersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ExtraHeadersAdapter extends RecyclerView.Adapter<ExtraHeadersAdapter.ViewHolder> {
     private final ArrayList<ExtraHeadersModel> list;
     private final ExtraHeadersCallback callback;
 
@@ -27,32 +25,20 @@ public class ExtraHeadersAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ExtraHeadersAdapter.ItemsViewHolder(ItemExtraHeadersBinding.inflate(LayoutInflater.from(
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ExtraHeadersAdapter.ViewHolder(ItemExtraHeadersBinding.inflate(LayoutInflater.from(
                 parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        try {
-            if (holder instanceof ExtraHeadersAdapter.ItemsViewHolder vh) {
-                vh.itemView.setOnClickListener(view -> callback.onHeaderEdit(position));
-                vh.bindData(list, position);
-            }
-
-        } catch (Exception e) {
-            Timber.e(e, "onBindViewHolder Error");
-        }
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(view -> callback.onHeaderEdit(position));
+        holder.bindData(list, position);
     }
 
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -77,12 +63,12 @@ public class ExtraHeadersAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return list.isEmpty() ? null : list;
     }
 
-    public static class ItemsViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView key;
         private final TextView value;
 
-        public ItemsViewHolder(ItemExtraHeadersBinding binding) {
+        public ViewHolder(ItemExtraHeadersBinding binding) {
             super(binding.getRoot());
             key = binding.extraHeadersKey;
             value = binding.extraHeadersValue;

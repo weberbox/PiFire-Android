@@ -21,13 +21,15 @@
 
     <TextView
         android:id="@+id/extra_headers_key"
-        style="@style/Text15AllerBold"
+        style="@style/TextOpenSans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:maxLines="1"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/extra_headers_value"
         app:layout_constraintStart_toEndOf="@+id/headers_icon"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +37,7 @@
 
     <TextView
         android:id="@+id/extra_headers_value"
-        style="@style/Text10Aller"
+        style="@style/Text10OpenSans"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -46,9 +48,9 @@
         android:maxLines="1"
         android:textColor="@color/colorPlaceholder"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/headers_icon"
         app:layout_constraintTop_toBottomOf="@+id/extra_headers_key"
-        app:layout_constraintEnd_toEndOf="parent"
         tools:text="@string/placeholder_string" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/no_probes_tv"
-        style="@style/Text18AllerBold"
+        style="@style/TextOpenSans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/large_spacing"
@@ -17,6 +17,8 @@
         android:paddingBottom="@dimen/large_spacing"
         android:text="@string/settings_probes_not_found"
         android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -57,6 +59,9 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
         Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
+
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         if (manualCat != null && manualMode != null) {
             manualMode.setOnPreferenceClickListener(preference -> {
@@ -275,7 +280,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     private void showFragment(Fragment fragment) {
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
-                .replace(android.R.id.content, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }

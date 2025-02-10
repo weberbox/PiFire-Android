@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
@@ -55,6 +58,9 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
         EditTextPreference augerRate = findPreference(getString(R.string.prefs_pellet_auger_rate));
+
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
                 "").isEmpty()) {
@@ -184,5 +190,16 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
                 }
             }
         }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof EditTextPreference) {
+            if (getContext() != null) {
+                new PrefsEditDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        super.onDisplayPreferenceDialog(preference);
     }
 }

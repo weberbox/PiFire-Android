@@ -378,7 +378,7 @@ public abstract class AbstractDialog implements DialogInterface {
         }
 
         binding.getRoot().setBackgroundColor(ContextCompat.getColor(activity,
-                R.color.material_dialog_background));
+                R.color.colorPrimaryDark));
 
         titleView.setTextColor(ContextCompat.getColor(activity,
                 R.color.material_dialog_title_text_color));
@@ -394,7 +394,7 @@ public abstract class AbstractDialog implements DialogInterface {
 
         ColorStateList negativeButtonTint = ContextCompat.getColorStateList(
                 activity.getApplicationContext(),
-                R.color.dialog_negative_button_text_color);
+                R.color.dialog_positive_button_text_color);
         negativeButtonView.setIconTint(negativeButtonTint);
         negativeButtonView.setTextColor(negativeButtonTint);
 

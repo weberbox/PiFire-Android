@@ -1,175 +1,429 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet_dialog"
-    android:padding="@dimen/default_spacing">
+    android:paddingStart="@dimen/default_spacing"
+    android:paddingEnd="@dimen/default_spacing"
+    android:paddingBottom="@dimen/default_spacing">
 
-    <FrameLayout
-        android:id="@+id/temp_list_container"
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_gray_rounded_alpha">
-
-        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
-            android:id="@+id/temp_fast_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="0dp"
-            android:paddingEnd="30dp"
-            app:handleDrawable="@drawable/bg_thumb_view"
-            app:handleHeight="10dp"
-            app:handleVisibilityDuration="600"
-            app:handleWidth="40dp"
-            app:popupDrawable="@android:color/transparent"
-            app:popupTextStyle="@style/TextTransparent"
-            app:trackMarginEnd="30dp"
-            app:trackMarginStart="30dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/temp_list"
-                android:layout_width="180dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:clipToPadding="false"
-                android:paddingLeft="@dimen/default_spacing"
-                android:paddingTop="@dimen/picker_top_bottom_padding"
-                android:paddingRight="@dimen/default_spacing"
-                android:paddingBottom="@dimen/picker_top_bottom_padding" />
-
-        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="start|center"
-            android:background="?attr/colorAccent" />
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="end|center"
-            android:background="?attr/colorAccent" />
-
-    </FrameLayout>
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/probe_options_container"
+        android:id="@+id/type_options_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/temp_list_container"
-        android:paddingBottom="8dp"
-        android:visibility="gone">
+        android:layout_marginTop="30dp">
 
-        <RelativeLayout
-            android:id="@+id/probe_shutdown_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/target_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginBottom="@dimen/small_spacing"
-            app:layout_constraintBottom_toTopOf="@+id/probe_warm_container"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/probe_shutdown_text"
-                style="@style/Text14AllerBold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_spacing"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/grill_shutdown_temp"
-                android:textAlignment="center"
-                android:textSize="13sp"
-                android:textStyle="normal"
-                app:autoSizeTextType="uniform" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/target_options_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/probe_shutdown_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toEndOf="@+id/probe_shutdown_text"
-                android:checked="false" />
+                <FrameLayout
+                    android:id="@+id/target_temp_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_gray_rounded_alpha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        </RelativeLayout>
+                    <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+                        android:id="@+id/target_temp_fast_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="30dp"
+                        app:handleDrawable="@drawable/bg_thumb_view"
+                        app:handleHeight="10dp"
+                        app:handleVisibilityDuration="600"
+                        app:handleWidth="40dp"
+                        app:popupDrawable="@android:color/transparent"
+                        app:popupTextStyle="@style/TextTransparent"
+                        app:trackMarginEnd="30dp"
+                        app:trackMarginStart="30dp">
 
-        <RelativeLayout
-            android:id="@+id/probe_warm_container"
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/target_temp_list"
+                            android:layout_width="180dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:clipToPadding="false"
+                            android:paddingLeft="@dimen/default_spacing"
+                            android:paddingTop="@dimen/picker_top_bottom_padding"
+                            android:paddingRight="@dimen/default_spacing"
+                            android:paddingBottom="@dimen/picker_top_bottom_padding" />
+
+                    </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="start|center"
+                        android:background="?attr/colorAccent" />
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="end|center"
+                        android:background="?attr/colorAccent" />
+
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/target_switch_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/target_temp_container">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/probe_shutdown_t_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="10dp"
+                        android:checked="false"
+                        android:text="@string/grill_shutdown_temp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/Text14Aller" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/probe_keep_warm_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/probe_shutdown_t_switch"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="10dp"
+                        android:checked="false"
+                        android:text="@string/grill_keep_warm_temp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/Text14Aller" />
+
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.weberbox.pifire.ui.views.ProbeTypeCard
+                android:id="@+id/probe_type_target"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/target_options_container"
+                app:probe_type_icon="@drawable/ic_menu_target"
+                app:probe_type_title="@string/probe_type_target" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/high_limit_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_below="@id/probe_shutdown_container"
-            android:layout_marginBottom="@dimen/small_spacing"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/probe_shutdown_container">
+            app:layout_constraintTop_toBottomOf="@+id/target_container">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/probe_warm_text"
-                style="@style/Text14AllerBold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_spacing"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/grill_keep_warm_temp"
-                android:textAlignment="center"
-                android:textSize="13sp"
-                android:textStyle="normal"
-                app:autoSizeTextType="uniform" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/high_limit_options_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/probe_keep_warm_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toEndOf="@+id/probe_warm_text"
-                android:checked="false" />
+                <FrameLayout
+                    android:id="@+id/high_limit_temp_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_gray_rounded_alpha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-        </RelativeLayout>
+                    <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+                        android:id="@+id/high_limit_temp_fast_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="30dp"
+                        app:handleDrawable="@drawable/bg_thumb_view"
+                        app:handleHeight="10dp"
+                        app:handleVisibilityDuration="600"
+                        app:handleWidth="40dp"
+                        app:popupDrawable="@android:color/transparent"
+                        app:popupTextStyle="@style/TextTransparent"
+                        app:trackMarginEnd="30dp"
+                        app:trackMarginStart="30dp">
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/high_limit_temp_list"
+                            android:layout_width="180dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:clipToPadding="false"
+                            android:paddingLeft="@dimen/default_spacing"
+                            android:paddingTop="@dimen/picker_top_bottom_padding"
+                            android:paddingRight="@dimen/default_spacing"
+                            android:paddingBottom="@dimen/picker_top_bottom_padding" />
+
+                    </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="start|center"
+                        android:background="?attr/colorAccent" />
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="end|center"
+                        android:background="?attr/colorAccent" />
+
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/high_limit_switch_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/high_limit_temp_container">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/probe_shutdown_hl_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="10dp"
+                        android:checked="false"
+                        android:text="@string/grill_shutdown_temp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/Text14Aller"
+                        tools:visibility="gone" />
+
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.weberbox.pifire.ui.views.ProbeTypeCard
+                android:id="@+id/probe_type_high_limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/high_limit_options_container"
+                app:probe_type_icon="@drawable/ic_menu_high_limit"
+                app:probe_type_title="@string/probe_type_high_limit" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/low_limit_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/high_limit_container">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/low_limit_options_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <FrameLayout
+                    android:id="@+id/low_limit_temp_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/bg_gray_rounded_alpha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+                        android:id="@+id/low_limit_temp_fast_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="30dp"
+                        app:handleDrawable="@drawable/bg_thumb_view"
+                        app:handleHeight="10dp"
+                        app:handleVisibilityDuration="600"
+                        app:handleWidth="40dp"
+                        app:popupDrawable="@android:color/transparent"
+                        app:popupTextStyle="@style/TextTransparent"
+                        app:trackMarginEnd="30dp"
+                        app:trackMarginStart="30dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/low_limit_temp_list"
+                            android:layout_width="180dp"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:clipToPadding="false"
+                            android:paddingLeft="@dimen/default_spacing"
+                            android:paddingTop="@dimen/picker_top_bottom_padding"
+                            android:paddingRight="@dimen/default_spacing"
+                            android:paddingBottom="@dimen/picker_top_bottom_padding" />
+
+                    </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="start|center"
+                        android:background="?attr/colorAccent" />
+
+                    <View
+                        android:layout_width="16dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="end|center"
+                        android:background="?attr/colorAccent" />
+
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/low_limit_switch_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/low_limit_temp_container">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/probe_shutdown_ll_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="10dp"
+                        android:checked="false"
+                        android:text="@string/grill_shutdown_temp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/Text14Aller" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/probe_reignite_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/probe_shutdown_ll_switch"
+                        android:layout_marginStart="@dimen/default_spacing"
+                        android:layout_marginEnd="10dp"
+                        android:checked="false"
+                        android:text="@string/grill_reignite_temp"
+                        android:textAlignment="viewStart"
+                        android:textAppearance="@style/Text14Aller" />
+
+                </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.weberbox.pifire.ui.views.ProbeTypeCard
+                android:id="@+id/probe_type_low_limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/low_limit_options_container"
+                app:probe_type_icon="@drawable/ic_menu_low_limit"
+                app:probe_type_title="@string/probe_type_low_limit" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/probe_button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/probe_options_container"
-        android:orientation="horizontal">
+        android:layout_below="@id/type_options_container"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/probe_options"
-            style="@style/MainButtonAccent"
+            style="@style/MaterialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:text="@string/options" />
+            android:layout_marginEnd="12dp"
+            android:layout_weight=".33"
+            android:background="@drawable/bg_ripple_primary_button"
+            android:text="@string/options"
+            app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/set_temp_clear"
-            style="@style/MainButtonAccent"
+            style="@style/MaterialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:text="@string/clear"
-            android:visibility="visible" />
+            android:layout_marginEnd="12dp"
+            android:layout_weight=".33"
+            android:background="@drawable/bg_ripple_primary_button"
+            android:text="@string/clear_all"
+            android:visibility="visible"
+            app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/set_temp_confirm"
-            style="@style/MainButtonAccent"
+            style="@style/MaterialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:text="@string/confirm" />
+            android:layout_weight=".33"
+            android:background="@drawable/bg_ripple_primary_button"
+            android:text="@string/confirm"
+            app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
     </LinearLayout>
 </RelativeLayout>

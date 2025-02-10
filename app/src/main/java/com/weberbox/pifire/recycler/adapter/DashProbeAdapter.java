@@ -1,5 +1,8 @@
 package com.weberbox.pifire.recycler.adapter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -11,7 +14,6 @@ import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.ItemDashProbeBinding;
 import com.weberbox.pifire.interfaces.DashProbeCallback;
 import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
-import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.views.DashProbeCard;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TempUtils;
@@ -51,9 +53,9 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return true;
             });
             vh.probe.getProbeName().setText(probe.getName());
-            if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
+            if (isPrimaryProbe(probe)) {
                 vh.probe.getProbeIcon().setImageResource(R.drawable.ic_grill_thermometer);
-                vh.probe.setSetTempEnabled(true);
+                vh.probe.setIsPrimaryProbe(true);
                 if (probe.getSetTemp() > 0) {
                     vh.probe.getProbeSetTemp().setText(StringUtils.formatTemp(probe.getSetTemp(),
                             tempUtils.isFahrenheit()));
@@ -63,16 +65,14 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             } else {
                 vh.probe.getProbeIcon().setImageResource(R.drawable.ic_grill_probe);
-                vh.probe.setSetTempEnabled(false);
-                AnimUtils.fadeAnimation(vh.probe.getProbeShutdown(), 300,
-                        probe.getShutdown() ? Constants.FADE_IN : Constants.FADE_OUT);
-                AnimUtils.fadeAnimation(vh.probe.getProbeKeepWarm(), 300,
-                        probe.getKeepWarm() ? Constants.FADE_IN : Constants.FADE_OUT);
+                vh.probe.setIsPrimaryProbe(false);
+                vh.probe.getProbeShutdown().setVisibility(probe.getShutdown() ? VISIBLE : GONE);
+                vh.probe.getProbeKeepWarm().setVisibility(probe.getKeepWarm() ? VISIBLE : GONE);
             }
-            if (probe.getValue() > 0) {
-                vh.probe.getProbeTemp().setText(StringUtils.formatTemp(probe.getValue(),
+            if (probe.getProbeTemp() > 0) {
+                vh.probe.getProbeTemp().setText(StringUtils.formatTemp(probe.getProbeTemp(),
                         tempUtils.isFahrenheit()));
-                vh.probe.setProbeTempProgress(probe.getValue().intValue());
+                vh.probe.setProbeTempProgress(probe.getProbeTemp().intValue());
             } else {
                 vh.probe.getProbeTemp().setText(
                         vh.itemView.getContext().getString(R.string.placeholder_temp));
@@ -84,7 +84,7 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     vh.probe.getProbeTargetTemp().setText(StringUtils.formatTemp(probe.getTarget(),
                             tempUtils.isFahrenheit()));
                 } else {
-                    if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
+                    if (isPrimaryProbe(probe)) {
                         vh.probe.getProbeTempProgress().setMax(tempUtils.getMaxGrillTemp());
                     } else {
                         vh.probe.getProbeTempProgress().setMax(tempUtils.getMaxProbeTemp());
@@ -93,6 +93,15 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             vh.itemView.getContext().getString(R.string.placeholder_none));
                 }
             }
+            if (probe.getEta() != null) {
+                vh.probe.setEtaEnabled(true);
+                vh.probe.getProbeEta().setText(probe.getEta());
+            } else {
+                vh.probe.setEtaEnabled(false);
+                vh.probe.getProbeEta().setText(
+                        vh.itemView.getContext().getString(R.string.placeholder_none));
+            }
+            vh.probe.getProbeNotifications().setVisibility(probe.getNotifications() ? VISIBLE : GONE);
         } catch (Exception e) {
             Timber.e(e, "onBindViewHolder Error");
         }
@@ -137,11 +146,15 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public DashProbe getGrillProbe() {
         for (DashProbe probe : list) {
-            if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
+            if (isPrimaryProbe(probe)) {
                 return probe;
             }
         }
         return null;
+    }
+
+    private boolean isPrimaryProbe(DashProbe probe) {
+        return probe.getProbeType().equals(Constants.DASH_PROBE_PRIMARY);
     }
 
     public static class ProbeViewHolder extends RecyclerView.ViewHolder {

@@ -3,10 +3,14 @@ package com.weberbox.pifire.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
+import com.weberbox.pifire.databinding.ActivityPreferencesBinding;
 import com.weberbox.pifire.interfaces.SettingsSocketCallback;
 import com.weberbox.pifire.ui.fragments.preferences.AdminSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.AppSettingsFragment;
@@ -26,9 +30,22 @@ import timber.log.Timber;
 
 public class PreferencesActivity extends BaseActivity {
 
+    private ActivityPreferencesBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        binding = ActivityPreferencesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            v.setPadding(0, topInset, 0, bottomInset);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         PiFireApplication app = (PiFireApplication) getApplication();
         Socket socket = app.getSocket();
@@ -37,6 +54,7 @@ public class PreferencesActivity extends BaseActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setElevation(0);
         }
 
         Intent intent = getIntent();
@@ -45,6 +63,12 @@ public class PreferencesActivity extends BaseActivity {
         if (savedInstanceState == null) {
             startSettingsFragment(fragment);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
     @Override
@@ -73,7 +97,7 @@ public class PreferencesActivity extends BaseActivity {
     private void launchFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .replace(binding.fragmentContainer.getId(), fragment)
                 .commit();
     }
 

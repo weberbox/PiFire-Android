@@ -6,7 +6,6 @@ import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
 import com.weberbox.pifire.model.local.TimePickerModel;
@@ -60,8 +60,8 @@ public class TimePickerDialog {
         ConstraintLayout optionsContainer = binding.timerOptionsContainer;
         SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
         SwitchCompat keepWarmSwitch = binding.timerKeepWarmSwitch;
-        Button confirmButton = binding.setTimerConfirm;
-        Button optionsButton = binding.timerOptions;
+        MaterialButton confirmButton = binding.setTimerConfirm;
+        MaterialButton optionsButton = binding.timerOptions;
 
         PickerLayoutManager hoursPickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);

@@ -9,17 +9,16 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
-import androidx.appcompat.widget.AppCompatButton;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPelletsEditBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsEditCardBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
+import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.StringUtils;
 
@@ -56,9 +55,9 @@ public class PelletsEditDialog {
 
         LayoutPelletsEditCardBinding pelletsProfileEdit = binding.pelletsEditProfileContainer;
 
-        AppCompatButton pelletEditSave = binding.pelletEditSave;
-        AppCompatButton pelletEditLoad = binding.pelletEditLoad;
-        AppCompatButton pelletEditDelete = binding.pelletEditDelete;
+        MaterialButton pelletEditSave = binding.saveButton;
+        MaterialButton pelletEditLoad = binding.saveLoadButton;
+        MaterialButton pelletEditDelete = binding.deleteButton;
         profileBrandTv = binding.pelletsEditProfileContainer.pelletEditBrandTv;
         profileWoodTv = pelletsProfileEdit.pelletEditWoodTv;
         profileRatingTv = pelletsProfileEdit.pelletEditRatingTv;
@@ -72,6 +71,9 @@ public class PelletsEditDialog {
             profileWoodTv.setText(pelletProfile.getWood());
             profileRatingTv.setText(StringUtils.getRatingText(pelletProfile.getRating()));
             profileComments.setText(pelletProfile.getComments());
+        } else {
+            pelletEditSave.setEnabled(false);
+            pelletEditLoad.setEnabled(false);
         }
 
         String[] ratings = activity.getResources().getStringArray(R.array.items_rating);
@@ -91,63 +93,6 @@ public class PelletsEditDialog {
 
         pelletEditDelete.setVisibility(pelletProfile != null ? View.VISIBLE : View.GONE);
         pelletEditLoad.setVisibility(pelletProfile != null ? View.GONE : View.VISIBLE);
-
-        profileBrandTv.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (s.length() == 0) {
-                    profileBrand.setError(activity.getString(R.string.text_blank_error));
-                } else {
-                    profileBrand.setError(null);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        profileWoodTv.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (s.length() == 0) {
-                    profileWood.setError(activity.getString(R.string.text_blank_error));
-                } else {
-                    profileWood.setError(null);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        profileRatingTv.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                if (s.length() == 0) {
-                    profileRating.setError(activity.getString(R.string.text_blank_error));
-                } else {
-                    profileRating.setError(null);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
 
         pelletEditSave.setOnClickListener(v -> {
             if (checkRequiredFields()) {
@@ -172,6 +117,88 @@ public class PelletsEditDialog {
                 callback.onProfileDelete(pelletProfile.getId(), position);
             }
             bottomSheetDialog.dismiss();
+        });
+
+        profileBrandTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.length() == 0) {
+                    pelletEditSave.setEnabled(false);
+                    pelletEditLoad.setEnabled(false);
+                    profileBrand.setError(activity.getString(R.string.text_blank_error));
+                } else {
+                    if (profileWoodTv.getText() != null &&
+                            !profileWoodTv.getText().toString().isEmpty() &&
+                            profileRatingTv.getText() != null &&
+                            !profileRatingTv.getText().toString().isEmpty()) {
+                        pelletEditSave.setEnabled(true);
+                        pelletEditLoad.setEnabled(true);
+                    }
+                    profileBrand.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        profileWoodTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.length() == 0) {
+                    pelletEditSave.setEnabled(false);
+                    profileWood.setError(activity.getString(R.string.text_blank_error));
+                } else {
+                    if (profileBrandTv.getText() != null &&
+                            !profileBrandTv.getText().toString().isEmpty() &&
+                            profileRatingTv.getText() != null &&
+                            !profileRatingTv.getText().toString().isEmpty()) {
+                        pelletEditSave.setEnabled(true);
+                        pelletEditLoad.setEnabled(true);
+                    }
+                    profileWood.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        profileRatingTv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.length() == 0) {
+                    pelletEditSave.setEnabled(false);
+                    profileRating.setError(activity.getString(R.string.text_blank_error));
+                } else {
+                    if (profileBrandTv.getText() != null &&
+                            !profileBrandTv.getText().toString().isEmpty() &&
+                            profileWoodTv.getText() != null &&
+                            !profileWoodTv.getText().toString().isEmpty()) {
+                        pelletEditSave.setEnabled(true);
+                        pelletEditLoad.setEnabled(true);
+                    }
+                    profileRating.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
         });
 
         bottomSheetDialog.setContentView(binding.getRoot());

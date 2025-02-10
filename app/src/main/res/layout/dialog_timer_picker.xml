@@ -4,15 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_bottom_sheet_dialog"
-    android:padding="@dimen/default_spacing">
+    android:paddingStart="@dimen/default_spacing"
+    android:paddingEnd="@dimen/default_spacing"
+    android:paddingBottom="@dimen/default_spacing">
+
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/timer_list_container"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/bg_gray_rounded_alpha">
-
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -101,7 +108,7 @@
         <RelativeLayout
             android:id="@+id/timer_shutdown_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="32dp"
             android:layout_marginBottom="@dimen/small_spacing"
             app:layout_constraintBottom_toTopOf="@+id/timer_warm_container"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +128,7 @@
                 android:textStyle="normal"
                 app:autoSizeTextType="uniform" />
 
-            <androidx.appcompat.widget.SwitchCompat
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/timer_shutdown_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -135,7 +142,7 @@
         <RelativeLayout
             android:id="@+id/timer_warm_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="32dp"
             android:layout_below="@id/timer_shutdown_container"
             android:layout_marginBottom="@dimen/small_spacing"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -156,7 +163,7 @@
                 android:textStyle="normal"
                 app:autoSizeTextType="uniform" />
 
-            <androidx.appcompat.widget.SwitchCompat
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/timer_keep_warm_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -176,24 +183,26 @@
         android:layout_below="@id/timer_options_container"
         android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/timer_options"
-            style="@style/MainButtonAccent"
+            style="@style/MaterialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:text="@string/options" />
+            android:background="@drawable/bg_ripple_primary_button"
+            android:text="@string/options"
+            app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/set_timer_confirm"
-            style="@style/MainButtonAccent"
+            style="@style/MaterialButtonPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/bg_ripple_grey_button"
-            android:text="@string/confirm" />
+            android:background="@drawable/bg_ripple_primary_button"
+            android:text="@string/confirm"
+            app:backgroundTint="@color/dialog_positive_button_color_grey" />
 
     </LinearLayout>
 </RelativeLayout>

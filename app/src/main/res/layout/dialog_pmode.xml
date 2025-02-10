@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="@android:color/transparent"
@@ -7,52 +8,78 @@
     android:paddingTop="20dp"
     android:paddingEnd="@dimen/small_spacing">
 
-    <LinearLayout
-        android:id="@+id/pmode_header"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <TextView
-            style="@style/Text15AllerBold"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_table_header_cell_left"
-            android:gravity="center"
-            android:maxLines="1"
-            android:padding="6dp"
-            android:text="@string/settings_pmode_mode" />
-
-        <TextView
-            style="@style/Text15AllerBold"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_table_header_cell_middle"
-            android:gravity="center"
-            android:maxLines="1"
-            android:padding="6dp"
-            android:text="@string/settings_pmode_auger_on" />
-
-        <TextView
-            style="@style/Text15AllerBold"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/bg_table_header_cell_right"
-            android:gravity="center"
-            android:maxLines="1"
-            android:padding="6dp"
-            android:text="@string/settings_pmode_auger_off" />
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pmode_recycler"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_editor_cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pmode_header" />
+        android:background="@drawable/bg_bottom_sheet_dialog">
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/pmode_header"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal"
+            android:paddingStart="?listPreferredItemPaddingStart"
+            android:paddingEnd="?listPreferredItemPaddingEnd"
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/Text15AllerBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:text="@string/settings_pmode_mode" />
+
+            <TextView
+                style="@style/Text15AllerBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:text="@string/settings_pmode_auger_on" />
+
+            <TextView
+                style="@style/Text15AllerBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="6dp"
+                android:text="@string/settings_pmode_auger_off" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pmode_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pmode_header"
+            android:paddingStart="?listPreferredItemPaddingStart"
+            android:paddingEnd="?listPreferredItemPaddingEnd"
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pmode_header" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

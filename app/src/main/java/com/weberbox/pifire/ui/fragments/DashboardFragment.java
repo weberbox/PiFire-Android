@@ -32,7 +32,6 @@ import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
 import com.weberbox.pifire.interfaces.DashProbeCallback;
 import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
-import com.weberbox.pifire.model.local.ProbeOptionsModel;
 import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.remote.DashDataModel.DashProbeInfo;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
@@ -55,6 +54,7 @@ import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TempUtils;
+import com.weberbox.pifire.utils.TimeUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -82,10 +82,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private CountDownTimer countDownTimer;
     private PelletLevelView pelletLevelIndicator;
     private Socket socket;
-    private TempUtils tempUtils;
     private DashProbeAdapter dashAdapter;
     private ArrayList<NotifyData> notifyData;
-
     private List<ProbeInfo> probeInfo;
     private boolean isLoading = false;
     private boolean smokePlusEnabled = false;
@@ -146,7 +144,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         pwmControlText = binding.dashLayout.dashPwmControl;
         pwmControlBox = binding.dashLayout.dashPwmContainer;
 
-        tempUtils = new TempUtils(getContext());
+        TempUtils tempUtils = new TempUtils(getContext());
 
         currentModeBox.setOnClickListener(v -> {
             if (socketConnected()) {
@@ -425,12 +423,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 list.add(new DashProbe(
                         probe.getLabel(),
                         probe.getName(),
-                        probe.getType(),
-                        0.0,
-                        0,
-                        0.0,
-                        false,
-                        false));
+                        probe.getType()));
             }
         }
         return list;
@@ -478,10 +471,9 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private void showHoldPickerDialog() {
         if (dashAdapter != null) {
             DashProbe grillProbe = dashAdapter.getGrillProbe();
-            ProbeOptionsModel optionsModel = new ProbeOptionsModel(false, false);
             if (grillProbe != null) {
-                tempPickerDialog = new TempPickerDialog(requireActivity(), grillProbe, optionsModel,
-                        tempUtils.getDefaultGrillTemp(), true, true,
+                tempPickerDialog = new TempPickerDialog(requireActivity(), grillProbe, notifyData,
+                        true, true,
                         DashboardFragment.this);
                 tempPickerDialog.showDialog();
             }
@@ -526,23 +518,19 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     }
 
     @Override
-    public void onTempConfirmClicked(DashProbe probe, ProbeOptionsModel probeOptions, String temp,
-                                     boolean hold) {
+    public void onTempConfirmClicked(ArrayList<NotifyData> notifyData, String temp, boolean hold) {
         if (socket != null && notifyData != null) {
-            if (hold) {
+            if (hold && temp != null) {
                 ServerControl.setGrillHoldTemp(socket, temp, this::processPostResponse);
             }
-            probe.setKeepWarm(probeOptions.getKeepWarm());
-            probe.setShutdown(probeOptions.getShutdown());
-            ServerControl.setProbeNotify(socket, probe, notifyData, temp, hold,
-                    this::processPostResponse);
+            ServerControl.setProbeNotify(socket, notifyData, hold, this::processPostResponse);
         }
     }
 
     @Override
-    public void onTempClearClicked(DashProbe probe) {
+    public void onTempClearClicked(ArrayList<NotifyData> notifyData) {
         if (socket != null && notifyData != null) {
-            ServerControl.clearProbeNotify(socket, probe, notifyData, this::processPostResponse);
+            ServerControl.clearProbeNotify(socket, notifyData, this::processPostResponse);
         }
     }
 
@@ -557,31 +545,17 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
     @Override
     public void onProbeClick(DashProbe probe) {
-        switch (probe.getType()) {
-            case Constants.DASH_PROBE_PRIMARY -> {
-                if (socketConnected()) {
-                    int defaultTemp = tempUtils.getDefaultGrillTemp();
+        if (socketConnected()) {
+            switch (probe.getProbeType()) {
+                case Constants.DASH_PROBE_PRIMARY -> {
                     boolean hold = probe.getSetTemp() > 0.0;
-                    if (hold) {
-                        defaultTemp = probe.getSetTemp().intValue();
-                    } else if (probe.getTarget() > 0) {
-                        defaultTemp = probe.getTarget();
-                    }
-                    ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
-                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, probeOptions,
-                            defaultTemp, hold, false, DashboardFragment.this);
+                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, notifyData,
+                            hold, false, DashboardFragment.this);
                     tempPickerDialog.showDialog();
                 }
-            }
-            case Constants.DASH_PROBE_FOOD -> {
-                if (socketConnected()) {
-                    int defaultTemp = tempUtils.getDefaultProbeTemp();
-                    if (probe.getTarget() > 0) {
-                        defaultTemp = probe.getTarget();
-                    }
-                    ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
-                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, probeOptions,
-                            defaultTemp, false, false, DashboardFragment.this);
+                case Constants.DASH_PROBE_FOOD -> {
+                    tempPickerDialog = new TempPickerDialog(requireActivity(), probe, notifyData,
+                            false, false, DashboardFragment.this);
                     tempPickerDialog.showDialog();
                 }
             }
@@ -591,14 +565,9 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     @Override
     public void onProbeLongClick(DashProbe probe) {
         if (socketConnected()) {
-            if (probe.getType().equals(Constants.DASH_PROBE_PRIMARY)) {
-                int defaultTemp = tempUtils.getDefaultGrillTemp();
-                if (probe.getValue() > 0) {
-                    defaultTemp = probe.getTarget();
-                }
-                ProbeOptionsModel probeOptions = new ProbeOptionsModel(false, false);
-                tempPickerDialog = new TempPickerDialog(getActivity(), probe, probeOptions, defaultTemp,
-                        false, false, DashboardFragment.this);
+            if (probe.getProbeType().equals(Constants.DASH_PROBE_PRIMARY)) {
+                tempPickerDialog = new TempPickerDialog(getActivity(), probe, notifyData,
+                        false, true, DashboardFragment.this);
                 tempPickerDialog.showDialog();
             }
         }
@@ -638,7 +607,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 // Grill Probe
                 for (Map.Entry<String, Double> gProbe : dashProbeInfo.getPrimaryProbe().entrySet()) {
                     if (gProbe.getKey() != null && gProbe.getKey().equals(probe.getLabel())) {
-                        probe.setValue(gProbe.getValue());
+                        probe.setProbeTemp(gProbe.getValue());
                         probe.setSetTemp(dashProbeInfo.getPrimarySetPoint());
                         dashAdapter.updateProbe(probe);
                     }
@@ -647,15 +616,16 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 // Food Probes
                 for (Map.Entry<String, Double> fProbe : dashProbeInfo.getFoodProbes().entrySet()) {
                     if (fProbe.getKey() != null && fProbe.getKey().equals(probe.getLabel())) {
-                        probe.setValue(fProbe.getValue());
+                        probe.setProbeTemp(fProbe.getValue());
                         dashAdapter.updateProbe(probe);
                     }
                 }
 
-                // Target/Notification Temps
-                for (NotifyData notifyData : dashDataModel.getNotifyData()) {
-                    if (notifyData.getType().equals("probe")) {
-                        if (notifyData.getLabel().equals(probe.getLabel())) {
+                // Probe Notify Info
+                for (NotifyData notifyData : notifyData) {
+                    // ETA, Options, Target Temps
+                    if (notifyData.getLabel().equals(probe.getLabel())) {
+                        if (notifyData.getType().equals(Constants.TYPE_TARGET)) {
                             if (!probe.getTarget().equals((notifyData.getTarget()))) {
                                 probe.setTarget(notifyData.getTarget());
                             }
@@ -665,22 +635,33 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                             if (probe.getKeepWarm() != notifyData.getKeepWarm()) {
                                 probe.setKeepWarm(notifyData.getKeepWarm());
                             }
-                            dashAdapter.updateProbe(probe);
+                            probe.setEta(TimeUtils.formatSeconds(notifyData.getEta()));
+                        }
+                        dashAdapter.updateProbe(probe);
+                    }
+
+                    // Timer Notifications
+                    if (notifyData.getType().equals("timer")) {
+                        if (notifyData.getLabel().equals("Timer")) {
+                            AnimUtils.fadeAnimation(timerShutdown, 300,
+                                    notifyData.getShutdown() ?
+                                            Constants.FADE_IN : Constants.FADE_OUT);
+                            AnimUtils.fadeAnimation(timerKeepWarm, 300,
+                                    notifyData.getKeepWarm() ?
+                                            Constants.FADE_IN : Constants.FADE_OUT);
                         }
                     }
                 }
-            }
 
-            // Timer Notifications
-            for (NotifyData notifyData : notifyData) {
-                if (notifyData.getType().equals("timer")) {
-                    if (notifyData.getLabel().equals("Timer")) {
-                        AnimUtils.fadeAnimation(timerShutdown, 300,
-                                notifyData.getShutdown() ?
-                                        Constants.FADE_IN : Constants.FADE_OUT);
-                        AnimUtils.fadeAnimation(timerKeepWarm, 300,
-                                notifyData.getKeepWarm() ?
-                                        Constants.FADE_IN : Constants.FADE_OUT);
+                // Probe Notifications Icon
+                probe.setNotifications(false);
+                for (NotifyData notifyData : notifyData) {
+                    if (notifyData.getLabel().equals(probe.getLabel())) {
+                        if (notifyData.getTarget() > 0 && notifyData.getReq()) {
+                            probe.setNotifications(true);
+                            dashAdapter.updateProbe(probe);
+                            break;
+                        }
                     }
                 }
             }
@@ -777,9 +758,10 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             for (DashProbe probe : dashAdapter.getDashProbes()) {
                 probe.setSetTemp(0.0);
                 probe.setTarget(0);
-                probe.setValue(0.0);
+                probe.setProbeTemp(0.0);
                 probe.setKeepWarm(false);
                 probe.setShutdown(false);
+                probe.setNotifications(false);
                 dashAdapter.updateProbe(probe);
             }
         }

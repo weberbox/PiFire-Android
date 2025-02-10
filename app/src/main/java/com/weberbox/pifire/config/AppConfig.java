@@ -24,7 +24,7 @@ public class AppConfig {
     public static final int DASH_RECYCLER_LAND = 4;
 
     // Temp Selector Temps F
-    public static final int MIN_GRILL_TEMP_SET_F = 125;
+    public static final int MIN_GRILL_TEMP_SET_F = 100;
     public static final int MAX_GRILL_TEMP_SET_F = 600;
     public static final int DEFAULT_GRILL_TEMP_SET_F = 225;
     public static final int MIN_PROBE_TEMP_SET_F = 40;
@@ -32,7 +32,7 @@ public class AppConfig {
     public static final int DEFAULT_PROBE_TEMP_SET_F = 135;
 
     // Temp Selector Temps C
-    public static final int MIN_GRILL_TEMP_SET_C = 50;
+    public static final int MIN_GRILL_TEMP_SET_C = 37;
     public static final int MAX_GRILL_TEMP_SET_C = 315;
     public static final int DEFAULT_GRILL_TEMP_SET_C = 100;
     public static final int MIN_PROBE_TEMP_SET_C = 4;

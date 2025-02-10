@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -83,7 +83,7 @@ public class ExtraHeadersPreference extends Preference implements ExtraHeadersCa
         recycler.setLayoutManager(new LinearLayoutManager(context));
         recycler.setAdapter(adapter);
 
-        AppCompatButton addHeader = (AppCompatButton) holder.findViewById(R.id.headers_add_button);
+        MaterialButton addHeader = (MaterialButton) holder.findViewById(R.id.headers_add_button);
         addHeader.setOnClickListener(view -> {
             ExtraHeadersDialog dialog = new ExtraHeadersDialog(context, null,
                     null, null, ExtraHeadersPreference.this);

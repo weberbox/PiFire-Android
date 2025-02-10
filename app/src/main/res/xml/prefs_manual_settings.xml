@@ -3,30 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_manual_mode">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode"
             app:title="@string/enabled" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_admin_manual_note"
             app:title="@string/settings_note" />
 
     </PreferenceCategory>
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_cat_manual_functions">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
             app:dependency="@string/prefs_manual_mode"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_fan"
             app:title="@string/settings_manual_fan" />
 
@@ -34,7 +31,6 @@
             android:max="100"
             app:defaultValue="100"
             app:dependency="@string/prefs_manual_mode_fan"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_pwm"
             app:showSeekBarValue="true"
             app:title="@string/settings_manual_pwm" />
@@ -42,21 +38,18 @@
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
             app:dependency="@string/prefs_manual_mode"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_auger"
             app:title="@string/settings_manual_auger" />
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
             app:dependency="@string/prefs_manual_mode"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_igniter"
             app:title="@string/settings_manual_igniter" />
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:defaultValue="false"
             app:dependency="@string/prefs_manual_mode"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_manual_mode_power"
             app:title="@string/settings_manual_power" />
 

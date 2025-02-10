@@ -3,7 +3,6 @@ package com.weberbox.pifire.ui.dialogs;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogScrollPickerBinding;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
@@ -48,7 +48,7 @@ public class ProfilePickerDialog {
     public BottomSheetDialog showDialog() {
         DialogScrollPickerBinding binding = DialogScrollPickerBinding.inflate(inflater);
 
-        Button confirmButton = binding.btnItemConfirm;
+        MaterialButton confirmButton = binding.btnItemConfirm;
 
         PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, false);

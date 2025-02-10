@@ -60,6 +60,8 @@
                     android:layout_margin="8dp"
                     android:animateLayoutChanges="true"
                     android:indeterminate="false"
+                    app:indicatorTrackGapSize="0dp"
+                    app:trackStopIndicatorSize="0dp"
                     app:indicatorColor="@color/colorAccent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

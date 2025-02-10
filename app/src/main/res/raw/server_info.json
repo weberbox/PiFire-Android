@@ -1,5 +1,49 @@
 [
   {
+    "appVersionCode": 2040000,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
+    "appVersionCode": 2030100,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "1.9.0",
+      "build": "4"
+    }
+  },
+  {
+    "appVersionCode": 2030000,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "1.9.0",
+      "build": "4"
+    }
+  },
+  {
+    "appVersionCode": 2020100,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "1.9.0",
+      "build": "4"
+    }
+  },
+  {
     "appVersionCode": 2020000,
     "minServerInfo": {
       "version": "1.8.0",

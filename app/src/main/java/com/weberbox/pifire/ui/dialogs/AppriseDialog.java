@@ -1,84 +1,91 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
+import android.view.View;
 
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.databinding.DialogInputTextBinding;
+import com.weberbox.pifire.databinding.DialogAppriseBinding;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAppriseCallback;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public class AppriseDialog {
 
+    private final BottomSheetDialog bottomSheetDialog;
     private final LayoutInflater inflater;
-    private final AlertDialog.Builder dialog;
     private final DialogAppriseCallback callback;
     private final Context context;
     private final String location;
     private final int title;
+    private final boolean delete;
     private final Integer position;
-    private String string;
 
     public AppriseDialog(Context context, @StringRes int title, Integer position,
-                         String location, DialogAppriseCallback callback) {
-        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+                         String location, boolean delete, DialogAppriseCallback callback) {
+        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.title = title;
         this.position = position;
         this.location = location;
+        this.delete = delete;
         this.callback = callback;
     }
 
-    public AlertDialog showDialog() {
-        DialogInputTextBinding binding = DialogInputTextBinding.inflate(inflater);
+    public BottomSheetDialog showDialog() {
+        DialogAppriseBinding binding = DialogAppriseBinding.inflate(inflater);
 
-        dialog.setTitle(title);
+        MaterialButton saveButton = binding.saveButton;
+        MaterialButton cancelButton = binding.cancelButton;
+        MaterialButton deleteButton = binding.deleteButton;
+        TextInputLayout inputLayout = binding.dialogAppriseTextLayout;
+        TextInputEditText input = binding.dialogAppriseText;
 
-        final TextInputLayout inputLayout = binding.dialogTextInputLayout;
-        final TextInputEditText input = binding.dialogTextInput;
+        binding.dialogAppriseHeaderTitle.setText(title);
 
         if (location != null) {
             input.setText(location);
+        } else {
+            saveButton.setEnabled(false);
         }
 
-        dialog.setView(binding.getRoot());
+        deleteButton.setVisibility(delete ? View.VISIBLE : View.GONE);
+        cancelButton.setVisibility(delete ? View.GONE : View.VISIBLE);
 
-        dialog.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            if (input.getText() != null) {
-                string = input.getText().toString();
-                if (!string.isEmpty()) {
+        saveButton.setOnClickListener(v -> {
+            Editable locationEdit = input.getText();
+            if (locationEdit != null) {
+                String location = locationEdit.toString();
+                if (location.isEmpty()) {
+                    saveButton.setEnabled(false);
+                    inputLayout.setError(context.getString(R.string.text_blank_error));
+                } else {
                     if (position != null) {
-                        callback.onDialogEdit(position, string);
+                        callback.onDialogEdit(position, location);
                     } else {
-                        callback.onDialogAdd(string);
+                        callback.onDialogAdd(location);
                     }
-                    dialog.dismiss();
                 }
+                bottomSheetDialog.dismiss();
             }
         });
 
-        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        cancelButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
 
-        final AlertDialog alertDialog = dialog.create();
-
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        }
-
-        alertDialog.show();
-
-        if (location == null) {
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-        }
+        deleteButton.setOnClickListener(view -> {
+            callback.onDialogDelete(position);
+            bottomSheetDialog.dismiss();
+        });
 
         input.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,10 +95,10 @@ public class AppriseDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    saveButton.setEnabled(false);
                     inputLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    saveButton.setEnabled(true);
                     inputLayout.setError(null);
                 }
             }
@@ -101,8 +108,24 @@ public class AppriseDialog {
             }
         });
 
-        input.requestFocus();
+        bottomSheetDialog.setContentView(binding.getRoot());
 
-        return alertDialog;
+        bottomSheetDialog.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
+        bottomSheetDialog.show();
+
+        Configuration configuration = context.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            if (bottomSheetDialog.getWindow() != null) {
+                bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
+        }
+
+        return bottomSheetDialog;
     }
 }

@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -22,6 +22,7 @@ import com.weberbox.pifire.config.PushConfig;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.views.preferences.AppriseLocationPreference;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
@@ -74,12 +75,15 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
         appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
 
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
         if (oneSignalConsent != null) {
             oneSignalConsent.setOnPreferenceClickListener(preference -> {
-                final FragmentManager fm = requireActivity().getSupportFragmentManager();
-                final FragmentTransaction ft = fm.beginTransaction();
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(android.R.id.content, new OneSignalConsentFragment())
+                requireActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.animator.fragment_fade_enter,
+                                R.animator.fragment_fade_exit)
+                        .replace(R.id.fragment_container, new OneSignalConsentFragment())
                         .addToBackStack(null)
                         .commit();
                 return true;
@@ -225,5 +229,16 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
                 }
             }
         }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof EditTextPreference) {
+            if (getContext() != null) {
+                new PrefsEditDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        super.onDisplayPreferenceDialog(preference);
     }
 }

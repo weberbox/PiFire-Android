@@ -11,11 +11,11 @@
     <color name="colorAccent">#1942DA</color>
     <color name="colorAccentDisabled">#811942DA</color>
     <color name="colorAccentRed">#DC0000</color>
-    <color name="colorAccentRedDisabled">#82B62B2B</color>
     <color name="colorLighterGrey">#454545</color>
     <color name="colorUiPrimaryDisabled">#80333333</color>
     <color name="colorTransBlack">#77000000</color>
     <color name="colorLightGrey">#FF333333</color>
+    <color name="colorLightGreyDisabled">#FF292929</color>
     <color name="colorGreyHint">#C8C7C7</color>
     <color name="colorGreyAlpha">#DF333333</color>
     <color name="colorInfo">#3498DB</color>
@@ -23,7 +23,8 @@
     <color name="colorOrangeButton">#F39C12</color>
     <color name="colorGreenButton">#00BC8C</color>
     <color name="colorWarning">#BA0101</color>
-    <color name="colorRedButton">#A50202</color>
+    <color name="colorRedButton">#FFA50202</color>
+    <color name="colorRedButtonDisabled">#82B62B2B</color>
     <color name="colorNavSelector">#40164DD9</color>
     <color name="colorNavSelected">#811942DA</color>
     <color name="colorTimerProgress">#ff414243</color>

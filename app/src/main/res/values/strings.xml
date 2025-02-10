@@ -59,11 +59,18 @@
     <string name="options">Options</string>
     <string name="offline">Offline</string>
     <string name="exit">Exit</string>
+    <string name="clear_all">Clear All</string>
 
     <string name="add_extra_header">Add New Header</string>
+    <string name="add_smart_profile">Add Profile</string>
+    <string name="add_apprise_location">Add Location</string>
     <string name="extra_headers_note">Manage custom headers. Each of the headers you add will be added to every API request</string>
 
     <string name="text_blank_error">Cannot be blank!</string>
+
+    <string name="probe_type_target">Target Temp Notifications</string>
+    <string name="probe_type_high_limit">High Limit Temp Notifications</string>
+    <string name="probe_type_low_limit">Low Limit Temp Notifications</string>
 
     <string name="grill_mode_start">Start</string>
     <string name="grill_mode_monitor">Monitor</string>
@@ -76,6 +83,7 @@
     <string name="grill_state_mode">Mode</string>
     <string name="dash_grill_title">Grill</string>
     <string name="grill_state_current">Current</string>
+    <string name="grill_state_eta">Eta</string>
     <string name="grill_state_target">Target</string>
     <string name="grill_state_set">Set</string>
 
@@ -87,6 +95,7 @@
     <string name="dash_pwm_control">PWM</string>
     <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
     <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
+    <string name="grill_reignite_temp">Attempt Re-ignite When Temp Achieved</string>
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
     <string name="grill_keep_warm_timer">Keep Warm When Timer Expires</string>
 
@@ -293,8 +302,6 @@
 
     <string name="settings_smart_start_temp_range_add">Add Smart Start Profile</string>
     <string name="settings_smart_start_temp_range_edit">Edit Smart Start Profile</string>
-    <string name="settings_smart_start_temp_range_delete">Delete Smart Start Profile</string>
-    <string name="settings_smart_start_temp_range_delete_content">Are you sure that you want to permanently delete this item?</string>
     <string name="settings_smart_start_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
 
     <string name="settings_cat_shutdown">Shutdown Settings</string>
@@ -337,8 +344,6 @@
     <string name="settings_apprise_locations">Locations</string>
     <string name="settings_apprise_add">Add Apprise Location</string>
     <string name="settings_apprise_edit">Edit Apprise Location</string>
-    <string name="settings_apprise_delete">Delete Apprise Location</string>
-    <string name="settings_apprise_delete_content">Are you sure that you want to permanently delete this location?</string>
 
     <string name="settings_cat_onesignal">Push Notifications</string>
     <string name="settings_cat_onesignal_consent">One Signal Consent</string>
@@ -439,8 +444,6 @@
 
     <string name="settings_pwm_temp_range_add">Add PWM Temp Profile</string>
     <string name="settings_pwm_temp_range_edit">Edit PWM Temp Profile</string>
-    <string name="settings_pwm_temp_range_delete">Delete PWM Temp Profile</string>
-    <string name="settings_pwm_temp_range_delete_content">Are you sure that you want to permanently delete this item?</string>
     <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
     <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
@@ -503,7 +506,7 @@
     <string name="pellets_cannot_delete_profile">Error cannot delete current profile</string>
     <string name="pellets_add_brand">Add New Brand</string>
     <string name="pellets_add_woods">Add New Wood</string>
-    <string name="pellets_dialog_save_load">Save &amp; Load</string>
+    <string name="pellets_dialog_load">Load</string>
 
     <string name="pellets_brand_holder">Generic</string>
     <string name="pellets_wood_holder">Alder</string>

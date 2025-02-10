@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="?listPreferredItemPaddingLeft"
-    android:paddingRight="?listPreferredItemPaddingRight"
+    android:paddingStart="?listPreferredItemPaddingStart"
+    android:paddingEnd="?listPreferredItemPaddingEnd"
     android:paddingBottom="@dimen/medium_spacing">
 
     <LinearLayout
@@ -11,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="2">
 
         <TextView
+            style="@style/Text14OpenSans"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
@@ -23,6 +25,7 @@
             android:textStyle="bold" />
 
         <TextView
+            style="@style/Text14OpenSans"
             android:layout_width="0dp"
             android:layout_height="35dp"
             android:layout_gravity="center"
@@ -31,30 +34,26 @@
             android:text="@string/settings_pwm_control_duty"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/settings_pwm_control_action"
-            android:textStyle="bold" />
-
     </LinearLayout>
-
-    <View
-        android:id="@+id/pwm_control_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/pwm_control_header"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="3dp"
-        android:background="@color/colorLightGrey" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pwm_control_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pwm_control_divider" />
+        android:layout_below="@+id/pwm_control_header"
+        android:layout_marginTop="5dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pwm_control_add_button"
+        style="@style/MaterialButtonPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwm_control_recycler"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/bg_ripple_primary_button"
+        android:text="@string/add_smart_profile"
+        app:backgroundTint="@color/dialog_positive_button_color_accent" />
 
 </RelativeLayout>

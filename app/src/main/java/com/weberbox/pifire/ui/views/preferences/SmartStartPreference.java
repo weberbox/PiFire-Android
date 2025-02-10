@@ -10,6 +10,7 @@ import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -21,7 +22,6 @@ import com.weberbox.pifire.model.local.SmartStartModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart.SSProfile;
 import com.weberbox.pifire.recycler.adapter.SmartStartAdapter;
-import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
 import com.weberbox.pifire.utils.AlertUtils;
@@ -103,6 +103,19 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
             recycler.setLayoutManager(new LinearLayoutManager(context));
             recycler.setAdapter(adapter);
         }
+
+        MaterialButton addButton = (MaterialButton) holder.findViewById(R.id.smart_start_add_button);
+        addButton.setOnClickListener(view -> {
+            if (socketConnected()) {
+                List<SmartStartModel> items = adapter.getSmartStartItems();
+                int setTemp = items.get(items.size() - 1).getTemp();
+
+                SmartStartDialog dialog = new SmartStartDialog(context,
+                        R.string.settings_smart_start_temp_range_add, null, null, null,
+                        setTemp, 240, 15, 2, units, false, items, this);
+                dialog.showDialog();
+            }
+        });
     }
 
     @Override
@@ -131,63 +144,40 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
                 maxTemp = items.get(position + 1).getTemp() - 1;
             }
 
+            boolean deleteEnabled = position != 0 && position != 1 && position >=
+                    adapter.getItemCount() - 1;
+
             SmartStartDialog dialog = new SmartStartDialog(context,
                     R.string.settings_smart_start_temp_range_edit, position, minTemp, maxTemp,
-                    temp, startUp, augerOn, pMode, units, items, this);
+                    temp, startUp, augerOn, pMode, units, deleteEnabled, items, this);
             dialog.showDialog();
         }
     }
 
     @Override
-    public void onSmartStartDelete(int position) {
+    public void onDialogDelete(int position) {
         if (socketConnected()) {
-            BottomButtonDialog dialog = new BottomButtonDialog.Builder((Activity) context)
-                    .setTitle(context.getString(R.string.settings_smart_start_temp_range_delete))
-                    .setMessage(context.getString(R.string.settings_smart_start_temp_range_delete_content))
-                    .setAutoDismiss(true)
-                    .setNegativeButton(context.getString(R.string.cancel),
-                            (dialogInterface, which) -> {
-                            })
-                    .setPositiveButtonWithColor(context.getString(R.string.delete),
-                            R.color.dialog_positive_button_color_red,
-                            (dialogInterface, which) -> {
-                                adapter.removeSmartStartItem(position);
+            adapter.removeSmartStartItem(position);
 
-                                List<Integer> rangeList = new ArrayList<>();
-                                List<SSProfile> profileList = new ArrayList<>();
+            List<Integer> rangeList = new ArrayList<>();
+            List<SSProfile> profileList = new ArrayList<>();
 
-                                List<SmartStartModel> items = adapter.getSmartStartItems();
-
-                                int itemCount = items.size();
-                                for (int i = 0; i < itemCount; i++) {
-                                    if (i != itemCount - 1) {
-                                        rangeList.add(items.get(i).getTemp());
-                                    }
-                                    profileList.add(new SSProfile()
-                                            .withStartUpTime(items.get(i).getStartUp())
-                                            .withAugerOnTime(items.get(i).getAugerOn())
-                                            .withPMode(items.get(i).getPMode()));
-
-                                }
-
-                                ServerControl.setSmartStartTable(socket, rangeList, profileList,
-                                        this::processPostResponse);
-                            })
-                    .build();
-            dialog.show();
-        }
-    }
-
-    @Override
-    public void onSmartStartAdd() {
-        if (socketConnected()) {
             List<SmartStartModel> items = adapter.getSmartStartItems();
-            int setTemp = items.get(items.size() - 1).getTemp();
 
-            SmartStartDialog dialog = new SmartStartDialog(context,
-                    R.string.settings_smart_start_temp_range_add, null, null, null,
-                    setTemp, 240, 15, 2, units, items, this);
-            dialog.showDialog();
+            int itemCount = items.size();
+            for (int i = 0; i < itemCount; i++) {
+                if (i != itemCount - 1) {
+                    rangeList.add(items.get(i).getTemp());
+                }
+                profileList.add(new SSProfile()
+                        .withStartUpTime(items.get(i).getStartUp())
+                        .withAugerOnTime(items.get(i).getAugerOn())
+                        .withPMode(items.get(i).getPMode()));
+
+            }
+
+            ServerControl.setSmartStartTable(socket, rangeList, profileList,
+                    this::processPostResponse);
         }
     }
 

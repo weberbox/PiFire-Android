@@ -36,6 +36,11 @@ public class Constants {
     public static final int FRAG_MANUAL_SETTINGS = 9;
     public static final int FRAG_PWM_SETTINGS = 10;
 
+    // Probe Notify Types
+    public static final String TYPE_TARGET = "probe";
+    public static final String TYPE_LIMIT_HIGH = "probe_limit_high";
+    public static final String TYPE_LIMIT_LOW = "probe_limit_low";
+
     // Fade Directions
     public static final int FADE_OUT = 0;
     public static final int FADE_IN = 1;

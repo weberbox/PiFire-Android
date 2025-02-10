@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -20,6 +22,8 @@ import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
+import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
+import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
@@ -67,6 +71,8 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference fanOffTime = findPreference(getString(R.string.prefs_work_splus_off_time));
         EditTextPreference fanDutyCycle = findPreference(getString(R.string.prefs_work_splus_ramp_dc));
 
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         if (pModeTable != null) {
             pModeTable.setOnPreferenceClickListener(preference -> {
@@ -345,5 +351,22 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 }
             }
         }
+    }
+
+    @Override
+    public void onDisplayPreferenceDialog(@NonNull Preference preference) {
+        if (preference instanceof EditTextPreference) {
+            if (getContext() != null) {
+                new PrefsEditDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        if (preference instanceof ListPreference) {
+            if (getContext() != null) {
+                new PrefsListDialog(getContext(), preference).showDialog();
+                return;
+            }
+        }
+        super.onDisplayPreferenceDialog(preference);
     }
 }

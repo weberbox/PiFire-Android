@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/settings_cat_server_title">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_server_title">
 
         <Preference
             app:key="@string/prefs_server_address"
@@ -9,7 +12,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_basic_auth_title">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_basic_auth_title">
 
         <SwitchPreferenceCompat
             app:key="@string/prefs_server_basic_auth"
@@ -23,7 +28,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_extra_headers_title">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_extra_headers_title">
 
         <SwitchPreferenceCompat
             app:key="@string/prefs_server_extra_headers"
@@ -35,8 +42,7 @@
     <PreferenceCategory>
 
         <com.weberbox.pifire.ui.views.preferences.ExtraHeadersPreference
-            app:key="@string/prefs_server_headers_table"
-            app:iconSpaceReserved="false" />
+            app:key="@string/prefs_server_headers_table" />
 
     </PreferenceCategory>
 </PreferenceScreen>

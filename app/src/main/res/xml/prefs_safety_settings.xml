@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:iconSpaceReserved="false"
+        android:layout="@layout/preference_cat"
         app:title="@string/settings_safety">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
@@ -14,16 +14,12 @@
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_min_start"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_min_start"
             app:title="@string/settings_safety_min_start"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_start"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_start"
             app:title="@string/settings_safety_max_start"
             app:useSimpleSummaryProvider="true" />
@@ -32,28 +28,23 @@
             app:defaultValue="@string/def_safety_retries"
             app:entries="@array/reignite_retries"
             app:entryValues="@array/reignite_retries"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_retries"
             app:title="@string/settings_safety_retries"
             app:useSimpleSummaryProvider="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_safety_max_temp"
-            app:dialogLayout="@layout/dialog_text_input_pref"
-            app:iconSpaceReserved="false"
             app:key="@string/prefs_safety_max_temp"
             app:title="@string/settings_safety_max_temp"
             app:useSimpleSummaryProvider="true" />
 
         <Preference
             android:layout="@layout/preference_cat_note"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_safety_note"
             app:title="@string/settings_note" />
 
         <Preference
             android:layout="@layout/preference_cat_warning"
-            app:iconSpaceReserved="false"
             app:summary="@string/settings_safety_warning"
             app:title="@string/settings_warning" />
 

@@ -7,16 +7,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatButton;
-
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogHeadersEditBinding;
-import com.weberbox.pifire.databinding.LayoutHeadersEditCardBinding;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogHeadersCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+
 public class ExtraHeadersDialog {
 
     private final BottomSheetDialog bottomSheetDialog;
@@ -41,21 +41,46 @@ public class ExtraHeadersDialog {
     public BottomSheetDialog showDialog() {
         DialogHeadersEditBinding binding = DialogHeadersEditBinding.inflate(inflater);
 
-        LayoutHeadersEditCardBinding headersEdit = binding.headersEditContainer;
-
-        AppCompatButton headerSave = binding.headersEditSave;
-        AppCompatButton headerDelete = binding.headersEditDelete;
-        headerKey = headersEdit.headersEditKeyTv;
-        headerValue = headersEdit.headersEditValueTv;
+        MaterialButton saveButton = binding.saveButton;
+        MaterialButton deleteButton = binding.deleteButton;
+        TextInputLayout headerKeyLayout = binding.headersEditKey;
+        TextInputLayout headerValueLayout = binding.headersEditValue;
+        headerKey = binding.headersEditKeyTv;
+        headerValue = binding.headersEditValueTv;
 
         headerKey.setText(key != null ? key : "");
         headerValue.setText(value != null ? value : "");
 
-        if (key != null || value != null) {
-            headerDelete.setVisibility(View.VISIBLE);
+        if (key != null && value != null) {
+            deleteButton.setVisibility(View.VISIBLE);
         } else {
-            headerDelete.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.GONE);
+            saveButton.setEnabled(false);
         }
+
+        saveButton.setOnClickListener(v -> {
+            Editable keyEdit = headerKey.getText();
+            Editable valueEdit = headerValue.getText();
+            if (keyEdit != null && valueEdit != null) {
+                String key = keyEdit.toString();
+                String value = valueEdit.toString();
+                if (key.isEmpty()) {
+                    headerKeyLayout.setError(context.getString(R.string.text_blank_error));
+                }
+                if (value.isEmpty()) {
+                    headerValueLayout.setError(context.getString(R.string.text_blank_error));
+                }
+                if (!key.isEmpty() && !value.isEmpty()) {
+                    callback.onDialogSave(key, value, position);
+                    bottomSheetDialog.dismiss();
+                }
+            }
+        });
+
+        deleteButton.setOnClickListener(v -> {
+            callback.onDialogDelete(position);
+            bottomSheetDialog.dismiss();
+        });
 
         headerKey.addTextChangedListener(new TextWatcher() {
             @Override
@@ -65,9 +90,14 @@ public class ExtraHeadersDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    headerKey.setError(context.getString(R.string.text_blank_error));
+                    saveButton.setEnabled(false);
+                    headerKeyLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
-                    headerKey.setError(null);
+                    if (headerValue.getText() != null &&
+                            !headerValue.getText().toString().isEmpty()) {
+                        saveButton.setEnabled(true);
+                    }
+                    headerKeyLayout.setError(null);
                 }
             }
 
@@ -84,39 +114,20 @@ public class ExtraHeadersDialog {
             @Override
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
-                    headerValue.setError(context.getString(R.string.text_blank_error));
+                    saveButton.setEnabled(false);
+                    headerValueLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
-                    headerValue.setError(null);
+                    if (headerKey.getText() != null &&
+                            !headerKey.getText().toString().isEmpty()) {
+                        saveButton.setEnabled(true);
+                    }
+                    headerValueLayout.setError(null);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
             }
-        });
-
-        headerSave.setOnClickListener(v -> {
-            Editable keyEdit = headerKey.getText();
-            Editable valueEdit = headerValue.getText();
-            if (keyEdit != null && valueEdit != null) {
-                String key = keyEdit.toString();
-                String value = valueEdit.toString();
-                if (key.isEmpty()) {
-                    headerKey.setError(context.getString(R.string.text_blank_error));
-                }
-                if (value.isEmpty()) {
-                    headerValue.setError(context.getString(R.string.text_blank_error));
-                }
-                if (!key.isEmpty() && !value.isEmpty()) {
-                    callback.onDialogSave(key, value, position);
-                    bottomSheetDialog.dismiss();
-                }
-            }
-        });
-
-        headerDelete.setOnClickListener(v -> {
-            callback.onDialogDelete(position);
-            bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.setContentView(binding.getRoot());

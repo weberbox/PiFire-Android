@@ -3,6 +3,7 @@ package com.weberbox.pifire;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,6 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
@@ -125,6 +129,14 @@ public class MainActivity extends BaseActivity implements
         if (getSupportActionBar() != null) {
             setupActionBar(getSupportActionBar());
         }
+
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
+            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
+            v.setPadding(0, topInset, 0, bottomInset);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         panelsLayout = binding.overlappingPanels;
         startPanel = binding.startPanel;
@@ -364,7 +376,11 @@ public class MainActivity extends BaseActivity implements
         Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
         intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_left, android.R.anim.fade_out);
+        } else {
+            overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+        }
     };
 
     private final NavBindingCallback navBindingCallback = new NavBindingCallback() {
@@ -380,7 +396,11 @@ public class MainActivity extends BaseActivity implements
             Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
             intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, android.R.anim.fade_out);
+            } else {
+                overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+            }
         }
 
         @Override

@@ -32,6 +32,15 @@ public class VersionUtils {
         return isSupportedMinMax(serverVersion, requiredVersion, true);
     }
 
+    public static boolean isSupportedBuild(String requiredVersion, String requiredBuild) {
+        String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
+        String serverBuild = Prefs.getString("prefs_server_build", "0");
+        if (isSupportedMinMax(serverVersion, requiredVersion, true)) {
+            return isSupportedMinMax(serverBuild, requiredBuild, true);
+        }
+        return false;
+    }
+
     public static boolean checkFirstRun(Context context) {
         String prefsVersion = context.getString(R.string.prefs_installed_version);
         String prefsComplete = context.getString(R.string.prefs_setup_completed);

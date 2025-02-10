@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.util.TypedValue;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,12 +39,16 @@ public final class ViewUtils {
     public static void toggleStatusBarColor(Activity activity, int colorFrom, int colorTo) {
         Window window = activity.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
+        }
         ValueAnimator anim = ValueAnimator.ofObject(new ArgbEvaluator(),
                 ContextCompat.getColor(activity, colorFrom),
                 ContextCompat.getColor(activity, colorTo));
         anim.setDuration(405);
-        anim.addUpdateListener(animation -> window.setStatusBarColor((int) anim.getAnimatedValue()));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            anim.addUpdateListener(animation -> window.setStatusBarColor((int) anim.getAnimatedValue()));
+        }
         anim.start();
     }
 
@@ -54,7 +59,9 @@ public final class ViewUtils {
 
         Window window = activity.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            window.setStatusBarColor(ContextCompat.getColor(activity, R.color.colorTransparent));
+        }
         TypedValue colorPrimaryTypedValue = new TypedValue();
         TypedValue actionModeBackgroundTypedValue = new TypedValue();
         activity.getTheme().resolveAttribute(R.attr.colorPrimary, colorPrimaryTypedValue, true);
@@ -74,8 +81,10 @@ public final class ViewUtils {
 
         ValueAnimator anim = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         anim.setDuration(duration);
-        anim.addUpdateListener(animator ->
-                window.setStatusBarColor((int) animator.getAnimatedValue()));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            anim.addUpdateListener(animator ->
+                    window.setStatusBarColor((int) animator.getAnimatedValue()));
+        }
         anim.start();
     }
 }

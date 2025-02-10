@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:id="@+id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
         android:id="@+id/relative_layout_dialog"
         style="@style/MaterialDialog"
@@ -60,17 +66,22 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_negative"
-                style="@style/MaterialDialog.NegativeButton"
+                style="@style/MaterialButtonPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_ripple_primary_button"
+                app:backgroundTint="@color/dialog_positive_button_color_grey"
                 app:iconGravity="textStart"
                 tools:text="Negative" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_positive"
-                style="@style/MaterialDialog.PositiveButton"
+                style="@style/MaterialButtonPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_primary_button"
+                app:backgroundTint="@color/dialog_positive_button_color_grey"
                 app:iconGravity="textStart"
                 tools:text="Positive" />
         </LinearLayout>

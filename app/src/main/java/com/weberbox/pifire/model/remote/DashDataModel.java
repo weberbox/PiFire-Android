@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.weberbox.pifire.utils.adapters.CustomTypeAdapterFactory;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -112,6 +113,9 @@ public class DashDataModel {
         @SerializedName("target")
         @Expose
         private Integer target;
+        @SerializedName("eta")
+        @Expose
+        private Integer eta;
         @SerializedName("shutdown")
         @Expose
         private Boolean shutdown;
@@ -121,6 +125,15 @@ public class DashDataModel {
         @SerializedName("last_check")
         @Expose
         private Double lastCheck;
+        @SerializedName("reignite")
+        @Expose
+        private Boolean reignite;
+        @SerializedName("condition")
+        @Expose
+        private String condition;
+        @SerializedName("triggered")
+        @Expose
+        private Boolean triggered;
 
         public String getLabel() {
             return label;
@@ -162,6 +175,14 @@ public class DashDataModel {
             this.target = target;
         }
 
+        public Integer getEta() {
+            return eta;
+        }
+
+        public void setEta(Integer eta) {
+            this.eta = eta;
+        }
+
         public Boolean getShutdown() {
             return shutdown;
         }
@@ -176,6 +197,30 @@ public class DashDataModel {
 
         public void setKeepWarm(Boolean keepWarm) {
             this.keepWarm = keepWarm;
+        }
+
+        public Boolean getReignite() {
+            return reignite;
+        }
+
+        public void setReignite(Boolean reignite) {
+            this.reignite = reignite;
+        }
+
+        public String getCondition() {
+            return condition;
+        }
+
+        public void setCondition(String condition) {
+            this.condition = condition;
+        }
+
+        public Boolean getTriggered() {
+            return triggered;
+        }
+
+        public void setTriggered(Boolean triggered) {
+            this.triggered = triggered;
         }
 
         public Double getLastCheck() {
@@ -236,7 +281,10 @@ public class DashDataModel {
     }
 
     public static DashDataModel parseJSON(String response) {
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .registerTypeAdapterFactory(new CustomTypeAdapterFactory())
+                .create();
         return gson.fromJson(response, DashDataModel.class);
     }
 

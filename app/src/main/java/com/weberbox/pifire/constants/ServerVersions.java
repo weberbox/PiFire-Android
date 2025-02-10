@@ -24,5 +24,6 @@ public class ServerVersions {
     public static final String V_180 = "1.8.0";
     public static final String V_181 = "1.8.1";
     public static final String V_182 = "1.8.2";
+    public static final String V_190 = "1.9.0";
 
 }

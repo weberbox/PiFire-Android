@@ -18,7 +18,7 @@
     <string name="prefs_server_headers">prefs_server_headers</string>
     <string name="prefs_server_headers_table">prefs_server_headers_table</string>
 
-    <string name="prefs_event_amount">pref_event_amount</string>
+    <string name="prefs_event_amount">prefs_event_amount</string>
 
     <string name="prefs_onesignal_consent_dismiss">prefs_onesignal_consent_dismiss</string>
 

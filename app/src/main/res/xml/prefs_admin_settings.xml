@@ -1,6 +1,8 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:layout="@layout/preference_cat"
         app:key="@string/prefs_manual_mode_cat"
         app:title="@string/settings_cat_manual_functions">
 
@@ -11,7 +13,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_admin">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_admin">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:key="@string/prefs_admin_debug"
@@ -20,7 +24,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_data_manage">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_data_manage">
 
         <Preference
             app:key="@string/prefs_admin_delete_history"
@@ -49,7 +55,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_power">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_power">
 
         <Preference
             app:key="@string/prefs_admin_restart"
@@ -65,7 +73,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/settings_cat_boot">
+    <PreferenceCategory
+        android:layout="@layout/preference_cat"
+        app:title="@string/settings_cat_boot">
 
         <com.weberbox.pifire.ui.views.preferences.SwitchPreferenceCompatSocket
             app:key="@string/prefs_admin_boot_to_monitor"

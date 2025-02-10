@@ -1,39 +1,44 @@
 package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
-import android.view.WindowManager;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogSmartStartBinding;
 import com.weberbox.pifire.model.local.SmartStartModel;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
+import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import java.util.List;
 
 public class SmartStartDialog {
 
+    private final BottomSheetDialog bottomSheetDialog;
     private final LayoutInflater inflater;
-    private final AlertDialog.Builder dialog;
     private final DialogSmartStartCallback callback;
     private final Context context;
     private final String units;
     private final int title;
+    private final boolean delete;
     private final Integer minTemp, maxTemp, setTemp, startUp, augerOn, pMode, position;
     private final List<SmartStartModel> list;
     private TextInputEditText tempInput, startUpInput, augerOnInput, pModeInput;
 
     public SmartStartDialog(Context context, @StringRes int title, Integer position,
                             Integer minTemp, Integer maxTemp, Integer setTemp, Integer startUp,
-                            Integer augerOn, Integer pMode, String units,
+                            Integer augerOn, Integer pMode, String units, boolean delete,
                             List<SmartStartModel> list, DialogSmartStartCallback callback) {
-        dialog = new AlertDialog.Builder(context, R.style.AlertDialogThemeMaterial);
+        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.title = title;
@@ -45,20 +50,20 @@ public class SmartStartDialog {
         this.augerOn = augerOn;
         this.pMode = pMode;
         this.units = units;
+        this.delete = delete;
         this.list = list;
         this.callback = callback;
     }
 
-    public AlertDialog showDialog() {
+    public BottomSheetDialog showDialog() {
         DialogSmartStartBinding binding = DialogSmartStartBinding.inflate(inflater);
-
-        dialog.setTitle(title);
 
         TextView dialogNote = binding.dialogSmartStartTempNote;
         tempInput = binding.dialogSmartStartTempText;
         startUpInput = binding.dialogSmartStartStartUpText;
         augerOnInput = binding.dialogSmartStartAugerOnText;
         pModeInput = binding.dialogSmartStartPModeText;
+        binding.dialogSmartStartHeaderTitle.setText(title);
 
         String note;
         if (minTemp == null) {
@@ -95,9 +100,19 @@ public class SmartStartDialog {
         augerOnInput.setText((String.valueOf(augerOn)));
         pModeInput.setText((String.valueOf(pMode)));
 
-        dialog.setView(binding.getRoot());
+        MaterialButton saveButton = binding.saveButton;
+        MaterialButton cancelButton = binding.cancelButton;
+        MaterialButton deleteButton = binding.deleteButton;
 
-        dialog.setPositiveButton(R.string.save, (dialog, which) -> {
+        saveButton.setEnabled(tempInput != null);
+        saveButton.setEnabled(startUpInput != null);
+        saveButton.setEnabled(augerOnInput != null);
+        saveButton.setEnabled(pModeInput != null);
+
+        deleteButton.setVisibility(delete ? View.VISIBLE : View.GONE);
+        cancelButton.setVisibility(delete ? View.GONE : View.VISIBLE);
+
+        saveButton.setOnClickListener(v -> {
             if (tempInput.getText() != null && startUpInput.getText() != null &&
                     augerOnInput.getText() != null && pModeInput.getText() != null) {
                 Integer temp = Integer.valueOf(tempInput.getText().toString());
@@ -114,25 +129,34 @@ public class SmartStartDialog {
                     callback.onDialogAdd(list, temp, start, auger, pMode);
                 }
             }
+            bottomSheetDialog.dismiss();
         });
 
-        dialog.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
+        cancelButton.setOnClickListener(v -> bottomSheetDialog.dismiss());
 
-        AlertDialog alertDialog = dialog.create();
+        deleteButton.setOnClickListener(view -> {
+            callback.onDialogDelete(position);
+            bottomSheetDialog.dismiss();
+        });
 
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setSoftInputMode(
-                    WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        bottomSheetDialog.setContentView(binding.getRoot());
+
+        bottomSheetDialog.setOnShowListener(dialog -> {
+            @SuppressWarnings("rawtypes")
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        });
+
+        bottomSheetDialog.show();
+
+        Configuration configuration = context.getResources().getConfiguration();
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                configuration.screenWidthDp > 450) {
+            if (bottomSheetDialog.getWindow() != null) {
+                bottomSheetDialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
+            }
         }
 
-        alertDialog.show();
-
-        if (maxTemp == null && position != null) {
-            startUpInput.requestFocus();
-        } else {
-            tempInput.requestFocus();
-        }
-
-        return alertDialog;
+        return bottomSheetDialog;
     }
 }

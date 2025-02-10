@@ -11,13 +11,14 @@
         android:id="@+id/setup_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.PiFire.AppBarOverlay">
+        android:theme="@style/Theme.PiFire.AppBarOverlay"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/setup_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryDark"
             app:popupTheme="@style/Theme.PiFire.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

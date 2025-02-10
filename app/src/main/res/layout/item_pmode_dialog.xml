@@ -3,43 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="45dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/bg_ripple_event_item"
     android:orientation="horizontal"
     android:weightSum="3">
 
     <TextView
         android:id="@+id/pmode_item_tv"
-        style="@style/Text15Aller"
+        style="@style/TextOpenSans"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/bg_table_content_cell"
         android:gravity="center"
         android:maxLines="1"
         android:padding="6dp"
+        android:textSize="15sp"
         tools:text="@string/placeholder_number" />
 
     <TextView
         android:id="@+id/pmode_item_aon"
-        style="@style/Text15Aller"
+        style="@style/TextOpenSans"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/bg_table_content_cell"
         android:gravity="center"
         android:maxLines="1"
         android:padding="6dp"
+        android:textSize="15sp"
         tools:text="@string/placeholder_number" />
 
     <TextView
         android:id="@+id/pmode_item_aoff"
-        style="@style/Text15Aller"
+        style="@style/TextOpenSans"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/bg_table_content_cell"
         android:gravity="center"
         android:maxLines="1"
         android:padding="6dp"
+        android:textSize="15sp"
         tools:text="@string/placeholder_number" />
 
 </LinearLayout>

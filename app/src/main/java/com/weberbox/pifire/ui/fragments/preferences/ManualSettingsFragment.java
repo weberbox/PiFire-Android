@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -61,6 +63,9 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         igniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
         powerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
         pwmOutput = findPreference(getString(R.string.prefs_manual_mode_pwm));
+
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         if (manualMode != null && fanEnable != null && augerEnable != null &&
                 igniterEnable != null && powerEnable != null) {

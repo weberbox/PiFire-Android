@@ -74,7 +74,6 @@ public final class BottomIconDialog extends AbstractDialog {
                 if (this.dialog.getWindow() != null) {
                     this.dialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
                 }
-                this.dialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
             }
         });
     }

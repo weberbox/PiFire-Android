@@ -1,6 +1,8 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -29,6 +31,9 @@ public class OneSignalConsentFragment extends PreferenceFragmentCompat implement
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
+
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
     }
 
     @Override

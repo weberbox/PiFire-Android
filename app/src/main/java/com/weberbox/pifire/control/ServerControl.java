@@ -5,7 +5,6 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.interfaces.SocketCallback;
-import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
 import com.weberbox.pifire.model.remote.ControlDataModel;
 import com.weberbox.pifire.model.remote.ControlDataModel.Manual;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
@@ -117,17 +116,8 @@ public class ServerControl {
     }
 
     // Set Temp Notify
-    public static void setProbeNotify(Socket socket, DashProbe probe,
-                                      ArrayList<NotifyData> notifyData, String temp,
+    public static void setProbeNotify(Socket socket, ArrayList<NotifyData> notifyData,
                                       boolean holdMode, SocketCallback callback) {
-        for (NotifyData notify : notifyData) {
-            if (notify.getLabel().equals(probe.getLabel())) {
-                notify.setTarget(Integer.valueOf(temp));
-                notify.setKeepWarm(probe.getKeepWarm());
-                notify.setShutdown(probe.getShutdown());
-                notify.setReq(true);
-            }
-        }
         String json = new Gson().toJson(new ControlDataModel()
                 .withNotifyData(notifyData)
                 .withUpdated(holdMode));
@@ -135,16 +125,8 @@ public class ServerControl {
     }
 
     // Clear Temp Notify
-    public static void clearProbeNotify(Socket socket, DashProbe probe,
-                                        ArrayList<NotifyData> notifyData, SocketCallback callback) {
-        for (NotifyData notify : notifyData) {
-            if (notify.getLabel().equals(probe.getLabel())) {
-                notify.setTarget(0);
-                notify.setKeepWarm(false);
-                notify.setShutdown(false);
-                notify.setReq(false);
-            }
-        }
+    public static void clearProbeNotify(Socket socket, ArrayList<NotifyData> notifyData,
+                                        SocketCallback callback) {
         String json = new Gson().toJson(new ControlDataModel()
                 .withNotifyData(notifyData));
         controlPostEmit(socket, json, callback);

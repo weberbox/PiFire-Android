@@ -76,6 +76,31 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextOpenSans" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/open_sans_font_family</item>
+        <item name="fontFamily">@font/open_sans_font_family</item>
+    </style>
+
+    <style name="Text16OpenSans" parent="TextOpenSans">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text14OpenSans" parent="TextOpenSans">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text12OpenSans" parent="TextOpenSans">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text10OpenSans" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/open_sans_font_family</item>
+        <item name="fontFamily">@font/open_sans_font_family</item>
+    </style>
+
     <style name="TextTransparent" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textColor">@android:color/transparent</item>
     </style>
@@ -87,31 +112,14 @@
         <item name="android:rotation">180</item>
     </style>
 
-    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
-        <item name="colorControlActivated">@color/colorAccent</item>
-    </style>
-
-    <style name="MainButtonPrimary" parent="@style/TextAppearance.AppCompat.Widget.Button">
+    <style name="MaterialButtonPrimary" parent="@style/MaterialDialog">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:background">@drawable/bg_main_button_primary_selector</item>
-        <item name="android:paddingTop">13dp</item>
-        <item name="android:paddingBottom">13dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/knockout_regular</item>
-    </style>
-
-    <style name="MainButtonAccent" parent="@style/MainButtonPrimary">
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:background">@drawable/bg_main_button_accent_selector</item>
-    </style>
-
-    <style name="HeadersButton" parent="@style/TextAppearance.AppCompat.Widget.Button">
-        <item name="android:textSize">24sp</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:background">@drawable/bg_headers_button</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">@font/knockout_regular</item>
+        <item name="android:color">@color/colorLightGrey</item>
     </style>
 
     <style name="BottomSheetDialogFloating" parent="Theme.Design.Light.BottomSheetDialog">
@@ -128,66 +136,6 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="AlertDialogThemeMaterial" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:windowMinWidthMinor">85%</item>
-        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyleMaterial</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyleMaterial</item>
-        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyleMaterial</item>
-    </style>
-
-    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-        <item name="android:windowMinWidthMinor">85%</item>
-        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
-    </style>
-
-    <style name="NegativeButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/dialog_button_color</item>
-    </style>
-
-    <style name="PositiveButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/dialog_button_color</item>
-    </style>
-
-    <style name="NeutralButtonStyleMaterial" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/dialog_button_color</item>
-    </style>
-
-    <style name="AlerterButton" parent="Widget.MaterialComponents.Button">
-        <item name="android:textAppearance">@style/Text15AllerBold</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="SnackbarThemeMaterial" parent="Widget.MaterialComponents.Snackbar">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
-        <item name="actionTextColorAlpha">1</item>
-    </style>
-
-    <style name="SnackbarButtonThemeMaterial" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
-    <style name="SnackbarTextThemeMaterial" parent="Widget.MaterialComponents.Snackbar.TextView">
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
-
-    <style name="ThemeOverlay.App.Snackbar" parent="">
-        <item name="colorOnSurface">@color/colorPrimaryLighter</item>
-    </style>
-
-    <style name="PreferencesActionBar" parent="@style/Widget.MaterialComponents.ActionBar.Primary">
-        <item name="background">@color/colorAccent</item>
-    </style>
-
-    <style name="FabRoundedSquareOverlay" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">10dp</item>
-        <item name="cornerSizeTopRight">10dp</item>
-        <item name="cornerSizeBottomRight">10dp</item>
-        <item name="cornerSizeBottomLeft">10dp</item>
-    </style>
 
     <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_bottom_sheet_dialog</item>
@@ -200,6 +148,55 @@
 
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
         <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="tint">?colorOnSurface</item>
+        <item name="android:alpha">0.3</item>
+    </style>
+
+    <style name="AlerterButton" parent="Widget.Material3.Button">
+        <item name="android:textAppearance">@style/Text15AllerBold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="PreferencesActionBar" parent="@style/Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="FabRoundedSquareOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeBottomRight">10dp</item>
+        <item name="cornerSizeBottomLeft">10dp</item>
+    </style>
+
+    <style name="AlertDialogThemeMaterial" parent="ThemeOverlay.Material3.Dialog.Alert">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyleMaterial</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyleMaterial</item>
+        <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyleMaterial</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.Dialog.Alert">
+        <item name="android:windowMinWidthMinor">85%</item>
+        <item name="android:windowBackground">@drawable/bg_alert_dialog</item>
+    </style>
+
+    <style name="NegativeButtonStyleMaterial" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dialog_button_color</item>
+    </style>
+
+    <style name="PositiveButtonStyleMaterial" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dialog_button_color</item>
+    </style>
+
+    <style name="NeutralButtonStyleMaterial" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dialog_button_color</item>
     </style>
 
     <style name="MaterialDialog">
@@ -234,41 +231,53 @@
         <item name="android:textColor">@color/material_dialog_message_text_color</item>
     </style>
 
-    <style name="MaterialDialog.PositiveButton" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton.Icon">
+    <style name="MaterialDialog.PositiveButton" parent="@style/Widget.Material3.Button.UnelevatedButton">
         <item name="android:layout_margin">4dp</item>
         <item name="android:letterSpacing">0.025</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="MaterialDialog.NegativeButton" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+    <style name="MaterialDialog.NegativeButton" parent="Widget.Material3.Button.OutlinedButton.Icon">
         <item name="android:layout_margin">4dp</item>
         <item name="android:letterSpacing">0.025</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="MaterialDialog.Positive.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="MaterialDialog.Positive.TextButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:layout_margin">4dp</item>
         <item name="android:letterSpacing">0.025</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="MaterialDialog.Negative.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="MaterialDialog.Negative.TextButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:layout_margin">4dp</item>
         <item name="android:letterSpacing">0.025</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/material_dialog_negative_text_color</item>
     </style>
 
-    <style name="TextInputLayoutFilledBox" parent="@style/Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
+    <style name="TextInputLayoutFilledBox" parent="@style/Widget.Material3.TextInputLayout.FilledBox">
         <item name="boxStrokeColor">@color/selector_stroke_color</item>
     </style>
 
-    <style name="TextInputEditTextFilledBox" parent="@style/Widget.MaterialComponents.TextInputEditText.FilledBox">
+    <style name="TextInputEditTextFilledBox" parent="@style/Widget.Material3.TextInputEditText.FilledBox">
         <item name="android:paddingStart" tools:ignore="NewApi">2dp</item>
         <item name="android:paddingEnd" tools:ignore="NewApi">2dp</item>
         <item name="android:paddingLeft">2dp</item>
         <item name="android:paddingRight">2dp</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Preference" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/App.Preference.SwitchPreference</item>
+    </style>
+
+    <style name="App.Preference.SwitchPreference" parent="Preference.SwitchPreference.Material">
+        <item name="android:widgetLayout">@layout/preference_switch</item>
     </style>
 
 </resources>

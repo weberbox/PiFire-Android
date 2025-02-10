@@ -10,6 +10,7 @@ import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pixplicity.easyprefs.library.Prefs;
@@ -20,7 +21,6 @@ import com.weberbox.pifire.interfaces.AppriseCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.recycler.adapter.AppriseAdapter;
 import com.weberbox.pifire.ui.dialogs.AppriseDialog;
-import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAppriseCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
@@ -78,15 +78,17 @@ public class AppriseLocationPreference extends Preference implements AppriseCall
         adapter = new AppriseAdapter(locations, this);
         recycler.setLayoutManager(new LinearLayoutManager(context));
         recycler.setAdapter(adapter);
-    }
 
-    @Override
-    public void onLocationAdd() {
-        if (socketConnected()) {
-            AppriseDialog dialog = new AppriseDialog(context,
-                    R.string.settings_apprise_add, null, null, this);
-            dialog.showDialog();
-        }
+        MaterialButton addButton = (MaterialButton) holder.findViewById(R.id.apprise_add_button);
+        addButton.setOnClickListener(view -> {
+            if (socketConnected()) {
+                if (socketConnected()) {
+                    AppriseDialog dialog = new AppriseDialog(context,
+                            R.string.settings_apprise_add, null, null, false, this);
+                    dialog.showDialog();
+                }
+            }
+        });
     }
 
     @Override
@@ -95,29 +97,8 @@ public class AppriseLocationPreference extends Preference implements AppriseCall
             List<String> locations = adapter.getLocations();
             String location = locations.get(position);
             AppriseDialog dialog = new AppriseDialog(context,
-                    R.string.settings_apprise_edit, position, location, this);
+                    R.string.settings_apprise_edit, position, location, true, this);
             dialog.showDialog();
-        }
-    }
-
-    @Override
-    public void onLocationDelete(int position) {
-        if (socketConnected()) {
-            BottomButtonDialog dialog = new BottomButtonDialog.Builder((Activity) context)
-                    .setTitle(context.getString(R.string.settings_apprise_delete))
-                    .setMessage(context.getString(R.string.settings_apprise_delete_content))
-                    .setAutoDismiss(true)
-                    .setNegativeButton(context.getString(R.string.cancel),
-                            (dialogInterface, which) -> {
-                            })
-                    .setPositiveButtonWithColor(context.getString(R.string.delete),
-                            R.color.dialog_positive_button_color_red,
-                            (dialogInterface, which) -> {
-                                adapter.removeLocation(position);
-                                updateLocations(adapter.getLocations());
-                            })
-                    .build();
-            dialog.show();
         }
     }
 
@@ -131,6 +112,14 @@ public class AppriseLocationPreference extends Preference implements AppriseCall
     public void onDialogEdit(int position, String location) {
         adapter.updateLocation(position, location);
         updateLocations(adapter.getLocations());
+    }
+
+    @Override
+    public void onDialogDelete(int position) {
+        if (socketConnected()) {
+            adapter.removeLocation(position);
+            updateLocations(adapter.getLocations());
+        }
     }
 
     private void processPostResponse(String response) {

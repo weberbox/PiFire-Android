@@ -36,8 +36,8 @@ def getGitBranch = { ->
 }
 
 def vMajor = 2
-def vMinor = 3
-def vPatch = 1
+def vMinor = 4
+def vPatch = 0
 
 android {
     compileSdk 35
@@ -134,8 +134,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.5'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.5'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.6'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
