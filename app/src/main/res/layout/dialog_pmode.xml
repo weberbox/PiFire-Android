@@ -34,37 +34,40 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                style="@style/Text15AllerBold"
+                style="@style/TextOpenSans"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="6dp"
-                android:text="@string/settings_pmode_mode" />
+                android:text="@string/settings_pmode_mode"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
-                style="@style/Text15AllerBold"
+                style="@style/TextOpenSans"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="6dp"
-                android:text="@string/settings_pmode_auger_on" />
+                android:text="@string/settings_pmode_auger_on"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
-                style="@style/Text15AllerBold"
+                style="@style/TextOpenSans"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="6dp"
-                android:text="@string/settings_pmode_auger_off" />
+                android:text="@string/settings_pmode_auger_off"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

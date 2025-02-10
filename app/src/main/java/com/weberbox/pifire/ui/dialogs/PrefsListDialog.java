@@ -49,10 +49,8 @@ public class PrefsListDialog {
 
         binding.dialogPrefsListHeaderTitle.setText(title);
 
-        List<CharSequence> entries = Arrays.stream(((ListPreference) preference)
-                .getEntries()).toList();
-        List<CharSequence> entryValues = Arrays.stream(((ListPreference) preference)
-                .getEntryValues()).toList();
+        List<CharSequence> entries = Arrays.asList(((ListPreference) preference).getEntries());
+        List<CharSequence> values = Arrays.asList(((ListPreference) preference).getEntryValues());
 
         ArrayAdapter<CharSequence> listAdapter = new ArrayAdapter<>(context,
                 R.layout.item_menu_popup, entries);
@@ -64,7 +62,7 @@ public class PrefsListDialog {
             Editable edit = input.getText();
             if (edit != null) {
                 int position = listAdapter.getPosition(edit.toString());
-                ((ListPreference) preference).setValue(entryValues.get(position).toString());
+                ((ListPreference) preference).setValue(values.get(position).toString());
             }
             bottomSheetDialog.dismiss();
         });
