@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -24,6 +25,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
@@ -58,6 +61,13 @@ public class ProbeSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
+
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);
     }

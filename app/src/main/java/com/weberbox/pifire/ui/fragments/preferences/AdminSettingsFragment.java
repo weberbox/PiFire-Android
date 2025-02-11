@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -22,6 +23,8 @@ import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
@@ -59,6 +62,13 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
         Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

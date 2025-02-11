@@ -1,28 +1,51 @@
 <resources>
 
+    <style name="Theme.PiFire" parent="BaseAppTheme" />
+    <style name="Theme.PiFire.Settings" parent="BaseAppSettingsTheme" />
+
     <style name="Theme.PiFire.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimaryDark</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/bg_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.PiFire.NoActionBar</item>
     </style>
 
-    <style name="Theme.PiFire" parent="Theme.Material3.Dark">
+    <style name="BaseAppTheme" parent="Theme.Material3.Dark">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">@color/colorAccent</item>
         <item name="colorPrimaryContainer">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
-        <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:colorControlActivated">@color/colorAccent</item>
         <item name="colorOfflineStatus">@color/colorAccentRed</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:actionModeBackground">@color/colorAccent</item>
         <item name="cursorErrorColor">@color/colorAccentRed</item>
         <item name="cursorColor">@color/colorAccent</item>
+        <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="android:actionModeBackground">@color/colorAccent</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="BaseAppSettingsTheme" parent="@style/Theme.Material3.Dark">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="preferenceTheme">@style/ThemeOverlay.App.Preference</item>
+        <item name="android:textAppearance">@style/Text14OpenSans</item>
+        <item name="android:textAppearanceListItem">@style/Text16OpenSans</item>
+        <item name="android:textAppearanceListItemSecondary">@style/Text14OpenSans</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/colorAccent</item>
+        <item name="colorPrimaryContainer">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorOfflineStatus">@color/colorAccentRed</item>
+        <item name="android:colorControlActivated">@color/colorAccent</item>
+        <item name="android:navigationBarColor">#44000000</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="Theme.PiFire.NoActionBar">
@@ -34,26 +57,5 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="Theme.PiFire.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="Theme.PiFire.SettingsTheme" parent="@style/Theme.Material3.Dark">
-        <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">true</item>
-        <item name="actionBarStyle">@style/PreferencesActionBar</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-        <item name="colorOfflineStatus">@color/colorAccentRed</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="android:colorControlActivated">@color/colorAccent</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
-        <item name="preferenceTheme">@style/ThemeOverlay.App.Preference</item>
-        <item name="colorOnPrimary">@color/colorAccent</item>
-        <item name="colorPrimaryContainer">@color/colorAccent</item>
-        <item name="android:textAppearance">@style/Text14OpenSans</item>
-        <item name="android:textAppearanceListItem">@style/Text16OpenSans</item>
-        <item name="android:textAppearanceListItemSecondary">@style/Text14OpenSans</item>
-    </style>
+    <style name="Theme.PiFire.PopupOverlay" parent="ThemeOverlay.Material3.Dark" />
 </resources>

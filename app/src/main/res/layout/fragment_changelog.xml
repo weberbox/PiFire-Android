@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/changelog_toolbar"
+        android:clipToPadding="false"
         app:chglib_current_version_color="@color/colorAccent"
         app:chglib_row_header_layout="@layout/layout_changelog_header"
         app:chglib_row_layout="@layout/layout_changelog_row" />

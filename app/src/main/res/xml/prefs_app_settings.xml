@@ -81,7 +81,7 @@
             app:dependency="@string/prefs_crash_enable"
             app:isPreferenceVisible="false" />
 
-        <EditTextPreference
+        <com.weberbox.pifire.ui.views.preferences.EditTextPreference
             android:key="@string/prefs_crash_user_email"
             android:summary="@string/settings_crash_email_summary"
             android:title="@string/settings_crash_email"

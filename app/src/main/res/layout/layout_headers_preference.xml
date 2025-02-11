@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="?listPreferredItemPaddingStart"
@@ -9,6 +10,7 @@
 
     <TextView
         android:id="@+id/headers_note"
+        style="@style/Text12OpenSans"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/extra_headers_note" />
@@ -18,7 +20,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/headers_note"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:nestedScrollingEnabled="false"
+        tools:listitem="@layout/item_extra_headers" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/headers_add_button"

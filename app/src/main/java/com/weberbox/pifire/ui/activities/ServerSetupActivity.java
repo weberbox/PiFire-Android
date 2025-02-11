@@ -10,9 +10,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -27,7 +24,10 @@ import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
 import com.weberbox.pifire.model.view.SetupViewModel;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 
-public class ServerSetupActivity extends AppCompatActivity {
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
+
+public class ServerSetupActivity extends BaseActivity {
 
     private StepperNavigationView stepper;
     private AppBarConfiguration appBarConfiguration;
@@ -49,13 +49,12 @@ public class ServerSetupActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            v.setPadding(0, topInset, 0, bottomInset);
-            return WindowInsetsCompat.CONSUMED;
-        });
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
+                .applyToView(binding.setupAppbar);
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars())
+                .applyToView(binding.fabSetup);
 
         getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 

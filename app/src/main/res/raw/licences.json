@@ -87,6 +87,10 @@
     [
       "MaterialDesign Icons",
       "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
+    ],
+    [
+      "Insetter",
+      "https://github.com/chrisbanes/insetter#Apache-2.0-1-ov-file"
     ]
   ]
 }

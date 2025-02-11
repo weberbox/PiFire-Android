@@ -23,8 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -44,7 +42,6 @@ import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
-import com.weberbox.pifire.databinding.LayoutNavHeaderLeftBinding;
 import com.weberbox.pifire.enums.OneSignalResult;
 import com.weberbox.pifire.enums.ServerSupport;
 import com.weberbox.pifire.interfaces.NavBindingCallback;
@@ -70,6 +67,7 @@ import com.weberbox.pifire.utils.VersionUtils;
 import java.util.Collections;
 import java.util.List;
 
+import dev.chrisbanes.insetter.Insetter;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -85,6 +83,7 @@ public class MainActivity extends BaseActivity implements
     private MainViewModel mainViewModel;
     private ViewPager2 viewPager;
     private TextView actionBarText;
+    private TextView navGrillName;
     private FrameLayout startPanel;
     private UpdateUtils updateUtils;
     private FrameLayout endPanel;
@@ -130,14 +129,6 @@ public class MainActivity extends BaseActivity implements
             setupActionBar(getSupportActionBar());
         }
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            v.setPadding(0, topInset, 0, bottomInset);
-            return WindowInsetsCompat.CONSUMED;
-        });
-
         panelsLayout = binding.overlappingPanels;
         startPanel = binding.startPanel;
         endPanel = binding.endPanel;
@@ -148,6 +139,8 @@ public class MainActivity extends BaseActivity implements
 
         bottomBar = binding.appBarMainPanel.contentMain.bottomBar;
         viewPager = binding.appBarMainPanel.contentMain.viewPager;
+
+        navGrillName = binding.navLayoutPanel.navLeftHeader.navHeadGrillName;
 
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
@@ -160,16 +153,12 @@ public class MainActivity extends BaseActivity implements
 
         PanelsChildGestureRegionObserver.Provider.get().register(viewPager);
 
-        LayoutNavHeaderLeftBinding header = binding.navLayoutPanel.navLeftHeader;
-        TextView navGrillName = header.navHeadGrillName;
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars())
+                .applyToView(panelsLayout);
 
-        String grillName = Prefs.getString(getString(R.string.prefs_grill_name), "");
-
-        if (grillName.isEmpty()) {
-            navGrillName.setVisibility(View.GONE);
-        } else {
-            navGrillName.setVisibility(View.VISIBLE);
-            navGrillName.setText(grillName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setNavigationBarContrastEnforced(false);
         }
 
         if (!Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
@@ -213,6 +202,7 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        updateGrillName();
         if (AppConfig.IS_PLAY_BUILD && updateUtils != null) {
             updateUtils.checkForUpdate(false, true);
         }
@@ -280,6 +270,19 @@ public class MainActivity extends BaseActivity implements
         if (panel == Panel.START || panel == Panel.END) {
             new Handler(Looper.getMainLooper()).postDelayed(() ->
                     panelsLayout.closePanels(), 800L);
+        }
+    }
+
+    private void updateGrillName() {
+        String grillName = Prefs.getString(getString(R.string.prefs_grill_name), "");
+
+        if (grillName.isEmpty()) {
+            navGrillName.setVisibility(View.GONE);
+        } else {
+            navGrillName.setVisibility(View.VISIBLE);
+            if (!grillName.equals(navGrillName.getText().toString())) {
+                navGrillName.setText(grillName);
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -25,6 +26,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class SafetySettingsFragment extends PreferenceFragmentCompat implements
@@ -56,6 +59,13 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
         EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
         EditTextPreference maxGrillTemp = findPreference(getString(R.string.prefs_safety_max_temp));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

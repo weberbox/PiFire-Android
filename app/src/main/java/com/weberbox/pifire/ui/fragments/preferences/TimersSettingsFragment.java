@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -28,6 +29,8 @@ import com.weberbox.pifire.utils.AlertUtils;
 
 import java.util.Objects;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class TimersSettingsFragment extends PreferenceFragmentCompat implements
@@ -66,6 +69,13 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         startToModeTemp = findPreference(getString(R.string.prefs_startup_goto_temp));
         primeOnStartup = findPreference(getString(R.string.prefs_prime_on_startup));
         startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

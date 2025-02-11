@@ -43,7 +43,7 @@
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".ui.activities.PreferencesActivity"
-            android:theme="@style/Theme.PiFire.SettingsTheme" />
+            android:theme="@style/Theme.PiFire.Settings" />
 
         <receiver
             android:name=".receiver.AppUpdateReceiver"

@@ -1,0 +1,12 @@
+<resources>
+
+    <style name="Theme.PiFire" parent="BaseAppTheme">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.PiFire.Settings" parent="BaseAppSettingsTheme">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>

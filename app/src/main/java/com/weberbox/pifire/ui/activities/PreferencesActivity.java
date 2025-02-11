@@ -3,8 +3,6 @@ package com.weberbox.pifire.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +23,8 @@ import com.weberbox.pifire.ui.fragments.preferences.TimersSettingsFragment;
 import com.weberbox.pifire.ui.fragments.preferences.WorkSettingsFragment;
 import com.weberbox.pifire.utils.SettingsUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -39,22 +39,20 @@ public class PreferencesActivity extends BaseActivity {
         binding = ActivityPreferencesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            v.setPadding(0, topInset, 0, bottomInset);
-            return WindowInsetsCompat.CONSUMED;
-        });
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
+                .applyToView(binding.appBar);
+
 
         PiFireApplication app = (PiFireApplication) getApplication();
         Socket socket = app.getSocket();
 
         new SettingsUtils(this, settingsSocketCallback).requestSettingsData(socket);
 
+        setSupportActionBar(binding.toolbar);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setElevation(0);
         }
 
         Intent intent = getIntent();

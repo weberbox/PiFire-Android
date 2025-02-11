@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="?listPreferredItemPaddingStart"
@@ -41,7 +42,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pwm_control_header"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:nestedScrollingEnabled="false"
+        tools:listitem="@layout/item_pwm_control" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pwm_control_add_button"

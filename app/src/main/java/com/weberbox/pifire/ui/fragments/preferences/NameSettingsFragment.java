@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -20,6 +21,8 @@ import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class NameSettingsFragment extends PreferenceFragmentCompat implements
@@ -47,6 +50,13 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

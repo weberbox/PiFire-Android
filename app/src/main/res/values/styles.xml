@@ -82,6 +82,10 @@
         <item name="fontFamily">@font/open_sans_font_family</item>
     </style>
 
+    <style name="Text18OpenSans" parent="TextOpenSans">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="Text16OpenSans" parent="TextOpenSans">
         <item name="android:textSize">16sp</item>
     </style>
@@ -122,32 +126,19 @@
         <item name="android:color">@color/colorLightGrey</item>
     </style>
 
-    <style name="BottomSheetDialogFloating" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="BottomSheetDialogFloating" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
     </style>
 
-    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+    <style name="BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/bottomSheetStyleWrapper</item>
     </style>
 
-    <style name="bottomSheetStyleWrapper" parent="Widget.Design.BottomSheet.Modal">
+    <style name="bottomSheetStyleWrapper" parent="@style/Widget.Material3.BottomSheet.Modal">
+        <item name="paddingBottomSystemWindowInsets">true</item>
         <item name="android:background">@android:color/transparent</item>
-    </style>
-
-
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bg_bottom_sheet_dialog</item>
-        <item name="android:layout_margin">8dp</item>
-    </style>
-
-    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-    </style>
-
-    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
-        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
     </style>
 
     <style name="Widget.MaterialComponents.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
@@ -159,10 +150,6 @@
         <item name="android:textAppearance">@style/Text15AllerBold</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="PreferencesActionBar" parent="@style/Widget.Material3.ActionBar.Solid">
-        <item name="background">@color/colorPrimaryDark</item>
     </style>
 
     <style name="FabRoundedSquareOverlay" parent="">

@@ -11,6 +11,7 @@ import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -27,6 +28,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.update.UpdateUtils;
 import com.weberbox.pifire.utils.CrashUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.sentry.Sentry;
 
 public class AppSettingsFragment extends PreferenceFragmentCompat implements
@@ -52,6 +55,13 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
         SwitchPreferenceCompat devCrashEnabled = findPreference(getString(R.string.prefs_dev_crash_enable));
         Preference serverSettings = findPreference(getString(R.string.prefs_server_settings));
         PreferenceCategory updaterCat = findPreference(getString(R.string.prefs_app_updater_cat));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

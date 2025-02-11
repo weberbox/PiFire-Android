@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -28,6 +29,9 @@ import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.CredentialsDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.utils.AlertUtils;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -57,6 +61,13 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
 
         Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
         Preference credentials = findPreference(getString(R.string.prefs_server_credentials));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

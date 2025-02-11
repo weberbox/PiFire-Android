@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -25,6 +26,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class PelletSettingsFragment extends PreferenceFragmentCompat implements
@@ -58,6 +61,13 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
         EditTextPreference augerRate = findPreference(getString(R.string.prefs_pellet_auger_rate));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

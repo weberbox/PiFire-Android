@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -27,6 +28,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
@@ -70,6 +73,13 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference fanOnTime = findPreference(getString(R.string.prefs_work_splus_on_time));
         EditTextPreference fanOffTime = findPreference(getString(R.string.prefs_work_splus_off_time));
         EditTextPreference fanDutyCycle = findPreference(getString(R.string.prefs_work_splus_ramp_dc));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

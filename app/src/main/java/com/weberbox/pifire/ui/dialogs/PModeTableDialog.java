@@ -74,16 +74,13 @@ public class PModeTableDialog {
         String[] pmodes = context.getResources().getStringArray(R.array.pmode_setting);
         String[] pmode_times = context.getResources().getStringArray(R.array.pmode_times);
 
-        pModeList.add(new PModeModel(pmodes[0], augerOn, pmode_times[0]));
-        pModeList.add(new PModeModel(pmodes[1], augerOn, pmode_times[1]));
-        pModeList.add(new PModeModel(pmodes[2], augerOn, pmode_times[2]));
-        pModeList.add(new PModeModel(pmodes[3], augerOn, pmode_times[3]));
-        pModeList.add(new PModeModel(pmodes[4], augerOn, pmode_times[4]));
-        pModeList.add(new PModeModel(pmodes[5], augerOn, pmode_times[5]));
-        pModeList.add(new PModeModel(pmodes[6], augerOn, pmode_times[6]));
-        pModeList.add(new PModeModel(pmodes[7], augerOn, pmode_times[7]));
-        pModeList.add(new PModeModel(pmodes[8], augerOn, pmode_times[8]));
-        pModeList.add(new PModeModel(pmodes[9], augerOn, pmode_times[9]));
+        for (int i = 0; i < pmodes.length; i++) {
+            PModeModel mode = new PModeModel(
+                    pmodes[i], augerOn,
+                    pmode_times[i]
+            );
+            pModeList.add(mode);
+        }
 
         return pModeList;
     }

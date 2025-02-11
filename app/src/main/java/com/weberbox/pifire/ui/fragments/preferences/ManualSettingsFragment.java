@@ -8,6 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
@@ -23,6 +24,8 @@ import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -63,6 +66,13 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         igniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
         powerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
         pwmOutput = findPreference(getString(R.string.prefs_manual_mode_pwm));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

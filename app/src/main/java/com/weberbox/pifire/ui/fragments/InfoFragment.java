@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -54,6 +53,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -88,15 +89,18 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getActivity() != null) {
-            WindowCompat.setDecorFitsSystemWindows(getActivity().getWindow(), false);
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
+                .applyToView(binding.infoToolbar.getRoot());
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars(), Side.BOTTOM)
+                .applyToView(binding.infoScrollView);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarContrastEnforced(true);
+            }
         }
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            v.setPadding(0, topInset, 0, bottomInset);
-            return WindowInsetsCompat.CONSUMED;
-        });
 
         socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
 
@@ -238,6 +242,11 @@ public class InfoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarContrastEnforced(false);
+            }
+        }
     }
 
     private void showOfflineAlert() {

@@ -102,7 +102,7 @@ public final class BottomButtonDialog extends AbstractDialog {
 
     static class BottomSheetDialog extends com.google.android.material.bottomsheet.BottomSheetDialog {
         BottomSheetDialog(@NonNull Context context) {
-            super(context, R.style.BottomSheetDialogTheme);
+            super(context, R.style.BottomSheetDialog);
         }
     }
 }

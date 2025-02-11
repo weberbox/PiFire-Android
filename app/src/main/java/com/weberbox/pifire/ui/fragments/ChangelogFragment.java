@@ -1,6 +1,7 @@
 package com.weberbox.pifire.ui.fragments;
 
 import android.animation.Animator;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +20,9 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.weberbox.changelibs.library.view.ChangeLogRecyclerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentChangelogBinding;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class ChangelogFragment extends Fragment {
 
@@ -40,16 +42,6 @@ public class ChangelogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (getActivity() != null) {
-            WindowCompat.setDecorFitsSystemWindows(getActivity().getWindow(), false);
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
-            int topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top;
-            int bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom;
-            v.setPadding(0, topInset, 0, bottomInset);
-            return WindowInsetsCompat.CONSUMED;
-        });
-
         TextView actionBarText = binding.changelogToolbar.actionBarText;
         ImageView navButton = binding.changelogToolbar.actionBarNavButton;
         ImageView configButton = binding.changelogToolbar.actionBarConfigButton;
@@ -58,6 +50,19 @@ public class ChangelogFragment extends Fragment {
 
         changeLogView.setAlpha(0.0f);
         animationView.addAnimatorListener(listener);
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
+                .applyToView(binding.changelogToolbar.getRoot());
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars(), Side.BOTTOM)
+                .applyToView(binding.changelog);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarContrastEnforced(true);
+            }
+        }
 
         actionBarText.setText(R.string.changelog_title);
         navButton.setImageResource(R.drawable.ic_nav_back);
@@ -71,6 +76,11 @@ public class ChangelogFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarContrastEnforced(false);
+            }
+        }
     }
 
     private final Animator.AnimatorListener listener = new Animator.AnimatorListener() {

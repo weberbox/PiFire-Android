@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
@@ -27,6 +28,8 @@ import com.weberbox.pifire.ui.views.preferences.AppriseLocationPreference;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
@@ -74,6 +77,13 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
         SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
         appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);

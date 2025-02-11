@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -23,6 +24,8 @@ import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 
 public class PWMSettingsFragment extends PreferenceFragmentCompat implements
@@ -54,6 +57,13 @@ public class PWMSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference pwmFrequency = findPreference(getString(R.string.prefs_pwm_frequency));
         EditTextPreference pwmMinDutyCycle = findPreference(getString(R.string.prefs_pwm_min_duty_cycle));
         EditTextPreference pwmMaxDutyCycle = findPreference(getString(R.string.prefs_pwm_max_duty_cycle));
+
+        getListView().setClipToPadding(false);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);
