@@ -51,6 +51,7 @@ public class ChangelogFragment extends Fragment {
 
         changeLogView.setAlpha(0.0f);
         animationView.addAnimatorListener(listener);
+        animationView.playAnimation();
 
         Insetter.builder()
                 .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
