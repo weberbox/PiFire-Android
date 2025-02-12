@@ -2,11 +2,16 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.text.Editable;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -17,8 +22,13 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPrefsListBinding;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class PrefsListDialog {
 
@@ -27,7 +37,7 @@ public class PrefsListDialog {
     private final Context context;
     private final Preference preference;
 
-    public PrefsListDialog(Context context, Preference preference) {
+    public PrefsListDialog(@NotNull Context context, @NotNull Preference preference) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -76,6 +86,23 @@ public class PrefsListDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         bottomSheetDialog.show();
 

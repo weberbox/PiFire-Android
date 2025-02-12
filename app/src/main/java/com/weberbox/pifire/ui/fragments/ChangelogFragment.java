@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
@@ -62,6 +63,11 @@ public class ChangelogFragment extends Fragment {
             if (getActivity() != null) {
                 getActivity().getWindow().setNavigationBarContrastEnforced(true);
             }
+        } else {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                        getActivity(), R.color.colorNavBarAlpha));
+            }
         }
 
         actionBarText.setText(R.string.changelog_title);
@@ -79,6 +85,11 @@ public class ChangelogFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (getActivity() != null) {
                 getActivity().getWindow().setNavigationBarContrastEnforced(false);
+            }
+        } else {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                        getActivity(), android.R.color.transparent));
             }
         }
     }

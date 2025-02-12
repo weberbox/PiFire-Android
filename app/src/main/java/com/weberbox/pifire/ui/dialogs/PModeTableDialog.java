@@ -2,8 +2,13 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +21,13 @@ import com.weberbox.pifire.model.local.PModeModel;
 import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class PModeTableDialog {
 
@@ -26,7 +36,7 @@ public class PModeTableDialog {
     private final Context context;
 
 
-    public PModeTableDialog(Context context) {
+    public PModeTableDialog(@NotNull Context context) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -51,6 +61,23 @@ public class PModeTableDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         bottomSheetDialog.show();
 

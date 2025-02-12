@@ -1,13 +1,19 @@
 package com.weberbox.pifire.ui.dialogs;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -22,7 +28,12 @@ import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.StringUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class PelletsEditDialog {
 
@@ -30,19 +41,19 @@ public class PelletsEditDialog {
     private final LayoutInflater inflater;
     private final DialogPelletsProfileCallback callback;
     private final PelletProfileModel pelletProfile;
-    private final Activity activity;
+    private final Context context;
     private final List<String> brands, woods;
     private final int position;
     private AutoCompleteTextView profileBrandTv, profileWoodTv, profileRatingTv;
     private TextInputEditText profileComments;
     private TextInputLayout profileBrand, profileWood, profileRating;
 
-    public PelletsEditDialog(Activity activity, List<String> brands, List<String> woods,
-                             PelletProfileModel pelletProfile, int position,
-                             DialogPelletsProfileCallback callback) {
-        bottomSheetDialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogFloating);
-        inflater = LayoutInflater.from(activity);
-        this.activity = activity;
+    public PelletsEditDialog(@NotNull Context context, @NotNull List<String> brands,
+                             @NotNull List<String> woods, @Nullable PelletProfileModel pelletProfile,
+                             int position, @NotNull DialogPelletsProfileCallback callback) {
+        bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
+        inflater = LayoutInflater.from(context);
+        this.context = context;
         this.brands = brands;
         this.woods = woods;
         this.pelletProfile = pelletProfile;
@@ -76,15 +87,15 @@ public class PelletsEditDialog {
             pelletEditLoad.setEnabled(false);
         }
 
-        String[] ratings = activity.getResources().getStringArray(R.array.items_rating);
+        String[] ratings = context.getResources().getStringArray(R.array.items_rating);
 
-        ArrayAdapter<String> brandsAdapter = new ArrayAdapter<>(activity,
+        ArrayAdapter<String> brandsAdapter = new ArrayAdapter<>(context,
                 R.layout.item_menu_popup, brands);
 
-        ArrayAdapter<String> woodsAdapter = new ArrayAdapter<>(activity,
+        ArrayAdapter<String> woodsAdapter = new ArrayAdapter<>(context,
                 R.layout.item_menu_popup, woods);
 
-        ArrayAdapter<String> ratingsAdapter = new ArrayAdapter<>(activity,
+        ArrayAdapter<String> ratingsAdapter = new ArrayAdapter<>(context,
                 R.layout.item_menu_popup, ratings);
 
         profileBrandTv.setAdapter(brandsAdapter);
@@ -129,7 +140,7 @@ public class PelletsEditDialog {
                 if (s.length() == 0) {
                     pelletEditSave.setEnabled(false);
                     pelletEditLoad.setEnabled(false);
-                    profileBrand.setError(activity.getString(R.string.text_blank_error));
+                    profileBrand.setError(context.getString(R.string.text_blank_error));
                 } else {
                     if (profileWoodTv.getText() != null &&
                             !profileWoodTv.getText().toString().isEmpty() &&
@@ -156,7 +167,7 @@ public class PelletsEditDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     pelletEditSave.setEnabled(false);
-                    profileWood.setError(activity.getString(R.string.text_blank_error));
+                    profileWood.setError(context.getString(R.string.text_blank_error));
                 } else {
                     if (profileBrandTv.getText() != null &&
                             !profileBrandTv.getText().toString().isEmpty() &&
@@ -183,7 +194,7 @@ public class PelletsEditDialog {
             public void onTextChanged(CharSequence s, int i, int i1, int i2) {
                 if (s.length() == 0) {
                     pelletEditSave.setEnabled(false);
-                    profileRating.setError(activity.getString(R.string.text_blank_error));
+                    profileRating.setError(context.getString(R.string.text_blank_error));
                 } else {
                     if (profileBrandTv.getText() != null &&
                             !profileBrandTv.getText().toString().isEmpty() &&
@@ -209,9 +220,27 @@ public class PelletsEditDialog {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars() |
+                        WindowInsetsCompat.Type.ime(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
+
         bottomSheetDialog.show();
 
-        Configuration configuration = activity.getResources().getConfiguration();
+        Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
             if (bottomSheetDialog.getWindow() != null) {
@@ -224,11 +253,11 @@ public class PelletsEditDialog {
 
     private boolean checkRequiredFields() {
         if (profileBrandTv.getText().length() == 0) {
-            profileBrand.setError(activity.getString(R.string.text_blank_error));
+            profileBrand.setError(context.getString(R.string.text_blank_error));
         } else if (profileWoodTv.getText().length() == 0) {
-            profileWood.setError(activity.getString(R.string.text_blank_error));
+            profileWood.setError(context.getString(R.string.text_blank_error));
         } else if (profileRatingTv.getText().length() == 0) {
-            profileRating.setError(activity.getString(R.string.text_blank_error));
+            profileRating.setError(context.getString(R.string.text_blank_error));
         } else {
             return true;
         }

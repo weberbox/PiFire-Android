@@ -212,7 +212,7 @@ public class SwipeButton extends RelativeLayout {
                     Color.WHITE));
 
             float textSize = ViewUtils.convertPixelsToSp(
-                    typedArray.getDimension(R.styleable.SwipeButton_inner_text_size, 0), context);
+                    typedArray.getDimension(R.styleable.SwipeButton_inner_text_size, 0));
 
             if (textSize != 0) {
                 centerText.setTextSize(textSize);
@@ -499,7 +499,7 @@ public class SwipeButton extends RelativeLayout {
         if (trailEnabled) {
             layer.setVisibility(View.VISIBLE);
             layer.setLayoutParams(new RelativeLayout.LayoutParams(
-                    (int) (swipeButtonInner.getX() + swipeButtonInner.getWidth() / 3),
+                    (int) (swipeButtonInner.getX() + (float) swipeButtonInner.getWidth() / 3),
                     centerText.getHeight()));
         }
     }

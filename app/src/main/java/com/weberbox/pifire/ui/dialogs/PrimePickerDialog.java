@@ -2,12 +2,16 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -15,6 +19,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
@@ -23,11 +28,17 @@ import com.weberbox.pifire.databinding.DialogPrimePickerBinding;
 import com.weberbox.pifire.recycler.adapter.PrimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogPrimeCallback;
+import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class PrimePickerDialog {
 
@@ -37,7 +48,7 @@ public class PrimePickerDialog {
     private final DialogPrimeCallback callback;
     private final Context context;
 
-    public PrimePickerDialog(Context context, DialogPrimeCallback callback) {
+    public PrimePickerDialog(@NotNull Context context, @NotNull DialogPrimeCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -47,9 +58,10 @@ public class PrimePickerDialog {
     public BottomSheetDialog showDialog() {
         DialogPrimePickerBinding binding = DialogPrimePickerBinding.inflate(inflater);
 
-        SwitchCompat startupSwitch = binding.primeStartupSwitch;
-        MaterialButton confirmButton = binding.setPrimeConfirm;
-        MaterialButton cancelButton = binding.setPrimeCancel;
+        RelativeLayout optionsContainer = binding.primeOptionsContainer;
+        MaterialSwitch startupSwitch = binding.primeStartupSwitch;
+        MaterialButton confirmButton = binding.primeConfirm;
+        MaterialButton optionsButton = binding.primeOptions;
 
         PickerLayoutManager pickerLayoutManager = new PickerLayoutManager(context,
                 PickerLayoutManager.VERTICAL, true);
@@ -103,7 +115,13 @@ public class PrimePickerDialog {
                             ServerConstants.G_MODE_STOP);
         });
 
-        cancelButton.setOnClickListener(v -> pickerBottomSheet.dismiss());
+        optionsButton.setOnClickListener(v -> {
+            if (optionsContainer.getVisibility() == View.GONE) {
+                AnimUtils.slideOpen(optionsContainer);
+            } else {
+                AnimUtils.slideClosed(optionsContainer);
+            }
+        });
 
 
         pickerBottomSheet.setOnDismissListener(dialogInterface -> {
@@ -117,6 +135,23 @@ public class PrimePickerDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         pickerBottomSheet.show();
 

@@ -3,66 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_bottom_sheet_dialog"
     android:paddingStart="@dimen/default_spacing"
     android:paddingEnd="@dimen/default_spacing"
     android:paddingBottom="@dimen/default_spacing">
 
-    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:id="@+id/drag_handle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
 
-    <FrameLayout
-        android:id="@+id/scroll_list_container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_gray_rounded_alpha">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/scroll_list"
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:clipToPadding="false"
-            android:paddingLeft="@dimen/default_spacing"
-            android:paddingTop="120dp"
-            android:paddingRight="@dimen/default_spacing"
-            android:paddingBottom="120dp" />
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="start|center"
-            android:background="@color/colorAccent" />
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="end|center"
-            android:background="@color/colorAccent" />
-
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scroll_list_container"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_item_confirm"
-            style="@style/MaterialButtonPrimary"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_primary_button"
-            android:text="@string/confirm"
-            app:backgroundTint="@color/dialog_positive_button_color_grey" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+        <FrameLayout
+            android:id="@+id/scroll_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_gray_rounded_alpha"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/scroll_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:clipToPadding="false"
+                android:paddingLeft="@dimen/default_spacing"
+                android:paddingTop="120dp"
+                android:paddingRight="@dimen/default_spacing"
+                android:paddingBottom="120dp" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="2dp"
+                android:layout_gravity="start|center"
+                android:background="@color/colorAccent" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="2dp"
+                android:layout_gravity="end|center"
+                android:background="@color/colorAccent" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scroll_list_container"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/scroll_list_container">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_item_confirm"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/confirm"
+                app:backgroundTint="@color/dialog_positive_button_color_grey" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

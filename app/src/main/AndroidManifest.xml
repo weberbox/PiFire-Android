@@ -39,7 +39,7 @@
         <activity
             android:name=".ui.activities.ServerSetupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.PiFire.NoActionBar"
+            android:theme="@style/Theme.PiFire.Setup"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
         <activity
             android:name=".ui.activities.PreferencesActivity"

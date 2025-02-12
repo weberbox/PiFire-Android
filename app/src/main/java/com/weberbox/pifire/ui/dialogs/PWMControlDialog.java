@@ -2,13 +2,18 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -22,7 +27,12 @@ import com.weberbox.pifire.ui.dialogs.interfaces.DialogPWMCallback;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class PWMControlDialog {
 
@@ -37,10 +47,12 @@ public class PWMControlDialog {
     private final List<PWMControlModel> list;
     private TextInputEditText tempInput, dutyCycleInput;
 
-    public PWMControlDialog(Context context, @StringRes int title, Integer position,
-                            Integer minTemp, Integer maxTemp, Integer setTemp, Integer dutyCycle,
-                            String units, boolean delete, List<PWMControlModel> list,
-                            DialogPWMCallback callback) {
+    public PWMControlDialog(@NotNull Context context, @StringRes int title, Integer position,
+                            @Nullable Integer minTemp, @Nullable Integer maxTemp,
+                            @NotNull Integer setTemp, @NotNull Integer dutyCycle,
+                            @NotNull String units, boolean delete,
+                            @NotNull List<PWMControlModel> list,
+                            @NotNull DialogPWMCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -176,6 +188,24 @@ public class PWMControlDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars() |
+                        WindowInsetsCompat.Type.ime(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         bottomSheetDialog.show();
 

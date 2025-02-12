@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -99,6 +100,11 @@ public class InfoFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (getActivity() != null) {
                 getActivity().getWindow().setNavigationBarContrastEnforced(true);
+            }
+        } else {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                        getActivity(), R.color.colorNavBarAlpha));
             }
         }
 
@@ -245,6 +251,11 @@ public class InfoFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (getActivity() != null) {
                 getActivity().getWindow().setNavigationBarContrastEnforced(false);
+            }
+        } else {
+            if (getActivity() != null) {
+                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                        getActivity(), android.R.color.transparent));
             }
         }
     }

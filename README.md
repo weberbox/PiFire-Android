@@ -17,7 +17,7 @@ The creator of this project takes no responsibility for any damage that you may 
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021-2023.
+Android Application created by James Weber, copyright 2021-2025.
 
 This app used the following open-source libraries and/or code inspired from these projects.
 
@@ -42,6 +42,7 @@ This app used the following open-source libraries and/or code inspired from thes
 - [Changelog Lib](https://github.com/weberbox/changeloglib)
 - [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
 - [OkHttp](https://github.com/square/okhttp)
+- [Insetter](https://github.com/chrisbanes/insetter)
 
 ### Licensing
 
@@ -50,7 +51,7 @@ This project is licensed under the GNU GPLv3 license.
 ```
 PiFire Android - Native Android app for the PiFire smoker project
 
-Copyright (c) 2021-2023 James Weber
+Copyright (c) 2021-2025 James Weber
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/base_app_bar_main">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

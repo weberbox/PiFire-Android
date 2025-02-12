@@ -3,138 +3,127 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_bottom_sheet_dialog"
     android:paddingStart="@dimen/default_spacing"
     android:paddingEnd="@dimen/default_spacing"
     android:paddingBottom="@dimen/default_spacing">
 
-    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-        android:id="@+id/drag_handle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <FrameLayout
-        android:id="@+id/prime_list_container"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_gray_rounded_alpha">
-
-        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
-            android:id="@+id/prime_fast_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="0dp"
-            android:paddingEnd="30dp"
-            app:handleDrawable="@drawable/bg_thumb_view"
-            app:handleHeight="10dp"
-            app:handleVisibilityDuration="600"
-            app:handleWidth="40dp"
-            app:popupDrawable="@android:color/transparent"
-            app:popupTextStyle="@style/TextTransparent"
-            app:trackMarginEnd="30dp"
-            app:trackMarginStart="30dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/prime_list"
-                android:layout_width="180dp"
-                android:layout_height="match_parent"
-                android:layout_centerHorizontal="true"
-                android:clipToPadding="false"
-                android:paddingLeft="@dimen/default_spacing"
-                android:paddingTop="@dimen/picker_top_bottom_padding"
-                android:paddingRight="@dimen/default_spacing"
-                android:paddingBottom="@dimen/picker_top_bottom_padding" />
-
-        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="start|center"
-            android:background="?attr/colorAccent" />
-
-        <View
-            android:layout_width="16dp"
-            android:layout_height="2dp"
-            android:layout_gravity="end|center"
-            android:background="?attr/colorAccent" />
-
-    </FrameLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/prime_options_container"
+        android:id="@+id/dialog_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/prime_list_container"
-        android:paddingBottom="8dp"
-        android:visibility="visible">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/prime_startup_container"
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginBottom="@dimen/small_spacing"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/prime_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_gray_rounded_alpha"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/prime_startup_text"
-                style="@style/Text14AllerBold"
-                android:layout_width="wrap_content"
+            <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+                android:id="@+id/prime_fast_scroll"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_spacing"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/dialog_prime_startup"
-                android:textAlignment="center"
-                android:textSize="13sp"
-                android:textStyle="normal"
-                app:autoSizeTextType="uniform" />
+                android:paddingStart="0dp"
+                android:paddingEnd="30dp"
+                app:handleDrawable="@drawable/bg_thumb_view"
+                app:handleHeight="10dp"
+                app:handleVisibilityDuration="600"
+                app:handleWidth="40dp"
+                app:popupDrawable="@android:color/transparent"
+                app:popupTextStyle="@style/TextTransparent"
+                app:trackMarginEnd="30dp"
+                app:trackMarginStart="30dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/prime_list"
+                    android:layout_width="180dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:clipToPadding="false"
+                    android:paddingLeft="@dimen/default_spacing"
+                    android:paddingTop="@dimen/picker_top_bottom_padding"
+                    android:paddingRight="@dimen/default_spacing"
+                    android:paddingBottom="@dimen/picker_top_bottom_padding" />
+
+            </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="2dp"
+                android:layout_gravity="start|center"
+                android:background="?attr/colorAccent" />
+
+            <View
+                android:layout_width="16dp"
+                android:layout_height="2dp"
+                android:layout_gravity="end|center"
+                android:background="?attr/colorAccent" />
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/prime_options_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prime_list_container">
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/prime_startup_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_spacing"
                 android:layout_marginEnd="10dp"
-                android:layout_toEndOf="@+id/prime_startup_text"
-                android:checked="false" />
+                android:checked="false"
+                android:text="@string/dialog_prime_startup"
+                android:textAlignment="viewStart"
+                android:textAppearance="@style/Text14Aller" />
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/prime_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prime_options_container">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/prime_options"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/options"
+                android:visibility="visible"
+                app:backgroundTint="@color/dialog_positive_button_color_grey" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/prime_confirm"
+                style="@style/MaterialButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bg_ripple_primary_button"
+                android:text="@string/confirm"
+                app:backgroundTint="@color/dialog_positive_button_color_grey" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/prime_button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/prime_options_container"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/set_prime_cancel"
-            style="@style/MaterialButtonPrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_primary_button"
-            android:text="@string/cancel"
-            android:visibility="visible"
-            app:backgroundTint="@color/dialog_positive_button_color_grey" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/set_prime_confirm"
-            style="@style/MaterialButtonPrimary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_ripple_primary_button"
-            android:text="@string/confirm"
-            app:backgroundTint="@color/dialog_positive_button_color_grey" />
-
-    </LinearLayout>
 </RelativeLayout>

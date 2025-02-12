@@ -2,11 +2,16 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -22,7 +27,12 @@ import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class ProfilePickerDialog {
 
@@ -35,8 +45,10 @@ public class ProfilePickerDialog {
     private String currentProfile;
     private String currentProfileId;
 
-    public ProfilePickerDialog(Context context, List<PelletProfileModel> pelletList,
-                               String currentProfile, DialogPelletsProfileCallback callback) {
+    public ProfilePickerDialog(@NotNull Context context,
+                               @NotNull List<PelletProfileModel> pelletList,
+                               @NotNull String currentProfile,
+                               @NotNull DialogPelletsProfileCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -90,6 +102,23 @@ public class ProfilePickerDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         pickerBottomSheet.show();
 

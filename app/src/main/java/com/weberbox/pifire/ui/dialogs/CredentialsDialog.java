@@ -2,7 +2,13 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewOutlineProvider;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -14,6 +20,11 @@ import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
+import org.jetbrains.annotations.NotNull;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
+
 public class CredentialsDialog {
 
     private final BottomSheetDialog bottomSheetDialog;
@@ -22,7 +33,7 @@ public class CredentialsDialog {
     private final Context context;
     private TextInputEditText userInput, passInput;
 
-    public CredentialsDialog(Context context, DialogAuthCallback callback) {
+    public CredentialsDialog(@NotNull Context context, @NotNull DialogAuthCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -59,6 +70,24 @@ public class CredentialsDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars() |
+                        WindowInsetsCompat.Type.ime(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         bottomSheetDialog.show();
 

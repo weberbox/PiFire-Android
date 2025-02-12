@@ -2,12 +2,16 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -18,6 +22,12 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogAppriseBinding;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogAppriseCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class AppriseDialog {
 
@@ -30,8 +40,9 @@ public class AppriseDialog {
     private final boolean delete;
     private final Integer position;
 
-    public AppriseDialog(Context context, @StringRes int title, Integer position,
-                         String location, boolean delete, DialogAppriseCallback callback) {
+    public AppriseDialog(@NotNull Context context, @StringRes int title, @Nullable Integer position,
+                         @Nullable String location, boolean delete,
+                         @NotNull DialogAppriseCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -115,6 +126,24 @@ public class AppriseDialog {
             BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars() |
+                        WindowInsetsCompat.Type.ime(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         bottomSheetDialog.show();
 

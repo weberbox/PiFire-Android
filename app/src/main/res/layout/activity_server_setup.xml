@@ -25,7 +25,7 @@
 
     <include
         android:id="@+id/setup_layout"
-        layout="@layout/setup_main"
+        layout="@layout/base_setup_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/setup_appbar" />

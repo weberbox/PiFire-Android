@@ -7,7 +7,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-        android:background="@color/colorTransparent"
+        android:background="@android:color/transparent"
         android:theme="@style/Theme.PiFire.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout

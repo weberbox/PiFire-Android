@@ -2,15 +2,19 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Outline;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
@@ -27,10 +31,15 @@ import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 public class TimePickerDialog {
 
@@ -45,7 +54,7 @@ public class TimePickerDialog {
     private final int scrollHours;
     private final int scrollMinutes;
 
-    public TimePickerDialog(Context context, DialogDashboardCallback callback) {
+    public TimePickerDialog(@NotNull Context context, @NotNull DialogDashboardCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -57,7 +66,7 @@ public class TimePickerDialog {
     public BottomSheetDialog showDialog() {
         DialogTimerPickerBinding binding = DialogTimerPickerBinding.inflate(inflater);
 
-        ConstraintLayout optionsContainer = binding.timerOptionsContainer;
+        RelativeLayout optionsContainer = binding.timerOptionsContainer;
         SwitchCompat shutdownSwitch = binding.timerShutdownSwitch;
         SwitchCompat keepWarmSwitch = binding.timerKeepWarmSwitch;
         MaterialButton confirmButton = binding.setTimerConfirm;
@@ -92,18 +101,13 @@ public class TimePickerDialog {
         minutesList.setLayoutManager(minsPickerLayoutManager);
         minutesList.setAdapter(minsAdapter);
 
-        if (callback != null) {
-            optionsButton.setVisibility(View.VISIBLE);
-            optionsButton.setOnClickListener(v -> {
-                if (optionsContainer.getVisibility() == View.GONE) {
-                    AnimUtils.slideOpen(optionsContainer);
-                } else {
-                    AnimUtils.slideClosed(optionsContainer);
-                }
-            });
-        } else {
-            optionsButton.setVisibility(View.GONE);
-        }
+        optionsButton.setOnClickListener(v -> {
+            if (optionsContainer.getVisibility() == View.GONE) {
+                AnimUtils.slideOpen(optionsContainer);
+            } else {
+                AnimUtils.slideClosed(optionsContainer);
+            }
+        });
 
         shutdownSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
                 keepWarmSwitch.setEnabled(!isChecked));
@@ -115,22 +119,20 @@ public class TimePickerDialog {
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.timer_item_container);
                     TextView text = parent.findViewById(R.id.timer_item_text_view);
-                    hoursSelected =  text.getText().toString();
+                    hoursSelected = text.getText().toString();
                 });
 
         minsPickerLayoutManager.setOnScrollStopListener(
                 view -> {
                     LinearLayout parent = view.findViewById(R.id.timer_item_container);
                     TextView text = parent.findViewById(R.id.timer_item_text_view);
-                    minutesSelected =  text.getText().toString();
+                    minutesSelected = text.getText().toString();
                 });
 
         confirmButton.setOnClickListener(v -> {
             pickerBottomSheet.dismiss();
-            if (callback != null) {
-                callback.onTimerConfirmClicked(hoursSelected, minutesSelected,
-                        shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
-            }
+            callback.onTimerConfirmClicked(hoursSelected, minutesSelected,
+                    shutdownSwitch.isChecked(), keepWarmSwitch.isChecked());
         });
 
         pickerBottomSheet.setOnDismissListener(dialogInterface -> {
@@ -155,9 +157,26 @@ public class TimePickerDialog {
 
         pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
-            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
+
+        binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                float radius = context.getResources().getDimension(R.dimen.radiusTop);
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight() +
+                        (int) radius, radius);
+            }
+        });
+        binding.getRoot().setClipToOutline(true);
+
+        binding.getRoot().setBackgroundColor(ContextCompat.getColor(context,
+                R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         pickerBottomSheet.show();
 
@@ -173,8 +192,8 @@ public class TimePickerDialog {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void setCurrentHours(int position, boolean smooth){
-        if(smooth) {
+    private void setCurrentHours(int position, boolean smooth) {
+        if (smooth) {
             hoursList.smoothScrollToPosition(position);
         } else {
             hoursList.scrollToPosition(position);
@@ -182,8 +201,8 @@ public class TimePickerDialog {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private void setCurrentMinutes(int position, boolean smooth){
-        if(smooth) {
+    private void setCurrentMinutes(int position, boolean smooth) {
+        if (smooth) {
             minutesList.smoothScrollToPosition(position);
         } else {
             minutesList.scrollToPosition(position);

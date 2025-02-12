@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.button.MaterialButton;
@@ -41,6 +42,9 @@ import com.weberbox.pifire.ui.dialogs.model.TextAlignment;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.TextViewRichDrawable;
 import com.weberbox.pifire.ui.views.SwipeButton;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 
 @SuppressWarnings({"unused", "rawtypes"})
 public abstract class AbstractDialog implements DialogInterface {
@@ -378,7 +382,7 @@ public abstract class AbstractDialog implements DialogInterface {
         }
 
         binding.getRoot().setBackgroundColor(ContextCompat.getColor(activity,
-                R.color.colorPrimaryDark));
+                R.color.material_dialog_background));
 
         titleView.setTextColor(ContextCompat.getColor(activity,
                 R.color.material_dialog_title_text_color));
@@ -401,6 +405,10 @@ public abstract class AbstractDialog implements DialogInterface {
         if (negativeButtonTint != null) {
             negativeButtonView.setRippleColor(negativeButtonTint.withAlpha(75));
         }
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.relativeLayoutDialog);
 
         return binding.getRoot();
     }
@@ -507,6 +515,10 @@ public abstract class AbstractDialog implements DialogInterface {
 
         binding.getRoot().setBackgroundColor(ContextCompat.getColor(activity,
                 R.color.material_dialog_background));
+
+        Insetter.builder()
+                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
+                .applyToView(binding.dialogContainer);
 
         return binding.getRoot();
     }
