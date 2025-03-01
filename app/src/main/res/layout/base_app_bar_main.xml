@@ -18,11 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
-            app:contentInsetEnd="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:popupTheme="@style/Theme.PiFire.PopupOverlay" />
+            app:menu="@menu/activity_main_options"
+            app:navigationIcon="@drawable/ic_nav_burger"
+            app:popupTheme="@style/Theme.PiFire.PopupOverlay"
+            app:titleTextAppearance="@style/Text20AllerBold"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

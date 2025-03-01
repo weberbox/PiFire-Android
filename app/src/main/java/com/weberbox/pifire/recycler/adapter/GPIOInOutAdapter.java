@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,16 +8,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemGpioInOutBinding;
-import com.weberbox.pifire.model.local.GPIOInOutModel;
+import com.weberbox.pifire.record.GPIOInOutRecord;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GPIOInOutAdapter extends RecyclerView.Adapter<GPIOInOutAdapter.ViewHolder> {
 
-    private List<GPIOInOutModel> list;
+    private final HashMap<String, String> list;
+    private ArrayList<GPIOInOutRecord> outputs;
 
-    public GPIOInOutAdapter(final List<GPIOInOutModel> list) {
-        this.list = list;
+    public GPIOInOutAdapter() {
+        this.list = new HashMap<>();
+        this.outputs = new ArrayList<>();
     }
 
     @NonNull
@@ -31,17 +35,29 @@ public class GPIOInOutAdapter extends RecyclerView.Adapter<GPIOInOutAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.bindData(list.get(position));
+        holder.bindData(outputs.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setList(List<GPIOInOutModel> list) {
-        this.list = list;
+    @SuppressWarnings("NotifyDataSetChanged")
+    public void setInOutList(@NotNull HashMap<String, String> inOutList, boolean dcFan) {
+        list.clear();
+        outputs.clear();
+        list.putAll(inOutList);
+        outputs = new ArrayList<>(inOutList.size());
+        list.forEach((key, value) -> {
+            if (key.contains("dc_fan") || key.contains("pwm")) {
+                if (dcFan) {
+                    outputs.add(new GPIOInOutRecord(key, value));
+                }
+            } else {
+                outputs.add(new GPIOInOutRecord(key, value));
+            }
+        });
         notifyDataSetChanged();
     }
 
@@ -56,9 +72,9 @@ public class GPIOInOutAdapter extends RecyclerView.Adapter<GPIOInOutAdapter.View
             pin = binding.gpioPin;
         }
 
-        public void bindData(final GPIOInOutModel item) {
-            name.setText(item.getName());
-            pin.setText(item.getPin());
+        public void bindData(final GPIOInOutRecord item) {
+            name.setText(item.name());
+            pin.setText(item.pin());
         }
     }
 }

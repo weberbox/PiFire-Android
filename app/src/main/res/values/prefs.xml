@@ -41,6 +41,10 @@
     <!-- PiFire Settings -->
     <string name="prefs_dc_fan">prefs_dc_fan</string>
     <string name="prefs_standalone">prefs_standalone</string>
+    <string name="prefs_platform_current">prefs_platform_current</string>
+    <string name="prefs_platform_type">prefs_platform_type</string>
+    <string name="prefs_controller_config">prefs_controller_config</string>
+    <string name="prefs_controller_selected">prefs_controller_selected</string>
 
     <string name="prefs_server_version">prefs_server_version</string>
     <string name="prefs_server_build">prefs_server_build</string>

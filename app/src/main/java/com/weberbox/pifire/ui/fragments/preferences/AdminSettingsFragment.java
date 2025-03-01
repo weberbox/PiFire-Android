@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,7 +10,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -18,19 +18,20 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private Socket socket;
 
     @Override
@@ -41,10 +42,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @Override
@@ -67,7 +65,6 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -75,8 +72,16 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
 
         if (manualCat != null && manualMode != null) {
             manualMode.setOnPreferenceClickListener(preference -> {
-                showFragment(new ManualSettingsFragment());
-                return true;
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_left,
+                                R.anim.slide_out_left,
+                                R.anim.slide_in_right,
+                                R.anim.slide_out_right)
+                        .replace(R.id.fragment_container, new ManualSettingsFragment())
+                        .addToBackStack(ManualSettingsFragment.class.getName())
+                        .commit();
+                return false;
             });
         }
 
@@ -269,10 +274,20 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_admin);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_admin));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -287,27 +302,21 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    private void showFragment(Fragment fragment) {
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
     private void processPostResponse(String response) {
         processPostResponse(response, true);
     }
 
     private void processPostResponse(String response, boolean showSuccess) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
-        requireActivity().runOnUiThread(() -> {
-            if (result.getResult().equals("error")) {
-                AlertUtils.createErrorAlert(requireActivity(), result.getMessage(), false);
-            } else if (showSuccess) {
-                AlertUtils.createAlert(requireActivity(), R.string.settings_action_success, 1000);
-            }
-        });
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                if (result.getResult().equals("error")) {
+                    AlertUtils.createErrorAlert(getActivity(), result.getMessage(), false);
+                } else if (showSuccess) {
+                    AlertUtils.createAlert(getActivity(), R.string.settings_action_success, 1000);
+                }
+            });
+        }
     }
 
     @Override
@@ -340,7 +349,7 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         if (socket != null && socket.connected()) {
             return true;
         } else {
-            AlertUtils.createErrorAlert(getActivity(), R.string.settings_error_offline, false);
+            AlertUtils.createErrorAlert(requireActivity(), R.string.settings_error_offline, false);
             return false;
         }
     }

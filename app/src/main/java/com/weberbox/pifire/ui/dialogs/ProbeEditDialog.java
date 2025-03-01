@@ -24,7 +24,6 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogProbeEditBinding;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeInfo;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogProbeCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -135,6 +134,8 @@ public class ProbeEditDialog {
 
         bottomSheetDialog.show();
 
+        probeNameTv.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -167,5 +168,9 @@ public class ProbeEditDialog {
 
         probeProfileTv.setAdapter(profileAdapter);
         return probeProfileTv;
+    }
+
+    public interface DialogProbeCallback {
+        void onProbeUpdated(int position, @NotNull String probeName, @NotNull String probeProfile);
     }
 }

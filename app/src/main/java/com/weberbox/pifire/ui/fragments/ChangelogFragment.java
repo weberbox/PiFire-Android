@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.weberbox.changelibs.library.view.ChangeLogRecyclerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.FragmentChangelogBinding;
@@ -43,9 +42,7 @@ public class ChangelogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView actionBarText = binding.changelogToolbar.actionBarText;
-        ImageView navButton = binding.changelogToolbar.actionBarNavButton;
-        ImageView configButton = binding.changelogToolbar.actionBarConfigButton;
+        MaterialToolbar toolbar = binding.changelogToolbar;
         changeLogView = binding.changelog;
         animationView = binding.animationView;
 
@@ -55,27 +52,20 @@ public class ChangelogFragment extends Fragment {
 
         Insetter.builder()
                 .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
-                .applyToView(binding.changelogToolbar.getRoot());
+                .applyToView(binding.changelogToolbar);
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars(), Side.BOTTOM)
                 .applyToView(binding.changelog);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (getActivity() != null) {
-                getActivity().getWindow().setNavigationBarContrastEnforced(true);
-            }
+            requireActivity().getWindow().setNavigationBarContrastEnforced(true);
         } else {
-            if (getActivity() != null) {
-                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
-                        getActivity(), R.color.colorNavBarAlpha));
-            }
+            requireActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                    requireActivity(), R.color.colorNavBarAlpha));
         }
 
-        actionBarText.setText(R.string.changelog_title);
-        navButton.setImageResource(R.drawable.ic_nav_back);
-        navButton.setOnClickListener(v ->
+        toolbar.setNavigationOnClickListener(view1 ->
                 requireActivity().getOnBackPressedDispatcher().onBackPressed());
-        configButton.setVisibility(View.GONE);
 
     }
 

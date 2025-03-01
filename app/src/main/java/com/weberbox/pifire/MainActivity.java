@@ -7,12 +7,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -21,7 +21,6 @@ import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.DataBindingUtil;
@@ -34,6 +33,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback;
 import com.discord.panels.OverlappingPanelsLayout;
 import com.discord.panels.OverlappingPanelsLayout.Panel;
 import com.discord.panels.PanelsChildGestureRegionObserver;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
@@ -41,6 +41,7 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.ActivityMainPanelsBinding;
 import com.weberbox.pifire.enums.OneSignalResult;
 import com.weberbox.pifire.enums.ServerSupport;
@@ -52,6 +53,7 @@ import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.ui.activities.BaseActivity;
 import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.adapter.MainPagerAdapter;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
@@ -82,7 +84,6 @@ public class MainActivity extends BaseActivity implements
     private SettingsUtils settingsUtils;
     private MainViewModel mainViewModel;
     private ViewPager2 viewPager;
-    private TextView actionBarText;
     private TextView navGrillName;
     private FrameLayout startPanel;
     private UpdateUtils updateUtils;
@@ -90,7 +91,6 @@ public class MainActivity extends BaseActivity implements
     private NavListItem navDashboard, navPellets, navEvents;
     private Socket socket;
     private int downX;
-
     private boolean firstLaunch = true;
 
     @Override
@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements
 
         if (Prefs.getBoolean(getString(R.string.prefs_show_changelog), true)) {
             Prefs.putBoolean(getString(R.string.prefs_show_changelog), false);
-            showFragment(new ChangelogFragment());
+            showFragment(new ChangelogFragment(), R.animator.fragment_fade_enter);
         }
 
         getOnBackPressedDispatcher().addCallback(this, onBackCallback);
@@ -123,10 +123,11 @@ public class MainActivity extends BaseActivity implements
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        setSupportActionBar(binding.appBarMainPanel.toolbar);
+        MaterialToolbar toolbar = binding.appBarMainPanel.toolbar;
+        setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
-            setupActionBar(getSupportActionBar());
+            getSupportActionBar().setTitle(R.string.menu_dashboard);
         }
 
         panelsLayout = binding.overlappingPanels;
@@ -149,7 +150,6 @@ public class MainActivity extends BaseActivity implements
         viewPager.registerOnPageChangeCallback(onPageChangeCallback);
 
         bottomBar.setupWithViewPager2(viewPager);
-        actionBarText.setText(R.string.menu_dashboard);
 
         PanelsChildGestureRegionObserver.Provider.get().register(viewPager);
 
@@ -164,6 +164,23 @@ public class MainActivity extends BaseActivity implements
         if (!Prefs.getBoolean(getString(R.string.prefs_dc_fan))) {
             binding.settingsLayoutPanel.settingsPwm.setVisibility(View.GONE);
         }
+
+        if (VersionUtils.isUnSupportedBuild(ServerVersions.V_190, "23")) {
+            binding.navLayoutPanel.navRecipes.setVisibility(View.GONE);
+        }
+
+        toolbar.setNavigationOnClickListener(view -> {
+            onGestureRegionsUpdate(Collections.emptyList());
+            panelsLayout.openStartPanel();
+        });
+
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.nav_settings) {
+                onGestureRegionsUpdate(Collections.emptyList());
+                panelsLayout.openEndPanel();
+            }
+            return false;
+        });
 
         mainViewModel.getServerConnected().observe(this, connected -> {
             if (connected != null) {
@@ -186,7 +203,9 @@ public class MainActivity extends BaseActivity implements
         mainViewModel.getEndPanelStateChange().observe(this, state ->
                 panelsLayout.handleEndPanelState(state));
 
-        connectSocketListenData(socket);
+        if (socket != null) {
+            connectSocketListenData(socket);
+        }
 
         VersionUtils.checkSupportedServerVersion(this);
 
@@ -233,11 +252,8 @@ public class MainActivity extends BaseActivity implements
             binding = null;
         }
         if (socket != null) {
-            socket.disconnect();
-            socket.off(Socket.EVENT_CONNECT, onConnect);
-            socket.off(Socket.EVENT_DISCONNECT, onDisconnect);
-            socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-            socket.off(ServerConstants.LISTEN_GRILL_DATA, updateGrillData);
+            socket = null;
+            ((PiFireApplication) getApplication()).disconnectSocket();
         }
         if (viewPager != null) {
             PanelsChildGestureRegionObserver.Provider.get().unregister(viewPager);
@@ -248,21 +264,30 @@ public class MainActivity extends BaseActivity implements
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
+        boolean scrollToDash = intent.getBooleanExtra(Constants.INTENT_SCROLL_DASH, false);
         boolean restartSocket = intent.getBooleanExtra(Constants.INTENT_SETUP_RESTART, false);
         if (restartSocket) {
             socket = null;
+            ((PiFireApplication) getApplication()).disconnectSocket();
             socket = ((PiFireApplication) getApplication()).getSocket();
-            connectSocketListenData(socket);
+            if (socket != null) {
+                connectSocketListenData(socket);
+            }
+        }
+        if (scrollToDash) {
+            viewPager.setCurrentItem(Constants.FRAG_DASHBOARD, false);
         }
     }
 
     @Override
     public void onGestureRegionsUpdate(@NonNull List<Rect> list) {
         panelsLayout.setChildGestureRegions(list);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main_options, menu);
+        return true;
     }
 
     private void closePanelsDelayed() {
@@ -337,10 +362,9 @@ public class MainActivity extends BaseActivity implements
                         Prefs.getString("prefs_server_version", "1.0.0"),
                         Prefs.getString("prefs_server_build", "0")));
             }
-            case FAILED -> VersionUtils.getRawSupportedVersion(this, this);
             case UNTESTED -> {
                 Timber.d("Unlisted Version in ServerInfo");
-                showUntestedDialog(getString(R.string.dialog_untested_app_version_message));
+                showUntestedDialog();
             }
         }
     }
@@ -361,11 +385,11 @@ public class MainActivity extends BaseActivity implements
         });
     }
 
-    private void showUntestedDialog(String message) {
+    private void showUntestedDialog() {
         runOnUiThread(() -> {
             MaterialDialogText dialog = new MaterialDialogText.Builder(MainActivity.this)
                     .setTitle(getString(R.string.dialog_untested_app_version_title))
-                    .setMessage(message)
+                    .setMessage(getString(R.string.dialog_untested_app_version_message))
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.close),
                             (dialogInterface, which) -> dialogInterface.dismiss())
@@ -379,10 +403,8 @@ public class MainActivity extends BaseActivity implements
         Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
         intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, fragment);
         startActivity(intent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_left, android.R.anim.fade_out);
-        } else {
-            overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
         }
     };
 
@@ -394,28 +416,38 @@ public class MainActivity extends BaseActivity implements
         }
 
         @Override
+        public void onNavRecipes() {
+            closePanelsDelayed();
+            Intent intent = new Intent(MainActivity.this, RecipeActivity.class);
+            intent.putExtra(Constants.INTENT_RECIPE_FRAGMENT, Constants.FRAG_ALL_RECIPES);
+            startActivity(intent);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
+            }
+        }
+
+        @Override
         public void onNavAdmin() {
             closePanelsDelayed();
             Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
             intent.putExtra(Constants.INTENT_SETTINGS_FRAGMENT, Constants.FRAG_ADMIN_SETTINGS);
+            intent.putExtra(Constants.INTENT_TRANS_ADMIN, true);
             startActivity(intent);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.slide_in_right, android.R.anim.fade_out);
-            } else {
-                overridePendingTransition(R.anim.slide_in_right, android.R.anim.fade_out);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                overridePendingTransition(R.anim.slide_in_left, android.R.anim.fade_out);
             }
         }
 
         @Override
         public void onNavInfo() {
             closePanelsDelayed();
-            showFragment(new InfoFragment());
+            showFragment(new InfoFragment(), R.anim.slide_in_left);
         }
 
         @Override
         public void onNavChangelog() {
             closePanelsDelayed();
-            showFragment(new ChangelogFragment());
+            showFragment(new ChangelogFragment(), R.anim.slide_in_left);
         }
     };
 
@@ -433,8 +465,8 @@ public class MainActivity extends BaseActivity implements
         public void onPageSelected(int position) {
             super.onPageSelected(position);
             bottomBar.selectTabAt(position, true);
-            if (bottomBar.getSelectedTab() != null) {
-                actionBarText.setText(bottomBar.getSelectedTab().getTitle());
+            if (bottomBar.getSelectedTab() != null && getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(bottomBar.getSelectedTab().getTitle());
             }
             navDashboard.setNavSelected(position == Constants.FRAG_DASHBOARD);
             navPellets.setNavSelected(position == Constants.FRAG_PELLETS);
@@ -463,29 +495,14 @@ public class MainActivity extends BaseActivity implements
         }
     };
 
-    private void setupActionBar(ActionBar actionBar) {
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.layout_actionbar);
-        View view = actionBar.getCustomView();
-        actionBarText = view.findViewById(R.id.action_bar_text);
-        ImageButton navButton = view.findViewById(R.id.action_bar_nav_button);
-        ImageButton configButton = view.findViewById(R.id.action_bar_config_button);
-        navButton.setOnClickListener(v -> {
-            onGestureRegionsUpdate(Collections.emptyList());
-            panelsLayout.openStartPanel();
-        });
-        configButton.setOnClickListener(v -> {
-            onGestureRegionsUpdate(Collections.emptyList());
-            panelsLayout.openEndPanel();
-        });
-    }
-
-    private void showFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.animator.fragment_fade_enter, R.animator.fragment_fade_exit)
+    private void showFragment(Fragment fragment, int enterAnimation) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(enterAnimation, R.animator.fragment_fade_exit,
+                        enterAnimation, R.animator.fragment_fade_exit)
+                .setReorderingAllowed(true)
                 .replace(android.R.id.content, fragment)
-                .addToBackStack(null)
+                .addToBackStack(fragment.getClass().getName())
                 .commit();
     }
 
@@ -502,7 +519,9 @@ public class MainActivity extends BaseActivity implements
         public void call(Object... args) {
             Timber.d("Socket connected");
             mainViewModel.setServerConnected(true);
-            settingsUtils.requestSettingsData(socket);
+            if (socket != null) {
+                settingsUtils.requestSettingsData(socket);
+            }
         }
     };
 

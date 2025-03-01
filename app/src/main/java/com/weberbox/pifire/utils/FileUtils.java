@@ -34,10 +34,6 @@ public class FileUtils {
                 callback.onDataLoaded(readRawJSONFile(context, file)));
     }
 
-    public static String getJSONString(Context context, String filename) {
-        return loadJSONFile(context, filename);
-    }
-
     private static void saveJSONFile(Context context, String filename, String jsonString) {
         if (context != null) {
             boolean isFileCreated = FileUtils.createJSONFile(context,
@@ -114,7 +110,7 @@ public class FileUtils {
     }
 
     private static boolean isFilePresent(Context context, String fileName) {
-        String path = context.getCacheDir().getAbsolutePath() + "/" + fileName;
+        String path = context.getCacheDir().getAbsolutePath() + File.separator + fileName;
         File file = new File(path);
         return file.exists();
     }

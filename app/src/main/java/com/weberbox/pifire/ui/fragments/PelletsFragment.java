@@ -1,6 +1,5 @@
 package com.weberbox.pifire.ui.fragments;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,21 +32,20 @@ import com.weberbox.pifire.databinding.LayoutPelletsBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsCurrentBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsHopperBinding;
 import com.weberbox.pifire.databinding.LayoutPelletsUsageBinding;
-import com.weberbox.pifire.model.local.PelletItemModel;
-import com.weberbox.pifire.model.local.PelletLogModel;
 import com.weberbox.pifire.model.remote.PelletDataModel;
 import com.weberbox.pifire.model.remote.PelletDataModel.Current;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.PelletItemsAdapter;
+import com.weberbox.pifire.recycler.adapter.PelletLogAdapter;
 import com.weberbox.pifire.recycler.adapter.PelletProfileEditAdapter;
-import com.weberbox.pifire.recycler.adapter.PelletsLogAdapter;
+import com.weberbox.pifire.recycler.adapter.PelletProfileEditAdapter.PelletProfileEditCallback;
 import com.weberbox.pifire.ui.dialogs.BottomButtonDialog;
 import com.weberbox.pifire.ui.dialogs.PelletsAddDialog;
-import com.weberbox.pifire.ui.dialogs.PelletsEditDialog;
+import com.weberbox.pifire.ui.dialogs.PelletsProfileEditDialog;
+import com.weberbox.pifire.ui.dialogs.PelletsProfileEditDialog.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.dialogs.ProfilePickerDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.views.CardViewHeaderButton;
 import com.weberbox.pifire.ui.views.PelletsCardViewRecycler;
 import com.weberbox.pifire.ui.views.PelletsEditorRecycler;
@@ -58,7 +56,6 @@ import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -74,13 +71,9 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     private RelativeLayout rootContainer;
     private SwipeRefreshLayout swipeRefresh;
     private ProgressBar loadingBar;
-    private PelletItemsAdapter pelletBrandsAdapter, pelletWoodsAdapter;
-    private PelletsLogAdapter pelletsLogAdapter;
-    private PelletProfileEditAdapter profileEditAdapter;
-    private List<PelletItemModel> brandsEditList, woodsEditList;
-    private List<PelletLogModel> logsList;
-    private List<PelletProfileModel> profileList, profileEditList;
-    private List<String> brandsList, woodsList;
+    private PelletItemsAdapter pelletBrandAdapter, pelletWoodAdapter;
+    private PelletLogAdapter pelletLogAdapter;
+    private PelletProfileEditAdapter pelletProfileEditAdapter;
     private LinearProgressIndicator hopperLevel;
     private VeilLayout hopperPlaceholder, currentPlaceholder, usagePlaceholder;
     private VeilRecyclerFrameView brandsCardViewRecycler, woodsCardViewRecycler;
@@ -99,14 +92,6 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        brandsList = new ArrayList<>();
-        woodsList = new ArrayList<>();
-        brandsEditList = new ArrayList<>();
-        woodsEditList = new ArrayList<>();
-        logsList = new ArrayList<>();
-        profileList = new ArrayList<>();
-        profileEditList = new ArrayList<>();
 
         LayoutPelletsBinding pelletsBinding = binding.pelletsLayout;
         LayoutPelletsHopperBinding hopperBinding = pelletsBinding.pelletsHopperLevel;
@@ -133,10 +118,6 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         TextView addNewProfile = editorCardView.getHeaderButton();
         TextView addNewBrand = brandsCardView.getHeaderButton();
         TextView addNewWood = woodsCardView.getHeaderButton();
-        TextView brandsViewAll = brandsCardView.getViewAllButton();
-        TextView woodsViewAll = woodsCardView.getViewAllButton();
-        TextView logsViewAll = logsCardView.getViewAllButton();
-        TextView profilesViewAll = editorCardView.getViewAllButton();
 
         TextView refreshPellets = hopperHeader.getButton();
         TextView loadNewPellets = currentHeader.getButton();
@@ -144,25 +125,27 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         pelletUsageImperial = usageBinding.pelletsUsageImperial;
         pelletUsageMetric = usageBinding.pelletsUsageMetric;
 
-        pelletBrandsAdapter = new PelletItemsAdapter(brandsEditList, this, true);
+        pelletBrandAdapter = new PelletItemsAdapter(this::onPelletItemDeleted, true);
 
         brandsCardViewRecycler = brandsCardView.getRecycler();
-        brandsCardViewRecycler.setAdapter(pelletBrandsAdapter);
+        brandsCardViewRecycler.setAdapter(pelletBrandAdapter);
 
-        pelletWoodsAdapter = new PelletItemsAdapter(woodsEditList, this, true);
+        pelletWoodAdapter = new PelletItemsAdapter(this::onPelletItemDeleted, true);
 
         woodsCardViewRecycler = woodsCardView.getRecycler();
-        woodsCardViewRecycler.setAdapter(pelletWoodsAdapter);
+        woodsCardViewRecycler.setAdapter(pelletWoodAdapter);
 
-        pelletsLogAdapter = new PelletsLogAdapter(logsList, this, true);
+        pelletLogAdapter = new PelletLogAdapter(this::onPelletLogDeleted, true);
+
+        binding.pelletsLayout.pelletsLogs.setViewAll(true);
 
         logsRecycler = logsCardView.getRecycler();
-        logsRecycler.setAdapter(pelletsLogAdapter);
+        logsRecycler.setAdapter(pelletLogAdapter);
 
-        profileEditAdapter = new PelletProfileEditAdapter(profileEditList, this, true);
+        pelletProfileEditAdapter = new PelletProfileEditAdapter(profileEditCallback, true);
 
         editorRecycler = editorCardView.getRecycler();
-        editorRecycler.setAdapter(profileEditAdapter);
+        editorRecycler.setAdapter(pelletProfileEditAdapter);
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
@@ -174,111 +157,87 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
 
         refreshPellets.setOnClickListener(v -> {
             if (socketConnected()) {
-                ServerControl.sendCheckHopperLevel(socket, this::processPostResponse);
+                ServerControl.sendCheckHopperLevel(socket, this::processResponse);
                 toggleLoading(true);
             }
         });
 
         loadNewPellets.setOnClickListener(v -> {
-            if (socketConnected() && getActivity() != null) {
+            if (socketConnected()) {
+                List<PelletProfileModel> profileList = pelletProfileEditAdapter.getPelletProfiles();
                 if (profileList != null && currentPelletId != null) {
-                    ProfilePickerDialog profilePickerDialog = new ProfilePickerDialog(getActivity(),
-                            profileList, currentPelletId, PelletsFragment.this);
-                    profilePickerDialog.showDialog();
+                    ProfilePickerDialog dialog = new ProfilePickerDialog(requireActivity(),
+                            profileList, currentPelletId, this::onProfileSelected);
+                    dialog.showDialog();
                 }
             }
         });
 
         addNewBrand.setOnClickListener(v -> {
-            if (socketConnected() && getActivity() != null) {
-                PelletsAddDialog dialog = new PelletsAddDialog(getActivity(),
+            if (socketConnected()) {
+                PelletsAddDialog dialog = new PelletsAddDialog(requireActivity(),
                         getString(R.string.pellets_add_brand), Constants.PELLET_BRAND, null, null,
-                        this::onItemAdded);
+                        this::onPelletItemAdded);
                 dialog.showDialog();
             }
         });
 
         addNewWood.setOnClickListener(v -> {
-            if (socketConnected() && getActivity() != null) {
-                PelletsAddDialog dialog = new PelletsAddDialog(getActivity(),
+            if (socketConnected()) {
+                PelletsAddDialog dialog = new PelletsAddDialog(requireActivity(),
                         getString(R.string.pellets_add_woods), Constants.PELLET_WOOD, null, null,
-                        this::onItemAdded);
+                        this::onPelletItemAdded);
                 dialog.showDialog();
             }
         });
 
         addNewProfile.setOnClickListener(v -> {
-            if (socketConnected() && getActivity() != null) {
-                PelletsEditDialog dialog = new PelletsEditDialog(getActivity(), brandsList,
-                        woodsList, null, -1, PelletsFragment.this);
+            if (socketConnected()) {
+                PelletsProfileEditDialog dialog = new PelletsProfileEditDialog(requireActivity(),
+                        pelletBrandAdapter.getPelletItems(), pelletWoodAdapter.getPelletItems(),
+                        null, -1, PelletsFragment.this);
                 dialog.showDialog();
             }
         });
 
-        brandsViewAll.setOnClickListener(v -> {
-            setBrandsViewLimited(false);
-            pelletBrandsAdapter.setLimitEnabled(false);
-            pelletBrandsAdapter.notifyItemRangeChanged(AppConfig.RECYCLER_LIMIT, brandsList.size());
-        });
-
-        woodsViewAll.setOnClickListener(v -> {
-            setWoodsViewLimited(false);
-            pelletWoodsAdapter.setLimitEnabled(false);
-            pelletWoodsAdapter.notifyItemRangeChanged(AppConfig.RECYCLER_LIMIT, woodsList.size());
-        });
-
-        logsViewAll.setOnClickListener(v -> {
-            setLogsViewLimited(false);
-            pelletsLogAdapter.setLimitEnabled(false);
-            pelletsLogAdapter.notifyItemRangeChanged(AppConfig.RECYCLER_LIMIT, logsList.size());
-        });
-
-        profilesViewAll.setOnClickListener(v -> {
-            setProfilesViewLimited(false);
-            profileEditAdapter.setLimitEnabled(false);
-            profileEditAdapter.notifyItemRangeChanged(AppConfig.RECYCLER_LIMIT, profileList.size());
-        });
-
-        if (getActivity() != null) {
-            mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mainViewModel.getPelletData().observe(getViewLifecycleOwner(), pelletData -> {
-                swipeRefresh.setRefreshing(false);
-                if (pelletData != null && pelletData.getLiveData() != null) {
-                    if (pelletData.getIsNewData()) {
-                        FileUtils.executorSaveJSON(getActivity(), Constants.JSON_PELLETS,
-                                pelletData.getLiveData());
-                    }
-                    updateUIWithData(pelletData.getLiveData());
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mainViewModel.getPelletData().observe(getViewLifecycleOwner(), pelletData -> {
+            swipeRefresh.setRefreshing(false);
+            if (pelletData != null && pelletData.getLiveData() != null) {
+                if (pelletData.getIsNewData()) {
+                    FileUtils.executorSaveJSON(getActivity(), Constants.JSON_PELLETS,
+                            pelletData.getLiveData());
                 }
-            });
+                updateUIWithData(pelletData.getLiveData());
+            }
+        });
 
-            mainViewModel.getDashData().observe(getViewLifecycleOwner(), dashData -> {
-                if (dashData != null && dashData.getHopperLevel() != null) {
-                    toggleLoading(false);
-                    int pelletLevel = dashData.getHopperLevel();
-                    hopperLevel.setProgress(pelletLevel);
-                    hopperLevelText.setText(StringUtils.formatPercentage(pelletLevel));
-                    if (getActivity() != null) {
-                        if (pelletLevel < AppConfig.LOW_PELLET_WARNING) {
-                            hopperLevel.setIndicatorColor(ContextCompat.getColor(getActivity(),
-                                    R.color.colorPelletDanger));
-                            hopperLevel.setTrackColor(ContextCompat.getColor(getActivity(),
-                                    R.color.colorPelletDangerBG));
-                        } else {
-                            hopperLevel.setIndicatorColor(ContextCompat.getColor(getActivity(),
-                                    R.color.colorAccent));
-                            hopperLevel.setTrackColor(ContextCompat.getColor(getActivity(),
-                                    R.color.colorAccentDisabled));
-                        }
+        mainViewModel.getDashData().observe(getViewLifecycleOwner(), dashData -> {
+            if (dashData != null && dashData.getHopperLevel() != null) {
+                toggleLoading(false);
+                int pelletLevel = dashData.getHopperLevel();
+                hopperLevel.setProgress(pelletLevel);
+                hopperLevelText.setText(StringUtils.formatPercentage(pelletLevel));
+                if (getActivity() != null) {
+                    if (pelletLevel < AppConfig.LOW_PELLET_WARNING) {
+                        hopperLevel.setIndicatorColor(ContextCompat.getColor(getActivity(),
+                                R.color.colorPelletDanger));
+                        hopperLevel.setTrackColor(ContextCompat.getColor(getActivity(),
+                                R.color.colorPelletDangerBG));
+                    } else {
+                        hopperLevel.setIndicatorColor(ContextCompat.getColor(getActivity(),
+                                R.color.colorAccent));
+                        hopperLevel.setTrackColor(ContextCompat.getColor(getActivity(),
+                                R.color.colorAccentDisabled));
                     }
                 }
-            });
+            }
+        });
 
-            mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-                toggleLoading(true);
-                requestDataUpdate();
-            });
-        }
+        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+            toggleLoading(true);
+            requestDataUpdate();
+        });
     }
 
     @Override
@@ -349,7 +308,7 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         }
     }
 
-    private void processPostResponse(String response) {
+    private void processResponse(String response) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
         if (result.getResult().equals("error")) {
             requireActivity().runOnUiThread(() ->
@@ -358,30 +317,12 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private void updateUIWithData(String responseData) {
-        brandsList.clear();
-        woodsList.clear();
-        brandsEditList.clear();
-        woodsEditList.clear();
-        logsList.clear();
-        profileList.clear();
-        profileEditList.clear();
-
         try {
             PelletDataModel pelletDataModel = PelletDataModel.parseJSON(responseData);
-
             Current current = pelletDataModel.getCurrent();
-
-            brandsList.addAll(pelletDataModel.getBrands());
-            woodsList.addAll(pelletDataModel.getWoods());
-
-            Map<String, String> logs = pelletDataModel.getLogs();
             Map<String, PelletProfileModel> profiles = pelletDataModel.getProfiles();
-
             TransitionManager.beginDelayedTransition(rootContainer, new Fade(Fade.IN));
-
-            profileList.addAll(profiles.values());
 
             if (current.getDateLoaded() != null) {
                 if (Prefs.getString(getString(R.string.prefs_grill_units)).equals("F")) {
@@ -432,63 +373,14 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
                 }
             }
 
-            for (int i = 0; i < brandsList.size(); i++) {
-                PelletItemModel brandsList = new PelletItemModel(
-                        this.brandsList.get(i),
-                        Constants.PELLET_BRAND
-                );
-                brandsEditList.add(brandsList);
-            }
+            pelletBrandAdapter.setPelletItems(pelletDataModel.getBrands(), Constants.PELLET_BRAND);
 
-            pelletBrandsAdapter.notifyDataSetChanged();
+            pelletWoodAdapter.setPelletItems(pelletDataModel.getWoods(), Constants.PELLET_WOOD);
 
-            for (int i = 0; i < woodsList.size(); i++) {
-                PelletItemModel woodsList = new PelletItemModel(
-                        this.woodsList.get(i),
-                        Constants.PELLET_WOOD
-                );
-                woodsEditList.add(woodsList);
-            }
+            pelletLogAdapter.setPelletLogs(pelletDataModel.getLogs(),
+                    pelletDataModel.getProfiles());
 
-            pelletWoodsAdapter.notifyDataSetChanged();
-
-            for (PelletProfileModel profile : profiles.values()) {
-
-                if (profile != null) {
-                    PelletProfileModel profileEditList = new PelletProfileModel(
-                            profile.getBrand(),
-                            profile.getWood(),
-                            profile.getRating(),
-                            profile.getComments(),
-                            profile.getId()
-                    );
-                    this.profileEditList.add(profileEditList);
-                }
-            }
-
-            profileEditAdapter.notifyDataSetChanged();
-
-            for (String date : logs.keySet()) {
-                String logPelletId = logs.get(date);
-
-                PelletProfileModel pelletProfile = profiles.get(logPelletId);
-
-                if (pelletProfile != null) {
-                    PelletLogModel logList = new PelletLogModel(
-                            date,
-                            pelletProfile.getBrand() + " " + pelletProfile.getWood(),
-                            pelletProfile.getRating()
-                    );
-                    logsList.add(logList);
-                }
-            }
-
-            pelletsLogAdapter.notifyDataSetChanged();
-
-            setBrandsViewLimited(true);
-            setWoodsViewLimited(true);
-            setLogsViewLimited(true);
-            setProfilesViewLimited(true);
+            pelletProfileEditAdapter.setPelletProfiles(profiles);
 
             hopperPlaceholder.unVeil();
             usagePlaceholder.unVeil();
@@ -506,44 +398,20 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
 
         } catch (IllegalStateException | JsonSyntaxException | NullPointerException e) {
             Timber.e(e, "Pellets JSON Error");
-            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
-                    getString(R.string.menu_pellet_manager)), false);
+            if (getActivity() != null) {
+                AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                        getString(R.string.menu_pellet_manager)), false);
+            }
         }
     }
 
-    private void setWoodsViewLimited(boolean limited) {
-        if (pelletWoodsAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.pelletsWoods.setViewAll(limited && woodsList.size() > 3);
-        }
-    }
-
-    private void setBrandsViewLimited(boolean limited) {
-        if (pelletBrandsAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.pelletsBrands.setViewAll(limited && brandsList.size() > 3);
-        }
-    }
-
-    private void setLogsViewLimited(boolean limited) {
-        if (pelletsLogAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.pelletsLogs.setViewAll(limited && logsList.size() > 3);
-        }
-    }
-
-    private void setProfilesViewLimited(boolean limited) {
-        if (profileEditAdapter.getLimitEnabled()) {
-            binding.pelletsLayout.pelletsEditor.setViewAll(limited && profileList.size() > 3);
-        }
-    }
-
-    @Override
-    public void onItemDelete(String type, String item, int position) {
+    public void onPelletItemDeleted(String item, String type, int position) {
         if (socketConnected()) {
             BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
                     .setAutoDismiss(true)
                     .setTitle(getString(R.string.dialog_confirm_action))
                     .setMessage(getString(R.string.pellets_delete_content))
                     .setNegativeButton(getString(R.string.cancel), (dialogInterface, which) -> {
-
                     })
                     .setPositiveButtonWithColor(getString(R.string.delete),
                             R.color.dialog_positive_button_color_red, (dialogInterface, which) ->
@@ -553,8 +421,22 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         }
     }
 
-    @Override
-    public void onLogLongClick(String logDate, int position) {
+    public void onPelletItemAdded(String item, String type) {
+        if (socketConnected()) {
+            switch (type) {
+                case Constants.PELLET_WOOD -> {
+                    pelletWoodAdapter.addNewPelletItem(item, type);
+                    ServerControl.sendAddPelletWood(socket, item, this::processResponse);
+                }
+                case Constants.PELLET_BRAND -> {
+                    pelletBrandAdapter.addNewPelletItem(item, type);
+                    ServerControl.sendAddPelletBrand(socket, item, this::processResponse);
+                }
+            }
+        }
+    }
+
+    public void onPelletLogDeleted(String logDate, int position) {
         if (socketConnected()) {
             BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
                     .setAutoDismiss(true)
@@ -570,70 +452,67 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
         }
     }
 
-    @Override
     public void onDeleteConfirmed(String type, String item, int position) {
         if (socketConnected()) {
             switch (type) {
                 case Constants.PELLET_WOOD -> {
-                    ServerControl.sendDeletePelletWood(socket, item, this::processPostResponse);
-                    woodsEditList.remove(position);
-                    pelletWoodsAdapter.notifyItemRemoved(position);
-                    pelletWoodsAdapter.notifyItemRangeChanged(position, woodsEditList.size());
+                    pelletWoodAdapter.removePelletItem(position);
+                    ServerControl.sendDeletePelletWood(socket, item, this::processResponse);
                 }
                 case Constants.PELLET_BRAND -> {
-                    ServerControl.sendDeletePelletBrand(socket, item, this::processPostResponse);
-                    brandsEditList.remove(position);
-                    pelletBrandsAdapter.notifyItemRemoved(position);
-                    pelletBrandsAdapter.notifyItemRangeChanged(position, brandsEditList.size());
+                    pelletBrandAdapter.removePelletItem(position);
+                    ServerControl.sendDeletePelletBrand(socket, item, this::processResponse);
                 }
                 case Constants.PELLET_PROFILE -> deletePelletProfile(item, position);
                 case Constants.PELLET_LOG -> {
-                    ServerControl.sendDeletePelletLog(socket, item, this::processPostResponse);
-                    logsList.remove(position);
-                    pelletsLogAdapter.notifyItemRemoved(position);
-                    pelletsLogAdapter.notifyItemRangeChanged(position, logsList.size());
+                    pelletLogAdapter.removeLogItem(position);
+                    ServerControl.sendDeletePelletLog(socket, item, this::processResponse);
                 }
             }
         }
     }
 
-    @Override
-    public void onItemAdded(String type, String item) {
-        if (socketConnected()) {
-            switch (type) {
-                case Constants.PELLET_WOOD -> {
-                    ServerControl.sendAddPelletWood(socket, item, this::processPostResponse);
-                    forceRefreshData();
-                }
-                case Constants.PELLET_BRAND -> {
-                    ServerControl.sendAddPelletBrand(socket, item, this::processPostResponse);
-                    forceRefreshData();
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onProfileOpen(PelletProfileModel profile, int position) {
-        if (socketConnected()) {
-            PelletsEditDialog dialog = new PelletsEditDialog(requireActivity(), brandsList,
-                    woodsList, profile, position, PelletsFragment.this);
-            dialog.showDialog();
-        }
-    }
-
-    @Override
     public void onProfileSelected(String profileName, String profileId) {
         if (profileId != null && socket != null) {
-            ServerControl.sendLoadPelletProfile(socket, profileId, this::processPostResponse);
+            ServerControl.sendLoadPelletProfile(socket, profileId, this::processResponse);
             forceRefreshData();
         }
     }
 
+    private final PelletProfileEditCallback profileEditCallback = new PelletProfileEditCallback() {
+        @Override
+        public void onPelletProfileDeleted(String item, String type, int position) {
+            if (socketConnected()) {
+                BottomButtonDialog dialog = new BottomButtonDialog.Builder(requireActivity())
+                        .setAutoDismiss(true)
+                        .setTitle(getString(R.string.dialog_confirm_action))
+                        .setMessage(getString(R.string.pellets_delete_content))
+                        .setNegativeButton(getString(R.string.cancel), (dialogInterface, which) -> {
+                        })
+                        .setPositiveButtonWithColor(getString(R.string.delete),
+                                R.color.dialog_positive_button_color_red, (dialogInterface, which) ->
+                                        onDeleteConfirmed(type, item, position))
+                        .build();
+                dialog.show();
+            }
+        }
+
+        @Override
+        public void onPelletProfileOpen(PelletProfileModel profile, int position) {
+            if (socketConnected()) {
+                PelletsProfileEditDialog dialog = new PelletsProfileEditDialog(requireActivity(),
+                        pelletBrandAdapter.getPelletItems(), pelletWoodAdapter.getPelletItems(),
+                        profile, position, PelletsFragment.this);
+                dialog.showDialog();
+            }
+        }
+    };
+
     @Override
     public void onProfileAdd(PelletProfileModel profile) {
         if (socketConnected()) {
-            ServerControl.sendAddPelletProfile(socket, profile, this::processPostResponse);
+            ServerControl.sendAddPelletProfile(socket, profile, this::processResponse);
+            // For now need to force reload because server creates the ID
             forceRefreshData();
         }
     }
@@ -642,9 +521,9 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     public void onProfileEdit(PelletProfileModel profile, boolean load) {
         if (socketConnected()) {
             if (load) {
-                ServerControl.sendAddPelletProfileLoad(socket, profile, this::processPostResponse);
+                ServerControl.sendAddPelletProfileLoad(socket, profile, this::processResponse);
             } else {
-                ServerControl.sendEditPelletProfile(socket, profile, this::processPostResponse);
+                ServerControl.sendEditPelletProfile(socket, profile, this::processResponse);
             }
             forceRefreshData();
         }
@@ -658,11 +537,8 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
     private void deletePelletProfile(String profile, int position) {
         if (socketConnected()) {
             if (currentPelletId != null && !currentPelletId.equals(profile)) {
-                ServerControl.sendDeletePelletProfile(socket, profile, this::processPostResponse);
-                profileEditList.remove(position);
-                profileEditAdapter.notifyItemRemoved(position);
-                profileEditAdapter.notifyItemRangeChanged(position,
-                        profileEditList.size());
+                pelletProfileEditAdapter.removePelletProfile(position);
+                ServerControl.sendDeletePelletProfile(socket, profile, this::processResponse);
             } else {
                 AlertUtils.createErrorAlert(getActivity(), R.string.pellets_cannot_delete_profile,
                         false);

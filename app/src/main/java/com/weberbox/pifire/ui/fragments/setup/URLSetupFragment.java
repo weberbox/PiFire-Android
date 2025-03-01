@@ -1,7 +1,7 @@
 package com.weberbox.pifire.ui.fragments.setup;
 
-import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,10 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,27 +21,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonSyntaxException;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.normal.TedPermission;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.FragmentSetupUrlBinding;
-import com.weberbox.pifire.enums.ServerSupport;
-import com.weberbox.pifire.interfaces.ServerInfoCallback;
-import com.weberbox.pifire.interfaces.SettingsSocketCallback;
+import com.weberbox.pifire.interfaces.SetupProgressCallback;
 import com.weberbox.pifire.model.local.ExtraHeadersModel;
 import com.weberbox.pifire.model.remote.VersionsDataModel;
 import com.weberbox.pifire.model.view.SetupViewModel;
-import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.CredentialsDialog;
+import com.weberbox.pifire.ui.dialogs.CredentialsDialog.DialogAuthCallback;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
+import com.weberbox.pifire.utils.NetworkUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 import com.weberbox.pifire.utils.SettingsUtils;
 import com.weberbox.pifire.utils.VersionUtils;
@@ -50,44 +52,29 @@ import com.weberbox.pifire.utils.VersionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.Credentials;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import timber.log.Timber;
 
-public class URLSetupFragment extends Fragment implements DialogAuthCallback, ServerInfoCallback {
+public class URLSetupFragment extends Fragment {
 
     private FragmentSetupUrlBinding binding;
     private TextInputEditText serverAddress;
     private TextInputLayout serverURLLayout;
-    private AutoCompleteTextView serverScheme;
+    private SetupProgressCallback progressCallback;
     private SettingsUtils settingsUtils;
-    private ProgressBar connectProgress;
     private NavController navController;
-    private String url;
     private Socket socket;
-    private String validURL;
-    private String secure;
-    private String unSecure;
-    private String credentials;
-    private String extraHeaders;
 
     private boolean isConnecting = false;
 
@@ -111,22 +98,7 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         serverAddress = binding.serverAddress;
         serverURLLayout = binding.serverAddressLayout;
 
-        connectProgress = ((ServerSetupActivity) requireActivity()).getProgressBar();
-
-        serverScheme = binding.serverAddressSchemeTv;
-
-        secure = getString(R.string.https_scheme);
-        unSecure = getString(R.string.http_scheme);
-
-        String[] scheme = new String[]{unSecure, secure};
-
-        if (getActivity() != null) {
-            ArrayAdapter<String> schemesAdapter = new ArrayAdapter<>(getActivity(),
-                    R.layout.item_menu_popup, scheme);
-            serverScheme.setAdapter(schemesAdapter);
-        }
-
-        settingsUtils = new SettingsUtils(requireActivity(), settingsSocketCallback);
+        settingsUtils = new SettingsUtils(requireActivity());
 
         serverAddress.addTextChangedListener(new TextWatcher() {
             @Override
@@ -142,7 +114,12 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                 if (s.length() == 0) {
                     serverURLLayout.setError(getString(R.string.setup_blank_url));
                 } else {
-                    serverURLLayout.setError(null);
+                    if (isValidUrl(s.toString())) {
+                        serverURLLayout.setError(null);
+                    } else {
+                        serverURLLayout.setError(getString(R.string.setup_invalid_url));
+
+                    }
                 }
             }
         });
@@ -151,32 +128,28 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                 .get(SetupViewModel.class);
         setupViewModel.getFabEvent().observe(getViewLifecycleOwner(), unused -> {
             if (serverAddress.getText() != null && !isConnecting) {
-                verifyURLAndTestConnect(serverAddress.getText().toString());
-            }
-        });
-
-        setupViewModel.getQRData().observe(getViewLifecycleOwner(), serverAddress -> {
-            if (serverAddress != null && !serverAddress.isEmpty()) {
-                try {
-                    URI uri = new URI(serverAddress);
-                    this.serverAddress.setText(uri.getHost());
-                    if (serverAddress.startsWith(secure)) {
-                        serverScheme.setText(secure, false);
-                    }
-                } catch (URISyntaxException e) {
-                    AlertUtils.createErrorAlert(requireActivity(), R.string.setup_invalid_url_alert,
-                            false);
-                    Timber.w(e, "Invalid URI");
+                if (isValidUrl(serverAddress.getText().toString())) {
+                    String baseUrl = createUrl(serverAddress.getText().toString());
+                    setupViewModel.setAddress(baseUrl);
+                    verifyServerUrl(baseUrl);
+                } else {
+                    serverURLLayout.setError(getString(R.string.setup_invalid_url));
                 }
             }
         });
 
-        if (setupViewModel.getQRData().getValue() == null) {
-            setupViewModel.setQRData(Prefs.getString(getString(R.string.prefs_server_address), ""));
+        setupViewModel.getAddress().observe(getViewLifecycleOwner(), serverAddress -> {
+            if (serverAddress != null && !serverAddress.isEmpty()) {
+                this.serverAddress.setText(serverAddress);
+            }
+        });
+
+        if (setupViewModel.getAddress().getValue() == null) {
+            setupViewModel.setAddress(Prefs.getString(getString(R.string.prefs_server_address), ""));
         }
 
         ImageView scanQRButton = binding.useQrcode;
-        if (!cameraAvailable()) {
+        if (!isCameraAvailable()) {
             scanQRButton.setVisibility(View.GONE);
         }
 
@@ -184,8 +157,22 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
             if (Alerter.isShowing()) {
                 Alerter.hide();
             }
-            requestPermissionCamera();
+            if (isGooglePlayServicesAvailable(requireActivity())) {
+                if (!isConnecting) openQRCodeScanner(requireActivity(), setupViewModel);
+            } else {
+                showAlertError(getString(R.string.setup_error_play_services));
+            }
         });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            progressCallback = (SetupProgressCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
     }
 
     @Override
@@ -193,35 +180,17 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         super.onDestroyView();
         if (socket != null) {
             socket.disconnect();
-            socket.off(Socket.EVENT_CONNECT, onConnect);
-            socket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            socket.off(Socket.EVENT_CONNECT);
+            socket.off(Socket.EVENT_CONNECT_ERROR);
+            socket = null;
         }
     }
 
-    @Override
-    public void onAuthDialogSave(boolean success) {
-        if (success) {
-            Prefs.putBoolean(getString(R.string.prefs_server_basic_auth), true);
-            if (serverAddress.getText() != null && !isConnecting) {
-                verifyURLAndTestConnect(serverAddress.getText().toString());
-            }
-        } else {
-            showAlerter(getActivity(), getString(R.string.setup_error));
-        }
-    }
-
-    @Override
-    public void onAuthDialogCancel() {
-        if (connectProgress.isShown()) connectProgress.setVisibility(View.GONE);
-    }
-
-    private void verifyURLAndTestConnect(String address) {
-        if (!address.isEmpty()) {
-            if (isValidUrl(address)) {
-                String scheme = String.valueOf(serverScheme.getText());
-                String url = scheme + address;
+    private void verifyServerUrl(String baseUrl) {
+        if (!baseUrl.isEmpty()) {
+            if (isValidUrl(baseUrl)) {
                 serverAddress.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                testServerConnection(url);
+                testConnectionAndFetchVersions(baseUrl);
             } else {
                 serverURLLayout.setError(getString(R.string.setup_invalid_url));
             }
@@ -230,185 +199,156 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         }
     }
 
-    private void testServerConnection(String url) {
-        this.url = url;
+    private void testConnectionAndFetchVersions(String baseUrl) {
         if (!isConnecting) {
-            connectProgress.setVisibility(View.VISIBLE);
+            if (NetworkUtils.isNetworkAvailable(requireActivity().getApplication())) {
+                setConnecting(true);
 
-            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth), false)) {
-                String username = SecurityUtils.decrypt(getActivity(),
-                        R.string.prefs_server_basic_auth_user);
-                String password = SecurityUtils.decrypt(getActivity(),
-                        R.string.prefs_server_basic_auth_password);
-                credentials = Credentials.basic(username, password);
-            } else {
-                credentials = null;
-            }
-
-            if (Prefs.getBoolean(getString(R.string.prefs_server_extra_headers), false)) {
-                extraHeaders = SecurityUtils.decrypt(getActivity(), R.string.prefs_server_headers);
-            } else {
-                extraHeaders = null;
-            }
-
-            OkHttpClient client = HTTPUtils.createHttpClient(true, true);
-            Request request = HTTPUtils.createHttpRequest(url, credentials, extraHeaders);
-
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Timber.d(e, "Request onFailure");
-                    if (getActivity() != null) {
+                String url = baseUrl + ServerConstants.URL_API_SETTINGS;
+                HTTPUtils.createHttpGet(requireActivity(), url, new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         if (e.getMessage() != null && e.getMessage()
                                 .contains("CertPathValidatorException")) {
-                            getActivity().runOnUiThread(() -> {
-                                connectProgress.setVisibility(View.GONE);
-                                MaterialDialogText dialog = new MaterialDialogText.Builder(
-                                        requireActivity())
-                                        .setTitle(getString(R.string.setup_server_self_signed_title))
-                                        .setMessage(getString(R.string.setup_server_self_signed))
-                                        .setPositiveButton(getString(R.string.close),
-                                                (dialogInterface, which) ->
-                                                        dialogInterface.dismiss())
-                                        .build();
-                                dialog.show();
-                            });
+                            showSelfSignedCertDialog();
                         } else {
-                            getActivity().runOnUiThread(() -> {
-                                connectProgress.setVisibility(View.GONE);
-                                showAlerter(getActivity(), e.getMessage());
-                            });
+                            showAlertErrorAndLog(getString(R.string.http_on_failure),
+                                    "HTTP onFailure");
                         }
                     }
-                }
 
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull final Response response) {
-                    if (!response.isSuccessful()) {
-                        Timber.d("Response: %s", response.toString());
-                        if (response.code() == 401) {
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> {
-                                    connectProgress.setVisibility(View.GONE);
-                                    new CredentialsDialog(requireActivity(),
-                                            URLSetupFragment.this).showDialog();
-                                });
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response)
+                            throws IOException {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                checkSupportedVersion(response.body().string(), baseUrl);
+                            } else {
+                                showAlertErrorAndLog(getString(R.string.http_response_null),
+                                        "Response Body Null");
                             }
                         } else {
-                            if (getActivity() != null) {
-                                getActivity().runOnUiThread(() -> {
-                                    connectProgress.setVisibility(View.GONE);
-                                    showAlerter(getActivity(),
-                                            getString(R.string.setup_server_connect_error,
-                                                    String.valueOf(response.code()), response.message()));
-                                });
+                            if (response.code() == 401) {
+                                showCredentialsDialog(baseUrl);
+                            } else {
+                                showAlertErrorAndLog(getString(R.string.http_unsuccessful,
+                                                String.valueOf(response.code()),
+                                                HTTPUtils.getReasonPhrase(response.code())),
+                                        "Response Unsuccessful");
                             }
                         }
-                    } else {
-                        getServerVersion(url, credentials, extraHeaders);
+                        response.close();
                     }
-                    response.close();
-                }
-            });
-        }
-    }
-
-    private void getServerVersion(String baseUrl, String credentials, String extraHeaders) {
-        HttpUrl parsedUrl = HttpUrl.parse(baseUrl);
-        if (parsedUrl != null) {
-
-            HttpUrl.Builder urlBuilder = parsedUrl.newBuilder();
-            urlBuilder.addPathSegment("api");
-            urlBuilder.addPathSegment("settings");
-            String url = urlBuilder.build().toString();
-            HTTPUtils.createHttpGet(url, credentials, extraHeaders, new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    showHTTPRequestError(e.getMessage(), "HTTP Request onFailure");
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response)
-                        throws IOException {
-                    if (response.isSuccessful()) {
-                        if (response.body() != null) {
-                            VersionsDataModel versionsDataModel =
-                                    VersionsDataModel.parseJSON(response.body().string());
-                            try {
-                                VersionsDataModel.Versions versions =
-                                        versionsDataModel.getSettings().getVersions();
-                                if (versions != null) {
-                                    Prefs.putString(getString(R.string.prefs_server_version),
-                                            versions.getServerVersion());
-                                    Prefs.putString(getString(R.string.prefs_server_build),
-                                            versions.getServerBuild());
-                                    VersionUtils.checkSupportedServerVersion(
-                                            URLSetupFragment.this);
-                                } else {
-                                    showHTTPRequestError(getString(R.string.setup_versions_null),
-                                            "Setup Versions Null");
-                                }
-
-                            } catch (IllegalStateException | JsonSyntaxException |
-                                     NullPointerException e) {
-                                showHTTPRequestError(getString(R.string.setup_versions_error),
-                                        "Versions JSON Error");
-                            }
-                        } else {
-                            showHTTPRequestError(getString(R.string.setup_versions_response),
-                                    "Response Body Null");
-                        }
-                    } else {
-                        showHTTPRequestError(getString(R.string.setup_server_connect_error,
-                                String.valueOf(response.code()), response.message()),
-                                "Response Unsuccessful");
-                    }
-                }
-            });
-        } else {
-            showHTTPRequestError(getString(R.string.setup_versions_parse_error),
-                    "Parsed URL Error");
-        }
-    }
-
-    private void getFullSettingsData() {
-        if (!isConnecting) {
-            IO.Options options = new IO.Options();
-            Map<String, List<String>> headersMap = new HashMap<>();
-
-            isConnecting = true;
-
-            if (credentials != null) {
-                headersMap.put("Authorization", Collections.singletonList(credentials));
+                });
+            } else {
+                showNoNetworkDialog();
             }
+        }
+    }
+
+    private void checkSupportedVersion(String response, String baseUrl) {
+        VersionsDataModel versionsDataModel = VersionsDataModel.parseJSON(response);
+        try {
+            VersionsDataModel.Versions versions = versionsDataModel.getSettings().getVersions();
+            if (versions != null) {
+                String prefsVersion = getString(R.string.prefs_server_version);
+                String prefsBuild = getString(R.string.prefs_server_build);
+                Prefs.putString(prefsVersion, versions.getServerVersion());
+                Prefs.putString(prefsBuild, versions.getServerBuild());
+                VersionUtils.checkSupportedServerVersion((result, version, build) -> {
+                    switch (result) {
+                        case SUPPORTED -> getFullSettingsData(baseUrl);
+                        case UNSUPPORTED_MIN -> {
+                            Timber.d("Min Server Version Unsupported");
+                            showUnsupportedDialog(
+                                    getString(R.string.dialog_unsupported_server_min_message,
+                                            version, build.isBlank() ? "0" : build,
+                                            Prefs.getString(prefsVersion, "1.0.0"),
+                                            Prefs.getString(prefsBuild, "0")));
+                        }
+                        case UNSUPPORTED_MAX -> {
+                            Timber.d("Max Server Version Unsupported");
+                            showUnsupportedDialog(
+                                    getString(R.string.dialog_unsupported_server_max_message,
+                                            version, build.isBlank() ? "0" : build,
+                                            Prefs.getString(prefsVersion, "1.0.0"),
+                                            Prefs.getString(prefsBuild, "0")));
+                        }
+                        case UNTESTED -> {
+                            Timber.d("Unlisted Version in ServerInfo");
+                            showUntestedDialog(
+                                    getString(R.string.dialog_untested_app_version_message),
+                                    baseUrl);
+                        }
+                    }
+                });
+            } else {
+                showAlertErrorAndLog(getString(R.string.setup_versions_null),
+                        "Setup Versions Null");
+            }
+
+        } catch (IllegalStateException | JsonSyntaxException |
+                 NullPointerException e) {
+            showAlertErrorAndLog(getString(R.string.setup_versions_error),
+                    "Versions JSON Error");
+        }
+    }
+
+    private void getFullSettingsData(String baseURl) {
+        IO.Options options = new IO.Options();
+        Map<String, List<String>> headersMap = new HashMap<>();
+
+        String credentials = SecurityUtils.getCredentials(requireActivity());
+        String headers = SecurityUtils.getExtraHeaders(requireActivity());
+
+        if (credentials != null) {
+            headersMap.put("Authorization", Collections.singletonList(credentials));
+        }
+
+        if (headers != null) {
+            ArrayList<ExtraHeadersModel> extraHeaders = ExtraHeadersModel.parseJSON(headers);
+
             if (extraHeaders != null) {
-                ArrayList<ExtraHeadersModel> headers = ExtraHeadersModel.parseJSON(extraHeaders);
-                for (ExtraHeadersModel header : headers) {
+                for (ExtraHeadersModel header : extraHeaders) {
                     headersMap.put(header.getHeaderKey(),
                             Collections.singletonList(header.getHeaderValue()));
                 }
             }
-
-            if (headersMap.isEmpty()) {
-                createSocket(url, null);
-            } else {
-                options.extraHeaders = headersMap;
-                createSocket(url, options);
-            }
-
-            validURL = url;
-            socket.connect();
-            socket.on(Socket.EVENT_CONNECT, onConnect);
-            socket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         }
+
+        if (headersMap.isEmpty()) {
+            createSocket(baseURl, null);
+        } else {
+            options.extraHeaders = headersMap;
+            createSocket(baseURl, options);
+        }
+
+        socket.connect();
+        socket.on(Socket.EVENT_CONNECT, args ->
+                settingsUtils.requestSettingsData(socket, results -> {
+                    if (!results.isEmpty()) {
+                        showAlertErrorAndLog(getString(R.string.error_settings_errors, results),
+                                "Error saving settings");
+                    } else {
+                        completeSetup(baseURl);
+                    }
+                }));
+        socket.on(Socket.EVENT_CONNECT_ERROR, args ->
+                showAlertErrorAndLog(getString(R.string.setup_socket_error),
+                        "Error Connecting to Socket"));
     }
 
-    private void storeValidURL() {
-        if (validURL != null) {
-            Prefs.putString(getString(R.string.prefs_server_address), validURL);
-            navController.navigate(R.id.nav_setup_push);
-        } else {
-            showAlerter(getActivity(), getString(R.string.setup_error));
+    private void completeSetup(String baseUrl) {
+        if (getActivity() != null) {
+            Timber.d("Socket Connected Storing URL");
+            getActivity().runOnUiThread(() -> {
+                setConnecting(false);
+                if (Alerter.isShowing()) {
+                    Alerter.hide();
+                }
+                Prefs.putString(getString(R.string.prefs_server_address), baseUrl);
+                navController.navigate(R.id.nav_setup_push);
+            });
         }
     }
 
@@ -420,68 +360,29 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
                 socket = IO.socket(serverURL);
             }
         } catch (URISyntaxException e) {
-            Timber.w(e, "Socket URI Error");
-            isConnecting = false;
-            serverURLLayout.setError(getString(R.string.setup_error));
+            showAlertErrorAndLog(getString(R.string.setup_uri_exception), "Socket URI Error");
         }
     }
 
-    private final Emitter.Listener onConnect = args -> settingsUtils.requestSettingsData(socket);
-
-    private final Emitter.Listener onConnectError = new Emitter.Listener() {
-        @Override
-        public void call(Object... args) {
-            if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    Timber.d("Error Connecting to Socket");
-                    connectProgress.setVisibility(View.GONE);
-                    socket.disconnect();
-                    socket.close();
-                    isConnecting = false;
-                    showAlerter(getActivity(), getString(R.string.setup_cannot_connect));
-                });
-            }
-        }
-    };
-
-    private final SettingsSocketCallback settingsSocketCallback = results -> {
-        if (!results.isEmpty()) {
-            showSettingsError(getString(R.string.error_settings_errors, results));
-        } else {
-            completeSetup();
-        }
-    };
-
-    @Override
-    public void onServerInfo(ServerSupport result, String version, String build) {
-        switch (result) {
-            case SUPPORTED -> getFullSettingsData();
-            case UNSUPPORTED_MIN -> {
-                Timber.d("Min Server Version Unsupported");
-                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_min_message,
-                        version, build.isBlank() ? "0" : build,
-                        Prefs.getString("prefs_server_version", "1.0.0"),
-                        Prefs.getString("prefs_server_build", "0")));
-            }
-            case UNSUPPORTED_MAX -> {
-                Timber.d("Max Server Version Unsupported");
-                showUnsupportedDialog(getString(R.string.dialog_unsupported_server_max_message,
-                        version, build.isBlank() ? "0" : build,
-                        Prefs.getString("prefs_server_version", "1.0.0"),
-                        Prefs.getString("prefs_server_build", "0")));
-            }
-            case FAILED -> VersionUtils.getRawSupportedVersion(requireActivity(), this);
-            case UNTESTED -> {
-                Timber.d("Unlisted Version in ServerInfo");
-                showUntestedDialog(getString(R.string.dialog_untested_app_version_message));
-            }
+    private void showNoNetworkDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                setConnecting(false);
+                MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
+                        .setTitle(getString(R.string.dialog_no_network_title))
+                        .setMessage(getString(R.string.dialog_dialog_no_network_title_message))
+                        .setPositiveButton(getString(android.R.string.ok),
+                                (dialogInterface, which) -> dialogInterface.dismiss())
+                        .build();
+                dialog.show();
+            });
         }
     }
 
     private void showUnsupportedDialog(String message) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
-                connectProgress.setVisibility(View.GONE);
+                setConnecting(false);
                 MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
                         .setTitle(getString(R.string.dialog_unsupported_server_version_title))
                         .setMessage(message)
@@ -493,17 +394,16 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         }
     }
 
-    private void showUntestedDialog(String message) {
+    private void showUntestedDialog(String message, String baseUrl) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
-                connectProgress.setVisibility(View.GONE);
                 MaterialDialogText dialog = new MaterialDialogText.Builder(getActivity())
                         .setTitle(getString(R.string.dialog_untested_app_version_title))
                         .setMessage(message)
                         .setPositiveButton(getString(android.R.string.ok),
                                 (dialogInterface, which) -> {
                                     dialogInterface.dismiss();
-                                    getFullSettingsData();
+                                    getFullSettingsData(baseUrl);
                                 })
                         .build();
                 dialog.show();
@@ -511,78 +411,112 @@ public class URLSetupFragment extends Fragment implements DialogAuthCallback, Se
         }
     }
 
-    private void showHTTPRequestError(String string, String logMessage) {
+    private void showCredentialsDialog(String baseUrl) {
         if (getActivity() != null) {
             getActivity().runOnUiThread(() -> {
+                setConnecting(false);
+                new CredentialsDialog(requireActivity(),
+                        new DialogAuthCallback() {
+                            @Override
+                            public void onAuthDialogSave(boolean success) {
+                                if (success) {
+                                    Prefs.putBoolean(getString(R.string.prefs_server_basic_auth),
+                                            true);
+                                    verifyServerUrl(baseUrl);
+                                } else {
+                                    showAlertError(getString(R.string.settings_credentials_error));
+                                }
+                            }
+
+                            @Override
+                            public void onAuthDialogCancel() {
+                                setConnecting(false);
+                            }
+                        }).showDialog();
+            });
+        }
+    }
+
+    private void showSelfSignedCertDialog() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                setConnecting(false);
+                new MaterialDialogText.Builder(
+                        requireActivity())
+                        .setTitle(getString(R.string.setup_server_self_signed_title))
+                        .setMessage(getString(R.string.setup_server_self_signed))
+                        .setPositiveButton(getString(android.R.string.ok),
+                                (dialogInterface, which) ->
+                                        dialogInterface.dismiss())
+                        .build().show();
+            });
+        }
+    }
+
+    private void showAlertErrorAndLog(String string, String logMessage) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(() -> {
+                setConnecting(false);
                 Timber.d(logMessage);
-                connectProgress.setVisibility(View.GONE);
-                showAlerter(getActivity(), string);
+                showAlertError(string);
             });
         }
     }
 
-    private void showSettingsError(String error) {
+    private void showAlertError(String message) {
         if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                Timber.d(error);
-                connectProgress.setVisibility(View.GONE);
-                socket.disconnect();
-                socket.close();
-                isConnecting = false;
-                showAlerter(getActivity(), error);
-            });
-        }
-    }
-
-    private void completeSetup() {
-        if (getActivity() != null) {
-            Timber.d("Socket Connected Storing URL");
-            getActivity().runOnUiThread(() -> {
-                connectProgress.setVisibility(View.GONE);
-                isConnecting = false;
-                if (Alerter.isShowing()) {
-                    Alerter.hide();
-                }
-                storeValidURL();
-            });
+            setConnecting(false);
+            AlertUtils.createErrorAlert(getActivity(), message, 5000);
         }
     }
 
     private boolean isValidUrl(String url) {
-        if (url.startsWith(secure) || url.startsWith(unSecure)) {
-            return false;
-        }
-        Pattern p = Patterns.WEB_URL;
-        Matcher m = p.matcher(url.toLowerCase());
-        return m.matches();
+        return Patterns.WEB_URL.matcher(url).matches();
     }
 
-    private void showAlerter(Activity activity, String message) {
-        AlertUtils.createErrorAlert(activity, message, true);
+    private String createUrl(String url) {
+        return URLUtil.guessUrl(url).replaceAll("/$", "");
     }
 
-    public boolean cameraAvailable() {
+    private void setConnecting(boolean isConnecting) {
+        this.isConnecting = isConnecting;
+        serverAddress.setEnabled(!isConnecting);
+        if (progressCallback != null) progressCallback.onShowProgress(isConnecting);
+    }
+
+    public boolean isCameraAvailable() {
         return requireActivity().getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_CAMERA_ANY);
     }
 
-    private void requestPermissionCamera() {
-        TedPermission.create()
-                .setPermissions(Manifest.permission.CAMERA)
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted() {
-                        if (getActivity() != null) {
-                            navController.navigate(R.id.nav_setup_scan_qr);
-                        }
-                    }
+    public boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        return status == ConnectionResult.SUCCESS;
+    }
 
-                    @Override
-                    public void onPermissionDenied(List<String> deniedPermissions) {
-                        AlertUtils.createErrorAlert(getActivity(), R.string.app_permissions_denied,
-                                false);
+    private void openQRCodeScanner(Activity activity, SetupViewModel viewModel) {
+        GmsBarcodeScannerOptions options = new GmsBarcodeScannerOptions.Builder()
+                .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+                .enableAutoZoom()
+                .build();
+        GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(activity, options);
+        scanner.startScan()
+                .addOnSuccessListener(barcode -> {
+                    if (barcode.getValueType() == Barcode.TYPE_URL) {
+                        if (barcode.getUrl() != null) {
+                            viewModel.setAddress(barcode.getUrl().getUrl());
+                        } else {
+                            Toast.makeText(activity, getString(R.string.setup_scan_qr_failed),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        showAlertError(getString(R.string.setup_qr_invalid_url));
                     }
                 })
-                .check();
+                .addOnCanceledListener(() -> Toast.makeText(activity,
+                        getString(R.string.setup_scan_qr_canceled), Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(activity,
+                        getString(R.string.setup_scan_qr_failed), Toast.LENGTH_SHORT).show());
     }
 }

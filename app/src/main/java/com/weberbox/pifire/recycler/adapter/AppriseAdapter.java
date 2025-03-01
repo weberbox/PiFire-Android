@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -10,7 +9,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemAppriseLocationBinding;
-import com.weberbox.pifire.interfaces.AppriseCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class AppriseAdapter extends RecyclerView.Adapter<AppriseAdapter.ViewHold
     private final List<String> list;
     private final AppriseCallback callback;
 
-    public AppriseAdapter(final List<String> list, AppriseCallback callback) {
+    public AppriseAdapter(@NotNull final List<String> list, @NotNull AppriseCallback callback) {
         this.list = list;
         this.callback = callback;
     }
@@ -34,34 +34,29 @@ public class AppriseAdapter extends RecyclerView.Adapter<AppriseAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.item.setOnClickListener(view ->
-                callback.onLocationEdit(position));
-        holder.bindData(list, position);
+                callback.onLocationEdit(holder.getBindingAdapterPosition()));
+        holder.bindData(list, holder.getBindingAdapterPosition());
     }
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void addLocation(String location) {
+    public void addLocation(@NotNull String location) {
         list.add(list.size(), location);
-        notifyDataSetChanged();
-//        notifyItemInserted(list.size());
+        notifyItemInserted(list.size() - 1);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void removeLocation(int position) {
         list.remove(position);
-        notifyDataSetChanged();
-//        notifyItemRemoved(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, list.size());
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateLocation(int position, String location) {
+    public void updateLocation(int position, @NotNull String location) {
         list.set(position, location);
-        notifyDataSetChanged();
-//        notifyItemChanged(position);
+        notifyItemChanged(position);
     }
 
     public List<String> getLocations() {
@@ -84,5 +79,9 @@ public class AppriseAdapter extends RecyclerView.Adapter<AppriseAdapter.ViewHold
                 location.setText(list.get(position));
             }
         }
+    }
+
+    public interface AppriseCallback {
+        void onLocationEdit(int position);
     }
 }

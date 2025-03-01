@@ -20,7 +20,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPelletsAddBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsAddCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,14 +70,14 @@ public class PelletsAddDialog {
         }
 
         saveButton.setOnClickListener(v -> {
-            Editable pelletsEdit = input.getText();
-            if (pelletsEdit != null) {
-                String pellets = pelletsEdit.toString();
-                if (pellets.isEmpty()) {
+            Editable editable = input.getText();
+            if (editable != null) {
+                String item = editable.toString();
+                if (item.isEmpty()) {
                     saveButton.setEnabled(false);
                     inputLayout.setError(context.getString(R.string.text_blank_error));
                 } else {
-                    callback.onDialogConfirm(type, pellets);
+                    callback.onPelletItemAdded(item, type);
                     bottomSheetDialog.dismiss();
                 }
             }
@@ -139,6 +138,8 @@ public class PelletsAddDialog {
 
         bottomSheetDialog.show();
 
+        input.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -148,5 +149,9 @@ public class PelletsAddDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    public interface DialogPelletsAddCallback {
+        void onPelletItemAdded(@NotNull String item, @Nullable String type);
     }
 }

@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPmodeBinding;
-import com.weberbox.pifire.model.local.PModeModel;
+import com.weberbox.pifire.record.PModeRecord;
 import com.weberbox.pifire.recycler.adapter.PModeViewAdapter;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
@@ -92,8 +92,8 @@ public class PModeTableDialog {
         return bottomSheetDialog;
     }
 
-    private List<PModeModel> getPModeList() {
-        List<PModeModel> pModeList = new ArrayList<>();
+    private List<PModeRecord> getPModeList() {
+        List<PModeRecord> pModeList = new ArrayList<>();
 
         String augerOn = Prefs.getString(context.getString(R.string.prefs_work_auger_on),
                 context.getString(R.string.def_pmode_auger_on));
@@ -102,7 +102,7 @@ public class PModeTableDialog {
         String[] pmode_times = context.getResources().getStringArray(R.array.pmode_times);
 
         for (int i = 0; i < pmodes.length; i++) {
-            PModeModel mode = new PModeModel(
+            PModeRecord mode = new PModeRecord(
                     pmodes[i], augerOn,
                     pmode_times[i]
             );

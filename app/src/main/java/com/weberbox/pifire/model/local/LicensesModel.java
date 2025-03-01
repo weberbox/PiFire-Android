@@ -1,46 +1,34 @@
 package com.weberbox.pifire.model.local;
 
-import androidx.annotation.NonNull;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 
-@SuppressWarnings("unused")
+import java.util.ArrayList;
+import java.util.List;
+
 public class LicensesModel {
 
-    private int projectIconColor;
-    private String projectIcon;
-    private String projectText;
-    private String projectLicense;
+    @SerializedName("project")
+    @Expose
+    private String project;
+    @SerializedName("license")
+    @Expose
+    private String license;
 
-    public LicensesModel(@NonNull final String project, @NonNull final String license) {
-        setProjectText(project);
-        setProjectLicense(license);
-        setProjectIcon(project.substring(0, 1).toUpperCase());
+    public String getProject() {
+        return project;
     }
 
-    @NonNull
-    public String getProjectIcon() {
-        return projectIcon;
+    public String getLicense() {
+        return license;
     }
 
-    public void setProjectIcon(@NonNull final String projectIcon) {
-        this.projectIcon = projectIcon;
-    }
-
-    @NonNull
-    public String getProjectText() {
-        return projectText;
-    }
-
-    public void setProjectText(@NonNull final String projectText) {
-        this.projectText = projectText;
-    }
-
-    @NonNull
-    public String getProjectLicense() {
-        return projectLicense;
-    }
-
-    private void setProjectLicense(@NonNull final String projectLicense) {
-        this.projectLicense = projectLicense;
+    public static ArrayList<LicensesModel> parseJSON(String response) {
+        Gson gson = new GsonBuilder().create();
+        return gson.fromJson(response, new TypeToken<List<LicensesModel>>(){}.getType());
     }
 
 }

@@ -101,6 +101,8 @@ public class PrefsEditDialog {
 
         bottomSheetDialog.show();
 
+        input.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {

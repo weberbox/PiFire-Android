@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,19 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemSmartStartBinding;
-import com.weberbox.pifire.interfaces.SmartStartCallback;
-import com.weberbox.pifire.model.local.SmartStartModel;
+import com.weberbox.pifire.record.SmartStartRecord;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SmartStartAdapter extends RecyclerView.Adapter<SmartStartAdapter.ViewHolder> {
 
-    private final List<SmartStartModel> list;
+    private final List<SmartStartRecord> list;
     private final SmartStartCallback callback;
     private final String units;
 
-    public SmartStartAdapter(final List<SmartStartModel> list, String units,
-                             SmartStartCallback callback) {
+    public SmartStartAdapter(@NotNull final List<SmartStartRecord> list, @NotNull String units,
+                             @NotNull SmartStartCallback callback) {
         this.list = list;
         this.units = units;
         this.callback = callback;
@@ -44,42 +44,41 @@ public class SmartStartAdapter extends RecyclerView.Adapter<SmartStartAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void addNewSmartStartItem(Integer temp, Integer startUp, Integer augerOn,
-                                     Integer pMode) {
-        Integer lastStartUp = list.get(list.size() - 1).getStartUp();
-        Integer lastAugerOn = list.get(list.size() - 1).getAugerOn();
-        Integer lastPMode = list.get(list.size() - 1).getPMode();
-        list.remove(list.size() - 1);
-        list.add(list.size(), new SmartStartModel(temp, lastStartUp, lastAugerOn, lastPMode));
-        list.add(list.size(), new SmartStartModel(temp + 1, startUp, augerOn, pMode));
-        notifyDataSetChanged();
+    public void addNewSmartStartItem(@NotNull Integer temp, @NotNull Integer startUp,
+                                     @NotNull Integer augerOn, @NotNull Integer pMode) {
+        int lastPosition = list.size() - 1;
+        Integer lastStartUp = list.get(lastPosition).startUp();
+        Integer lastAugerOn = list.get(lastPosition).augerOn();
+        Integer lastPMode = list.get(lastPosition).pMode();
+        list.set(lastPosition, new SmartStartRecord(temp, lastStartUp, lastAugerOn, lastPMode));
+        list.add(list.size(), new SmartStartRecord(temp + 1, startUp, augerOn, pMode));
+        notifyItemRangeChanged(lastPosition, 2);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void removeSmartStartItem(int position) {
         list.remove(position);
-        Integer lastTemp = list.get(list.size() - 2).getTemp();
-        Integer lastStartUp = list.get(list.size() - 1).getStartUp();
-        Integer lastAugerOn = list.get(list.size() - 1).getAugerOn();
-        Integer lastPMode = list.get(list.size() - 1).getPMode();
-        list.set(position - 1, new SmartStartModel(lastTemp + 1, lastStartUp, lastAugerOn,
+        int lastPosition = list.size() - 1;
+        Integer lastTemp = list.get(list.size() - 2).temp();
+        Integer lastStartUp = list.get(lastPosition).startUp();
+        Integer lastAugerOn = list.get(lastPosition).augerOn();
+        Integer lastPMode = list.get(lastPosition).pMode();
+        list.set(position - 1, new SmartStartRecord(lastTemp + 1, lastStartUp, lastAugerOn,
                 lastPMode));
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position - 1, 2);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateSmartStartItem(int position, Integer temp, Integer startUp, Integer augerOn,
-                                     Integer pMode) {
-        list.set(position, new SmartStartModel(temp, startUp, augerOn, pMode));
-        notifyDataSetChanged();
+    public void updateSmartStartItem(int position, @NotNull Integer temp, @NotNull Integer startUp,
+                                     @NotNull Integer augerOn, @NotNull Integer pMode) {
+        list.set(position, new SmartStartRecord(temp, startUp, augerOn, pMode));
+        notifyItemRangeChanged(position, 2);
     }
 
-    public List<SmartStartModel> getSmartStartItems() {
-        return list.isEmpty() ? null : list;
+    public List<SmartStartRecord> getSmartStartItems() {
+        return list;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,29 +98,33 @@ public class SmartStartAdapter extends RecyclerView.Adapter<SmartStartAdapter.Vi
             item = binding.itemSmartStartContainer;
         }
 
-        public void bindData(final List<SmartStartModel> list, int position, String units) {
+        public void bindData(final List<SmartStartRecord> list, int position, String units) {
             int rangeSize = list.size();
             if (rangeSize > 0) {
                 String temp;
                 if (position == 0) {
-                    temp = "< " + list.get(position).getTemp() + " " + units;
+                    temp = "< " + list.get(position).temp() + " " + units;
                 } else if (position == rangeSize - 1) {
-                    temp = "> " + (list.get(position).getTemp() - 1) + " " + units;
+                    temp = "> " + (list.get(position).temp() - 1) + " " + units;
                 } else {
-                    temp = list.get(position - 1).getTemp() + "-" +
-                            list.get(position).getTemp() + " " + units;
+                    temp = list.get(position - 1).temp() + "-" +
+                            list.get(position).temp() + " " + units;
                 }
 
-                String start = list.get(position).getStartUp() + "s";
-                String auger = list.get(position).getAugerOn() + "s";
+                String start = list.get(position).startUp() + "s";
+                String auger = list.get(position).augerOn() + "s";
 
                 range.setText(temp);
                 startUp.setText(start);
                 augerOn.setText(auger);
-                pMode.setText(String.valueOf(list.get(position).getPMode()));
+                pMode.setText(String.valueOf(list.get(position).pMode()));
 
             }
         }
+    }
+
+    public interface SmartStartCallback {
+        void onSmartStartEdit(int position);
     }
 }
 

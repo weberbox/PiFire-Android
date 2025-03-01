@@ -6,15 +6,30 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
-    <include
-        android:id="@+id/info_toolbar"
-        layout="@layout/layout_actionbar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/info_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:theme="@style/Theme.PiFire.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/info_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryDark"
+            app:title="@string/menu_info"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/Theme.PiFire.PopupOverlay"
+            app:titleTextAppearance="@style/Text20AllerBold" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/info_pull_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/info_toolbar">
+        android:layout_below="@id/info_app_bar">
 
         <ScrollView
             android:id="@+id/info_scroll_view"
@@ -134,7 +149,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/info_toolbar"
+        android:layout_below="@+id/info_app_bar"
         android:layout_marginTop="-7dp"
         android:indeterminate="true"
         android:indeterminateTint="@color/colorAccent"

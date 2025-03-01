@@ -1223,21 +1223,361 @@ public class SettingsDataModel {
     }
 
     public static class Controller {
+        @SerializedName("config")
+        @Expose
+        private Config config;
         @SerializedName("selected")
         @Expose
         private String selected;
 
-        public String getController() {
+        public Config getConfig() {
+            return config;
+        }
+
+        public void setConfig(Config config) {
+            this.config = config;
+        }
+
+        public Controller withConfig(Config config) {
+            this.config = config;
+            return this;
+        }
+
+        public String getSelected() {
             return selected;
         }
 
-        public void setController(String selected) {
+        public void setSelected(String selected) {
             this.selected = selected;
         }
 
-        public Controller withController(String selected) {
+        public Controller withSelected(String selected) {
             this.selected = selected;
             return this;
+        }
+
+        public static class Config {
+
+            @SerializedName("pid")
+            @Expose
+            private Pid pid;
+            @SerializedName("pid_ac")
+            @Expose
+            private PidAc pidAc;
+            @SerializedName("pid_sp")
+            @Expose
+            private PidSp pidSp;
+
+            public Pid getPid() {
+                return pid;
+            }
+
+            public void setPid(Pid pid) {
+                this.pid = pid;
+            }
+
+            public Config withPid(Pid pid) {
+                this.pid = pid;
+                return this;
+            }
+
+            public PidAc getPidAc() {
+                return pidAc;
+            }
+
+            public void setPidAc(PidAc pidAc) {
+                this.pidAc = pidAc;
+            }
+
+            public Config withPidAc(PidAc pidAc) {
+                this.pidAc = pidAc;
+                return this;
+            }
+
+            public PidSp getPidSp() {
+                return pidSp;
+            }
+
+            public void setPidSp(PidSp pidSp) {
+                this.pidSp = pidSp;
+            }
+
+            public Config withPidSp(PidSp pidSp) {
+                this.pidSp = pidSp;
+                return this;
+            }
+
+            public static class Pid {
+
+                @SerializedName("PB")
+                @Expose
+                private Double pb;
+                @SerializedName("Td")
+                @Expose
+                private Double td;
+                @SerializedName("Ti")
+                @Expose
+                private Double ti;
+                @SerializedName("center")
+                @Expose
+                private Double center;
+
+                public Double getPb() {
+                    return pb;
+                }
+
+                public void setPb(Double pb) {
+                    this.pb = pb;
+                }
+
+                public Pid withPb(Double pb) {
+                    this.pb = pb;
+                    return this;
+                }
+
+                public Double getTd() {
+                    return td;
+                }
+
+                public void setTd(Double td) {
+                    this.td = td;
+                }
+
+                public Pid withTd(Double td) {
+                    this.td = td;
+                    return this;
+                }
+
+                public Double getTi() {
+                    return ti;
+                }
+
+                public void setTi(Double ti) {
+                    this.ti = ti;
+                }
+
+                public Pid withTi(Double ti) {
+                    this.ti = ti;
+                    return this;
+                }
+
+                public Double getCenter() {
+                    return center;
+                }
+
+                public void setCenter(Double center) {
+                    this.center = center;
+                }
+
+                public Pid withCenter(Double center) {
+                    this.center = center;
+                    return this;
+                }
+
+            }
+
+            public static class PidAc {
+
+                @SerializedName("PB")
+                @Expose
+                private Double pb;
+                @SerializedName("Td")
+                @Expose
+                private Double td;
+                @SerializedName("Ti")
+                @Expose
+                private Double ti;
+                @SerializedName("center_factor")
+                @Expose
+                private Double centerFactor;
+                @SerializedName("stable_window")
+                @Expose
+                private Integer stableWindow;
+
+                public Double getPb() {
+                    return pb;
+                }
+
+                public void setPb(Double pb) {
+                    this.pb = pb;
+                }
+
+                public PidAc withPb(Double pb) {
+                    this.pb = pb;
+                    return this;
+                }
+
+                public Double getTd() {
+                    return td;
+                }
+
+                public void setTd(Double td) {
+                    this.td = td;
+                }
+
+                public PidAc withTd(Double td) {
+                    this.td = td;
+                    return this;
+                }
+
+                public Double getTi() {
+                    return ti;
+                }
+
+                public void setTi(Double ti) {
+                    this.ti = ti;
+                }
+
+                public PidAc withTi(Double ti) {
+                    this.ti = ti;
+                    return this;
+                }
+
+                public Double getCenterFactor() {
+                    return centerFactor;
+                }
+
+                public void setCenterFactor(Double centerFactor) {
+                    this.centerFactor = centerFactor;
+                }
+
+                public PidAc withCenterFactor(Double centerFactor) {
+                    this.centerFactor = centerFactor;
+                    return this;
+                }
+
+                public Integer getStableWindow() {
+                    return stableWindow;
+                }
+
+                public void setStableWindow(Integer stableWindow) {
+                    this.stableWindow = stableWindow;
+                }
+
+                public PidAc withStableWindow(Integer stableWindow) {
+                    this.stableWindow = stableWindow;
+                    return this;
+                }
+
+            }
+
+            public static class PidSp {
+
+                @SerializedName("PB")
+                @Expose
+                private Double pb;
+                @SerializedName("Td")
+                @Expose
+                private Double td;
+                @SerializedName("Ti")
+                @Expose
+                private Double ti;
+                @SerializedName("center_factor")
+                @Expose
+                private Double centerFactor;
+                @SerializedName("stable_window")
+                @Expose
+                private Integer stableWindow;
+                @SerializedName("tau")
+                @Expose
+                private Integer tau;
+                @SerializedName("theta")
+                @Expose
+                private Integer theta;
+
+                public Double getPb() {
+                    return pb;
+                }
+
+                public void setPb(Double pb) {
+                    this.pb = pb;
+                }
+
+                public PidSp withPb(Double pb) {
+                    this.pb = pb;
+                    return this;
+                }
+
+                public Double getTd() {
+                    return td;
+                }
+
+                public void setTd(Double td) {
+                    this.td = td;
+                }
+
+                public PidSp withTd(Double td) {
+                    this.td = td;
+                    return this;
+                }
+
+                public Double getTi() {
+                    return ti;
+                }
+
+                public void setTi(Double ti) {
+                    this.ti = ti;
+                }
+
+                public PidSp withTi(Double ti) {
+                    this.ti = ti;
+                    return this;
+                }
+
+                public Double getCenterFactor() {
+                    return centerFactor;
+                }
+
+                public void setCenterFactor(Double centerFactor) {
+                    this.centerFactor = centerFactor;
+                }
+
+                public PidSp withCenterFactor(Double centerFactor) {
+                    this.centerFactor = centerFactor;
+                    return this;
+                }
+
+                public Integer getStableWindow() {
+                    return stableWindow;
+                }
+
+                public void setStableWindow(Integer stableWindow) {
+                    this.stableWindow = stableWindow;
+                }
+
+                public PidSp withStableWindow(Integer stableWindow) {
+                    this.stableWindow = stableWindow;
+                    return this;
+                }
+
+                public Integer getTau() {
+                    return tau;
+                }
+
+                public void setTau(Integer tau) {
+                    this.tau = tau;
+                }
+
+                public PidSp withTau(Integer tau) {
+                    this.tau = tau;
+                    return this;
+                }
+
+                public Integer getTheta() {
+                    return theta;
+                }
+
+                public void setTheta(Integer theta) {
+                    this.theta = theta;
+                }
+
+                public PidSp withTheta(Integer theta) {
+                    this.theta = theta;
+                    return this;
+                }
+
+            }
+
         }
     }
 

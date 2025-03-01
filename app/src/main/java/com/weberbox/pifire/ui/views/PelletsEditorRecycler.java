@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,8 +23,6 @@ public class PelletsEditorRecycler extends CardView {
     private TextView headerTitle;
     private TextView headerButton;
     private ImageView headerIcon;
-    private View gradient;
-    private TextView viewAllButton;
     private boolean buttonEnabled;
 
     public PelletsEditorRecycler(@NonNull Context context) {
@@ -64,8 +61,6 @@ public class PelletsEditorRecycler extends CardView {
             headerButton = binding.addProfileButton;
             headerIcon = binding.editorHeaderIcon;
             recyclerView = binding.editorRecycler;
-            gradient = binding.editorViewAllShadow;
-            viewAllButton = binding.editorViewAll;
 
             recyclerView.setLayoutManager(new ScrollDisableLayoutManager(context));
             recyclerView.setNestedScrollingEnabled(false);
@@ -118,15 +113,6 @@ public class PelletsEditorRecycler extends CardView {
 
     public VeilRecyclerFrameView getRecycler() {
         return recyclerView;
-    }
-
-    public void setViewAll(boolean shown) {
-        gradient.setVisibility(shown ? VISIBLE : GONE);
-        viewAllButton.setVisibility(shown ? VISIBLE : GONE);
-    }
-
-    public TextView getViewAllButton() {
-        return viewAllButton;
     }
 
 }

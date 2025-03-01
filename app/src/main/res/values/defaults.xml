@@ -80,4 +80,7 @@
     <string name="def_startup_goto_mode">Smoke</string>
     <string name="def_startup_goto_temp">165</string>
 
+    <string name="def_recipe_time">0 min</string>
+    <string name="def_recipe_diff">Easy</string>
+
 </resources>

@@ -4,7 +4,13 @@
     <changelogversion versionName="2.4.0" changeDate="" currentVersion="true">
         <changelogtext logType="new">Added support for PiFire v1.9.0 Build 5+</changelogtext>
         <changelogtext logType="new">Added high and low probe notifications for supported PiFire versions</changelogtext>
+        <changelogtext logType="new">Added elapsed time for supported PiFire versions</changelogtext>
+        <changelogtext logType="new">Added outputs status for supported PiFire versions</changelogtext>
         <changelogtext logType="new">Added probe ETAs for supported PiFire versions</changelogtext>
+        <changelogtext logType="new">Added recipes support. You can now view, start, share, print and control running recipes with possible editing support later down the road</changelogtext>
+        <changelogtext logType="fix">Fixed issue with changing values on settings in some dialogs</changelogtext>
+        <changelogtext logType="imp">Check for network connection before making API Calls</changelogtext>
+        <changelogtext logType="imp">Improved performance for views and layouts</changelogtext>
         <changelogtext logType="imp">Move app toward Edge to Edge display and unify style across Android versions</changelogtext>
         <changelogtext logType="imp">Update setup to check server version via api before attempting to fetch full settings via socket. This will make the errors to the user clearer if the server version is not supported by the app. </changelogtext>
         <changelogtext logType="imp">Add improved server settings errors, when an issues occurs saving settings it will be displayed in a popup message</changelogtext>

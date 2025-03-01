@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,8 +23,6 @@ public class PelletsCardViewRecycler extends CardView {
     private TextView headerTitle;
     private TextView headerButton;
     private ImageView headerIcon;
-    private View gradient;
-    private TextView viewAllButton;
     private boolean buttonEnabled;
 
     public PelletsCardViewRecycler(@NonNull Context context) {
@@ -38,7 +35,8 @@ public class PelletsCardViewRecycler extends CardView {
         init(context, attrs);
     }
 
-    public PelletsCardViewRecycler(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PelletsCardViewRecycler(@NonNull Context context, @Nullable AttributeSet attrs,
+                                   int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -48,13 +46,18 @@ public class PelletsCardViewRecycler extends CardView {
                 LayoutInflater.from(context), this, true);
 
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PelletsCardViewRecycler);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs,
+                    R.styleable.PelletsCardViewRecycler);
 
-            String headerText = typedArray.getString(R.styleable.PelletsCardViewRecycler_pellets_header_title);
-            String buttonText = typedArray.getString(R.styleable.PelletsCardViewRecycler_pellets_button_text);
-            buttonEnabled = typedArray.getBoolean(R.styleable.PelletsCardViewRecycler_pellets_button_enabled,
+            String headerText = typedArray.getString(
+                    R.styleable.PelletsCardViewRecycler_pellets_header_title);
+            String buttonText = typedArray.getString(
+                    R.styleable.PelletsCardViewRecycler_pellets_button_text);
+            buttonEnabled = typedArray.getBoolean(
+                    R.styleable.PelletsCardViewRecycler_pellets_button_enabled,
                     false);
-            int headerIconArray = typedArray.getResourceId(R.styleable.PelletsCardViewRecycler_pellets_header_icon,
+            int headerIconArray = typedArray.getResourceId(
+                    R.styleable.PelletsCardViewRecycler_pellets_header_icon,
                     R.drawable.ic_pellet_edit);
 
             headerText = headerText == null ? "" : headerText;
@@ -64,8 +67,6 @@ public class PelletsCardViewRecycler extends CardView {
             headerButton = binding.cardHeaderButton;
             headerIcon = binding.cardHeaderIcon;
             recyclerView = binding.pelletsRecycler;
-            gradient = binding.pelletsViewAllShadow;
-            viewAllButton = binding.pelletsViewAll;
 
             recyclerView.setLayoutManager(new ScrollDisableLayoutManager(context));
             recyclerView.setNestedScrollingEnabled(false);
@@ -118,15 +119,6 @@ public class PelletsCardViewRecycler extends CardView {
 
     public VeilRecyclerFrameView getRecycler() {
         return recyclerView;
-    }
-
-    public void setViewAll(boolean shown) {
-        gradient.setVisibility(shown ? VISIBLE : GONE);
-        viewAllButton.setVisibility(shown ? VISIBLE : GONE);
-    }
-
-    public TextView getViewAllButton() {
-        return viewAllButton;
     }
 
 }

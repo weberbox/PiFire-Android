@@ -1,18 +1,8 @@
 package com.weberbox.pifire.constants;
 
-@SuppressWarnings("unused")
+
 public class Constants {
 
-    // Grill Modes
-    public static final String GRILL_CURRENT_STOP = "Stop";
-    public static final String GRILL_CURRENT_STARTUP = "Startup";
-    public static final String GRILL_CURRENT_REIGNITE = "Reignite";
-    public static final String GRILL_CURRENT_SMOKE = "Smoke";
-    public static final String GRILL_CURRENT_HOLD = "Hold";
-    public static final String GRILL_CURRENT_SHUTDOWN = "Shutdown";
-    public static final String GRILL_CURRENT_MONITOR = "Monitor";
-    public static final String GRILL_CURRENT_MANUAL = "Manual";
-    public static final String GRILL_CURRENT_PRIME = "Prime";
 
     // Probe Types
     public static final String DASH_PROBE_PRIMARY = "Primary";
@@ -36,6 +26,11 @@ public class Constants {
     public static final int FRAG_MANUAL_SETTINGS = 9;
     public static final int FRAG_PWM_SETTINGS = 10;
 
+    // Recipe Fragment
+    public static final int FRAG_ALL_RECIPES = 0;
+    public static final int FRAG_VIEW_RECIPE = 1;
+    public static final int FRAG_EDIT_RECIPE = 2;
+
     // Probe Notify Types
     public static final String TYPE_TARGET = "probe";
     public static final String TYPE_LIMIT_HIGH = "probe_limit_high";
@@ -48,15 +43,21 @@ public class Constants {
     // Intents
     public static final String INTENT_SETUP_RESTART = "setup_restart";
     public static final String INTENT_SETTINGS_FRAGMENT = "setting_fragment";
+    public static final String INTENT_RECIPE_FRAGMENT = "recipe_fragment";
+    public static final String INTENT_RECIPE_FILENAME = "recipe_filename";
+    public static final String INTENT_RECIPE_STEP = "recipe_step";
+    public static final String INTENT_RECIPE_IMAGE = "recipe_image";
+    public static final String INTENT_EXTRA_HEADERS = "extra_headers_update";
+    public static final String INTENT_SCROLL_DASH = "scroll_dash";
+    public static final String INTENT_SETUP_BACK = "setup_back";
+    public static final String INTENT_TRANS_ADMIN = "trans_admin";
+
 
     // JSON File Names
     public static final String JSON_EVENTS = "events.json";
     public static final String JSON_PELLETS = "pellets.json";
     public static final String JSON_INFO = "info.json";
-    public static final String JSON_SERVER_INFO = "server_info.json";
-
-    // Licenses
-    public static final String LICENSES_LIST = "licenses";
+    public static final String JSON_RECIPES = "recipes.json";
 
     // Pellet Types
     public static final String PELLET_WOOD = "woods";

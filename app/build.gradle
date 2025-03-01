@@ -42,6 +42,8 @@ def vPatch = 0
 android {
     compileSdk 35
 
+    namespace 'com.weberbox.pifire'
+
     defaultConfig {
         applicationId "com.weberbox.pifire"
         minSdk 24
@@ -95,7 +97,6 @@ android {
         dataBinding true
         buildConfig true
     }
-    namespace 'com.weberbox.pifire'
 
     applicationVariants.configureEach { variant ->
         def appName
@@ -128,28 +129,27 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.android.gms:play-services-code-scanner:16.1.0'
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.6'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.8.6'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.8.8'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.8.8'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
     implementation 'androidx.security:security-crypto:1.0.0'
     implementation 'com.pixplicity.easyprefs:EasyPrefs:1.10.0'
-    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
     implementation 'nl.joery.animatedbottombar:library:1.1.0'
     implementation 'com.quiph.ui:recyclerviewfastscroller:1.0.0'
-    implementation 'io.sentry:sentry-android:8.1.0'
-    implementation 'io.sentry:sentry-android-fragment:8.1.0'
-    implementation 'io.sentry:sentry-android-timber:8.1.0'
+    implementation 'io.sentry:sentry-android:8.2.0'
+    implementation 'io.sentry:sentry-android-fragment:8.2.0'
+    implementation 'io.sentry:sentry-android-timber:8.2.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.github.discord:OverlappingPanels:0.1.5'
-    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.4.2'
     implementation 'com.github.skydoves:androidveil:1.1.4'
     implementation 'com.github.tapadoo:alerter:7.2.4'
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
@@ -161,7 +161,9 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
     implementation 'com.intuit.ssp:ssp-android:1.1.0'
     implementation 'dev.chrisbanes.insetter:insetter:0.6.1'
-    implementation platform('com.google.firebase:firebase-bom:33.9.0')
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.tbuonomo:dotsindicator:5.1.0'
+    implementation platform('com.google.firebase:firebase-bom:33.10.0')
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.onesignal:OneSignal:4.8.7'
     implementation 'com.google.android.play:app-update:2.1.0'
@@ -172,5 +174,6 @@ dependencies {
     }
     //noinspection GradleDependency
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
 }

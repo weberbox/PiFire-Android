@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,8 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemExtraHeadersBinding;
-import com.weberbox.pifire.interfaces.ExtraHeadersCallback;
 import com.weberbox.pifire.model.local.ExtraHeadersModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,8 @@ public class ExtraHeadersAdapter extends RecyclerView.Adapter<ExtraHeadersAdapte
     private final ArrayList<ExtraHeadersModel> list;
     private final ExtraHeadersCallback callback;
 
-    public ExtraHeadersAdapter(final ArrayList<ExtraHeadersModel> list, ExtraHeadersCallback callback) {
+    public ExtraHeadersAdapter(@NotNull final ArrayList<ExtraHeadersModel> list,
+                               @NotNull ExtraHeadersCallback callback) {
         this.list = list;
         this.callback = callback;
     }
@@ -38,29 +39,27 @@ public class ExtraHeadersAdapter extends RecyclerView.Adapter<ExtraHeadersAdapte
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void addNewHeaderItem(String key, String value) {
         list.add(list.size(), new ExtraHeadersModel(key, value));
-        notifyDataSetChanged();
+        notifyItemInserted(list.size() - 1);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void removeHeaderItem(int position) {
         list.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, list.size());
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void updateHeaderItem(int position, String key, String value) {
         list.set(position, new ExtraHeadersModel(key, value));
-        notifyDataSetChanged();
+        notifyItemChanged(position);
     }
 
     public ArrayList<ExtraHeadersModel> getHeaderItems() {
-        return list.isEmpty() ? null : list;
+        return list;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,5 +79,9 @@ public class ExtraHeadersAdapter extends RecyclerView.Adapter<ExtraHeadersAdapte
                 value.setText(list.get(position).getHeaderValue());
             }
         }
+    }
+
+    public interface ExtraHeadersCallback {
+        void onHeaderEdit(int position);
     }
 }

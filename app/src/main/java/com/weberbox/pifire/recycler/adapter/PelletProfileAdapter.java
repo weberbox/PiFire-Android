@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.weberbox.pifire.databinding.ItemPickerTextBinding;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdapter.ViewHolder> {
 
     private final List<PelletProfileModel> list;
 
-    public PelletProfileAdapter(final List<PelletProfileModel> list) {
+    public PelletProfileAdapter(@NotNull final List<PelletProfileModel> list) {
         this.list = list;
     }
 
@@ -35,7 +37,7 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdap
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,10 +51,10 @@ public class PelletProfileAdapter extends RecyclerView.Adapter<PelletProfileAdap
             pelletProfileId = binding.pickerItemId;
         }
 
-        public void bindData(final PelletProfileModel model) {
-            String item = model.getBrand() + " " + model.getWood();
+        public void bindData(final PelletProfileModel profile) {
+            String item = profile.getBrand() + " " + profile.getWood();
             pelletProfile.setText(item);
-            pelletProfileId.setText(model.getId());
+            pelletProfileId.setText(profile.getId());
         }
     }
 }

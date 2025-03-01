@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -9,17 +8,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemGpioDeviceBinding;
-import com.weberbox.pifire.model.local.GPIODevicesModel;
+import com.weberbox.pifire.record.GPIODevicesRecord;
 import com.weberbox.pifire.utils.StringUtils;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GPIODevicesAdapter extends RecyclerView.Adapter<GPIODevicesAdapter.ViewHolder> {
 
-    private List<GPIODevicesModel> list;
+    private final HashMap<String, HashMap<String, String>> list;
+    private ArrayList<GPIODevicesRecord> devices;
 
-    public GPIODevicesAdapter(final List<GPIODevicesModel> list) {
-        this.list = list;
+    public GPIODevicesAdapter() {
+        this.list = new HashMap<>();
+        this.devices = new ArrayList<>();
     }
 
     @NonNull
@@ -32,17 +35,33 @@ public class GPIODevicesAdapter extends RecyclerView.Adapter<GPIODevicesAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.bindData(list.get(position));
+        holder.bindData(devices.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return devices.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setList(List<GPIODevicesModel> list) {
-        this.list = list;
+    @SuppressWarnings("NotifyDataSetChanged")
+    public void setDevicesList(HashMap<String, HashMap<String, String>> devicesList) {
+        list.clear();
+        devices.clear();
+        list.putAll(devicesList);
+        devices = new ArrayList<>(devicesList.size());
+        AtomicInteger cycle = new AtomicInteger();
+        list.forEach((key, value) -> {
+            cycle.getAndSet(1);
+            value.forEach((function, pin) -> {
+                if (cycle.intValue() == 1) {
+                    cycle.getAndIncrement();
+                    devices.add(new GPIODevicesRecord(key, function, pin));
+                } else {
+                    devices.add(new GPIODevicesRecord("", function, pin));
+                }
+                cycle.getAndSet(0);
+            });
+        });
         notifyDataSetChanged();
     }
 
@@ -59,10 +78,10 @@ public class GPIODevicesAdapter extends RecyclerView.Adapter<GPIODevicesAdapter.
             pin = binding.gpioDevicePin;
         }
 
-        public void bindData(final GPIODevicesModel item) {
-            name.setText(StringUtils.capFirstLetter(item.getName()));
-            function.setText(item.getFunction());
-            pin.setText(item.getPin());
+        public void bindData(final GPIODevicesRecord item) {
+            name.setText(StringUtils.capFirstLetter(item.name()));
+            function.setText(item.function());
+            pin.setText(item.pin());
         }
     }
 }

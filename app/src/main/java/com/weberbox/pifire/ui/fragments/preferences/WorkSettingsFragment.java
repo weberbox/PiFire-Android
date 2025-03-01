@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,8 +21,8 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PModeTableDialog;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
@@ -29,13 +30,14 @@ import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private Socket socket;
 
     @Override
@@ -46,11 +48,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @Override
@@ -64,8 +62,8 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference minSmokeTemp = findPreference(getString(R.string.prefs_work_splus_min));
         EditTextPreference maxSmokeTemp = findPreference(getString(R.string.prefs_work_splus_max));
         EditTextPreference pidCycle = findPreference(getString(R.string.prefs_work_controller_cycle));
-        EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_controller_u_max));
         EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_controller_u_min));
+        EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_controller_u_max));
         EditTextPreference lidOpenThresh = findPreference(getString(R.string.prefs_work_lid_open_thresh));
         EditTextPreference lidOpenPause = findPreference(getString(R.string.prefs_work_lid_open_pause));
         EditTextPreference keepWarmTemp = findPreference(getString(R.string.prefs_work_keep_warm_temp));
@@ -78,7 +76,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -86,8 +83,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
 
         if (pModeTable != null) {
             pModeTable.setOnPreferenceClickListener(preference -> {
-                PModeTableDialog pModeTableDialog = new PModeTableDialog(requireActivity());
-                pModeTableDialog.showDialog();
+                new PModeTableDialog(requireActivity()).showDialog();
                 return true;
             });
         }
@@ -168,17 +164,7 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             pidCycle.setOnBindEditTextListener(editText -> {
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 0.1, null, editText));
-            });
-        }
-
-        if (pidUMax != null) {
-            pidUMax.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 0.1, null,
-                                editText));
+                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
             });
         }
 
@@ -187,7 +173,17 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 editText.setInputType(InputType.TYPE_CLASS_NUMBER |
                         InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 0.1, null,
+                        new EmptyTextListener(requireActivity(), 0.05, 0.99,
+                                editText));
+            });
+        }
+
+        if (pidUMax != null) {
+            pidUMax.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editText.addTextChangedListener(
+                        new EmptyTextListener(requireActivity(), 0.1, 1.0,
                                 editText));
             });
         }
@@ -222,10 +218,20 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_work);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_work));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);

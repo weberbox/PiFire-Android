@@ -8,20 +8,20 @@ import com.weberbox.pifire.model.SingleLiveEvent;
 
 public class SetupViewModel extends ViewModel {
 
-    private final MutableLiveData<String> QRData;
+    private final MutableLiveData<String> serverAddress;
     private final SingleLiveEvent<Void> fabClickEvent;
 
     public SetupViewModel() {
-        QRData = new MutableLiveData<>();
+        serverAddress = new MutableLiveData<>();
         fabClickEvent = new SingleLiveEvent<>();
     }
 
-    public LiveData<String> getQRData() {
-        return QRData;
+    public LiveData<String> getAddress() {
+        return serverAddress;
     }
 
-    public void setQRData(String qrData) {
-        QRData.setValue(qrData);
+    public void setAddress(String address) {
+        serverAddress.setValue(address);
     }
 
     public void fabOnClick() {

@@ -41,4 +41,15 @@ public class TimeUtils {
         }
         return null;
     }
+
+    @SuppressLint("DefaultLocale")
+    public static String formatMinutes(Integer totalMinutes) {
+        if (totalMinutes != null && totalMinutes > 0) {
+            int hours = totalMinutes / 60;
+            int minutes = totalMinutes % 60;
+
+            return String.format("%d:%02d", hours, minutes);
+        }
+        return "--:--";
+    }
 }

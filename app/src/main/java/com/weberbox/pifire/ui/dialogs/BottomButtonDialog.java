@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.weberbox.pifire.R;
@@ -56,6 +57,9 @@ public final class BottomButtonDialog extends AbstractDialog {
             }
         });
         dialogView.setClipToOutline(true);
+
+        dialogView.setBackgroundColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_background));
 
         dialog.setOnShowListener(dialog -> {
             BottomSheetDialog d = (BottomSheetDialog) dialog;

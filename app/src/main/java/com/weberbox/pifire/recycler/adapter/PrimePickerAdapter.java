@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.databinding.ItemPickerPrimeBinding;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public class PrimePickerAdapter extends RecyclerView.Adapter<PrimePickerAdapter.ViewHolder> implements
@@ -17,7 +19,7 @@ public class PrimePickerAdapter extends RecyclerView.Adapter<PrimePickerAdapter.
 
     private final List<Integer> list;
 
-    public PrimePickerAdapter(final List<Integer> list) {
+    public PrimePickerAdapter(@NotNull final List<Integer> list) {
         this.list = list;
     }
 
@@ -36,7 +38,7 @@ public class PrimePickerAdapter extends RecyclerView.Adapter<PrimePickerAdapter.
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     @NonNull

@@ -16,7 +16,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogCredentialsBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -48,8 +47,8 @@ public class CredentialsDialog {
         userInput = binding.dialogUserInputTv;
         passInput = binding.dialogPassInputTv;
 
-        userInput.setText(SecurityUtils.decrypt(context, R.string.prefs_server_basic_auth_user));
-        passInput.setText(SecurityUtils.decrypt(context, R.string.prefs_server_basic_auth_password));
+        userInput.setText(SecurityUtils.getUsername(context));
+        passInput.setText(SecurityUtils.getPassword(context));
 
         saveButton.setOnClickListener(v -> {
             callback.onAuthDialogSave(saveCredentials(
@@ -71,6 +70,8 @@ public class CredentialsDialog {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
+        bottomSheetDialog.setOnCancelListener(dialogInterface -> callback.onAuthDialogCancel());
+
         binding.getRoot().setOutlineProvider(new ViewOutlineProvider() {
             @Override
             public void getOutline(View view, Outline outline) {
@@ -91,6 +92,8 @@ public class CredentialsDialog {
 
         bottomSheetDialog.show();
 
+        userInput.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -103,7 +106,11 @@ public class CredentialsDialog {
     }
 
     private boolean saveCredentials(String user, String pass) {
-        return SecurityUtils.encrypt(context, R.string.prefs_server_basic_auth_user, user) &&
-                SecurityUtils.encrypt(context, R.string.prefs_server_basic_auth_password, pass);
+        return SecurityUtils.setUsername(context, user) && SecurityUtils.setPassword(context, pass);
+    }
+
+    public interface DialogAuthCallback {
+        void onAuthDialogSave(boolean success);
+        void onAuthDialogCancel();
     }
 }

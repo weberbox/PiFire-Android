@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.ItemEventsListBinding;
-import com.weberbox.pifire.model.local.EventsModel;
+import com.weberbox.pifire.model.remote.EventsModel.Events;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
-import com.weberbox.pifire.utils.TextUtils;
+import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -28,11 +29,12 @@ import timber.log.Timber;
 
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.ViewHolder> {
 
-    private List<EventsModel> list;
+    private final List<Events> list;
     private final Activity activity;
     private final boolean isFahrenheit;
 
-    public EventsListAdapter(Activity activity) {
+    public EventsListAdapter(@NotNull Activity activity) {
+        this.list = new ArrayList<>();
         this.activity = activity;
         isFahrenheit = Prefs.getString(activity.getString(R.string.prefs_grill_units)).equals("F");
     }
@@ -47,11 +49,11 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final EventsModel event = list.get(position);
+        final Events event = list.get(position);
         holder.bindData(holder.itemView.getContext(), event, isFahrenheit);
 
         holder.root.setOnClickListener(view -> {
-            if (TextUtils.hasEllipsis(holder.eventText)) {
+            if (StringUtils.hasEllipsis(holder.eventText)) {
                 MaterialDialogText dialog = new MaterialDialogText.Builder(activity)
                         .setTitle(activity.getString(R.string.dialog_event))
                         .setMessage(holder.eventText.getText().toString())
@@ -65,12 +67,13 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setEventsList(List<EventsModel> eventsList) {
-        this.list = new ArrayList<>(eventsList);
+    @SuppressWarnings("NotifyDataSetChanged")
+    public void setEventsList(List<Events> eventsList) {
+        list.clear();
+        list.addAll(eventsList);
         notifyDataSetChanged();
     }
 
@@ -91,7 +94,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Vi
             eventText = binding.eventTextHolder;
         }
 
-        public void bindData(Context context, EventsModel event, boolean isFahrenheit) {
+        public void bindData(Context context, Events event, boolean isFahrenheit) {
             eventIcon.setBackgroundColor(ContextCompat.getColor(context, event.getEventIconColor()));
             eventIcon.setText(event.getEventIcon());
             eventText.setText(event.getEventText());

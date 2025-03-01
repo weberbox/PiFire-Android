@@ -16,11 +16,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
-import com.weberbox.pifire.interfaces.ExtraHeadersCallback;
+import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.model.local.ExtraHeadersModel;
 import com.weberbox.pifire.recycler.adapter.ExtraHeadersAdapter;
+import com.weberbox.pifire.recycler.adapter.ExtraHeadersAdapter.ExtraHeadersCallback;
 import com.weberbox.pifire.ui.dialogs.ExtraHeadersDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogHeadersCallback;
+import com.weberbox.pifire.ui.dialogs.ExtraHeadersDialog.DialogHeadersCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.SecurityUtils;
 
@@ -73,7 +74,7 @@ public class ExtraHeadersPreference extends Preference implements ExtraHeadersCa
 
         RecyclerView recycler = (RecyclerView) holder.findViewById(R.id.extra_headers_recycler);
 
-        String headers = SecurityUtils.decrypt(context, R.string.prefs_server_headers);
+        String headers = SecurityUtils.getHeaders(context);
 
         ArrayList<ExtraHeadersModel> extraHeaders = ExtraHeadersModel.parseJSON(headers);
 
@@ -127,10 +128,9 @@ public class ExtraHeadersPreference extends Preference implements ExtraHeadersCa
     }
 
     private boolean saveExtraHeaders(ArrayList<ExtraHeadersModel> headers) {
-        Intent intent = new Intent("extra-headers-update");
+        Intent intent = new Intent(Constants.INTENT_EXTRA_HEADERS);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        return !SecurityUtils.encrypt(context, R.string.prefs_server_headers,
-                new Gson().toJson(headers));
+        return !SecurityUtils.setHeaders(context, new Gson().toJson(headers));
     }
 
 }

@@ -4,31 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dash_root_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:foreground="@android:color/transparent"
-    android:padding="@dimen/dash_margin">
+    android:padding="@dimen/dash_half_margin">
+
+    <include
+        android:id="@+id/dash_recipe_layout"
+        layout="@layout/layout_dash_recipe_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dash_half_margin"
+        android:layout_marginEnd="@dimen/dash_half_margin"
+        android:layout_marginBottom="@dimen/dash_margin"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/dash_probe_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dash_probe_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@+id/dash_lower_container"
+        app:layout_constraintBottom_toTopOf="@+id/dash_container_one"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dash_recipe_layout"
         app:layout_constraintVertical_weight="1">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dash_lower_container"
+        android:id="@+id/dash_container_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dash_half_margin"
         android:layout_marginEnd="@dimen/dash_half_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/dash_container_two"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dash_probe_recycler"
@@ -290,6 +304,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_weight="1" />
 
+                <ImageView
+                    android:id="@+id/dash_mode_paused"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ic_grill_pause"
+                    android:backgroundTint="@color/colorRedButton"
+                    android:contentDescription="@string/placeholder_img"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/dash_grill_mode"
                     style="@style/Text24Knockout"
@@ -379,7 +405,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/dash_smoke_plus_container"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/dash_pwm_title"
@@ -408,5 +435,56 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dash_container_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dash_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dash_container_one"
+        app:layout_constraintVertical_weight="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dash_elapsed_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_barrier"
+            app:layout_constraintEnd_toStartOf="@+id/dash_outputs_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/dash_elapsed_layout"
+                layout="@layout/layout_dash_elapsed" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dash_outputs_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bottom_barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/dash_elapsed_container"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/dash_outputs_layout"
+                layout="@layout/layout_dash_outputs" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/bottom_barrier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="dash_outputs_container, dash_elapsed_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,6 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.DialogPrimePickerBinding;
 import com.weberbox.pifire.recycler.adapter.PrimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPrimeCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
@@ -170,5 +169,9 @@ public class PrimePickerDialog {
     private static List<Integer> generatePrimeList(int start, int end) {
         return IntStream.iterate(start, i -> i + 5).limit((end - start) / 5 + 1)
                 .boxed().collect(Collectors.toList());
+    }
+
+    public interface DialogPrimeCallback {
+        void onPrimeAmountSelected(Integer amount, String nextMode);
     }
 }

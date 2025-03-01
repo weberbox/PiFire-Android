@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,8 +20,8 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
@@ -30,13 +31,14 @@ import com.weberbox.pifire.utils.AlertUtils;
 import java.util.Objects;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private EditTextPreference startToModeTemp, primeOnStartup, startupExitTemp;
     private Socket socket;
 
@@ -48,11 +50,7 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @Override
@@ -74,7 +72,6 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -149,7 +146,17 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
                         new EmptyTextListener(requireActivity(), minTemp, maxTemp, editText));
             });
             startToModeTemp.setVisible(
-                    startToMode.getValue().equals(getString(R.string.grill_mode_hold)));
+                    startToMode.getValue().equalsIgnoreCase(getString(R.string.grill_mode_hold)));
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
         }
     }
 
@@ -162,8 +169,8 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_timers);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_timers));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);

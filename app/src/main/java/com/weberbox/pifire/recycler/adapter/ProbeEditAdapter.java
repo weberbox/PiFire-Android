@@ -12,7 +12,9 @@ import com.weberbox.pifire.databinding.ItemProbeEditBinding;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeInfo;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
 import com.weberbox.pifire.ui.dialogs.ProbeEditDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogProbeCallback;
+import com.weberbox.pifire.ui.dialogs.ProbeEditDialog.DialogProbeCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -22,8 +24,9 @@ public class ProbeEditAdapter extends RecyclerView.Adapter<ProbeEditAdapter.View
     private final DialogProbeCallback callback;
     private final List<ProbeInfo> list;
 
-    public ProbeEditAdapter(final List<ProbeInfo> list, List<ProbeProfileModel> profiles,
-                            DialogProbeCallback callback) {
+    public ProbeEditAdapter(@NotNull final List<ProbeInfo> list,
+                            @NotNull List<ProbeProfileModel> profiles,
+                            @NotNull DialogProbeCallback callback) {
         this.list = list;
         this.profiles = profiles;
         this.callback = callback;
@@ -53,7 +56,7 @@ public class ProbeEditAdapter extends RecyclerView.Adapter<ProbeEditAdapter.View
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     public void updateProbeType(int position, String name) {

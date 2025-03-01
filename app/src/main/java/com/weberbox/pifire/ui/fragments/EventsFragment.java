@@ -13,25 +13,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentEventsBinding;
-import com.weberbox.pifire.model.local.EventsModel;
+import com.weberbox.pifire.model.remote.EventsModel;
+import com.weberbox.pifire.model.remote.EventsModel.Events;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.EventsListAdapter;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.FileUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +43,7 @@ public class EventsFragment extends Fragment {
     private VeilRecyclerFrameView eventsRecycler;
     private ProgressBar loadingBar;
     private SwipeRefreshLayout swipeRefresh;
-    private List<EventsModel> events;
+    private List<Events> events;
     private Socket socket;
 
     @Override
@@ -80,7 +76,7 @@ public class EventsFragment extends Fragment {
         int padding = getResources().getDimensionPixelOffset(R.dimen.recycler_padding);
 
         eventsRecycler.getRecyclerView().setClipToPadding(false);
-        eventsRecycler.getRecyclerView().setPadding(0, padding,0, padding);
+        eventsRecycler.getRecyclerView().setPadding(0, padding, 0, padding);
         eventsRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventsRecycler.setAdapter(eventsListAdapter);
         eventsRecycler.addVeiledItems(10);
@@ -184,37 +180,29 @@ public class EventsFragment extends Fragment {
     private void updateUIWithData(String responseData) {
         events.clear();
 
+        EventsModel eventsModel = EventsModel.parseJSON(responseData);
+
+        int customAmount = Integer.parseInt(Prefs.getString(
+                getString(R.string.prefs_event_amount),
+                getString(R.string.def_event_amounts_app)));
+        int listAmount = Math.min(customAmount, eventsModel.getEventsList().size());
+
         try {
-            JSONObject rootObject = new JSONObject(responseData);
-            JSONArray array = rootObject.getJSONArray(ServerConstants.EVENTS_LIST);
-
-            int customAmount = Integer.parseInt(Prefs.getString(
-                    getString(R.string.prefs_event_amount),
-                    getString(R.string.def_event_amounts_app)));
-            int listAmount = Math.min(customAmount, array.length());
-
             for (int i = 0; i < listAmount; i++) {
-                JSONArray innerArray = array.getJSONArray(i);
-
-                EventsModel events = new EventsModel(
-                        innerArray.getString(0),
-                        innerArray.getString(1),
-                        innerArray.getString(2)
-                );
+                List<String> event = eventsModel.getEventsList().get(i);
+                Events events = new Events(event.get(0), event.get(1), event.get(2));
                 this.events.add(events);
             }
-
-            eventsListAdapter.setEventsList(events);
-
-            eventsRecycler.unVeil();
-            eventsRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
-
-        } catch (JSONException | IllegalStateException | JsonSyntaxException |
-                NullPointerException e) {
-            Timber.e(e,"Events JSON Error");
+        } catch (IndexOutOfBoundsException e) {
+            Timber.e(e, "Events Index Exception");
             AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_events)), false);
         }
+
+        eventsListAdapter.setEventsList(events);
+
+        eventsRecycler.unVeil();
+        eventsRecycler.getVeiledRecyclerView().setVisibility(View.GONE);
 
         toggleLoading(false);
     }

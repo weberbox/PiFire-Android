@@ -24,7 +24,6 @@ import java.util.Map;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import okhttp3.Credentials;
 import timber.log.Timber;
 
 public class PiFireApplication extends Application {
@@ -74,20 +73,14 @@ public class PiFireApplication extends Application {
 
             Map<String, List<String>> headersMap = new HashMap<>();
 
-            if (Prefs.getBoolean(getString(R.string.prefs_server_basic_auth))) {
+            String credentials = SecurityUtils.getCredentials(this);
+            String headers = SecurityUtils.getExtraHeaders(this);
 
-                String username = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_user);
-                String password = SecurityUtils.decrypt(this, R.string.prefs_server_basic_auth_password);
-
-                String credentials = Credentials.basic(username, password);
-
+            if (credentials != null) {
                 headersMap.put("Authorization", Collections.singletonList(credentials));
             }
 
-            if (Prefs.getBoolean(getString(R.string.prefs_server_extra_headers))) {
-
-                String headers = SecurityUtils.decrypt(this, R.string.prefs_server_headers);
-
+            if (headers != null) {
                 ArrayList<ExtraHeadersModel> extraHeaders = ExtraHeadersModel.parseJSON(headers);
 
                 if (extraHeaders != null) {
@@ -98,7 +91,9 @@ public class PiFireApplication extends Application {
                 }
             }
 
-            options.extraHeaders = headersMap;
+            if (!headersMap.isEmpty()) {
+                options.extraHeaders = headersMap;
+            }
 
             return IO.socket(serverUri, options);
         } else {

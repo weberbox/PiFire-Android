@@ -5,6 +5,15 @@ public class ServerConstants {
     // Default String
     public static final String DEFAULT_SOCKET_URL = "http://192.168.1.254";
 
+    // Urls
+    public static final String URL_RECIPE_DETAILS = "/api/recipe/details";
+    public static final String URL_RECIPE_DELETE = "/recipedata";
+    public static final String URL_API_CONTROL = "/api/control";
+    public static final String URL_API_SETTINGS = "/api/settings";
+
+    // Folders
+    public static final String FOLDER_RECIPES = "./recipes/";
+
     // Socket IO Strings
     public static final String LISTEN_GRILL_DATA = "grill_control_data";
 
@@ -57,9 +66,10 @@ public class ServerConstants {
     public static final String G_MODE_STOP = "Stop";
     public static final String G_MODE_MANUAL = "Manual";
     public static final String G_MODE_PRIME = "Prime";
+    public static final String G_MODE_RECIPE = "Recipe";
+    public static final String G_MODE_REIGNITE = "Reignite";
 
     // Socket Strings Dep
-    public static final String EVENTS_LIST = "events_list";
     public static final String MODE_MANUAL = "manual";
 
 }

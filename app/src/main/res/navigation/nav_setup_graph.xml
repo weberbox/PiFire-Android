@@ -24,21 +24,8 @@
             android:id="@+id/action_nav_address_to_nav_welcome"
             app:destination="@id/nav_setup_welcome" />
         <action
-            android:id="@+id/action_nav_address_to_nav_scan_qr"
-            app:destination="@id/nav_setup_scan_qr" />
-        <action
             android:id="@+id/action_nav_address_to_nav_push"
             app:destination="@id/nav_setup_push" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_setup_scan_qr"
-        android:name="com.weberbox.pifire.ui.fragments.setup.QRScanFragment"
-        android:label="@string/setup_server_address"
-        tools:layout="@layout/fragment_setup_qr_scan" >
-        <action
-            android:id="@+id/action_nav_push_to_nav_address"
-            app:destination="@id/nav_setup_address" />
     </fragment>
 
     <fragment

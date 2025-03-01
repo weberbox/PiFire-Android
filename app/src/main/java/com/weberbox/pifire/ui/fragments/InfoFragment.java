@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
@@ -21,10 +21,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.skydoves.androidveil.VeilLayout;
 import com.skydoves.androidveil.VeilRecyclerFrameView;
+import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
@@ -32,8 +34,6 @@ import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentInfoBinding;
-import com.weberbox.pifire.model.local.GPIODevicesModel;
-import com.weberbox.pifire.model.local.GPIOInOutModel;
 import com.weberbox.pifire.model.local.LicensesModel;
 import com.weberbox.pifire.model.remote.InfoDataModel;
 import com.weberbox.pifire.model.view.MainViewModel;
@@ -46,13 +46,10 @@ import com.weberbox.pifire.utils.FileUtils;
 import com.weberbox.pifire.utils.TimeUtils;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import dev.chrisbanes.insetter.Insetter;
 import dev.chrisbanes.insetter.Side;
@@ -69,15 +66,16 @@ public class InfoFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private ProgressBar loadingBar;
     private LicensesListAdapter licensesListAdapter;
-    private ArrayList<LicensesModel> licenses;
-    private ArrayList<GPIOInOutModel> inputs, outputs;
-    private ArrayList<GPIODevicesModel> devices;
     private GPIOInOutAdapter gpioOutputAdapter, gpioInputAdapter;
     private GPIODevicesAdapter gpioDevicesAdapter;
     private VeilRecyclerFrameView inputRecycler, outputRecycler, devicesRecycler;
-    private View gradient;
-    private TextView viewAllButton;
     private VeilLayout systemVeil, modulesVeil, uptimeVeil, serverVeil;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
+    }
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -92,38 +90,21 @@ public class InfoFragment extends Fragment {
 
         Insetter.builder()
                 .margin(WindowInsetsCompat.Type.systemBars(), Side.TOP)
-                .applyToView(binding.infoToolbar.getRoot());
+                .applyToView(binding.infoToolbar);
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars(), Side.BOTTOM)
                 .applyToView(binding.infoScrollView);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (getActivity() != null) {
-                getActivity().getWindow().setNavigationBarContrastEnforced(true);
-            }
+            requireActivity().getWindow().setNavigationBarContrastEnforced(true);
         } else {
-            if (getActivity() != null) {
-                getActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
-                        getActivity(), R.color.colorNavBarAlpha));
-            }
+            requireActivity().getWindow().setNavigationBarColor(ContextCompat.getColor(
+                    requireActivity(), R.color.colorNavBarAlpha));
         }
 
-        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
-
-        TextView actionBarText = binding.infoToolbar.actionBarText;
-        ImageView navButton = binding.infoToolbar.actionBarNavButton;
-        ImageView configButton = binding.infoToolbar.actionBarConfigButton;
-
-        actionBarText.setText(R.string.menu_info);
-        navButton.setImageResource(R.drawable.ic_nav_back);
-        navButton.setOnClickListener(v ->
+        MaterialToolbar toolbar = binding.infoToolbar;
+        toolbar.setNavigationOnClickListener(view1 ->
                 requireActivity().getOnBackPressedDispatcher().onBackPressed());
-        configButton.setVisibility(View.GONE);
-
-        licenses = new ArrayList<>();
-        inputs = new ArrayList<>();
-        outputs = new ArrayList<>();
-        devices = new ArrayList<>();
 
         rootContainer = binding.infoRootContainer;
         swipeRefresh = binding.infoPullRefresh;
@@ -144,19 +125,19 @@ public class InfoFragment extends Fragment {
         outputRecycler = binding.gpioInOutCardView.gpioOutputRecycler;
         devicesRecycler = binding.gpioDevicesCardView.gpioDevicesRecycler;
 
-        gpioOutputAdapter = new GPIOInOutAdapter(outputs);
+        gpioOutputAdapter = new GPIOInOutAdapter();
         outputRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         outputRecycler.setNestedScrollingEnabled(false);
         outputRecycler.addVeiledItems(6);
         outputRecycler.setAdapter(gpioOutputAdapter);
 
-        gpioInputAdapter = new GPIOInOutAdapter(inputs);
+        gpioInputAdapter = new GPIOInOutAdapter();
         inputRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         inputRecycler.setNestedScrollingEnabled(false);
         inputRecycler.addVeiledItems(1);
         inputRecycler.setAdapter(gpioInputAdapter);
 
-        gpioDevicesAdapter = new GPIODevicesAdapter(devices);
+        gpioDevicesAdapter = new GPIODevicesAdapter();
         devicesRecycler.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         devicesRecycler.setNestedScrollingEnabled(false);
         devicesRecycler.addVeiledItems(6);
@@ -205,14 +186,6 @@ public class InfoFragment extends Fragment {
         licenseInfo.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
         licenseInfo.setAdapter(licensesListAdapter);
 
-        gradient = binding.licensesCardView.licensesViewAllShadow;
-        viewAllButton = binding.licensesCardView.licensesViewAll;
-
-        viewAllButton.setOnClickListener(v -> {
-            licensesListAdapter.setLimitEnabled(false);
-            licensesListAdapter.notifyItemRangeChanged(3, licenses.size());
-            setLicensesViewLimited(false);
-        });
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (socketConnected()) {
@@ -221,24 +194,28 @@ public class InfoFragment extends Fragment {
                 swipeRefresh.setRefreshing(false);
             }
         });
+        swipeRefresh.setEnabled(false);
 
-        if (getActivity() != null) {
-            mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
-            mainViewModel.getInfoData().observe(getViewLifecycleOwner(), infoData -> {
-                swipeRefresh.setRefreshing(false);
-                if (infoData != null && infoData.getLiveData() != null) {
-                    if (infoData.getIsNewData()) {
-                        FileUtils.executorSaveJSON(getActivity(), Constants.JSON_INFO,
-                                infoData.getLiveData());
-                    }
-                    updateUIWithData(infoData.getLiveData());
+        mainViewModel = new ViewModelProvider(requireActivity()).get(MainViewModel.class);
+        mainViewModel.getInfoData().observe(getViewLifecycleOwner(), infoData -> {
+            swipeRefresh.setEnabled(true);
+            swipeRefresh.setRefreshing(false);
+            if (infoData != null && infoData.getLiveData() != null) {
+                if (infoData.getIsNewData()) {
+                    FileUtils.executorSaveJSON(getActivity(), Constants.JSON_INFO,
+                            infoData.getLiveData());
                 }
-            });
-        }
+                updateUIWithData(infoData.getLiveData());
+            }
+        });
 
-        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
+        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), connected -> {
             toggleLoading(true);
-            requestDataUpdate();
+            if (connected) {
+                requestDataUpdate();
+            } else {
+                showOfflineAlert();
+            }
         });
 
         loadLicenses();
@@ -262,7 +239,9 @@ public class InfoFragment extends Fragment {
 
     private void showOfflineAlert() {
         if (getActivity() != null) {
-            AlertUtils.createOfflineAlert(getActivity());
+            if (!Alerter.isShowing()) {
+                AlertUtils.createOfflineAlert(getActivity());
+            }
         }
     }
 
@@ -310,18 +289,9 @@ public class InfoFragment extends Fragment {
         }
     }
 
-    private void setLicensesViewLimited(boolean limited) {
-        gradient.setVisibility(limited ? View.VISIBLE : View.GONE);
-        viewAllButton.setVisibility(limited ? View.VISIBLE : View.GONE);
-    }
-
     private void updateUIWithData(String responseData) {
 
         try {
-
-            inputs.clear();
-            outputs.clear();
-            devices.clear();
 
             InfoDataModel infoDataModel = InfoDataModel.parseJSON(responseData);
 
@@ -331,35 +301,7 @@ public class InfoFragment extends Fragment {
             String upTime = infoDataModel.getUpTime();
             String version = infoDataModel.getServerVersion();
             String build = infoDataModel.getServerBuild();
-
             boolean dcFan = Prefs.getBoolean(getString(R.string.prefs_dc_fan));
-            infoDataModel.getOutPins().forEach((key, value) -> {
-                if (key.contains("dc_fan") || key.contains("pwm")) {
-                    if (dcFan) {
-                        outputs.add(new GPIOInOutModel(key, value));
-                    }
-                } else {
-                    outputs.add(new GPIOInOutModel(key, value));
-                }
-            });
-
-            infoDataModel.getInPins().forEach((key, value) ->
-                    inputs.add(new GPIOInOutModel(key, value)));
-
-            AtomicInteger cycle = new AtomicInteger();
-            infoDataModel.getDevPins().forEach((key, value) -> {
-                cycle.getAndSet(1);
-                value.forEach((function, pin) -> {
-                    if (cycle.intValue() == 1) {
-                        cycle.getAndIncrement();
-                        devices.add(new GPIODevicesModel(key, function, pin));
-                    } else {
-                        devices.add(new GPIODevicesModel("", function, pin));
-                    }
-                    cycle.getAndSet(0);
-                });
-            });
-            this.gpioDevicesAdapter.setList(devices);
 
             String cpuModel = "";
             String[] cpuSeparated;
@@ -389,8 +331,9 @@ public class InfoFragment extends Fragment {
             this.networkInfo.setText(networkString);
             this.upTime.setText(socket.connected() ? upTime : getString(R.string.offline));
             this.cpuTemp.setText(socket.connected() ? cpuTemp : getString(R.string.offline));
-            this.gpioOutputAdapter.setList(outputs);
-            this.gpioInputAdapter.setList(inputs);
+            this.gpioOutputAdapter.setInOutList(infoDataModel.getOutPins(), dcFan);
+            this.gpioInputAdapter.setInOutList(infoDataModel.getInPins(), dcFan);
+            this.gpioDevicesAdapter.setDevicesList(infoDataModel.getDevPins());
             this.version.setText(version);
             this.build.setText(build);
 
@@ -412,37 +355,21 @@ public class InfoFragment extends Fragment {
     }
 
     private void loadLicenses() {
-        licenses.clear();
-
         if (getActivity() != null) {
             FileUtils.executorLoadRawJson(getActivity(), R.raw.licences, jsonString -> {
                 try {
-
-                    if (jsonString != null) {
-                        JSONObject rootObject = new JSONObject(jsonString);
-                        JSONArray array = rootObject.getJSONArray(Constants.LICENSES_LIST);
-
-                        for (int i = 0; i < array.length(); i++) {
-                            JSONArray innerArray = array.getJSONArray(i);
-
-                            LicensesModel project = new LicensesModel(
-                                    innerArray.getString(0),
-                                    innerArray.getString(1)
-                            );
-                            licenses.add(project);
-                        }
-
-                        requireActivity().runOnUiThread(() -> {
-                            setLicensesViewLimited(licenses.size() > 3);
-                            licensesListAdapter.setList(licenses);
-                        });
-
+                    ArrayList<LicensesModel> licenses = LicensesModel.parseJSON(jsonString);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() ->
+                                licensesListAdapter.setLicenseList(licenses));
                     }
-
                 } catch (Exception e) {
                     Timber.w(e, "Licences JSON Error");
-                    AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
-                            getString(R.string.info_credits)), false);
+                    if (getActivity() != null) {
+                        AlertUtils.createErrorAlert(getActivity(),
+                                getString(R.string.json_parsing_error,
+                                        getString(R.string.info_credits)), false);
+                    }
                 }
             });
         }

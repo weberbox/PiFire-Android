@@ -20,7 +20,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogAppriseBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAppriseCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -147,6 +146,8 @@ public class AppriseDialog {
 
         bottomSheetDialog.show();
 
+        input.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -156,5 +157,11 @@ public class AppriseDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    public interface DialogAppriseCallback {
+        void onDialogAdd(String location);
+        void onDialogEdit(int position, String location);
+        void onDialogDelete(int position);
     }
 }

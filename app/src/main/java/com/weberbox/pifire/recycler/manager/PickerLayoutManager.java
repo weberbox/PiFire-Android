@@ -6,8 +6,6 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.weberbox.pifire.interfaces.OnScrollStopListener;
-
 @SuppressWarnings("unused")
 public class PickerLayoutManager extends LinearLayoutManager {
 
@@ -134,5 +132,9 @@ public class PickerLayoutManager extends LinearLayoutManager {
 
     public void setOnScrollStopListener(OnScrollStopListener onScrollStopListener) {
         this.onScrollStopListener = onScrollStopListener;
+    }
+
+    public interface OnScrollStopListener {
+        void selectedView(View view);
     }
 }

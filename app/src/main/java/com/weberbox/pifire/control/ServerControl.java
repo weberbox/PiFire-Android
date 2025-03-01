@@ -7,6 +7,8 @@ import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.interfaces.SocketCallback;
 import com.weberbox.pifire.model.remote.ControlDataModel;
 import com.weberbox.pifire.model.remote.ControlDataModel.Manual;
+import com.weberbox.pifire.model.remote.ControlDataModel.Recipe;
+import com.weberbox.pifire.model.remote.ControlDataModel.StepData;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.model.remote.PostDataModel;
@@ -102,7 +104,7 @@ public class ServerControl {
 
     // Smoke Plus Enable/Disable
     public static void setSmokePlus(Socket socket, boolean enabled, SocketCallback callback) {
-        String json = new Gson().toJson(new ControlDataModel().withsPlus(enabled));
+        String json = new Gson().toJson(new ControlDataModel().withSmokePlus(enabled));
         controlPostEmit(socket, json, callback);
     }
 
@@ -165,6 +167,24 @@ public class ServerControl {
                 .withStartup(new Startup().withDuration(Integer.parseInt(duration))));
         settingsPostEmit(socket, json, callback);
         controlSettingsUpdateEmit(socket, callback);
+    }
+
+    // Recipe UnPause
+    public static void sendRecipeUnPause(Socket socket, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                .withRecipe(new Recipe().withStepData(new StepData().withPause(false)))
+                .withUpdated(true));
+        controlPostEmit(socket, json, callback);
+    }
+
+    // Recipe Run File
+    @SuppressWarnings("unused")
+    public static void sendRecipeRunFile(Socket socket, String filename, SocketCallback callback) {
+        String json = new Gson().toJson(new ControlDataModel()
+                        .withUpdated(true)
+                        .withMode(ServerConstants.G_MODE_RECIPE)
+                        .withRecipe(new Recipe().withFileName(filename)));
+        controlPostEmit(socket, json, callback);
     }
 
     // Prime On Startup
@@ -379,7 +399,7 @@ public class ServerControl {
                         ServerResponseModel response =
                                 ServerResponseModel.parseJSON(args[0].toString());
                         if (response.getResult().equals("success")) {
-                            new SettingsUtils(context, null).requestSettingsData(socket);
+                            new SettingsUtils(context).requestSettingsData(socket);
                         } else {
                             Timber.d("Failed to register with Pifire");
                         }

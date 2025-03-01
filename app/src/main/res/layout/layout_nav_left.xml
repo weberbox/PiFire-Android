@@ -79,6 +79,15 @@
                         android:background="@color/colorPlaceholder" />
 
                     <com.weberbox.pifire.ui.views.NavListItem
+                        android:id="@+id/nav_recipes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick='@{() -> callback.onNavRecipes()}'
+                        app:nav_icon="@drawable/ic_menu_recipes"
+                        app:nav_selected="false"
+                        app:nav_title="@string/menu_recipes" />
+
+                    <com.weberbox.pifire.ui.views.NavListItem
                         android:id="@+id/nav_admin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

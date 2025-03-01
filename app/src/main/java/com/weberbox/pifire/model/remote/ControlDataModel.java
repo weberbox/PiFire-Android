@@ -1,10 +1,14 @@
 package com.weberbox.pifire.model.remote;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
+import com.weberbox.pifire.utils.adapters.CustomTypeAdapterFactory;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class ControlDataModel {
@@ -20,7 +24,7 @@ public class ControlDataModel {
     private String nextMode;
     @SerializedName("s_plus")
     @Expose
-    private Boolean sPlus;
+    private Boolean smokePlus;
     @SerializedName("pwm_control")
     @Expose
     private Boolean pwmControl;
@@ -93,7 +97,7 @@ public class ControlDataModel {
         return this;
     }
 
-    public String getMode() {
+    public String getCurrentMode() {
         return mode;
     }
 
@@ -119,20 +123,20 @@ public class ControlDataModel {
         return this;
     }
 
-    public Boolean getsPlus() {
-        return sPlus;
+    public Boolean getSmokePlus() {
+        return smokePlus;
     }
 
-    public void setsPlus(Boolean sPlus) {
-        this.sPlus = sPlus;
+    public void setSmokePlus(Boolean smokePlus) {
+        this.smokePlus = smokePlus;
     }
 
-    public ControlDataModel withsPlus(Boolean sPlus) {
-        this.sPlus = sPlus;
+    public ControlDataModel withSmokePlus(Boolean smokePlus) {
+        this.smokePlus = smokePlus;
         return this;
     }
 
-    public Boolean getPWMControl() {
+    public Boolean getPwmControl() {
         return pwmControl;
     }
 
@@ -419,6 +423,9 @@ public class ControlDataModel {
         @SerializedName("step")
         @Expose
         private Integer step;
+        @SerializedName("step_data")
+        @Expose
+        private StepData stepData;
 
         public String getFileName() {
             return fileName;
@@ -458,58 +465,204 @@ public class ControlDataModel {
             this.step = step;
             return this;
         }
+
+        public StepData getStepData() {
+            return stepData;
+        }
+
+        public void setStepData(StepData stepData) {
+            this.stepData = stepData;
+        }
+
+        public Recipe withStepData(StepData stepData) {
+            this.stepData = stepData;
+            return this;
+        }
+    }
+
+    public static class StepData {
+
+        @SerializedName("hold_temp")
+        @Expose
+        private Integer holdTemp;
+        @SerializedName("message")
+        @Expose
+        private String message;
+        @SerializedName("mode")
+        @Expose
+        private String mode;
+        @SerializedName("notify")
+        @Expose
+        private Boolean notify;
+        @SerializedName("pause")
+        @Expose
+        private Boolean pause;
+        @SerializedName("timer")
+        @Expose
+        private Integer timer;
+        @SerializedName("triggered")
+        @Expose
+        private Boolean triggered;
+        @SerializedName("trigger_temps")
+        @Expose
+        private Map<String, Double> triggerTemps;
+
+        public Integer getHoldTemp() {
+            return holdTemp;
+        }
+
+        public void setHoldTemp(Integer holdTemp) {
+            this.holdTemp = holdTemp;
+        }
+
+        public StepData withHoldTemp(Integer holdTemp) {
+            this.holdTemp = holdTemp;
+            return this;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public StepData withMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        public String getMode() {
+            return mode;
+        }
+
+        public void setMode(String mode) {
+            this.mode = mode;
+        }
+
+        public StepData withMode(String mode) {
+            this.mode = mode;
+            return this;
+        }
+
+        public Boolean getNotify() {
+            return notify;
+        }
+
+        public void setNotify(Boolean notify) {
+            this.notify = notify;
+        }
+
+        public StepData withNotify(Boolean notify) {
+            this.notify = notify;
+            return this;
+        }
+
+        public Boolean getPause() {
+            return pause;
+        }
+
+        public void setPause(Boolean pause) {
+            this.pause = pause;
+        }
+
+        public StepData withPause(Boolean pause) {
+            this.pause = pause;
+            return this;
+        }
+
+        public Integer getTimer() {
+            return timer;
+        }
+
+        public void setTimer(Integer timer) {
+            this.timer = timer;
+        }
+
+        public StepData withTimer(Integer timer) {
+            this.timer = timer;
+            return this;
+        }
+
+        public Boolean getTriggered() {
+            return triggered;
+        }
+
+        public void setTriggered(Boolean triggered) {
+            this.triggered = triggered;
+        }
+
+        public StepData withTriggered(Boolean triggered) {
+            this.triggered = triggered;
+            return this;
+        }
+
+        public Map<String, Double> getTriggerTemps() {
+            return triggerTemps;
+        }
+
+        public void setTriggered(Map<String, Double> triggerTemps) {
+            this.triggerTemps = triggerTemps;
+        }
+
+        public StepData withTriggered(Map<String, Double> triggerTemps) {
+            this.triggerTemps = triggerTemps;
+            return this;
+        }
+
     }
 
     public static class Timer {
 
         @SerializedName("start")
         @Expose
-        private Float start;
+        private Double start;
         @SerializedName("paused")
         @Expose
-        private Float paused;
+        private Double paused;
         @SerializedName("end")
         @Expose
-        private Float end;
+        private Double end;
         @SerializedName("shutdown")
         @Expose
         private Boolean shutdown;
 
-        public Float getStart() {
+        public Double getStart() {
             return start;
         }
 
-        public void setStart(Float start) {
+        public void setStart(Double start) {
             this.start = start;
         }
 
-        public Timer withStart(Float start) {
+        public Timer withStart(Double start) {
             this.start = start;
             return this;
         }
 
-        public Float getPaused() {
+        public Double getPaused() {
             return paused;
         }
 
-        public void setPaused(Float paused) {
+        public void setPaused(Double paused) {
             this.paused = paused;
         }
 
-        public Timer withPaused(Float paused) {
+        public Timer withPaused(Double paused) {
             this.paused = paused;
             return this;
         }
 
-        public Float getEnd() {
+        public Double getEnd() {
             return end;
         }
 
-        public void setEnd(Float end) {
+        public void setEnd(Double end) {
             this.end = end;
         }
 
-        public Timer withEnd(Float end) {
+        public Timer withEnd(Double end) {
             this.end = end;
             return this;
         }
@@ -664,5 +817,13 @@ public class ControlDataModel {
             this.profileSelected = profileSelected;
             return this;
         }
+    }
+
+    public static ControlDataModel parseJSON(String response) {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .registerTypeAdapterFactory(new CustomTypeAdapterFactory())
+                .create();
+        return gson.fromJson(response, ControlDataModel.class);
     }
 }

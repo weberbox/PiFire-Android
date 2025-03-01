@@ -46,73 +46,37 @@
         android:textColor="@color/colorWhite"
         android:textSize="16sp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/server_address_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="15dp"
+        android:hint="@string/setup_server_address"
+        android:textColorHint="@color/colorWhite"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
+        app:boxBackgroundColor="@color/colorPrimary"
+        app:boxStrokeColor="@color/selector_stroke_color"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/colorGreyHint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/server_address_scheme"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="@dimen/small_spacing"
-            android:hint="@string/scheme"
-            android:labelFor="@+id/server_address_scheme_tv"
-            android:paddingBottom="20dp"
-            android:textColorHint="@color/colorWhite"
-            android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-            app:boxBackgroundColor="@color/colorPrimary"
-            app:boxStrokeColor="@color/selector_stroke_color"
-            app:endIconTint="@color/colorWhite"
-            app:hintTextColor="@color/colorGreyHint"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/server_address_layout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/server_address"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:fontFamily="@font/aller_regular"
+            android:imeOptions="actionDone"
+            android:inputType="textUri"
+            android:singleLine="true"
+            android:textColor="@color/colorWhite" />
 
-            <AutoCompleteTextView
-                android:id="@+id/server_address_scheme_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/aller_regular"
-                android:inputType="none"
-                android:text="@string/http_scheme" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/server_address_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:hint="@string/setup_server_address"
-            android:textColorHint="@color/colorWhite"
-            android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
-            app:boxBackgroundColor="@color/colorPrimary"
-            app:boxStrokeColor="@color/selector_stroke_color"
-            app:errorEnabled="true"
-            app:hintTextColor="@color/colorGreyHint"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/server_address_scheme"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/server_address"
-                android:layout_width="match_parent"
-                android:layout_height="72dp"
-                android:fontFamily="@font/aller_regular"
-                android:imeOptions="actionDone"
-                android:inputType="textUri"
-                android:singleLine="true"
-                android:textColor="@color/colorWhite" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/use_qrcode"

@@ -1,10 +1,15 @@
 package com.weberbox.pifire.ui.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -28,19 +33,25 @@ import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
+import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.control.ServerControl;
 import com.weberbox.pifire.databinding.FragmentDashboardBinding;
-import com.weberbox.pifire.interfaces.DashProbeCallback;
+import com.weberbox.pifire.databinding.LayoutDashRecipeInfoBinding;
 import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
+import com.weberbox.pifire.model.remote.ControlDataModel;
+import com.weberbox.pifire.model.remote.ControlDataModel.Timer;
 import com.weberbox.pifire.model.remote.DashDataModel;
 import com.weberbox.pifire.model.remote.DashDataModel.DashProbeInfo;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
+import com.weberbox.pifire.model.remote.DashDataModel.StatusInfo;
 import com.weberbox.pifire.model.remote.DashDataModel.TimerInfo;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeInfo;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.MainViewModel;
 import com.weberbox.pifire.recycler.adapter.DashProbeAdapter;
+import com.weberbox.pifire.recycler.adapter.DashProbeAdapter.DashProbeCallback;
+import com.weberbox.pifire.ui.activities.RecipeActivity;
 import com.weberbox.pifire.ui.dialogs.BottomIconDialog;
 import com.weberbox.pifire.ui.dialogs.PrimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.TempPickerDialog;
@@ -48,6 +59,7 @@ import com.weberbox.pifire.ui.dialogs.TimePickerDialog;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.CountDownTimer;
+import com.weberbox.pifire.ui.utils.ElapsedTimer;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 import com.weberbox.pifire.ui.views.PelletLevelView;
 import com.weberbox.pifire.utils.AlertUtils;
@@ -55,6 +67,7 @@ import com.weberbox.pifire.utils.NullUtils;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TempUtils;
 import com.weberbox.pifire.utils.TimeUtils;
+import com.weberbox.pifire.utils.VersionUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -73,23 +86,30 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private FragmentDashboardBinding binding;
     private TextView timerCountDownText, pelletLevelText;
     private TextView currentModeText, smokePlusText, pwmControlText;
-    private ImageView timerShutdown, timerKeepWarm;
+    private TextView dashRecipeMode, dashRecipeStep, dashRecipeStatus;
+    private TextView dashElapsedTime;
+    private ImageView timerShutdown, timerKeepWarm, dashModePaused;
     private ProgressBar loadingBar, timerProgress;
     private ConstraintLayout smokePlusBox, pwmControlBox;
     private SwipeRefreshLayout swipeRefresh;
     private TempPickerDialog tempPickerDialog;
     private FrameLayout timerPausedLayout;
     private CountDownTimer countDownTimer;
+    private ElapsedTimer elapsedTimer;
     private PelletLevelView pelletLevelIndicator;
     private Socket socket;
     private DashProbeAdapter dashAdapter;
     private ArrayList<NotifyData> notifyData;
     private List<ProbeInfo> probeInfo;
+    private ConstraintLayout currentModeBox, dashRecipeView;
+    private Animation modePulse, fanAnim, augerAnim, igniterAnim;
+    private ImageView dashOutputFan, dashOutputAuger, dashOutputIgniter;
     private boolean isLoading = false;
     private boolean smokePlusEnabled = false;
     private boolean pwmControlEnabled = false;
+    private boolean recipePaused = false;
 
-    private String currentMode = Constants.GRILL_CURRENT_STOP;
+    private String currentMode = ServerConstants.G_MODE_STOP;
 
 
     public DashboardFragment() {
@@ -119,8 +139,9 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         });
 
         // Mode
-        ConstraintLayout currentModeBox = binding.dashLayout.dashStatusContainer;
+        currentModeBox = binding.dashLayout.dashStatusContainer;
         currentModeText = binding.dashLayout.dashGrillMode;
+        dashModePaused = binding.dashLayout.dashModePaused;
 
         // Timer
         ConstraintLayout timerBox = binding.dashLayout.dashTimerContainer;
@@ -144,16 +165,81 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         pwmControlText = binding.dashLayout.dashPwmControl;
         pwmControlBox = binding.dashLayout.dashPwmContainer;
 
+        // Recipe
+        modePulse = AnimationUtils.loadAnimation(requireActivity(), R.anim.mode_pulse);
+        LayoutDashRecipeInfoBinding recipeInfoBinding = binding.dashLayout.dashRecipeLayout;
+        dashRecipeView = recipeInfoBinding.getRoot();
+        dashRecipeMode = recipeInfoBinding.dashRecipeModeText;
+        dashRecipeStep = recipeInfoBinding.dashRecipeStepText;
+        dashRecipeStatus = recipeInfoBinding.dashRecipeStatusText;
+
+        // Elapsed Time
+        dashElapsedTime = binding.dashLayout.dashElapsedLayout.dashElapsedText;
+
+        // Outputs
+        fanAnim = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_fan);
+        augerAnim = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_output);
+        igniterAnim = AnimationUtils.loadAnimation(requireActivity(), R.anim.anim_output);
+        dashOutputFan = binding.dashLayout.dashOutputsLayout.dashOutputFan;
+        dashOutputAuger = binding.dashLayout.dashOutputsLayout.dashOutputAuger;
+        dashOutputIgniter = binding.dashLayout.dashOutputsLayout.dashOutputIgniter;
+
+        if (VersionUtils.isUnSupportedBuild(ServerVersions.V_190, "23")) {
+            ViewUtils.setViewGone(binding.dashLayout.dashElapsedContainer);
+            ViewUtils.setViewGone(binding.dashLayout.dashOutputsContainer);
+        }
+
         TempUtils tempUtils = new TempUtils(getContext());
+
+        dashRecipeView.setOnClickListener(view1 -> {
+            if (dashRecipeView.getTag() != null && dashRecipeStep.getText() != null) {
+                String filename = dashRecipeView.getTag().toString();
+                Intent intent = new Intent(requireActivity(), RecipeActivity.class);
+                intent.putExtra(Constants.INTENT_RECIPE_FRAGMENT, Constants.FRAG_VIEW_RECIPE);
+                intent.putExtra(Constants.INTENT_RECIPE_FILENAME, filename);
+                intent.putExtra(Constants.INTENT_RECIPE_STEP,
+                        Integer.valueOf(dashRecipeStep.getText().toString()));
+                startActivity(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    requireActivity().overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN,
+                            R.anim.slide_in_right,
+                            android.R.anim.fade_out);
+                } else {
+                    requireActivity().overridePendingTransition(R.anim.slide_in_right,
+                            android.R.anim.fade_out);
+                }
+            }
+        });
 
         currentModeBox.setOnClickListener(v -> {
             if (socketConnected()) {
-                if (!currentMode.equals(Constants.GRILL_CURRENT_MANUAL)) {
-                    if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
-                        boolean swipeEnabled = Prefs.getBoolean(getString(
-                                        R.string.prefs_safety_startup_check),
-                                getResources().getBoolean(R.bool.def_safety_startup_check));
-
+                boolean swipeEnabled = Prefs.getBoolean(getString(
+                                R.string.prefs_safety_startup_check),
+                        getResources().getBoolean(R.bool.def_safety_startup_check));
+                switch (currentMode) {
+                    case ServerConstants.G_MODE_START, ServerConstants.G_MODE_REIGNITE,
+                         ServerConstants.G_MODE_SHUTDOWN -> {
+                        BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                                .setAutoDismiss(true)
+                                .setNegativeButton(getString(R.string.grill_mode_smoke),
+                                        R.drawable.ic_grill_smoke, (dialogInterface, which) ->
+                                                ServerControl.modeSmokeGrill(socket,
+                                                        this::processPostResponse))
+                                .setNeutralButton(getString(R.string.grill_mode_hold),
+                                        R.drawable.ic_grill_hold, (dialogInterface, which) ->
+                                                showHoldPickerDialog())
+                                .setPositiveButton(getString(R.string.grill_mode_stop),
+                                        R.drawable.ic_timer_stop,
+                                        (dialogInterface, which) ->
+                                                ServerControl.modeStopGrill(socket,
+                                                        this::processPostResponse))
+                                .build();
+                        dialog.show();
+                    }
+                    case ServerConstants.G_MODE_MANUAL ->
+                            AlertUtils.createManualAlert(getActivity(),
+                                    R.string.control_manual_mode, false);
+                    case ServerConstants.G_MODE_STOP -> {
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)
                                 .setNegativeButton(getString(R.string.grill_mode_start),
@@ -174,12 +260,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                                         })
                                 .build();
                         dialog.show();
-                    } else if (currentMode.equals(Constants.GRILL_CURRENT_MONITOR) ||
-                            currentMode.equals(Constants.GRILL_CURRENT_PRIME)) {
-                        boolean swipeEnabled = Prefs.getBoolean(getString(
-                                        R.string.prefs_safety_startup_check),
-                                getResources().getBoolean(R.bool.def_safety_startup_check));
-
+                    }
+                    case ServerConstants.G_MODE_MONITOR, ServerConstants.G_MODE_PRIME -> {
                         BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
                                 .setAutoDismiss(true)
                                 .setNegativeButton(getString(R.string.grill_mode_start),
@@ -201,54 +283,52 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                                         })
                                 .build();
                         dialog.show();
-                    } else {
-                        BottomIconDialog dialog;
-                        if (currentMode.equals(Constants.GRILL_CURRENT_SHUTDOWN)) {
-                            dialog = new BottomIconDialog.Builder(requireActivity())
-                                    .setAutoDismiss(true)
-                                    .setNegativeButton(getString(R.string.grill_mode_smoke),
-                                            R.drawable.ic_grill_smoke, (dialogInterface, which) ->
-                                                    ServerControl.modeSmokeGrill(socket,
-                                                            this::processPostResponse))
-                                    .setNeutralButton(getString(R.string.grill_mode_hold),
-                                            R.drawable.ic_grill_hold, (dialogInterface, which) ->
-                                                    showHoldPickerDialog())
-                                    .setPositiveButton(getString(R.string.grill_mode_stop),
-                                            R.drawable.ic_timer_stop,
-                                            (dialogInterface, which) ->
-                                                    ServerControl.modeStopGrill(socket,
-                                                            this::processPostResponse))
-                                    .build();
-                        } else {
-                            dialog = new BottomIconDialog.Builder(requireActivity())
-                                    .setAutoDismiss(true)
-                                    .setNegativeButton(getString(R.string.grill_mode_smoke),
-                                            R.drawable.ic_grill_smoke, (dialogInterface, which) ->
-                                                    ServerControl.modeSmokeGrill(socket,
-                                                            this::processPostResponse))
-                                    .setNeutralButton(getString(R.string.grill_mode_hold),
-                                            R.drawable.ic_grill_hold, (dialogInterface, which) ->
-                                                    showHoldPickerDialog())
-                                    .setPositiveButton(getString(R.string.grill_mode_shutdown),
-                                            R.drawable.ic_grill_shutdown,
-                                            (dialogInterface, which) ->
-                                                    ServerControl.modeShutdownGrill(socket,
-                                                            this::processPostResponse))
-                                    .build();
-                        }
+                    }
+                    case ServerConstants.G_MODE_RECIPE -> {
+                        int buttonText = recipePaused ? R.string.grill_mode_continue :
+                                R.string.grill_mode_next;
+                        BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                                .setAutoDismiss(true)
+                                .setNegativeButton(getString(R.string.grill_mode_shutdown),
+                                        R.drawable.ic_grill_shutdown,
+                                        (dialogInterface, which) ->
+                                                ServerControl.modeShutdownGrill(socket,
+                                                        this::processPostResponse))
+                                .setPositiveButton(getString(buttonText),
+                                        R.drawable.ic_grill_next,
+                                        (dialogInterface, which) ->
+                                                ServerControl.sendRecipeUnPause(socket,
+                                                        this::processPostResponse))
+                                .build();
                         dialog.show();
                     }
-                } else {
-                    AlertUtils.createManualAlert(getActivity(), R.string.control_manual_mode, false);
+                    default -> {
+                        BottomIconDialog dialog = new BottomIconDialog.Builder(requireActivity())
+                                .setAutoDismiss(true)
+                                .setNegativeButton(getString(R.string.grill_mode_smoke),
+                                        R.drawable.ic_grill_smoke, (dialogInterface, which) ->
+                                                ServerControl.modeSmokeGrill(socket,
+                                                        this::processPostResponse))
+                                .setNeutralButton(getString(R.string.grill_mode_hold),
+                                        R.drawable.ic_grill_hold, (dialogInterface, which) ->
+                                                showHoldPickerDialog())
+                                .setPositiveButton(getString(R.string.grill_mode_shutdown),
+                                        R.drawable.ic_grill_shutdown,
+                                        (dialogInterface, which) ->
+                                                ServerControl.modeShutdownGrill(socket,
+                                                        this::processPostResponse))
+                                .build();
+                        dialog.show();
+                    }
                 }
             }
         });
 
         smokePlusBox.setOnClickListener(v -> {
-            if (currentMode.equals(Constants.GRILL_CURRENT_HOLD)
-                    || currentMode.equals(Constants.GRILL_CURRENT_SMOKE)) {
+            if (currentMode.equals(ServerConstants.G_MODE_HOLD)
+                    || currentMode.equals(ServerConstants.G_MODE_SMOKE)) {
                 ServerControl.setSmokePlus(socket, !smokePlusEnabled, this::processPostResponse);
-            } else if (!currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
+            } else if (!currentMode.equals(ServerConstants.G_MODE_STOP)) {
                 AlertUtils.createAlert(getActivity(), R.string.control_smoke_plus_disabled,
                         1000);
             }
@@ -260,10 +340,10 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 smokePlusTitle.setText(R.string.grill_smoke_plus_abv);
             }
             pwmControlBox.setOnClickListener(v -> {
-                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD)) {
+                if (currentMode.equals(ServerConstants.G_MODE_HOLD)) {
                     ServerControl.setPWMControl(socket, !pwmControlEnabled,
                             this::processPostResponse);
-                } else if (!currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
+                } else if (!currentMode.equals(ServerConstants.G_MODE_STOP)) {
                     AlertUtils.createAlert(getActivity(), R.string.control_pwm_control_disabled,
                             1000);
                 }
@@ -307,7 +387,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                     }
                     dialog.show();
                 } else {
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(requireActivity(),
                             DashboardFragment.this);
                     timePickerDialog.showDialog();
                 }
@@ -328,7 +408,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
         probeInfo = getProbeInfoList();
 
-        dashAdapter = new DashProbeAdapter(getProbeList(probeInfo), tempUtils,this);
+        dashAdapter = new DashProbeAdapter(getProbeList(probeInfo), tempUtils, this);
 
         int spanCount = ViewUtils.isLandscape(requireActivity()) ?
                 AppConfig.DASH_RECYCLER_LAND : AppConfig.DASH_RECYCLER_PORT;
@@ -345,8 +425,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
             }
         });
 
-        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), enabled -> {
-            if (enabled != null && enabled) {
+        mainViewModel.getServerConnected().observe(getViewLifecycleOwner(), connected -> {
+            if (connected != null && connected) {
                 if (!isLoading) {
                     requestDataUpdate();
                 }
@@ -412,7 +492,8 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     private List<ProbeInfo> getProbeInfoList() {
         ProbeMap probeMap = new Gson().fromJson(
                 Prefs.getString(getString(R.string.prefs_probe_map)),
-                new TypeToken<ProbeMap>() {}.getType());
+                new TypeToken<ProbeMap>() {
+                }.getType());
         return probeMap.getProbeInfo();
     }
 
@@ -517,6 +598,18 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         return countDownTimer;
     }
 
+    private ElapsedTimer getElapsedTimer() {
+        if (elapsedTimer == null) {
+            return new ElapsedTimer() {
+                @Override
+                public void onElapsedUpdate(String elapsedTime) {
+                    dashElapsedTime.setText(elapsedTime);
+                }
+            };
+        }
+        return elapsedTimer;
+    }
+
     @Override
     public void onTempConfirmClicked(ArrayList<NotifyData> notifyData, String temp, boolean hold) {
         if (socket != null && notifyData != null) {
@@ -566,7 +659,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
     public void onProbeLongClick(DashProbe probe) {
         if (socketConnected()) {
             if (probe.getProbeType().equals(Constants.DASH_PROBE_PRIMARY)) {
-                tempPickerDialog = new TempPickerDialog(getActivity(), probe, notifyData,
+                tempPickerDialog = new TempPickerDialog(requireActivity(), probe, notifyData,
                         false, true, DashboardFragment.this);
                 tempPickerDialog.showDialog();
             }
@@ -587,19 +680,44 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         try {
 
             DashProbeInfo dashProbeInfo = dashDataModel.getDashProbeInfo();
+            ControlDataModel controlInfo = dashDataModel.getControlInfo();
+            StatusInfo statusInfo = dashDataModel.getStatusInfo();
             TimerInfo timerInfo = dashDataModel.getTimerInfo();
-            notifyData = dashDataModel.getNotifyData();
+            Timer timer = controlInfo.getTimer();
 
-            String currentMode = dashDataModel.getCurrentMode();
+            // To Support PiFire Versions below 1.9.0 build 23?
+            String currentMode;
+            Boolean smokePlus;
+            Boolean pwmControl;
+            long timerStartTime;
+            long timerEndTime;
+            long timerPauseTime;
+            Boolean timerPaused;
+            Boolean timerActive;
+            if (NullUtils.checkObjectNotNull(controlInfo, timer)) {
+                notifyData = controlInfo.getNotifyData();
+                currentMode = controlInfo.getCurrentMode();
+                smokePlus = controlInfo.getSmokePlus();
+                pwmControl = controlInfo.getPwmControl();
+                timerStartTime = timer.getStart().longValue();
+                timerEndTime = timer.getEnd().longValue();
+                timerPauseTime = timer.getPaused().longValue();
+                timerPaused = timer.getPaused() > 0;
+                timerActive = timer.getStart() > 0;
+            } else {
+                notifyData = dashDataModel.getNotifyData();
+                currentMode = dashDataModel.getCurrentMode();
+                smokePlus = dashDataModel.getSmokePlus();
+                pwmControl = dashDataModel.getPwmControl();
+                timerStartTime = timerInfo.getTimerStartTime();
+                timerEndTime = timerInfo.getTimerEndTime();
+                timerPauseTime = timerInfo.getTimerPauseTime();
+                timerPaused = timerInfo.getTimerPaused();
+                timerActive = timerInfo.getTimerActive();
+            }
+
             Double grillTarget = dashProbeInfo.getPrimarySetPoint();
-            long timerStartTime = timerInfo.getTimerStartTime();
-            long timerEndTime = timerInfo.getTimerEndTime();
-            long timerPauseTime = timerInfo.getTimerPauseTime();
             Integer hopperLevel = dashDataModel.getHopperLevel();
-            Boolean smokePlus = dashDataModel.getSmokePlus();
-            Boolean pwmControl = dashDataModel.getPwmControl();
-            Boolean timerPaused = timerInfo.getTimerPaused();
-            Boolean timerActive = timerInfo.getTimerActive();
 
             List<DashProbe> probes = dashAdapter.getDashProbes();
 
@@ -668,14 +786,14 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
 
             if (NullUtils.checkObjectNotNull(currentMode, smokePlus, hopperLevel, grillTarget)) {
                 this.currentMode = currentMode;
-                if (currentMode.equals(Constants.GRILL_CURRENT_STOP)) {
+                if (currentMode.equalsIgnoreCase(ServerConstants.G_MODE_STOP)) {
                     currentModeText.setText(R.string.off);
                 } else {
                     currentModeText.setText(currentMode);
                 }
 
-                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) |
-                        currentMode.equals(Constants.GRILL_CURRENT_SMOKE) && smokePlus) {
+                if (currentMode.equalsIgnoreCase(ServerConstants.G_MODE_HOLD) |
+                        currentMode.equalsIgnoreCase(ServerConstants.G_MODE_SMOKE) && smokePlus) {
                     smokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_enabled);
                     smokePlusText.setText(R.string.on);
                     smokePlusEnabled = true;
@@ -685,7 +803,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                     smokePlusEnabled = false;
                 }
 
-                if (currentMode.equals(Constants.GRILL_CURRENT_HOLD) && pwmControl) {
+                if (currentMode.equalsIgnoreCase(ServerConstants.G_MODE_HOLD) && pwmControl) {
                     pwmControlBox.setBackgroundResource(R.drawable.bg_ripple_smokep_enabled);
                     pwmControlText.setText(R.string.on);
                     pwmControlEnabled = true;
@@ -727,13 +845,68 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
                 }
             }
 
+            if (NullUtils.checkObjectNotNull(statusInfo, controlInfo,
+                    controlInfo.getRecipe().getStep())) {
+                if (statusInfo.getRecipeMode()) {
+                    String filename = controlInfo.getRecipe().getFileName();
+                    ViewUtils.setViewVisible(dashRecipeView);
+                    dashRecipeMode.setText(statusInfo.getDisplayMode());
+                    dashRecipeStep.setText(String.valueOf(controlInfo.getRecipe().getStep()));
+                    dashRecipeView.setTag(filename.substring(filename.lastIndexOf("/") + 1));
+                    if (statusInfo.getRecipePaused()) {
+                        recipePaused = true;
+                        ViewUtils.setViewVisible(dashModePaused);
+                        ViewUtils.setBackground(requireActivity(), currentModeBox,
+                                R.drawable.bg_ripple_mode_recipe);
+                        ViewUtils.startAnimation(currentModeBox, modePulse);
+                        dashRecipeStatus.setText(getString(R.string.dash_recipe_paused));
+                    } else {
+                        clearRecipePaused();
+                        dashRecipeStatus.setText(getString(R.string.dash_recipe_running));
+                    }
+                } else {
+                    clearRecipePaused();
+                    ViewUtils.setViewGone(dashRecipeView);
+                }
+                if (statusInfo.getStartupTimestamp() > 0) {
+                    elapsedTimer = getElapsedTimer();
+                    elapsedTimer.startElapsed(statusInfo.getStartupTimestamp());
+                } else {
+                    stopElapsed();
+                }
+                if (statusInfo.getOutPins().getFan()) {
+                    ViewUtils.startAnimation(dashOutputFan, fanAnim);
+                } else {
+                    ViewUtils.stopAnimation(dashOutputFan, fanAnim);
+                }
+                if (statusInfo.getOutPins().getAuger()) {
+                    ViewUtils.startAnimation(dashOutputAuger, augerAnim);
+                } else {
+                    ViewUtils.stopAnimation(dashOutputAuger, augerAnim);
+                }
+                if (statusInfo.getOutPins().getIgniter()) {
+                    ViewUtils.startAnimation(dashOutputIgniter, igniterAnim);
+                } else {
+                    ViewUtils.stopAnimation(dashOutputIgniter, igniterAnim);
+                }
+            }
+
         } catch (IllegalStateException | NullPointerException e) {
             Timber.e(e, "Dashboard JSON Error");
-            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+            AlertUtils.createErrorAlert(requireActivity(), getString(R.string.json_parsing_error,
                     getString(R.string.menu_dashboard)), false);
         }
 
         toggleLoading(false);
+    }
+
+    private void clearRecipePaused() {
+        recipePaused = false;
+        ViewUtils.setViewGone(dashModePaused);
+        ViewUtils.setBackground(requireActivity(), currentModeBox,
+                R.drawable.bg_ripple_table);
+        modePulse.cancel();
+        modePulse.reset();
     }
 
     private void stopTimer() {
@@ -743,6 +916,13 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         toggleTimerPaused(false);
         timerProgress.setProgress(0);
         timerCountDownText.setText(R.string.placeholder_time);
+    }
+
+    private void stopElapsed() {
+        if (elapsedTimer != null) {
+            elapsedTimer.stopElapsed();
+        }
+        dashElapsedTime.setText(R.string.placeholder_time);
     }
 
     private void toggleTimerPaused(boolean show) {
@@ -767,7 +947,7 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         }
 
         stopTimer();
-        currentMode = Constants.GRILL_CURRENT_STOP;
+        currentMode = ServerConstants.G_MODE_STOP;
         currentModeText.setText(R.string.off);
         smokePlusBox.setBackgroundResource(R.drawable.bg_ripple_smokep_disabled);
         smokePlusText.setText(R.string.off);
@@ -777,6 +957,10 @@ public class DashboardFragment extends Fragment implements DialogDashboardCallba
         pwmControlEnabled = false;
         timerCountDownText.setText(R.string.placeholder_time);
         pelletLevelText.setText(R.string.placeholder_percentage);
+        dashElapsedTime.setText(R.string.placeholder_time);
+        ViewUtils.stopAnimation(dashOutputFan, fanAnim);
+        ViewUtils.stopAnimation(dashOutputAuger, augerAnim);
+        ViewUtils.stopAnimation(dashOutputIgniter, igniterAnim);
         if (getActivity() != null) {
             pelletLevelText.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorWhite));
         }

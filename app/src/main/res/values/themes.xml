@@ -3,6 +3,7 @@
     <style name="Theme.PiFire" parent="BaseAppTheme" />
     <style name="Theme.PiFire.Settings" parent="BaseAppSettingsTheme" />
     <style name="Theme.PiFire.Setup" parent="BaseAppSetupTheme" />
+    <style name="Theme.PiFire.Recipes" parent="BaseAppRecipesTheme" />
 
     <style name="Theme.PiFire.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/colorPrimaryDark</item>
@@ -12,10 +13,15 @@
 
     <style name="BaseAppTheme" parent="BaseAppColors">
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowActivityTransitions">true</item>
         <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
         <item name="android:actionModeBackground">@color/colorAccent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:actionButtonStyle">@style/ActionButtonStyle</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_left</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
     </style>
 
     <style name="BaseAppSettingsTheme" parent="BaseAppColors">
@@ -27,11 +33,30 @@
         <item name="android:textAppearanceListItem">@style/Text16OpenSans</item>
         <item name="android:textAppearanceListItemSecondary">@style/Text14OpenSans</item>
         <item name="android:navigationBarColor">@color/colorNavBarAlpha</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_right</item>
     </style>
 
     <style name="BaseAppSetupTheme" parent="BaseAppColors">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_right</item>
+    </style>
+
+    <style name="BaseAppRecipesTheme" parent="BaseAppColors">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="actionModeStyle">@style/RecipesActionBar</item>
+
+        <item name="android:navigationBarColor">@color/colorNavBarAlpha</item>
     </style>
 
     <style name="BaseAppColors" parent="Theme.Material3.Dark">
@@ -44,7 +69,7 @@
         <item name="colorOfflineStatus">@color/colorAccentRed</item>
         <item name="cursorColor">@color/colorAccent</item>
         <item name="android:colorControlActivated">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.PiFire.NoActionBar">

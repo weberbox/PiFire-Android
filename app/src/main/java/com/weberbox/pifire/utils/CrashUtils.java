@@ -49,7 +49,18 @@ public class CrashUtils {
                             getPrefString(context, R.string.prefs_server_build));
                     event.setExtra("Temp Units",
                             getPrefString(context, R.string.prefs_grill_units));
-                    event.setExtra("Modules", getServerModules(context));
+                    event.setExtra("RealHW",
+                            getPrefString(context, R.string.prefs_real_hw));
+                    event.setExtra("PWM",
+                            getPrefString(context, R.string.prefs_dc_fan));
+                    event.setExtra("Modules",
+                            getServerModules(context));
+                    event.setExtra("Platform Type",
+                            getPrefString(context, R.string.prefs_platform_type));
+                    event.setExtra("Platform Current",
+                            getPrefString(context, R.string.prefs_platform_current));
+                    event.setExtra("Controller Selected",
+                            getPrefString(context, R.string.prefs_controller_selected));
 
                     if (event.isCrashed() && event.getEventId() != null) {
                         storeCrashEvent(context, event.getEventId().toString());

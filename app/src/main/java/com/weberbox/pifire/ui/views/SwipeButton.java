@@ -25,9 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.interfaces.OnSwipeActiveListener;
-import com.weberbox.pifire.interfaces.OnStateChangeListener;
-import com.weberbox.pifire.interfaces.OnSwipeTouchListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 @SuppressWarnings("unused")
@@ -528,5 +525,17 @@ public class SwipeButton extends RelativeLayout {
 
     private boolean isTouchOutsideInitialPosition(MotionEvent event, View view) {
         return event.getX() > view.getX() + view.getWidth();
+    }
+
+    public interface OnStateChangeListener {
+        void onStateChange(boolean active);
+    }
+
+    public interface OnSwipeActiveListener {
+        void onActive();
+    }
+
+    public interface OnSwipeTouchListener {
+        void onSwipeTouch(View v, MotionEvent event);
     }
 }

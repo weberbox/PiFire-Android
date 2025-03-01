@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -10,19 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemPwmControlBinding;
-import com.weberbox.pifire.interfaces.PWMControlCallback;
-import com.weberbox.pifire.model.local.PWMControlModel;
+import com.weberbox.pifire.record.PWMControlRecord;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class PWMControlAdapter extends RecyclerView.Adapter<PWMControlAdapter.ViewHolder> {
 
-    private final List<PWMControlModel> list;
+    private final List<PWMControlRecord> list;
     private final PWMControlCallback callback;
     private final String units;
 
-    public PWMControlAdapter(final List<PWMControlModel> list, String units,
-                             PWMControlCallback callback) {
+    public PWMControlAdapter(@NotNull final List<PWMControlRecord> list, @NotNull String units,
+                             @NotNull PWMControlCallback callback) {
         this.list = list;
         this.units = units;
         this.callback = callback;
@@ -44,35 +44,33 @@ public class PWMControlAdapter extends RecyclerView.Adapter<PWMControlAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void addNewControlItem(Integer temp, int dutyCycle) {
-        Integer lastDutyCycle = list.get(list.size() - 1).getDutyCycle();
-        list.remove(list.size() - 1);
-        list.add(list.size(), new PWMControlModel(temp, lastDutyCycle));
-        list.add(list.size(), new PWMControlModel(temp + 1, dutyCycle));
-        notifyDataSetChanged();
+    public void addNewControlItem(@NotNull Integer temp, int dutyCycle) {
+        int lastPosition = list.size() - 1;
+        Integer lastDutyCycle = list.get(lastPosition).dutyCycle();
+        list.set(lastPosition, new PWMControlRecord(temp, lastDutyCycle));
+        list.add(list.size(), new PWMControlRecord(temp + 1, dutyCycle));
+        notifyItemRangeChanged(lastPosition, 2);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     public void removeControlItem(int position) {
         list.remove(position);
-        Integer lastDutyCycle = list.get(list.size() - 1).getDutyCycle();
-        Integer lastTemp = list.get(list.size() - 2).getTemp();
-        list.set(position - 1, new PWMControlModel(lastTemp + 1, lastDutyCycle));
-        notifyDataSetChanged();
+        int lastPosition = list.size() - 1;
+        Integer lastDutyCycle = list.get(lastPosition).dutyCycle();
+        Integer lastTemp = list.get(list.size() - 2).temp();
+        list.set(position - 1, new PWMControlRecord(lastTemp + 1, lastDutyCycle));
+        notifyItemRangeChanged(position - 1, 2);
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void updateControlItem(int position, Integer temp, int dutyCycle) {
-        list.set(position, new PWMControlModel(temp, dutyCycle));
-        notifyDataSetChanged();
+    public void updateControlItem(int position, @NotNull Integer temp, int dutyCycle) {
+        list.set(position, new PWMControlRecord(temp, dutyCycle));
+        notifyItemRangeChanged(position , 2);
     }
 
-    public List<PWMControlModel> getControlItems() {
-        return list.isEmpty() ? null : list;
+    public List<PWMControlRecord> getControlItems() {
+        return list;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -88,24 +86,28 @@ public class PWMControlAdapter extends RecyclerView.Adapter<PWMControlAdapter.Vi
             item = binding.itemPwmContainer;
         }
 
-        public void bindData(final List<PWMControlModel> list, int position, String units) {
+        public void bindData(final List<PWMControlRecord> list, int position, String units) {
             int rangeSize = list.size();
             if (rangeSize > 0) {
                 String temp;
                 if (position == 0) {
-                    temp = "< " + list.get(position).getTemp() + " " + units;
+                    temp = "< " + list.get(position).temp() + " " + units;
                 } else if (position == rangeSize - 1) {
-                    temp = "> " + (list.get(position).getTemp() - 1) + " " + units;
+                    temp = "> " + (list.get(position).temp() - 1) + " " + units;
                 } else {
-                    temp = list.get(position - 1).getTemp() + "-" +
-                            list.get(position).getTemp() + " " + units;
+                    temp = list.get(position - 1).temp() + "-" +
+                            list.get(position).temp() + " " + units;
                 }
 
-                String dutyCycle = list.get(position).getDutyCycle() + "%";
+                String dutyCycle = list.get(position).dutyCycle() + "%";
 
                 range.setText(temp);
                 duty.setText(dutyCycle);
             }
         }
+    }
+
+    public interface PWMControlCallback {
+        void onPWMControlEdit(int position);
     }
 }

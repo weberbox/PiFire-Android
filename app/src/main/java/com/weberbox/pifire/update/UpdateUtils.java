@@ -103,10 +103,11 @@ public class UpdateUtils {
         firebaseRemoteConfig.setDefaultsAsync(defaults);
 
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(task -> {
+            String firebaseInfo = firebaseRemoteConfig.getString(AppConfig.INAPP_FIREBASE_INFO);
             if (task.isSuccessful()) {
-                String firebaseInfo = firebaseRemoteConfig.getString(AppConfig.INAPP_FIREBASE_INFO);
                 checkUpdatePriority(forced, firebaseInfo, appUpdateInfo);
             } else {
+                checkUpdatePriority(forced, firebaseInfo, appUpdateInfo);
                 Timber.d("Firebase Update Info Fetch Failed");
             }
         });

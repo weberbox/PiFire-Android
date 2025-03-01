@@ -6,11 +6,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
-
     <application
         android:name=".application.PiFireApplication"
         android:allowBackup="true"
@@ -23,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.PiFire"
-        tools:targetApi="s">
+        tools:replace="android:supportsRtl">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -44,6 +39,9 @@
         <activity
             android:name=".ui.activities.PreferencesActivity"
             android:theme="@style/Theme.PiFire.Settings" />
+        <activity
+            android:name=".ui.activities.RecipeActivity"
+            android:theme="@style/Theme.PiFire.Recipes" />
 
         <receiver
             android:name=".receiver.AppUpdateReceiver"

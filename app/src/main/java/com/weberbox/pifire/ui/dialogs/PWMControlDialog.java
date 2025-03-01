@@ -22,8 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogPwmControlBinding;
-import com.weberbox.pifire.model.local.PWMControlModel;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPWMCallback;
+import com.weberbox.pifire.record.PWMControlRecord;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
@@ -44,14 +43,14 @@ public class PWMControlDialog {
     private final int title;
     private final boolean delete;
     private final Integer minTemp, maxTemp, setTemp, dutyCycle, position;
-    private final List<PWMControlModel> list;
+    private final List<PWMControlRecord> list;
     private TextInputEditText tempInput, dutyCycleInput;
 
     public PWMControlDialog(@NotNull Context context, @StringRes int title, Integer position,
                             @Nullable Integer minTemp, @Nullable Integer maxTemp,
                             @NotNull Integer setTemp, @NotNull Integer dutyCycle,
                             @NotNull String units, boolean delete,
-                            @NotNull List<PWMControlModel> list,
+                            @NotNull List<PWMControlRecord> list,
                             @NotNull DialogPWMCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
@@ -209,6 +208,14 @@ public class PWMControlDialog {
 
         bottomSheetDialog.show();
 
+        if (tempInput.isEnabled()) {
+            tempInput.requestFocus();
+        } else {
+            dutyCycleInput.requestFocus();
+        }
+
+        tempInput.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -218,5 +225,11 @@ public class PWMControlDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    public interface DialogPWMCallback {
+        void onDialogAdd(List<PWMControlRecord> list, Integer temp, Integer dutyCycle);
+        void onDialogEdit(List<PWMControlRecord> list, int position, Integer temp, Integer dutyCycle);
+        void onDialogDelete(int position);
     }
 }

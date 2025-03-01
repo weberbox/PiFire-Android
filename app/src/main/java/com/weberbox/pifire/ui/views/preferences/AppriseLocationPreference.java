@@ -17,11 +17,11 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.interfaces.AppriseCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.recycler.adapter.AppriseAdapter;
+import com.weberbox.pifire.recycler.adapter.AppriseAdapter.AppriseCallback;
 import com.weberbox.pifire.ui.dialogs.AppriseDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAppriseCallback;
+import com.weberbox.pifire.ui.dialogs.AppriseDialog.DialogAppriseCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import java.util.List;

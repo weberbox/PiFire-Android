@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,21 +22,22 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.config.PushConfig;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.views.preferences.AppriseLocationPreference;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.OneSignalUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class NotificationSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private AppriseLocationPreference appriseLocations;
     private Socket socket;
 
@@ -47,10 +49,7 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @NonNull
@@ -82,7 +81,6 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -90,11 +88,14 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
 
         if (oneSignalConsent != null) {
             oneSignalConsent.setOnPreferenceClickListener(preference -> {
-                requireActivity().getSupportFragmentManager().beginTransaction()
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
                         .setCustomAnimations(R.animator.fragment_fade_enter,
+                                R.animator.fragment_fade_exit,
+                                R.animator.fragment_fade_enter,
                                 R.animator.fragment_fade_exit)
                         .replace(R.id.fragment_container, new OneSignalConsentFragment())
-                        .addToBackStack(null)
+                        .addToBackStack(OneSignalConsentFragment.class.getName())
                         .commit();
                 return true;
             });
@@ -108,6 +109,16 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         socket = null;
@@ -116,8 +127,8 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_notifications);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_notifications));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -135,9 +146,11 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
     private void processPostResponse(String response) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
         if (result.getResult().equals("error")) {
-            requireActivity().runOnUiThread(() ->
-                    AlertUtils.createErrorAlert(requireActivity(),
-                            result.getMessage(), false));
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() ->
+                        AlertUtils.createErrorAlert(getActivity(),
+                                result.getMessage(), false));
+            }
         }
     }
 

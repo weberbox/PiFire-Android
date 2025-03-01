@@ -9,7 +9,7 @@ object TimberUtils {
     @JvmStatic
     fun configTimber() {
         if (BuildConfig.DEBUG) {
-            Timber.plant(DebugLogTree())
+            Timber.plant(DebugLogTree("PiFireTag"))
         }
     }
 }

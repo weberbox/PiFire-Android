@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,10 +12,10 @@ public class InfoDataModel {
 
     @SerializedName("cpuinfo")
     @Expose
-    private List<String> cpuInfo = new ArrayList<>();
+    private List<String> cpuInfo;
     @SerializedName("ifconfig")
     @Expose
-    private List<String> ifConfig = new ArrayList<>();
+    private List<String> ifConfig;
     @SerializedName("temp")
     @Expose
     private String temp;
@@ -25,13 +24,13 @@ public class InfoDataModel {
     private String uptime;
     @SerializedName("outpins")
     @Expose
-    private HashMap<String, String> outPins = new HashMap<>();
+    private HashMap<String, String> outPins;
     @SerializedName("inpins")
     @Expose
-    private HashMap<String, String> inPins = new HashMap<>();
+    private HashMap<String, String> inPins;
     @SerializedName("dev_pins")
     @Expose
-    private HashMap<String, HashMap<String, String>> devPins = new HashMap<>();
+    private HashMap<String, HashMap<String, String>> devPins;
     @SerializedName("server_version")
     @Expose
     private String serverVersion;

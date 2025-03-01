@@ -8,15 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemPmodeDialogBinding;
-import com.weberbox.pifire.model.local.PModeModel;
+import com.weberbox.pifire.record.PModeRecord;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.ViewHolder> {
 
-    private final List<PModeModel> list;
+    private final List<PModeRecord> list;
 
-    public PModeViewAdapter(final List<PModeModel> list) {
+    public PModeViewAdapter(@NotNull final List<PModeRecord> list) {
         this.list = list;
     }
 
@@ -34,7 +36,7 @@ public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.View
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -50,10 +52,10 @@ public class PModeViewAdapter extends RecyclerView.Adapter<PModeViewAdapter.View
             augerOff = binding.pmodeItemAoff;
         }
 
-        public void bindData(final PModeModel model) {
-            pMode.setText(model.getPMode());
-            augerOn.setText(model.getAugerOn());
-            augerOff.setText(model.getAugerOff());
+        public void bindData(final PModeRecord model) {
+            pMode.setText(model.pMode());
+            augerOn.setText(model.augerOn());
+            augerOff.setText(model.augerOff());
         }
     }
 }

@@ -2,7 +2,6 @@ package com.weberbox.pifire.ui.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Outline;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RawRes;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.weberbox.pifire.R;
@@ -20,7 +20,6 @@ import com.weberbox.pifire.ui.dialogs.model.DialogButton;
 import com.weberbox.pifire.ui.dialogs.model.DialogMessage;
 import com.weberbox.pifire.ui.dialogs.model.DialogSwipeButton;
 import com.weberbox.pifire.ui.dialogs.model.DialogTitle;
-import com.weberbox.pifire.ui.utils.ViewUtils;
 
 public final class BottomIconDialog extends AbstractDialog {
 
@@ -58,6 +57,9 @@ public final class BottomIconDialog extends AbstractDialog {
         });
         dialogView.setClipToOutline(true);
 
+        dialogView.setBackgroundColor(ContextCompat.getColor(activity,
+                R.color.material_dialog_background));
+
         dialog.setOnShowListener(dialog -> {
             BottomSheetDialog d = (BottomSheetDialog) dialog;
 
@@ -66,14 +68,6 @@ public final class BottomIconDialog extends AbstractDialog {
 
             if (bottomSheet != null) {
                 BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-
-            Configuration configuration = activity.getResources().getConfiguration();
-            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                    configuration.screenWidthDp > 450) {
-                if (this.dialog.getWindow() != null) {
-                    this.dialog.getWindow().setLayout(ViewUtils.dpToPx(450), -1);
-                }
             }
         });
     }

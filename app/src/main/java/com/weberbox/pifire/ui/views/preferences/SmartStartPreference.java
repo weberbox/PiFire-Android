@@ -17,13 +17,13 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.interfaces.SmartStartCallback;
-import com.weberbox.pifire.model.local.SmartStartModel;
+import com.weberbox.pifire.record.SmartStartRecord;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart.SSProfile;
 import com.weberbox.pifire.recycler.adapter.SmartStartAdapter;
+import com.weberbox.pifire.recycler.adapter.SmartStartAdapter.SmartStartCallback;
 import com.weberbox.pifire.ui.dialogs.SmartStartDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
+import com.weberbox.pifire.ui.dialogs.SmartStartDialog.DialogSmartStartCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
         super.onBindViewHolder(holder);
         holder.itemView.setClickable(false);
 
-        List<SmartStartModel> smartStartList = new ArrayList<>();
+        List<SmartStartRecord> smartStartList = new ArrayList<>();
 
         RecyclerView recycler = (RecyclerView) holder.findViewById(R.id.smart_start_recycler);
 
@@ -92,7 +92,7 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
             rangeList.add(rangeList.get(rangeList.size() - 1) + 1);
 
             for (int i = 0; i < rangeList.size(); i++) {
-                smartStartList.add(new SmartStartModel(rangeList.get(i),
+                smartStartList.add(new SmartStartRecord(rangeList.get(i),
                         profileList.get(i).getStartUpTime(),
                         profileList.get(i).getAugerOnTime(),
                         profileList.get(i).getPMode()));
@@ -107,8 +107,8 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
         MaterialButton addButton = (MaterialButton) holder.findViewById(R.id.smart_start_add_button);
         addButton.setOnClickListener(view -> {
             if (socketConnected()) {
-                List<SmartStartModel> items = adapter.getSmartStartItems();
-                int setTemp = items.get(items.size() - 1).getTemp();
+                List<SmartStartRecord> items = adapter.getSmartStartItems();
+                int setTemp = items.get(items.size() - 1).temp();
 
                 SmartStartDialog dialog = new SmartStartDialog(context,
                         R.string.settings_smart_start_temp_range_add, null, null, null,
@@ -121,19 +121,19 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
     @Override
     public void onSmartStartEdit(int position) {
         if (socketConnected()) {
-            List<SmartStartModel> items = adapter.getSmartStartItems();
+            List<SmartStartRecord> items = adapter.getSmartStartItems();
 
             int temp;
             if (position == items.size() - 1) {
-                temp = items.get(position).getTemp() - 1;
+                temp = items.get(position).temp() - 1;
             } else {
-                temp = items.get(position).getTemp();
+                temp = items.get(position).temp();
             }
 
-            int startUp = items.get(position).getStartUp();
-            int augerOn = items.get(position).getAugerOn();
-            int pMode = items.get(position).getPMode();
-            int minTemp = position == 0 ? 0 : items.get(position - 1).getTemp() + 1;
+            int startUp = items.get(position).startUp();
+            int augerOn = items.get(position).augerOn();
+            int pMode = items.get(position).pMode();
+            int minTemp = position == 0 ? 0 : items.get(position - 1).temp() + 1;
 
             Integer maxTemp;
             if (position == items.size() - 1) {
@@ -141,7 +141,7 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
             } else if (position == items.size() - 2) {
                 maxTemp = 1000;
             } else {
-                maxTemp = items.get(position + 1).getTemp() - 1;
+                maxTemp = items.get(position + 1).temp() - 1;
             }
 
             boolean deleteEnabled = position != 0 && position != 1 && position >=
@@ -162,17 +162,17 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
             List<Integer> rangeList = new ArrayList<>();
             List<SSProfile> profileList = new ArrayList<>();
 
-            List<SmartStartModel> items = adapter.getSmartStartItems();
+            List<SmartStartRecord> items = adapter.getSmartStartItems();
 
             int itemCount = items.size();
             for (int i = 0; i < itemCount; i++) {
                 if (i != itemCount - 1) {
-                    rangeList.add(items.get(i).getTemp());
+                    rangeList.add(items.get(i).temp());
                 }
                 profileList.add(new SSProfile()
-                        .withStartUpTime(items.get(i).getStartUp())
-                        .withAugerOnTime(items.get(i).getAugerOn())
-                        .withPMode(items.get(i).getPMode()));
+                        .withStartUpTime(items.get(i).startUp())
+                        .withAugerOnTime(items.get(i).augerOn())
+                        .withPMode(items.get(i).pMode()));
 
             }
 
@@ -182,7 +182,7 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
     }
 
     @Override
-    public void onDialogAdd(List<SmartStartModel> list, Integer temp, Integer startUp,
+    public void onDialogAdd(List<SmartStartRecord> list, Integer temp, Integer startUp,
                             Integer augerOn, Integer pMode) {
         adapter.addNewSmartStartItem(temp, startUp, augerOn, pMode);
 
@@ -192,12 +192,12 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
         int itemCount = list.size();
         for (int i = 0; i < itemCount; i++) {
             if (i != itemCount - 1) {
-                rangeList.add(list.get(i).getTemp());
+                rangeList.add(list.get(i).temp());
             }
             profileList.add(new SSProfile()
-                    .withStartUpTime(list.get(i).getStartUp())
-                    .withAugerOnTime(list.get(i).getAugerOn())
-                    .withPMode(list.get(i).getPMode()));
+                    .withStartUpTime(list.get(i).startUp())
+                    .withAugerOnTime(list.get(i).augerOn())
+                    .withPMode(list.get(i).pMode()));
 
         }
 
@@ -207,16 +207,16 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
     }
 
     @Override
-    public void onDialogEdit(List<SmartStartModel> list, int position, Integer temp,
+    public void onDialogEdit(List<SmartStartRecord> list, int position, Integer temp,
                              Integer startUp, Integer augerOn, Integer pMode) {
         adapter.updateSmartStartItem(position, temp, startUp, augerOn, pMode);
 
         if (position == list.size() - 2) {
             adapter.updateSmartStartItem(
                     list.size() - 1, temp + 1,
-                    list.get(list.size() - 1).getStartUp(),
-                    list.get(list.size() - 1).getAugerOn(),
-                    list.get(list.size() - 1).getPMode());
+                    list.get(list.size() - 1).startUp(),
+                    list.get(list.size() - 1).augerOn(),
+                    list.get(list.size() - 1).pMode());
         }
 
         List<Integer> rangeList = new ArrayList<>();
@@ -225,12 +225,12 @@ public class SmartStartPreference extends Preference implements SmartStartCallba
         int itemCount = list.size();
         for (int i = 0; i < itemCount; i++) {
             if (i != itemCount - 1) {
-                rangeList.add(list.get(i).getTemp());
+                rangeList.add(list.get(i).temp());
             }
             profileList.add(new SSProfile()
-                    .withStartUpTime(list.get(i).getStartUp())
-                    .withAugerOnTime(list.get(i).getAugerOn())
-                    .withPMode(list.get(i).getPMode()));
+                    .withStartUpTime(list.get(i).startUp())
+                    .withAugerOnTime(list.get(i).augerOn())
+                    .withPMode(list.get(i).pMode()));
 
         }
 

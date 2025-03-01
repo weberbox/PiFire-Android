@@ -1,6 +1,6 @@
 package com.weberbox.pifire.recycler.adapter;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -15,60 +15,113 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.databinding.ItemLicenseListBinding;
+import com.weberbox.pifire.databinding.ItemViewMoreBinding;
 import com.weberbox.pifire.model.local.LicensesModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapter.ViewHolder> {
+import timber.log.Timber;
 
-    private List<LicensesModel> list;
-    private boolean limited;
+public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public LicensesListAdapter(boolean limited) {
+    private static final int FOOTER_VIEW = 1;
+    private final List<LicensesModel> list;
+    private final int limitAmount;
+    private boolean limitEnabled;
+
+    @SuppressWarnings("unused")
+    public LicensesListAdapter(boolean limitEnabled, int limitAmount) {
         this.list = new ArrayList<>();
-        this.limited = limited;
+        this.limitEnabled = limitEnabled;
+        this.limitAmount = limitAmount;
+    }
+
+    public LicensesListAdapter(boolean limitEnabled) {
+        this.list = new ArrayList<>();
+        this.limitEnabled = limitEnabled;
+        this.limitAmount = AppConfig.RECYCLER_LIMIT;
     }
 
     @NonNull
     @Override
-    public LicensesListAdapter.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
-                                                             final int viewType) {
-        return new ViewHolder(ItemLicenseListBinding.inflate(LayoutInflater.from(
-                parent.getContext()), parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent,
+                                                      final int viewType) {
+        if (viewType == FOOTER_VIEW) {
+            return new FooterViewHolder(ItemViewMoreBinding.inflate(LayoutInflater.from(
+                    parent.getContext()), parent, false));
+        } else {
+            return new ItemsViewHolder(ItemLicenseListBinding.inflate(LayoutInflater.from(
+                    parent.getContext()), parent, false));
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.bindData(list.get(position));
-        holder.root.setOnClickListener(v -> {
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(holder.projectLicense.getText().toString()));
-            holder.itemView.getContext().startActivity(i);
-        });
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder,
+                                 final int position) {
+        try {
+            if (holder instanceof ItemsViewHolder vh) {
+                vh.bindData(list.get(position));
+                vh.root.setOnClickListener(v -> {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(vh.projectLicense.getText().toString()));
+                    vh.itemView.getContext().startActivity(i);
+                });
+            } else if (holder instanceof FooterViewHolder vh) {
+                vh.bindData(vh.itemView.getContext(), limitEnabled);
+                vh.viewAll.setOnClickListener(view -> toggleViewAll());
+
+            }
+        } catch (Exception e) {
+            Timber.e(e, "onBindViewHolder Error");
+        }
     }
 
     @Override
     public int getItemCount() {
-        if (limited) {
-            return Math.min(list.size(), AppConfig.RECYCLER_LIMIT);
+        if (limitEnabled) {
+            return Math.min(list.size(), limitAmount + 1);
         } else {
-            return list == null ? 0 : list.size();
+            if (list.size() > limitAmount) {
+                return list.size() + 1;
+            } else {
+                return list.size();
+            }
         }
     }
 
-    public void setLimitEnabled(boolean enabled) {
-        limited = enabled;
+    @Override
+    public int getItemViewType(int position) {
+        if (limitEnabled) {
+            if (position == limitAmount) {
+                return FOOTER_VIEW;
+            } else {
+                return super.getItemViewType(position);
+            }
+        } else {
+            if (position == list.size()) {
+                return FOOTER_VIEW;
+            } else {
+                return super.getItemViewType(position);
+            }
+        }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setList(List<LicensesModel> list) {
-        this.list = list;
+    @SuppressWarnings("NotifyDataSetChanged")
+    public void setLicenseList(List<LicensesModel> licenceList) {
+        list.clear();
+        list.addAll(licenceList);
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @SuppressWarnings("NotifyDataSetChanged")
+    private void toggleViewAll() {
+        this.limitEnabled = !limitEnabled;
+        notifyDataSetChanged();
+    }
+
+    public static class ItemsViewHolder extends RecyclerView.ViewHolder {
 
         private final View root;
         private final int[] colors;
@@ -78,10 +131,10 @@ public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapte
         private final TextView projectText;
         private final TextView projectLicense;
 
-        public ViewHolder(ItemLicenseListBinding binding) {
+        public ItemsViewHolder(ItemLicenseListBinding binding) {
             super(binding.getRoot());
-            colors = binding.getRoot().getContext().getResources().getIntArray(
-                    R.array.licenses_color_list);
+            colors = binding.getRoot().getContext().getResources()
+                    .getIntArray(R.array.licenses_color_list);
             random = new Random();
             root = binding.getRoot();
             cardView = binding.licenseItemViewContainer;
@@ -94,9 +147,28 @@ public class LicensesListAdapter extends RecyclerView.Adapter<LicensesListAdapte
             int randomColor = random.nextInt(colors.length);
             cardView.setCardBackgroundColor(colors[randomColor]);
             projectIcon.setBackgroundColor(colors[randomColor]);
-            projectIcon.setText(license.getProjectIcon());
-            projectText.setText(license.getProjectText());
-            projectLicense.setText(license.getProjectLicense());
+            projectIcon.setText(license.getProject().substring(0, 1).toUpperCase());
+            projectText.setText(license.getProject());
+            projectLicense.setText(license.getLicense());
         }
+    }
+
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView viewAll;
+
+        public FooterViewHolder(ItemViewMoreBinding binding) {
+            super(binding.getRoot());
+            viewAll = binding.viewAllButton;
+        }
+
+        public void bindData(Context context, boolean limitEnabled) {
+            if (limitEnabled) {
+                viewAll.setText(context.getString(R.string.view_all));
+            } else {
+                viewAll.setText(context.getString(R.string.view_less));
+            }
+        }
+
     }
 }

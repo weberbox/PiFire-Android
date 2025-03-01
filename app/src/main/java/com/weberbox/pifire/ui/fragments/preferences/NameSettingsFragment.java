@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -16,19 +17,20 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
+import timber.log.Timber;
 
 public class NameSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private Socket socket;
 
     @Override
@@ -39,11 +41,7 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @Override
@@ -55,12 +53,22 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
         setDividerHeight(0);
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
 
     @Override
     public void onDestroy() {
@@ -71,8 +79,8 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_grill_name);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_grill_name));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -90,9 +98,11 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
     private void processPostResponse(String response) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
         if (result.getResult().equals("error")) {
-            requireActivity().runOnUiThread(() ->
-                    AlertUtils.createErrorAlert(requireActivity(),
-                            result.getMessage(), false));
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() ->
+                        AlertUtils.createErrorAlert(getActivity(),
+                                result.getMessage(), false));
+            }
         }
     }
 

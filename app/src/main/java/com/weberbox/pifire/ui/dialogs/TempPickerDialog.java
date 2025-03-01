@@ -30,12 +30,12 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerVersions;
 import com.weberbox.pifire.databinding.DialogTempPickerBinding;
-import com.weberbox.pifire.interfaces.OnScrollStopListener;
 import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
-import com.weberbox.pifire.model.local.TempPickerModel;
+import com.weberbox.pifire.record.TempPickerRecord;
 import com.weberbox.pifire.model.remote.DashDataModel.NotifyData;
 import com.weberbox.pifire.recycler.adapter.TempPickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
+import com.weberbox.pifire.recycler.manager.PickerLayoutManager.OnScrollStopListener;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
 import com.weberbox.pifire.ui.utils.AnimUtils;
 import com.weberbox.pifire.ui.utils.ViewUtils;
@@ -75,8 +75,8 @@ public class TempPickerDialog {
     private final boolean saveOnly;
 
     public TempPickerDialog(@NotNull Context context, @NotNull final DashProbe probe,
-                            @NotNull ArrayList<NotifyData> notifyData, boolean hold, boolean saveOnly,
-                            @NotNull DialogDashboardCallback callback) {
+                            @NotNull ArrayList<NotifyData> notifyData, boolean hold,
+                            boolean saveOnly, @NotNull DialogDashboardCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -368,7 +368,7 @@ public class TempPickerDialog {
             optionButton.setVisibility(View.VISIBLE);
         }
 
-        if (!VersionUtils.isSupportedBuild(ServerVersions.V_190, "5")) {
+        if (VersionUtils.isUnSupportedBuild(ServerVersions.V_190, "5")) {
             highLimitContainer.setVisibility(View.GONE);
             lowLimitContainer.setVisibility(View.GONE);
             targetReqSwitch.setChecked(true);
@@ -526,14 +526,17 @@ public class TempPickerDialog {
 
     public void saveSelectedTemp(String temp, Integer position) {
         if (targetOptionsContainer.getVisibility() == View.VISIBLE) {
+            if (!targetReqSwitch.isChecked()) targetReqSwitch.setChecked(true);
             targetTemp = Objects.requireNonNullElseGet(temp, () ->
                     String.valueOf(targetPickerAdapter.onChange(position)));
         }
         if (lowLimitOptionsContainer.getVisibility() == View.VISIBLE) {
+            if (!lowLimitReqSwitch.isChecked()) lowLimitReqSwitch.setChecked(true);
             lowLimitTemp = Objects.requireNonNullElseGet(temp, () ->
                     String.valueOf(lowLimitPickerAdapter.onChange(position)));
         }
         if (highLimitOptionsContainer.getVisibility() == View.VISIBLE) {
+            if (!highLimitReqSwitch.isChecked()) highLimitReqSwitch.setChecked(true);
             highLimitTemp = Objects.requireNonNullElseGet(temp, () ->
                     String.valueOf(highLimitPickerAdapter.onChange(position)));
         }
@@ -545,20 +548,20 @@ public class TempPickerDialog {
         recyclerView.scrollToPosition(increment ? position / 5 : position);
     }
 
-    private static List<TempPickerModel> generateTemperatureList(Context context, String tempUnit,
-                                                                 int start, int end) {
-        List<TempPickerModel> tempPickerViewModelList;
+    private static List<TempPickerRecord> generateTemperatureList(Context context, String tempUnit,
+                                                                  int start, int end) {
+        List<TempPickerRecord> tempPickerViewModelList;
 
         NumberFormat formatter = new DecimalFormat("00");
         if (Prefs.getBoolean(context.getString(R.string.prefs_increment_temps),
                 context.getResources().getBoolean(R.bool.def_increment_temps))) {
             tempPickerViewModelList = IntStream.iterate(start, i -> i + 5)
                     .limit((end - start) / 5 + 1).mapToObj(i ->
-                            new TempPickerModel(formatter.format(i), tempUnit))
+                            new TempPickerRecord(formatter.format(i), tempUnit))
                     .collect(Collectors.toList());
         } else {
             tempPickerViewModelList = IntStream.range(start, end).mapToObj(i ->
-                            new TempPickerModel(formatter.format(i), tempUnit))
+                            new TempPickerRecord(formatter.format(i), tempUnit))
                     .collect(Collectors.toList());
         }
 

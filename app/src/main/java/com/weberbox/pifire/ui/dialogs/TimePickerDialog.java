@@ -24,7 +24,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogTimerPickerBinding;
-import com.weberbox.pifire.model.local.TimePickerModel;
 import com.weberbox.pifire.recycler.adapter.TimePickerAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
 import com.weberbox.pifire.ui.dialogs.interfaces.DialogDashboardCallback;
@@ -210,13 +209,13 @@ public class TimePickerDialog {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private List<TimePickerModel> generateTimeList(int start, int end) {
-        List<TimePickerModel> timePickerViewModelList;
+    private List<String> generateTimeList(int start, int end) {
+        List<String> strings;
 
         NumberFormat formatter = new DecimalFormat("00");
-        timePickerViewModelList = IntStream.range(start, end).mapToObj(i ->
-                new TimePickerModel(formatter.format(i))).collect(Collectors.toList());
+        strings = IntStream.range(start, end).mapToObj(formatter::format).collect(
+                Collectors.toList());
 
-        return timePickerViewModelList;
+        return strings;
     }
 }

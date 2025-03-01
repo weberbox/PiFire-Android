@@ -24,7 +24,6 @@ import com.weberbox.pifire.databinding.DialogScrollPickerBinding;
 import com.weberbox.pifire.model.remote.PelletDataModel.PelletProfileModel;
 import com.weberbox.pifire.recycler.adapter.PelletProfileAdapter;
 import com.weberbox.pifire.recycler.manager.PickerLayoutManager;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPelletsProfileCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +37,7 @@ public class ProfilePickerDialog {
 
     private final BottomSheetDialog pickerBottomSheet;
     private final LayoutInflater inflater;
-    private final DialogPelletsProfileCallback callback;
+    private final PelletProfilePickerCallback callback;
     private final List<PelletProfileModel> pelletsList;
     private final Context context;
     private RecyclerView profileList;
@@ -48,7 +47,7 @@ public class ProfilePickerDialog {
     public ProfilePickerDialog(@NotNull Context context,
                                @NotNull List<PelletProfileModel> pelletList,
                                @NotNull String currentProfile,
-                               @NotNull DialogPelletsProfileCallback callback) {
+                               @NotNull PelletProfilePickerCallback callback) {
         pickerBottomSheet = new BottomSheetDialog(context, R.style.BottomSheetDialog);
         inflater = LayoutInflater.from(context);
         this.context = context;
@@ -78,7 +77,11 @@ public class ProfilePickerDialog {
         profileList.setLayoutManager(pickerLayoutManager);
         profileList.setAdapter(profileAdapter);
 
-        currentProfileId = pelletsList.get(0).getId();
+        for (int i = 0; i < pelletsList.size(); i++) {
+            if (pelletsList.get(i).getId().equalsIgnoreCase(currentProfileId)) {
+                setDefaultProfile(i);
+            }
+        }
 
         pickerLayoutManager.setOnScrollStopListener(
                 view -> {
@@ -99,7 +102,7 @@ public class ProfilePickerDialog {
 
         pickerBottomSheet.setOnShowListener(dialog -> {
             @SuppressWarnings("rawtypes")
-            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog)dialog).getBehavior();
+            BottomSheetBehavior bottomSheetBehavior = ((BottomSheetDialog) dialog).getBehavior();
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
@@ -133,12 +136,11 @@ public class ProfilePickerDialog {
         return pickerBottomSheet;
     }
 
-    @SuppressWarnings("unused")
-    private void setDefaultProfile(int position, boolean smooth){
-        if (smooth) {
-            profileList.smoothScrollToPosition(position);
-        } else {
-            profileList.scrollToPosition(position);
-        }
+    private void setDefaultProfile(int position) {
+        profileList.scrollToPosition(position);
+    }
+
+    public interface PelletProfilePickerCallback {
+        void onProfileSelected(String profileName, String profileId);
     }
 }

@@ -24,7 +24,6 @@ This app used the following open-source libraries and/or code inspired from thes
 - [PiFire](https://github.com/nebhead/PiFire)
 - [Socket.IO](https://github.com/socketio/socket.io-client-java)
 - [AnimatedBottomBar](https://github.com/Droppers/AnimatedBottomBar)
-- [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
 - [EasyPrefs](https://github.com/Pixplicity/EasyPrefs)
 - [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
 - [RecyclerViewFastScroller](https://github.com/quiph/RecyclerView-FastScroller)
@@ -32,7 +31,6 @@ This app used the following open-source libraries and/or code inspired from thes
 - [Sentry](https://github.com/getsentry/sentry-java)
 - [Timber](https://github.com/JakeWharton/timber)
 - [OverlappingPanels](https://github.com/discord/OverlappingPanels)
-- [TedPermission](https://github.com/ParkSangGwon/TedPermission)
 - [AndroidVeil](https://github.com/skydoves/AndroidVeil)
 - [Alerter](https://github.com/Tapadoo/Alerter)
 - [MaterialRatingBar](https://github.com/zhanghai/MaterialRatingBar)
@@ -43,6 +41,10 @@ This app used the following open-source libraries and/or code inspired from thes
 - [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
 - [OkHttp](https://github.com/square/okhttp)
 - [Insetter](https://github.com/chrisbanes/insetter)
+- [Dotsindicator](https://github.com/tommybuonomo/dotsindicator)
+- [Glide](https://github.com/bumptech/glide)
+- [sdp](https://github.com/intuit/sdp)
+- [ssp](https://github.com/intuit/ssp)
 
 ### Licensing
 

@@ -17,13 +17,13 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.control.ServerControl;
-import com.weberbox.pifire.interfaces.PWMControlCallback;
-import com.weberbox.pifire.model.local.PWMControlModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel.PWM.PWMProfile;
+import com.weberbox.pifire.record.PWMControlRecord;
 import com.weberbox.pifire.recycler.adapter.PWMControlAdapter;
+import com.weberbox.pifire.recycler.adapter.PWMControlAdapter.PWMControlCallback;
 import com.weberbox.pifire.ui.dialogs.PWMControlDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogPWMCallback;
+import com.weberbox.pifire.ui.dialogs.PWMControlDialog.DialogPWMCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
         super.onBindViewHolder(holder);
         holder.itemView.setClickable(false);
 
-        List<PWMControlModel> pwmControlList = new ArrayList<>();
+        List<PWMControlRecord> pwmControlList = new ArrayList<>();
 
         RecyclerView recycler = (RecyclerView) holder.findViewById(R.id.pwm_control_recycler);
 
@@ -92,7 +92,7 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
             rangeList.add(rangeList.get(rangeList.size() - 1) + 1);
 
             for (int i = 0; i < rangeList.size(); i++) {
-                pwmControlList.add(new PWMControlModel(rangeList.get(i),
+                pwmControlList.add(new PWMControlRecord(rangeList.get(i),
                         profileList.get(i).getDutyCycle()));
             }
 
@@ -105,8 +105,8 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
         MaterialButton addButton = (MaterialButton) holder.findViewById(R.id.pwm_control_add_button);
         addButton.setOnClickListener(view -> {
             if (socketConnected()) {
-                List<PWMControlModel> controlItems = adapter.getControlItems();
-                int setTemp = controlItems.get(controlItems.size() - 1).getTemp();
+                List<PWMControlRecord> controlItems = adapter.getControlItems();
+                int setTemp = controlItems.get(controlItems.size() - 1).temp();
 
                 PWMControlDialog dialog = new PWMControlDialog(context,
                         R.string.settings_pwm_temp_range_add, null, null, null,
@@ -119,17 +119,17 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
     @Override
     public void onPWMControlEdit(int position) {
         if (socketConnected()) {
-            List<PWMControlModel> controlItems = adapter.getControlItems();
+            List<PWMControlRecord> controlItems = adapter.getControlItems();
 
             int temp;
             if (position == controlItems.size() - 1) {
-                temp = controlItems.get(position).getTemp() - 1;
+                temp = controlItems.get(position).temp() - 1;
             } else {
-                temp = controlItems.get(position).getTemp();
+                temp = controlItems.get(position).temp();
             }
 
-            int dutyCycle = controlItems.get(position).getDutyCycle();
-            int minTemp = position == 0 ? 0 : controlItems.get(position - 1).getTemp() + 1;
+            int dutyCycle = controlItems.get(position).dutyCycle();
+            int minTemp = position == 0 ? 0 : controlItems.get(position - 1).temp() + 1;
 
             Integer maxTemp;
             if (position == controlItems.size() - 1) {
@@ -137,7 +137,7 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
             } else if (position == controlItems.size() - 2) {
                 maxTemp = 100;
             } else {
-                maxTemp = controlItems.get(position + 1).getTemp() - 1;
+                maxTemp = controlItems.get(position + 1).temp() - 1;
             }
 
             boolean deleteEnabled = position != 0 && position != 1 && position >=
@@ -151,7 +151,7 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
     }
 
     @Override
-    public void onDialogAdd(List<PWMControlModel> controlItems, Integer temp, Integer dutyCycle) {
+    public void onDialogAdd(List<PWMControlRecord> controlItems, Integer temp, Integer dutyCycle) {
         adapter.addNewControlItem(temp, dutyCycle);
 
         List<Integer> rangeList = new ArrayList<>();
@@ -160,10 +160,10 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
         int itemCount = controlItems.size();
         for (int i = 0; i < itemCount; i++) {
             if (i != itemCount - 1) {
-                rangeList.add(controlItems.get(i).getTemp());
+                rangeList.add(controlItems.get(i).temp());
             }
             profileList.add(new PWMProfile().withDutyCycle(
-                    controlItems.get(i).getDutyCycle()));
+                    controlItems.get(i).dutyCycle()));
 
         }
 
@@ -172,13 +172,13 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
     }
 
     @Override
-    public void onDialogEdit(List<PWMControlModel> controlItems, int position, Integer temp,
+    public void onDialogEdit(List<PWMControlRecord> controlItems, int position, Integer temp,
                              Integer dutyCycle) {
         adapter.updateControlItem(position, temp, dutyCycle);
 
         if (position == controlItems.size() - 2) {
             adapter.updateControlItem(controlItems.size() - 1, temp + 1,
-                    controlItems.get(controlItems.size() - 1).getDutyCycle());
+                    controlItems.get(controlItems.size() - 1).dutyCycle());
         }
 
         List<Integer> rangeList = new ArrayList<>();
@@ -187,10 +187,10 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
         int itemCount = controlItems.size();
         for (int i = 0; i < itemCount; i++) {
             if (i != itemCount - 1) {
-                rangeList.add(controlItems.get(i).getTemp());
+                rangeList.add(controlItems.get(i).temp());
             }
             profileList.add(new PWMProfile().withDutyCycle(
-                    controlItems.get(i).getDutyCycle()));
+                    controlItems.get(i).dutyCycle()));
 
         }
 
@@ -206,15 +206,15 @@ public class PWMControlPreference extends Preference implements PWMControlCallba
             List<Integer> rangeList = new ArrayList<>();
             List<PWMProfile> profileList = new ArrayList<>();
 
-            List<PWMControlModel> controlItems = adapter.getControlItems();
+            List<PWMControlRecord> controlItems = adapter.getControlItems();
 
             int itemCount = controlItems.size();
             for (int i = 0; i < itemCount; i++) {
                 if (i != itemCount - 1) {
-                    rangeList.add(controlItems.get(i).getTemp());
+                    rangeList.add(controlItems.get(i).temp());
                 }
                 profileList.add(new PWMProfile().withDutyCycle(
-                        controlItems.get(i).getDutyCycle()));
+                        controlItems.get(i).dutyCycle()));
 
             }
 

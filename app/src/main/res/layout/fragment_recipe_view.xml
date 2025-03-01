@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipes_view_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context=".ui.fragments.recipes.RecipeViewFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/recipes_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:id="@+id/rv_main_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/rv_recycler_container"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recipes_image_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_spacing"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginEnd="@dimen/default_spacing"
+                    android:layout_marginBottom="@dimen/default_spacing"
+                    app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/recipe_image_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true"
+                    app:indicatorColor="@color/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/recipes_about_cv"
+                layout="@layout/layout_recipes_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rv_recycler_container"
+                android:layout_marginStart="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing" />
+
+            <include
+                android:id="@+id/recipes_description_cv"
+                layout="@layout/layout_recipes_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipes_about_cv"
+                android:layout_marginStart="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing" />
+
+            <include
+                android:id="@+id/recipes_ingredients_cv"
+                layout="@layout/layout_recipes_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipes_description_cv"
+                android:layout_marginStart="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing" />
+
+            <include
+                android:id="@+id/recipes_instructions_cv"
+                layout="@layout/layout_recipes_instructions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipes_ingredients_cv"
+                android:layout_marginStart="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing" />
+
+            <include
+                android:id="@+id/recipes_steps_cv"
+                layout="@layout/layout_recipes_steps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recipes_instructions_cv"
+                android:layout_marginStart="@dimen/default_spacing"
+                android:layout_marginEnd="@dimen/default_spacing"
+                android:layout_marginBottom="@dimen/default_spacing" />
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:id="@+id/fab_click_catcher"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.6"
+        android:background="@color/colorPrimaryDark"
+        android:clickable="false"
+        android:visibility="invisible"
+        tools:visibility="invisible" />
+
+    <include
+        android:id="@+id/recipe_view_fab"
+        layout="@layout/layout_recipes_view_fab" />
+
+</RelativeLayout>

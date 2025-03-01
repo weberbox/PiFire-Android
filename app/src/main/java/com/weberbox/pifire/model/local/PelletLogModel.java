@@ -12,26 +12,26 @@ import timber.log.Timber;
 
 public class PelletLogModel {
 
-    private String pelletID;
+    private final String pelletID;
+    private final String pelletName;
+    private final int pelletRating;
     private String pelletDate;
-    private String pelletName;
-    private int pelletRating;
 
     public PelletLogModel(@NonNull final String pelletDate, @NonNull final String pelletName,
                           @NonNull final Integer pelletRating) {
-        setPelletID(pelletDate);
-        setPelletName(pelletName);
-        setPelletRating(pelletRating);
+        this.pelletID = pelletDate;
+        this.pelletName = pelletName;
+        this.pelletRating = pelletRating;
 
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date date = formatter.parse(pelletDate);
             formatter.applyPattern("MM/dd");
-            setPelletDate(formatter.format(date));
+            this.pelletDate = formatter.format(date);
         } catch (ParseException e) {
             Timber.w(e, "Error parsing date %s", e.getMessage());
-            setPelletDate(pelletDate);
+            this.pelletDate = pelletDate;
         }
 
     }
@@ -41,17 +41,9 @@ public class PelletLogModel {
         return pelletID;
     }
 
-    public void setPelletID(@NonNull final String pelletID) {
-        this.pelletID = pelletID;
-    }
-
     @NonNull
     public String getPelletDate() {
         return pelletDate;
-    }
-
-    public void setPelletDate(@NonNull final String pelletDate) {
-        this.pelletDate = pelletDate;
     }
 
     @NonNull
@@ -59,16 +51,8 @@ public class PelletLogModel {
         return pelletName;
     }
 
-    public void setPelletName(@NonNull final String pelletName) {
-        this.pelletName = pelletName;
-    }
-
     public int getPelletRating() {
         return pelletRating;
-    }
-
-    public void setPelletRating(final int pelletRating) {
-        this.pelletRating = pelletRating;
     }
 
 }

@@ -4,6 +4,7 @@
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimary">#FF262626</color>
+    <color name="colorPrimaryAlpha">#ED262626</color>
     <color name="colorPrimaryNav">#292929</color>
     <color name="colorPrimaryLight">#2E2E2E</color>
     <color name="colorPrimaryLighter">#424242</color>
@@ -48,4 +49,7 @@
     <color name="material_dialog_background">@color/colorBottomDialog</color>
     <color name="material_dialog_title_text_color">@android:color/primary_text_dark</color>
     <color name="material_dialog_message_text_color">@android:color/secondary_text_dark</color>
+
+    <color name="abc_decor_view_status_guard" tools:override="true">@android:color/transparent</color>
+    <color name="abc_decor_view_status_guard_light" tools:override="true">@android:color/transparent</color>
 </resources>

@@ -9,6 +9,12 @@ import timber.log.Timber;
 
 public class DebugLogTree extends Timber.DebugTree {
 
+    private final String prefix;
+
+    public DebugLogTree(String prefix) {
+        this.prefix = prefix;
+    }
+
     @Override
     protected void log(int priority, String tag, @NonNull String message, Throwable t) {
         // Workaround for devices that do not show lower priority logs
@@ -16,7 +22,7 @@ public class DebugLogTree extends Timber.DebugTree {
             if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO)
                 priority = Log.ERROR;
         }
-        super.log(priority, tag, message, t);
+        super.log(priority, prefix + "." + tag, message, t);
     }
 
     @Override

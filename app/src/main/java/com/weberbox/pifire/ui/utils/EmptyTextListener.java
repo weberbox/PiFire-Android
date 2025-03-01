@@ -43,24 +43,33 @@ public class EmptyTextListener implements TextWatcher {
         MaterialButton saveButton = editText.getRootView().findViewById(R.id.save_button);
         textInputLayout = (TextInputLayout) editText.findViewById(
                 editText.getId()).getParent().getParent();
-        if (s.length() == 0) {
+        try {
+            if (s.length() == 0) {
+                if (positiveButton != null) positiveButton.setEnabled(false);
+                if (saveButton != null) saveButton.setEnabled(false);
+                setError(context.getString(R.string.text_blank_error));
+            } else {
+                double input = Double.parseDouble(s.toString());
+                if (min != null && input < min) {
+                    if (positiveButton != null) positiveButton.setEnabled(false);
+                    if (saveButton != null) saveButton.setEnabled(false);
+                    setError(context.getString(R.string.settings_min_error,
+                            new DecimalFormat("0.##").format(min)));
+                } else if (max != null && input > max) {
+                    if (positiveButton != null) positiveButton.setEnabled(false);
+                    if (saveButton != null) saveButton.setEnabled(false);
+                    setError(context.getString(R.string.settings_max_error,
+                            new DecimalFormat("0.##").format(max)));
+                } else {
+                    if (positiveButton != null) positiveButton.setEnabled(true);
+                    if (saveButton != null) saveButton.setEnabled(true);
+                    setError(null);
+                }
+            }
+        } catch (NumberFormatException e) {
             if (positiveButton != null) positiveButton.setEnabled(false);
             if (saveButton != null) saveButton.setEnabled(false);
-            setError(context.getString(R.string.text_blank_error));
-        } else if (min != null && Double.parseDouble(s.toString()) < min) {
-            if (positiveButton != null) positiveButton.setEnabled(false);
-            if (saveButton != null) saveButton.setEnabled(false);
-            setError(context.getString(R.string.settings_min_error,
-                    new DecimalFormat("0.#").format(min - 1)));
-        } else if (max != null && Double.parseDouble(s.toString()) > max) {
-            if (positiveButton != null) positiveButton.setEnabled(false);
-            if (saveButton != null) saveButton.setEnabled(false);
-            setError(context.getString(R.string.settings_max_error,
-                    new DecimalFormat("0.#").format(max + 1)));
-        } else {
-            if (positiveButton != null) positiveButton.setEnabled(true);
-            if (saveButton != null) saveButton.setEnabled(true);
-            setError(null);
+            setError(context.getString(R.string.settings_number_error));
         }
     }
 

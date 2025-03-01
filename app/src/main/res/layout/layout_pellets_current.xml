@@ -41,7 +41,8 @@
             app:veilLayout_highlightColor="@color/colorPlaceholder"
             app:veilLayout_radius="18dp"
             app:veilLayout_shimmerEnable="true"
-            app:veilLayout_veiled="true">
+            app:veilLayout_veiled="true"
+            tools:veilLayout_veiled="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/current_view"

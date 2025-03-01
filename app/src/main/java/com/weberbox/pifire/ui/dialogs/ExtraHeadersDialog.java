@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogHeadersEditBinding;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogHeadersCallback;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -172,6 +171,8 @@ public class ExtraHeadersDialog {
 
         bottomSheetDialog.show();
 
+        headerKey.requestFocus();
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -181,5 +182,10 @@ public class ExtraHeadersDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    public interface DialogHeadersCallback {
+        void onDialogSave(String key, String value, Integer position);
+        void onDialogDelete(int position);
     }
 }

@@ -9,16 +9,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller;
 import com.weberbox.pifire.databinding.ItemPickerTempBinding;
-import com.weberbox.pifire.model.local.TempPickerModel;
+import com.weberbox.pifire.record.TempPickerRecord;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class TempPickerAdapter extends RecyclerView.Adapter<TempPickerAdapter.ViewHolder> implements
         RecyclerViewFastScroller.OnPopupTextUpdate {
 
-    private final List<TempPickerModel> list;
+    private final List<TempPickerRecord> list;
 
-    public TempPickerAdapter(final List<TempPickerModel> list) {
+    public TempPickerAdapter(@NotNull final List<TempPickerRecord> list) {
         this.list = list;
     }
 
@@ -37,16 +39,16 @@ public class TempPickerAdapter extends RecyclerView.Adapter<TempPickerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     @NonNull
     @Override
     public CharSequence onChange(int position) {
         if (position < list.size()) {
-            return list.get(position).getTempText();
+            return list.get(position).tempText();
         } else {
-            return list.get(position - 1).getTempText();
+            return list.get(position - 1).tempText();
         }
     }
 
@@ -61,9 +63,9 @@ public class TempPickerAdapter extends RecyclerView.Adapter<TempPickerAdapter.Vi
             unitTextView = binding.tempItemUnitTextView;
         }
 
-        public void bindData(final TempPickerModel model) {
-            tempTextView.setText(model.getTempText());
-            unitTextView.setText(model.getUnitText());
+        public void bindData(final TempPickerRecord model) {
+            tempTextView.setText(model.tempText());
+            unitTextView.setText(model.unitText());
         }
     }
 }

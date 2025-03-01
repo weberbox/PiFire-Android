@@ -12,6 +12,12 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class DashDataModel {
 
+    @SerializedName("status_info")
+    @Expose
+    private StatusInfo statusInfo;
+    @SerializedName("control_info")
+    @Expose
+    private ControlDataModel controlInfo;
     @SerializedName("probe_info")
     @Expose
     private DashProbeInfo dashProbeInfo;
@@ -33,6 +39,14 @@ public class DashDataModel {
     @SerializedName("hopper_level")
     @Expose
     private Integer hopperLevel;
+
+    public StatusInfo getStatusInfo() {
+        return statusInfo;
+    }
+
+    public ControlDataModel getControlInfo() {
+        return controlInfo;
+    }
 
     public DashProbeInfo getDashProbeInfo() {
         return dashProbeInfo;
@@ -278,6 +292,209 @@ public class DashDataModel {
         public Boolean getTimerActive() {
             return timerActive;
         }
+    }
+
+    public static class StatusInfo {
+
+        @SerializedName("hopper_level")
+        @Expose
+        private Integer hopperLevel;
+        @SerializedName("lid_open_detected")
+        @Expose
+        private Boolean lidOpenDetected;
+        @SerializedName("lid_open_endtime")
+        @Expose
+        private Integer lidOpenEndTime;
+        @SerializedName("mode")
+        @Expose
+        private String displayMode;
+        @SerializedName("p_mode")
+        @Expose
+        private Integer pMode;
+        @SerializedName("prime_amount")
+        @Expose
+        private Integer primeAmount;
+        @SerializedName("prime_duration")
+        @Expose
+        private Integer primeDuration;
+        @SerializedName("recipe")
+        @Expose
+        private Boolean recipeMode;
+        @SerializedName("recipe_paused")
+        @Expose
+        private Boolean recipePaused;
+        @SerializedName("s_plus")
+        @Expose
+        private Boolean smokePlus;
+        @SerializedName("shutdown_duration")
+        @Expose
+        private Integer shutdownDuration;
+        @SerializedName("start_duration")
+        @Expose
+        private Integer startupDuration;
+        @SerializedName("start_time")
+        @Expose
+        private Double startTime;
+        @SerializedName("startup_timestamp")
+        @Expose
+        private Double startupTimestamp;
+        @SerializedName("units")
+        @Expose
+        private String units;
+        @SerializedName("outpins")
+        @Expose
+        private OutPins outPins;
+        @SerializedName("notify_data")
+        @Expose
+        private ArrayList<NotifyData> notifyData;
+        @SerializedName("timer")
+        @Expose
+        private Timer timer;
+
+        public Integer getHopperLevel() {
+            return hopperLevel;
+        }
+
+        public Boolean getLidOpenDetected() {
+            return lidOpenDetected;
+        }
+
+        public Integer getLidOpenEndTime() {
+            return lidOpenEndTime;
+        }
+
+        public String getDisplayMode() {
+            return displayMode;
+        }
+
+        public Integer getPMode() {
+            return pMode;
+        }
+
+        public Integer getPrimeAmount() {
+            return primeAmount;
+        }
+
+        public Integer getPrimeDuration() {
+            return primeDuration;
+        }
+
+        public Boolean getRecipeMode() {
+            return recipeMode;
+        }
+
+        public Boolean getRecipePaused() {
+            return recipePaused;
+        }
+
+        public Boolean getSmokePlus() {
+            return smokePlus;
+        }
+
+        public Integer getShutdownDuration() {
+            return shutdownDuration;
+        }
+
+        public Integer getStartupDuration() {
+            return startupDuration;
+        }
+
+        public Double getStartTime() {
+            return startTime;
+        }
+
+        public Double getStartupTimestamp() {
+            return startupTimestamp;
+        }
+
+        public String getUnits() {
+            return units;
+        }
+
+        public OutPins getOutPins() {
+            return outPins;
+        }
+
+        public ArrayList<NotifyData> getNotifyData() {
+            return notifyData;
+        }
+
+        public Timer getTimer() {
+            return timer;
+        }
+
+    }
+
+    public static class OutPins {
+        @SerializedName("auger")
+        @Expose
+        private Boolean auger;
+        @SerializedName("fan")
+        @Expose
+        private Boolean fan;
+        @SerializedName("igniter")
+        @Expose
+        private Boolean igniter;
+        @SerializedName("power")
+        @Expose
+        private Boolean power;
+        @SerializedName("pwm")
+        @Expose
+        private Double pwm;
+
+        public Boolean getAuger() {
+            return auger;
+        }
+
+        public Boolean getFan() {
+            return fan;
+        }
+
+        public Boolean getIgniter() {
+            return igniter;
+        }
+
+        public Boolean getPower() {
+            return power;
+        }
+
+        public Double getPwm() {
+            return pwm;
+        }
+
+    }
+
+    public static class Timer {
+
+        @SerializedName("start")
+        @Expose
+        private Double start;
+        @SerializedName("end")
+        @Expose
+        private Double end;
+        @SerializedName("paused")
+        @Expose
+        private Double paused;
+        @SerializedName("shutdown")
+        @Expose
+        private Boolean shutdown;
+
+        public Double getStart() {
+            return start;
+        }
+
+        public Double getEnd() {
+            return end;
+        }
+
+        public Double getPaused() {
+            return paused;
+        }
+
+        public Boolean getShutdown() {
+            return shutdown;
+        }
+
     }
 
     public static DashDataModel parseJSON(String response) {

@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,20 +23,21 @@ import androidx.preference.SwitchPreferenceCompat;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.ui.dialogs.PrefsEditDialog;
 import com.weberbox.pifire.ui.dialogs.PrefsListDialog;
 import com.weberbox.pifire.update.UpdateUtils;
 import com.weberbox.pifire.utils.CrashUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.sentry.Sentry;
+import timber.log.Timber;
 
 public class AppSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private UpdateUtils updateUtils;
 
     @Override
@@ -60,7 +62,6 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -68,11 +69,14 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
 
         if (serverSettings != null) {
             serverSettings.setOnPreferenceClickListener(preference -> {
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.animator.fragment_fade_enter,
-                                R.animator.fragment_fade_exit)
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_right,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_left)
                         .replace(R.id.fragment_container, new ServerSettingsFragment())
-                        .addToBackStack(null)
+                        .addToBackStack(ServerSettingsFragment.class.getName())
                         .commit();
                 return true;
             });
@@ -105,10 +109,20 @@ public class AppSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_app);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_app));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);

@@ -8,15 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.weberbox.pifire.databinding.ItemPickerTimerBinding;
-import com.weberbox.pifire.model.local.TimePickerModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class TimePickerAdapter extends RecyclerView.Adapter<TimePickerAdapter.ViewHolder> {
 
-    private final List<TimePickerModel> list;
+    private final List<String> list;
 
-    public TimePickerAdapter(final List<TimePickerModel> list) {
+    public TimePickerAdapter(@NotNull final List<String> list) {
         this.list = list;
     }
 
@@ -35,7 +36,7 @@ public class TimePickerAdapter extends RecyclerView.Adapter<TimePickerAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return  list.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,8 +48,8 @@ public class TimePickerAdapter extends RecyclerView.Adapter<TimePickerAdapter.Vi
             simpleTextView = binding.timerItemTextView;
         }
 
-        public void bindData(final TimePickerModel viewModel) {
-            simpleTextView.setText(viewModel.getTimeText());
+        public void bindData(final String string) {
+            simpleTextView.setText(string);
         }
     }
 }

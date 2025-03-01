@@ -6,29 +6,26 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 public class PelletDataModel {
 
     @SerializedName("archive")
     @Expose
-    private Map<String, PelletProfileModel> profiles = new HashMap<>();
+    private Map<String, PelletProfileModel> profiles;
     @SerializedName("brands")
     @Expose
-    private List<String> brands = new ArrayList<>();
+    private List<String> brands;
     @SerializedName("current")
     @Expose
     private Current current;
     @SerializedName("log")
     @Expose
-    private Map<String, String> log = new HashMap<>();
+    private Map<String, String> log;
     @SerializedName("woods")
     @Expose
-    private List<String> woods = new ArrayList<>();
+    private List<String> woods;
 
     public Map<String, PelletProfileModel> getProfiles() {
         return profiles;
@@ -42,32 +39,16 @@ public class PelletDataModel {
         return brands;
     }
 
-    public void setBrands(List<String> brands) {
-        this.brands = brands;
-    }
-
     public Current getCurrent() {
         return current;
-    }
-
-    public void setCurrent(Current current) {
-        this.current = current;
     }
 
     public Map<String, String> getLogs() {
         return log;
     }
 
-    public void setLogs(Map<String, String> log) {
-        this.log = log;
-    }
-
     public List<String> getWoods() {
         return woods;
-    }
-
-    public void setWoods(List<String> woods) {
-        this.woods = woods;
     }
 
     public static class Current {
@@ -89,32 +70,12 @@ public class PelletDataModel {
             return dateLoaded;
         }
 
-        public void setDateLoaded(String dateLoaded) {
-            this.dateLoaded = dateLoaded;
-        }
-
         public Double getEstimatedUsage() {
             return estUsage;
         }
 
-        public void setEstimatedUsage(Double estUsage) {
-            this.estUsage = estUsage;
-        }
-
-        public Integer getHopperLevel() {
-            return hopperLevel;
-        }
-
-        public void setHopperLevel(Integer hopperLevel) {
-            this.hopperLevel = hopperLevel;
-        }
-
         public String getPelletId() {
             return pelletid;
-        }
-
-        public void setPelletId(String pelletid) {
-            this.pelletid = pelletid;
         }
 
     }
@@ -140,27 +101,19 @@ public class PelletDataModel {
         public PelletProfileModel(@NonNull final String brand, @NonNull final String wood,
                                   @NonNull final Integer rating, @NonNull final String comments,
                                   @NonNull final String id) {
-            setBrand(brand);
-            setWood(wood);
-            setRating(rating);
-            setComments(comments);
-            setId(id);
+            this.brand = brand;
+            this.wood = wood;
+            this.rating = rating;
+            this.comments = comments;
+            this.id = id;
         }
 
         public String getBrand() {
             return brand;
         }
 
-        public void setBrand(String brand) {
-            this.brand = brand;
-        }
-
         public String getComments() {
             return comments;
-        }
-
-        public void setComments(String comments) {
-            this.comments = comments;
         }
 
         public String getId() {
@@ -175,16 +128,8 @@ public class PelletDataModel {
             return rating;
         }
 
-        public void setRating(Integer rating) {
-            this.rating = rating;
-        }
-
         public String getWood() {
             return wood;
-        }
-
-        public void setWood(String wood) {
-            this.wood = wood;
         }
 
     }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryLight"
+    android:layout_marginBottom="@dimen/_1sdp">
+
+    <View
+        android:id="@+id/recipe_steps_step_color"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorAccentDisabled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_one"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/recipe_steps_step"
+        style="@style/Text18Aller"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_one"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/recipes_item_step" />
+
+    <TextView
+        android:id="@+id/recipe_steps_mode_header"
+        style="@style/Text15AllerBold"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:gravity="center"
+        android:text="@string/recipes_step_mode"
+        app:layout_constraintEnd_toStartOf="@+id/recipe_steps_mode"
+        app:layout_constraintStart_toEndOf="@+id/guideline_one"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/recipe_steps_mode"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/recipe_steps_mode_header"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/shutdown" />
+
+    <TextView
+        android:id="@+id/recipe_steps_header"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:breakStrategy="simple"
+        android:text="@string/recipes_step_options_header"
+        app:layout_constraintBottom_toTopOf="@+id/recipe_steps_options"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline_one"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_steps_mode_header" />
+
+    <TextView
+        android:id="@+id/recipe_steps_options"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_22sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:breakStrategy="simple"
+        app:layout_constraintBottom_toTopOf="@+id/recipe_steps_notif_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline_one"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_steps_header"
+        tools:text="@string/recipes_step_options_startup" />
+
+    <TextView
+        android:id="@+id/recipe_steps_notif_header"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:text="@string/recipes_step_notif_header"
+        app:layout_constraintBottom_toTopOf="@+id/recipe_steps_notif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline_one"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_steps_options" />
+
+    <TextView
+        android:id="@+id/recipe_steps_notif"
+        style="@style/Text15Aller"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_22sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:breakStrategy="simple"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline_one"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_steps_notif_header"
+        tools:text="@string/recipes_step_options_startup" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.20" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

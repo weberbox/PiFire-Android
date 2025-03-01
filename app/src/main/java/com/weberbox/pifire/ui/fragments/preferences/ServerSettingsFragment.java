@@ -24,19 +24,20 @@ import com.weberbox.pifire.MainActivity;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.Constants;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.ui.activities.ServerSetupActivity;
 import com.weberbox.pifire.ui.dialogs.CredentialsDialog;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogAuthCallback;
+import com.weberbox.pifire.ui.dialogs.CredentialsDialog.DialogAuthCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
+import timber.log.Timber;
 
 public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private boolean reloadRequired = false;
 
     @Override
@@ -45,7 +46,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackCallback);
         if (getContext() != null) {
             LocalBroadcastManager.getInstance(getContext()).registerReceiver(messageReceiver,
-                    new IntentFilter("extra-headers-update"));
+                    new IntentFilter(Constants.INTENT_EXTRA_HEADERS));
         }
     }
 
@@ -66,7 +67,6 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -74,10 +74,9 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
 
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(preference -> {
-                if (getActivity() != null) {
-                    Intent intent = new Intent(getActivity(), ServerSetupActivity.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(requireActivity(), ServerSetupActivity.class);
+                intent.putExtra(Constants.INTENT_SETUP_BACK, true);
+                startActivity(intent);
                 return true;
             });
 
@@ -94,10 +93,20 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_server);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_server));
         }
         if (sharedPreferences != null) {
             sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -162,7 +171,7 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
             if (success) {
                 reloadRequired = true;
             } else {
-                AlertUtils.createErrorAlert(getActivity(), R.string.settings_credentials_error, false);
+                AlertUtils.createErrorAlert(requireActivity(), R.string.settings_credentials_error, false);
             }
         }
 

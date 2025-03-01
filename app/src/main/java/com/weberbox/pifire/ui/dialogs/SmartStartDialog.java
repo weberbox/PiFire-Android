@@ -19,8 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.databinding.DialogSmartStartBinding;
-import com.weberbox.pifire.model.local.SmartStartModel;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogSmartStartCallback;
+import com.weberbox.pifire.record.SmartStartRecord;
 import com.weberbox.pifire.ui.utils.EmptyTextListener;
 import com.weberbox.pifire.ui.utils.ViewUtils;
 
@@ -41,14 +40,14 @@ public class SmartStartDialog {
     private final int title;
     private final boolean delete;
     private final Integer minTemp, maxTemp, setTemp, startUp, augerOn, pMode, position;
-    private final List<SmartStartModel> list;
+    private final List<SmartStartRecord> list;
     private TextInputEditText tempInput, startUpInput, augerOnInput, pModeInput;
 
     public SmartStartDialog(@NotNull Context context, @StringRes int title, Integer position,
                             @Nullable Integer minTemp, @Nullable Integer maxTemp,
                             @NotNull Integer setTemp, @NotNull Integer startUp,
                             @NotNull Integer augerOn, @NotNull Integer pMode, @NotNull String units,
-                            boolean delete, @NotNull List<SmartStartModel> list,
+                            boolean delete, @NotNull List<SmartStartRecord> list,
                             @NotNull DialogSmartStartCallback callback) {
         bottomSheetDialog = new BottomSheetDialog(context, R.style.BottomSheetDialogFloating);
         inflater = LayoutInflater.from(context);
@@ -179,6 +178,12 @@ public class SmartStartDialog {
 
         bottomSheetDialog.show();
 
+        if (tempInput.isEnabled()) {
+            tempInput.requestFocus();
+        } else {
+            startUpInput.requestFocus();
+        }
+
         Configuration configuration = context.getResources().getConfiguration();
         if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 configuration.screenWidthDp > 450) {
@@ -188,5 +193,13 @@ public class SmartStartDialog {
         }
 
         return bottomSheetDialog;
+    }
+
+    public interface DialogSmartStartCallback {
+        void onDialogAdd(List<SmartStartRecord> list, Integer temp, Integer startUp, Integer augerOn,
+                         Integer pMode);
+        void onDialogEdit(List<SmartStartRecord> list, int position, Integer temp, Integer startUp,
+                          Integer augerOn, Integer pMode);
+        void onDialogDelete(int position);
     }
 }

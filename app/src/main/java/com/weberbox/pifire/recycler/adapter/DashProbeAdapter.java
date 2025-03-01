@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.ItemDashProbeBinding;
-import com.weberbox.pifire.interfaces.DashProbeCallback;
 import com.weberbox.pifire.model.local.DashProbeModel.DashProbe;
 import com.weberbox.pifire.ui.views.DashProbeCard;
 import com.weberbox.pifire.utils.StringUtils;
 import com.weberbox.pifire.utils.TempUtils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final TempUtils tempUtils;
     private final DashProbeCallback callback;
 
-    public DashProbeAdapter(final List<DashProbe> list, TempUtils tempUtils,
-                            DashProbeCallback callback) {
+    public DashProbeAdapter(@NotNull final List<DashProbe> list, @NotNull TempUtils tempUtils,
+                            @NotNull DashProbeCallback callback) {
         this.list = list;
         this.tempUtils = tempUtils;
         this.callback = callback;
@@ -109,22 +110,23 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return list.size();
     }
 
     @SuppressWarnings("unused")
-    public void addProbe(DashProbe probe) {
+    public void addProbe(@NotNull DashProbe probe) {
         list.add(list.size(), probe);
-        notifyItemInserted(list.size());
+        notifyItemInserted(list.size() - 1);
     }
 
     @SuppressWarnings("unused")
     public void removeProbe(int position) {
         list.remove(position);
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position, list.size());
     }
 
-    public void updateProbe(DashProbe probe) {
+    public void updateProbe(@NotNull DashProbe probe) {
         int position = list.indexOf(probe);
         list.set(position, probe);
         notifyItemChanged(position);
@@ -135,7 +137,7 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @SuppressWarnings("unused")
-    public DashProbe getDashProbe(String label) {
+    public DashProbe getDashProbe(@NotNull String label) {
         for (DashProbe probe : list) {
             if (probe.getLabel().equals(label)) {
                 return probe;
@@ -153,7 +155,7 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return null;
     }
 
-    private boolean isPrimaryProbe(DashProbe probe) {
+    private boolean isPrimaryProbe(@NotNull DashProbe probe) {
         return probe.getProbeType().equals(Constants.DASH_PROBE_PRIMARY);
     }
 
@@ -165,5 +167,10 @@ public class DashProbeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(binding.getRoot());
             probe = binding.dashProbe;
         }
+    }
+
+    public interface DashProbeCallback {
+        void onProbeClick(DashProbe probe);
+        void onProbeLongClick(DashProbe probe);
     }
 }

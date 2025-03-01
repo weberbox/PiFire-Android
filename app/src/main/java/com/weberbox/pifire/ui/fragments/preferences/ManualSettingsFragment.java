@@ -1,5 +1,6 @@
 package com.weberbox.pifire.ui.fragments.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,13 +20,12 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.application.PiFireApplication;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.control.ServerControl;
+import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.ManualDataModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
-import com.weberbox.pifire.ui.activities.PreferencesActivity;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import dev.chrisbanes.insetter.Insetter;
-import dev.chrisbanes.insetter.Side;
 import io.socket.client.Socket;
 import timber.log.Timber;
 
@@ -33,6 +33,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SharedPreferences sharedPreferences;
+    private ToolbarTitleCallback toolbarTitleCallback;
     private SwitchPreferenceCompat manualMode;
     private SwitchPreferenceCompat fanEnable;
     private SwitchPreferenceCompat augerEnable;
@@ -49,10 +50,7 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActivity() != null) {
-            PiFireApplication app = (PiFireApplication) getActivity().getApplication();
-            socket = app.getSocket();
-        }
+        socket = ((PiFireApplication) requireActivity().getApplication()).getSocket();
     }
 
     @Override
@@ -71,7 +69,6 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
-                .margin(WindowInsetsCompat.Type.systemBars(), Side.BOTTOM)
                 .applyToView(getListView());
 
         setDivider(new ColorDrawable(Color.TRANSPARENT));
@@ -100,10 +97,20 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            toolbarTitleCallback = (ToolbarTitleCallback) context;
+        } catch (ClassCastException e) {
+            Timber.e(e, "Activity does not implement callback");
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-        if (getActivity() != null) {
-            ((PreferencesActivity) getActivity()).setActionBarTitle(R.string.settings_manual);
+        if (toolbarTitleCallback != null) {
+            toolbarTitleCallback.onTitleChange(getString(R.string.settings_manual));
         }
 
         if (socket != null && socket.connected()) {
@@ -191,9 +198,11 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
     private void processPostResponse(String response) {
         ServerResponseModel result = ServerResponseModel.parseJSON(response);
         if (result.getResponse() != null && result.getResponse().getResult().equals("error")) {
-            requireActivity().runOnUiThread(() ->
-                    AlertUtils.createErrorAlert(requireActivity(),
-                            result.getResponse().getMessage(), false));
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() ->
+                        AlertUtils.createErrorAlert(getActivity(),
+                                result.getResponse().getMessage(), false));
+            }
         }
     }
 
@@ -245,8 +254,10 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
 
         } catch (NullPointerException e) {
             Timber.w(e, "Manual JSON Response Error");
-            AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
-                    getString(R.string.menu_setting)), false);
+            if (getActivity() != null) {
+                AlertUtils.createErrorAlert(getActivity(), getString(R.string.json_parsing_error,
+                        getString(R.string.menu_setting)), false);
+            }
         }
     }
 }

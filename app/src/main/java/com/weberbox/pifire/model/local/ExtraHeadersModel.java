@@ -22,8 +22,8 @@ public class ExtraHeadersModel {
     private String headerValue;
 
     public ExtraHeadersModel(@NonNull final String key, @NonNull final String value) {
-        setHeaderKey(key);
-        setHeaderValue(value);
+        this.headerKey = key;
+        this.headerValue = value;
     }
 
     public String getHeaderKey() {

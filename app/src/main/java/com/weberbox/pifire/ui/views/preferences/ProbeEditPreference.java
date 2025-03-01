@@ -23,7 +23,7 @@ import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.recycler.adapter.ProbeEditAdapter;
-import com.weberbox.pifire.ui.dialogs.interfaces.DialogProbeCallback;
+import com.weberbox.pifire.ui.dialogs.ProbeEditDialog.DialogProbeCallback;
 import com.weberbox.pifire.utils.AlertUtils;
 
 import org.jetbrains.annotations.NotNull;

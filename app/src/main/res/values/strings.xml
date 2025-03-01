@@ -9,6 +9,7 @@
     <string name="menu_events">Events</string>
     <string name="menu_setting">Settings</string>
     <string name="menu_info">Info</string>
+    <string name="menu_recipes">Recipes</string>
 
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_pellet_manager">Pellet Manager</string>
@@ -26,27 +27,18 @@
     <string name="placeholder_text_view">TextView</string>
     <string name="placeholder_string">This is a very long text and we need to show 3…(dots)</string>
 
-    <string name="json_parsing_error">JSON Parsing Error - %1$s not updated</string>
-
-    <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
-    <string name="disabled_option_dialog_title">Disabled Feature</string>
-    <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher is required. Please upgrade to a newer version to use this function.</string>
-
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="colon">:</string>
     <string name="confirm">Confirm</string>
-    <string name="clear">Clear</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
     <string name="view_all">View All</string>
+    <string name="view_less">View Less</string>
     <string name="enabled">Enabled</string>
     <string name="swipe_to_start">Swipe to start</string>
     <string name="dismiss_button">Dismiss</string>
     <string name="open_button">Open</string>
-    <string name="http_scheme">http://</string>
-    <string name="https_scheme">https://</string>
-    <string name="scheme">Scheme</string>
     <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
@@ -59,7 +51,13 @@
     <string name="options">Options</string>
     <string name="offline">Offline</string>
     <string name="exit">Exit</string>
+    <string name="search">Search</string>
+    <string name="print">Print</string>
+    <string name="share">Share</string>
+    <string name="run">Run</string>
     <string name="clear_all">Clear All</string>
+
+    <string name="action_item_selected">%1$s Selected</string>
 
     <string name="add_extra_header">Add New Header</string>
     <string name="add_smart_profile">Add Profile</string>
@@ -79,6 +77,8 @@
     <string name="grill_mode_hold">Hold</string>
     <string name="grill_mode_shutdown">Shutdown</string>
     <string name="grill_mode_prime">Prime</string>
+    <string name="grill_mode_next">Next</string>
+    <string name="grill_mode_continue">Continue</string>
 
     <string name="grill_state_mode">Mode</string>
     <string name="dash_grill_title">Grill</string>
@@ -99,27 +99,20 @@
     <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
     <string name="grill_keep_warm_timer">Keep Warm When Timer Expires</string>
 
+    <string name="dash_recipe_info">Recipe Info</string>
+    <string name="dash_recipe_mode">Mode:</string>
+    <string name="dash_recipe_step">Step:</string>
+    <string name="dash_recipe_status">Status:</string>
+    <string name="dash_recipe_running">Running</string>
+    <string name="dash_recipe_paused">Paused</string>
+    <string name="dash_recipe_number">0</string>
+
+    <string name="dash_elapsed">Elapsed Time</string>
+    <string name="dash_outputs">Outputs</string>
+
     <string name="timer_start">Start</string>
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
-
-    <string name="dialog_prime_startup">Startup Grill After Priming</string>
-
-    <string name="dialog_confirm_action">Confirm Action</string>
-
-    <string name="dialog_event">Event Info</string>
-    <string name="dialog_probe_edit">Probe Edit</string>
-    <string name="dialog_probe_name">Probe Name</string>
-    <string name="dialog_probe_profile">Probe Profile</string>
-    <string name="dialog_max_error">Must be less than %1$s characters</string>
-
-    <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
-    <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>
-    <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. \n\nYour current version is %3$s build %4$s \n\nPlease check for an update to this application</string>
-    <string name="dialog_untested_app_version_title">Untested Version</string>
-    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected.</string>
-
-    <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
 
     <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
     <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
@@ -128,23 +121,68 @@
 
     <string name="changelog_title">What\'s New</string>
 
+    <!-- Recipes -->
+    <string name="recipes_load_error">There was an error loading the requested recipe!</string>
+    <string name="recipes_actions">Actions</string>
+    <string name="recipes_removed">Recipe successfully removed</string>
+    <string name="recipes_remove_failed">Server responded with an error, recipe was not deleted. Please try again</string>
+    <string name="recipes_run_failed">Server responded with an error, could not start recipe. Please try again</string>
+    <string name="recipes_dif_easy">Easy</string>
+    <string name="recipes_dif_intermediate">Intermediate</string>
+    <string name="recipes_dif_hard">Hard</string>
+    <string name="recipes_dif_advanced">Advanced</string>
+    <string name="recipes_cook_time">Cook Time:</string>
+    <string name="recipes_prep_time">Prep Time:</string>
+    <string name="recipes_difficulty">Difficulty:</string>
+    <string name="recipes_probes">Food Probes:</string>
+    <string name="recipes_author">Author:</string>
+    <string name="recipes_rating">Rating:</string>
+    <string name="recipes_description">Description</string>
+    <string name="recipes_steps">Program Steps</string>
+    <string name="recipes_ingredients">Ingredients</string>
+    <string name="recipes_instructions">Instructions</string>
+    <string name="recipes_item_step">Step</string>
+    <string name="recipes_item_number">#</string>
+    <string name="recipes_item_qty">Quantity</string>
+    <string name="recipes_item_ingredient">Ingredient</string>
+    <string name="recipes_item_direction">Direction</string>
+    <string name="recipes_item_ingredients">Ingredients</string>
+    <string name="recipes_step_mode">Mode:</string>
+    <string name="recipes_step_mode_hold">%1$s @%2$d°%3$s</string>
+    <string name="recipes_step_step">Step %1$d</string>
+    <string name="recipes_step_startup_header">Transition to the next step after:</string>
+    <string name="recipes_step_options_header">Transition to the next step after one of the following trigger(s):</string>
+    <string name="recipes_step_options_startup">Startup completes successfully</string>
+    <string name="recipes_step_options_primary">Primary reaches %1$d°%2$s</string>
+    <string name="recipes_step_options_food">Food Probe %1$d reaches %2$d°%3$s</string>
+    <string name="recipes_step_options_timer">%1$d minutes elapses</string>
+    <string name="recipes_step_options_user">The user presses continue</string>
+    <string name="recipes_step_notif_header">Notifications:</string>
+    <string name="recipes_step_notif">\"%1$s\"</string>
+    <string name="recipes_retrieve_error">There was an error retrieving the recipe list. Please try again</string>
+    <string name="recipes_filename_error">There was an error retrieving the recipe file. Please try again</string>
+    <string name="recipes_header_about">About This Recipe</string>
+
+
+    <!-- Setup -->
     <string name="setup_connect">Connect</string>
     <string name="setup_push">Consent</string>
     <string name="setup_finish">Finish</string>
     <string name="setup_server_address">Server Address</string>
-    <string name="setup_invalid_url">Address is invalid!</string>
-    <string name="setup_invalid_url_alert">Address is invalid! Please try again</string>
+    <string name="setup_invalid_url">Please enter a valid address</string>
     <string name="setup_blank_url">Address cannot blank!</string>
-    <string name="setup_cannot_connect">Cannot connect to PiFire. Verify entered address and that grill is powered on</string>
-    <string name="setup_error">There was an error please try again</string>
-    <string name="setup_with_qr_code_text">You can generate a QR code by holding the down button on the grill\'s display or from the Admin menu in a browser</string>
+    <string name="setup_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
+    <string name="setup_qr_invalid_url">Scanned QR does not contain a valid URL</string>
+    <string name="setup_uri_exception">There was an error creating the URI for websocket connection please try again</string>
+
+    <string name="setup_error_play_services">Google Play Services were not detected on this device, to use the QR Scan function Play Services must be installed</string>
     <string name="setup_enter_address">Enter PiFire Address</string>
     <string name="setup_enter_address_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
     <string name="setup_finish_title">Setup Complete</string>
     <string name="setup_finish_text">Connection to your PiFire server is now complete. If you need to change the connection settings you can find them in the app settings</string>
     <string name="setup_scan_qr">Scan QR Code</string>
-    <string name="setup_server_connect_error">Failed to connect. HTTP Code: %1$s - Message: %2$s</string>
-    <string name="setup_server_auth_required">Authentication Required</string>
+    <string name="setup_scan_qr_canceled">Scanning Canceled</string>
+    <string name="setup_scan_qr_failed">Scanning Failed</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
     <string name="setup_server_self_signed">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
     <string name="setup_push_consent_title">OneSignal Data Privacy</string>
@@ -153,12 +191,11 @@
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
-    <string name="setup_settings_error">Failed to retrieve settings from server. Please check your connection and verify your server version is compatible</string>
     <string name="setup_versions_error">Failed to retrieve PiFire version info from server. Please check your connection and verify your server version is compatible</string>
     <string name="setup_versions_null">The PiFire versions fetched from the server had an issue parsing. Please check your PiFire server and verify server version is compatible</string>
-    <string name="setup_versions_response">Did not receive a proper response from the PiFire server. Please check your connection and verify your server version is compatible</string>
-    <string name="setup_versions_parse_error">There was an error parsing the server url. Please check the entered server url</string>
 
+
+    <!-- Settings -->
     <string name="settings_server">Server Settings</string>
     <string name="settings_app">App Settings</string>
     <string name="settings_probe">Probe Settings</string>
@@ -172,15 +209,16 @@
     <string name="settings_pellets">Pellet Settings</string>
     <string name="settings_manual">Manual Mode</string>
 
-    <!-- Settings Preferences -->
     <string name="settings_info">Info:</string>
     <string name="settings_note">Note:</string>
     <string name="settings_warning">Warning:</string>
     <string name="settings_danger">Danger:</string>
-    <string name="settings_min_error">Value must be greater than %1$s</string>
-    <string name="settings_max_error">Value must be less than %1$s</string>
+    <string name="settings_min_error">Value must be %1$s or greater</string>
+    <string name="settings_max_error">Value must be %1$s or less</string>
+    <string name="settings_number_error">Value must be a number</string>
 
     <string name="settings_action_success">Action completed successfully</string>
+    <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
 
     <string name="settings_server_settings_title">Server Settings</string>
     <string name="settings_server_settings_summary">Setup server address and authentication</string>
@@ -211,7 +249,6 @@
 
     <string name="settings_cat_extra_headers_title">Custom Headers</string>
     <string name="settings_extra_headers_summary">Add custom headers to all HTTP requests</string>
-    <string name="settings_extra_headers_dialog">Extra Headers</string>
     <string name="settings_headers_key">Header Key</string>
     <string name="settings_headers_value">Header Value</string>
     <string name="settings_extra_headers_editor">Custom Header Editor</string>
@@ -243,32 +280,32 @@
     <string name="settings_pmode_mode">P-Mode</string>
     <string name="settings_pmode_table">P-Mode Table</string>
     <string name="settings_pmode_summary">Click here a P-Mode chart</string>
-    <string name="settings_pmode_auger_on">Auger ON Time</string>
-    <string name="settings_pmode_auger_off">Auger OFF Time</string>
+    <string name="settings_pmode_auger_on">Auger ON Time (s)</string>
+    <string name="settings_pmode_auger_off">Auger OFF Time (s)</string>
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
     <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the fan icon button on the dashboard. The icon will be highlighted blue indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the below min/max temperatures.</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
-    <string name="settings_splus_on_time">Fan On Time</string>
-    <string name="settings_splus_off_time">Fan Off Time</string>
+    <string name="settings_splus_on_time">Fan On Time (s)</string>
+    <string name="settings_splus_off_time">Fan Off Time (s)</string>
     <string name="settings_splus_fan_ramp">Fan Ramping Enabled</string>
-    <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle</string>
+    <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle (%)</string>
     <string name="settings_splus_fan_ramp_note">Fan Ramping will ramp the fan from off to the desired duty cycle instead of just turning on to full speed during Smoke Plus cycling. You can control the ramp duration by setting the Fan ON Time below. The desired duty cycle can also be set below.</string>
 
     <string name="settings_cat_controller">Controller Cycle Settings</string>
-    <string name="settings_controller_cycle">Cycle Time</string>
+    <string name="settings_controller_cycle">Cycle Time (s)</string>
     <string name="settings_controller_cycle_note">Amount of seconds for a complete cycle. At the beginning of each cycle, the controller will check the current temperature and set point to determine the cycle ratio (auger ON time / auger OFF time). [Default=25]</string>
-    <string name="settings_controller_u_min">Minimum Cycle Ratio</string>
+    <string name="settings_controller_u_min">Min Cycle Ratio (%)</string>
     <string name="settings_controller_u_min_note">Minimum percentage of cycle where the auger is on. This is to prevent flame–out which can happen with a cycle ratio of less than 0.1. (0.0 – 0.99) [Default=0.1]</string>
-    <string name="settings_controller_u_max">Maximum Cycle Ratio</string>
+    <string name="settings_controller_u_max">Max Cycle Ratio (%)</string>
     <string name="settings_controller_u_max_note">Maximum percentage of cycle where the auger is on. This is to minimize possible overshoots, or overcompensation in temperature. (0.0 – 1.0) [Default=0.9]</string>
     <string name="settings_controller_note">For each controller, you can set certain cycle settings, like the cycle time (length of time between controller sampling temperature and adjusting the amount of auger ON time). To use the recommended values for the currently selected controller, click on the button in the recommended column.</string>
 
     <string name="settings_cat_lid_detection">Lid Detection</string>
     <string name="settings_lid_open_enabled">Lid Open Detection</string>
-    <string name="settings_lid_open_thresh">Open Threshold %</string>
+    <string name="settings_lid_open_thresh">Open Threshold (%)</string>
     <string name="settings_lid_open_pause">Open Pause Time (s)</string>
     <string name="settings_lid_open_note">If enabled, the system will attempt to determine if the lid was opened and temporarily suspend the PID. If the temperature drops below the threshold (percentage of the hold temperature), a lid open event is triggered. Once lid open is detected, it will pause the PID for the specified amount of seconds.</string>
 
@@ -278,7 +315,7 @@
     <string name="settings_keep_warm_note">The Keep Warm mode is a specified Hold temperature, that you can define, that can be activated by a timer or notification targets. When the grill is active, you can click on the timer dialog and check the Keep Warm box. Or you can click on the Notification Targets for any of the probes and select the Keep Warm box. The Keep Warm function will be activated when a probe notify target has been achieved or the timer has expired. The Grill will exit the currently running mode and switch to Hold Mode then attempt to maintain the temperature set above.</string>
 
     <string name="settings_cat_startup">Startup Settings</string>
-    <string name="settings_startup_duration">Startup Timer (seconds)</string>
+    <string name="settings_startup_duration">Startup Timer (s)</string>
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
     <string name="settings_startup_goto_title">Mode After Startup</string>
     <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
@@ -288,7 +325,7 @@
     <string name="settings_startup_exit_temp">Exit Startup @ Temperature</string>
     <string name="settings_startup_exit_temp_value">Temperature</string>
     <string name="settings_startup_prime">Always Prime on Startup</string>
-    <string name="settings_startup_prime_value">Amount (grams)</string>
+    <string name="settings_startup_prime_value">Amount (g)</string>
 
     <string name="settings_smart_start">Smart Start</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
@@ -296,7 +333,6 @@
     <string name="settings_smart_start_startup">Startup</string>
     <string name="settings_smart_start_auger_on">AugerOn</string>
     <string name="settings_smart_start_p_mode">P-Mode</string>
-    <string name="settings_smart_start_action">Action</string>
     <string name="settings_smart_start_exit_temp">Exit Startup Temperature</string>
     <string name="settings_smart_start_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
 
@@ -305,7 +341,7 @@
     <string name="settings_smart_start_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
 
     <string name="settings_cat_shutdown">Shutdown Settings</string>
-    <string name="settings_shutdown_duration">Shutdown Timer (seconds)</string>
+    <string name="settings_shutdown_duration">Shutdown Timer (s)</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
     <string name="settings_auto_power_off">Auto Power Off</string>
     <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
@@ -404,7 +440,7 @@
 
     <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
     <string name="settings_pellet_warning_level">Warning Level (%)</string>
-    <string name="settings_pellet_warning_time">Check Time (mins)</string>
+    <string name="settings_pellet_warning_time">Check Time (m)</string>
     <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications during a cook at the specified check time</string>
 
     <string name="settings_cat_pellets">Pellet Level Sensor</string>
@@ -440,7 +476,6 @@
     <string name="settings_pwm_control_temp">Temp</string>
     <string name="settings_pwm_control_range">Temp Range</string>
     <string name="settings_pwm_control_duty">Duty Cycle</string>
-    <string name="settings_pwm_control_action">Action</string>
 
     <string name="settings_pwm_temp_range_add">Add PWM Temp Profile</string>
     <string name="settings_pwm_temp_range_edit">Edit PWM Temp Profile</string>
@@ -448,6 +483,7 @@
     <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
 
+    <!-- Info -->
     <string name="info_system_info">System Information</string>
     <string name="info_cpu">CPU Model</string>
     <string name="info_cpu_temp">CPU Temp</string>
@@ -482,6 +518,7 @@
     <string name="info_app_build_git_rev">Git Revisions</string>
     <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; %1$s\n\nPiFire Android created by James Weber, &#169; %1$s</string>
 
+    <!-- Pellets -->
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_usage">Estimated Usage</string>
     <string name="pellets_current_load">Current</string>
@@ -520,6 +557,7 @@
     <string name="item_rating_2">★ ★</string>
     <string name="item_rating_1">★</string>
 
+    <!-- Notifications -->
     <string name="notification_group_grill">pifire_grill_group</string>
     <string name="notification_group_grill_name">Grill Alerts</string>
     <string name="notification_channel_base">pifire_base_alerts</string>
@@ -546,9 +584,39 @@
     <string name="inapp_update_current">App is currently up to date!</string>
     <string name="inapp_update_check_failed">Checking for Updates Failed. Please try again later.</string>
 
-    <string name="app_permissions_denied">If permissions are rejected you will not be able to use this function!</string>
-
+    <!-- Errors -->
     <string name="error_settings_errors">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Errors: %1$s</string>
+    <string name="http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your server is online and try again</string>
+    <string name="http_unsuccessful">The server responded with error code %1$s - %2$s</string>
+    <string name="http_response_null">The server responded with error code %1$s - %2$s</string>
+
+    <!-- JSON -->
+    <string name="json_parsing_error">JSON Parsing Error - %1$s not updated</string>
+
+    <!-- Disabled Features -->
+    <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
+    <string name="disabled_option_dialog_title">Disabled Feature</string>
+    <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher is required. Please upgrade to a newer version to use this function.</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_prime_startup">Startup Grill After Priming</string>
+
+    <string name="dialog_confirm_action">Confirm Action</string>
+
+    <string name="dialog_event">Event Info</string>
+    <string name="dialog_probe_edit">Probe Edit</string>
+    <string name="dialog_probe_name">Probe Name</string>
+    <string name="dialog_probe_profile">Probe Profile</string>
+    <string name="dialog_max_error">Must be less than %1$s characters</string>
+
+    <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
+    <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>
+    <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. \n\nYour current version is %3$s build %4$s \n\nPlease check for an update to this application</string>
+    <string name="dialog_untested_app_version_title">Untested Version</string>
+    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected.</string>
+
+    <string name="dialog_no_network_title">Network Disconnected</string>
+    <string name="dialog_dialog_no_network_title_message">A network was not detected, please check your internet connectivity</string>
 
 
 </resources>

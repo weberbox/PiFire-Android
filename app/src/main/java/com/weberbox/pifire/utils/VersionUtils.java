@@ -1,6 +1,5 @@
 package com.weberbox.pifire.utils;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -9,7 +8,6 @@ import com.pixplicity.easyprefs.library.Prefs;
 import com.weberbox.pifire.BuildConfig;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.config.AppConfig;
-import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.enums.ServerSupport;
 import com.weberbox.pifire.enums.VersionResults;
 import com.weberbox.pifire.interfaces.ServerInfoCallback;
@@ -32,13 +30,13 @@ public class VersionUtils {
         return isSupportedMinMax(serverVersion, requiredVersion, true);
     }
 
-    public static boolean isSupportedBuild(String requiredVersion, String requiredBuild) {
+    public static boolean isUnSupportedBuild(String requiredVersion, String requiredBuild) {
         String serverVersion = Prefs.getString("prefs_server_version", "1.0.0");
         String serverBuild = Prefs.getString("prefs_server_build", "0");
         if (isSupportedMinMax(serverVersion, requiredVersion, true)) {
-            return isSupportedMinMax(serverBuild, requiredBuild, true);
+            return !isSupportedMinMax(serverBuild, requiredBuild, true);
         }
-        return false;
+        return true;
     }
 
     public static boolean checkFirstRun(Context context) {
@@ -65,60 +63,38 @@ public class VersionUtils {
         firebaseRemoteConfig.setDefaultsAsync(defaults);
 
         firebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(task -> {
+            String firebaseInfo = firebaseRemoteConfig.getString(AppConfig.SERVER_SUPPORT_INFO);
             if (task.isSuccessful()) {
-                String firebaseInfo = firebaseRemoteConfig.getString(AppConfig.SERVER_SUPPORT_INFO);
-                ArrayList<ServerInfo> serverInfo = ServerInfo.parseJSON(firebaseInfo);
-                for (ServerInfo info : serverInfo) {
-                    if (info.getAppVersionCode() == BuildConfig.VERSION_CODE) {
-                        VersionBuild minSupport = info.getMinServerInfo();
-                        VersionBuild maxSupport = info.getMaxServerInfo();
-                        if (checkMinVerBuild(minSupport)) {
-                            if (checkMaxVerBuild(maxSupport)) {
-                                callback.onServerInfo(ServerSupport.SUPPORTED, null, null);
-                            } else {
-                                callback.onServerInfo(ServerSupport.UNSUPPORTED_MAX,
-                                        maxSupport.getVersion(), maxSupport.getBuild());
-                            }
-                        } else {
-                            callback.onServerInfo(ServerSupport.UNSUPPORTED_MIN,
-                                    minSupport.getVersion(), minSupport.getBuild());
-                        }
-                        return;
-                    }
-                }
-                callback.onServerInfo(ServerSupport.UNTESTED, null, null);
+                parseSupportInfo(firebaseInfo, callback);
             } else {
-                callback.onServerInfo(ServerSupport.FAILED, null, null);
+                parseSupportInfo(firebaseInfo, callback);
+                Timber.d("Version Check Network Call Failed");
             }
         });
     }
 
-    public static void getRawSupportedVersion(Activity activity, ServerInfoCallback callback) {
-        ArrayList<ServerInfo> serverInfo = ServerInfo.parseJSON(
-                FileUtils.getJSONString(activity, Constants.JSON_SERVER_INFO));
-        if (serverInfo != null) {
-            for (ServerInfo info : serverInfo) {
-                if (info.getAppVersionCode() == BuildConfig.VERSION_CODE) {
-                    VersionBuild minSupport = info.getMinServerInfo();
-                    VersionBuild maxSupport = info.getMaxServerInfo();
-                    if (checkMinVerBuild(minSupport)) {
-                        if (checkMaxVerBuild(maxSupport)) {
-                            callback.onServerInfo(ServerSupport.SUPPORTED, null, null);
-                        } else {
-                            callback.onServerInfo(ServerSupport.UNSUPPORTED_MAX,
-                                    maxSupport.getVersion(), maxSupport.getBuild());
-                        }
+    private static void parseSupportInfo(String firebaseInfo, ServerInfoCallback callback) {
+        ArrayList<ServerInfo> serverInfo = ServerInfo.parseJSON(firebaseInfo);
+        for (ServerInfo info : serverInfo) {
+            if (info.getAppVersionCode() == BuildConfig.VERSION_CODE) {
+                VersionBuild minSupport = info.getMinServerInfo();
+                VersionBuild maxSupport = info.getMaxServerInfo();
+                if (checkMinVerBuild(minSupport)) {
+                    if (checkMaxVerBuild(maxSupport)) {
+                        callback.onServerInfo(ServerSupport.SUPPORTED, null, null);
                     } else {
-                        callback.onServerInfo(ServerSupport.UNSUPPORTED_MIN,
-                                minSupport.getVersion(), minSupport.getBuild());
+                        callback.onServerInfo(ServerSupport.UNSUPPORTED_MAX,
+                                maxSupport.getVersion(), maxSupport.getBuild());
                     }
+                } else {
+                    callback.onServerInfo(ServerSupport.UNSUPPORTED_MIN,
+                            minSupport.getVersion(), minSupport.getBuild());
                 }
+                return;
             }
-        } else {
-            callback.onServerInfo(ServerSupport.FAILED, null, null);
         }
+        callback.onServerInfo(ServerSupport.UNTESTED, null, null);
     }
-
     private static boolean checkMinVerBuild(VersionBuild versionBuild) {
         String minVersion = versionBuild.getVersion();
         String minBuild = versionBuild.getBuild();

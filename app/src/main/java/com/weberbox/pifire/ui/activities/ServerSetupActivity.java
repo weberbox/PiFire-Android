@@ -1,6 +1,7 @@
 package com.weberbox.pifire.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -20,19 +21,19 @@ import androidx.navigation.ui.NavigationUI;
 import com.aceinteract.android.stepper.StepperNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.weberbox.pifire.R;
+import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.ActivityServerSetupBinding;
+import com.weberbox.pifire.interfaces.SetupProgressCallback;
 import com.weberbox.pifire.model.view.SetupViewModel;
-import com.weberbox.pifire.ui.utils.AnimUtils;
 
 import dev.chrisbanes.insetter.Insetter;
 import dev.chrisbanes.insetter.Side;
 
-public class ServerSetupActivity extends BaseActivity {
+public class ServerSetupActivity extends BaseActivity implements SetupProgressCallback {
 
     private StepperNavigationView stepper;
     private AppBarConfiguration appBarConfiguration;
     private ActivityServerSetupBinding binding;
-    private FloatingActionButton setupFab;
     private ProgressBar connectProgress;
     private int downX;
 
@@ -45,8 +46,17 @@ public class ServerSetupActivity extends BaseActivity {
 
         setSupportActionBar(binding.setupToolbar);
 
+        Intent intent = getIntent();
+        boolean enableBackNavigation = intent.getBooleanExtra(Constants.INTENT_SETUP_BACK, false);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        if (enableBackNavigation) {
+            binding.setupToolbar.setNavigationIcon(android.R.drawable.ic_menu_save);
+            binding.setupToolbar.setNavigationOnClickListener(v ->
+                    getOnBackPressedDispatcher().onBackPressed());
         }
 
         Insetter.builder()
@@ -58,7 +68,7 @@ public class ServerSetupActivity extends BaseActivity {
 
         getOnBackPressedDispatcher().addCallback(this, onBackCallback);
 
-        setupFab = binding.fabSetup;
+        FloatingActionButton setupFab = binding.fabSetup;
         connectProgress = binding.setupLayout.connectProgressbar;
         stepper = binding.setupLayout.setupStepper;
 
@@ -73,24 +83,22 @@ public class ServerSetupActivity extends BaseActivity {
                 R.id.server_setup_fragment);
         stepper.setupWithNavController(navController);
 
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        if (enableBackNavigation) {
+            AppBarConfiguration abc = new AppBarConfiguration.Builder().build();
+            NavigationUI.setupActionBarWithNavController(this, navController, abc);
+        } else {
+            NavigationUI.setupActionBarWithNavController(this, navController);
+        }
 
         SetupViewModel setupViewModel = new ViewModelProvider(this).get(SetupViewModel.class);
 
         setupFab.setOnClickListener(v -> setupViewModel.fabOnClick());
 
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_setup_scan_qr) {
-                AnimUtils.rotateFabBackwards(setupFab);
-            } else {
-                AnimUtils.rotateFabForwards(setupFab);
-            }
-        });
-
     }
 
-    public ProgressBar getProgressBar() {
-        return connectProgress;
+    @Override
+    public void onShowProgress(boolean show) {
+        connectProgress.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

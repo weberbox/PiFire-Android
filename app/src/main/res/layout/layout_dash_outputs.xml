@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dash_half_margin"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    app:cardPreventCornerOverlap="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dash_status_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripple_table"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="@dimen/dash_padding_start"
+        android:paddingTop="@dimen/dash_padding_top"
+        android:paddingEnd="@dimen/dash_padding_end"
+        android:paddingBottom="@dimen/dash_padding_bottom">
+
+        <TextView
+            android:id="@+id/dash_outputs"
+            style="@style/Text16AllerBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash_outputs"
+            android:textSize="@dimen/dash_text_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="@dimen/dash_margin"
+            android:layout_marginBottom="@dimen/dash_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dash_outputs">
+
+            <ImageView
+                android:id="@+id/dash_output_fan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/dash_margin"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_output_fan"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dash_output_auger"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/dash_output_auger"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:scaleX="1"
+                android:scaleY="1.1"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_output_auger"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dash_output_igniter"
+                app:layout_constraintStart_toEndOf="@+id/dash_output_fan"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/dash_output_igniter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:layout_marginStart="@dimen/dash_margin"
+                android:contentDescription="@string/placeholder_img"
+                android:src="@drawable/ic_output_igniter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dash_output_auger"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
