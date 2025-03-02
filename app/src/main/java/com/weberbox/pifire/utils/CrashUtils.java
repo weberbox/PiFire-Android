@@ -60,7 +60,7 @@ public class CrashUtils {
                     event.setExtra("Platform Current",
                             getPrefString(context, R.string.prefs_platform_current));
                     event.setExtra("Controller Selected",
-                            getPrefString(context, R.string.prefs_controller_selected));
+                            getPrefString(context, R.string.prefs_cntrlr_selected));
 
                     if (event.isCrashed() && event.getEventId() != null) {
                         storeCrashEvent(context, event.getEventId().toString());

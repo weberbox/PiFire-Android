@@ -125,7 +125,7 @@
     <string name="recipes_load_error">There was an error loading the requested recipe!</string>
     <string name="recipes_actions">Actions</string>
     <string name="recipes_removed">Recipe successfully removed</string>
-    <string name="recipes_remove_failed">Server responded with an error, recipe was not deleted. Please try again</string>
+    <string name="recipes_remove_failed">Server responded with an error, the recipe was not deleted. Please try again</string>
     <string name="recipes_run_failed">Server responded with an error, could not start recipe. Please try again</string>
     <string name="recipes_dif_easy">Easy</string>
     <string name="recipes_dif_intermediate">Intermediate</string>
@@ -162,6 +162,7 @@
     <string name="recipes_retrieve_error">There was an error retrieving the recipe list. Please try again</string>
     <string name="recipes_filename_error">There was an error retrieving the recipe file. Please try again</string>
     <string name="recipes_header_about">About This Recipe</string>
+    <string name="recipes_failed_loading">Failed loading recipes</string>
 
 
     <!-- Setup -->
@@ -211,6 +212,7 @@
 
     <string name="settings_info">Info:</string>
     <string name="settings_note">Note:</string>
+    <string name="settings_description">Description:</string>
     <string name="settings_warning">Warning:</string>
     <string name="settings_danger">Danger:</string>
     <string name="settings_min_error">Value must be %1$s or greater</string>
@@ -294,14 +296,37 @@
     <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle (%)</string>
     <string name="settings_splus_fan_ramp_note">Fan Ramping will ramp the fan from off to the desired duty cycle instead of just turning on to full speed during Smoke Plus cycling. You can control the ramp duration by setting the Fan ON Time below. The desired duty cycle can also be set below.</string>
 
-    <string name="settings_cat_controller">Controller Cycle Settings</string>
-    <string name="settings_controller_cycle">Cycle Time (s)</string>
-    <string name="settings_controller_cycle_note">Amount of seconds for a complete cycle. At the beginning of each cycle, the controller will check the current temperature and set point to determine the cycle ratio (auger ON time / auger OFF time). [Default=25]</string>
-    <string name="settings_controller_u_min">Min Cycle Ratio (%)</string>
-    <string name="settings_controller_u_min_note">Minimum percentage of cycle where the auger is on. This is to prevent flame–out which can happen with a cycle ratio of less than 0.1. (0.0 – 0.99) [Default=0.1]</string>
-    <string name="settings_controller_u_max">Max Cycle Ratio (%)</string>
-    <string name="settings_controller_u_max_note">Maximum percentage of cycle where the auger is on. This is to minimize possible overshoots, or overcompensation in temperature. (0.0 – 1.0) [Default=0.9]</string>
-    <string name="settings_controller_note">For each controller, you can set certain cycle settings, like the cycle time (length of time between controller sampling temperature and adjusting the amount of auger ON time). To use the recommended values for the currently selected controller, click on the button in the recommended column.</string>
+    <string name="settings_cat_cntrlr_config">Controller Configuration (HOLD Mode)</string>
+    <string name="settings_cat_cntrlr_pid">Controller Configuration</string>
+    <string name="settings_cntrlr_title">Selected Controller Type</string>
+    <string name="settings_pid_cntrlr_title">Controller Settings</string>
+    <string name="settings_pid_cntrlr_summary">Setup PID and Cycle settings</string>
+    <string name="settings_pid_cntrlr_pb_note">This is the temperature band centered around the set point, that the controller is active. If the error is less than PB/2, the command is 1.0. Higher PB\'s decrease controller response to error. [Default=60.0]</string>
+    <string name="settings_pid_cntrlr_pb">Proportional Band(PB)</string>
+    <string name="settings_pid_cntrlr_td_note">Time (in seconds) to predict the future value. Higher Td makes the controller more responsive to the Error Rate of Change. [Default=45.0]</string>
+    <string name="settings_pid_cntrlr_td">Derivative Time (Td)</string>
+    <string name="settings_pid_cntrlr_ti_note">Time (in seconds) to eliminate the integral error. Higher Ti makes the controller less responsive to accumulated error over time. [Default=180.0]</string>
+    <string name="settings_pid_cntrlr_ti">Integral Time (Ti)</string>
+    <string name="settings_pid_cntrlr_sw_note">Window +/- from Set Point for triggering Overshoot condition. When in Overshoot, Output is set to min. [Default=12]</string>
+    <string name="settings_pid_cntrlr_sw">Stable Window (Degrees)</string>
+    <string name="settings_pid_cntrlr_center">Center Ratio</string>
+    <string name="settings_pid_cntrlr_center_note_standard">Center of Cycle Ratio, which is specific to the way this PID will behave. Higher Centers increase system response at high set points. Lower Centers increase system stability at low set points but may keep the system from reaching high set points. [Default=0.5]</string>
+    <string name="settings_pid_cntrlr_center_factor">Center Factor</string>
+    <string name="settings_pid_cntrlr_center_note_auto">Center Factor multiplied by Set Point. Higher Center Factors increase system response at high set points. Lower Center Factors increase system stability at low set points but may keep the system from reaching high set points. Controller accounts for F to C conversion. EX: At 240F(115C) center is 240 * 0.0012 = 0.288. [Default=0.0010]</string>
+    <string name="settings_pid_cntrlr_tau_note">Time constant for the Smith Predictor. This is the time it takes the system to reach 2/3 of it\'s final value after a Set Point change. Higher Tau decreases system sensitivity to model mismatch. [Default=115]</string>
+    <string name="settings_pid_cntrlr_tau">Tau (s)</string>
+    <string name="settings_pid_cntrlr_theta_note">Time delay in the system. Theta is measured after commanding a Set Point change as the time it takes from the initial command to seeing initial temperature rise. Higher Theta makes the system more sensitive to delays in the system. [Default=65]</string>
+    <string name="settings_pid_cntrlr_theta">Theta (s)</string>
+    <string name="settings_cycle_cntrlr_no_config">No configuration options are exposed for this controller</string>
+
+    <string name="settings_cat_cntrlr_cycle">Controller Cycle Settings</string>
+    <string name="settings_cycle_cntrlr_cycle">Cycle Time (s)</string>
+    <string name="settings_cycle_cntrlr_cycle_note">Amount of seconds for a complete cycle. At the beginning of each cycle, the controller will check the current temperature and set point to determine the cycle ratio (auger ON time / auger OFF time). [Default=25]</string>
+    <string name="settings_cycle_cntrlr_u_min">Min Cycle Ratio (%)</string>
+    <string name="settings_cycle_cntrlr_u_min_note">Minimum percentage of cycle where the auger is on. This is to prevent flame–out which can happen with a cycle ratio of less than 0.1. (0.0 – 0.99) [Default=0.1]</string>
+    <string name="settings_cycle_cntrlr_u_max">Max Cycle Ratio (%)</string>
+    <string name="settings_cycle_cntrlr_u_max_note">Maximum percentage of cycle where the auger is on. This is to minimize possible overshoots, or overcompensation in temperature. (0.0 – 1.0) [Default=0.9]</string>
+    <string name="settings_cycle_cntrlr_note">For each controller, you can set certain cycle settings, like the cycle time (length of time between controller sampling temperature and adjusting the amount of auger ON time). To use the recommended values for the currently selected controller, click on the button in the recommended column.</string>
 
     <string name="settings_cat_lid_detection">Lid Detection</string>
     <string name="settings_lid_open_enabled">Lid Open Detection</string>
@@ -588,7 +613,7 @@
     <string name="error_settings_errors">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Errors: %1$s</string>
     <string name="http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your server is online and try again</string>
     <string name="http_unsuccessful">The server responded with error code %1$s - %2$s</string>
-    <string name="http_response_null">The server responded with error code %1$s - %2$s</string>
+    <string name="http_response_null">The server response was null. Please try again</string>
 
     <!-- JSON -->
     <string name="json_parsing_error">JSON Parsing Error - %1$s not updated</string>

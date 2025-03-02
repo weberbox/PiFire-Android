@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private final List<LicensesModel> list;
     private final int limitAmount;
     private boolean limitEnabled;
+    private RecyclerView recyclerView;
 
     @SuppressWarnings("unused")
     public LicensesListAdapter(boolean limitEnabled, int limitAmount) {
@@ -42,6 +45,12 @@ public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.list = new ArrayList<>();
         this.limitEnabled = limitEnabled;
         this.limitAmount = AppConfig.RECYCLER_LIMIT;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -70,7 +79,7 @@ public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 });
             } else if (holder instanceof FooterViewHolder vh) {
                 vh.bindData(vh.itemView.getContext(), limitEnabled);
-                vh.viewAll.setOnClickListener(view -> toggleViewAll());
+                vh.viewAll.setOnClickListener(view -> toggleViewAll(vh.itemView.getContext()));
 
             }
         } catch (Exception e) {
@@ -116,7 +125,16 @@ public class LicensesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @SuppressWarnings("NotifyDataSetChanged")
-    private void toggleViewAll() {
+    private void toggleViewAll(Context context) {
+        LayoutAnimationController animation;
+        if (limitEnabled) {
+            animation = AnimationUtils.loadLayoutAnimation(context,
+                    R.anim.fall_down_animation);
+        } else {
+            animation = AnimationUtils.loadLayoutAnimation(context,
+                    R.anim.slide_up_animation);
+        }
+        recyclerView.setLayoutAnimation(animation);
         this.limitEnabled = !limitEnabled;
         notifyDataSetChanged();
     }

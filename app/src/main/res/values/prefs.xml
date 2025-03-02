@@ -43,8 +43,6 @@
     <string name="prefs_standalone">prefs_standalone</string>
     <string name="prefs_platform_current">prefs_platform_current</string>
     <string name="prefs_platform_type">prefs_platform_type</string>
-    <string name="prefs_controller_config">prefs_controller_config</string>
-    <string name="prefs_controller_selected">prefs_controller_selected</string>
 
     <string name="prefs_server_version">prefs_server_version</string>
     <string name="prefs_server_build">prefs_server_build</string>
@@ -69,9 +67,40 @@
     <string name="prefs_work_splus_fan_ramp">prefs_work_splus_fan_ramp</string>
     <string name="prefs_work_splus_ramp_dc">prefs_work_splus_ramp_dc</string>
 
-    <string name="prefs_work_controller_cycle">prefs_work_controller_cycle</string>
-    <string name="prefs_work_controller_u_min">prefs_work_controller_u_min</string>
-    <string name="prefs_work_controller_u_max">prefs_work_controller_u_max</string>
+    <string name="prefs_work_pid">prefs_work_pid</string>
+
+    <string name="prefs_cntrlr_config">prefs_cntrlr_config</string>
+    <string name="prefs_cntrlr_config_pid">prefs_cntrlr_config_pid</string>
+    <string name="prefs_cntrlr_config_pid_ac">prefs_cntrlr_config_pid_ac</string>
+    <string name="prefs_cntrlr_config_pid_sp">prefs_cntrlr_config_pid_sp</string>
+    <string name="prefs_cntrlr_no_config">prefs_cntrlr_no_config</string>
+
+    <string name="prefs_cntrlr_selected">prefs_cntrlr_selected</string>
+
+    <string name="prefs_pid_cntrlr_pb">prefs_pid_cntrlr_pb</string>
+    <string name="prefs_pid_cntrlr_td">prefs_pid_cntrlr_td</string>
+    <string name="prefs_pid_cntrlr_ti">prefs_pid_cntrlr_ti</string>
+    <string name="prefs_pid_cntrlr_center">prefs_pid_cntrlr_center</string>
+
+    <string name="prefs_pid_ac_cntrlr_pb">prefs_pid_ac_cntrlr_pb</string>
+    <string name="prefs_pid_ac_cntrlr_td">prefs_pid_ac_cntrlr_td</string>
+    <string name="prefs_pid_ac_cntrlr_ti">prefs_pid_ac_cntrlr_ti</string>
+    <string name="prefs_pid_ac_cntrlr_center">prefs_pid_ac_cntrlr_center</string>
+    <string name="prefs_pid_ac_cntrlr_sp">prefs_pid_ac_cntrlr_sp</string>
+
+    <string name="prefs_pid_sp_cntrlr_pb">prefs_pid_sp_cntrlr_pb</string>
+    <string name="prefs_pid_sp_cntrlr_td">prefs_pid_sp_cntrlr_td</string>
+    <string name="prefs_pid_sp_cntrlr_ti">prefs_pid_sp_cntrlr_ti</string>
+    <string name="prefs_pid_sp_cntrlr_center">prefs_pid_sp_cntrlr_center</string>
+    <string name="prefs_pid_sp_cntrlr_sp">prefs_pid_sp_cntrlr_sp</string>
+    <string name="prefs_pid_sp_cntrlr_tau">prefs_pid_sp_cntrlr_tau</string>
+    <string name="prefs_pid_sp_cntrlr_theta">prefs_pid_sp_cntrlr_theta</string>
+
+
+    <string name="prefs_cycle_cntrlr_config">prefs_cycle_cntrlr_config</string>
+    <string name="prefs_cycle_cntrlr_cycle">prefs_cycle_cntrlr_cycle</string>
+    <string name="prefs_cycle_cntrlr_u_min">prefs_cycle_cntrlr_u_min</string>
+    <string name="prefs_cycle_cntrlr_u_max">prefs_cycle_cntrlr_u_max</string>
 
     <string name="prefs_work_lid_open_cat">prefs_work_lid_open_cat</string>
     <string name="prefs_work_lid_open_detect">prefs_work_lid_open_detect</string>

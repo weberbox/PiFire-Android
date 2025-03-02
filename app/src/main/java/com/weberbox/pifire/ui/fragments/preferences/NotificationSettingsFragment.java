@@ -73,27 +73,26 @@ public class NotificationSettingsFragment extends PreferenceFragmentCompat imple
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
-        SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
-        appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
-
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
 
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
+        Preference oneSignalConsent = findPreference(getString(R.string.prefs_notif_onesignal_consent));
+        SwitchPreferenceCompat appriseEnabled = findPreference(getString(R.string.prefs_notif_apprise_enabled));
+        appriseLocations = findPreference(getString(R.string.prefs_notif_apprise_locations));
 
         if (oneSignalConsent != null) {
             oneSignalConsent.setOnPreferenceClickListener(preference -> {
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.animator.fragment_fade_enter,
-                                R.animator.fragment_fade_exit,
-                                R.animator.fragment_fade_enter,
-                                R.animator.fragment_fade_exit)
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_right,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_left)
                         .replace(R.id.fragment_container, new OneSignalConsentFragment())
                         .addToBackStack(OneSignalConsentFragment.class.getName())
                         .commit();

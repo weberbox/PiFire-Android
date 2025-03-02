@@ -54,21 +54,20 @@ public class PelletSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .applyToView(getListView());
+
         PreferenceCategory pelletWarnings = findPreference(getString(R.string.prefs_pellet_warning_cat));
         EditTextPreference pelletWarningTime = findPreference(getString(R.string.prefs_pellet_warning_time));
         EditTextPreference pelletWarningLevel = findPreference(getString(R.string.prefs_pellet_warning_level));
         EditTextPreference pelletsFull = findPreference(getString(R.string.prefs_pellet_full));
         EditTextPreference pelletsEmpty = findPreference(getString(R.string.prefs_pellet_empty));
         EditTextPreference augerRate = findPreference(getString(R.string.prefs_pellet_auger_rate));
-
-        getListView().setClipToPadding(false);
-
-        Insetter.builder()
-                .padding(WindowInsetsCompat.Type.navigationBars())
-                .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
 
         if (pelletWarnings != null && Prefs.getString(getString(R.string.prefs_pellet_warning_level),
                 "").isEmpty()) {

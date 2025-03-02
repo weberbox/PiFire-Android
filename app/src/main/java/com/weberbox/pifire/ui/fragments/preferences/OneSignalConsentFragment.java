@@ -39,13 +39,12 @@ public class OneSignalConsentFragment extends PreferenceFragmentCompat implement
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
     }
 
     @Override

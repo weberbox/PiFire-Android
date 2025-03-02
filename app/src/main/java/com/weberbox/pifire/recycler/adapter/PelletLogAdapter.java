@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ public class PelletLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private final PelletLogCallback callback;
     private final int limitAmount;
     private boolean limitEnabled;
+    private RecyclerView recyclerView;
 
     @SuppressWarnings("unused")
     public PelletLogAdapter(@NotNull PelletLogCallback callback, boolean limitEnabled,
@@ -47,6 +50,12 @@ public class PelletLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.callback = callback;
         this.limitEnabled = limitEnabled;
         this.limitAmount = AppConfig.RECYCLER_LIMIT;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
     }
 
     @NonNull
@@ -72,7 +81,7 @@ public class PelletLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         vh.pelletID, vh.getAbsoluteAdapterPosition()));
             } else if (holder instanceof FooterViewHolder vh) {
                 vh.bindData(vh.itemView.getContext(), limitEnabled);
-                vh.viewAll.setOnClickListener(view -> toggleViewAll());
+                vh.viewAll.setOnClickListener(view -> toggleViewAll(vh.itemView.getContext()));
 
             }
         } catch (Exception e) {
@@ -136,7 +145,16 @@ public class PelletLogAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @SuppressWarnings("NotifyDataSetChanged")
-    private void toggleViewAll() {
+    private void toggleViewAll(Context context) {
+        LayoutAnimationController animation;
+        if (limitEnabled) {
+            animation = AnimationUtils.loadLayoutAnimation(context,
+                    R.anim.fall_down_animation);
+        } else {
+            animation = AnimationUtils.loadLayoutAnimation(context,
+                    R.anim.slide_up_animation);
+        }
+        recyclerView.setLayoutAnimation(animation);
         this.limitEnabled = !limitEnabled;
         notifyDataSetChanged();
     }

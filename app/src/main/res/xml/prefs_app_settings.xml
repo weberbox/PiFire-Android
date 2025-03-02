@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <PreferenceCategory
         android:layout="@layout/preference_cat"
@@ -30,8 +31,8 @@
 
         <ListPreference
             app:defaultValue="@string/def_event_amounts_app"
-            app:entries="@array/event_amounts_names"
-            app:entryValues="@array/event_amounts"
+            app:entries="@array/event_amounts_entries"
+            app:entryValues="@array/event_amounts_values"
             app:key="@string/prefs_event_amount"
             app:summary="@string/settings_app_events_amount_summary"
             app:title="@string/settings_app_events_amount_title" />
@@ -79,7 +80,8 @@
             android:summary="@string/settings_dev_crash_summary"
             android:title="@string/settings_dev_crash_title"
             app:dependency="@string/prefs_crash_enable"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            tools:isPreferenceVisible="true" />
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreference
             android:key="@string/prefs_crash_user_email"

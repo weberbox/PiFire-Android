@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:alpha="1"
+        android:alpha="1.0"
         android:background="@drawable/bg_grey_gradient_270"
         android:clickable="false" />
 

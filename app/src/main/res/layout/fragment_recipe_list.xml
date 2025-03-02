@@ -8,17 +8,50 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".ui.fragments.recipes.RecipeListFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipe_list_error_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="-60dp"
+        android:visibility="invisible"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/recipe_list_error_image"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_80sdp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:contentDescription="@string/recipes_failed_loading"
+            android:src="@drawable/ic_error"
+            app:layout_constraintBottom_toTopOf="@+id/recipe_list_error_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/recipe_list_error_text"
+            style="@style/Text20AllerBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="@dimen/_8ssp"
+            android:text="@string/recipes_failed_loading"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_list_error_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/recipe_list_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="-60dp"
         android:indeterminate="true"
-        app:indicatorColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:indicatorColor="@color/colorAccent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_delete_recipes"

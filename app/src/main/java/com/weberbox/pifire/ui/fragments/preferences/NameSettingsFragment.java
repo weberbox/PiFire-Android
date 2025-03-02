@@ -50,13 +50,12 @@ public class NameSettingsFragment extends PreferenceFragmentCompat implements
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
     }
 
     @Override

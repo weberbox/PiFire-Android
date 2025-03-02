@@ -55,18 +55,17 @@ public class SafetySettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
-        EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
-        EditTextPreference maxGrillTemp = findPreference(getString(R.string.prefs_safety_max_temp));
-
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
 
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
+        EditTextPreference minStartTemp = findPreference(getString(R.string.prefs_safety_min_start));
+        EditTextPreference maxStartTemp = findPreference(getString(R.string.prefs_safety_max_start));
+        EditTextPreference maxGrillTemp = findPreference(getString(R.string.prefs_safety_max_temp));
 
         if (minStartTemp != null) {
             minStartTemp.setOnBindEditTextListener(this);

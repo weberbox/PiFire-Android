@@ -13,6 +13,10 @@ import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeMap;
 import com.weberbox.pifire.model.remote.ProbeDataModel.ProbeProfileModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.remote.SettingsDataModel;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.Pid;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.PidAc;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.PidSp;
 import com.weberbox.pifire.model.remote.SettingsDataModel.CycleData;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Globals;
 import com.weberbox.pifire.model.remote.SettingsDataModel.KeepWarm;
@@ -34,8 +38,6 @@ import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.StartToMode;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Versions;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Controller;
-import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -164,19 +166,6 @@ public class SettingsUtils {
                 }
             }
 
-            if (VersionUtils.isSupported(ServerVersions.V_180)) {
-                Controller controller = settingsResponse.getController()  ;
-                if (controller != null) {
-                    Config config = controller.getConfig();
-                    putString(R.string.prefs_controller_config, new Gson().toJson(config),
-                            "Controller Config");
-                    putString(R.string.prefs_controller_selected, controller.getSelected(),
-                            "Controller Selected");
-                } else {
-                    errors.add("Controller");
-                }
-            }
-
             Ifttt ifttt = settingsResponse.getNotifyServices().getIfttt();
             if (ifttt != null) {
                 putBoolean(R.string.prefs_notif_ifttt_enabled, ifttt.getEnabled(),
@@ -255,20 +244,65 @@ public class SettingsUtils {
                 errors.add("Apprise");
             }
 
+            if (VersionUtils.isSupported(ServerVersions.V_180)) {
+                Controller controller = settingsResponse.getController();
+                if (controller != null) {
+                    Pid pid = controller.getConfig().getPid();
+                    PidAc pidAc = controller.getConfig().getPidAc();
+                    PidSp pidSp = controller.getConfig().getPidSp();
+                    putString(R.string.prefs_cntrlr_selected, controller.getSelected(),
+                            "Controller Selected");
+                    putDoubleString(R.string.prefs_pid_cntrlr_pb, pid.getPb(),
+                            "Pid PB");
+                    putDoubleString(R.string.prefs_pid_cntrlr_td, pid.getTd(),
+                            "Pid Td");
+                    putDoubleString(R.string.prefs_pid_cntrlr_ti, pid.getTi(),
+                            "Pid Ti");
+                    putDoubleString(R.string.prefs_pid_cntrlr_center, pid.getCenter(),
+                            "Pid Center");
+                    putDoubleString(R.string.prefs_pid_ac_cntrlr_pb, pidAc.getPb(),
+                            "PidAc PB");
+                    putDoubleString(R.string.prefs_pid_ac_cntrlr_td, pidAc.getTd(),
+                            "PidAc Td");
+                    putDoubleString(R.string.prefs_pid_ac_cntrlr_ti, pidAc.getTi(),
+                            "PidAc Ti");
+                    putDoubleString(R.string.prefs_pid_ac_cntrlr_center, pidAc.getCenterFactor(),
+                            "PidAc Center Factor");
+                    putIntString(R.string.prefs_pid_ac_cntrlr_sp, pidAc.getStableWindow(),
+                            "PidAc Stable Window");
+                    putDoubleString(R.string.prefs_pid_sp_cntrlr_pb, pidSp.getPb(),
+                            "PidSp PB");
+                    putDoubleString(R.string.prefs_pid_sp_cntrlr_td, pidSp.getTd(),
+                            "PidSp Td");
+                    putDoubleString(R.string.prefs_pid_sp_cntrlr_ti, pidSp.getTi(),
+                            "PidSp Ti");
+                    putDoubleString(R.string.prefs_pid_sp_cntrlr_center, pidSp.getCenterFactor(),
+                            "PidSp Center Factor");
+                    putIntString(R.string.prefs_pid_sp_cntrlr_sp, pidSp.getStableWindow(),
+                            "PidSp Stable Window");
+                    putIntString(R.string.prefs_pid_sp_cntrlr_tau, pidSp.getTau(),
+                            "PidSp Tau");
+                    putIntString(R.string.prefs_pid_sp_cntrlr_theta, pidSp.getTheta(),
+                            "PidSp Theta");
+                } else {
+                    errors.add("Controller");
+                }
+            }
+
             CycleData cycleData = settingsResponse.getCycleData();
             if (cycleData != null) {
-                putIntString(R.string.prefs_work_controller_cycle, cycleData.getHoldCycleTime(),
+                putIntString(R.string.prefs_cycle_cntrlr_cycle, cycleData.getHoldCycleTime(),
                         "CycleData HoldCycleTime");
+                putFloatString(R.string.prefs_cycle_cntrlr_u_max, cycleData.getuMax(),
+                        "CycleData uMax");
+                putFloatString(R.string.prefs_cycle_cntrlr_u_min, cycleData.getuMin(),
+                        "CycleData uMin");
                 putIntString(R.string.prefs_work_auger_on, cycleData.getSmokeOnCycleTime(),
                         "CycleData SmokeOnCycleTime");
                 putIntString(R.string.prefs_work_auger_off, cycleData.getSmokeOffCycleTime(),
                         "CycleData SmokeOffCycleTime");
                 putIntString(R.string.prefs_work_pmode_mode, cycleData.getPMode(),
                         "CycleData PMode");
-                putFloatString(R.string.prefs_work_controller_u_max, cycleData.getuMax(),
-                        "CycleData uMax");
-                putFloatString(R.string.prefs_work_controller_u_min, cycleData.getuMin(),
-                        "CycleData uMin");
                 putBoolean(R.string.prefs_work_lid_open_detect, cycleData.getLidOpenDetectEnabled(),
                         "CycleData LidDetection");
                 putIntString(R.string.prefs_work_lid_open_thresh, cycleData.getLidOpenThreshold(),
@@ -468,6 +502,18 @@ public class SettingsUtils {
     }
 
     private void putIntString(int key, Integer value, String item) {
+        if (value != null) {
+            if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
+                Prefs.putString(context.getString(key), String.valueOf(value));
+            }
+        } else {
+            if (!errors.contains(item)) {
+                errors.add(item);
+            }
+        }
+    }
+
+    private void putDoubleString(int key, Double value, String item) {
         if (value != null) {
             if (!Prefs.getString(context.getString(key)).equals(String.valueOf(value))) {
                 Prefs.putString(context.getString(key), String.valueOf(value));

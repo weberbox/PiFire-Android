@@ -52,19 +52,18 @@ public class PWMSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        EditTextPreference tempFanUpdateTime = findPreference(getString(R.string.prefs_pwm_fan_update_time));
-        EditTextPreference pwmFrequency = findPreference(getString(R.string.prefs_pwm_frequency));
-        EditTextPreference pwmMinDutyCycle = findPreference(getString(R.string.prefs_pwm_min_duty_cycle));
-        EditTextPreference pwmMaxDutyCycle = findPreference(getString(R.string.prefs_pwm_max_duty_cycle));
-
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
 
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
+        EditTextPreference tempFanUpdateTime = findPreference(getString(R.string.prefs_pwm_fan_update_time));
+        EditTextPreference pwmFrequency = findPreference(getString(R.string.prefs_pwm_frequency));
+        EditTextPreference pwmMinDutyCycle = findPreference(getString(R.string.prefs_pwm_min_duty_cycle));
+        EditTextPreference pwmMaxDutyCycle = findPreference(getString(R.string.prefs_pwm_max_duty_cycle));
 
         if (tempFanUpdateTime != null) {
             tempFanUpdateTime.setOnBindEditTextListener(editText -> {

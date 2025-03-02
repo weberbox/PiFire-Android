@@ -98,7 +98,7 @@ public class PModeTableDialog {
         String augerOn = Prefs.getString(context.getString(R.string.prefs_work_auger_on),
                 context.getString(R.string.def_pmode_auger_on));
 
-        String[] pmodes = context.getResources().getStringArray(R.array.pmode_setting);
+        String[] pmodes = context.getResources().getStringArray(R.array.pmode_values);
         String[] pmode_times = context.getResources().getStringArray(R.array.pmode_times);
 
         for (int i = 0; i < pmodes.length; i++) {

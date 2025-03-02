@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.MenuProvider;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
@@ -28,9 +29,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentRecipeListBinding;
-import com.weberbox.pifire.interfaces.RecipesCallback;
-import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
-import com.weberbox.pifire.model.remote.RecipesModel;
 import com.weberbox.pifire.model.remote.RecipesModel.RecipeDetails;
 import com.weberbox.pifire.model.view.RecipesViewModel;
 import com.weberbox.pifire.recycler.adapter.RecipeListAdapter;
@@ -42,14 +40,12 @@ import java.util.List;
 import java.util.Map;
 
 import dev.chrisbanes.insetter.Insetter;
-import timber.log.Timber;
 
 public class RecipeListFragment extends Fragment implements OnRecipeItemCallback,
         SearchView.OnQueryTextListener, ActionMode.Callback {
 
     private FragmentRecipeListBinding binding;
-    private RecipesCallback recipesCallback;
-    private ToolbarTitleCallback toolbarTitleCallback;
+    private RecipesViewModel recipesViewModel;
     private ExtendedFloatingActionButton fabDeleteRecipes;
     private CircularProgressIndicator progressIndicator;
     private RecipeListAdapter recipeListAdapter;
@@ -69,6 +65,7 @@ public class RecipeListFragment extends Fragment implements OnRecipeItemCallback
         super.onViewCreated(view, savedInstanceState);
 
         RecyclerView recipesRecycler = binding.recipesRecycler;
+        ConstraintLayout errorContainer = binding.recipeListErrorContainer;
         fabDeleteRecipes = binding.fabDeleteRecipes;
         swipeRefresh = binding.recipesPullRefresh;
         progressIndicator = binding.recipeListLoading;
@@ -115,36 +112,30 @@ public class RecipeListFragment extends Fragment implements OnRecipeItemCallback
         recipesRecycler.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recipesRecycler.setAdapter(recipeListAdapter);
 
-        if (recipesCallback != null) {
-            swipeRefresh.setOnRefreshListener(() -> recipesCallback.onRetrieveRecipes());
-            swipeRefresh.setEnabled(false);
-        }
+        swipeRefresh.setEnabled(false);
 
-        if (toolbarTitleCallback != null) {
-            toolbarTitleCallback.onTitleChange(getString(R.string.menu_recipes));
-        }
-
-        RecipesViewModel recipesViewModel = new ViewModelProvider(
-                requireActivity()).get(RecipesViewModel.class);
+        recipesViewModel = new ViewModelProvider(requireActivity()).get(RecipesViewModel.class);
         recipesViewModel.getRecipesData().observe(getViewLifecycleOwner(), recipesData -> {
             swipeRefresh.setEnabled(true);
             hideSwipeRefresh();
-            if (recipesData != null) {
-                updateUIWithData(recipesData);
+            if (recipesData != null && recipesData.getRecipeDetails() != null) {
+                recipeListAdapter.setRecipes(recipesData.getRecipeDetails());
+                progressIndicator.setVisibility(View.GONE);
             }
         });
 
-    }
+        recipesViewModel.getOnError().observe(getViewLifecycleOwner(), onError -> {
+            progressIndicator.setVisibility(View.GONE);
+            AnimUtils.fadeAnimation(errorContainer, 500, onError ?
+                    Constants.FADE_IN : Constants.FADE_OUT);
+            swipeRefresh.setEnabled(onError);
+            hideSwipeRefresh();
+        });
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            recipesCallback = (RecipesCallback) context;
-            toolbarTitleCallback = (ToolbarTitleCallback) context;
-        } catch (ClassCastException e) {
-            Timber.e(e, "Activity does not implement callback");
-        }
+        swipeRefresh.setOnRefreshListener(() -> recipesViewModel.retrieveRecipes());
+
+        recipesViewModel.setToolbarTitle(getString(R.string.menu_recipes));
+
     }
 
     @Override
@@ -268,18 +259,7 @@ public class RecipeListFragment extends Fragment implements OnRecipeItemCallback
         recipeListAdapter.setIsInChoiceMode(false);
 
         for (RecipeDetails recipe : delRecipe.values()) {
-            if (recipesCallback != null) {
-                recipesCallback.onRecipeDelete(recipe.getFilename());
-            }
-        }
-    }
-
-    private void updateUIWithData(RecipesModel recipesModel) {
-        if (recipesModel.getRecipeDetails() != null) {
-            requireActivity().runOnUiThread(() -> {
-                recipeListAdapter.setRecipes(recipesModel.getRecipeDetails());
-                progressIndicator.setVisibility(View.GONE);
-            });
+            recipesViewModel.setOnRecipeDelete(recipe.getFilename());
         }
     }
 

@@ -55,6 +55,7 @@ public class AnimUtils {
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation arg0) {
+                    if (view.getVisibility() == View.GONE) view.setVisibility(View.INVISIBLE);
                 }
 
                 @Override

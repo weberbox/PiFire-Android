@@ -58,6 +58,14 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .applyToView(getListView());
+
         SwitchPreferenceCompatSocket startupExitTempEnabled = findPreference(getString(R.string.prefs_startup_exit_temp_enabled));
         SwitchPreferenceCompatSocket startupPrimeEnabled = findPreference(getString(R.string.prefs_prime_on_startup_enabled));
         EditTextPreference shutdownDuration = findPreference(getString(R.string.prefs_shutdown_duration));
@@ -67,15 +75,6 @@ public class TimersSettingsFragment extends PreferenceFragmentCompat implements
         startToModeTemp = findPreference(getString(R.string.prefs_startup_goto_temp));
         primeOnStartup = findPreference(getString(R.string.prefs_prime_on_startup));
         startupExitTemp = findPreference(getString(R.string.prefs_startup_exit_temp));
-
-        getListView().setClipToPadding(false);
-
-        Insetter.builder()
-                .padding(WindowInsetsCompat.Type.navigationBars())
-                .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
 
         if (shutdownDuration != null) {
             shutdownDuration.setOnBindEditTextListener(editText -> {

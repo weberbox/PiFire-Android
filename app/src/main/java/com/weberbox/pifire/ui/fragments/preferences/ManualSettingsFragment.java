@@ -58,21 +58,20 @@ public class ManualSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .applyToView(getListView());
+
         manualMode = findPreference(getString(R.string.prefs_manual_mode));
         fanEnable = findPreference(getString(R.string.prefs_manual_mode_fan));
         augerEnable = findPreference(getString(R.string.prefs_manual_mode_auger));
         igniterEnable = findPreference(getString(R.string.prefs_manual_mode_igniter));
         powerEnable = findPreference(getString(R.string.prefs_manual_mode_power));
         pwmOutput = findPreference(getString(R.string.prefs_manual_mode_pwm));
-
-        getListView().setClipToPadding(false);
-
-        Insetter.builder()
-                .padding(WindowInsetsCompat.Type.navigationBars())
-                .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
 
         if (manualMode != null && fanEnable != null && augerEnable != null &&
                 igniterEnable != null && powerEnable != null) {

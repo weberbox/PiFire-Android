@@ -137,8 +137,6 @@ public class PelletsFragment extends Fragment implements DialogPelletsProfileCal
 
         pelletLogAdapter = new PelletLogAdapter(this::onPelletLogDeleted, true);
 
-        binding.pelletsLayout.pelletsLogs.setViewAll(true);
-
         logsRecycler = logsCardView.getRecycler();
         logsRecycler.setAdapter(pelletLogAdapter);
 

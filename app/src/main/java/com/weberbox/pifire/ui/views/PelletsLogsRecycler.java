@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,8 +22,6 @@ public class PelletsLogsRecycler extends CardView {
     private VeilRecyclerFrameView recyclerView;
     private TextView headerTitle;
     private ImageView headerIcon;
-    private View gradient;
-    private TextView viewAllButton;
 
     public PelletsLogsRecycler(@NonNull Context context) {
         super(context);
@@ -36,7 +33,8 @@ public class PelletsLogsRecycler extends CardView {
         init(context, attrs);
     }
 
-    public PelletsLogsRecycler(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PelletsLogsRecycler(@NonNull Context context, @Nullable AttributeSet attrs,
+                               int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -46,10 +44,13 @@ public class PelletsLogsRecycler extends CardView {
                 LayoutInflater.from(context), this, true);
 
         if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PelletsLogsRecycler);
+            TypedArray typedArray = context.obtainStyledAttributes(attrs,
+                    R.styleable.PelletsLogsRecycler);
 
-            String headerText = typedArray.getString(R.styleable.PelletsLogsRecycler_logs_header_title);
-            int headerIconArray = typedArray.getResourceId(R.styleable.PelletsLogsRecycler_logs_header_icon,
+            String headerText = typedArray.getString(
+                    R.styleable.PelletsLogsRecycler_logs_header_title);
+            int headerIconArray = typedArray.getResourceId(
+                    R.styleable.PelletsLogsRecycler_logs_header_icon,
                     R.drawable.ic_menu_history);
 
             headerText = headerText == null ? "" : headerText;
@@ -57,8 +58,6 @@ public class PelletsLogsRecycler extends CardView {
             headerTitle = binding.logsHeaderText;
             headerIcon = binding.logsHeaderIcon;
             recyclerView = binding.logsRecycler;
-            gradient = binding.logsViewAllShadow;
-            viewAllButton = binding.logsViewAll;
 
             recyclerView.setLayoutManager(new ScrollDisableLayoutManager(context));
             recyclerView.setNestedScrollingEnabled(false);
@@ -85,15 +84,6 @@ public class PelletsLogsRecycler extends CardView {
 
     public VeilRecyclerFrameView getRecycler() {
         return recyclerView;
-    }
-
-    public void setViewAll(boolean shown) {
-        gradient.setVisibility(shown ? VISIBLE : GONE);
-        viewAllButton.setVisibility(shown ? VISIBLE : GONE);
-    }
-
-    public TextView getViewAllButton() {
-        return viewAllButton;
     }
 
 }

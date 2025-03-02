@@ -50,6 +50,14 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .applyToView(getListView());
+
         PreferenceCategory manualCat = findPreference(getString(R.string.prefs_manual_mode_cat));
         Preference manualMode = findPreference(getString(R.string.prefs_manual_mode_frag));
         Preference historyDelete = findPreference(getString(R.string.prefs_admin_delete_history));
@@ -60,15 +68,6 @@ public class AdminSettingsFragment extends PreferenceFragmentCompat implements
         Preference rebootSystem = findPreference(getString(R.string.prefs_admin_reboot));
         Preference shutdownSystem = findPreference(getString(R.string.prefs_admin_shutdown));
         Preference restartSystem = findPreference(getString(R.string.prefs_admin_restart));
-
-        getListView().setClipToPadding(false);
-
-        Insetter.builder()
-                .padding(WindowInsetsCompat.Type.navigationBars())
-                .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
 
         if (manualCat != null && manualMode != null) {
             manualMode.setOnPreferenceClickListener(preference -> {

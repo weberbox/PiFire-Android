@@ -1,4 +1,21 @@
 <resources>
+
+    <string-array name="controller_config_entries">
+        <item>PID Standard</item>
+        <item>PID Auto Center</item>
+        <item>PID Smith Predictor</item>
+        <item>Fuzzy Logic Controller</item>
+        <item>Machine Learning Controller</item>
+    </string-array>
+
+    <string-array name="controller_config_values">
+        <item>pid</item>
+        <item>pid_ac</item>
+        <item>pid_sp</item>
+        <item>fuzzy</item>
+        <item>ml</item>
+    </string-array>
+
     <string-array name="grill_temp_unit_entries">
         <item>Fahrenheit</item>
         <item>Celsius</item>
@@ -9,16 +26,7 @@
         <item>C</item>
     </string-array>
 
-    <string-array name="event_amounts">
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-        <item>40</item>
-        <item>50</item>
-        <item>60</item>
-    </string-array>
-
-    <string-array name="event_amounts_names">
+    <string-array name="event_amounts_entries">
         <item>10 Items</item>
         <item>20 items</item>
         <item>30 Items</item>
@@ -27,7 +35,29 @@
         <item>60 Items</item>
     </string-array>
 
-    <string-array name="pmode_setting">
+    <string-array name="event_amounts_values">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+    </string-array>
+
+    <string-array name="pmode_entries">
+        <item>Mode 0</item>
+        <item>Mode 1</item>
+        <item>Mode 2 (Factory Default)</item>
+        <item>Mode 3</item>
+        <item>Mode 4</item>
+        <item>Mode 5</item>
+        <item>Mode 6</item>
+        <item>Mode 7</item>
+        <item>Mode 8</item>
+        <item>Mode 9</item>
+    </string-array>
+
+    <string-array name="pmode_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -53,20 +83,7 @@
         <item>135 Seconds</item>
     </string-array>
 
-    <string-array name="pmode_setting_names">
-        <item>Mode 0</item>
-        <item>Mode 1</item>
-        <item>Mode 2 (Factory Default)</item>
-        <item>Mode 3</item>
-        <item>Mode 4</item>
-        <item>Mode 5</item>
-        <item>Mode 6</item>
-        <item>Mode 7</item>
-        <item>Mode 8</item>
-        <item>Mode 9</item>
-    </string-array>
-
-    <string-array name="reignite_retries">
+    <string-array name="reignite_retries_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>

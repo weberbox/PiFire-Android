@@ -35,13 +35,11 @@ import com.skydoves.androidveil.VeilLayout;
 import com.skydoves.androidveil.VeilRecyclerFrameView;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.R;
-import com.weberbox.pifire.config.AppConfig;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.databinding.FragmentRecipeViewBinding;
-import com.weberbox.pifire.interfaces.RecipesCallback;
-import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.remote.RecipesModel;
 import com.weberbox.pifire.model.remote.RecipesModel.Asset;
+import com.weberbox.pifire.model.remote.RecipesModel.Details;
 import com.weberbox.pifire.model.remote.RecipesModel.MetaData;
 import com.weberbox.pifire.model.remote.RecipesModel.Recipe;
 import com.weberbox.pifire.model.remote.RecipesModel.RecipeDetails;
@@ -63,18 +61,16 @@ import java.util.ArrayList;
 
 import dev.chrisbanes.insetter.Insetter;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
-import timber.log.Timber;
 
 @SuppressWarnings("unused")
 public class RecipeViewFragment extends Fragment {
 
     private FragmentRecipeViewBinding binding;
+    private RecipesViewModel recipesViewModel;
     private RecipeImageAdapter imagesAdapter;
     private RecipeIngredientsAdapter ingredientsAdapter;
     private RecipeInstructionsAdapter instructionsAdapter;
     private RecipeStepsAdapter recipeStepsAdapter;
-    private RecipesCallback recipesCallback;
-    private ToolbarTitleCallback toolbarTitleCallback;
     private ExtendedFloatingActionButton fabActions;
     private FloatingActionButton fabRunRecipe, fabPrintRecipe, fabShareRecipe, fabDeleteRecipe;
     private LinearLayout ingredientsContainer, instructionsContainer, notesContainer;
@@ -90,10 +86,8 @@ public class RecipeViewFragment extends Fragment {
     private NestedScrollView scrollView;
     private WebView webViewReference;
     private View fabClickCatcher;
-    private View instructionsGradient;
-    private TextView instructionsViewAll;
     private String recipeFilename;
-    private RecipesModel.Details recipeDetails;
+    private Details recipeDetails;
     private int currentStep;
 
     private boolean fabClicked = false;
@@ -121,6 +115,8 @@ public class RecipeViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recipesViewModel = new ViewModelProvider(requireActivity()).get(RecipesViewModel.class);
+
         scrollView = binding.recipesScrollView;
         recipeAuthor = binding.recipesAboutCv.recipesAuthor;
         recipeRating = binding.recipesAboutCv.recipesRating;
@@ -146,8 +142,6 @@ public class RecipeViewFragment extends Fragment {
         recipeIngredientsVeil = binding.recipesIngredientsCv.recipesIngredientsRv;
         recipeInstructionsVeil = binding.recipesInstructionsCv.recipesInstructionsRv;
         recipeStepsVeil = binding.recipesStepsCv.recipesStepsRecycler;
-        instructionsGradient = binding.recipesInstructionsCv.instructionsViewAllShadow;
-        instructionsViewAll = binding.recipesInstructionsCv.instructionsViewAll;
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
@@ -168,7 +162,7 @@ public class RecipeViewFragment extends Fragment {
         imagesAdapter = new RecipeImageAdapter(this, onItemClickListener);
         imagesRecycler.setAdapter(imagesAdapter);
 
-        ingredientsAdapter = new RecipeIngredientsAdapter();
+        ingredientsAdapter = new RecipeIngredientsAdapter(true);
         ingredientsRv.setAdapter(ingredientsAdapter);
         ingredientsRv.setLayoutManager(new ScrollDisableLayoutManager(requireActivity()));
 
@@ -182,19 +176,12 @@ public class RecipeViewFragment extends Fragment {
 
         recipeRating.setIsIndicator(true);
 
-        instructionsViewAll.setOnClickListener(v -> {
-            instructionsAdapter.setLimitEnabled(false);
-            instructionsAdapter.notifyItemRangeChanged(AppConfig.RECYCLER_LIMIT,
-                    instructionsAdapter.getItemCount());
-            setInstructionsViewLimited(false);
-        });
-
         fabActions.setOnClickListener(v -> fabActionsClicked());
 
         fabRunRecipe.setOnClickListener(v -> {
             fabActionsClicked();
-            if (recipeFilename != null && recipesCallback != null) {
-                recipesCallback.onRunRecipe(recipeFilename);
+            if (recipeFilename != null) {
+                recipesViewModel.setOnRunRecipe(recipeFilename);
             }
         });
 
@@ -209,9 +196,9 @@ public class RecipeViewFragment extends Fragment {
                     .setPositiveButtonWithColor(getString(R.string.delete),
                             R.color.dialog_positive_button_color_red, (dialogInterface, which) -> {
                                 requireActivity().getOnBackPressedDispatcher().onBackPressed();
-                                if (recipeFilename != null && recipesCallback != null) {
-                                    recipesCallback.onRecipeDelete(recipeFilename);
-                                    recipesCallback.onRetrieveRecipes();
+                                if (recipeFilename != null) {
+                                    recipesViewModel.setOnRecipeDelete(recipeFilename);
+                                    recipesViewModel.retrieveRecipes();
                                 }
                             })
                     .build();
@@ -263,17 +250,6 @@ public class RecipeViewFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            recipesCallback = (RecipesCallback) context;
-            toolbarTitleCallback = (ToolbarTitleCallback) context;
-        } catch (ClassCastException e) {
-            Timber.e(e, "Activity does not implement callback");
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         forceScreenOn();
@@ -295,9 +271,7 @@ public class RecipeViewFragment extends Fragment {
                 String description = metaData.getDescription();
                 int time = metaData.getCookTime();
 
-                if (toolbarTitleCallback != null) {
-                    toolbarTitleCallback.onTitleChange(metaData.getTitle());
-                }
+                recipesViewModel.setToolbarTitle(metaData.getTitle());
 
                 ArrayList<RecipeImageRecord> imagesList = orderImageRecords(details, metaData);
 
@@ -317,8 +291,6 @@ public class RecipeViewFragment extends Fragment {
                 if (recipe.getInstructions().isEmpty()) {
                     recipeInstructionsHolder.setVisibility(View.GONE);
                 } else {
-                    setInstructionsViewLimited(recipe.getInstructions().size() >
-                            AppConfig.RECYCLER_LIMIT);
                     instructionsAdapter.setRecipeInstructions(recipe.getInstructions());
                 }
 
@@ -468,11 +440,6 @@ public class RecipeViewFragment extends Fragment {
             fabActions.shrink();
         }
         fabClicked = !fabClicked;
-    }
-
-    private void setInstructionsViewLimited(boolean limited) {
-        instructionsGradient.setVisibility(limited ? View.VISIBLE : View.GONE);
-        instructionsViewAll.setVisibility(limited ? View.VISIBLE : View.GONE);
     }
 
     private final OnItemClickListener onItemClickListener = (imageView, filename, recipeImage) -> {

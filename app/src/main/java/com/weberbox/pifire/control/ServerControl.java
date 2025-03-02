@@ -38,6 +38,11 @@ import com.weberbox.pifire.model.remote.SettingsDataModel.Startup;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.SmartStart.SSProfile;
 import com.weberbox.pifire.model.remote.SettingsDataModel.Startup.StartToMode;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.Pid;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.PidAc;
+import com.weberbox.pifire.model.remote.SettingsDataModel.Controller.Config.PidSp;
 import com.weberbox.pifire.utils.AckTimeOut;
 import com.weberbox.pifire.utils.SettingsUtils;
 
@@ -581,22 +586,157 @@ public class ServerControl {
         controlSettingsUpdateEmit(socket, callback);
     }
 
+    // Set Controller Type
+    public static void setCntrlrSelected(Socket socket, String selected, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new SettingsDataModel.Controller().withSelected(selected)));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller Pid Pb
+    public static void setCntrlrPidPb(Socket socket, String pb, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPid(new Pid().withPb(Double.valueOf(pb))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller Pid Td
+    public static void setCntrlrPidTd(Socket socket, String td, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPid(new Pid().withTd(Double.valueOf(td))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller Pid Ti
+    public static void setCntrlrPidTi(Socket socket, String ti, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPid(new Pid().withTi(Double.valueOf(ti))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller Pid Center
+    public static void setCntrlrPidCenter(Socket socket, String center, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPid(new Pid().withCenter(Double.valueOf(center))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidAc Pb
+    public static void setCntrlrPidAcPb(Socket socket, String pb, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidAc(new PidAc().withPb(Double.valueOf(pb))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidAc Td
+    public static void setCntrlrPidAcTd(Socket socket, String td, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidAc(new PidAc().withTd(Double.valueOf(td))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidAc Ti
+    public static void setCntrlrPidAcTi(Socket socket, String ti, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidAc(new PidAc().withTi(Double.valueOf(ti))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidAc Center
+    public static void setCntrlrPidAcCenter(Socket socket, String center, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidAc(new PidAc().withCenterFactor(Double.valueOf(center))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidAc Stable Window
+    public static void setCntrlrPidAcSp(Socket socket, String sp, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidAc(new PidAc().withStableWindow(Integer.valueOf(sp))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Pb
+    public static void setCntrlrPidSpPb(Socket socket, String pb, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withPb(Double.valueOf(pb))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Td
+    public static void setCntrlrPidSpTd(Socket socket, String td, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withTd(Double.valueOf(td))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Ti
+    public static void setCntrlrPidSpTi(Socket socket, String ti, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withTi(Double.valueOf(ti))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Center
+    public static void setCntrlrPidSpCenter(Socket socket, String center, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withCenterFactor(Double.valueOf(center))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Stable Window
+    public static void setCntrlrPidSpSp(Socket socket, String sp, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withStableWindow(Integer.valueOf(sp))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Tau
+    public static void setCntrlrPidSpTau(Socket socket, String tau, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withTau(Integer.valueOf(tau))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
+    // Set Controller PidSp Thea
+    public static void setCntrlrPidSpTheta(Socket socket, String theta, SocketCallback callback) {
+        String json = new Gson().toJson(new SettingsDataModel()
+                .withController(new Controller().withConfig(new Config()
+                        .withPidSp(new PidSp().withTheta(Integer.valueOf(theta))))));
+        settingsPostEmit(socket, json, callback);
+    }
+
     // Set Controller Cycle Time
-    public static void setControllerTime(Socket socket, String time, SocketCallback callback) {
+    public static void setCntrlrTime(Socket socket, String time, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withCycleData(new CycleData().withHoldCycleTime(Integer.parseInt(time))));
         settingsPostEmit(socket, json, callback);
     }
 
     // Set Controller U Min
-    public static void setControlleruMin(Socket socket, String uMin, SocketCallback callback) {
+    public static void setCntrlruMin(Socket socket, String uMin, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withCycleData(new CycleData().withuMin(Float.parseFloat(uMin))));
         settingsPostEmit(socket, json, callback);
     }
 
     // Set Controller U Max
-    public static void setControlleruMax(Socket socket, String uMax, SocketCallback callback) {
+    public static void setCntrlruMax(Socket socket, String uMax, SocketCallback callback) {
         String json = new Gson().toJson(new SettingsDataModel()
                 .withCycleData(new CycleData().withuMax(Float.parseFloat(uMax))));
         settingsPostEmit(socket, json, callback);

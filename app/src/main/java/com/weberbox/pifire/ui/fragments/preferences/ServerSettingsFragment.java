@@ -60,17 +60,16 @@ public class ServerSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
-        Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
-        Preference credentials = findPreference(getString(R.string.prefs_server_credentials));
-
         getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
 
         Insetter.builder()
                 .padding(WindowInsetsCompat.Type.navigationBars())
                 .applyToView(getListView());
 
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
+        Preference serverAddress = findPreference(getString(R.string.prefs_server_address));
+        Preference credentials = findPreference(getString(R.string.prefs_server_credentials));
 
         if (serverAddress != null) {
             serverAddress.setOnPreferenceClickListener(preference -> {

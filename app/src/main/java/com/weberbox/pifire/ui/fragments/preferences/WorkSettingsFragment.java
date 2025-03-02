@@ -56,14 +56,20 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = getPreferenceScreen().getSharedPreferences();
 
+        getListView().setClipToPadding(false);
+        setDivider(new ColorDrawable(Color.TRANSPARENT));
+        setDividerHeight(0);
+
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.navigationBars())
+                .applyToView(getListView());
+
         Preference pModeTable = findPreference(getString(R.string.prefs_work_pmode_table));
+        Preference pidSettings = findPreference(getString(R.string.prefs_work_pid));
         EditTextPreference augerOnTime = findPreference(getString(R.string.prefs_work_auger_on));
         EditTextPreference augerOffTime = findPreference(getString(R.string.prefs_work_auger_off));
         EditTextPreference minSmokeTemp = findPreference(getString(R.string.prefs_work_splus_min));
         EditTextPreference maxSmokeTemp = findPreference(getString(R.string.prefs_work_splus_max));
-        EditTextPreference pidCycle = findPreference(getString(R.string.prefs_work_controller_cycle));
-        EditTextPreference pidUMin = findPreference(getString(R.string.prefs_work_controller_u_min));
-        EditTextPreference pidUMax = findPreference(getString(R.string.prefs_work_controller_u_max));
         EditTextPreference lidOpenThresh = findPreference(getString(R.string.prefs_work_lid_open_thresh));
         EditTextPreference lidOpenPause = findPreference(getString(R.string.prefs_work_lid_open_pause));
         EditTextPreference keepWarmTemp = findPreference(getString(R.string.prefs_work_keep_warm_temp));
@@ -71,15 +77,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
         EditTextPreference fanOnTime = findPreference(getString(R.string.prefs_work_splus_on_time));
         EditTextPreference fanOffTime = findPreference(getString(R.string.prefs_work_splus_off_time));
         EditTextPreference fanDutyCycle = findPreference(getString(R.string.prefs_work_splus_ramp_dc));
-
-        getListView().setClipToPadding(false);
-
-        Insetter.builder()
-                .padding(WindowInsetsCompat.Type.navigationBars())
-                .applyToView(getListView());
-
-        setDivider(new ColorDrawable(Color.TRANSPARENT));
-        setDividerHeight(0);
 
         if (pModeTable != null) {
             pModeTable.setOnPreferenceClickListener(preference -> {
@@ -160,31 +157,18 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
             });
         }
 
-        if (pidCycle != null) {
-            pidCycle.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 1.0, null, editText));
-            });
-        }
-
-        if (pidUMin != null) {
-            pidUMin.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 0.05, 0.99,
-                                editText));
-            });
-        }
-
-        if (pidUMax != null) {
-            pidUMax.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER |
-                        InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                editText.addTextChangedListener(
-                        new EmptyTextListener(requireActivity(), 0.1, 1.0,
-                                editText));
+        if (pidSettings != null) {
+            pidSettings.setOnPreferenceClickListener(preference -> {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_right,
+                                R.anim.slide_in_left,
+                                R.anim.slide_out_left)
+                        .replace(R.id.fragment_container, new PidSettingsFragment())
+                        .addToBackStack(PidSettingsFragment.class.getName())
+                        .commit();
+                return true;
             });
         }
 
@@ -292,21 +276,6 @@ public class WorkSettingsFragment extends PreferenceFragmentCompat implements
                 if (preference.getContext().getString(R.string.prefs_work_splus_max)
                         .equals(preference.getKey())) {
                     ServerControl.setSmokeMaxTemp(socket,
-                            ((EditTextPreference) preference).getText(), this::processPostResponse);
-                }
-                if (preference.getContext().getString(R.string.prefs_work_controller_cycle)
-                        .equals(preference.getKey())) {
-                    ServerControl.setControllerTime(socket,
-                            ((EditTextPreference) preference).getText(), this::processPostResponse);
-                }
-                if (preference.getContext().getString(R.string.prefs_work_controller_u_max)
-                        .equals(preference.getKey())) {
-                    ServerControl.setControlleruMax(socket,
-                            ((EditTextPreference) preference).getText(), this::processPostResponse);
-                }
-                if (preference.getContext().getString(R.string.prefs_work_controller_u_min)
-                        .equals(preference.getKey())) {
-                    ServerControl.setControlleruMin(socket,
                             ((EditTextPreference) preference).getText(), this::processPostResponse);
                 }
                 if (preference.getContext().getString(R.string.prefs_work_keep_warm_temp)

@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.pixplicity.easyprefs.library.Prefs;
 import com.tapadoo.alerter.Alerter;
 import com.weberbox.pifire.MainActivity;
@@ -28,11 +27,8 @@ import com.weberbox.pifire.R;
 import com.weberbox.pifire.constants.Constants;
 import com.weberbox.pifire.constants.ServerConstants;
 import com.weberbox.pifire.databinding.ActivityRecipesBinding;
-import com.weberbox.pifire.interfaces.RecipesCallback;
-import com.weberbox.pifire.interfaces.ToolbarTitleCallback;
 import com.weberbox.pifire.model.local.RecipeActionsModel;
 import com.weberbox.pifire.model.remote.ControlDataModel;
-import com.weberbox.pifire.model.remote.RecipesModel;
 import com.weberbox.pifire.model.remote.ServerResponseModel;
 import com.weberbox.pifire.model.view.RecipesViewModel;
 import com.weberbox.pifire.ui.dialogs.MaterialDialogText;
@@ -41,8 +37,6 @@ import com.weberbox.pifire.ui.fragments.recipes.RecipeViewFragment;
 import com.weberbox.pifire.utils.AlertUtils;
 import com.weberbox.pifire.utils.HTTPUtils;
 import com.weberbox.pifire.utils.NetworkUtils;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -53,7 +47,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 import timber.log.Timber;
 
-public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback, RecipesCallback {
+public class RecipeActivity extends BaseActivity {
 
     private ActivityRecipesBinding binding;
     private RecipesViewModel recipesViewModel;
@@ -85,12 +79,20 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
 
         recipesViewModel = new ViewModelProvider(this).get(RecipesViewModel.class);
 
+        recipesViewModel.getOnRecipeDelete().observe(this, this::deleteRecipe);
+        recipesViewModel.getOnRunRecipe().observe(this, this::runRecipe);
+        recipesViewModel.getOnApiCallFailed().observe(this, this::showFailedAlerter);
+        recipesViewModel.getOnNoNetwork().observe(this, unused -> showNoNetworkDialog());
+        recipesViewModel.getToolbarTitle().observe(this, title -> {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setTitle(title);
+            }
+        });
+
         Intent intent = getIntent();
         int fragment = intent.getIntExtra(Constants.INTENT_RECIPE_FRAGMENT, 0);
         String recipeFilename = intent.getStringExtra(Constants.INTENT_RECIPE_FILENAME);
         Integer recipeStep = intent.getIntExtra((Constants.INTENT_RECIPE_STEP), -1);
-
-        retrieveRecipes();
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.customStatusGuard, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
@@ -125,34 +127,12 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
     }
 
     @Override
-    public void onTitleChange(@NotNull String title) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(title);
-        }
-    }
-
-    @Override
-    public void onRecipeDelete(@NonNull String filename) {
-        deleteRecipe(filename);
-    }
-
-    @Override
-    public void onRetrieveRecipes() {
-        retrieveRecipes();
-    }
-
-    @Override
-    public void onRunRecipe(@NotNull String filename) {
-        runRecipe(filename);
-    }
-
-    @Override
     public void onActionModeStarted(ActionMode mode) {
         super.onActionModeStarted(mode);
         // This seems like a hack, not sure how else to fix in yet in API 35+. We setup a custom
         // view above the status bar and set the alpha to 0.0. Then set the height of the view in
         // onCreate to the size of the actual status bar. Then fade the view in and out along with
-        // the Action Bar.
+        // the Action Bar. Otherwise the normal status guard is black and flashes in and out
         binding.customStatusGuard.animate().alpha(1f);
     }
 
@@ -193,43 +173,6 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
                 .commit();
     }
 
-    private void retrieveRecipes() {
-        if (NetworkUtils.isNetworkAvailable(getApplication())) {
-            String url = Prefs.getString(getString(R.string.prefs_server_address)) +
-                    ServerConstants.URL_RECIPE_DETAILS;
-            HTTPUtils.createHttpGet(this, url, new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Timber.e(e, "onFailure");
-                    showFailedAlerter(getString(R.string.recipes_retrieve_error));
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response)
-                        throws IOException {
-                    if (!response.isSuccessful()) {
-                        showFailedAlerter(getString(R.string.recipes_retrieve_error));
-                    } else {
-                        if (response.body() != null) {
-                            try {
-                                RecipesModel recipesModel = RecipesModel.parseJSON(
-                                        response.body().string());
-                                recipesViewModel.setRecipesData(recipesModel);
-                            } catch (JsonSyntaxException e) {
-                                showFailedAlerter(getString(R.string.recipes_retrieve_error));
-                            }
-                        } else {
-                            showFailedAlerter(getString(R.string.recipes_retrieve_error));
-                        }
-                    }
-                    response.close();
-                }
-            });
-        } else {
-            showNoNetworkDialog();
-        }
-    }
-
     private void deleteRecipe(String filename) {
         if (NetworkUtils.isNetworkAvailable(getApplication())) {
             String url = Prefs.getString(getString(R.string.prefs_server_address)) +
@@ -240,28 +183,31 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
             HTTPUtils.createHttpPost(this, url, json, new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Timber.e(e, "onFailure");
-                    showFailedAlerter(getString(R.string.recipes_remove_failed));
+                    Timber.d(e, "onFailure");
+                    showFailedAlerter(getString(R.string.http_on_failure));
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response)
                         throws IOException {
-                    if (!response.isSuccessful()) {
-                        Timber.d("Unexpected response %s", response);
-                        showFailedAlerter(getString(R.string.recipes_remove_failed));
-                    } else {
+                    if (response.isSuccessful()) {
                         if (response.body() != null) {
                             ServerResponseModel responseModel = ServerResponseModel.parseJSON(
                                     response.body().string());
                             if (responseModel.getResult().equalsIgnoreCase("success")) {
                                 showSuccessfulDeleteAlerter();
-                                retrieveRecipes();
+                                recipesViewModel.retrieveRecipes();
                             } else {
                                 Timber.d("Response Error %s", response);
                                 showFailedAlerter(getString(R.string.recipes_remove_failed));
                             }
+                        } else {
+                            showFailedAlerter(getString(R.string.http_response_null));
                         }
+                    } else {
+                        showFailedAlerter(getString(R.string.http_unsuccessful,
+                                String.valueOf(response.code()),
+                                HTTPUtils.getReasonPhrase(response.code())));
                     }
                     response.close();
                 }
@@ -283,17 +229,14 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
             HTTPUtils.createHttpPost(this, url, json, new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    Timber.e(e, "onFailure");
-                    showFailedAlerter(getString(R.string.recipes_run_failed));
+                    Timber.d(e, "onFailure");
+                    showFailedAlerter(getString(R.string.http_on_failure));
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response)
                         throws IOException {
-                    if (!response.isSuccessful()) {
-                        Timber.d("Unexpected response %s", response);
-                        showFailedAlerter(getString(R.string.recipes_run_failed));
-                    } else {
+                    if (response.isSuccessful()) {
                         if (response.body() != null) {
                             ServerResponseModel responseModel = ServerResponseModel.parseJSON(
                                     response.body().string());
@@ -307,7 +250,13 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
                                 Timber.d("Response Error %s", response);
                                 showFailedAlerter(getString(R.string.recipes_run_failed));
                             }
+                        } else {
+                            showFailedAlerter(getString(R.string.http_response_null));
                         }
+                    } else {
+                        showFailedAlerter(getString(R.string.http_unsuccessful,
+                                String.valueOf(response.code()),
+                                HTTPUtils.getReasonPhrase(response.code())));
                     }
                     response.close();
                 }
@@ -331,7 +280,7 @@ public class RecipeActivity extends BaseActivity implements ToolbarTitleCallback
 
     private void showFailedAlerter(String error) {
         this.runOnUiThread(() ->
-                AlertUtils.createErrorAlert(this, error, true));
+                AlertUtils.createErrorAlert(this, error, 5000));
     }
 
     private void showNoNetworkDialog() {

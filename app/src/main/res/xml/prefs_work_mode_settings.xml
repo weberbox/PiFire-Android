@@ -9,8 +9,7 @@
         <Preference
             android:layout="@layout/preference_cat_info"
             app:summary="@string/settings_pmode_info_one"
-            app:title="@string/settings_info">
-        </Preference>
+            app:title="@string/settings_info"/>
 
         <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
             app:defaultValue="@string/def_pmode_auger_on"
@@ -27,8 +26,7 @@
         <Preference
             android:layout="@layout/preference_cat_info"
             app:summary="@string/settings_pmode_info_two"
-            app:title="@string/settings_info">
-        </Preference>
+            app:title="@string/settings_info"/>
 
         <Preference
             android:layout="@layout/preference_cat_note"
@@ -41,8 +39,8 @@
 
         <com.weberbox.pifire.ui.views.preferences.ListPreferenceSocket
             app:defaultValue="@string/def_pmode_mode"
-            app:entries="@array/pmode_setting_names"
-            app:entryValues="@array/pmode_setting"
+            app:entries="@array/pmode_entries"
+            app:entryValues="@array/pmode_values"
             app:key="@string/prefs_work_pmode_mode"
             app:title="@string/settings_pmode_mode"
             app:useSimpleSummaryProvider="true" />
@@ -112,43 +110,12 @@
 
     <PreferenceCategory
         android:layout="@layout/preference_cat"
-        app:title="@string/settings_cat_controller">
+        app:title="@string/settings_cat_cntrlr_pid">
 
         <Preference
-            android:layout="@layout/preference_cat_info"
-            app:summary="@string/settings_controller_cycle_note"
-            app:title="@string/settings_info">
-        </Preference>
-
-        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:defaultValue="@string/def_pid_cycle"
-            app:key="@string/prefs_work_controller_cycle"
-            app:title="@string/settings_controller_cycle"
-            app:useSimpleSummaryProvider="true" />
-
-        <Preference
-            android:layout="@layout/preference_cat_info"
-            app:summary="@string/settings_controller_u_min_note"
-            app:title="@string/settings_info">
-        </Preference>
-
-        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:defaultValue="@string/def_pid_u_min"
-            app:key="@string/prefs_work_controller_u_min"
-            app:title="@string/settings_controller_u_min"
-            app:useSimpleSummaryProvider="true" />
-
-        <Preference
-            android:layout="@layout/preference_cat_info"
-            app:summary="@string/settings_controller_u_max_note"
-            app:title="@string/settings_info">
-        </Preference>
-
-        <com.weberbox.pifire.ui.views.preferences.EditTextPreferenceSocket
-            app:defaultValue="@string/def_pid_u_max"
-            app:key="@string/prefs_work_controller_u_max"
-            app:title="@string/settings_controller_u_max"
-            app:useSimpleSummaryProvider="true" />
+            app:key="@string/prefs_work_pid"
+            app:summary="@string/settings_pid_cntrlr_summary"
+            app:title="@string/settings_pid_cntrlr_title" />
 
     </PreferenceCategory>
 
