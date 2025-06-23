@@ -1,0 +1,38 @@
+[
+  {
+    "appVersionCode": 3000000,
+    "isMandatory": true,
+    "minServerInfo": {
+      "version": "1.10.0",
+      "build": "25"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
+    "appVersionCode": 2040000,
+    "isMandatory": true,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "1.9.0",
+      "build": "8"
+    }
+  },
+  {
+    "appVersionCode": 2030100,
+    "isMandatory": true,
+    "minServerInfo": {
+      "version": "1.8.0",
+      "build": "8"
+    },
+    "maxServerInfo": {
+      "version": "1.9.0",
+      "build": "4"
+    }
+  }
+]

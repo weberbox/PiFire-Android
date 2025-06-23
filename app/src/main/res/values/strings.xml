@@ -1,136 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">PiFire</string>
-    <string name="nav_app_title_one">Pi</string>
-    <string name="nav_app_title_two">Fire\u00A0</string>
-
-    <string name="menu_dashboard">Dashboard</string>
-    <string name="menu_pellet_manager">Pellets</string>
-    <string name="menu_events">Events</string>
-    <string name="menu_setting">Settings</string>
-    <string name="menu_info">Info</string>
-    <string name="menu_recipes">Recipes</string>
 
     <string name="nav_dashboard">Dashboard</string>
-    <string name="nav_pellet_manager">Pellet Manager</string>
-    <string name="nav_events">Event Log</string>
-    <string name="nav_admin">Admin</string>
+    <string name="nav_events">Events</string>
+    <string name="nav_pellets">Pellets</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_info">Info</string>
+    <string name="nav_recipes">Recipes</string>
     <string name="nav_changelog">Changelog</string>
+    <string name="nav_logout">Switch Server</string>
 
-    <string name="placeholder_img">placeholder_img</string>
-    <string name="placeholder_temp">0°</string>
-    <string name="placeholder_percentage">0%</string>
-    <string name="placeholder_time">00:00</string>
-    <string name="placeholder_mode">Off</string>
     <string name="placeholder_none">--</string>
-    <string name="placeholder_number">Number</string>
-    <string name="placeholder_text_view">TextView</string>
-    <string name="placeholder_string">This is a very long text and we need to show 3…(dots)</string>
 
-    <string name="on">On</string>
-    <string name="off">Off</string>
-    <string name="colon">:</string>
+    <string name="my_smokers">My Smokers</string>
+
+    <string name="items">Items</string>
     <string name="confirm">Confirm</string>
+    <string name="continue_">Continue</string>
+    <string name="exit">Exit</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
     <string name="view_all">View All</string>
-    <string name="view_less">View Less</string>
     <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
     <string name="swipe_to_start">Swipe to start</string>
-    <string name="dismiss_button">Dismiss</string>
-    <string name="open_button">Open</string>
-    <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
-    <string name="welcome">Welcome</string>
-    <string name="terms">Terms</string>
+    <string name="load">Load</string>
     <string name="reset">Reset</string>
     <string name="reboot">Reboot</string>
     <string name="restart">Restart</string>
     <string name="shutdown">Shutdown</string>
     <string name="options">Options</string>
+    <string name="online">Online</string>
     <string name="offline">Offline</string>
-    <string name="exit">Exit</string>
+    <string name="connecting">Connecting</string>
     <string name="search">Search</string>
+    <string name="search_ellipsis">Search…</string>
     <string name="print">Print</string>
     <string name="share">Share</string>
     <string name="run">Run</string>
+    <string name="error">Error</string>
+    <string name="unknown">Unknown</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="celsius">Celsius</string>
+    <string name="clear">Clear</string>
     <string name="clear_all">Clear All</string>
+    <string name="unset">Not Set</string>
+    <string name="try_again">Try again</string>
+    <string name="go_back">Go Back</string>
+    <string name="back">Back</string>
+    <string name="fan">Fan</string>
+    <string name="auger">Auger</string>
+    <string name="igniter">Igniter</string>
+    <string name="update">Update</string>
+    <string name="postpone">Postpone</string>
+    <string name="voice_input">Voice Input</string>
+    <string name="next">Next</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="settings">Settings</string>
+    <string name="status">Status:</string>
+    <string name="smoker">Smoker %1$d</string>
+    <string name="install">Install</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 
-    <string name="action_item_selected">%1$s Selected</string>
+    <string name="seconds_format">%1$s seconds</string>
+    <string name="minutes_format">%1$s minutes</string>
+    <string name="grams_format">%1$s grams</string>
+    <string name="percent_format">%1$s %%</string>
+    <string name="temp_format">%1$s %2$s</string>
+    <string name="hz_format">%1$s Hz</string>
+    <string name="cm_format">%1$s cm</string>
+    <string name="gs_format">%1$s g/s</string>
+
+    <string name="basic_auth">Basic Auth</string>
+    <string name="extra_headers">Extra Headers</string>
+    <string name="show_password">Show Password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="invalid_url">Please enter a valid address</string>
+    <string name="admin_action_completed">Action completed successfully</string>
+
+    <string name="nav_drawer_close">Close Nav Drawer</string>
+
+    <string name="app_theme_light">Light Theme</string>
+    <string name="app_theme_dark">Dark Theme</string>
+    <string name="app_theme_system">System Theme</string>
 
     <string name="add_extra_header">Add New Header</string>
     <string name="add_smart_profile">Add Profile</string>
     <string name="add_apprise_location">Add Location</string>
+    <string name="apprise_locations_note">format://user@location/authorization</string>
     <string name="extra_headers_note">Manage custom headers. Each of the headers you add will be added to every API request</string>
-
-    <string name="text_blank_error">Cannot be blank!</string>
+    <string name="extra_headers_not_defined">No headers defined</string>
 
     <string name="probe_type_target">Target Temp Notifications</string>
     <string name="probe_type_high_limit">High Limit Temp Notifications</string>
     <string name="probe_type_low_limit">Low Limit Temp Notifications</string>
 
-    <string name="grill_mode_start">Start</string>
-    <string name="grill_mode_monitor">Monitor</string>
-    <string name="grill_mode_stop">Stop</string>
-    <string name="grill_mode_smoke">Smoke</string>
-    <string name="grill_mode_hold">Hold</string>
-    <string name="grill_mode_shutdown">Shutdown</string>
-    <string name="grill_mode_prime">Prime</string>
-    <string name="grill_mode_next">Next</string>
-    <string name="grill_mode_continue">Continue</string>
-
-    <string name="grill_state_mode">Mode</string>
-    <string name="dash_grill_title">Grill</string>
-    <string name="grill_state_current">Current</string>
-    <string name="grill_state_eta">Eta</string>
-    <string name="grill_state_target">Target</string>
-    <string name="grill_state_set">Set</string>
-
+    <string name="dash_mode_startup">Startup</string>
+    <string name="dash_mode_monitor">Monitor</string>
+    <string name="dash_mode_stop">Stop</string>
+    <string name="dash_mode_smoke">Smoke</string>
+    <string name="dash_mode_hold">Hold</string>
+    <string name="dash_mode_shutdown">Shutdown</string>
+    <string name="dash_mode_prime">Prime</string>
+    <string name="dash_mode_reignite">Reignite</string>
+    <string name="dash_mode_recipe">Recipe</string>
+    <string name="dash_mode_manual">Manual</string>
+    <string name="dash_mode_start">Start</string>
+    <string name="dash_mode_continue">Continue</string>
+    <string name="dash_mode_next">Next</string>
+    <string name="dash_state_current">Current</string>
+    <string name="dash_state_eta">Eta - </string>
+    <string name="dash_state_target">Target</string>
+    <string name="dash_state_set_to">Set to</string>
     <string name="dash_timer_title">Timer</string>
     <string name="dash_pellets_title">Pellets</string>
     <string name="dash_remaining_title">Remaining</string>
-    <string name="grill_smoke_plus">Smoke Plus</string>
-    <string name="grill_smoke_plus_abv">S Plus</string>
-    <string name="dash_pwm_control">PWM</string>
-    <string name="grill_shutdown_temp">Shutdown Grill When Temp Achieved</string>
-    <string name="grill_keep_warm_temp">Keep Warm When Temp Achieved</string>
-    <string name="grill_reignite_temp">Attempt Re-ignite When Temp Achieved</string>
-    <string name="grill_shutdown_timer">Shutdown Grill When Timer Expires</string>
-    <string name="grill_keep_warm_timer">Keep Warm When Timer Expires</string>
-
+    <string name="dash_smoke_plus">Smoke Plus</string>
+    <string name="dash_pwm_control">PWM Control</string>
+    <string name="dash_shutdown_temp">Shutdown Grill When Temp Achieved</string>
+    <string name="dash_keep_warm_temp">Keep Warm When Temp Achieved</string>
+    <string name="dash_reignite_temp">Attempt Re-ignite When Temp Achieved</string>
+    <string name="dash_shutdown_timer">Shutdown Grill When Timer Expires</string>
+    <string name="dash_keep_warm_timer">Keep Warm When Timer Expires</string>
+    <string name="dash_prime_and_startup">Startup grill after priming</string>
     <string name="dash_recipe_info">Recipe Info</string>
     <string name="dash_recipe_mode">Mode:</string>
     <string name="dash_recipe_step">Step:</string>
     <string name="dash_recipe_status">Status:</string>
     <string name="dash_recipe_running">Running</string>
     <string name="dash_recipe_paused">Paused</string>
-    <string name="dash_recipe_number">0</string>
-
+    <string name="dash_remaining_time">%1$s Time Remaining:</string>
+    <string name="dash_lid_open_detected">Lid Open Detected</string>
+    <string name="dash_lid_open_paused">PID Paused for:</string>
+    <string name="dash_critical_error_title">Critical Error Detected!</string>
+    <string name="dash_critical_error_description">A critical error was detected by PiFire. Check your grill and web interface for more info</string>
+    <string name="dash_errors_title">Error Detected!</string>
+    <string name="dash_warnings_title">Warning Detected!</string>
     <string name="dash_elapsed">Elapsed Time</string>
-    <string name="dash_outputs">Outputs</string>
 
-    <string name="timer_start">Start</string>
+    <string name="dash_hold_temp_tip_title">Set Grill Temp</string>
+    <string name="dash_hold_temp_tip_details">To change the Hold temperature long press on the Grill Probe or select Hold mode again</string>
+
+    <string name="timer_resume">Resume</string>
     <string name="timer_pause">Pause</string>
     <string name="timer_stop">Stop</string>
 
-    <string name="control_not_connected">No Connection to PiFire - Currently Offline</string>
-    <string name="control_smoke_plus_disabled">Only available in Hold and Smoke modes</string>
-    <string name="control_pwm_control_disabled">Only available in Hold mode</string>
-    <string name="control_manual_mode">Manual mode must be controlled from Admin Settings</string>
+    <string name="not_connected_cached_results">Connection to PiFire Failed - Showing cached results. Refresh to try again</string>
+    <string name="control_smoke_plus_disabled">Feature is only available in Hold and Smoke modes</string>
+    <string name="control_pwm_control_disabled">Feature is only available in Hold mode</string>
 
     <string name="changelog_title">What\'s New</string>
+    <string name="changelog_error">No changelog items found!</string>
+    <string name="trigger_lid_open">Manually Trigger Lid Open</string>
+    <string name="add_server_button">Add Smoker</string>
 
     <!-- Recipes -->
-    <string name="recipes_load_error">There was an error loading the requested recipe!</string>
-    <string name="recipes_actions">Actions</string>
-    <string name="recipes_removed">Recipe successfully removed</string>
-    <string name="recipes_remove_failed">Server responded with an error, the recipe was not deleted. Please try again</string>
-    <string name="recipes_run_failed">Server responded with an error, could not start recipe. Please try again</string>
-    <string name="recipes_dif_easy">Easy</string>
-    <string name="recipes_dif_intermediate">Intermediate</string>
-    <string name="recipes_dif_hard">Hard</string>
-    <string name="recipes_dif_advanced">Advanced</string>
     <string name="recipes_cook_time">Cook Time:</string>
     <string name="recipes_prep_time">Prep Time:</string>
     <string name="recipes_difficulty">Difficulty:</string>
@@ -146,7 +175,6 @@
     <string name="recipes_item_qty">Quantity</string>
     <string name="recipes_item_ingredient">Ingredient</string>
     <string name="recipes_item_direction">Direction</string>
-    <string name="recipes_item_ingredients">Ingredients</string>
     <string name="recipes_step_mode">Mode:</string>
     <string name="recipes_step_mode_hold">%1$s @%2$d°%3$s</string>
     <string name="recipes_step_step">Step %1$d</string>
@@ -159,79 +187,78 @@
     <string name="recipes_step_options_user">The user presses continue</string>
     <string name="recipes_step_notif_header">Notifications:</string>
     <string name="recipes_step_notif">\"%1$s\"</string>
-    <string name="recipes_retrieve_error">There was an error retrieving the recipe list. Please try again</string>
-    <string name="recipes_filename_error">There was an error retrieving the recipe file. Please try again</string>
     <string name="recipes_header_about">About This Recipe</string>
-    <string name="recipes_failed_loading">Failed loading recipes</string>
-
+    <string name="recipes_delete_running">Cannot delete recipe that is currently running!</string>
+    <string name="recipes_voice_input_message">Say a keyword or title to start a search</string>
 
     <!-- Setup -->
+    <string name="setup_terms">Terms</string>
+    <string name="setup_auth">Authentication</string>
     <string name="setup_connect">Connect</string>
     <string name="setup_push">Consent</string>
     <string name="setup_finish">Finish</string>
+    <string name="setup_grill_name">Grill Name</string>
     <string name="setup_server_address">Server Address</string>
-    <string name="setup_invalid_url">Please enter a valid address</string>
-    <string name="setup_blank_url">Address cannot blank!</string>
-    <string name="setup_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
     <string name="setup_qr_invalid_url">Scanned QR does not contain a valid URL</string>
-    <string name="setup_uri_exception">There was an error creating the URI for websocket connection please try again</string>
 
     <string name="setup_error_play_services">Google Play Services were not detected on this device, to use the QR Scan function Play Services must be installed</string>
-    <string name="setup_enter_address">Enter PiFire Address</string>
-    <string name="setup_enter_address_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
-    <string name="setup_finish_title">Setup Complete</string>
-    <string name="setup_finish_text">Connection to your PiFire server is now complete. If you need to change the connection settings you can find them in the app settings</string>
+    <string name="setup_auth_title">Server Authentication</string>
+    <string name="setup_auth_text">If your server requires authentication enter it here or continue if not required</string>
+    <string name="setup_connect_title">Enter PiFire Address</string>
+    <string name="setup_connect_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
+    <string name="setup_finish_title">Complete Setup</string>
+    <string name="setup_finish_text">Connection to your PiFire server is now complete. Name your grill below and continue to the dashboard</string>
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_canceled">Scanning Canceled</string>
     <string name="setup_scan_qr_failed">Scanning Failed</string>
+    <string name="setup_server_auth_error_title">Authentication Failure</string>
+    <string name="setup_server_auth_error_message">The server has responded with an authentication error. Verify your credentials are correct and try again</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
-    <string name="setup_server_self_signed">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
+    <string name="setup_server_self_signed_message">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
     <string name="setup_push_consent_title">OneSignal Data Privacy</string>
-    <string name="setup_push_consent_toggle">Allow OneSignal to send push notifications</string>
     <string name="setup_push_dialog_declined_title">Skip Consent</string>
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
-    <string name="setup_versions_error">Failed to retrieve PiFire version info from server. Please check your connection and verify your server version is compatible</string>
-    <string name="setup_versions_null">The PiFire versions fetched from the server had an issue parsing. Please check your PiFire server and verify server version is compatible</string>
-
+    <string name="socket_failed_connection">The connection to PiFire failed. Check your connection and try again</string>
 
     <!-- Settings -->
     <string name="settings_server">Server Settings</string>
-    <string name="settings_app">App Settings</string>
-    <string name="settings_probe">Probe Settings</string>
-    <string name="settings_grill_name">Grill Name</string>
-    <string name="settings_work">Work Mode</string>
-    <string name="settings_pwm">PWM Settings</string>
-    <string name="settings_timers">Startup &amp; Shutdown</string>
-    <string name="settings_safety">Safety Settings</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_admin">Admin Settings</string>
-    <string name="settings_pellets">Pellet Settings</string>
+    <string name="settings_app_title">App Settings</string>
+    <string name="settings_app_summary">Theme, events amount, temps increment</string>
+    <string name="settings_admin_title">Admin Settings</string>
+    <string name="settings_admin_summary">Manual, debug, data management, power</string>
+    <string name="settings_probe_title">Probe Settings</string>
+    <string name="settings_probe_summary">Profiles, probe name, temp units</string>
+    <string name="settings_naming_title">Grill Name</string>
+    <string name="settings_naming_summary">Set a custom grill name</string>
+    <string name="settings_work_title">Work Mode</string>
+    <string name="settings_work_summary">PID, cycle, P-Mode, smoke plus, lid</string>
+    <string name="settings_pwm_title">PWM Settings</string>
+    <string name="settings_pwm_summary">Temp control, profiles, fan settings</string>
+    <string name="settings_pellets_title">Pellet Settings</string>
+    <string name="settings_pellets_summary">Warnings, distance, auger rate, igniter</string>
+    <string name="settings_timers_title">Startup &amp; Shutdown</string>
+    <string name="settings_timers_summary">Duration, temps, priming, smart start, power</string>
+    <string name="settings_safety_title">Safety Settings</string>
+    <string name="settings_safety_summary">Startup check, min-max temps, reignite</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_notifications_summary">Various notification providers</string>
     <string name="settings_manual">Manual Mode</string>
 
     <string name="settings_info">Info:</string>
     <string name="settings_note">Note:</string>
-    <string name="settings_description">Description:</string>
     <string name="settings_warning">Warning:</string>
     <string name="settings_danger">Danger:</string>
     <string name="settings_min_error">Value must be %1$s or greater</string>
     <string name="settings_max_error">Value must be %1$s or less</string>
     <string name="settings_number_error">Value must be a number</string>
 
-    <string name="settings_action_success">Action completed successfully</string>
-    <string name="settings_error_offline">Currently Offline - Settings cannot be changed</string>
-
-    <string name="settings_server_settings_title">Server Settings</string>
-    <string name="settings_server_settings_summary">Setup server address and authentication</string>
-
-    <string name="settings_cat_updates">Update Checking</string>
-    <string name="settings_update_check_now">Check Now</string>
-    <string name="settings_update_check_now_summary">Check for updates now</string>
+    <string name="settings_landing_select_online_title">Auto select server</string>
+    <string name="settings_landing_select_online_summary">Automatically select the first online server when opening app</string>
 
     <string name="settings_cat_crash">Crash Reporting</string>
     <string name="settings_enable_crash">Enable</string>
-    <string name="settings_enable_crash_disabled">Sentry DSN is not set. Option is disabled</string>
     <string name="settings_crash_summary">If the application crashes this will send a report to the developer</string>
     <string name="settings_dev_crash_title">Debug Crash</string>
     <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
@@ -244,29 +271,31 @@
     <string name="settings_cat_basic_auth_title">Basic Authentication</string>
     <string name="settings_basic_auth_summary">Use basic authentication if the server is behind a reverse proxy</string>
     <string name="settings_credentials_title">Credentials</string>
-    <string name="settings_username">Username</string>
-    <string name="settings_password">Password</string>
     <string name="settings_credentials_summary">Basic Auth Credentials</string>
-    <string name="settings_credentials_error">Error encrypting credentials. Please try again</string>
 
     <string name="settings_cat_extra_headers_title">Custom Headers</string>
     <string name="settings_extra_headers_summary">Add custom headers to all HTTP requests</string>
     <string name="settings_headers_key">Header Key</string>
     <string name="settings_headers_value">Header Value</string>
     <string name="settings_extra_headers_editor">Custom Header Editor</string>
-    <string name="settings_extra_headers_error">There was an error saving your custom headers, please try again</string>
+    <string name="settings_extra_headers">Extra Headers</string>
 
     <string name="settings_cat_events_title">Events</string>
     <string name="settings_app_events_amount_title">Event List Amount</string>
-    <string name="settings_app_events_amount_summary">How many items will be shown in the events list \nNote this is only for the app not the server</string>
 
     <string name="settings_cat_app_temps">Temps</string>
     <string name="settings_app_increment_temps">Increment Temps</string>
     <string name="settings_app_increment_temps_summary">Increment Grill and Probe Temps by 5°</string>
 
-    <string name="settings_cat_app_screen">Screen</string>
+    <string name="settings_cat_app_ui">User Interface</string>
+    <string name="settings_app_theme_title">App Theme</string>
+    <string name="settings_app_dynamic_color_title">Dynamic Color</string>
+    <string name="settings_app_dynamic_color_summary">When enabled the app colors are dynamically changed based on the users wallpaper etc</string>
+    <string name="settings_app_dynamic_color_disabled">Dynamic Color feature requires Android 12 or newer (Api 31+)</string>
     <string name="settings_app_screen_on_title">Keep Screen On</string>
     <string name="settings_app_screen_on_summary">Force the screen to remain on while viewing the dashboard.</string>
+    <string name="settings_app_bottom_bar_title">Bottom Navigation Bar</string>
+    <string name="settings_app_bottom_bar_summary">Show or hide the bottom bar on the dashboard</string>
 
     <string name="settings_cat_temp_units">Temp Units</string>
     <string name="settings_grill_temp_units">Displayed Units</string>
@@ -274,6 +303,8 @@
 
     <string name="settings_cat_probe_edit">Probe Name &amp; Type</string>
     <string name="settings_probes_not_found">No Probes Found</string>
+    <string name="settings_probes_no_profile">Probe type does not use profiles</string>
+    <string name="settings_probe_name">Probe Name</string>
 
     <string name="settings_cat_cycle">Startup / Smoke Mode Cycle Settings</string>
     <string name="settings_pmode_info_one">During Startup and Smoke modes, the cycle time (Auger On Time + Auger Off Time) is fixed, and does not change dynamically based on any other inputs. Effectively, this may allow you to adjust the rough smoke temperature depending other external factors like ambient temperature (seasonal), etc.</string>
@@ -281,19 +312,20 @@
     <string name="settings_pmode_note">P-Mode is used for both Startup and Smoke modes, but not Hold mode. For more information about the P-Mode click here</string>
     <string name="settings_pmode_mode">P-Mode</string>
     <string name="settings_pmode_table">P-Mode Table</string>
-    <string name="settings_pmode_summary">Click here a P-Mode chart</string>
-    <string name="settings_pmode_auger_on">Auger ON Time (s)</string>
-    <string name="settings_pmode_auger_off">Auger OFF Time (s)</string>
+    <string name="settings_pmode_summary">Click here for a P-Mode chart</string>
+    <string name="settings_pmode_auger_on">Auger ON Time</string>
+    <string name="settings_pmode_auger_off">Auger OFF Time</string>
+    <string name="settings_pmode">Mode %1$s</string>
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
     <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the fan icon button on the dashboard. The icon will be highlighted blue indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the below min/max temperatures.</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
-    <string name="settings_splus_on_time">Fan On Time (s)</string>
-    <string name="settings_splus_off_time">Fan Off Time (s)</string>
+    <string name="settings_splus_on_time">Fan On Time</string>
+    <string name="settings_splus_off_time">Fan Off Time</string>
     <string name="settings_splus_fan_ramp">Fan Ramping Enabled</string>
-    <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle (%)</string>
+    <string name="settings_splus_ramp_dc">Fan Ramp Duty Cycle</string>
     <string name="settings_splus_fan_ramp_note">Fan Ramping will ramp the fan from off to the desired duty cycle instead of just turning on to full speed during Smoke Plus cycling. You can control the ramp duration by setting the Fan ON Time below. The desired duty cycle can also be set below.</string>
 
     <string name="settings_cat_cntrlr_config">Controller Configuration (HOLD Mode)</string>
@@ -314,43 +346,40 @@
     <string name="settings_pid_cntrlr_center_factor">Center Factor</string>
     <string name="settings_pid_cntrlr_center_note_auto">Center Factor multiplied by Set Point. Higher Center Factors increase system response at high set points. Lower Center Factors increase system stability at low set points but may keep the system from reaching high set points. Controller accounts for F to C conversion. EX: At 240F(115C) center is 240 * 0.0012 = 0.288. [Default=0.0010]</string>
     <string name="settings_pid_cntrlr_tau_note">Time constant for the Smith Predictor. This is the time it takes the system to reach 2/3 of it\'s final value after a Set Point change. Higher Tau decreases system sensitivity to model mismatch. [Default=115]</string>
-    <string name="settings_pid_cntrlr_tau">Tau (s)</string>
+    <string name="settings_pid_cntrlr_tau">Tau</string>
     <string name="settings_pid_cntrlr_theta_note">Time delay in the system. Theta is measured after commanding a Set Point change as the time it takes from the initial command to seeing initial temperature rise. Higher Theta makes the system more sensitive to delays in the system. [Default=65]</string>
-    <string name="settings_pid_cntrlr_theta">Theta (s)</string>
+    <string name="settings_pid_cntrlr_theta">Theta</string>
     <string name="settings_cycle_cntrlr_no_config">No configuration options are exposed for this controller</string>
 
     <string name="settings_cat_cntrlr_cycle">Controller Cycle Settings</string>
-    <string name="settings_cycle_cntrlr_cycle">Cycle Time (s)</string>
+    <string name="settings_cycle_cntrlr_cycle">Cycle Time</string>
     <string name="settings_cycle_cntrlr_cycle_note">Amount of seconds for a complete cycle. At the beginning of each cycle, the controller will check the current temperature and set point to determine the cycle ratio (auger ON time / auger OFF time). [Default=25]</string>
-    <string name="settings_cycle_cntrlr_u_min">Min Cycle Ratio (%)</string>
+    <string name="settings_cycle_cntrlr_u_min">Min Cycle Ratio</string>
     <string name="settings_cycle_cntrlr_u_min_note">Minimum percentage of cycle where the auger is on. This is to prevent flame–out which can happen with a cycle ratio of less than 0.1. (0.0 – 0.99) [Default=0.1]</string>
-    <string name="settings_cycle_cntrlr_u_max">Max Cycle Ratio (%)</string>
+    <string name="settings_cycle_cntrlr_u_max">Max Cycle Ratio</string>
     <string name="settings_cycle_cntrlr_u_max_note">Maximum percentage of cycle where the auger is on. This is to minimize possible overshoots, or overcompensation in temperature. (0.0 – 1.0) [Default=0.9]</string>
-    <string name="settings_cycle_cntrlr_note">For each controller, you can set certain cycle settings, like the cycle time (length of time between controller sampling temperature and adjusting the amount of auger ON time). To use the recommended values for the currently selected controller, click on the button in the recommended column.</string>
 
     <string name="settings_cat_lid_detection">Lid Detection</string>
     <string name="settings_lid_open_enabled">Lid Open Detection</string>
-    <string name="settings_lid_open_thresh">Open Threshold (%)</string>
-    <string name="settings_lid_open_pause">Open Pause Time (s)</string>
+    <string name="settings_lid_open_thresh">Open Threshold</string>
+    <string name="settings_lid_open_pause">Open Pause Time</string>
     <string name="settings_lid_open_note">If enabled, the system will attempt to determine if the lid was opened and temporarily suspend the PID. If the temperature drops below the threshold (percentage of the hold temperature), a lid open event is triggered. Once lid open is detected, it will pause the PID for the specified amount of seconds.</string>
 
     <string name="settings_cat_keep_warm">Keep Warm Settings</string>
-    <string name="settings_keep_warm_s_plus">Smoke Plus Enabled During \'Keep Warm\'</string>
+    <string name="settings_keep_warm_s_plus">Smoke Plus During \'Keep Warm\'</string>
     <string name="settings_keep_warm_temp">Keep Warm Temp</string>
     <string name="settings_keep_warm_note">The Keep Warm mode is a specified Hold temperature, that you can define, that can be activated by a timer or notification targets. When the grill is active, you can click on the timer dialog and check the Keep Warm box. Or you can click on the Notification Targets for any of the probes and select the Keep Warm box. The Keep Warm function will be activated when a probe notify target has been achieved or the timer has expired. The Grill will exit the currently running mode and switch to Hold Mode then attempt to maintain the temperature set above.</string>
 
     <string name="settings_cat_startup">Startup Settings</string>
-    <string name="settings_startup_duration">Startup Timer (s)</string>
+    <string name="settings_startup_duration">Startup Timer</string>
     <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
     <string name="settings_startup_goto_title">Mode After Startup</string>
     <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
-    <string name="settings_startup_smoke_mode">Smoke Mode</string>
-    <string name="settings_startup_hold_mode">Hold Mode</string>
     <string name="settings_startup_hold_temp">Hold Temp</string>
     <string name="settings_startup_exit_temp">Exit Startup @ Temperature</string>
     <string name="settings_startup_exit_temp_value">Temperature</string>
     <string name="settings_startup_prime">Always Prime on Startup</string>
-    <string name="settings_startup_prime_value">Amount (g)</string>
+    <string name="settings_startup_prime_value">Amount</string>
 
     <string name="settings_smart_start">Smart Start</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
@@ -360,13 +389,12 @@
     <string name="settings_smart_start_p_mode">P-Mode</string>
     <string name="settings_smart_start_exit_temp">Exit Startup Temperature</string>
     <string name="settings_smart_start_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
-
-    <string name="settings_smart_start_temp_range_add">Add Smart Start Profile</string>
-    <string name="settings_smart_start_temp_range_edit">Edit Smart Start Profile</string>
-    <string name="settings_smart_start_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
+    <string name="settings_smart_start_profiles_title">Smart Start Profiles</string>
+    <string name="settings_smart_start_profiles_summary">Configure Smart Start profiles</string>
+    <string name="settings_smart_start_editor_title">Smart Start Profile Editor</string>
 
     <string name="settings_cat_shutdown">Shutdown Settings</string>
-    <string name="settings_shutdown_duration">Shutdown Timer (s)</string>
+    <string name="settings_shutdown_duration">Shutdown Timer</string>
     <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
     <string name="settings_auto_power_off">Auto Power Off</string>
     <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
@@ -401,36 +429,39 @@
     <string name="settings_influxdb_org">Org</string>
     <string name="settings_influxdb_bucket">Bucket</string>
 
+    <string name="settings_cat_mqtt">MQTT</string>
+    <string name="settings_mqtt_id">PiFire Unique ID</string>
+    <string name="settings_mqtt_broker">MQTT Broker</string>
+    <string name="settings_mqtt_port">MQTT Port</string>
+    <string name="settings_mqtt_update_sec">Refresh Rate (sec)</string>
+    <string name="settings_mqtt_topic">Home Assistant Discovery Topic</string>
+    <string name="settings_mqtt_id_note"> Enter a unique name for this instance of PiFire. This name is used as the root mqtt topic for this device. Changing it later will result in new mqtt topics being created, and if using Home Assistant will result in new sensors being created.</string>
+    <string name="settings_mqtt_port_note">Enter the IP or host name of your mqtt broker and port. ex:homeassistant.local 1883</string>
+    <string name="settings_mqtt_user_note">Leave the username and password blank if your broker does not require authentication</string>
+    <string name="settings_mqtt_update_sec_note">Specify in seconds, how often you would like to publish PiFire data to the mqtt broker.</string>
+    <string name="settings_mqtt_topic_note">The Home Assistant MQTT integration. can automatically add PiFire and its devices if you specify the discovery topic name here</string>
+
     <string name="settings_cat_apprise">Apprise</string>
-    <string name="settings_apprise_locations">Locations</string>
-    <string name="settings_apprise_add">Add Apprise Location</string>
-    <string name="settings_apprise_edit">Edit Apprise Location</string>
+    <string name="settings_apprise_locations">Apprise Locations</string>
+    <string name="settings_apprise_no_locations">No locations defined</string>
 
     <string name="settings_cat_onesignal">Push Notifications</string>
-    <string name="settings_cat_onesignal_consent">One Signal Consent</string>
     <string name="settings_onesignal_consent_title">OneSignal Consent</string>
-    <string name="settings_onesignal_consent_summary">Review OneSignal privacy policy</string>
     <string name="settings_onesignal_consent_1">OneSignal is used to deliver notifications from PiFire. No Personally Identifiable Information is being collected by OneSignal. Notification data sent through OneSignal\'s API will be deleted after ~30 days.</string>
     <string name="settings_onesignal_consent_2">Once you accept, this device will register with OneSignal. Consent can be revoked to prevent further communication with OneSignal.</string>
     <string name="settings_onesignal_consent_3">OneSignal.com must not be blocked (e.g. in PiHole) for device registration to succeed</string>
-    <string name="settings_onesignal_declined">Status: Not Accepted X</string>
-    <string name="settings_onesignal_accepted">Status: Accepted \u2713</string>
-    <string name="settings_onesignal_alert_consent_title">OneSignal Consent Not Accepted</string>
+    <string name="settings_onesignal_declined">Status: Not Accepted</string>
+    <string name="settings_onesignal_accepted">Status: Accepted</string>
     <string name="settings_onesignal_alert_consent_message">To receive notifications from PiFire consent to the OneSignal data privacy.</string>
-    <string name="settings_onesignal_id_error_title">Not Registered With OneSignal</string>
     <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole) The registration process can take up to 2 minutes.</string>
-    <string name="settings_onesignal_register_title">Not Registered With PiFire</string>
     <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take a couple minutes.</string>
-    <string name="settings_onesignal_error_title">Error With OneSignal</string>
     <string name="settings_onesignal_error_message">There was an unexpected error with OneSignal. Please try again later.</string>
-    <string name="settings_onesignal_token_title">OneSignal Token Error</string>
     <string name="settings_onesignal_token_message">OneSignal cannot obtain a push token from Google. If this device does not have Google Play Services installed push notifications will not be available</string>
-    <string name="settings_onesignal_subscribe_title">OneSignal Not Subscribed</string>
     <string name="settings_onesignal_subscribe_message">This device is not subscribed to OneSignal servers. Verify notifications for this app are not disabled in device settings. If notifications are not disabled the device will now attempt to subscribe</string>
 
     <string name="settings_cat_admin">Admin Options</string>
     <string name="settings_admin_debug">Debug Mode</string>
-    <string name="settings_admin_debug_note">This mode enables server verbose debug logging. May impact performance</string>
+    <string name="settings_admin_debug_summary">This mode enables server verbose debug logging. May impact performance</string>
     <string name="settings_admin_manual_summary">Allows manual control of the Auger, Fan, Igniter and Power outputs</string>
     <string name="settings_admin_manual_note">If enabled this will cancel the current mode</string>
 
@@ -464,24 +495,24 @@
     <string name="settings_admin_boot_to_monitor_summary">Enable boot into monitor mode</string>
 
     <string name="settings_cat_pellet_warning">Pellet Level Warnings</string>
-    <string name="settings_pellet_warning_level">Warning Level (%)</string>
-    <string name="settings_pellet_warning_time">Check Time (m)</string>
+    <string name="settings_pellet_warning">Warnings</string>
+    <string name="settings_pellet_warning_level">Warning Level</string>
+    <string name="settings_pellet_warning_time">Check Time</string>
     <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications during a cook at the specified check time</string>
 
-    <string name="settings_cat_pellets">Pellet Level Sensor</string>
-    <string name="settings_pellet_full">Full Distance (cm)</string>
-    <string name="settings_pellet_empty">Empty Distance (cm)</string>
-    <string name="settings_pellet_note">The distance value for full must be smaller than the value for empty.</string>
+    <string name="settings_cat_pellets_sensor">Pellet Level Sensor</string>
+    <string name="settings_pellet_sensor_full">Full Distance</string>
+    <string name="settings_pellet_sensor_empty">Empty Distance</string>
+    <string name="settings_pellet_sensor_note">The distance value for full must be smaller than the value for empty.</string>
 
-    <string name="settings_cat_pellets_auger">Auger Rate</string>
-    <string name="settings_pellet_auger_rate">Auger Rate (g/s)</string>
+    <string name="settings_cat_pellets_auger">Auger</string>
+    <string name="settings_pellet_auger_rate">Auger Rate</string>
     <string name="settings_pellet_auger_rate_note">This value is used to calculate how long to run the auger when priming, and to calculate estimated pellet usage. This value can be tuned for your auger speed, by going into manual mode and running the auger for 10 seconds, then weighing the pellets that have been dispensed into the firepot. For example, if you run the auger for 10 seconds and 3 grams of pellets are dispensed, then the calculation would be 3g / 10s = 0.3. That means 0.3 grams are dispensed per second of auger on time.</string>
 
     <string name="settings_cat_pellets_prime">Prime Settings</string>
     <string name="settings_pellet_prime_igniter">Start Igniter</string>
     <string name="settings_pellet_prime_igniter_note">Only enable the igniter during Priming, if you are absolutely sure that you need to do this. Enabling the igniter will ignite pellets and start the firepot, even without the fan enabled. This feature will only turn on the igniter if Prime &amp; Startup is selected. Otherwise, priming without startup will not utilize the igniter.</string>
 
-    <string name="settings_cat_manual_mode">Manual Mode</string>
     <string name="settings_cat_manual_functions">Manual Functions</string>
     <string name="settings_manual_fan">Toggle Fan</string>
     <string name="settings_manual_auger">Toggle Auger</string>
@@ -490,20 +521,21 @@
     <string name="settings_manual_pwm">Duty Cycle</string>
 
     <string name="settings_cat_pwm_fan_control">Temp Fan Control</string>
-    <string name="settings_pwm_fan_control_enabled">Temp Control Enabled by Default</string>
+    <string name="settings_pwm_fan_control_enabled">Temp Control by Default</string>
     <string name="settings_pwm_fan_control_note">If enabled Temp Fan Control will override Smoke Plus fan ramping. The fan will adjust with temperature and still cycle on and off but will not ramp up to speed.</string>
     <string name="settings_pwm_fan_table_note">If Current Grill Temp is over Set Temp Fan will be set to Minimum Duty Cycle. If the Grill temp is below the Set Temp the Duty Cycles below will be used. Example: If Current Grill Temp drops below Set Temp by 1–3 ° a 20% PWM will be set. If the Grill Temp drops below the Set Temp by 15° a 75% Duty Cycle will be set.</string>
-    <string name="settings_pwm_fan_update_time">Update Time (s)</string>
+    <string name="settings_pwm_fan_update_time">Update Time</string>
     <string name="settings_cat_fan_settings">General Fan Settings</string>
-    <string name="settings_pwm_frequency">Frequency (Hz)</string>
+    <string name="settings_pwm_frequency">Frequency</string>
     <string name="settings_pwm_min_duty_cycle">Min Duty Cycle</string>
     <string name="settings_pwm_max_duty_cycle">Max Duty Cycle</string>
     <string name="settings_pwm_control_temp">Temp</string>
     <string name="settings_pwm_control_range">Temp Range</string>
     <string name="settings_pwm_control_duty">Duty Cycle</string>
+    <string name="settings_pwm_control_title">PWM Profiles</string>
+    <string name="settings_pwm_control_summary">Configure Control Profiles</string>
 
-    <string name="settings_pwm_temp_range_add">Add PWM Temp Profile</string>
-    <string name="settings_pwm_temp_range_edit">Edit PWM Temp Profile</string>
+    <string name="settings_pwm_editor_title">PWM Profile Editor</string>
     <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
     <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
@@ -546,7 +578,6 @@
     <!-- Pellets -->
     <string name="pellets_hopper_level">Pellet Level</string>
     <string name="pellets_usage">Estimated Usage</string>
-    <string name="pellets_current_load">Current</string>
     <string name="pellets_current_brand">Brand:</string>
     <string name="pellets_current_wood">Wood:</string>
     <string name="pellets_current_rating">Rating:</string>
@@ -558,65 +589,59 @@
     <string name="pellets_rating">Rating</string>
     <string name="pellets_comments">Comments</string>
 
-    <string name="pellets_add">Add New</string>
     <string name="pellets_brands">Brands</string>
     <string name="pellets_woods">Wood Types</string>
     <string name="pellets_editor">Pellet Profiles Editor</string>
     <string name="pellets_log">Pellet Log</string>
-    <string name="pellets_load_new">Load New</string>
-    <string name="pellets_delete_content">Are you sure that you want to permanently delete this item?</string>
-    <string name="pellets_cannot_delete_profile">Error cannot delete current profile</string>
     <string name="pellets_add_brand">Add New Brand</string>
-    <string name="pellets_add_woods">Add New Wood</string>
-    <string name="pellets_dialog_load">Load</string>
-
-    <string name="pellets_brand_holder">Generic</string>
-    <string name="pellets_wood_holder">Alder</string>
-    <string name="pellets_date_holder" tools:ignore="TypographyDashes">2021-09-07 21:39:08</string>
-    <string name="pellets_comments_holder">This is a placeholder profile. Alder is generic and used in almost all pellets, regardless of the wood type indicated on the packaging. It tends to burn consistently and produces a mild smoke.</string>
-
-    <string name="item_rating_error">Unknown</string>
-    <string name="item_rating_5">★ ★ ★ ★ ★</string>
-    <string name="item_rating_4">★ ★ ★ ★</string>
-    <string name="item_rating_3">★ ★ ★</string>
-    <string name="item_rating_2">★ ★</string>
-    <string name="item_rating_1">★</string>
+    <string name="pellets_add_wood">Add New Wood</string>
+    <string name="pellets_add_profile">Add New Profile</string>
 
     <!-- Notifications -->
-    <string name="notification_group_grill">pifire_grill_group</string>
-    <string name="notification_group_grill_name">Grill Alerts</string>
     <string name="notification_channel_base">pifire_base_alerts</string>
     <string name="notification_channel_temp">pifire_temp_alerts</string>
     <string name="notification_channel_timer">pifire_timer_alerts</string>
     <string name="notification_channel_error">pifire_error_alerts</string>
     <string name="notification_channel_pellets">pifire_pellet_alerts</string>
-    <string name="notification_channel_base_name">General Alerts</string>
-    <string name="notification_channel_temp_name">Temp Alerts</string>
-    <string name="notification_channel_timer_name">Timer Alerts</string>
-    <string name="notification_channel_error_name">Error Alerts</string>
-    <string name="notification_channel_pellets_name">Pellet Alerts</string>
-    <string name="notification_desc_base">Shows general grill alerts</string>
-    <string name="notification_desc_temp">Shows grill temp alerts</string>
-    <string name="notification_desc_timer">Shows grill timer alerts</string>
-    <string name="notification_desc_error">Shows grill error alerts</string>
-    <string name="notification_desc_pellets">Shows grill pellet alerts</string>
-
+    <string name="notification_channel_base_name">General Notifications</string>
+    <string name="notification_channel_temp_name">Temp Notifications</string>
+    <string name="notification_channel_timer_name">Timer Notifications</string>
+    <string name="notification_channel_error_name">Error Notifications</string>
+    <string name="notification_channel_pellets_name">Pellet Notifications</string>
+    <string name="notification_desc_base">General Grill Notifications</string>
+    <string name="notification_desc_temp">Notifications For Temperature Targets And Set Points</string>
+    <string name="notification_desc_timer">Notifications For Timer Alarms</string>
+    <string name="notification_desc_error">Notifications For Grill Errors</string>
+    <string name="notification_desc_pellets">Notifications About Pellet Levels Etc</string>
 
     <!-- Google Play App Updater -->
+    <string name="inapp_update_available_title">Update Available</string>
+    <string name="inapp_update_available_message_flexible">A new app version is available, please check the release notes as it may or may not support your current server version</string>
+    <string name="inapp_update_available_message_immediate">A critical update is available and is required for continued use. Please update ASAP</string>
     <string name="inapp_update_checking">Checking for App Updates.</string>
     <string name="inapp_update_downloading">Update is currently downloading.</string>
-    <string name="inapp_update_downloaded">App update has finished downloading. Please restart to install update.</string>
+    <string name="inapp_update_downloaded">App update has finished downloading</string>
     <string name="inapp_update_current">App is currently up to date!</string>
     <string name="inapp_update_check_failed">Checking for Updates Failed. Please try again later.</string>
+    <string name="inapp_update_complete">App update completed</string>
+    <string name="inapp_update_canceled">App update canceled</string>
+    <string name="inapp_update_failed">App update failed!</string>
 
-    <!-- Errors -->
-    <string name="error_settings_errors">There was an error saving the settings from the PiFire Server. Please check if your settings are corrupted or if your server version is incompatible. Errors: %1$s</string>
-    <string name="http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your server is online and try again</string>
-    <string name="http_unsuccessful">The server responded with error code %1$s - %2$s</string>
-    <string name="http_response_null">The server response was null. Please try again</string>
-
-    <!-- JSON -->
-    <string name="json_parsing_error">JSON Parsing Error - %1$s not updated</string>
+    <!-- Data Errors -->
+    <string name="data_error_unknown">An unknown error occurred. Please try again</string>
+    <string name="data_error_json_parsing">JSON Parsing Error - Something went wrong, please try again</string>
+    <string name="data_error_serialization">A serialization error occurred. Please try again</string>
+    <string name="data_error_indexing">An indexing error occurred. Please try again</string>
+    <string name="data_error_no_cached_data">Could not make connection to server and there are no cached results to display. Please try again</string>
+    <string name="data_error_offline">No connection to PiFire your request could not be completed. Please try again</string>
+    <string name="data_error_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
+    <string name="data_error_socket_timeout">Request to PiFire has timed out. Please check your connection</string>
+    <string name="data_error_http_auth_error">The server requires authentications</string>
+    <string name="data_error_http_certificate_error">The server is using an untrusted certificate</string>
+    <string name="data_error_http_response_null">The server response was null. Please try again</string>
+    <string name="data_error_http_unsuccessful">The server responded with error code %1$s - %2$s</string>
+    <string name="data_error_http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your server is online and try again</string>
+    <string name="data_error_uri_error">There was an error creating the URI for websocket connection please try again</string>
 
     <!-- Disabled Features -->
     <string name="disabled_option_settings">Feature disabled. Requires PiFire version %1$s or higher</string>
@@ -624,24 +649,40 @@
     <string name="disabled_option_dialog_message">This feature is disabled and PiFire version %1$s or higher is required. Please upgrade to a newer version to use this function.</string>
 
     <!-- Dialogs -->
-    <string name="dialog_prime_startup">Startup Grill After Priming</string>
-
     <string name="dialog_confirm_action">Confirm Action</string>
+    <string name="dialog_confirm_delete_generic">Are you sure that you want to permanently delete this item?</string>
+    <string name="dialog_confirm_delete_item">Are you sure that you want to permanently delete \n %1$s?</string>
 
-    <string name="dialog_event">Event Info</string>
     <string name="dialog_probe_edit">Probe Edit</string>
-    <string name="dialog_probe_name">Probe Name</string>
-    <string name="dialog_probe_profile">Probe Profile</string>
-    <string name="dialog_max_error">Must be less than %1$s characters</string>
 
     <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
     <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>
     <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. \n\nYour current version is %3$s build %4$s \n\nPlease check for an update to this application</string>
     <string name="dialog_untested_app_version_title">Untested Version</string>
-    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected.</string>
+    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected. Continue at your own risk</string>
 
-    <string name="dialog_no_network_title">Network Disconnected</string>
-    <string name="dialog_dialog_no_network_title_message">A network was not detected, please check your internet connectivity</string>
+    <string name="text_blank_error">Cannot be blank!</string>
+    <string name="email_valid_error">Invalid email!</string>
+
+    <string name="error_no_cached_data_title">No Cached Data</string>
+    <string name="error_no_cached_data_description">The connection to PiFire was unsuccessful and there is no cached data to show. Check your connection or try again</string>
+
+    <string name="error_data_title">Data Error</string>
+    <string name="error_data_description">Unfortunately there was an issue gathering the data needed for this screen. You can go back and try again</string>
+
+    <string name="error_network_title">Network Error</string>
+    <string name="error_network_description">The connection to PiFire was unsuccessful. Check your connection or try again</string>
+
+    <string name="error_no_speech_detected">No speech detected</string>
+    <string name="error_recognition_canceled">Speech recognition canceled</string>
+
+    <string name="error_server_offline">Server is offline, check your connection and verify controller in powered on</string>
+
+    <string name="error_no_results_landing_title">No Smokers Found</string>
+    <string name="error_no_results_landing_summary">Try your search again or add a new smoker below</string>
+
+    <string name="error_no_results_recipes_title">No Recipes Found</string>
+    <string name="error_no_results_recipes_summary">Try your search again or add a new one via PiFire web</string>
 
 
 </resources>

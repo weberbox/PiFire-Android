@@ -22,39 +22,8 @@
     </string-array>
 
     <string-array name="grill_temp_unit_values">
-        <item>F</item>
-        <item>C</item>
-    </string-array>
-
-    <string-array name="event_amounts_entries">
-        <item>10 Items</item>
-        <item>20 items</item>
-        <item>30 Items</item>
-        <item>40 Items</item>
-        <item>50 Items</item>
-        <item>60 Items</item>
-    </string-array>
-
-    <string-array name="event_amounts_values">
-        <item>10</item>
-        <item>20</item>
-        <item>30</item>
-        <item>40</item>
-        <item>50</item>
-        <item>60</item>
-    </string-array>
-
-    <string-array name="pmode_entries">
-        <item>Mode 0</item>
-        <item>Mode 1</item>
-        <item>Mode 2 (Factory Default)</item>
-        <item>Mode 3</item>
-        <item>Mode 4</item>
-        <item>Mode 5</item>
-        <item>Mode 6</item>
-        <item>Mode 7</item>
-        <item>Mode 8</item>
-        <item>Mode 9</item>
+        <item>f_units</item>
+        <item>c_units</item>
     </string-array>
 
     <string-array name="pmode_values">
@@ -81,49 +50,6 @@
         <item>115 Seconds</item>
         <item>125 Seconds</item>
         <item>135 Seconds</item>
-    </string-array>
-
-    <string-array name="reignite_retries_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
-
-    <string-array name="items_rating">
-        <item>@string/item_rating_1</item>
-        <item>@string/item_rating_2</item>
-        <item>@string/item_rating_3</item>
-        <item>@string/item_rating_4</item>
-        <item>@string/item_rating_5</item>
-    </string-array>
-
-    <integer-array name="licenses_color_list">
-        <item>@color/eventsInfo</item>
-        <item>@color/eventsDebug</item>
-        <item>@color/eventsError</item>
-        <item>@color/eventsModeEnded</item>
-        <item>@color/eventsModeStarted</item>
-        <item>@color/eventsScriptEnded</item>
-        <item>@color/eventsScriptStart</item>
-        <item>@color/eventsWarning</item>
-    </integer-array>
-
-    <string-array name="startup_goto_modes_names">
-        <item>@string/settings_startup_smoke_mode</item>
-        <item>@string/settings_startup_hold_mode</item>
-    </string-array>
-
-    <string-array name="startup_goto_modes_values">
-        <item>@string/grill_mode_smoke</item>
-        <item>@string/grill_mode_hold</item>
     </string-array>
 
 </resources>

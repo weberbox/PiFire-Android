@@ -12,14 +12,6 @@
     "license": "https://github.com/socketio/socket.io-client-java/blob/master/LICENSE"
   },
   {
-    "project": "AnimatedBottomBar",
-    "license": "https://github.com/Droppers/AnimatedBottomBar/blob/master/LICENSE"
-  },
-  {
-    "project": "EasyPrefs",
-    "license": "https://github.com/Pixplicity/EasyPrefs/blob/master/license.txt"
-  },
-  {
     "project": "Sentry",
     "license": "https://github.com/getsentry/sentry-java/blob/main/LICENSE"
   },
@@ -28,32 +20,32 @@
     "license": "https://github.com/JakeWharton/timber/blob/trunk/LICENSE.txt"
   },
   {
-    "project": "RecyclerViewFastScroller",
-    "license": "https://github.com/quiph/RecyclerView-FastScroller/blob/master/LICENSE"
-  },
-  {
-    "project": "OverlappingPanels",
-    "license": "https://github.com/discord/OverlappingPanels/blob/master/LICENSE"
-  },
-  {
-    "project": "AndroidVeil",
-    "license": "https://github.com/skydoves/AndroidVeil/blob/master/LICENSE"
-  },
-  {
     "project": "Alerter",
     "license": "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
   },
   {
-    "project": "MaterialRatingBar",
-    "license": "https://github.com/zhanghai/MaterialRatingBar"
+    "project": "ComposePreference",
+    "license": "https://github.com/zhanghai/ComposePreference/blob/master/LICENSE"
+  },
+  {
+    "project": "Compose Unstyled",
+    "license": "https://github.com/composablehorizons/compose-unstyled/blob/main/LICENSE"
+  },
+  {
+    "project": "Haze",
+    "license": "https://github.com/chrisbanes/haze/blob/main/LICENSE"
+  },
+  {
+    "project": "Compose Ratingbar",
+    "license": "https://github.com/a914-gowtham/compose-ratingbar/blob/main/LICENSE"
   },
   {
     "project": "OkHttp",
     "license": "https://github.com/square/okhttp/blob/master/LICENSE.txt"
   },
   {
-    "project": "Android-Stepper",
-    "license": "https://github.com/acefalobi/android-stepper/blob/master/LICENSE"
+    "project": "Retrofit",
+    "license": "https://github.com/square/retrofit/blob/trunk/LICENSE.txt"
   },
   {
     "project": "OneSignal",
@@ -64,39 +56,11 @@
     "license": "https://github.com/airbnb/lottie-android/blob/master/LICENSE"
   },
   {
-    "project": "Changelog Lib",
-    "license": "https://github.com/weberbox/changeloglib/blob/master/LICENSE"
-  },
-  {
-    "project": "Material Dialog",
-    "license": "https://github.com/PatilShreyas/MaterialDialog-Android/blob/master/LICENSE"
-  },
-  {
-    "project": "KeyboardVisibilityEvent",
-    "license": "https://github.com/yshrsmz/KeyboardVisibilityEvent/blob/master/LICENSE"
-  },
-  {
     "project": "MaterialDesign Icons",
     "license": "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
   },
   {
-    "project": "Insetter",
-    "license": "https://github.com/chrisbanes/insetter/blob/main/LICENSE"
-  },
-  {
-    "project": "Dotsindicator",
-    "license": "https://github.com/tommybuonomo/dotsindicator/blob/master/LICENSE"
-  },
-  {
-    "project": "Glide",
-    "license": "https://github.com/bumptech/glide/blob/master/LICENSE"
-  },
-  {
-    "project": "sdp",
-    "license": "https://github.com/intuit/sdp/blob/master/LICENSE"
-  },
-  {
-    "project": "ssp",
-    "license": "https://github.com/intuit/ssp/blob/master/LICENSE"
+    "project": "Coil",
+    "license": "https://github.com/coil-kt/coil/blob/main/LICENSE.txt"
   }
 ]

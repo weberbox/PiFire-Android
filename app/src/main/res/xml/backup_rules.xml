@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <exclude
-        domain="sharedpref"
-        path="com.weberbox.pifire_encrypted_prefs.xml" />
+        domain="file"
+        path="datastore/headers_data" />
     <exclude
         domain="sharedpref"
         path="com.google.android.gms.appid.xml" />

@@ -1,55 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+    <color name="background">#FF12131B</color>
 
-    <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimary">#FF262626</color>
-    <color name="colorPrimaryAlpha">#ED262626</color>
-    <color name="colorPrimaryNav">#292929</color>
-    <color name="colorPrimaryLight">#2E2E2E</color>
-    <color name="colorPrimaryLighter">#424242</color>
     <color name="colorPrimaryDark">#FF1D1D1D</color>
-    <color name="colorBottomDialog">#212121</color>
-    <color name="colorAccent">#1942DA</color>
-    <color name="colorAccentDisabled">#811942DA</color>
-    <color name="colorAccentRed">#DC0000</color>
-    <color name="colorLighterGrey">#454545</color>
-    <color name="colorTransBlack">#77000000</color>
-    <color name="colorLightGrey">#FF333333</color>
-    <color name="colorLightGreyDisabled">#FF292929</color>
-    <color name="colorGreyHint">#C8C7C7</color>
-    <color name="colorGreyAlpha">#DF333333</color>
-    <color name="colorInfo">#3498DB</color>
-    <color name="colorNote">#DDC701</color>
-    <color name="colorWarning">#BA0101</color>
-    <color name="colorRedButton">#FFA50202</color>
-    <color name="colorRedButtonDisabled">#82B62B2B</color>
-    <color name="colorNavSelector">#40164DD9</color>
-    <color name="colorNavSelected">#811942DA</color>
-    <color name="colorTimerProgress">#FF414243</color>
-    <color name="colorProbeProgress">#40164DD9</color>
-    <color name="colorPlaceholder">#666666</color>
-    <color name="colorNavBarAlpha">#44000000</color>
 
-    <color name="eventsScriptStart">#8024D1A6</color>
-    <color name="eventsScriptEnded">#ED5A49</color>
-    <color name="eventsModeStarted">#800093F8</color>
-    <color name="eventsModeEnded">#80FAB247</color>
-    <color name="eventsError">#80F6260D</color>
-    <color name="eventsWarning">#80FF4731</color>
-    <color name="eventsDebug">#80004CFA</color>
-    <color name="eventsInfo">#666666</color>
-
-    <color name="colorPelletDanger">#C8B10000</color>
-    <color name="colorPelletDangerBG">#70B62929</color>
-
-    <color name="chglib_version_text_color" tools:override="true">@color/colorPrimaryLighter</color>
-
-    <color name="material_dialog_negative_text_color">#A1A1A1</color>
-    <color name="material_dialog_background">@color/colorBottomDialog</color>
-    <color name="material_dialog_title_text_color">@android:color/primary_text_dark</color>
-    <color name="material_dialog_message_text_color">@android:color/secondary_text_dark</color>
-
-    <color name="abc_decor_view_status_guard" tools:override="true">@android:color/transparent</color>
-    <color name="abc_decor_view_status_guard_light" tools:override="true">@android:color/transparent</color>
 </resources>

@@ -1,0 +1,632 @@
+{
+  "changelog": [
+    {
+      "version": "3.0.0",
+      "date": "",
+      "current": true,
+      "logs": [
+        {
+          "type": "note",
+          "text": "The entire app has been rewritten in Kotlin and Compose. Due to the major changes I expect there to be bugs after the transition to the newer codebase. Please be patient with the issues and or bugs"
+        },
+        {
+          "type": "new",
+          "text": "Added support for PiFire v1.10.0 Build 25+"
+        },
+        {
+          "type": "new",
+          "text": "Added support for multiple smokers or instances of PiFire"
+        },
+        {
+          "type": "new",
+          "text": "Added high and low probe notifications"
+        },
+        {
+          "type": "new",
+          "text": "Now supports Light and Dark Themes as well as Dynamic Color for Android 12+"
+        },
+        {
+          "type": "new",
+          "text": "Now supports Landscape and Portrait layouts on most all screens, the app is still mostly designed around phone sized portrait screens but I wanted to make it a bit more tablet friendly"
+        },
+        {
+          "type": "new",
+          "text": "Added ability to show or hide Bottom Bar on home screen"
+        },
+        {
+          "type": "new",
+          "text": "Added elapsed time counter"
+        },
+        {
+          "type": "new",
+          "text": "Added support for Lid Open detection and option to manually trigger lid open"
+        },
+        {
+          "type": "new",
+          "text": "Added startup and shutdown counter/banner"
+        },
+        {
+          "type": "new",
+          "text": "Added banners for PiFire errors and Warnings"
+        },
+        {
+          "type": "new",
+          "text": "Added outputs status and manual outputs control"
+        },
+        {
+          "type": "new",
+          "text": "Added probe ETAs"
+        },
+        {
+          "type": "new",
+          "text": "Added support for wireless probes, with connection and battery status"
+        },
+        {
+          "type": "new",
+          "text": "Added Controller Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added recipes support. You can now view, start, share, print and control running recipes with possible editing support later down the road"
+        },
+        {
+          "type": "new",
+          "text": "Added App Update checking for Play and Github versions"
+        },
+        {
+          "type": "imp",
+          "text": "Improved socket connections and connected/disconnected messages"
+        },
+        {
+          "type": "imp",
+          "text": "Improved longer list views to support expanding or opening a new page"
+        },
+        {
+          "type": "imp",
+          "text": "Check for network connection before making API Calls and present clearer errors"
+        },
+        {
+          "type": "imp",
+          "text": "Update setup to check server version via api before attempting to fetch full settings via socket. This will make the errors clearer if the server version is not supported by the app."
+        },
+        {
+          "type": "imp",
+          "text": "Redesigned app to support edge to edge on Android 15+"
+        },
+        {
+          "type": "imp",
+          "text": "Update all dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.3.0",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added support for custom headers in http requests, can be used for services like Cloudflare Access etc."
+        },
+        {
+          "type": "fix",
+          "text": "Visual fixes for Android 15 Api 35"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.2.1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Fix for unsupported dialogs showing incorrect information"
+        }
+      ]
+    },
+    {
+      "version": "2.2.0",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added support for PiFire v1.8.0+"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.1.3",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.1.2",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Update Startup & Shutdown due to PiFire backend Changes"
+        },
+        {
+          "type": "new",
+          "text": "Added Prime on Startup Setting"
+        },
+        {
+          "type": "new",
+          "text": "Added Startup Check Setting & combined app setting with PiFire server setting. Startup Check now applies to both the app and PiFire WebUI"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.1.1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "BugFix for ProbeMap Settings"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "2.1.0",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Overhaul for PiFire 1.7.0 Build 7+ Server Versions"
+        },
+        {
+          "type": "new",
+          "text": "Adaptable dashboard. Now supports multiple probes"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellet Check Time Setting"
+        },
+        {
+          "type": "new",
+          "text": "Added Prime Start Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added Boot to Monitor Admin Setting"
+        },
+        {
+          "type": "new",
+          "text": "Added PiFire Server Build Info"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        },
+        {
+          "type": "note",
+          "text": "Recipes was removed to avoid confusion now that PiFire supports custom recipe modes"
+        }
+      ]
+    },
+    {
+      "version": "1.5.6",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Probe Naming"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "1.5.5",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Lid Open Detection Settings"
+        }
+      ]
+    },
+    {
+      "version": "1.5.4",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Prime and Prime & Start Modes"
+        },
+        {
+          "type": "new",
+          "text": "Added Option to Increment Temps by 5°"
+        },
+        {
+          "type": "new",
+          "text": "Added Option to Edit Smart Start Config"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellets Estimated Usage"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellets Auger Rate to Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added Goto Mode After Startup to Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added Apprise Notification Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added PWM Fan Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added PWM Fan Ramping & Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added PWM Temp Control"
+        },
+        {
+          "type": "new",
+          "text": "Added PWM Duty Cycle to Manual Mode"
+        },
+        {
+          "type": "new",
+          "text": "Added ADC Probe Assignment Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellet Notification Check Time Setting"
+        },
+        {
+          "type": "new",
+          "text": "Added Device GPIO Pin Info to Info Page"
+        },
+        {
+          "type": "imp",
+          "text": "Dashboard Backend Layout Overhaul. Should Improve Performance and Scale to Different Device Screens Better"
+        },
+        {
+          "type": "imp",
+          "text": "Backend updates for Google Play Version"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        },
+        {
+          "type": "fix",
+          "text": "Fix zip deflating vulnerability"
+        },
+        {
+          "type": "fix",
+          "text": "Various typo/bug fixes"
+        }
+      ]
+    },
+    {
+      "version": "1.4.3",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added remote branch check on updater page"
+        },
+        {
+          "type": "fix",
+          "text": "Update Grill Notify Implementation for Server Versions 1.3.4+"
+        }
+      ]
+    },
+    {
+      "version": "1.4.2",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Fixed issue where starting a timer was crashing application"
+        }
+      ]
+    },
+    {
+      "version": "1.4.1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added a recipes section with print and share functions"
+        },
+        {
+          "type": "new",
+          "text": "Added a Viewpager to dash screens so you can now scroll left and right on the main pages"
+        },
+        {
+          "type": "new",
+          "text": "Added Overlapping Panels Navigation with left and right panels. You can open them by scrolling or using the toolbar icons"
+        },
+        {
+          "type": "new",
+          "text": "Added Keep Warm option toggle and settings. Requires PiFire v1.2.7 or later"
+        },
+        {
+          "type": "new",
+          "text": "Added Grill Startup Time Setting. Requires PiFire v1.2.7 or later"
+        },
+        {
+          "type": "new",
+          "text": "Added Grill Smart Start Setting. Requires PiFire v1.3.1 or later"
+        },
+        {
+          "type": "new",
+          "text": "Added PiFire modules information to info page"
+        },
+        {
+          "type": "new",
+          "text": "Added Auto Power Off function to settings. Requires PiFire v1.2.9 or later"
+        },
+        {
+          "type": "new",
+          "text": "Added Feedback function"
+        },
+        {
+          "type": "new",
+          "text": "Added Pinch/Tap Zoom to Recipe Image View"
+        },
+        {
+          "type": "imp",
+          "text": "Moved to OneSignal Push Notifications. Requires PiFire Server v1.2.7 or later"
+        },
+        {
+          "type": "imp",
+          "text": "Replaced most Snackbars with Alerter's for better visibility"
+        },
+        {
+          "type": "imp",
+          "text": "Various UI improvements including expandable views in Pellets and Info pages"
+        },
+        {
+          "type": "imp",
+          "text": "Backend WebSocket overhaul to improve functions and receive responses from PiFire. Backward compatibility is present for PiFire versions below 1.2.7"
+        },
+        {
+          "type": "note",
+          "text": "Firebase Notifications were removed to support OneSignal. If you have a PiFire server version below 1.2.7 push notifications will no longer function unless the server is updated to 1.2.7 or later"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed issue where reinstalling would break basic auth username and password decryption. If the app is uninstalled username and password will not be backed up and will need to be entered again after installation"
+        }
+      ]
+    },
+    {
+      "version": "1.3.2",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Celsius Support. Setting can be found in probe settings section or can be changed in PiFire"
+        },
+        {
+          "type": "new",
+          "text": "Added PID Center Ratio to Work Settings"
+        },
+        {
+          "type": "new",
+          "text": "Added Server Backup and Restore to Admin section"
+        },
+        {
+          "type": "imp",
+          "text": "Moved Crash Reporting to Sentry"
+        },
+        {
+          "type": "fix",
+          "text": "Misc Fixes"
+        },
+        {
+          "type": "note",
+          "text": "Some functions require PiFire v1.2.2 or later"
+        }
+      ]
+    },
+    {
+      "version": "1.3.1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Manual Controls to Admin section"
+        },
+        {
+          "type": "imp",
+          "text": "Added a Fast Scroll Option to Temp Selectors. This should help in scrolling to desired temp faster"
+        },
+        {
+          "type": "imp",
+          "text": "Added More Temp Selections to Temp Selections"
+        },
+        {
+          "type": "imp",
+          "text": "Updated self signed certificate implementation. This will allow self signed certificates that are imported to the Android certificate store"
+        },
+        {
+          "type": "fix",
+          "text": "Misc Fixes"
+        }
+      ]
+    },
+    {
+      "version": "1.3.0",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Temp Shutdown to Temp Selectors along with a visual flag to indicate it is active"
+        },
+        {
+          "type": "new",
+          "text": "Added Time Shutdown to Time Selector along with a visual flag to indicate it is active"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellet Level Check function. Just press the pellet level box on the dashboard or the refresh button on the pellets page"
+        },
+        {
+          "type": "new",
+          "text": "Added option to delete individual pellet logs. Just long press and a dialog will show"
+        },
+        {
+          "type": "new",
+          "text": "Added low pellet warning notifications. With this you can receive notifications if pellet levels go below a set threshold during a cook"
+        },
+        {
+          "type": "new",
+          "text": "Added a Keep Screen on function. This will force the screen to remain on when viewing the dashboard. This was it will not timeout and turn off. Be careful as this can drain battery"
+        },
+        {
+          "type": "imp",
+          "text": "Begin adding landscape tablet layout for dashboard, pellet manager, history and info"
+        },
+        {
+          "type": "imp",
+          "text": "Update Timer Operation to be more reliable and run locally. This allows a minute/seconds countdown without the server needing to send updates continuously"
+        },
+        {
+          "type": "imp",
+          "text": "Lowered the minimum api to 24. This should help support some older tablets"
+        },
+        {
+          "type": "fix",
+          "text": "Updated Firebase notifications"
+        },
+        {
+          "type": "fix",
+          "text": "Misc other bugfixes"
+        }
+      ]
+    },
+    {
+      "version": "1.2.0-rc1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "note",
+          "text": "Release Candidate"
+        },
+        {
+          "type": "new",
+          "text": "Added Temp Shutdown to Temp Selectors along with a visual flag to indicate it is active"
+        },
+        {
+          "type": "new",
+          "text": "Added Time Shutdown to Time Selector along with a visual flag to indicate it is active"
+        },
+        {
+          "type": "new",
+          "text": "Added Pellet Level Check function. Just press the pellet level box on the dashboard or the refresh button on the pellets page"
+        },
+        {
+          "type": "new",
+          "text": "Added option to delete individual pellet logs. Just long press and a dialog will show"
+        },
+        {
+          "type": "new",
+          "text": "Added low pellet warning notifications. With this you can receive notifications if pellet levels go below a set threshold during a cook"
+        },
+        {
+          "type": "new",
+          "text": "Added a Keep Screen on function. This will force the screen to remain on when viewing the dashboard. This was it will not timeout and turn off. Be careful as this can drain battery"
+        },
+        {
+          "type": "imp",
+          "text": "Begin adding landscape tablet layout for dashboard, pellet manager, history and info"
+        },
+        {
+          "type": "imp",
+          "text": "Update Timer Operation to be more reliable and run locally. This allows a minute/seconds countdown without the server needing to send updates continuously"
+        },
+        {
+          "type": "imp",
+          "text": "Lowered the minimum api to 24. This should help support some older tablets"
+        },
+        {
+          "type": "fix",
+          "text": "Misc other bugfixes"
+        }
+      ]
+    },
+    {
+      "version": "1.1.0-rc2",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Fixed loading bar views"
+        },
+        {
+          "type": "new",
+          "text": "Added option to view settings offline"
+        },
+        {
+          "type": "imp",
+          "text": "Updated the app updater functions"
+        }
+      ]
+    },
+    {
+      "version": "1.1.0-rc1",
+      "date": "",
+      "current": false,
+      "logs": [
+        {
+          "type": "note",
+          "text": "First Release Candidate"
+        }
+      ]
+    }
+  ]
+}

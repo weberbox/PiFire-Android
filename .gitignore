@@ -6,6 +6,7 @@
 .gradle
 /local.properties
 .idea/
+.idea
 /.idea/
 /.idea/caches
 /.idea/libraries
@@ -36,4 +37,3 @@ local.properties
 .idea/modules.xml
 .idea/misc.xml
 *.jks
-repo
