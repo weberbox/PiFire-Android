@@ -22,6 +22,9 @@
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
     <string name="view_all">View All</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
@@ -433,7 +436,7 @@
     <string name="settings_mqtt_id">PiFire Unique ID</string>
     <string name="settings_mqtt_broker">MQTT Broker</string>
     <string name="settings_mqtt_port">MQTT Port</string>
-    <string name="settings_mqtt_update_sec">Refresh Rate (sec)</string>
+    <string name="settings_mqtt_update_sec">Refresh Rate</string>
     <string name="settings_mqtt_topic">Home Assistant Discovery Topic</string>
     <string name="settings_mqtt_id_note"> Enter a unique name for this instance of PiFire. This name is used as the root mqtt topic for this device. Changing it later will result in new mqtt topics being created, and if using Home Assistant will result in new sensors being created.</string>
     <string name="settings_mqtt_port_note">Enter the IP or host name of your mqtt broker and port. ex:homeassistant.local 1883</string>
@@ -482,13 +485,19 @@
     <string name="settings_admin_factory_reset_note">Remove all user settings and restore to default</string>
     <string name="settings_admin_factory_reset_text">Are you sure that you want to reset to factory defaults? This operation cannot be undone.</string>
 
+    <string name="settings_cat_scripts">Scripts Management</string>
+    <string name="settings_admin_restart_control">Restart Control</string>
+    <string name="settings_admin_restart_control_text">Are you sure that you want to restart the control script</string>
+    <string name="settings_admin_restart_webapp">Restart WebApp</string>
+    <string name="settings_admin_restart_webapp_text">Are you sure that you want to restart the webapp script</string>
+    <string name="settings_admin_restart_supervisor">Restart Supervisor</string>
+    <string name="settings_admin_restart_supervisor_text">Are you sure that you want to restart supervisor</string>
+
     <string name="settings_cat_power">System Power</string>
     <string name="settings_admin_reboot">Reboot System</string>
     <string name="settings_admin_reboot_text">Are you sure that you want to reboot the system</string>
     <string name="settings_admin_shutdown">Shutdown System</string>
     <string name="settings_admin_shutdown_text">Are you sure that you want to shutdown the system</string>
-    <string name="settings_admin_restart">Restart System</string>
-    <string name="settings_admin_restart_text">Are you sure that you want to restart the system</string>
 
     <string name="settings_cat_boot">Boot Configuration</string>
     <string name="settings_admin_boot_to_monitor">Boot to Monitor</string>
@@ -557,10 +566,13 @@
     <string name="info_uptime">Server Uptime</string>
     <string name="info_modules_head">Module</string>
     <string name="info_modules_config">Configured</string>
-    <string name="info_modules">Modules</string>
+    <string name="info_modules">PiFire Modules</string>
     <string name="info_modules_display">Display</string>
     <string name="info_modules_dist">Distance</string>
     <string name="info_modules_platform">Platform</string>
+    <string name="info_pip_modules">Python Modules</string>
+    <string name="info_pip_name">Module</string>
+    <string name="info_pip_version">Version</string>
     <string name="info_credits">Credits and Licenses</string>
     <string name="info_server_info">Server Info</string>
     <string name="info_server_version">PiFire Version</string>
@@ -652,6 +664,12 @@
     <string name="dialog_confirm_action">Confirm Action</string>
     <string name="dialog_confirm_delete_generic">Are you sure that you want to permanently delete this item?</string>
     <string name="dialog_confirm_delete_item">Are you sure that you want to permanently delete \n %1$s?</string>
+
+    <string name="dialog_restart_control_title">Restart Control</string>
+    <string name="dialog_restart_control_message">Do you want to restart the control script?</string>
+
+    <string name="dialog_cancel_lid_detect_title">Cancel Lid Open</string>
+    <string name="dialog_cancel_lid_detect_message">Do you want to cancel Lid Open and resume PID Operation?</string>
 
     <string name="dialog_probe_edit">Probe Edit</string>
 

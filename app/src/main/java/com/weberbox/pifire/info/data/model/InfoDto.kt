@@ -14,8 +14,15 @@ data class InfoDto(
     val devPins: Map<String, Map<String, Int>>? = null,
     val serverVersion: String? = null,
     val serverBuild: String? = null,
+    val pipList: List<Module>? = null,
     val platform: String? = null,
     val display: String? = null,
     val distance: String? = null,
     val dcFan: Boolean? = null
-)
+) {
+    @Serializable
+    data class Module(
+        val name: String? = null,
+        val version: String? = null
+    )
+}

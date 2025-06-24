@@ -47,7 +47,6 @@ import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
-import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
@@ -201,8 +200,7 @@ private fun ProbeSettingsContent(
                         start = MaterialTheme.spacing.smallThree,
                         end = MaterialTheme.spacing.smallThree,
                         bottom = MaterialTheme.spacing.extraSmall
-                    )
-                    .limitWidthFraction(0.4f),
+                    ),
                 shape = MaterialTheme.shapes.large,
                 onClick = { probeSheet.open(item) }
             ) {

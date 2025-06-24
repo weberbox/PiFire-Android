@@ -121,6 +121,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             outPins = gpioOutPins,
             inPins = gpioInPins,
             devPins = gpioDevPins,
+            pipList = PipListMapper.map(from.pipList),
             platform = from.platform.orEmpty(),
             display = from.display.orEmpty(),
             distance = from.distance.orEmpty(),

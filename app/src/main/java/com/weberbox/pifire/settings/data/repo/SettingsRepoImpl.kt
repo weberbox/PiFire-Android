@@ -194,8 +194,16 @@ class SettingsRepoImpl @Inject constructor(
         return settingsApi.factoryReset()
     }
 
-    override suspend fun restartSystem(): Result<Unit, DataError> {
-        return settingsApi.restartSystem()
+    override suspend fun restartControl(): Result<Unit, DataError> {
+        return settingsApi.restartControl()
+    }
+
+    override suspend fun restartWebApp(): Result<Unit, DataError> {
+        return settingsApi.restartWebApp()
+    }
+
+    override suspend fun restartSupervisor(): Result<Unit, DataError> {
+        return settingsApi.restartSupervisor()
     }
 
     override suspend fun rebootSystem(): Result<Unit, DataError> {

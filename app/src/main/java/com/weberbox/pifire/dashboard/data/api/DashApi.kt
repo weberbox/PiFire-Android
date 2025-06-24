@@ -21,7 +21,7 @@ interface DashApi {
     suspend fun setGrillHoldTemp(temp: String): Result<Unit, DataError>
     suspend fun setProbeNotify(notifyDto: NotifyDto): Result<Unit, DataError>
     suspend fun checkHopperLevel(): Result<Unit, DataError>
-    suspend fun triggerLidOpen(): Result<Unit, DataError>
+    suspend fun sendToggleLidOpen(lidOpen: Boolean): Result<Unit, DataError>
     suspend fun sendToggleFan(enabled: Boolean): Result<Unit, DataError>
     suspend fun sendToggleAuger(enabled: Boolean): Result<Unit, DataError>
     suspend fun sendToggleIgniter(enabled: Boolean): Result<Unit, DataError>

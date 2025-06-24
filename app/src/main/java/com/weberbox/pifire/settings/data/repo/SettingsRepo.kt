@@ -32,7 +32,9 @@ interface SettingsRepo {
     suspend fun deletePelletLogs(): Result<Unit, DataError>
     suspend fun deletePellets(): Result<Unit, DataError>
     suspend fun factoryReset(): Result<Unit, DataError>
-    suspend fun restartSystem(): Result<Unit, DataError>
+    suspend fun restartControl(): Result<Unit, DataError>
+    suspend fun restartWebApp(): Result<Unit, DataError>
+    suspend fun restartSupervisor(): Result<Unit, DataError>
     suspend fun rebootSystem(): Result<Unit, DataError>
     suspend fun shutdownSystem(): Result<Unit, DataError>
     suspend fun setDebugMode(enabled: Boolean): Result<Server, DataError>

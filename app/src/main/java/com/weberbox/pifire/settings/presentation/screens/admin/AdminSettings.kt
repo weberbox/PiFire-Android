@@ -160,7 +160,9 @@ private fun AdminSettingsContent(
     val deletePelletLogSheet = rememberCustomModalBottomSheetState()
     val deletePelletSheet = rememberCustomModalBottomSheetState()
     val factoryResetSheet = rememberCustomModalBottomSheetState()
-    val restartSheet = rememberCustomModalBottomSheetState()
+    val restartControlSheet = rememberCustomModalBottomSheetState()
+    val restartWebAppSheet = rememberCustomModalBottomSheetState()
+    val restartSupervisorSheet = rememberCustomModalBottomSheetState()
     val rebootSheet = rememberCustomModalBottomSheetState()
     val shutdownSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
@@ -250,11 +252,22 @@ private fun AdminSettingsContent(
             onClick = { factoryResetSheet.open() }
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_power)) },
+            title = { Text(text = stringResource(R.string.settings_cat_scripts)) },
         )
         Preference(
-            title = { Text(text = stringResource(R.string.settings_admin_restart)) },
-            onClick = { restartSheet.open() }
+            title = { Text(text = stringResource(R.string.settings_admin_restart_control)) },
+            onClick = { restartControlSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_admin_restart_webapp)) },
+            onClick = { restartWebAppSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_admin_restart_supervisor)) },
+            onClick = { restartSupervisorSheet.open() }
+        )
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_cat_power)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_reboot)) },
@@ -314,11 +327,25 @@ private fun AdminSettingsContent(
         onPositive = { onEventSent(AdminContract.Event.FactoryReset) }
     )
     AdminActionSheet(
-        sheetState = restartSheet.sheetState,
-        message = stringResource(R.string.settings_admin_restart_text),
+        sheetState = restartControlSheet.sheetState,
+        message = stringResource(R.string.settings_admin_restart_control_text),
         positiveButtonText = stringResource(R.string.restart),
-        onDismiss = { restartSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.RestartSystem) }
+        onDismiss = { restartControlSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.RestartControl) }
+    )
+    AdminActionSheet(
+        sheetState = restartWebAppSheet.sheetState,
+        message = stringResource(R.string.settings_admin_restart_webapp_text),
+        positiveButtonText = stringResource(R.string.restart),
+        onDismiss = { restartWebAppSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.RestartWebApp) }
+    )
+    AdminActionSheet(
+        sheetState = restartSupervisorSheet.sheetState,
+        message = stringResource(R.string.settings_admin_restart_supervisor_text),
+        positiveButtonText = stringResource(R.string.restart),
+        onDismiss = { restartSupervisorSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.RestartSupervisor) }
     )
     AdminActionSheet(
         sheetState = rebootSheet.sheetState,

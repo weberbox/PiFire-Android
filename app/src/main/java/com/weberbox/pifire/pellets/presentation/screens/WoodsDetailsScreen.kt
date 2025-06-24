@@ -3,6 +3,7 @@ package com.weberbox.pifire.pellets.presentation.screens
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -79,18 +80,15 @@ private fun WoodsDetailsContent(
                     navController = navController,
                     isLoading = state.isLoading
                 ) {
-                    for (wood in state.pellets.woodsList) {
-                        item {
-                            WoodBrandItem(
-                                item = wood,
-                                onItemDelete = {
-                                    if (state.isConnected) {
-                                        woodDeleteSheet.open(wood)
-                                    }
+                    items(items = state.pellets.woodsList) { wood ->
+                        WoodBrandItem(
+                            item = wood,
+                            onItemDelete = {
+                                if (state.isConnected) {
+                                    woodDeleteSheet.open(wood)
                                 }
-                            )
-
-                        }
+                            }
+                        )
                     }
                 }
                 BottomSheet(

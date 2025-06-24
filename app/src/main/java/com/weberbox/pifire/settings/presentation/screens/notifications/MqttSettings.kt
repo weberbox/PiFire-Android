@@ -42,6 +42,7 @@ import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.getSummary
+import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
 import com.weberbox.pifire.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
@@ -198,7 +199,11 @@ private fun MqttSettingsContent(
         PreferenceNote(stringResource(R.string.settings_mqtt_user_note))
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_update_sec)) },
-            summary = { Text(text = getSummary(state.serverData.settings.mqttUpdateSec.toString())) },
+            summary = {
+                Text(
+                    text = getSummarySeconds(state.serverData.settings.mqttUpdateSec.toString())
+                )
+            },
             onClick = { updateSecSheet.open() }
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_update_sec_note))

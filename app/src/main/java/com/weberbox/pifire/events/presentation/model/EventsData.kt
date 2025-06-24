@@ -16,6 +16,7 @@ data class EventsData(
     ) {
         @Serializable
         class Event(
+            val id: String = "",
             val date: String = "",
             val time: String = "",
             val message: String = "",

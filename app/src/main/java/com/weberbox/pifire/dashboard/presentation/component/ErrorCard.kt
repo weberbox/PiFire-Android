@@ -47,7 +47,8 @@ import com.weberbox.pifire.common.presentation.util.slideOutShrinkExitTransition
 internal fun ErrorCard(
     modifier: Modifier = Modifier,
     errors: List<String>,
-    initialState: Boolean = false
+    initialState: Boolean = false,
+    onClick: (() -> Unit)? = null
 ) {
     errors.forEach { error ->
         var visible by rememberSaveable { mutableStateOf(true) }
@@ -82,7 +83,10 @@ internal fun ErrorCard(
                     shape = MaterialTheme.shapes.large,
                     elevation = CardDefaults.cardElevation(
                         defaultElevation = MaterialTheme.elevation.small
-                    )
+                    ),
+                    onClick = {
+                        if (onClick != null) onClick()
+                    }
                 ) {
                     Column(
                         modifier = Modifier

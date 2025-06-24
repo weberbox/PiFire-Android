@@ -42,7 +42,9 @@ class AdminSettingsViewModel @Inject constructor(
             is AdminContract.Event.DeletePelletsLog -> deletePelletsLog()
             is AdminContract.Event.FactoryReset -> factoryReset()
             is AdminContract.Event.RebootSystem -> rebootSystem()
-            is AdminContract.Event.RestartSystem -> restartSystem()
+            is AdminContract.Event.RestartControl -> restartControl()
+            is AdminContract.Event.RestartWebApp -> restartWebApp()
+            is AdminContract.Event.RestartSupervisor -> restartSupervisor()
             is AdminContract.Event.ShutdownSystem -> shutdownSystem()
             is AdminContract.Event.SetBootToMonitor -> setBootToMonitor(event.enabled)
             is AdminContract.Event.SetDebugMode -> setDebugMode(event.enabled)
@@ -93,9 +95,21 @@ class AdminSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun restartSystem() {
+    private fun restartControl() {
         viewModelScope.launch(Dispatchers.IO) {
-            handleAdminResult(settingsRepo.restartSystem())
+            handleAdminResult(settingsRepo.restartControl())
+        }
+    }
+
+    private fun restartWebApp() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleAdminResult(settingsRepo.restartWebApp())
+        }
+    }
+
+    private fun restartSupervisor() {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleAdminResult(settingsRepo.restartSupervisor())
         }
     }
 

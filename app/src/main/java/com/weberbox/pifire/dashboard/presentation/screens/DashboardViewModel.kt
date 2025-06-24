@@ -11,6 +11,9 @@ import com.weberbox.pifire.common.data.model.PostDto.NotifyDto
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
+import com.weberbox.pifire.common.presentation.util.DialogAction
+import com.weberbox.pifire.common.presentation.util.DialogController
+import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.dashboard.data.api.DashApi
@@ -27,6 +30,7 @@ import com.weberbox.pifire.dashboard.presentation.model.TimerData
 import com.weberbox.pifire.dashboard.presentation.util.CountDownTimer
 import com.weberbox.pifire.dashboard.presentation.util.ElapsedTimer
 import com.weberbox.pifire.settings.data.model.local.Pref
+import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +43,7 @@ class DashboardViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dashRepo: DashRepo,
     private val dashApi: DashApi,
+    private val settingsRepo: SettingsRepo,
     private val prefs: Prefs,
 ) : BaseViewModel<DashContract.Event, DashContract.State, DashContract.Effect>() {
     private var showHoldTempTip by mutableStateOf(false)
@@ -76,6 +81,8 @@ class DashboardViewModel @Inject constructor(
             is DashContract.Event.SendEvent -> sendDashEvent(event.event)
             is DashContract.Event.ProbeNotify -> setProbeNotify(event.notifyDto)
             is DashContract.Event.HideHoldTempTip -> hideHoldTempTip()
+            is DashContract.Event.ToggleLidDetect -> toggleLidOpen()
+            is DashContract.Event.RestartControl -> restartControlDialog()
         }
     }
 
@@ -239,6 +246,83 @@ class DashboardViewModel @Inject constructor(
         }
         setEffect {
             DashContract.Effect.HideHoldTempToolTip
+        }
+    }
+
+    private fun toggleLidOpen() {
+        viewModelScope.launch {
+            DialogController.sendEvent(
+                DialogEvent(
+                    title = UiText(
+                        R.string.dialog_cancel_lid_detect_title,
+                    ),
+                    message = UiText(
+                        R.string.dialog_cancel_lid_detect_message
+                    ),
+                    positiveAction = DialogAction(
+                        buttonText = UiText(R.string.yes),
+                        action = {
+                            setLoadingState(true)
+                            dashApi.sendToggleLidOpen(false)
+                        }
+                    ),
+                    negativeAction =
+                        DialogAction(
+                            buttonText = UiText(R.string.no),
+                            action = { }
+                        )
+                )
+            )
+        }
+    }
+
+    private fun restartControlDialog() {
+        viewModelScope.launch {
+            DialogController.sendEvent(
+                DialogEvent(
+                    title = UiText(
+                        R.string.dialog_restart_control_title,
+                    ),
+                    message = UiText(
+                        R.string.dialog_restart_control_message
+                    ),
+                    positiveAction = DialogAction(
+                        buttonText = UiText(R.string.yes),
+                        action = {
+                            setLoadingState(true)
+                            restartControl()
+                        }
+                    ),
+                    negativeAction =
+                        DialogAction(
+                            buttonText = UiText(R.string.no),
+                            action = { }
+                        )
+                )
+            )
+        }
+    }
+
+    private fun restartControl() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = settingsRepo.restartControl()
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is Result.Error -> {
+                        setLoadingState(false)
+                        setEffect {
+                            DashContract.Effect.Notification(
+                                text = result.error.asUiText(),
+                                error = true
+                            )
+                        }
+
+                    }
+                    is Result.Success -> {
+                        setLoadingState(false)
+                    }
+                }
+            }
         }
     }
 

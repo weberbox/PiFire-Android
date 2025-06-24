@@ -39,8 +39,8 @@ internal fun LicenseItem(
 ) {
     Card(
         modifier = Modifier.padding(
-            top = MaterialTheme.spacing.extraSmall,
-            bottom = MaterialTheme.spacing.extraSmall
+            top = MaterialTheme.spacing.extraExtraSmall,
+            bottom = MaterialTheme.spacing.extraExtraSmall
         ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.inverseOnSurface

@@ -69,7 +69,7 @@ class HomeScreenViewModel @Inject constructor(
 
     private fun triggerLidOpen() {
         viewModelScope.launch {
-            when (val result = dashApi.triggerLidOpen()) {
+            when (val result = dashApi.sendToggleLidOpen(true)) {
                 is Result.Error -> {
                     setEffect {
                         HomeContract.Effect.Notification(

@@ -108,7 +108,10 @@ private fun EventsScreen(
                             ),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
                     ) {
-                        items(items = state.eventsList) { item ->
+                        items(
+                            items = state.eventsList,
+                            key = { it.id }
+                        ) { item ->
                             EventItem(item)
                         }
                     }

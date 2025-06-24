@@ -64,7 +64,7 @@ internal fun RecipeInstructions(
                 ingredients = stringResource(R.string.recipes_ingredients),
                 step = stringResource(R.string.recipes_item_step)
             )
-            for (item in instructions.take(limit)) {
+            instructions.take(limit).forEach { item ->
                 InstructionsItem(
                     direction = item.text,
                     ingredients = item.ingredients.toBulletedList(),

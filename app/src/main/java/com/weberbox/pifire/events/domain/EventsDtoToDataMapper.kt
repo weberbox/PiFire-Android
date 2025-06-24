@@ -15,6 +15,7 @@ import com.weberbox.pifire.common.presentation.util.formatTimeString
 import com.weberbox.pifire.events.data.model.EventsDto
 import com.weberbox.pifire.events.presentation.model.EventsData.Events
 import com.weberbox.pifire.events.presentation.model.EventsData.Events.Event
+import java.util.UUID
 
 internal typealias EventColor = String
 internal typealias EventTitle = String
@@ -25,6 +26,7 @@ object EventsDtoToDataMapper : Mapper<EventsDto, Events> {
         events = from.events?.map {
             val titleColor = parseTitleColor(it.message.orEmpty())
             Event(
+                id = UUID.randomUUID().toString(),
                 date = formatDateString(
                     input = it.date.orEmpty(),
                     inputFormat = "yyyy-MM-dd"

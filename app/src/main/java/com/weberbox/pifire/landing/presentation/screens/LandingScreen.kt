@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -216,7 +216,10 @@ private fun LandingScreen(
                             .animateEnterExit()
                             .fillMaxSize(),
                     ) {
-                        itemsIndexed(filteredList) { _, server ->
+                        items(
+                            items = filteredList,
+                            key = { it.uuid }
+                        ) { server ->
                             ServerItem(
                                 server = server,
                                 onClick = { uuid ->

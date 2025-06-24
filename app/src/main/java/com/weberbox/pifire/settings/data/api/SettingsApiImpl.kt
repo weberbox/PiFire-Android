@@ -84,8 +84,16 @@ class SettingsApiImpl @Inject constructor(
         return sendAdminAction(ServerConstants.PT_FACTORY_DEFAULTS)
     }
 
-    override suspend fun restartSystem(): Result<Unit, DataError> {
-        return sendAdminAction(ServerConstants.PT_RESTART)
+    override suspend fun restartControl(): Result<Unit, DataError> {
+        return sendAdminAction(ServerConstants.PT_RESTART_CONTROL)
+    }
+
+    override suspend fun restartWebApp(): Result<Unit, DataError> {
+        return sendAdminAction(ServerConstants.PT_RESTART_WEBAPP)
+    }
+
+    override suspend fun restartSupervisor(): Result<Unit, DataError> {
+        return sendAdminAction(ServerConstants.PT_RESTART_SUPERVISOR)
     }
 
     override suspend fun rebootSystem(): Result<Unit, DataError> {

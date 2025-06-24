@@ -53,6 +53,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.HazeAppBar
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
+import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
@@ -266,6 +267,10 @@ private fun RecipeDetailsContent(
         }
     }
 
+    LinearLoadingIndicator(
+        isLoading = state.isLoading,
+        contentPadding = contentPadding
+    )
     Column(
         modifier = modifier
             .verticalScroll(scrollState)
@@ -365,7 +370,7 @@ private fun RecipeDetailsScreenPreview() {
                     recipeStep = -1,
                     recipeImages = emptyList(),
                     isInitialLoading = false,
-                    isLoading = false,
+                    isLoading = true,
                     isDataError = false
 
                 ),

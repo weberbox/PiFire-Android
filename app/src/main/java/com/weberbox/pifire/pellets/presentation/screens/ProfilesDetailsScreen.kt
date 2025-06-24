@@ -3,6 +3,7 @@ package com.weberbox.pifire.pellets.presentation.screens
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -83,36 +84,34 @@ private fun ProfilesDetailsContent(
                     navController = navController,
                     isLoading = state.isLoading
                 ) {
-                    for (profile in state.pellets.profilesList) {
-                        item {
-                            ProfileItem(
-                                profile = profile,
-                                isConnected = state.isConnected,
-                                onEventSent = { event ->
-                                    when (event) {
-                                        is PelletsContract.Event.DeleteProfileDialog -> {
-                                            profileDeleteSheet.open(event.profile)
-                                        }
-
-                                        is PelletsContract.Event.EditProfileDialog -> {
-                                            profileEditSheet.open(
-                                                ProfilesData(
-                                                    brands = state.pellets.brandsList,
-                                                    woods = state.pellets.woodsList,
-                                                    id = event.profile.id,
-                                                    currentBrand = event.profile.brand,
-                                                    currentWood = event.profile.wood,
-                                                    rating = event.profile.rating,
-                                                    comments = event.profile.comments
-                                                )
-                                            )
-                                        }
-
-                                        else -> onEventSent(event)
+                    items(items = state.pellets.profilesList) { profile ->
+                        ProfileItem(
+                            profile = profile,
+                            isConnected = state.isConnected,
+                            onEventSent = { event ->
+                                when (event) {
+                                    is PelletsContract.Event.DeleteProfileDialog -> {
+                                        profileDeleteSheet.open(event.profile)
                                     }
+
+                                    is PelletsContract.Event.EditProfileDialog -> {
+                                        profileEditSheet.open(
+                                            ProfilesData(
+                                                brands = state.pellets.brandsList,
+                                                woods = state.pellets.woodsList,
+                                                id = event.profile.id,
+                                                currentBrand = event.profile.brand,
+                                                currentWood = event.profile.wood,
+                                                rating = event.profile.rating,
+                                                comments = event.profile.comments
+                                            )
+                                        )
+                                    }
+
+                                    else -> onEventSent(event)
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
                 BottomSheet(

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
@@ -215,13 +215,16 @@ private fun RecipesScreen(
                                 )
                                 .fillMaxSize(),
                         ) {
-                            itemsIndexed(filteredList) { _, item ->
+                            items(
+                                items = filteredList,
+                                key = { it.recipeFilename }
+                            ) { recipe ->
                                 RecipeItem(
-                                    details = item,
+                                    details = recipe,
                                     onRecipeClick = {
                                         onNavigationRequested(
                                             RecipesContract.Effect.Navigation.RecipeDetails(
-                                                filename = item.recipeFilename
+                                                filename = recipe.recipeFilename
                                             )
                                         )
                                     }

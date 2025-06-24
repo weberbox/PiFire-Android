@@ -211,13 +211,21 @@ private fun DashboardScreen(
                         )
                         ErrorCard(
                             errors = state.dash.errors,
+                            onClick = {
+                                if (state.isConnected)
+                                    onEventSent(DashContract.Event.RestartControl)
+                            }
                         )
                         WarningCard(
                             warnings = state.dash.warnings,
                         )
                         LidDetectedCard(
                             lidOpenDetected = state.dash.lidOpenDetected,
-                            lidOpenEndTime = state.dash.lidOpenEndTime
+                            lidOpenEndTime = state.dash.lidOpenEndTime,
+                            onClick = {
+                                if (state.isConnected)
+                                    onEventSent(DashContract.Event.ToggleLidDetect)
+                            }
                         )
                         RemainingCard(
                             currentMode = state.dash.currentMode,

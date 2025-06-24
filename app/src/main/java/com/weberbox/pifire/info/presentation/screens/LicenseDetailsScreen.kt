@@ -2,6 +2,7 @@ package com.weberbox.pifire.info.presentation.screens
 
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -26,13 +27,11 @@ fun LicenseDetailsScreen(
         title = stringResource(R.string.info_credits),
         navController = navController
     ) {
-        for (project in args.licenses.list) {
-            item {
-                LicenseItem(project) {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.setData(it.toUri())
-                    context.startActivity(intent)
-                }
+        items(items = args.licenses.list) { project ->
+            LicenseItem(project) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setData(it.toUri())
+                context.startActivity(intent)
             }
         }
     }

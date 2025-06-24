@@ -16,6 +16,8 @@ class DashContract {
         data object PWMControl: Event()
         data object SmokePlus: Event()
         data object HideHoldTempTip: Event()
+        data object ToggleLidDetect : Event()
+        data object RestartControl : Event()
         data class ProbeNotify(val notifyDto: NotifyDto) : Event()
         data class SendEvent(val event: DashEvent): Event()
     }

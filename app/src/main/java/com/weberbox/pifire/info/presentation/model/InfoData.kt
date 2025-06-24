@@ -19,6 +19,7 @@ data class InfoData(
         val outPins: List<GPIOInOutData> = emptyList(),
         val inPins: List<GPIOInOutData> = emptyList(),
         val devPins: List<GPIODeviceData> = emptyList(),
+        val pipList: List<Module> = emptyList(),
         val platform: String = "",
         val display: String = "",
         val distance: String = "",
@@ -31,5 +32,11 @@ data class InfoData(
         val appBuildDate: String = "",
         val appGitBranch: String = "",
         val appGitRev: String = ""
-    )
+    ) {
+        @Serializable
+        data class Module(
+            val name: String = "",
+            val version: String = ""
+        )
+    }
 }

@@ -183,10 +183,10 @@ class DashApiImpl @Inject constructor(
         )
     }
 
-    override suspend fun triggerLidOpen(): Result<Unit, DataError> {
+    override suspend fun sendToggleLidOpen(lidOpen: Boolean): Result<Unit, DataError> {
         val json = json.encodeToString(
             ControlDto(
-                lidOpenToggle = true,
+                lidOpenToggle = lidOpen,
                 updated = true
             )
         )

@@ -28,7 +28,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -89,7 +88,6 @@ private fun RecipeImagesScreen(
         initialPage = state.imageIndex,
         pageCount = { state.imageList.size }
     )
-    val selectedImage by remember { mutableIntStateOf(0) }
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainer,
         1f to MaterialTheme.colorScheme.surfaceContainerLow
@@ -110,10 +108,6 @@ private fun RecipeImagesScreen(
         }?.collect()
     }
 
-    LaunchedEffect(selectedImage) {
-        if (selectedImage != 0) pagerState.animateScrollToPage(selectedImage)
-    }
-
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
@@ -126,6 +120,10 @@ private fun RecipeImagesScreen(
             currentImage?.let {
                 paletteColor.updateStartingColor(currentImage)
             }
+        }
+
+        LaunchedEffect(state.imageIndex) {
+            if (state.imageIndex != 0) pagerState.animateScrollToPage(state.imageIndex)
         }
 
         when {
@@ -174,12 +172,17 @@ private fun RecipeImagesScreen(
                             ),
                             beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT
                         ) { index ->
-                            val image = remember { state.imageList[index] }
-                            if (index == 0) currentImage = image
-                            RecipeAsyncImage(
-                                image = image,
-                                modifier = Modifier.pagerCubeInDepthTransition(index, pagerState),
-                            )
+                            if (state.imageList.isNotEmpty()) {
+                                val image = remember { state.imageList[index] }
+                                if (index == 0) currentImage = image
+                                RecipeAsyncImage(
+                                    image = image,
+                                    modifier = Modifier.pagerCubeInDepthTransition(
+                                        page = index,
+                                        pagerState = pagerState
+                                    ),
+                                )
+                            }
                         }
                         Row(
                             Modifier

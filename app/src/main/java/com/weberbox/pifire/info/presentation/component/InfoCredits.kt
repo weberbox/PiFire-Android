@@ -64,7 +64,7 @@ internal fun InfoCredits(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
             )
-            for (item in licenseData.list.take(limit)) {
+            licenseData.list.take(limit).forEach { item ->
                 LicenseItem(item) {
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setData(it.toUri())

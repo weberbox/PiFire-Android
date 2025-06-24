@@ -3,6 +3,7 @@ package com.weberbox.pifire.pellets.presentation.screens
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -80,22 +81,20 @@ private fun LogsDetailsContent(
                     navController = navController,
                     isLoading = state.isLoading
                 ) {
-                    for (log in state.pellets.logsList) {
-                        item {
-                            LogItem(
-                                log = log,
-                                isConnected = state.isConnected,
-                                onEventSent = { event ->
-                                    when (event) {
-                                        is PelletsContract.Event.DeleteLogDialog -> {
-                                            logDeleteSheet.open(event.log)
-                                        }
-
-                                        else -> onEventSent(event)
+                    items(items = state.pellets.logsList) { log ->
+                        LogItem(
+                            log = log,
+                            isConnected = state.isConnected,
+                            onEventSent = { event ->
+                                when (event) {
+                                    is PelletsContract.Event.DeleteLogDialog -> {
+                                        logDeleteSheet.open(event.log)
                                     }
+
+                                    else -> onEventSent(event)
                                 }
-                            )
-                        }
+                            }
+                        )
                     }
                 }
                 BottomSheet(
