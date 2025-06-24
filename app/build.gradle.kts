@@ -49,6 +49,7 @@ android {
         release {
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
+            isShrinkResources = true
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -177,6 +178,7 @@ sentry {
         enabled.set(true)
         features.set(EnumSet.allOf(InstrumentationFeature::class.java) - InstrumentationFeature.OKHTTP)
     }
+    ignoredBuildTypes.set(setOf("release"))
 }
 
 fun getKeystoreProperties(): Properties {

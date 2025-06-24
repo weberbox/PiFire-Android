@@ -25,15 +25,10 @@ class Prefs @Inject constructor(
     )
 
     init {
-        // Cleanup prior version prefs
-        if (sharedPrefs.getString("prefs_server_address", "")?.isNotBlank() == true) {
-            sharedPrefs.all.forEach { pref ->
-                if (pref.key.contains("prefs_")) {
-                    sharedPrefs.edit {
-                        remove(pref.key)
-                    }
-                }
-            }
+        // Clear prior version prefs to avoid issues with v3.0.0+
+        if (sharedPrefs.getBoolean("pref_clear_prefs", true)) {
+            sharedPrefs.edit { clear() }
+            sharedPrefs.edit { putBoolean("pref_clear_prefs", false) }
         }
     }
 
