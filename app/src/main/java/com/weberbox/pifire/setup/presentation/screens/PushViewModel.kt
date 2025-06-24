@@ -50,6 +50,11 @@ class PushViewModel @Inject constructor(
         if (consent) {
             oneSignalManager.promptForPushNotifications()
         }
+        setState {
+            copy(
+                consent = consent
+            )
+        }
     }
 
     private fun checkNavigateToFinish() {
