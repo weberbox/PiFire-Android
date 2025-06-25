@@ -14,14 +14,14 @@ data class Setting<T>(
 ) {
     companion object {
         // Versions
-        val serverVersion = Setting("prefs_server_version", "1.0.0")
-        val serverBuild = Setting("prefs_server_build", "1")
-        val recipesVersion = Setting("prefs_recipe_version", "1.0.0")
-        val cookFileVersion = Setting("prefs_cook_file_version", "1.0.0")
+        val serverVersion = Setting("server_version", "1.0.0")
+        val serverBuild = Setting("server_build", "1")
+        val recipesVersion = Setting("recipe_version", "1.0.0")
+        val cookFileVersion = Setting("cook_file_version", "1.0.0")
 
         // Probes
-        val probeProfiles = Setting("prefs_probe_profiles", mapOf<String, ProbeProfile>())
-        val probeMap = Setting("prefs_probe_map", ProbeMap())
+        val probeProfiles = Setting("probe_profiles", mapOf<String, ProbeProfile>())
+        val probeMap = Setting("probe_map", ProbeMap())
 
         // Globals
         val grillName = Setting("grill_name", "")
@@ -154,7 +154,7 @@ data class Setting<T>(
         val pushoverUrl = Setting("PublicURL", "")
 
         // Onesignal
-        val onesignalEnabled = Setting("enabled", true)
+        val onesignalEnabled = Setting("enabled", false)
         val onesignalUuid = Setting("uuid", "")
         val onesignalDevices = Setting("devices", mapOf<String, OneSignalDeviceInfo>())
 

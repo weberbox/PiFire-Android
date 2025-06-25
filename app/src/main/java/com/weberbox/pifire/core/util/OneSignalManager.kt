@@ -48,8 +48,7 @@ class OneSignalManager @Inject constructor(
         if (OneSignal.userProvidedPrivacyConsent()) {
             OneSignal.getDeviceState()?.also { state ->
                 if (state.isSubscribed) {
-                    val playerID = state.userId
-                    playerID?.also { id ->
+                    state.userId?.also { playerID ->
                         if (registrationResult == OneSignalStatus.ONESIGNAL_NOT_REGISTERED) {
                             settingsRepo.setOneSignalAppID(PushConfig.ONESIGNAL_APP_ID)
                         }

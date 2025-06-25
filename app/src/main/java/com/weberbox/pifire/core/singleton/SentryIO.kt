@@ -105,10 +105,6 @@ class SentryIO @Inject constructor(
                             server?.settings?.cntrlrSelected
                         )
 
-                        if (event.isCrashed && event.eventId != null) {
-                            storeCrashEvent(event.eventId.toString())
-                        }
-
                         event
                     }
             }
@@ -127,22 +123,19 @@ class SentryIO @Inject constructor(
 
     private fun setUserEmail(email: String) {
         if (email.isNotEmpty()) {
-            val user = User()
-            user.email = email
-            Sentry.setUser(user)
+            User().apply {
+                this.email = email
+                Sentry.setUser(this)
+            }
         }
     }
 
-    private fun getServerModules(): ArrayList<Modules> {
-        val arrayList = ArrayList<Modules>()
-        arrayList.add(
-            Modules(
-                grillplat = server?.settings?.modulesPlatform,
-                display = server?.settings?.modulesDisplay,
-                dist = server?.settings?.modulesDistance
-            )
+    private fun getServerModules(): Modules {
+        return Modules(
+            grillplat = server?.settings?.modulesPlatform,
+            display = server?.settings?.modulesDisplay,
+            dist = server?.settings?.modulesDistance
         )
-        return arrayList
     }
 
     private fun sentryDSNSet(context: Context): Boolean {
@@ -151,9 +144,5 @@ class SentryIO @Inject constructor(
 
     private fun sentryEnabled(): Boolean {
         return prefs.get(Pref.sentryEnabled)
-    }
-
-    private fun storeCrashEvent(eventId: String) {
-        prefs.set(Pref.sentryCrashEvent, eventId)
     }
 }

@@ -25,7 +25,8 @@ class NotificationServiceExtension : OSRemoteNotificationReceivedHandler {
 
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(activityIntent)
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         val mutableNotification = notification.mutableCopy()
