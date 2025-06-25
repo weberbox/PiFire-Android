@@ -79,7 +79,7 @@ fun <T> DropdownTextField(
     modifier: Modifier = Modifier,
     selectedValue: T,
     options: List<T>,
-    itemToString: (T) -> String,
+    itemToString: @Composable (T) -> String,
     label: String? = null,
     shape: CornerBasedShape = MaterialTheme.shapes.small,
     leadingIcon: @Composable (() -> Unit)? = null,

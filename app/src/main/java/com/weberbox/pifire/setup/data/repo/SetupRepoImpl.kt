@@ -4,7 +4,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parseGetResponse
-import com.weberbox.pifire.common.data.util.isNetworkAvailable
+import com.weberbox.pifire.common.data.util.networkAvailable
 import com.weberbox.pifire.common.presentation.util.getReasonPhrase
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.core.constants.ServerConstants
@@ -29,7 +29,7 @@ class SetupRepoImpl @Inject constructor(
         url: String,
         headerMap: Map<String, String>
     ): Result<VersionsData, DataError> {
-        if (isNetworkAvailable()) {
+        if (networkAvailable()) {
             try {
                 setupApi.getVersions(url, headerMap).let { response ->
                     if (response.isSuccessful) {

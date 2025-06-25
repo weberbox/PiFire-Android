@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Sensors
+import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -115,10 +115,13 @@ internal fun ProbeSheet(
                     .fillMaxWidth(),
                 selectedValue = enabled,
                 options = listOf(true, false),
-                itemToString = { if (it) "Enabled" else "Disabled" },
+                itemToString = { enabled ->
+                    if (enabled) stringResource(R.string.dialog_probe_edit_enabled)
+                    else stringResource(R.string.dialog_probe_edit_disabled)
+                },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Filled.Sensors,
+                        imageVector = Icons.Filled.Visibility,
                         contentDescription = null
                     )
                 },

@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.weberbox.pifire.application.App.Companion.getAppContext
 
-fun isNetworkAvailable(): Boolean {
+fun networkAvailable(): Boolean {
     val connectivityManager =
         getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val nw = connectivityManager.activeNetwork ?: return false

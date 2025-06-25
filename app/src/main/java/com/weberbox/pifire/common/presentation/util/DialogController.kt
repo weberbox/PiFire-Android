@@ -3,8 +3,8 @@ package com.weberbox.pifire.common.presentation.util
 import android.os.Parcelable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-
 
 @Parcelize
 data class DialogEvent(
@@ -18,7 +18,8 @@ data class DialogEvent(
 @Parcelize
 data class DialogAction(
     val buttonText: UiText,
-    val action: suspend () -> Unit,
+    @IgnoredOnParcel
+    val action: suspend () -> Unit = { },
 ) : Parcelable
 
 object DialogController {

@@ -252,9 +252,10 @@ private fun WorkSettingsContent(
             onClick = { pModeSheet.open() }
         )
         PreferenceNote(stringResource(R.string.settings_pmode_note)) {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setData(context.getString(R.string.def_pmode_link).toUri())
-            context.startActivity(intent)
+            Intent(Intent.ACTION_VIEW).apply {
+                setData(context.getString(R.string.def_pmode_link).toUri())
+                context.startActivity(this)
+            }
         }
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_splus)) },

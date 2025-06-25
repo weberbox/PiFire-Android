@@ -672,6 +672,8 @@
     <string name="dialog_cancel_lid_detect_message">Do you want to cancel Lid Open and resume PID Operation?</string>
 
     <string name="dialog_probe_edit">Probe Edit</string>
+    <string name="dialog_probe_edit_enabled">Visible</string>
+    <string name="dialog_probe_edit_disabled">Hidden</string>
 
     <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
     <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>

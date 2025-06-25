@@ -1,5 +1,6 @@
 package com.weberbox.pifire.home.presentation.screens
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
@@ -34,6 +35,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val serverSupportManager: ServerSupportManager,
     private val sessionStateHolder: SessionStateHolder,
+    private val savedStateHandle: SavedStateHandle,
     private val oneSignalManager: OneSignalManager,
     private val socketManager: SocketManager,
     private val settingsRepo: SettingsRepo,
@@ -48,6 +50,7 @@ class HomeScreenViewModel @Inject constructor(
         collectDashDataState()
         checkOneSignalStatus()
         checkServerSupported()
+        checkProcessKilled()
     }
 
     override fun setInitialState() = HomeContract.State(
@@ -139,6 +142,16 @@ class HomeScreenViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             oneSignalManager.checkOneSignalStatus()
         }
+    }
+
+    private fun checkProcessKilled() {
+        savedStateHandle.get<Boolean>("restored")?.also { restored ->
+            // If restored exists that should mean the process was killed by the system so we
+            // need to signOut as the socket will be dead and uiState will be incorrect
+            // we could restart the socket but it is probably better to just sign back in
+            if (restored) signOut()
+        }
+        savedStateHandle["restored"] = true
     }
 
     private fun checkServerSupported() {

@@ -50,7 +50,8 @@ suspend fun parsePostResponse(
 suspend inline fun <reified I, O> parseGetResponse(
     response: String,
     json: Json,
-    mapper: Mapper<I, O>
+    mapper: Mapper<I, O>,
+    logException: Boolean = true
 ): Result<O, DataError> {
     try {
         val responseDto = json.decodeFromString<ResponseDto>(response)
@@ -66,7 +67,10 @@ suspend inline fun <reified I, O> parseGetResponse(
         }
     } catch (e: Exception) {
         currentCoroutineContext().ensureActive()
-        Timber.e(e, "Parsing Exception")
+        if (logException)
+            Timber.e(e, "Parsing Exception")
+        else
+            Timber.d(e, "Parsing Exception")
     }
     return Result.Error(DataError.Local.JSON_ERROR)
 }

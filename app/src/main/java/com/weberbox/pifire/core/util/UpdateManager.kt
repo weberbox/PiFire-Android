@@ -160,7 +160,6 @@ class UpdateManager @Inject constructor(
                                 )
                             }
 
-                            Activity.RESULT_CANCELED -> activity.finish()
                             else -> activity.finish()
                         }
                     }
@@ -221,10 +220,11 @@ class UpdateManager @Inject constructor(
     }
 
     private fun openGithubLink(activity: Activity) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setData(activity.getString(R.string.def_github_releases_link).toUri())
-        activity.startActivity(intent)
-        activity.finish()
+        Intent(Intent.ACTION_VIEW).apply {
+            setData(activity.getString(R.string.def_github_releases_link).toUri())
+            activity.startActivity(this)
+            activity.finish()
+        }
     }
 }
 

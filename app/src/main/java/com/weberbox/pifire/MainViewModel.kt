@@ -72,25 +72,19 @@ class MainViewModel @Inject constructor(
 
     private fun storeLatestDataState() {
         viewModelScope.launch {
-            val pelletsData = sessionStateHolder.pelletsDataState.value
-            val dashData = sessionStateHolder.dashDataState.value
-            val eventsData = sessionStateHolder.eventsDataState.value
-            val recipesData = sessionStateHolder.recipesDataState.value
-            val settingsData = sessionStateHolder.settingsDataState.value
-
-            pelletsData?.also {
+            sessionStateHolder.pelletsDataState.value?.also { pelletsData ->
                 pelletsRepo.updatePelletsData(pelletsData)
             }
-            dashData?.also {
+            sessionStateHolder.dashDataState.value?.also { dashData ->
                 dashRepo.updateDashData(dashData)
             }
-            eventsData?.also {
+            sessionStateHolder.eventsDataState.value?.also { eventsData ->
                 eventsRepo.updateEventsData(eventsData)
             }
-            recipesData?.also {
+            sessionStateHolder.recipesDataState.value?.also { recipesData ->
                 recipesRepo.updateRecipesData(recipesData)
             }
-            settingsData?.also {
+            sessionStateHolder.settingsDataState.value?.also { settingsData ->
                 settingsRepo.updateServerSettings(settingsData)
             }
         }

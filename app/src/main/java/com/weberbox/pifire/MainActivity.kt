@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.EventAlertDialog
@@ -54,7 +53,7 @@ class MainActivity : ComponentActivity() {
             val state = mainViewModel.viewState.value
             val effectFlow = mainViewModel.effect
             val context = LocalContext.current
-            val navController: NavHostController = rememberNavController()
+            val navController = rememberNavController()
             val eventDialog = rememberEventDialogState()
             val snackbarHostState = remember { SnackbarHostState() }
             val scope = rememberCoroutineScope()

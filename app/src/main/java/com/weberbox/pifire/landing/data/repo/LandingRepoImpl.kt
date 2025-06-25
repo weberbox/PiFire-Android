@@ -4,7 +4,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parseGetResponse
-import com.weberbox.pifire.common.data.util.isNetworkAvailable
+import com.weberbox.pifire.common.data.util.networkAvailable
 import com.weberbox.pifire.common.presentation.util.getReasonPhrase
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.landing.data.api.LandingApi
@@ -24,7 +24,7 @@ class LandingRepoImpl @Inject constructor(
         url: String,
         headers: Map<String, String>
     ): Result<ServerUuidData, DataError> {
-        if (isNetworkAvailable()) {
+        if (networkAvailable()) {
             try {
                 landingApi.getServerUuid(url, headers).let { response ->
                     if (response.isSuccessful) {
@@ -32,7 +32,8 @@ class LandingRepoImpl @Inject constructor(
                             parseGetResponse(
                                 response = r.string(),
                                 json = json,
-                                mapper = ServerUuidDtoToDataMapper
+                                mapper = ServerUuidDtoToDataMapper,
+                                logException = false
                             ).let { data ->
                                 r.close()
                                 when (data) {
