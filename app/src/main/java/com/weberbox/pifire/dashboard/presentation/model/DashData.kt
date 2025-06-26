@@ -37,6 +37,7 @@ data class DashData(
         val timeRemaining: Int = 0,
         val tempUnits: String = Setting.tempUnits.value,
         val hasDcFan: Boolean = Setting.dcFan.value,
+        val hasDistanceSensor: Boolean = Setting.hasDistanceSensor.value,
         val startupCheck: Boolean = Setting.safetyStartupCheck.value,
         val allowManualOutputs: Boolean = Setting.safetyAllowManualChanges.value,
         val timer: Timer = Timer(),

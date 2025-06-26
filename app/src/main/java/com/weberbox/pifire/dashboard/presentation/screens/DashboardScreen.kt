@@ -336,11 +336,7 @@ private fun DashboardScreen(
                                 modifier = Modifier.weight(1f),
                                 onClick = {
                                     if (state.isConnected) {
-                                        onEventSent(
-                                            DashContract.Event.SendEvent(
-                                                DashEvent.HopperCheck
-                                            )
-                                        )
+                                        onEventSent(DashContract.Event.CheckHopperLevel)
                                     }
                                 }
                             )

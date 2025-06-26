@@ -184,7 +184,6 @@ private fun PwmSettingsContent(
             title = { Text(text = stringResource(R.string.settings_pwm_fan_control_enabled)) },
             summary = { Text(text = getSummary(state.serverData.settings.pwmControl)) }
         )
-        PreferenceNote(stringResource(R.string.settings_pwm_fan_control_note))
         Preference(
             title = { Text(text = stringResource(R.string.settings_pwm_fan_update_time)) },
             summary = {
@@ -205,6 +204,7 @@ private fun PwmSettingsContent(
                 )
             }
         )
+        PreferenceNote(stringResource(R.string.settings_pwm_fan_control_note))
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_fan_settings)) },
         )

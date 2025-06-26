@@ -38,6 +38,8 @@ class SafetySettingsViewModel @Inject constructor(
             is SafetyContract.Event.SetMinStartTemp -> setMinStartTemp(event.temp)
             is SafetyContract.Event.SetReigniteRetries -> setReigniteRetries(event.retries)
             is SafetyContract.Event.SetSafetyStartupCheck -> setSafetyStartupCheck(event.enabled)
+            is SafetyContract.Event.SetAllowManualChanges -> setAllowManualChanges(event.enabled)
+            is SafetyContract.Event.SetOverrideTime -> setOverrideTime(event.time)
         }
     }
 
@@ -51,6 +53,18 @@ class SafetySettingsViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun setAllowManualChanges(enabled: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setAllowManualChanges(enabled))
+        }
+    }
+
+    private fun setOverrideTime(time: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setOverrideTime(time))
         }
     }
 

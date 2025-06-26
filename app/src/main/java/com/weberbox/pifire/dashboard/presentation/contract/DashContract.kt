@@ -18,6 +18,7 @@ class DashContract {
         data object HideHoldTempTip: Event()
         data object ToggleLidDetect : Event()
         data object RestartControl : Event()
+        data object CheckHopperLevel : Event()
         data class ProbeNotify(val notifyDto: NotifyDto) : Event()
         data class SendEvent(val event: DashEvent): Event()
     }
@@ -31,7 +32,6 @@ class DashContract {
         data object Monitor : DashEvent()
         data object Shutdown : DashEvent()
         data object RecipeUnPause : DashEvent()
-        data object HopperCheck : DashEvent()
         data class ToggleFan(val enabled: Boolean) : DashEvent()
         data class ToggleAuger(val enabled: Boolean) : DashEvent()
         data class ToggleIgniter(val enabled: Boolean) : DashEvent()

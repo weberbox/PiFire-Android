@@ -245,6 +245,7 @@
     <string name="settings_timers_summary">Duration, temps, priming, smart start, power</string>
     <string name="settings_safety_title">Safety Settings</string>
     <string name="settings_safety_summary">Startup check, min-max temps, reignite</string>
+    <string name="settings_operating_temps_title">Operating Temperatures</string>
     <string name="settings_notifications_title">Notifications</string>
     <string name="settings_notifications_summary">Various notification providers</string>
     <string name="settings_manual">Manual Mode</string>
@@ -322,7 +323,7 @@
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>
     <string name="settings_splus_enabled">Smoke Plus Enabled by Default</string>
-    <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the fan icon button on the dashboard. The icon will be highlighted blue indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the below min/max temperatures.</string>
+    <string name="settings_splus_note">Smoke Plus Mode can be toggled on/off by tapping the smoke plus button on the dashboard. The button will be highlighted indicating that smoke plus is enabled. Smoke Plus will cycle the fan on and off during smoke and hold mode to promote additional smoke generation. Fan cycling will only occur between the above min/max temperatures.</string>
     <string name="settings_splus_min">Min Operational Temp</string>
     <string name="settings_splus_max">Max Operational Temp</string>
     <string name="settings_splus_on_time">Fan On Time</string>
@@ -406,6 +407,10 @@
 
     <string name="settings_safety_startup_check">Enable Startup Check</string>
     <string name="settings_safety_startup_check_summary">Enables an additional check after clicking startup, to prevent accidental startup</string>
+    <string name="settings_safety_manual_outputs">Allow Manual Changes</string>
+    <string name="settings_safety_manual_outputs_summary">Allows overrides to outputs during operation</string>
+    <string name="settings_safety_manual_outputs_note">Allow the ability to manually control outputs like the igniter, fan and auger, during normal operation. Keep in mind that during normal operation the igniter, fan and auger may (or may not) be controlled by the controller and user changes may be overridden. Use the above override time to block the controller from making changes for a period of seconds.</string>
+    <string name="settings_safety_manual_outputs_time">Override Time</string>
     <string name="settings_safety_min_start">Min Startup Temp</string>
     <string name="settings_safety_max_start">Max Startup Temp</string>
     <string name="settings_safety_retries">Reignite Retries</string>
@@ -507,7 +512,7 @@
     <string name="settings_pellet_warning">Warnings</string>
     <string name="settings_pellet_warning_level">Warning Level</string>
     <string name="settings_pellet_warning_time">Check Time</string>
-    <string name="settings_pellet_warning_note">Pellet levels below the input number will receive notifications during a cook at the specified check time</string>
+    <string name="settings_pellet_warning_note">Pellet levels below the warning threshold will receive notifications during a cook at the specified check time intervals</string>
 
     <string name="settings_cat_pellets_sensor">Pellet Level Sensor</string>
     <string name="settings_pellet_sensor_full">Full Distance</string>

@@ -19,6 +19,7 @@ import com.weberbox.pifire.home.presentation.screens.HomeScreenDestination
 import com.weberbox.pifire.info.presentation.model.Licenses
 import com.weberbox.pifire.info.presentation.screens.InfoScreenDestination
 import com.weberbox.pifire.info.presentation.screens.LicenseDetailsScreen
+import com.weberbox.pifire.info.presentation.screens.PipModulesDetailsScreen
 import com.weberbox.pifire.landing.presentation.screens.HeaderSettingsDestination
 import com.weberbox.pifire.landing.presentation.screens.LandingScreenDestination
 import com.weberbox.pifire.landing.presentation.screens.ServerSettingsDestination
@@ -158,6 +159,11 @@ fun NavGraphBuilder.infoNavGraph(navController: NavHostController) {
     ) {
         composable<NavGraph.InfoDest.Info> {
             InfoScreenDestination(navController)
+        }
+        composable<NavGraph.InfoDest.PipModulesDetails>(
+            enterTransition = { scaleEnterTransition() }
+        ) {
+            PipModulesDetailsScreen(navController)
         }
         composable<NavGraph.InfoDest.LicenseDetails>(
             typeMap = mapOf(typeOf<Licenses>() to parcelableType<Licenses>()),

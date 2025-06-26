@@ -58,5 +58,5 @@ internal fun getSummaryCm(value: String): String {
 
 @Composable
 internal fun getSummaryGs(value: String): String {
-    return stringResource(R.string.cm_format, value)
+    return stringResource(R.string.gs_format, value)
 }

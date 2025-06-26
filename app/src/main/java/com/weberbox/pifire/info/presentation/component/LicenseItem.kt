@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.toColorInt
-import com.weberbox.pifire.common.presentation.base.cardColorStops
 import com.weberbox.pifire.common.presentation.theme.SettingsTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.info.presentation.model.Licenses.License
@@ -37,6 +36,11 @@ internal fun LicenseItem(
     modifier: Modifier = Modifier,
     onClick: ((String) -> Unit)? = null,
 ) {
+    val colorStops = arrayOf(
+        0.0f to MaterialTheme.colorScheme.surfaceContainerHigh,
+        1f to MaterialTheme.colorScheme.surfaceContainer
+    )
+
     Card(
         modifier = Modifier.padding(
             top = MaterialTheme.spacing.extraExtraSmall,
@@ -53,7 +57,7 @@ internal fun LicenseItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Brush.horizontalGradient(colorStops = cardColorStops()))
+                .background(Brush.horizontalGradient(colorStops = colorStops))
                 .height(IntrinsicSize.Max),
             verticalAlignment = Alignment.CenterVertically
         ) {

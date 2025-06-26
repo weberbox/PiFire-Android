@@ -94,7 +94,6 @@ fun LandingScreenDestination(
     )
 }
 
-
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun LandingScreen(

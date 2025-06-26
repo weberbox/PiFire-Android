@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
             ObserveAsEvents(
                 flow = DialogController.events
             ) { event ->
-                eventDialog.show(event)
+                eventDialog.show(dialogEvent = event)
             }
 
             PiFireTheme(

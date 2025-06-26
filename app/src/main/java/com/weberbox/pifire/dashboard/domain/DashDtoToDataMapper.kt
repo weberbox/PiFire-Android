@@ -41,6 +41,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
         primeAmount = from.primeAmount ?: defaults.primeAmount,
         tempUnits = from.tempUnits ?: defaults.tempUnits,
         hasDcFan = from.hasDcFan ?: defaults.hasDcFan,
+        hasDistanceSensor = from.hasDistanceSensor ?: defaults.hasDistanceSensor,
         startupCheck = from.startupCheck ?: defaults.startupCheck,
         allowManualOutputs = from.allowManualOutputs ?: defaults.allowManualOutputs,
         timer = Timer(

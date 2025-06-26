@@ -18,5 +18,11 @@ data class Safety(
     val reigniteRetries: Int? = null,
 
     @SerialName("startup_check")
-    val startupCheck: Boolean? = null
+    val startupCheck: Boolean? = null,
+
+    @SerialName("allow_manual_changes")
+    val allowManualChanges: Boolean? = null,
+
+    @SerialName("manual_override_time")
+    val manualOverrideTime: Int? = null
 )

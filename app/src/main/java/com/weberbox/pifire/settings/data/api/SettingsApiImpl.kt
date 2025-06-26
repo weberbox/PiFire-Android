@@ -997,6 +997,20 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
+    override suspend fun setAllowManualChanges(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(safety = Safety(allowManualChanges = enabled))
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setOverrideTime(time: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(safety = Safety(manualOverrideTime = time))
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
     override suspend fun setMinStartTemp(temp: Int): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(safety = Safety(minStartupTemp = temp))

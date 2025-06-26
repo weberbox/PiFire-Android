@@ -25,13 +25,14 @@ fun LicenseDetailsScreen(
     val context = LocalContext.current
     DetailsScreen(
         title = stringResource(R.string.info_credits),
-        navController = navController
+        onNavigate = { navController.popBackStack() }
     ) {
         items(items = args.licenses.list) { project ->
             LicenseItem(project) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setData(it.toUri())
-                context.startActivity(intent)
+                Intent(Intent.ACTION_VIEW).apply {
+                    data = it.toUri()
+                    context.startActivity(this)
+                }
             }
         }
     }

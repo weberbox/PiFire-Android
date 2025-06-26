@@ -47,8 +47,8 @@ class DashboardViewModel @Inject constructor(
     private val prefs: Prefs,
 ) : BaseViewModel<DashContract.Event, DashContract.State, DashContract.Effect>() {
     private var showHoldTempTip by mutableStateOf(false)
-    private val timerIntent = CountDownTimer(viewModelScope)
-    private val elapsedIntent = ElapsedTimer(viewModelScope)
+    private val timerIntent = CountDownTimer(timerScope = viewModelScope)
+    private val elapsedIntent = ElapsedTimer(timerScope = viewModelScope)
 
     init {
         collectPrefsFlow()
@@ -83,6 +83,7 @@ class DashboardViewModel @Inject constructor(
             is DashContract.Event.HideHoldTempTip -> hideHoldTempTip()
             is DashContract.Event.ToggleLidDetect -> toggleLidOpen()
             is DashContract.Event.RestartControl -> restartControlDialog()
+            is DashContract.Event.CheckHopperLevel -> checkHopperLevel()
         }
     }
 
@@ -97,26 +98,25 @@ class DashboardViewModel @Inject constructor(
                     is DashEvent.Smoke -> dashApi.sendSmokeMode()
                     is DashEvent.Start -> dashApi.sendStartGrill()
                     is DashEvent.Stop -> dashApi.sendStopMode()
-                    is DashEvent.HopperCheck -> dashApi.checkHopperLevel()
                     is DashEvent.GrillHoldTemp -> dashApi.setGrillHoldTemp(event.temp)
                     is DashEvent.PrimeGrill -> dashApi.sendPrimeGrill(
-                        event.primeAmount,
-                        event.nextMode
+                        primeAmount = event.primeAmount,
+                        nextMode = event.nextMode
                     )
 
-                    is DashEvent.TimerAction -> dashApi.sendTimerAction(event.action)
+                    is DashEvent.TimerAction -> dashApi.sendTimerAction(action = event.action)
                     is DashEvent.TimerTime -> dashApi.sendTimerTime(
-                        event.hours,
-                        event.minutes,
-                        event.shutdown,
-                        event.keepWarm
+                        hours = event.hours,
+                        minutes = event.minutes,
+                        shutdown = event.shutdown,
+                        keepWarm = event.keepWarm
                     )
 
-                    is DashEvent.ToggleFan -> dashApi.sendToggleFan(event.enabled)
-                    is DashEvent.ToggleAuger -> dashApi.sendToggleAuger(event.enabled)
-                    is DashEvent.ToggleIgniter -> dashApi.sendToggleIgniter(event.enabled)
+                    is DashEvent.ToggleFan -> dashApi.sendToggleFan(enabled = event.enabled)
+                    is DashEvent.ToggleAuger -> dashApi.sendToggleAuger(enabled =event.enabled)
+                    is DashEvent.ToggleIgniter -> dashApi.sendToggleIgniter(enabled =event.enabled)
 
-                    else -> Result.Success(Unit)
+                    else -> Result.Success(data = Unit)
                 }
             )
         }
@@ -273,6 +273,14 @@ class DashboardViewModel @Inject constructor(
                         )
                 )
             )
+        }
+    }
+
+    private fun checkHopperLevel() {
+        if (viewState.value.dash.hasDistanceSensor) {
+            viewModelScope.launch(Dispatchers.IO) {
+                handleResult(dashApi.checkHopperLevel())
+            }
         }
     }
 

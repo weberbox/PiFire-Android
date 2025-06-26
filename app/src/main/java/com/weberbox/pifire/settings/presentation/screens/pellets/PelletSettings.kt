@@ -313,7 +313,7 @@ private fun PelletsSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                max = 100.0
+                max = (state.serverData.settings.pelletsEmpty - 1).toDouble()
             ),
             onUpdate = {
                 onEventSent(PelletsContract.Event.SetFullLevel(it.toInt()))

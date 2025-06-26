@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
@@ -23,6 +22,7 @@ import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.ConfirmSheet
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.pellets.presentation.component.WoodBrandItem
 import com.weberbox.pifire.pellets.presentation.contract.PelletsContract
@@ -37,19 +37,31 @@ fun BrandsDetailsScreen(
     viewModel: SharedDetailsViewModel = hiltViewModel()
 ) {
     BrandsDetailsContent(
-        navController = navController,
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
-        onEventSent = { event -> viewModel.setEvent(event) }
+        onEventSent = { event -> viewModel.setEvent(event) },
+        onNavigationRequested = { navigationEffect ->
+            when (navigationEffect) {
+                is PelletsContract.Effect.Navigation.Back ->
+                    navController.popBackStack()
+
+                is PelletsContract.Effect.Navigation.NavRoute -> {
+                    navController.safeNavigate(
+                        route = navigationEffect.route,
+                        popUp = navigationEffect.popUp
+                    )
+                }
+            }
+        }
     )
 }
 
 @Composable
 private fun BrandsDetailsContent(
-    navController: NavHostController,
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
-    onEventSent: (event: PelletsContract.Event) -> Unit
+    onEventSent: (event: PelletsContract.Event) -> Unit,
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
     val brandDeleteSheet = rememberInputModalBottomSheetState<String>()
@@ -61,6 +73,10 @@ private fun BrandsDetailsContent(
                         message = effect.text,
                         isError = effect.error
                     )
+                }
+
+                is PelletsContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
                 }
             }
         }?.collect()
@@ -77,8 +93,10 @@ private fun BrandsDetailsContent(
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.pellets_brands),
-                    navController = navController,
-                    isLoading = state.isLoading
+                    isLoading = state.isLoading,
+                    onNavigate = {
+                        onNavigationRequested(PelletsContract.Effect.Navigation.Back)
+                    }
                 ) {
                     items(items = state.pellets.brandsList) { brand ->
                         WoodBrandItem(
@@ -129,7 +147,6 @@ private fun BrandsDetailsScreenPreview() {
     PiFireTheme {
         Surface {
             BrandsDetailsContent(
-                navController = rememberNavController(),
                 state = PelletsContract.State(
                     pellets = buildPellets(),
                     isInitialLoading = false,
@@ -139,7 +156,8 @@ private fun BrandsDetailsScreenPreview() {
                     isConnected = true
                 ),
                 effectFlow = null,
-                onEventSent = { }
+                onEventSent = { },
+                onNavigationRequested = { }
             )
         }
     }

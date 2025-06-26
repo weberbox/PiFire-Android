@@ -5,6 +5,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
+import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.info.data.repo.InfoRepo
 import com.weberbox.pifire.info.presentation.contract.InfoContract
@@ -36,10 +37,16 @@ class InfoViewModel @Inject constructor(
 
     override fun handleEvents(event: InfoContract.Event) {
         when (event) {
-            InfoContract.Event.BackButtonClicked ->
+            is InfoContract.Event.BackButtonClicked ->
                 setEffect { InfoContract.Effect.Navigation.Back }
 
-            InfoContract.Event.Refresh -> getInfoData(true)
+            is InfoContract.Event.Refresh -> getInfoData(true)
+            is InfoContract.Event.PipModulesViewAll ->
+                setEffect {
+                    InfoContract.Effect.Navigation.NavRoute(
+                        route = NavGraph.InfoDest.PipModulesDetails
+                    )
+                }
         }
     }
 

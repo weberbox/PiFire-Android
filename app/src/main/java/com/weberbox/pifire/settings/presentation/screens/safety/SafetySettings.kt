@@ -45,6 +45,7 @@ import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.PreferenceWarning
 import com.weberbox.pifire.settings.presentation.component.getSummary
+import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
 import com.weberbox.pifire.settings.presentation.component.getSummaryTemp
 import com.weberbox.pifire.settings.presentation.contract.SafetyContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -159,6 +160,7 @@ fun SafetySettingsContent(
     onEventSent: (event: SafetyContract.Event) -> Unit,
     contentPadding: PaddingValues
 ) {
+    val overrideTimeSheet = rememberCustomModalBottomSheetState()
     val minStartupTempSheet = rememberCustomModalBottomSheetState()
     val maxStartupTempSheet = rememberCustomModalBottomSheetState()
     val maxTempSheet = rememberCustomModalBottomSheetState()
@@ -184,6 +186,31 @@ fun SafetySettingsContent(
                     text = stringResource(R.string.settings_safety_startup_check_summary)
                 )
             }
+        )
+        SwitchPreference(
+            value = state.serverData.settings.safetyAllowManualChanges,
+            onValueChange = { onEventSent(SafetyContract.Event.SetAllowManualChanges(it)) },
+            title = { Text(text = stringResource(R.string.settings_safety_manual_outputs)) },
+            summary = {
+                Text(
+                    text = stringResource(R.string.settings_safety_manual_outputs_summary)
+                )
+            }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_safety_manual_outputs_time)) },
+            summary = {
+                Text(
+                    text = getSummarySeconds(
+                        state.serverData.settings.safetyOverrideTime.toString()
+                    )
+                )
+            },
+            onClick = { overrideTimeSheet.open() }
+        )
+        PreferenceNote(stringResource(R.string.settings_safety_manual_outputs_note))
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_operating_temps_title)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_safety_min_start)) },
@@ -237,6 +264,25 @@ fun SafetySettingsContent(
         )
         PreferenceNote(stringResource(R.string.settings_safety_note))
         PreferenceWarning(stringResource(R.string.settings_safety_warning))
+    }
+    BottomSheet(
+        sheetState = overrideTimeSheet.sheetState
+    ) {
+        InputValidationSheet(
+            input = state.serverData.settings.safetyOverrideTime.toString(),
+            title = stringResource(R.string.settings_safety_manual_outputs_time),
+            placeholder = stringResource(R.string.settings_safety_manual_outputs_time),
+            validationOptions = ValidationOptions(
+                allowBlank = false,
+                keyboardType = KeyboardType.NumberPassword,
+                min = 1.0
+            ),
+            onUpdate = {
+                onEventSent(SafetyContract.Event.SetOverrideTime(it.toInt()))
+                overrideTimeSheet.close()
+            },
+            onDismiss = { overrideTimeSheet.close() }
+        )
     }
     BottomSheet(
         sheetState = minStartupTempSheet.sheetState

@@ -60,7 +60,10 @@ internal fun InfoList(
                 InfoModules(info = state.info)
             }
             item {
-                InfoPipModules(info = state.info)
+                InfoPipModules(
+                    info = state.info,
+                    onEventSent = onEventSent
+                )
             }
             item {
                 InfoUptime(info = state.info)

@@ -20,10 +20,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +44,7 @@ fun InputValidationSheet(
     title: String,
     placeholder: String = "",
     leadingIcon: ImageVector = Icons.Outlined.Edit,
+    contentType: ContentType? = null,
     validationOptions: ValidationOptions = ValidationOptions(),
     onUpdate: (String) -> Unit,
     onDelete: ((String) -> Unit)? = null,
@@ -60,6 +64,7 @@ fun InputValidationSheet(
         title = title,
         placeholder = placeholder,
         leadingIcon = leadingIcon,
+        contentType = contentType,
         onUpdate = onUpdate,
         onDelete = onDelete,
         onDismiss = onDismiss,
@@ -74,6 +79,7 @@ private fun InputValidationContent(
     title: String,
     placeholder: String = "",
     leadingIcon: ImageVector,
+    contentType: ContentType? = null,
     onUpdate: (String) -> Unit,
     onDelete: ((String) -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
@@ -103,7 +109,12 @@ private fun InputValidationContent(
         OutlineFieldWithState(
             modifier = Modifier
                 .fillMaxWidth()
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .then(
+                    contentType?.let { type ->
+                        Modifier.semantics { this.contentType = type }
+                    } ?: Modifier
+                ),
             placeholder = placeholder,
             fieldInput = state.input,
             errorStatus = state.error,

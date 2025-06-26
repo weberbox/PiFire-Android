@@ -28,6 +28,7 @@ data class DashDto(
     val primeAmount: Int? = null,
     val tempUnits: String? = null,
     val hasDcFan: Boolean? = null,
+    val hasDistanceSensor: Boolean? = null,
     val startupCheck: Boolean? = null,
     val allowManualOutputs: Boolean? = null,
     val timer: Timer? = null,

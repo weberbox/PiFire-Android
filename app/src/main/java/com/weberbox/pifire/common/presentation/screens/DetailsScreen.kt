@@ -22,8 +22,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.gradientBackground
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
@@ -37,8 +35,8 @@ import com.weberbox.pifire.info.presentation.screens.buildLicenseData
 @OptIn(ExperimentalMaterial3Api::class)
 fun DetailsScreen(
     title: String,
-    navController: NavHostController,
     isLoading: Boolean = false,
+    onNavigate: () -> Unit,
     content: LazyListScope.() -> Unit
 ) {
     val windowInsets = WindowInsets.safeDrawing
@@ -57,7 +55,7 @@ fun DetailsScreen(
                     )
                 },
                 scrollBehavior = scrollBehavior,
-                onNavigate = { navController.popBackStack() }
+                onNavigate = onNavigate
             )
         },
         containerColor = Color.Transparent,
@@ -90,7 +88,7 @@ private fun DetailsScreenPreview() {
         Surface {
             DetailsScreen(
                 title = stringResource(R.string.info_credits),
-                navController = rememberNavController()
+                onNavigate = { }
             ) {
                 for (license in buildLicenseData().list) {
                     item {

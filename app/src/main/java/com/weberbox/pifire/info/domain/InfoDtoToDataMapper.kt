@@ -21,13 +21,15 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         from.outPins?.forEach { (key: String, value: Int?) ->
             val pin = value?.toString() ?: ""
             if (key.contains("dc_fan") || key.contains("pwm")) {
-                from.dcFan?.also {
-                    gpioOutPins.add(
-                        GPIOInOutData(
-                            name = key.replace("_", " "),
-                            pin = pin
+                from.dcFan?.also { dcFan ->
+                    if (dcFan) {
+                        gpioOutPins.add(
+                            GPIOInOutData(
+                                name = key.replace("_", " "),
+                                pin = pin
+                            )
                         )
-                    )
+                    }
                 }
             } else {
                 gpioOutPins.add(
@@ -42,13 +44,15 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         from.inPins?.forEach { (key: String, value: Int?) ->
             val pin = value?.toString() ?: ""
             if (key.contains("dc_fan") || key.contains("pwm")) {
-                from.dcFan?.also {
-                    gpioInPins.add(
-                        GPIOInOutData(
-                            name = key.replace("_", " "),
-                            pin = pin
+                from.dcFan?.also { dcFan ->
+                    if (dcFan) {
+                        gpioInPins.add(
+                            GPIOInOutData(
+                                name = key.replace("_", " "),
+                                pin = pin
+                            )
                         )
-                    )
+                    }
                 }
             } else {
                 gpioInPins.add(
@@ -107,7 +111,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                         .dropLastWhile { it.isEmpty() }.toTypedArray()
                     networkString.append("Address:    ").append(inetSeparated[1]).append("\n\n")
                     networkString.append("Netmask:    ").append(inetSeparated[4]).append("\n\n")
-                    networkString.append("Broadcast:    ").append(inetSeparated[7]).append("\n")
+                    networkString.append("Broadcast:    ").append(inetSeparated[7])
                 }
             }
         }

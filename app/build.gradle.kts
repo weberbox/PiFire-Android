@@ -22,14 +22,14 @@ val vMinor = 0
 val vPatch = 0
 
 android {
-    compileSdk = 35
+    compileSdk = 36
 
     namespace = "com.weberbox.pifire"
 
     defaultConfig {
         applicationId = "com.weberbox.pifire"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = vMajor * 1000000 + vMinor * 10000 + vPatch * 100
         versionName = "${vMajor}.${vMinor}.${vPatch}"
     }
@@ -47,6 +47,7 @@ android {
 
     buildTypes {
         release {
+            manifestPlaceholders += mapOf()
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
             isShrinkResources = true

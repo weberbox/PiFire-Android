@@ -112,6 +112,10 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 safetyMaxTemp = from.safety?.maxTemp ?: Setting.safetyMaxTemp.value,
                 safetyReigniteRetries = from.safety?.reigniteRetries
                     ?: Setting.safetyReigniteRetries.value,
+                safetyAllowManualChanges = from.safety?.allowManualChanges
+                    ?: Setting.safetyAllowManualChanges.value,
+                safetyOverrideTime = from.safety?.manualOverrideTime
+                    ?: Setting.safetyOverrideTime.value,
                 shutdownDuration = from.shutdown?.duration ?: Setting.shutdownDuration.value,
                 shutdownAutoPowerOff = from.shutdown?.autoPowerOff
                     ?: Setting.shutdownAutoPowerOff.value,

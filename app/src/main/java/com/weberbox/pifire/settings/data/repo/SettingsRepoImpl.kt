@@ -94,6 +94,7 @@ class SettingsRepoImpl @Inject constructor(
                     serverMap = data.serverMap.mapValues { (uuid, item) ->
                         if (server.uuid == uuid) {
                             item.copy(
+                                name = server.settings.grillName,
                                 settings = server.settings
                             )
                         } else {
@@ -569,6 +570,14 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setSafetyStartupCheck(enabled: Boolean): Result<Server, DataError> {
         return transformResult(settingsApi.setSafetyStartupCheck(enabled))
+    }
+
+    override suspend fun setAllowManualChanges(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setAllowManualChanges(enabled))
+    }
+
+    override suspend fun setOverrideTime(time: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setOverrideTime(time))
     }
 
     override suspend fun setMinStartTemp(temp: Int): Result<Server, DataError> {

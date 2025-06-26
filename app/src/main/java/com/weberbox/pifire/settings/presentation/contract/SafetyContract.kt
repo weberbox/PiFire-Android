@@ -10,6 +10,8 @@ class SafetyContract {
 
     sealed class Event : ViewEvent {
         data class SetSafetyStartupCheck(val enabled: Boolean) : Event()
+        data class SetAllowManualChanges(val enabled: Boolean) : Event()
+        data class SetOverrideTime(val time: Int) : Event()
         data class SetMinStartTemp(val temp: Int) : Event()
         data class SetMaxStartTemp(val temp: Int) : Event()
         data class SetMaxGrillTemp(val temp: Int) : Event()

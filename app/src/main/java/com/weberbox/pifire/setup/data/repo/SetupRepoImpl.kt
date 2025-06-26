@@ -4,14 +4,17 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parseGetResponse
+import com.weberbox.pifire.common.data.parser.parseResponse
 import com.weberbox.pifire.common.data.util.networkAvailable
 import com.weberbox.pifire.common.presentation.util.getReasonPhrase
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
+import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.singleton.SocketManager
 import com.weberbox.pifire.settings.domain.SettingsDtoToDataMapper
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.setup.data.api.SetupApi
+import com.weberbox.pifire.setup.domain.LegacyVersionsDtoToDataMapper
 import com.weberbox.pifire.setup.domain.VersionsDtoToDataMapper
 import com.weberbox.pifire.setup.presentation.model.VersionsData
 import kotlinx.coroutines.currentCoroutineContext
@@ -23,7 +26,7 @@ class SetupRepoImpl @Inject constructor(
     private val socketManager: SocketManager,
     private val setupApi: SetupApi,
     private val json: Json
-): SetupRepo {
+) : SetupRepo {
 
     override suspend fun getVersions(
         url: String,
@@ -38,6 +41,57 @@ class SetupRepoImpl @Inject constructor(
                                 response = r.string(),
                                 json = json,
                                 mapper = VersionsDtoToDataMapper
+                            ).let { data ->
+                                r.close()
+                                checkLegacyResponse(
+                                    url = url,
+                                    headerMap = headerMap,
+                                    data = data
+                                )
+                            }
+                        } ?: Result.Error(DataError.Network.NULL_RESPONSE)
+                    } else {
+                        return if (response.code() == 401) {
+                            Result.Error(DataError.Network.AUTHENTICATION)
+                        } else {
+                            Result.Error(
+                                DataError.UiText(
+                                    R.string.data_error_http_unsuccessful,
+                                    uiTextArgsOf(
+                                        response.code().toString(),
+                                        getReasonPhrase(response.code())
+                                    )
+                                )
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                currentCoroutineContext().ensureActive()
+                e.message?.let { message ->
+                    return Result.Error(DataError.Server(message))
+                }
+                return Result.Error(DataError.Network.SERVER_ERROR)
+            }
+        } else {
+            return Result.Error(DataError.Network.NO_CONNECTION)
+        }
+    }
+
+    @Compatibility(versionBelow = "1.10.0", build = "25")
+    override suspend fun getVersionsLegacy(
+        url: String,
+        headerMap: Map<String, String>
+    ): Result<VersionsData, DataError> {
+        if (networkAvailable()) {
+            try {
+                setupApi.getVersions(url, headerMap).let { response ->
+                    if (response.isSuccessful) {
+                        return response.body()?.let { r ->
+                            parseResponse(
+                                response = r.string(),
+                                json = json,
+                                mapper = LegacyVersionsDtoToDataMapper
                             ).let { data ->
                                 r.close()
                                 when (data) {
@@ -103,6 +157,33 @@ class SetupRepoImpl @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    @Compatibility(versionBelow = "1.10.0", build = "25")
+    private suspend fun checkLegacyResponse(
+        url: String,
+        headerMap: Map<String, String>,
+        data: Result<VersionsData, DataError>
+    ): Result<VersionsData, DataError> {
+        return when (data) {
+            is Result.Error -> {
+                when (data.error) {
+                    is DataError.Server -> {
+                        return getVersionsLegacy(
+                            url = url.replace(
+                                oldValue = "get/versions",
+                                newValue = "settings"
+                            ),
+                            headerMap = headerMap
+                        )
+                    }
+
+                    else -> Result.Error(data.error)
+                }
+            }
+
+            is Result.Success -> Result.Success(data.data)
         }
     }
 }

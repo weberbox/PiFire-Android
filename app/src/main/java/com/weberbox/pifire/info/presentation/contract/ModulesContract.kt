@@ -4,22 +4,15 @@ import com.weberbox.pifire.common.presentation.base.ViewEvent
 import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
 import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.info.presentation.model.InfoData.Info
-import com.weberbox.pifire.info.presentation.model.Licenses
+import com.weberbox.pifire.info.presentation.model.InfoData.Info.Module
 
-class InfoContract {
+class ModulesContract {
 
-    sealed class Event : ViewEvent {
-        data object Refresh: Event()
-        data object PipModulesViewAll: Event()
-        data object BackButtonClicked : Event()
-    }
+    sealed class Event : ViewEvent
 
     data class State(
-        val info: Info,
-        val licenseData: Licenses,
-        val isInfoLoading: Boolean,
-        val isLicencesLoading: Boolean,
+        val pipModules: List<Module>,
+        val isInitialLoading: Boolean,
         val isRefreshing: Boolean,
         val isDataError: Boolean
     ) : ViewState
@@ -29,8 +22,6 @@ class InfoContract {
 
         sealed class Navigation : Effect() {
             data object Back : Navigation()
-            data object LicenseDetails : Navigation()
-            data class NavRoute(val route: Any, val popUp: Boolean = false) : Navigation()
         }
     }
 }

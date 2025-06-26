@@ -22,7 +22,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -85,7 +88,9 @@ internal fun CredentialsSheet(
             modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
         )
         OutlineFieldWithState(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .semantics { contentType = ContentType.Username }
+                .fillMaxWidth(),
             placeholder = stringResource(R.string.username),
             leadingIcon = Icons.Outlined.Person2,
             fieldInput = username,
@@ -99,7 +104,9 @@ internal fun CredentialsSheet(
             }
         )
         OutlineFieldWithState(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .semantics { contentType = ContentType.Password }
+                .fillMaxWidth(),
             placeholder = stringResource(R.string.password),
             leadingIcon = Icons.Outlined.Key,
             isPasswordField = true,

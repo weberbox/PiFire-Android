@@ -199,7 +199,7 @@ private fun WorkSettingsContent(
             onClick = {
                 onNavigationRequested(
                     WorkContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Pid
+                        route = NavGraph.SettingsDest.Pid
                     )
                 )
             }
@@ -253,7 +253,7 @@ private fun WorkSettingsContent(
         )
         PreferenceNote(stringResource(R.string.settings_pmode_note)) {
             Intent(Intent.ACTION_VIEW).apply {
-                setData(context.getString(R.string.def_pmode_link).toUri())
+                data = context.getString(R.string.def_pmode_link).toUri()
                 context.startActivity(this)
             }
         }
@@ -265,6 +265,30 @@ private fun WorkSettingsContent(
             onValueChange = { onEventSent(WorkContract.Event.SetSPlusEnabled(it)) },
             title = { Text(text = stringResource(R.string.settings_splus_enabled)) },
             summary = { Text(text = getSummary(state.serverData.settings.sPlusEnabled)) }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_splus_min)) },
+            summary = {
+                Text(
+                    text = getSummaryTemp(
+                        state.serverData.settings.sPlusMinTemp.toString(),
+                        state.serverData.settings.tempUnits
+                    )
+                )
+            },
+            onClick = { sPlusMinTempSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_splus_max)) },
+            summary = {
+                Text(
+                    text = getSummaryTemp(
+                        state.serverData.settings.sPlusMaxTemp.toString(),
+                        state.serverData.settings.tempUnits
+                    )
+                )
+            },
+            onClick = { sPlusMaxTempSheet.open() }
         )
         PreferenceNote(stringResource(R.string.settings_splus_note))
         if (state.serverData.settings.dcFan) {
@@ -278,7 +302,6 @@ private fun WorkSettingsContent(
                     )
                 }
             )
-            PreferenceNote(stringResource(R.string.settings_splus_fan_ramp_note))
             Preference(
                 title = { Text(text = stringResource(R.string.settings_splus_ramp_dc)) },
                 summary = {
@@ -290,6 +313,7 @@ private fun WorkSettingsContent(
                 },
                 onClick = { sPlusDutyCycleSheet.open() }
             )
+            PreferenceNote(stringResource(R.string.settings_splus_fan_ramp_note))
         }
         Preference(
             title = { Text(text = stringResource(R.string.settings_splus_on_time)) },

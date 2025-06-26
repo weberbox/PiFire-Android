@@ -37,6 +37,7 @@ data class Setting<T>(
 
         // Platform
         val dcFan = Setting("dc_fan", false)
+        val hasDistanceSensor = Setting("dist", false)
         val standalone = Setting("standalone", false)
         val realHw = Setting("real_hw", true)
         val platformCurrent = Setting("current", "custom")
@@ -109,6 +110,7 @@ data class Setting<T>(
         val safetyMaxTemp = Setting("maxtemp", 550)
         val safetyReigniteRetries = Setting("reigniteretries", 1)
         val safetyAllowManualChanges = Setting("allow_manual_changes", false)
+        val safetyOverrideTime = Setting("manual_override_time", 30)
 
         // Shutdown
         val shutdownDuration = Setting("shutdown_duration", 240)

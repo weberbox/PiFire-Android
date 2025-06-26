@@ -131,6 +131,8 @@ interface SettingsRepo {
     ): Result<Server, DataError>
 
     suspend fun setSafetyStartupCheck(enabled: Boolean): Result<Server, DataError>
+    suspend fun setAllowManualChanges(enabled: Boolean): Result<Server, DataError>
+    suspend fun setOverrideTime(time: Int): Result<Server, DataError>
     suspend fun setMinStartTemp(temp: Int): Result<Server, DataError>
     suspend fun setMaxStartTemp(temp: Int): Result<Server, DataError>
     suspend fun setMaxGrillTemp(temp: Int): Result<Server, DataError>

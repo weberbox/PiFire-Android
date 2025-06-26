@@ -32,6 +32,7 @@ sealed class NavGraph {
     @Serializable
     data object InfoDest {
         @Serializable data object Info
+        @Serializable data object PipModulesDetails
         @Serializable data class LicenseDetails(val licenses: Licenses)
     }
 

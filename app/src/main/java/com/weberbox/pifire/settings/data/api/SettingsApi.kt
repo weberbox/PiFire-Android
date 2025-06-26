@@ -115,6 +115,8 @@ interface SettingsApi {
     ): Result<String, DataError>
 
     suspend fun setSafetyStartupCheck(enabled: Boolean): Result<String, DataError>
+    suspend fun setAllowManualChanges(enabled: Boolean): Result<String, DataError>
+    suspend fun setOverrideTime(time: Int): Result<String, DataError>
     suspend fun setMinStartTemp(temp: Int): Result<String, DataError>
     suspend fun setMaxStartTemp(temp: Int): Result<String, DataError>
     suspend fun setMaxGrillTemp(temp: Int): Result<String, DataError>

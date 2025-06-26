@@ -120,6 +120,8 @@ data class SettingsData(
             val safetyMaxStartupTemp: Int = Setting.safetyMaxStartupTemp.value,
             val safetyMaxTemp: Int = Setting.safetyMaxTemp.value,
             val safetyReigniteRetries: Int = Setting.safetyReigniteRetries.value,
+            val safetyAllowManualChanges: Boolean = Setting.safetyAllowManualChanges.value,
+            val safetyOverrideTime: Int = Setting.safetyOverrideTime.value,
 
             // Shutdown
             val shutdownDuration: Int = Setting.shutdownDuration.value,

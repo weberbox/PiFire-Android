@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
@@ -64,23 +63,35 @@ fun PelletsScreenDestination(
     viewModel: PelletsViewModel = hiltViewModel()
 ) {
     PelletsScreen(
+        hazeState = hazeState,
+        contentPadding = contentPadding,
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
-        navController = navController,
-        hazeState = hazeState,
-        contentPadding = contentPadding
+        onNavigationRequested = { navigationEffect ->
+            when (navigationEffect) {
+                is PelletsContract.Effect.Navigation.Back ->
+                    navController.popBackStack()
+
+                is PelletsContract.Effect.Navigation.NavRoute -> {
+                    navController.safeNavigate(
+                        route = navigationEffect.route,
+                        popUp = navigationEffect.popUp
+                    )
+                }
+            }
+        }
     )
 }
 
 @Composable
 private fun PelletsScreen(
+    hazeState: HazeState,
+    contentPadding: PaddingValues,
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    navController: NavHostController,
-    hazeState: HazeState,
-    contentPadding: PaddingValues
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
     val scrollState = rememberScrollState()
@@ -103,6 +114,10 @@ private fun PelletsScreen(
                             message = effect.text,
                             isError = effect.error
                         )
+                    }
+
+                    is PelletsContract.Effect.Navigation -> {
+                        onNavigationRequested(effect)
                     }
                 }
             }
@@ -166,7 +181,11 @@ private fun PelletsScreen(
                                     }
 
                                     is PelletsContract.Event.BrandsViewAll -> {
-                                        navController.safeNavigate(NavGraph.HomeDest.BrandsDetails)
+                                        onNavigationRequested(
+                                            PelletsContract.Effect.Navigation.NavRoute(
+                                                route = NavGraph.HomeDest.BrandsDetails
+                                            )
+                                        )
                                     }
 
                                     else -> onEventSent(event)
@@ -187,7 +206,11 @@ private fun PelletsScreen(
                                     }
 
                                     is PelletsContract.Event.WoodsViewAll -> {
-                                        navController.safeNavigate(NavGraph.HomeDest.WoodsDetails)
+                                        onNavigationRequested(
+                                            PelletsContract.Effect.Navigation.NavRoute(
+                                                route = NavGraph.HomeDest.WoodsDetails
+                                            )
+                                        )
                                     }
 
                                     else -> onEventSent(event)
@@ -227,8 +250,10 @@ private fun PelletsScreen(
                                     }
 
                                     is PelletsContract.Event.ProfilesViewAll -> {
-                                        navController.safeNavigate(
-                                            NavGraph.HomeDest.ProfilesDetails
+                                        onNavigationRequested(
+                                            PelletsContract.Effect.Navigation.NavRoute(
+                                                route = NavGraph.HomeDest.ProfilesDetails
+                                            )
                                         )
                                     }
 
@@ -246,7 +271,11 @@ private fun PelletsScreen(
                                     }
 
                                     is PelletsContract.Event.LogsViewAll -> {
-                                        navController.safeNavigate(NavGraph.HomeDest.LogsDetails)
+                                        onNavigationRequested(
+                                            PelletsContract.Effect.Navigation.NavRoute(
+                                                route = NavGraph.HomeDest.LogsDetails
+                                            )
+                                        )
                                     }
 
                                     else -> onEventSent(event)
@@ -287,6 +316,8 @@ internal fun PelletsScreenPreview(
     PiFireTheme {
         Surface {
             PelletsScreen(
+                hazeState = hazeState,
+                contentPadding = contentPadding,
                 state = PelletsContract.State(
                     pellets = buildPellets(),
                     isInitialLoading = false,
@@ -297,9 +328,7 @@ internal fun PelletsScreenPreview(
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                hazeState = hazeState,
-                contentPadding = contentPadding,
-                navController = rememberNavController()
+                onNavigationRequested = { }
             )
         }
     }

@@ -27,7 +27,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.HazeAppBar
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
+import com.weberbox.pifire.common.presentation.navigation.NavGraph.InfoDest.LicenseDetails
 import com.weberbox.pifire.common.presentation.screens.CachedDataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
@@ -60,10 +60,16 @@ fun InfoScreenDestination(
 
                 is InfoContract.Effect.Navigation.LicenseDetails ->
                     navController.safeNavigate(
-                        route = NavGraph.InfoDest.LicenseDetails(
+                        route = LicenseDetails(
                             viewModel.viewState.value.licenseData
                         ),
                         popUp = false
+                    )
+
+                is InfoContract.Effect.Navigation.NavRoute ->
+                    navController.safeNavigate(
+                        route = navigationEffect.route,
+                        popUp = navigationEffect.popUp
                     )
             }
         }

@@ -34,7 +34,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -161,7 +164,9 @@ private fun AuthScreen(
                 HorizontalDivider(Modifier.width(MaterialTheme.size.extraLargeTwo))
                 Spacer(Modifier.height(MaterialTheme.spacing.smallThree))
                 OutlineFieldWithState(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .semantics { contentType = ContentType.Username }
+                        .fillMaxWidth(),
                     placeholder = stringResource(R.string.username),
                     leadingIcon = Icons.Filled.Person,
                     fieldInput = state.credentials.username.input,
@@ -171,7 +176,9 @@ private fun AuthScreen(
                     }
                 )
                 OutlineFieldWithState(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .semantics { contentType = ContentType.Password }
+                        .fillMaxWidth(),
                     placeholder = stringResource(R.string.password),
                     leadingIcon = Icons.Filled.Key,
                     isPasswordField = true,
