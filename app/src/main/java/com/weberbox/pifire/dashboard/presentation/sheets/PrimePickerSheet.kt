@@ -84,6 +84,7 @@ internal fun PrimePickerSheet(
                 .wrapContentHeight()
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.large)
+                .padding(bottom = MaterialTheme.spacing.extraSmall)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center
         ) {

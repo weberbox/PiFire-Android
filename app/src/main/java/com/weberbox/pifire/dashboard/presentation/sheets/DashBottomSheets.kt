@@ -119,7 +119,8 @@ internal fun DashBottomSheets(
             onConfirm = { temp ->
                 onEventSent(DashContract.Event.SendEvent(DashEvent.GrillHoldTemp(temp)))
                 holdPickerSheet.close()
-            }
+            },
+            onCancel = { holdPickerSheet.close() }
         )
     }
 }

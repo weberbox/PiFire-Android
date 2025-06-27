@@ -2,8 +2,10 @@ package com.weberbox.pifire.dashboard.presentation.sheets
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -11,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,6 +55,7 @@ internal fun HoldPickerSheet(
     extraRows: Int = 1,
     itemSpace: Dp = MaterialTheme.spacing.mediumOne,
     onConfirm: (temp: String) -> Unit,
+    onCancel: () -> Unit
 ) {
     val temps by remember {
         mutableStateOf(
@@ -84,6 +88,7 @@ internal fun HoldPickerSheet(
                 .wrapContentHeight()
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.large)
+                .padding(bottom = MaterialTheme.spacing.extraSmall)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
             contentAlignment = Alignment.Center
         ) {
@@ -116,17 +121,34 @@ internal fun HoldPickerSheet(
                 color = MaterialTheme.colorScheme.primaryContainer
             )
         }
-        Button(
-            onClick = { onConfirm(setTemp.toString()) },
-            shape = MaterialTheme.shapes.small,
+        Row(
             modifier = Modifier
-                .padding(vertical = MaterialTheme.spacing.extraSmall)
                 .fillMaxWidth()
+                .padding(vertical = MaterialTheme.spacing.extraSmall),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(R.string.confirm),
-                fontWeight = FontWeight.Bold
-            )
+            OutlinedButton(
+                onClick = onCancel,
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier
+                    .padding(end = MaterialTheme.spacing.smallOne)
+                    .weight(1f)
+            ) {
+                Text(
+                    text = stringResource(R.string.cancel),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Button(
+                onClick = { onConfirm(setTemp.toString()) },
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = stringResource(R.string.confirm),
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -145,6 +167,7 @@ private fun HoldPickerSheetPreview() {
                     probeData = probeData,
                     units = "F",
                     onConfirm = { },
+                    onCancel = { }
                 )
             }
         }

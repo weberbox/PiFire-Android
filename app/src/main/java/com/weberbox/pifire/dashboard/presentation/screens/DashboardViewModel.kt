@@ -278,6 +278,7 @@ class DashboardViewModel @Inject constructor(
 
     private fun checkHopperLevel() {
         if (viewState.value.dash.hasDistanceSensor) {
+            setLoadingState(true)
             viewModelScope.launch(Dispatchers.IO) {
                 handleResult(dashApi.checkHopperLevel())
             }
