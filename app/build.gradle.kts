@@ -1,18 +1,18 @@
-import java.util.Properties
+import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.io.FileInputStream
 import java.util.EnumSet
-import io.sentry.android.gradle.extensions.InstrumentationFeature
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.services)
     alias(libs.plugins.sentry.android.gradle)
-    alias(libs.plugins.jetbrains.kotlin.kapt)
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.jetbrains.kotlin.kapt)
 }
 
 private val keystoreProperties = getKeystoreProperties()

@@ -290,6 +290,28 @@ private fun WorkSettingsContent(
             },
             onClick = { sPlusMaxTempSheet.open() }
         )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_splus_on_time)) },
+            summary = {
+                Text(
+                    text = getSummarySeconds(
+                        state.serverData.settings.sPlusOnTime.toString()
+                    )
+                )
+            },
+            onClick = { sPlusOnTimeSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_splus_off_time)) },
+            summary = {
+                Text(
+                    text = getSummarySeconds(
+                        state.serverData.settings.sPlusOffTime.toString()
+                    )
+                )
+            },
+            onClick = { sPlusOffTimeSheet.open() }
+        )
         PreferenceNote(stringResource(R.string.settings_splus_note))
         if (state.serverData.settings.dcFan) {
             SwitchPreference(
@@ -315,40 +337,6 @@ private fun WorkSettingsContent(
             )
             PreferenceNote(stringResource(R.string.settings_splus_fan_ramp_note))
         }
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_splus_on_time)) },
-            summary = {
-                Text(
-                    text = getSummarySeconds(
-                        state.serverData.settings.sPlusOnTime.toString()
-                    )
-                )
-            },
-            onClick = { sPlusOnTimeSheet.open() }
-        )
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_splus_off_time)) },
-            summary = {
-                Text(
-                    text = getSummarySeconds(
-                        state.serverData.settings.sPlusOffTime.toString()
-                    )
-                )
-            },
-            onClick = { sPlusOffTimeSheet.open() }
-        )
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_splus_max)) },
-            summary = {
-                Text(
-                    text = getSummaryTemp(
-                        state.serverData.settings.sPlusMaxTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
-                )
-            },
-            onClick = { sPlusMaxTempSheet.open() }
-        )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_lid_detection)) },
         )

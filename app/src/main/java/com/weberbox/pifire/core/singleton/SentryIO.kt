@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.IOException
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
+import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.data.model.remote.Modules
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
@@ -46,7 +47,7 @@ class SentryIO @Inject constructor(
     }
 
     private fun initSentry(appContext: Context) {
-        if (sentryEnabled() && sentryDSNSet(appContext)) {
+        if (sentryEnabled() && sentryDSNSet()) {
             SentryAndroid.init(appContext) { options ->
                 options.sessionReplay.onErrorSampleRate = 1.0
                 options.sessionReplay.sessionSampleRate = 0.1
@@ -54,7 +55,7 @@ class SentryIO @Inject constructor(
                 options.isAttachScreenshot = true
                 options.isEnableAutoSessionTracking = true
                 options.isEnableDeduplication = true
-                options.dsn = appContext.getString(R.string.def_sentry_io_dsn)
+                options.dsn = Secrets.SENTRY_IO_DSN
                 options.tracesSampleRate = 1.0
                 options.addIntegration(
                     SentryTimberIntegration(
@@ -138,8 +139,8 @@ class SentryIO @Inject constructor(
         )
     }
 
-    private fun sentryDSNSet(context: Context): Boolean {
-        return context.getString(R.string.def_sentry_io_dsn).isNotEmpty()
+    private fun sentryDSNSet(): Boolean {
+        return Secrets.SENTRY_IO_DSN.isNotEmpty()
     }
 
     private fun sentryEnabled(): Boolean {

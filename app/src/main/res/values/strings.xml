@@ -317,8 +317,8 @@
     <string name="settings_pmode_mode">P-Mode</string>
     <string name="settings_pmode_table">P-Mode Table</string>
     <string name="settings_pmode_summary">Click here for a P-Mode chart</string>
-    <string name="settings_pmode_auger_on">Auger ON Time</string>
-    <string name="settings_pmode_auger_off">Auger OFF Time</string>
+    <string name="settings_pmode_auger_on">Auger On Time</string>
+    <string name="settings_pmode_auger_off">Auger Off Time</string>
     <string name="settings_pmode">Mode %1$s</string>
 
     <string name="settings_cat_splus">Smoke Plus Settings</string>

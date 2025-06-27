@@ -38,7 +38,7 @@ import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.config.PushConfig
+import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -161,7 +161,7 @@ private fun NotificationSettingsContent(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding)
     ) {
-        if (PushConfig.ONESIGNAL_APP_ID.isNotBlank()) {
+        if (Secrets.ONESIGNAL_APP_ID.isNotBlank()) {
             TwoTargetSwitchPreference(
                 value = state.serverData.settings.onesignalEnabled,
                 onValueChange = { onEventSent(NotifContract.Event.SetOneSignalEnabled(it)) },

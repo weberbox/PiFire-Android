@@ -12,7 +12,7 @@ import com.onesignal.OneSignal
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.config.PushConfig
+import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class OneSignalManager @Inject constructor(
-    @ApplicationContext private val appContext: Context,
+    @param:ApplicationContext private val appContext: Context,
     private val settingsRepo: SettingsRepo
 ) {
 
@@ -28,7 +28,7 @@ class OneSignalManager @Inject constructor(
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.ERROR, OneSignal.LOG_LEVEL.NONE)
         OneSignal.setRequiresUserPrivacyConsent(true)
         OneSignal.initWithContext(appContext.applicationContext)
-        OneSignal.setAppId(PushConfig.ONESIGNAL_APP_ID)
+        OneSignal.setAppId(Secrets.ONESIGNAL_APP_ID)
         initNotificationChannels(appContext.applicationContext)
     }
 
@@ -50,7 +50,7 @@ class OneSignalManager @Inject constructor(
                 if (state.isSubscribed) {
                     state.userId?.also { playerID ->
                         if (registrationResult == OneSignalStatus.ONESIGNAL_NOT_REGISTERED) {
-                            settingsRepo.setOneSignalAppID(PushConfig.ONESIGNAL_APP_ID)
+                            settingsRepo.setOneSignalAppID(Secrets.ONESIGNAL_APP_ID)
                         }
                         registerOneSignalDevice(playerID, getDevice(playerID))
                     }
@@ -76,7 +76,7 @@ class OneSignalManager @Inject constructor(
     }
 
     suspend fun checkOneSignalStatus(): OneSignalStatus {
-        if (PushConfig.ONESIGNAL_APP_ID.isNotBlank()) {
+        if (Secrets.ONESIGNAL_APP_ID.isNotBlank()) {
             when (val status = checkRegistration()) {
                 OneSignalStatus.ONESIGNAL_NO_ID -> {
                     Timber.d("Device has No ID")
