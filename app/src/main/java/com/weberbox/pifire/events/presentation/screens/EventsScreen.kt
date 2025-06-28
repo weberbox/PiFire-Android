@@ -61,21 +61,12 @@ private fun EventsScreen(
     hazeState: HazeState,
     contentPadding: PaddingValues,
 ) {
-    val activity = LocalActivity.current
     var isVisibleOnScreen by remember { mutableStateOf(false) }
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is EventsContract.Effect.Notification ->
-                        activity?.showAlerter(
-                            message = effect.text,
-                            isError = effect.error
-                        )
-                }
-            }
-        }?.collect()
-    }
+
+    HandleSideEffects(
+        isVisibleOnScreen = isVisibleOnScreen,
+        effectFlow = effectFlow
+    )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -118,6 +109,27 @@ private fun EventsScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    isVisibleOnScreen: Boolean,
+    effectFlow: Flow<EventsContract.Effect>?
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            if (isVisibleOnScreen) {
+                when (effect) {
+                    is EventsContract.Effect.Notification ->
+                        activity?.showAlerter(
+                            message = effect.text,
+                            isError = effect.error
+                        )
+                }
+            }
+        }?.collect()
     }
 }
 

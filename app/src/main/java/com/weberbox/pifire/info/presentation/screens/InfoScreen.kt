@@ -84,26 +84,14 @@ private fun InfoScreen(
     onEventSent: (event: InfoContract.Event) -> Unit,
     onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = rememberHazeState()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is InfoContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is InfoContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -144,6 +132,30 @@ private fun InfoScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<InfoContract.Effect>?,
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is InfoContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is InfoContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

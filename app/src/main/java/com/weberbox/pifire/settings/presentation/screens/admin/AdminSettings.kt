@@ -85,25 +85,13 @@ private fun AdminSettings(
     onEventSent: (event: AdminContract.Event) -> Unit,
     onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is AdminContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is AdminContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -385,6 +373,30 @@ private fun AdminActionSheet(
             onNegative = { onDismiss() },
             onPositive = { onPositive(); onDismiss() }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<AdminContract.Effect>?,
+    onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is AdminContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is AdminContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

@@ -87,25 +87,14 @@ private fun ServerSettings(
     onEventSent: (event: ServerContract.Event) -> Unit,
     onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is ServerContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is ServerContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -224,6 +213,30 @@ private fun ServerSettingsContent(
                 credentialsSheet.close()
             }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ServerContract.Effect>?,
+    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ServerContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is ServerContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

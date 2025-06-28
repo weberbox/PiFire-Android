@@ -1,5 +1,6 @@
 package com.weberbox.pifire.landing.presentation.screens
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
@@ -111,22 +112,12 @@ private fun LandingScreen(
     var fabVisible by remember { mutableStateOf(true) }
     var previousIndex by remember { mutableIntStateOf(0) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is LandingContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is LandingContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        activity = activity,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     LaunchedEffect(scrollState) {
         snapshotFlow {
@@ -290,6 +281,30 @@ private fun LandingScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    activity: Activity?,
+    effectFlow: Flow<LandingContract.Effect>?,
+    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
+) {
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is LandingContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is LandingContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

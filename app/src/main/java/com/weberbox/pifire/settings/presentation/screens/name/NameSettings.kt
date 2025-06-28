@@ -82,25 +82,13 @@ private fun NameSettings(
     onEventSent: (event: NameContract.Event) -> Unit,
     onNavigationRequested: (NameContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is NameContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is NameContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -182,6 +170,30 @@ private fun NameContent(
                 nameSheet.close()
             }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<NameContract.Effect>?,
+    onNavigationRequested: (NameContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is NameContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is NameContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

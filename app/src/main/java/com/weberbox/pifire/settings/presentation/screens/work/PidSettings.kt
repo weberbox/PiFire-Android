@@ -27,7 +27,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -37,9 +36,6 @@ import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
 import com.weberbox.pifire.common.presentation.screens.DataError
-import com.weberbox.pifire.common.presentation.sheets.BottomSheet
-import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
-import com.weberbox.pifire.common.presentation.sheets.ValidationOptions
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
@@ -47,7 +43,6 @@ import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.settings.presentation.component.PreferenceInfo
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
-import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
 import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
 import com.weberbox.pifire.settings.presentation.contract.WorkContract
@@ -95,25 +90,13 @@ private fun PidSettings(
     onEventSent: (event: WorkContract.Event) -> Unit,
     onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is WorkContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is WorkContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -211,200 +194,31 @@ private fun PidSettingsContent(
             },
             type = ListPreferenceType.DROPDOWN_MENU
         )
-        AnimatedVisibility(
-            visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID
-        ) {
-            Column {
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_pb)) },
-                    summary = {
-                        Text(
-                            text = getSummary(state.serverData.settings.cntrlrPidPb.toString())
-                        )
-                    },
-                    onClick = { pidPbSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_pb_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_td)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidTd.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidTdSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_td_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_ti)) },
-                    summary = {
-                        Text(
-                            text = getSummary(state.serverData.settings.cntrlrPidTi.toString())
-                        )
-                    },
-                    onClick = { pidTiSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_ti_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_center)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidCenter.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidCenterSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_center_note_standard))
-            }
-        }
-        AnimatedVisibility(
-            visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_AC
-        ) {
-            Column {
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_pb)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidAcPb.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidPbSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_pb_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_td)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidAcTd.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidTdSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_td_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_ti)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidAcTi.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidTiSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_ti_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_sw)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidAcStable.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidStableSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_sw_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_center_factor)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidAcCenter.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidCenterSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_center_note_auto))
-            }
-        }
-        AnimatedVisibility(
-            visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_SP
-        ) {
-            Column {
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_pb)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpPb.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidPbSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_pb_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_td)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpTd.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidTdSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_td_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_sw)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpStable.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidStableSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_sw_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_center_factor)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpCenter.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidCenterSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_center_note_standard))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_tau)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpTau.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidTauSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_tau_note))
-                Preference(
-                    title = { Text(text = stringResource(R.string.settings_pid_cntrlr_theta)) },
-                    summary = {
-                        Text(
-                            text = getSummary(
-                                state.serverData.settings.cntrlrPidSpTheta.toString()
-                            )
-                        )
-                    },
-                    onClick = { pidThetaSheet.open() }
-                )
-                PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_theta_note))
-            }
-        }
+        PidControlSettings(
+            state = state,
+            pidPbSheet = pidPbSheet,
+            pidTdSheet = pidTdSheet,
+            pidTiSheet = pidTiSheet,
+            pidCenterSheet = pidCenterSheet
+        )
+        PidAcControlSettings(
+            state = state,
+            pidPbSheet = pidPbSheet,
+            pidTdSheet = pidTdSheet,
+            pidTiSheet = pidTiSheet,
+            pidCenterSheet = pidCenterSheet,
+            pidStableSheet = pidStableSheet
+        )
+        PidSpControlSettings(
+            state = state,
+            pidPbSheet = pidPbSheet,
+            pidTdSheet = pidTdSheet,
+            pidCenterSheet = pidCenterSheet,
+            pidStableSheet = pidStableSheet,
+            pidTauSheet = pidTauSheet,
+            pidThetaSheet = pidThetaSheet
+        )
+
         AnimatedVisibility(
             visible = state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID &&
                     state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID_AC &&
@@ -440,323 +254,43 @@ private fun PidSettingsContent(
         )
         PreferenceInfo(stringResource(R.string.settings_cycle_cntrlr_u_max_note))
     }
-    BottomSheet(
-        sheetState = pidPbSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = when (state.serverData.settings.cntrlrSelected) {
-                ServerConstants.CNTRLR_PID -> {
-                    state.serverData.settings.cntrlrPidPb.toString()
+    PidBottomSheets(
+        state = state,
+        pidPbSheet = pidPbSheet,
+        pidTdSheet = pidTdSheet,
+        pidTiSheet = pidTiSheet,
+        pidCenterSheet = pidCenterSheet,
+        pidStableSheet = pidStableSheet,
+        pidTauSheet = pidTauSheet,
+        pidThetaSheet = pidThetaSheet,
+        holdCycleTimeSheet = holdCycleTimeSheet,
+        uMinSheet = uMinSheet,
+        uMaxSheet = uMaxSheet,
+        onEventSent = onEventSent
+    )
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<WorkContract.Effect>?,
+    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is WorkContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
                 }
 
-                ServerConstants.CNTRLR_PID_AC -> {
-                    state.serverData.settings.cntrlrPidAcPb.toString()
+                is WorkContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
                 }
-
-                ServerConstants.CNTRLR_PID_SP -> {
-                    state.serverData.settings.cntrlrPidSpPb.toString()
-                }
-
-                else -> {
-                    "Error"
-                }
-            },
-            title = stringResource(R.string.settings_pid_cntrlr_pb),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_pb),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal
-            ),
-            onUpdate = {
-                when (state.serverData.settings.cntrlrSelected) {
-                    ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidPb(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcPb(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpPb(it.toDouble()))
-                    }
-                }
-                pidPbSheet.close()
-            },
-            onDismiss = { pidPbSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidTdSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = when (state.serverData.settings.cntrlrSelected) {
-                ServerConstants.CNTRLR_PID -> {
-                    state.serverData.settings.cntrlrPidTd.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_AC -> {
-                    state.serverData.settings.cntrlrPidAcTd.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_SP -> {
-                    state.serverData.settings.cntrlrPidSpTd.toString()
-                }
-
-                else -> {
-                    "Error"
-                }
-            },
-            title = stringResource(R.string.settings_pid_cntrlr_td),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_td),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal
-            ),
-            onUpdate = {
-                when (state.serverData.settings.cntrlrSelected) {
-                    ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidTd(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcTd(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpTd(it.toDouble()))
-                    }
-                }
-                pidTdSheet.close()
-            },
-            onDismiss = { pidTdSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidTiSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = when (state.serverData.settings.cntrlrSelected) {
-                ServerConstants.CNTRLR_PID -> {
-                    state.serverData.settings.cntrlrPidTi.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_AC -> {
-                    state.serverData.settings.cntrlrPidAcTi.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_SP -> {
-                    state.serverData.settings.cntrlrPidSpTi.toString()
-                }
-
-                else -> {
-                    "Error"
-                }
-            },
-            title = stringResource(R.string.settings_pid_cntrlr_ti),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_ti),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal
-            ),
-            onUpdate = {
-                when (state.serverData.settings.cntrlrSelected) {
-                    ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidTi(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcTi(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpTi(it.toDouble()))
-                    }
-                }
-                pidTiSheet.close()
-            },
-            onDismiss = { pidTiSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidStableSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = when (state.serverData.settings.cntrlrSelected) {
-                ServerConstants.CNTRLR_PID_AC -> {
-                    state.serverData.settings.cntrlrPidAcStable.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_SP -> {
-                    state.serverData.settings.cntrlrPidSpStable.toString()
-                }
-
-                else -> {
-                    "Error"
-                }
-            },
-            title = stringResource(R.string.settings_pid_cntrlr_sw),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_sw),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal
-            ),
-            onUpdate = {
-                when (state.serverData.settings.cntrlrSelected) {
-                    ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcStable(it.toInt()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpStable(it.toInt()))
-                    }
-                }
-                pidStableSheet.close()
-            },
-            onDismiss = { pidStableSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidCenterSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = when (state.serverData.settings.cntrlrSelected) {
-                ServerConstants.CNTRLR_PID -> {
-                    state.serverData.settings.cntrlrPidCenter.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_AC -> {
-                    state.serverData.settings.cntrlrPidAcCenter.toString()
-                }
-
-                ServerConstants.CNTRLR_PID_SP -> {
-                    state.serverData.settings.cntrlrPidSpCenter.toString()
-                }
-
-                else -> {
-                    "Error"
-                }
-            },
-            title = stringResource(R.string.settings_pid_cntrlr_center),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_center),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal
-            ),
-            onUpdate = {
-                when (state.serverData.settings.cntrlrSelected) {
-                    ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidCenter(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcCenter(it.toDouble()))
-                    }
-
-                    ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpCenter(it.toDouble()))
-                    }
-                }
-                pidCenterSheet.close()
-            },
-            onDismiss = { pidCenterSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidTauSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.cntrlrPidSpTau.toString(),
-            title = stringResource(R.string.settings_pid_cntrlr_tau),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_tau),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword
-            ),
-            onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrPidSpTau(it.toInt()))
-                pidTauSheet.close()
-            },
-            onDismiss = { pidTauSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = pidThetaSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.cntrlrPidSpTheta.toString(),
-            title = stringResource(R.string.settings_pid_cntrlr_theta),
-            placeholder = stringResource(R.string.settings_pid_cntrlr_theta),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
-            ),
-            onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrPidSpTheta(it.toInt()))
-                pidThetaSheet.close()
-            },
-            onDismiss = { pidThetaSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = holdCycleTimeSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.holdCycleTime.toString(),
-            title = stringResource(R.string.settings_cycle_cntrlr_cycle),
-            placeholder = stringResource(R.string.settings_cycle_cntrlr_cycle),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
-            ),
-            onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrTime(it.toInt()))
-                holdCycleTimeSheet.close()
-            },
-            onDismiss = { holdCycleTimeSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = uMinSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.uMin.toString(),
-            title = stringResource(R.string.settings_cycle_cntrlr_u_min),
-            placeholder = stringResource(R.string.settings_cycle_cntrlr_u_min),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal,
-                min = 0.05,
-                max = 0.99
-            ),
-            onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlruMin(it.toDouble()))
-                uMinSheet.close()
-            },
-            onDismiss = { uMinSheet.close() }
-        )
-    }
-    BottomSheet(
-        sheetState = uMaxSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.uMax.toString(),
-            title = stringResource(R.string.settings_cycle_cntrlr_u_max),
-            placeholder = stringResource(R.string.settings_cycle_cntrlr_u_max),
-            validationOptions = ValidationOptions(
-                allowBlank = false,
-                keyboardType = KeyboardType.Decimal,
-                min = 0.1,
-                max = 1.0
-            ),
-            onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlruMax(it.toDouble()))
-                uMaxSheet.close()
-            },
-            onDismiss = { uMaxSheet.close() }
-        )
+            }
+        }?.collect()
     }
 }
 

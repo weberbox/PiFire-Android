@@ -111,29 +111,17 @@ private fun RecipesScreen(
     onEventSent: (event: RecipesContract.Event) -> Unit,
     onNavigationRequested: (RecipesContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val hazeState = rememberHazeState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val textFieldState = rememberTextFieldState()
     val searchBarState = rememberSearchBarState()
     val scope = rememberCoroutineScope()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is RecipesContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is RecipesContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -246,6 +234,30 @@ private fun RecipesScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<RecipesContract.Effect>?,
+    onNavigationRequested: (RecipesContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is RecipesContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is RecipesContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

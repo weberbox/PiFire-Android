@@ -107,26 +107,14 @@ private fun SettingsHome(
     onEventSent: (event: SettingsContract.Event) -> Unit,
     onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = rememberHazeState()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is SettingsContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is SettingsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
 
     Scaffold(
         modifier = Modifier
@@ -376,6 +364,30 @@ private fun HomePreference(
         },
         onClick = onClick
     )
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<SettingsContract.Effect>?,
+    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is SettingsContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is SettingsContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
+    }
 }
 
 @Composable

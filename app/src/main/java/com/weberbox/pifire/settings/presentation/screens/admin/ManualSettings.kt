@@ -86,25 +86,13 @@ private fun ManualSettings(
     onEventSent: (event: ManualContract.Event) -> Unit,
     onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is ManualContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is ManualContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -220,6 +208,30 @@ private fun ManualSettingsContent(
             title = { Text(text = stringResource(R.string.settings_manual_power)) },
             summary = { Text(text = getSummary(state.manualData.power)) }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ManualContract.Effect>?,
+    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ManualContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is ManualContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

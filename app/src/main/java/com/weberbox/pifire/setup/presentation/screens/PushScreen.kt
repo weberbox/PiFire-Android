@@ -87,38 +87,10 @@ private fun PushScreen(
     onEventSent: (event: PushContract.Event) -> Unit,
     onNavigationRequested: (PushContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is PushContract.Effect.Navigation -> onNavigationRequested(effect)
-                is PushContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-
-                is PushContract.Effect.Dialog -> {
-                    scope.launch {
-                        DialogController.sendEvent(
-                            event = DialogEvent(
-                                title = effect.dialogEvent.title,
-                                message = effect.dialogEvent.message,
-                                positiveAction = DialogAction(
-                                    buttonText = effect.dialogEvent.positiveAction.buttonText,
-                                    action = {
-                                        effect.dialogEvent.positiveAction.action.invoke()
-                                    }
-                                )
-                            )
-                        )
-                    }
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Column(
         modifier = Modifier
@@ -189,6 +161,45 @@ private fun PushScreen(
             onBackClick = { onNavigationRequested(PushContract.Effect.Navigation.Back) },
             onNextClick = { onEventSent(PushContract.Event.NavigateToFinish) }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<PushContract.Effect>?,
+    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is PushContract.Effect.Navigation -> onNavigationRequested(effect)
+                is PushContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+
+                is PushContract.Effect.Dialog -> {
+                    scope.launch {
+                        DialogController.sendEvent(
+                            event = DialogEvent(
+                                title = effect.dialogEvent.title,
+                                message = effect.dialogEvent.message,
+                                positiveAction = DialogAction(
+                                    buttonText = effect.dialogEvent.positiveAction.buttonText,
+                                    action = {
+                                        effect.dialogEvent.positiveAction.action.invoke()
+                                    }
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }?.collect()
     }
 }
 

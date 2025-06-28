@@ -93,26 +93,14 @@ private fun HeaderSettings(
     onEventSent: (event: HeadersContract.Event) -> Unit,
     onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val headersSheet = rememberInputModalBottomSheetState<ExtraHeader>()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is HeadersContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is HeadersContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -248,6 +236,30 @@ private fun HeaderSettings(
                 }
             )
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<HeadersContract.Effect>?,
+    onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is HeadersContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is HeadersContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

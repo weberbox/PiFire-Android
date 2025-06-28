@@ -82,25 +82,13 @@ private fun InfluxDbSettings(
     onEventSent: (event: NotifContract.Event) -> Unit,
     onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is NotifContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is NotifContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -255,6 +243,29 @@ private fun InfluxDbContent(
     }
 }
 
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<NotifContract.Effect>?,
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is NotifContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is NotifContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
+    }
+}
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

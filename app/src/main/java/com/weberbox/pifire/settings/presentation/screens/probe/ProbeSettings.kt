@@ -105,25 +105,13 @@ private fun ProbeSettings(
     onEventSent: (event: ProbeContract.Event) -> Unit,
     onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is ProbeContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is ProbeContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -309,6 +297,29 @@ private fun ProbeSettingsContent(
     }
 }
 
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ProbeContract.Effect>?,
+    onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ProbeContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is ProbeContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
+    }
+}
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

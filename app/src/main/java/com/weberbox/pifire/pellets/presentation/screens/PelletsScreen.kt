@@ -93,7 +93,6 @@ private fun PelletsScreen(
     onEventSent: (event: PelletsContract.Event) -> Unit,
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val scrollState = rememberScrollState()
     val currentSheet = rememberCustomModalBottomSheetState()
     val brandAddSheet = rememberCustomModalBottomSheetState()
@@ -105,24 +104,12 @@ private fun PelletsScreen(
     val profileDeleteSheet = rememberInputModalBottomSheetState<PelletProfile>()
     val logDeleteSheet = rememberInputModalBottomSheetState<PelletLog>()
     var isVisibleOnScreen by remember { mutableStateOf(false) }
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is PelletsContract.Effect.Notification -> {
-                        activity?.showAlerter(
-                            message = effect.text,
-                            isError = effect.error
-                        )
-                    }
 
-                    is PelletsContract.Effect.Navigation -> {
-                        onNavigationRequested(effect)
-                    }
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        isVisibleOnScreen = isVisibleOnScreen,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -303,6 +290,33 @@ private fun PelletsScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    isVisibleOnScreen: Boolean,
+    effectFlow: Flow<PelletsContract.Effect>?,
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            if (isVisibleOnScreen) {
+                when (effect) {
+                    is PelletsContract.Effect.Notification -> {
+                        activity?.showAlerter(
+                            message = effect.text,
+                            isError = effect.error
+                        )
+                    }
+
+                    is PelletsContract.Effect.Navigation -> {
+                        onNavigationRequested(effect)
+                    }
+                }
+            }
+        }?.collect()
     }
 }
 

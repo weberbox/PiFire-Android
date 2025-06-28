@@ -63,24 +63,12 @@ private fun WoodsDetailsContent(
     onEventSent: (event: PelletsContract.Event) -> Unit,
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val woodDeleteSheet = rememberInputModalBottomSheetState<String>()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is PelletsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
 
-                is PelletsContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -137,6 +125,30 @@ private fun WoodsDetailsContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<PelletsContract.Effect>?,
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is PelletsContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+
+                is PelletsContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+            }
+        }?.collect()
     }
 }
 

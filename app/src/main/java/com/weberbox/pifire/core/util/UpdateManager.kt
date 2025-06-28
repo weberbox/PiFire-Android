@@ -15,17 +15,17 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.common.data.repo.RemoteConfigRepository
-import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.common.presentation.util.DialogAction
 import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.SnackbarAction
 import com.weberbox.pifire.common.presentation.util.SnackbarController
 import com.weberbox.pifire.common.presentation.util.SnackbarEvent
+import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.constants.Constants
+import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.settings.data.model.local.Pref
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -44,7 +44,34 @@ class UpdateManager @Inject constructor(
             currentUpdate = config
             when (config.type) {
                 UpdateType.IMMEDIATE -> {
-                    activity.lifecycleScope.launch {
+                    DialogController.sendEvent(
+                        event = DialogEvent(
+                            title = UiText(
+                                R.string.inapp_update_available_title
+                            ),
+                            message = if (config.message.isNotBlank())
+                                UiText(config.message) else UiText(
+                                R.string.inapp_update_available_message_immediate
+                            ),
+                            dismissible = false,
+                            positiveAction = DialogAction(
+                                buttonText = UiText(R.string.update),
+                                action = {
+                                    activity.lifecycleScope.launch {
+                                        if (AppConfig.IS_PLAY_BUILD) {
+                                            launchUpdate(activity)
+                                        } else {
+                                            openGithubLink(activity)
+                                        }
+                                    }
+                                }
+                            )
+                        )
+                    )
+                }
+
+                UpdateType.FLEXIBLE -> {
+                    if (prefs.get(Pref.updatePostponeTime) < System.currentTimeMillis()) {
                         DialogController.sendEvent(
                             event = DialogEvent(
                                 title = UiText(
@@ -52,58 +79,27 @@ class UpdateManager @Inject constructor(
                                 ),
                                 message = if (config.message.isNotBlank())
                                     UiText(config.message) else UiText(
-                                    R.string.inapp_update_available_message_immediate
+                                    R.string.inapp_update_available_message_flexible
                                 ),
                                 dismissible = false,
                                 positiveAction = DialogAction(
                                     buttonText = UiText(R.string.update),
                                     action = {
-                                        activity.lifecycleScope.launch {
-                                            if (AppConfig.IS_PLAY_BUILD) {
-                                                launchUpdate(activity)
-                                            } else {
-                                                openGithubLink(activity)
-                                            }
+                                        if (AppConfig.IS_PLAY_BUILD) {
+                                            launchUpdate(activity)
+                                        } else {
+                                            openGithubLink(activity)
                                         }
+                                    },
+                                ),
+                                negativeAction = DialogAction(
+                                    buttonText = UiText(R.string.postpone),
+                                    action = {
+                                        postponeUpdate()
                                     }
                                 )
                             )
                         )
-                    }
-                }
-
-                UpdateType.FLEXIBLE -> {
-                    if (prefs.get(Pref.updatePostponeTime) < System.currentTimeMillis()) {
-                        activity.lifecycleScope.launch {
-                            DialogController.sendEvent(
-                                event = DialogEvent(
-                                    title = UiText(
-                                        R.string.inapp_update_available_title
-                                    ),
-                                    message = if (config.message.isNotBlank())
-                                        UiText(config.message) else UiText(
-                                        R.string.inapp_update_available_message_flexible
-                                    ),
-                                    dismissible = false,
-                                    positiveAction = DialogAction(
-                                        buttonText = UiText(R.string.update),
-                                        action = {
-                                            if (AppConfig.IS_PLAY_BUILD) {
-                                                launchUpdate(activity)
-                                            } else {
-                                                openGithubLink(activity)
-                                            }
-                                        },
-                                    ),
-                                    negativeAction = DialogAction(
-                                        buttonText = UiText(R.string.postpone),
-                                        action = {
-                                            postponeUpdate()
-                                        }
-                                    )
-                                )
-                            )
-                        }
                     }
                 }
             }

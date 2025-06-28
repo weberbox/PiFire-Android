@@ -98,25 +98,13 @@ private fun TimerSettings(
     onEventSent: (event: TimerContract.Event) -> Unit,
     onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is TimerContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is TimerContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -470,6 +458,30 @@ private fun TimerSettingsContent(
             },
             onDismiss = { shutdownDurationSheet.close() }
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<TimerContract.Effect>?,
+    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is TimerContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is TimerContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 

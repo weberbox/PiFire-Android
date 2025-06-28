@@ -1,5 +1,6 @@
 package com.weberbox.pifire.setup.presentation.screens
 
+import android.app.Activity
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
@@ -40,11 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.base.getPagerAnimationSpec
+import com.weberbox.pifire.common.presentation.component.CircularLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.OutlineFieldWithState
 import com.weberbox.pifire.common.presentation.model.InputState
 import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
@@ -55,7 +56,6 @@ import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.common.presentation.component.CircularLoadingIndicator
 import com.weberbox.pifire.setup.presentation.component.SetupBottomNavRow
 import com.weberbox.pifire.setup.presentation.contract.ConnectContract
 import com.weberbox.pifire.setup.presentation.model.SetupStep
@@ -105,37 +105,12 @@ private fun ConnectScreen(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val cameraAvailable by remember { mutableStateOf(isCameraAvailable(context)) }
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is ConnectContract.Effect.Navigation -> onNavigationRequested(effect)
-                is ConnectContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
 
-                is ConnectContract.Effect.Dialog -> {
-                    scope.launch {
-                        DialogController.sendEvent(
-                            event = DialogEvent(
-                                title = effect.dialogEvent.title,
-                                message = effect.dialogEvent.message,
-                                positiveAction = DialogAction(
-                                    buttonText = effect.dialogEvent.positiveAction.buttonText,
-                                    action = {
-                                        effect.dialogEvent.positiveAction.action.invoke()
-                                    }
-                                )
-                            )
-                        )
-                    }
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        activity = activity,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Box {
         Column(
@@ -223,6 +198,44 @@ private fun ConnectScreen(
     }
 }
 
+@Composable
+private fun HandleSideEffects(
+    activity: Activity?,
+    effectFlow: Flow<ConnectContract.Effect>?,
+    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ConnectContract.Effect.Navigation -> onNavigationRequested(effect)
+                is ConnectContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+
+                is ConnectContract.Effect.Dialog -> {
+                    scope.launch {
+                        DialogController.sendEvent(
+                            event = DialogEvent(
+                                title = effect.dialogEvent.title,
+                                message = effect.dialogEvent.message,
+                                positiveAction = DialogAction(
+                                    buttonText = effect.dialogEvent.positiveAction.buttonText,
+                                    action = {
+                                        effect.dialogEvent.positiveAction.action.invoke()
+                                    }
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        }?.collect()
+    }
+}
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -231,7 +244,7 @@ internal fun ConnectScreenPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(12.dp)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallTwo),
             ) {
                 ConnectScreen(
                     state = ConnectContract.State(

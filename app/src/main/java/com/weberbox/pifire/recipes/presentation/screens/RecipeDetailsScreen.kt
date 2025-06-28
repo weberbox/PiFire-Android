@@ -58,6 +58,7 @@ import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.ConfirmSheet
+import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
@@ -130,30 +131,17 @@ private fun RecipeDetailsScreen(
     onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val deleteSheet = rememberCustomModalBottomSheetState()
     val hazeState = rememberHazeState()
     val scrollState = rememberScrollState()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is DetailsContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is DetailsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-
-                is DetailsContract.Effect.DeleteDialog -> deleteSheet.open()
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        deleteSheet = deleteSheet,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Scaffold(
         modifier = Modifier
@@ -354,6 +342,33 @@ private fun RecipeDetailsContent(
                 onStepPosition = { position -> scrollToPosition = position }
             )
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    deleteSheet: CustomModalBottomSheetState,
+    effectFlow: Flow<DetailsContract.Effect>?,
+    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is DetailsContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is DetailsContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+
+                is DetailsContract.Effect.DeleteDialog -> deleteSheet.open()
+            }
+        }?.collect()
     }
 }
 

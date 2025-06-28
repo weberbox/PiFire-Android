@@ -1,5 +1,6 @@
 package com.weberbox.pifire.dashboard.presentation.screens
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
@@ -20,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TooltipState
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -132,31 +134,17 @@ private fun DashboardScreen(
     val timerSheet = rememberCustomModalBottomSheetState()
     val modeSheet = rememberCustomModalBottomSheetState()
     val holdPickerSheet = rememberCustomModalBottomSheetState()
-    val tooltipState = rememberTooltipState(initialIsVisible = false, true)
+    val tooltipState = rememberTooltipState(initialIsVisible = false, isPersistent = true)
     var outputsToolbar by rememberSaveable { mutableStateOf(false) }
     var isVisibleOnScreen by remember { mutableStateOf(false) }
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is DashContract.Effect.Navigation -> {
-                        onNavigationRequested(effect)
-                    }
 
-                    is DashContract.Effect.Notification -> {
-                        activity?.showAlerter(
-                            message = effect.text,
-                            isError = effect.error
-                        )
-                    }
-
-                    is DashContract.Effect.HideHoldTempToolTip -> {
-                        tooltipState.dismiss()
-                    }
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        activity = activity,
+        isVisibleOnScreen = isVisibleOnScreen,
+        tooltipState = tooltipState,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
 
     LaunchedEffect(state.holdTempToolTip) {
         if (state.holdTempToolTip) {
@@ -457,6 +445,39 @@ private fun DashboardScreen(
                 )
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HandleSideEffects(
+    activity: Activity?,
+    isVisibleOnScreen: Boolean,
+    tooltipState: TooltipState,
+    effectFlow: Flow<DashContract.Effect>?,
+    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit
+) {
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            if (isVisibleOnScreen) {
+                when (effect) {
+                    is DashContract.Effect.Navigation -> {
+                        onNavigationRequested(effect)
+                    }
+
+                    is DashContract.Effect.Notification -> {
+                        activity?.showAlerter(
+                            message = effect.text,
+                            isError = effect.error
+                        )
+                    }
+
+                    is DashContract.Effect.HideHoldTempToolTip -> {
+                        tooltipState.dismiss()
+                    }
+                }
+            }
+        }?.collect()
     }
 }
 

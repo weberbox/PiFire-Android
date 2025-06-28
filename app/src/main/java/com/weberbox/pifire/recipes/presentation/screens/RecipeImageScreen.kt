@@ -83,7 +83,7 @@ private fun RecipeImagesScreen(
     onEventSent: (event: ImagesContract.Event) -> Unit,
     onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
+
     val pagerState = rememberPagerState(
         initialPage = state.imageIndex,
         pageCount = { state.imageList.size }
@@ -92,21 +92,11 @@ private fun RecipeImagesScreen(
         0.0f to MaterialTheme.colorScheme.surfaceContainer,
         1f to MaterialTheme.colorScheme.surfaceContainerLow
     )
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is ImagesContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is ImagesContract.Effect.Notification ->
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -205,6 +195,29 @@ private fun RecipeImagesScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ImagesContract.Effect>?,
+    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ImagesContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is ImagesContract.Effect.Notification ->
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+            }
+        }?.collect()
     }
 }
 

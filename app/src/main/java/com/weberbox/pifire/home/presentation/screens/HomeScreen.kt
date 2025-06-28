@@ -1,5 +1,6 @@
 package com.weberbox.pifire.home.presentation.screens
 
+import android.app.Activity
 import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -142,23 +143,11 @@ private fun HomeScreen(
     val scope = rememberCoroutineScope()
     var title by rememberSaveable { mutableStateOf(navigationItems[initialPage].title) }
 
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is HomeContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
-
-                is HomeContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        activity = activity,
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     BackHandler(drawerState.isOpen || pagerState.currentPage != initialPage) {
         if (drawerState.isOpen) {
@@ -442,6 +431,31 @@ private fun HomeDrawerSheet(
         staticNavigationItems = staticNavigationItems,
         onNavigationRequested = onNavigationRequested
     )
+}
+
+@Composable
+private fun HandleSideEffects(
+    activity: Activity?,
+    effectFlow: Flow<HomeContract.Effect>?,
+    onNavigationRequested: (HomeContract.Effect.Navigation) -> Unit
+) {
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is HomeContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is HomeContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+
+            }
+        }?.collect()
+    }
 }
 
 @Composable

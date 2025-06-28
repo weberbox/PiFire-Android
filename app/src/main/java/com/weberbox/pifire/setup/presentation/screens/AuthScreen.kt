@@ -106,21 +106,12 @@ private fun AuthScreen(
     onEventSent: (event: AuthContract.Event) -> Unit,
     onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
     val headersSheet = rememberInputModalBottomSheetState<ExtraHeader>()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is AuthContract.Effect.Navigation -> onNavigationRequested(effect)
-                is AuthContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Column(
         modifier = Modifier
@@ -286,6 +277,26 @@ private fun AuthScreen(
     }
 }
 
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<AuthContract.Effect>?,
+    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is AuthContract.Effect.Navigation -> onNavigationRequested(effect)
+                is AuthContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
+    }
+}
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)

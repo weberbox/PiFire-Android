@@ -33,13 +33,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.common.presentation.component.CircularLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.OutlineFieldWithState
 import com.weberbox.pifire.common.presentation.model.InputState
 import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.common.presentation.component.CircularLoadingIndicator
 import com.weberbox.pifire.setup.presentation.component.SetupBottomNavRow
 import com.weberbox.pifire.setup.presentation.contract.FinishContract
 import kotlinx.coroutines.flow.Flow
@@ -72,21 +72,10 @@ private fun FinishScreen(
     onEventSent: (event: FinishContract.Event) -> Unit,
     onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is FinishContract.Effect.Navigation -> onNavigationRequested(effect)
-
-                is FinishContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested
+    )
 
     Box {
         Column(
@@ -146,6 +135,28 @@ private fun FinishScreen(
         CircularLoadingIndicator(
             isLoading = state.isLoading
         )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<FinishContract.Effect>?,
+    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is FinishContract.Effect.Navigation -> onNavigationRequested(effect)
+
+                is FinishContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error
+                    )
+                }
+            }
+        }?.collect()
     }
 }
 
