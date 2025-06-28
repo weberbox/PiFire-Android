@@ -6,12 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.model.ErrorStatus
 import com.weberbox.pifire.common.presentation.model.FieldInput
 import com.weberbox.pifire.common.presentation.model.InputState
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
+import com.weberbox.pifire.common.presentation.util.DialogAction
+import com.weberbox.pifire.common.presentation.util.DialogController
+import com.weberbox.pifire.common.presentation.util.DialogEvent
+import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.util.createUrl
+import com.weberbox.pifire.common.presentation.util.isNotSecureUrl
 import com.weberbox.pifire.common.presentation.util.validateUrl
 import com.weberbox.pifire.landing.presentation.contract.ServerContract
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
@@ -89,13 +95,49 @@ class ServerViewModel @Inject constructor(
 
     private fun toggleHeadersEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
+            if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
+                DialogController.sendEvent(
+                    event = DialogEvent(
+                        title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
+                        message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
+                        dismissible = false,
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.enable),
+                            action = {
+                                settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
+                            }
+                        ),
+                        negativeAction = DialogAction(
+                            buttonText = UiText(R.string.cancel),
+                            action = { }
+                        )
+                    )
+                )
+            } else settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
         }
     }
 
     private fun toggleCredentialsEnabled(enabled: Boolean) {
         viewModelScope.launch {
-            settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
+            if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
+                DialogController.sendEvent(
+                    event = DialogEvent(
+                        title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
+                        message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
+                        dismissible = false,
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.enable),
+                            action = {
+                                settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
+                            }
+                        ),
+                        negativeAction = DialogAction(
+                            buttonText = UiText(R.string.cancel),
+                            action = { }
+                        )
+                    )
+                )
+            } else settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
         }
     }
 

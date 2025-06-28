@@ -140,9 +140,7 @@ class SettingsRepoImpl @Inject constructor(
     override suspend fun updateServerList(server: Server, uuid: String) {
         dataStore.updateData { data ->
             data.copy(
-                serverMap = data.serverMap.plus(
-                    uuid to server
-                )
+                serverMap = data.serverMap.plus(uuid to server)
             )
         }
     }

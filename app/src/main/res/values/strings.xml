@@ -9,7 +9,7 @@
     <string name="nav_info">Info</string>
     <string name="nav_recipes">Recipes</string>
     <string name="nav_changelog">Changelog</string>
-    <string name="nav_logout">Switch Server</string>
+    <string name="nav_logout">Switch Smoker</string>
 
     <string name="placeholder_none">--</string>
 
@@ -26,6 +26,7 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="view_all">View All</string>
+    <string name="enable">Enable</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="swipe_to_start">Swipe to start</string>
@@ -205,17 +206,17 @@
     <string name="setup_qr_invalid_url">Scanned QR does not contain a valid URL</string>
 
     <string name="setup_error_play_services">Google Play Services were not detected on this device, to use the QR Scan function Play Services must be installed</string>
-    <string name="setup_auth_title">Server Authentication</string>
-    <string name="setup_auth_text">If your server requires authentication enter it here or continue if not required</string>
+    <string name="setup_auth_title">PiFire Authentication</string>
+    <string name="setup_auth_text">If your PiFire server requires authentication enter it here or continue if not required</string>
     <string name="setup_connect_title">Enter PiFire Address</string>
     <string name="setup_connect_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
     <string name="setup_finish_title">Complete Setup</string>
-    <string name="setup_finish_text">Connection to your PiFire server is now complete. Name your grill below and continue to the dashboard</string>
+    <string name="setup_finish_text">Connection to your PiFire server is now complete. Name your grill below and continue to finish the setup process</string>
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_canceled">Scanning Canceled</string>
     <string name="setup_scan_qr_failed">Scanning Failed</string>
     <string name="setup_server_auth_error_title">Authentication Failure</string>
-    <string name="setup_server_auth_error_message">The server has responded with an authentication error. Verify your credentials are correct and try again</string>
+    <string name="setup_server_auth_error_message">PiFire has responded with an authentication error. Verify your credentials are correct and try again</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
     <string name="setup_server_self_signed_message">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
     <string name="setup_push_consent_title">OneSignal Data Privacy</string>
@@ -226,7 +227,7 @@
     <string name="socket_failed_connection">The connection to PiFire failed. Check your connection and try again</string>
 
     <!-- Settings -->
-    <string name="settings_server">Server Settings</string>
+    <string name="settings_server">Smoker Settings</string>
     <string name="settings_app_title">App Settings</string>
     <string name="settings_app_summary">Theme, events amount, temps increment</string>
     <string name="settings_admin_title">Admin Settings</string>
@@ -258,8 +259,8 @@
     <string name="settings_max_error">Value must be %1$s or less</string>
     <string name="settings_number_error">Value must be a number</string>
 
-    <string name="settings_landing_select_online_title">Auto select server</string>
-    <string name="settings_landing_select_online_summary">Automatically select the first online server when opening app</string>
+    <string name="settings_landing_select_online_title">Auto select smoker</string>
+    <string name="settings_landing_select_online_summary">Automatically select the first online smoker when opening app</string>
 
     <string name="settings_cat_crash">Crash Reporting</string>
     <string name="settings_enable_crash">Enable</string>
@@ -269,16 +270,18 @@
     <string name="settings_crash_email">Email</string>
     <string name="settings_crash_email_summary">Include your email address with the error report</string>
 
-    <string name="settings_cat_server_title">Server</string>
-    <string name="settings_server_address">Server Address</string>
+    <string name="settings_cat_server_title">Address</string>
+    <string name="settings_server_address">Smoker Address</string>
 
-    <string name="settings_cat_basic_auth_title">Basic Authentication</string>
-    <string name="settings_basic_auth_summary">Use basic authentication if the server is behind a reverse proxy</string>
+    <string name="settings_cat_basic_auth_title">Authentication</string>
+    <string name="settings_basic_auth_title">Basic Auth</string>
+    <string name="settings_basic_auth_summary">Use basic authentication if PiFire is behind a reverse proxy</string>
     <string name="settings_credentials_title">Credentials</string>
-    <string name="settings_credentials_summary">Basic Auth Credentials</string>
+    <string name="settings_auth_warning">This app does not enforce a secure connection to PiFire and will send your credentials and/or headers regardless of the protocol being used (http or https). It is your responsibility to setup a secure connection (https) for all requests if you are using any type of authentication, otherwise your credentials and/or headers are being sent in an unsecure manner</string>
 
     <string name="settings_cat_extra_headers_title">Custom Headers</string>
-    <string name="settings_extra_headers_summary">Add custom headers to all HTTP requests</string>
+    <string name="settings_extra_headers_title">Extra Headers</string>
+    <string name="settings_extra_headers_summary">Add custom headers to all requests for services like Cloudflare Access etc</string>
     <string name="settings_headers_key">Header Key</string>
     <string name="settings_headers_value">Header Value</string>
     <string name="settings_extra_headers_editor">Custom Header Editor</string>
@@ -568,7 +571,7 @@
     <string name="info_gpio_device_name">Device</string>
     <string name="info_gpio_device_function">Function</string>
     <string name="info_gpio_device_pin">Pin</string>
-    <string name="info_uptime">Server Uptime</string>
+    <string name="info_uptime">PiFire Uptime</string>
     <string name="info_modules_head">Module</string>
     <string name="info_modules_config">Configured</string>
     <string name="info_modules">PiFire Modules</string>
@@ -579,7 +582,7 @@
     <string name="info_pip_name">Module</string>
     <string name="info_pip_version">Version</string>
     <string name="info_credits">Credits and Licenses</string>
-    <string name="info_server_info">Server Info</string>
+    <string name="info_server_info">PiFire Info</string>
     <string name="info_server_version">PiFire Version</string>
     <string name="info_server_build">PiFire Build</string>
     <string name="info_app_info">App Info</string>
@@ -633,7 +636,7 @@
 
     <!-- Google Play App Updater -->
     <string name="inapp_update_available_title">Update Available</string>
-    <string name="inapp_update_available_message_flexible">A new app version is available, please check the release notes as it may or may not support your current server version</string>
+    <string name="inapp_update_available_message_flexible">A new app version is available, please check the release notes as it may or may not support your current PiFire version</string>
     <string name="inapp_update_available_message_immediate">A critical update is available and is required for continued use. Please update ASAP</string>
     <string name="inapp_update_checking">Checking for App Updates.</string>
     <string name="inapp_update_downloading">Update is currently downloading.</string>
@@ -649,15 +652,15 @@
     <string name="data_error_json_parsing">JSON Parsing Error - Something went wrong, please try again</string>
     <string name="data_error_serialization">A serialization error occurred. Please try again</string>
     <string name="data_error_indexing">An indexing error occurred. Please try again</string>
-    <string name="data_error_no_cached_data">Could not make connection to server and there are no cached results to display. Please try again</string>
+    <string name="data_error_no_cached_data">Could not make connection to PiFire and there are no cached results to display. Please try again</string>
     <string name="data_error_offline">No connection to PiFire your request could not be completed. Please try again</string>
     <string name="data_error_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
     <string name="data_error_socket_timeout">Request to PiFire has timed out. Please check your connection</string>
-    <string name="data_error_http_auth_error">The server requires authentications</string>
-    <string name="data_error_http_certificate_error">The server is using an untrusted certificate</string>
-    <string name="data_error_http_response_null">The server response was null. Please try again</string>
-    <string name="data_error_http_unsuccessful">The server responded with error code %1$s - %2$s</string>
-    <string name="data_error_http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your server is online and try again</string>
+    <string name="data_error_http_auth_error">PiFire server requires authentications</string>
+    <string name="data_error_http_certificate_error">PiFire is using an untrusted certificate</string>
+    <string name="data_error_http_response_null">PiFire response was null. Please try again</string>
+    <string name="data_error_http_unsuccessful">PiFire responded with error code %1$s - %2$s</string>
+    <string name="data_error_http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your smoker is online and try again</string>
     <string name="data_error_uri_error">There was an error creating the URI for websocket connection please try again</string>
 
     <!-- Disabled Features -->
@@ -675,6 +678,9 @@
 
     <string name="dialog_cancel_lid_detect_title">Cancel Lid Open</string>
     <string name="dialog_cancel_lid_detect_message">Do you want to cancel Lid Open and resume PID Operation?</string>
+
+    <string name="dialog_auth_with_unsecure_protocol_title">Security Warning</string>
+    <string name="dialog_auth_with_unsecure_protocol_message">It looks like you are attempting to use an authentication method but are using an unsecure protocol (http). If you continue your credentials will not be sent in a secure manner. Continue at your own risk or setup a secure connection to your PiFire server</string>
 
     <string name="dialog_probe_edit">Probe Edit</string>
     <string name="dialog_probe_edit_enabled">Visible</string>
@@ -701,7 +707,7 @@
     <string name="error_no_speech_detected">No speech detected</string>
     <string name="error_recognition_canceled">Speech recognition canceled</string>
 
-    <string name="error_server_offline">Server is offline, check your connection and verify controller in powered on</string>
+    <string name="error_server_offline">Smoker is offline, check your connection and verify controller in powered on</string>
 
     <string name="error_no_results_landing_title">No Smokers Found</string>
     <string name="error_no_results_landing_summary">Try your search again or add a new smoker below</string>

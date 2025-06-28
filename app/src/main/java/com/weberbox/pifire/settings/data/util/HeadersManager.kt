@@ -18,11 +18,11 @@ class HeadersManager @Inject constructor(
     private val dataStore: DataStore<HeadersData>
 ) {
 
-    suspend fun addExtraHeader(uuid: Uuid, header: ExtraHeader) {
+    suspend fun updateExtraHeader(uuid: Uuid, header: ExtraHeader) {
         dataStore.updateData { current ->
             val currentHeaders = current.headersMap[uuid] ?: Headers()
             val updatedHeaders = currentHeaders.copy(
-                extraHeaders = currentHeaders.extraHeaders + header
+                extraHeaders = currentHeaders.extraHeaders.addOrUpdateByKey(header)
             )
             current.copy(
                 headersMap = current.headersMap + (uuid to updatedHeaders)
@@ -35,7 +35,7 @@ class HeadersManager @Inject constructor(
             val currentHeaders = current.headersMap[uuid] ?: Headers()
             val updatedHeaders = currentHeaders.copy(
                 extraHeaders = currentHeaders.extraHeaders.filterNot {
-                    it.key == header.key && it.value == header.value
+                    it.key == header.key
                 }
             )
             current.copy(
@@ -127,6 +127,15 @@ class HeadersManager @Inject constructor(
         }
 
         return headersMap.toImmutableMap()
+    }
+
+    private fun List<ExtraHeader>.addOrUpdateByKey(header: ExtraHeader): List<ExtraHeader> {
+        val index = indexOfFirst { it.key == header.key }
+        return if (index >= 0) {
+            toMutableList().apply { this[index] = header }
+        } else {
+            this + header
+        }
     }
 
 }

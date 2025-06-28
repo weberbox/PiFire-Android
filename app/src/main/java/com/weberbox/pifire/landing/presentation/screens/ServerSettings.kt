@@ -44,6 +44,7 @@ import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.landing.presentation.contract.ServerContract
 import com.weberbox.pifire.landing.presentation.sheets.CredentialsSheet
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
+import com.weberbox.pifire.settings.presentation.component.PreferenceWarning
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -51,7 +52,6 @@ import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
-import me.zhanghai.compose.preference.SwitchPreference
 import me.zhanghai.compose.preference.TwoTargetSwitchPreference
 
 @Composable
@@ -177,25 +177,16 @@ private fun ServerSettingsContent(
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_basic_auth_title)) }
         )
-        SwitchPreference(
+        TwoTargetSwitchPreference(
             value = state.serverData.credentialsEnabled,
-            title = { Text(text = stringResource(R.string.enabled)) },
+            title = { Text(text = stringResource(R.string.settings_basic_auth_title)) },
             summary = { Text(text = stringResource(R.string.settings_basic_auth_summary)) },
-            onValueChange = {
-                onEventSent(ServerContract.Event.EnableBasicAuth(it))
-            }
-        )
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_credentials_title)) },
-            summary = { Text(text = stringResource(R.string.settings_credentials_summary)) },
-            onClick = { credentialsSheet.open() }
-        )
-        PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_extra_headers_title)) }
+            onClick = { credentialsSheet.open() },
+            onValueChange = { onEventSent(ServerContract.Event.EnableBasicAuth(it)) }
         )
         TwoTargetSwitchPreference(
             value = state.serverData.headersEnabled,
-            title = { Text(text = stringResource(R.string.enabled)) },
+            title = { Text(text = stringResource(R.string.settings_extra_headers_title)) },
             summary = { Text(text = stringResource(R.string.settings_extra_headers_summary)) },
             onClick = {
                 onNavigationRequested(
@@ -206,6 +197,7 @@ private fun ServerSettingsContent(
             },
             onValueChange = { onEventSent(ServerContract.Event.EnableHeaders(it)) }
         )
+        PreferenceWarning(stringResource(R.string.settings_auth_warning))
     }
     BottomSheet(
         sheetState = addressSheet.sheetState
@@ -244,7 +236,9 @@ private fun ServerSettingsPreview() {
             Surface {
                 ServerSettings(
                     state = ServerContract.State(
-                        serverData = Server(),
+                        serverData = Server(
+                            address = "https://pifire.local"
+                        ),
                         basicAuth = BasicAuth(),
                         serverAddress = InputState(),
                         isInitialLoading = false,

@@ -67,7 +67,7 @@ class HeadersViewModel @Inject constructor(
     private fun updateHeader(extraHeader: ExtraHeader) {
         viewModelScope.launch {
             if (currentUuid.isNotBlank()) {
-                headersManager.addExtraHeader(
+                headersManager.updateExtraHeader(
                     uuid = currentUuid,
                     header = extraHeader
                 )

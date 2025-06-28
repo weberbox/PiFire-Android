@@ -20,6 +20,10 @@ fun createUrl(url: String): String {
     return URLUtil.guessUrl(url).replace("/$".toRegex(), "")
 }
 
+fun String.isNotSecureUrl(): Boolean {
+    return !startsWith("https://", ignoreCase = true)
+}
+
 fun getReasonPhrase(statusCode: Int): String {
     return when (statusCode) {
         (200) -> "OK"

@@ -122,12 +122,12 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun updateExtraHeader(extraHeader: ExtraHeader) {
+    private fun updateExtraHeader(header: ExtraHeader) {
         headersData = headersData.copy(
-            extraHeaders = headersData.extraHeaders.plus(extraHeader)
+            extraHeaders = headersData.extraHeaders.addOrUpdateByKey(header)
         )
         serverData = serverData.copy(
-            headersEnabled = true
+            headersEnabled = headersData.extraHeaders.isNotEmpty()
         )
 
         setState {
@@ -140,14 +140,26 @@ class AuthViewModel @Inject constructor(
     private fun deleteExtraHeader(header: ExtraHeader) {
         headersData = headersData.copy(
             extraHeaders = headersData.extraHeaders.filterNot {
-                it.value == header.value && it.key == header.key
+                it.key == header.key
             }
+        )
+        serverData = serverData.copy(
+            headersEnabled = headersData.extraHeaders.isNotEmpty()
         )
 
         setState {
             copy(
                 extraHeaders = headersData.extraHeaders
             )
+        }
+    }
+
+    private fun List<ExtraHeader>.addOrUpdateByKey(header: ExtraHeader): List<ExtraHeader> {
+        val index = indexOfFirst { it.key == header.key }
+        return if (index >= 0) {
+            toMutableList().apply { this[index] = header }
+        } else {
+            this + header
         }
     }
 

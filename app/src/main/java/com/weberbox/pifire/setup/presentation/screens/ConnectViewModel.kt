@@ -17,6 +17,7 @@ import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.util.createUrl
+import com.weberbox.pifire.common.presentation.util.isNotSecureUrl
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.common.presentation.util.validateUrl
 import com.weberbox.pifire.core.constants.Constants
@@ -58,7 +59,7 @@ class ConnectViewModel @Inject constructor(
     override fun handleEvents(event: ConnectContract.Event) {
         when (event) {
             is ConnectContract.Event.ValidateAddress -> validateAddress(event.address)
-            is ConnectContract.Event.GetServerVersions -> getServerVersions()
+            is ConnectContract.Event.GetServerVersions -> checkSecureAuth()
         }
     }
 
@@ -104,6 +105,32 @@ class ConnectViewModel @Inject constructor(
                     error = errorStatus
                 )
             )
+        }
+    }
+
+    private fun checkSecureAuth() {
+        viewModelScope.launch {
+            if (serverData.address.isNotSecureUrl() &&
+                serverData.headersEnabled or serverData.credentialsEnabled
+            ) {
+                DialogController.sendEvent(
+                    event = DialogEvent(
+                        title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
+                        message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
+                        dismissible = false,
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.continue_),
+                            action = {
+                                getServerVersions()
+                            }
+                        ),
+                        negativeAction = DialogAction(
+                            buttonText = UiText(R.string.cancel),
+                            action = { }
+                        )
+                    )
+                )
+            } else getServerVersions()
         }
     }
 
@@ -297,6 +324,7 @@ class ConnectViewModel @Inject constructor(
                 toggleLoading(false)
                 serverData = serverData.copy(
                     uuid = result.data.uuid,
+                    name = result.data.settings.grillName,
                     settings = result.data.settings
                 )
                 serverDataCache.saveServerData(serverData)
