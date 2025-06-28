@@ -12,6 +12,8 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.common.presentation.util.slideDownExpandEnterTransition
+import com.weberbox.pifire.common.presentation.util.slideDownShrinkExitTransition
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.settings.presentation.component.PreferenceInfo
 import com.weberbox.pifire.settings.presentation.component.getSummary
@@ -30,7 +32,9 @@ internal fun PidAcControlSettings(
     pidStableSheet: CustomModalBottomSheetState,
 ) {
     AnimatedVisibility(
-        visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_AC
+        visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_AC,
+        enter = slideDownExpandEnterTransition(),
+        exit = slideDownShrinkExitTransition()
     ) {
         Column {
             Preference(

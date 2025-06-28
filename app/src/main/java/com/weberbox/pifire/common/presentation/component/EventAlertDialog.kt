@@ -152,7 +152,7 @@ private fun DialogContent(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-fun EventAlertDialogPreview() {
+private fun EventAlertDialogPreview() {
     PiFireTheme {
         Surface {
             DialogContent(
