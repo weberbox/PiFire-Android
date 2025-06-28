@@ -300,19 +300,19 @@ private fun HandleSideEffects(
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
+    LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
         effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is PelletsContract.Effect.Notification -> {
+            when (effect) {
+                is PelletsContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is PelletsContract.Effect.Notification -> {
+                    if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
                             isError = effect.error
                         )
-                    }
-
-                    is PelletsContract.Effect.Navigation -> {
-                        onNavigationRequested(effect)
                     }
                 }
             }

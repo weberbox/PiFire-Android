@@ -457,24 +457,24 @@ private fun HandleSideEffects(
     effectFlow: Flow<DashContract.Effect>?,
     onNavigationRequested: (DashContract.Effect.Navigation) -> Unit
 ) {
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
+    LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
         effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is DashContract.Effect.Navigation -> {
-                        onNavigationRequested(effect)
-                    }
+            when (effect) {
+                is DashContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
 
-                    is DashContract.Effect.Notification -> {
+                is DashContract.Effect.Notification -> {
+                    if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
                             isError = effect.error
                         )
                     }
+                }
 
-                    is DashContract.Effect.HideHoldTempToolTip -> {
-                        tooltipState.dismiss()
-                    }
+                is DashContract.Effect.HideHoldTempToolTip -> {
+                    tooltipState.dismiss()
                 }
             }
         }?.collect()

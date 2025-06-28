@@ -118,16 +118,16 @@ private fun HandleSideEffects(
     effectFlow: Flow<EventsContract.Effect>?
 ) {
     val activity = LocalActivity.current
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
+    LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
         effectFlow?.onEach { effect ->
-            if (isVisibleOnScreen) {
-                when (effect) {
-                    is EventsContract.Effect.Notification ->
+            when (effect) {
+                is EventsContract.Effect.Notification ->
+                    if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
                             isError = effect.error
                         )
-                }
+                    }
             }
         }?.collect()
     }
