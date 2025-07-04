@@ -158,7 +158,7 @@ class SmartStartSheetViewModel : ViewModel() {
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 )
             }
@@ -244,7 +244,7 @@ class SmartStartSheetViewModel : ViewModel() {
                     ),
                     startUpError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 )
             }
@@ -291,7 +291,7 @@ class SmartStartSheetViewModel : ViewModel() {
                     ),
                     augerOnError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 )
             }

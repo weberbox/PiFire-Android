@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_no_cached_data_title">No Cached Data</string>
+    <string name="error_no_cached_data_description">The connection to PiFire was unsuccessful and there is no cached data to show. Check your connection or try again</string>
+    <string name="error_data_title">Data Error</string>
+    <string name="error_data_description">Unfortunately there was an issue gathering the data needed for this screen. You can go back and try again</string>
+    <string name="error_network_title">Network Error</string>
+    <string name="error_network_description">The connection to PiFire was unsuccessful. Check your connection or try again</string>
+    <string name="error_no_speech_detected">No speech detected</string>
+    <string name="error_recognition_canceled">Speech recognition canceled</string>
+    <string name="error_no_results_landing_title">No Smokers Found</string>
+    <string name="error_no_results_landing_summary">Try your search again or add a new smoker below</string>
+    <string name="error_no_results_recipes_title">No Recipes Found</string>
+    <string name="error_no_results_recipes_summary">Try your search again or add a new one via PiFire web</string>
+    <string name="error_invalid_url">Please enter a valid address</string>
+    <string name="error_text_blank">Cannot be blank!</string>
+    <string name="error_email_invalid">Invalid email!</string>
+
+    <string name="data_error_unknown">An unknown error occurred. Please try again</string>
+    <string name="data_error_json_parsing">JSON Parsing Error - Something went wrong, please try again</string>
+    <string name="data_error_no_cached_data">Could not make connection to PiFire and there are no cached results to display. Please try again</string>
+    <string name="data_error_offline">No connection to PiFire your request could not be completed. Please try again</string>
+    <string name="data_error_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
+    <string name="data_error_socket_timeout">Request to PiFire has timed out. Please check your connection</string>
+    <string name="data_error_http_auth_error">PiFire server requires authentications</string>
+    <string name="data_error_http_certificate_error">PiFire is using an untrusted certificate</string>
+    <string name="data_error_http_response_null">PiFire response was null. Please try again</string>
+    <string name="data_error_http_unsuccessful">PiFire responded with error code %1$s - %2$s</string>
+    <string name="data_error_http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your smoker is online and try again</string>
+</resources>

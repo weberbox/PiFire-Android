@@ -57,7 +57,7 @@ internal fun HomeAppBarActions(
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = stringResource(R.string.trigger_lid_open)
+                        text = stringResource(R.string.menu_trigger_lid_open)
                     )
                 },
                 onClick = {

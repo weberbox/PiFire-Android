@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
@@ -37,14 +38,39 @@ import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import java.util.UUID
 
 @Composable
 fun EventsScreenDestination(
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: EventsViewModel = hiltViewModel()
+    viewModel: EventsViewModel? = null
 ) {
-    EventsScreen(
+    return when {
+        LocalInspectionMode.current -> {
+            EventsScreenPreview(
+                contentPadding = contentPadding,
+                hazeState = hazeState
+            )
+        }
+
+        else -> {
+            EventsScreen(
+                contentPadding = contentPadding,
+                hazeState = hazeState,
+                viewModel = viewModel ?: hiltViewModel()
+            )
+        }
+    }
+}
+
+@Composable
+private fun EventsScreen(
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: EventsViewModel
+) {
+    EventsScreenContent(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
@@ -54,7 +80,7 @@ fun EventsScreenDestination(
 }
 
 @Composable
-private fun EventsScreen(
+private fun EventsScreenContent(
     state: EventsContract.State,
     effectFlow: Flow<EventsContract.Effect>?,
     onEventSent: (event: EventsContract.Event) -> Unit,
@@ -142,7 +168,7 @@ internal fun EventsScreenPreview(
 ) {
     PiFireTheme {
         Surface {
-            EventsScreen(
+            EventsScreenContent(
                 state = EventsContract.State(
                     eventsList = buildEventsList(),
                     isInitialLoading = false,
@@ -160,6 +186,7 @@ internal fun EventsScreenPreview(
 
 internal fun buildEventsList() = listOf(
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Stop Mode Started",
@@ -167,6 +194,7 @@ internal fun buildEventsList() = listOf(
         color = "#64666666"
     ),
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Hopper Level Checked @ 72%",
@@ -174,6 +202,7 @@ internal fun buildEventsList() = listOf(
         color = "#64666666"
     ),
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[WARNING] Warning Text",
@@ -181,6 +210,7 @@ internal fun buildEventsList() = listOf(
         color = "#32FF4731"
     ),
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Ended",
@@ -188,6 +218,7 @@ internal fun buildEventsList() = listOf(
         color = "#64666666"
     ),
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Starting",
@@ -195,6 +226,7 @@ internal fun buildEventsList() = listOf(
         color = "#64666666"
     ),
     Event(
+        id = UUID.randomUUID().toString(),
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[DEBUG] * Debug Testing",

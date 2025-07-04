@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_events_title">Events</string>
+    <string name="settings_app_events_amount_title">Event List Amount</string>
+
+    <string name="settings_cat_app_temps">Temps</string>
+    <string name="settings_app_increment_temps">Increment Temps</string>
+    <string name="settings_app_increment_temps_summary">Increment Grill and Probe Temps by 5°</string>
+
+    <string name="settings_cat_app_ui">User Interface</string>
+    <string name="settings_app_theme_title">App Theme</string>
+    <string name="settings_app_theme_light">Light Theme</string>
+    <string name="settings_app_theme_dark">Dark Theme</string>
+    <string name="settings_app_theme_system">System Theme</string>
+    <string name="settings_app_dynamic_color_title">Dynamic Color</string>
+    <string name="settings_app_dynamic_color_summary">When enabled the app colors are dynamically changed based on the users wallpaper etc</string>
+    <string name="settings_app_dynamic_color_disabled">Dynamic Color feature requires Android 12 or newer (Api 31+)</string>
+    <string name="settings_app_screen_on_title">Keep Screen On</string>
+    <string name="settings_app_screen_on_summary">Force the screen to remain on while viewing the dashboard.</string>
+    <string name="settings_app_bottom_bar_title">Bottom Navigation Bar</string>
+    <string name="settings_app_bottom_bar_summary">Show or hide the bottom bar on the dashboard</string>
+
+    <string name="settings_cat_crash">Crash Reporting</string>
+    <string name="settings_enable_crash">Enable</string>
+    <string name="settings_crash_summary">If the application crashes this will send a report to the developer</string>
+    <string name="settings_dev_crash_title">Debug Crash</string>
+    <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
+    <string name="settings_crash_email">Email</string>
+    <string name="settings_crash_email_summary">Include your email address with the error report</string>
+</resources>

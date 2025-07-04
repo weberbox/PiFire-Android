@@ -9,9 +9,9 @@ import com.weberbox.pifire.common.icons.Icon
 import com.weberbox.pifire.common.icons.outlined.Target
 
 enum class NotifType(val title: Int, val icon: ImageVector, val defaultVisibility: Boolean) {
-    Target(R.string.probe_type_target, Icon.Outlined.Target, true),
-    HighTemp(R.string.probe_type_high_limit, Icons.Filled.VerticalAlignTop, false),
-    LowTemp(R.string.probe_type_low_limit, Icons.Filled.VerticalAlignBottom, false);
+    Target(R.string.dialog_probe_type_target, Icon.Outlined.Target, true),
+    HighTemp(R.string.dialog_probe_type_high_limit, Icons.Filled.VerticalAlignTop, false),
+    LowTemp(R.string.dialog_probe_type_low_limit, Icons.Filled.VerticalAlignBottom, false);
 
     companion object {
         infix fun from(type: String): NotifType = NotifType.entries.firstOrNull {

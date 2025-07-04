@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dash_mode_startup">Startup</string>
+    <string name="dash_mode_monitor">Monitor</string>
+    <string name="dash_mode_stop">Stop</string>
+    <string name="dash_mode_smoke">Smoke</string>
+    <string name="dash_mode_hold">Hold</string>
+    <string name="dash_mode_shutdown">Shutdown</string>
+    <string name="dash_mode_prime">Prime</string>
+    <string name="dash_mode_reignite">Reignite</string>
+    <string name="dash_mode_recipe">Recipe</string>
+    <string name="dash_mode_manual">Manual</string>
+    <string name="dash_mode_start">Start</string>
+    <string name="dash_mode_continue">Continue</string>
+    <string name="dash_mode_next">Next</string>
+    <string name="dash_state_current">Current</string>
+    <string name="dash_state_eta">Eta - </string>
+    <string name="dash_state_target">Target</string>
+    <string name="dash_state_set_to">Set to</string>
+    <string name="dash_timer_title">Timer</string>
+    <string name="dash_pellets_title">Pellets</string>
+    <string name="dash_remaining_title">Remaining</string>
+    <string name="dash_smoke_plus">Smoke Plus</string>
+    <string name="dash_pwm_control">PWM Control</string>
+    <string name="dash_shutdown_temp">Shutdown Grill When Temp Achieved</string>
+    <string name="dash_keep_warm_temp">Keep Warm When Temp Achieved</string>
+    <string name="dash_reignite_temp">Attempt Re-ignite When Temp Achieved</string>
+    <string name="dash_shutdown_timer">Shutdown Grill When Timer Expires</string>
+    <string name="dash_keep_warm_timer">Keep Warm When Timer Expires</string>
+    <string name="dash_prime_and_startup">Startup grill after priming</string>
+    <string name="dash_recipe_info">Recipe Info</string>
+    <string name="dash_recipe_mode">Mode:</string>
+    <string name="dash_recipe_step">Step:</string>
+    <string name="dash_recipe_status">Status:</string>
+    <string name="dash_recipe_running">Running</string>
+    <string name="dash_recipe_paused">Paused</string>
+    <string name="dash_remaining_time">%1$s Time Remaining:</string>
+    <string name="dash_lid_open_detected">Lid Open Detected</string>
+    <string name="dash_lid_open_paused">PID Paused for:</string>
+    <string name="dash_critical_error_title">Critical Error Detected!</string>
+    <string name="dash_critical_error_description">A critical error was detected by PiFire. Check your grill and web interface for more info</string>
+    <string name="dash_errors_title">Error Detected!</string>
+    <string name="dash_warnings_title">Warning Detected!</string>
+    <string name="dash_elapsed">Elapsed Time</string>
+
+    <string name="dash_hold_temp_tip_title">Set Grill Temp</string>
+    <string name="dash_hold_temp_tip_details">To change the Hold temperature long press on the Grill Probe or select Hold mode again</string>
+</resources>

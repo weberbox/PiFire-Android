@@ -148,7 +148,7 @@ private fun AuthScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.basic_auth),
+                    text = stringResource(R.string.settings_basic_auth_title),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )
@@ -184,7 +184,7 @@ private fun AuthScreen(
                     }
                 )
                 Text(
-                    text = stringResource(R.string.extra_headers),
+                    text = stringResource(R.string.settings_extra_headers_title),
                     style = MaterialTheme.typography.bodyMedium,
                     textAlign = TextAlign.Center
                 )
@@ -246,7 +246,7 @@ private fun AuthScreen(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.add_extra_header),
+                        text = stringResource(R.string.settings_extra_headers_add),
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )

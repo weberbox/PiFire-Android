@@ -228,7 +228,7 @@ private fun AppriseContent(
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.add_apprise_location),
+                    text = stringResource(R.string.settings_apprise_add_location),
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -240,7 +240,7 @@ private fun AppriseContent(
         InputValidationSheet(
             input = appriseSheet.data,
             title = stringResource(R.string.settings_apprise_locations),
-            placeholder = stringResource(R.string.apprise_locations_note),
+            placeholder = stringResource(R.string.settings_apprise_locations_note),
             onUpdate = {
                 onEventSent(NotifContract.Event.UpdateAppriseLocation(it))
                 appriseSheet.close()
@@ -262,6 +262,7 @@ private fun HandleSideEffects(
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
+                is NotifContract.Effect.RequestPermission -> {}
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }

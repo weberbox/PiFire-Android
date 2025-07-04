@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_server_title">Address</string>
+    <string name="settings_server_address">Smoker Address</string>
+
+    <string name="settings_cat_extra_headers_title">Custom Headers</string>
+    <string name="settings_extra_headers_title">Extra Headers</string>
+    <string name="settings_extra_headers_summary">Add custom headers to all requests for services like Cloudflare Access etc</string>
+    <string name="settings_headers_key">Header Key</string>
+    <string name="settings_headers_value">Header Value</string>
+    <string name="settings_extra_headers_editor">Custom Header Editor</string>
+    <string name="settings_extra_headers">Extra Headers</string>
+    <string name="settings_extra_headers_add">Add New Header</string>
+    <string name="settings_extra_headers_note">Manage custom headers. Each of the headers you add will be added to every API request</string>
+    <string name="settings_extra_headers_not_defined">No headers defined</string>
+
+    <string name="settings_cat_basic_auth_title">Authentication</string>
+    <string name="settings_basic_auth_title">Basic Auth</string>
+    <string name="settings_basic_auth_summary">Use basic authentication if PiFire is behind a reverse proxy</string>
+    <string name="settings_credentials_title">Credentials</string>
+    <string name="settings_auth_warning">This app does not enforce a secure connection to PiFire and will send your credentials and/or headers regardless of the protocol being used (http or https). It is your responsibility to setup a secure connection (https) for all requests if you are using any type of authentication, otherwise your credentials and/or headers are being sent in an unsecure manner</string>
+</resources>

@@ -31,6 +31,7 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.ObserveAsEvents
 import com.weberbox.pifire.common.presentation.util.SnackbarController
+import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.util.UpdateManager
@@ -44,7 +45,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var appUpdateManager: UpdateManager
+    @Inject
+    lateinit var appUpdateManager: UpdateManager
 
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -69,7 +71,15 @@ class MainActivity : ComponentActivity() {
         val snackbarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
 
-        HandleSideEffects(effectFlow = effectFlow)
+        HandleSideEffects(
+            effectFlow = effectFlow,
+            onNavigationRequested = { navigationEffect ->
+                when (navigationEffect) {
+                    is MainContract.Effect.Navigation.NavRoute ->
+                        navController.safeNavigate(navigationEffect.route)
+                }
+            }
+        )
         ObserveSnackbarEvents(
             snackbarHostState = snackbarHostState,
             scope = scope,
@@ -91,18 +101,21 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun HandleSideEffects(effectFlow: Flow<MainContract.Effect>) {
+    private fun HandleSideEffects(
+        effectFlow: Flow<MainContract.Effect>,
+        onNavigationRequested: (MainContract.Effect.Navigation) -> Unit
+    ) {
         LaunchedEffect(SIDE_EFFECTS_KEY) {
             effectFlow.onEach { effect ->
                 when (effect) {
+                    is MainContract.Effect.CheckForAppUpdates -> checkForUpdates()
+                    is MainContract.Effect.Navigation.NavRoute -> onNavigationRequested(effect)
                     is MainContract.Effect.Notification -> {
                         showAlerter(
                             message = effect.text,
                             isError = effect.error
                         )
                     }
-
-                    is MainContract.Effect.CheckForAppUpdates -> checkForUpdates()
                 }
             }.collect()
         }

@@ -78,14 +78,14 @@ private fun SettingsScreen(
                 title = {
                     Text(
                         text = stringResource(
-                            R.string.settings_landing_select_online_title
+                            R.string.landing_select_online_title
                         )
                     )
                 },
                 summary = {
                     Text(
                         text = stringResource(
-                            R.string.settings_landing_select_online_summary
+                            R.string.landing_select_online_summary
                         )
                     )
                 }

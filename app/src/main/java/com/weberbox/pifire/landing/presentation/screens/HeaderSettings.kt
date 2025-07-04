@@ -129,7 +129,7 @@ private fun HeaderSettings(
                 .padding(contentPadding)
         ) {
             Text(
-                text = stringResource(R.string.extra_headers_note),
+                text = stringResource(R.string.settings_extra_headers_note),
                 modifier = Modifier.padding(MaterialTheme.spacing.smallThree),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
@@ -194,7 +194,7 @@ private fun HeaderSettings(
                         modifier = Modifier.size(MaterialTheme.size.extraLarge)
                     )
                     Text(
-                        text = stringResource(R.string.extra_headers_not_defined),
+                        text = stringResource(R.string.settings_extra_headers_not_defined),
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
                     )
@@ -214,7 +214,7 @@ private fun HeaderSettings(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.add_extra_header),
+                        text = stringResource(R.string.settings_extra_headers_add),
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center
                     )

@@ -177,7 +177,7 @@ class LandingViewModel @Inject constructor(
                         toggleLoading(false)
                         setEffect {
                             LandingContract.Effect.Notification(
-                                text = UiText(R.string.socket_failed_connection),
+                                text = UiText(R.string.alerter_socket_connection_failed),
                                 error = true
                             )
                         }

@@ -89,7 +89,7 @@ class RecipesViewModel @Inject constructor(
                     setState { copy(recipesList = result.data, isInitialLoading = false) }
                     setEffect {
                         RecipesContract.Effect.Notification(
-                            text = UiText(R.string.not_connected_cached_results),
+                            text = UiText(R.string.alerter_cached_results),
                             error = true
                         )
                     }

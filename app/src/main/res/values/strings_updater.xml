@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="inapp_update_available_title">Update Available</string>
+    <string name="inapp_update_available_message_flexible">A new app version is available, please check the release notes as it may or may not support your current PiFire version</string>
+    <string name="inapp_update_available_message_immediate">A critical update is available and is required for continued use. Please update ASAP</string>
+    <string name="inapp_update_checking">Checking for App Updates.</string>
+    <string name="inapp_update_downloading">Update is currently downloading.</string>
+    <string name="inapp_update_downloaded">App update has finished downloading</string>
+    <string name="inapp_update_current">App is currently up to date!</string>
+    <string name="inapp_update_check_failed">Checking for Updates Failed. Please try again later.</string>
+    <string name="inapp_update_complete">App update completed</string>
+    <string name="inapp_update_canceled">App update canceled</string>
+    <string name="inapp_update_failed">App update failed!</string>
+</resources>

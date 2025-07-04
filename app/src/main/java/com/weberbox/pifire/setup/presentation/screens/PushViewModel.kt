@@ -48,13 +48,16 @@ class PushViewModel @Inject constructor(
     private fun toggleConsent(consent: Boolean) {
         oneSignalManager.provideUserConsent(consent)
         if (consent) {
-            oneSignalManager.promptForPushNotifications()
+            setEffect {
+                PushContract.Effect.RequestPermission
+            }
         }
         setState {
             copy(
                 consent = consent
             )
         }
+        skipConsent = consent
     }
 
     private fun checkNavigateToFinish() {

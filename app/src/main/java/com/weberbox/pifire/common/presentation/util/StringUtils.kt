@@ -24,6 +24,10 @@ fun String.isNotSecureUrl(): Boolean {
     return !startsWith("https://", ignoreCase = true)
 }
 
+fun String?.isNotNullOrBlank(): Boolean {
+    return !isNullOrBlank()
+}
+
 fun getReasonPhrase(statusCode: Int): String {
     return when (statusCode) {
         (200) -> "OK"

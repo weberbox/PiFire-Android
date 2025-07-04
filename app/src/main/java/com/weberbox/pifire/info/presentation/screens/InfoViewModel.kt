@@ -111,7 +111,7 @@ class InfoViewModel @Inject constructor(
                     setState { copy(info = result.data, isInfoLoading = false) }
                     setEffect {
                         InfoContract.Effect.Notification(
-                            text = UiText(R.string.not_connected_cached_results),
+                            text = UiText(R.string.alerter_cached_results),
                             error = true
                         )
                     }

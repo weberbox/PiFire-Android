@@ -11,17 +11,13 @@ sealed interface DataError : Error {
         SOCKET_TIMEOUT,
         SERVER_ERROR,
         AUTHENTICATION,
-        URI_ERROR,
         NULL_RESPONSE,
-        UNSUCCESSFUL,
         CERTIFICATE,
         UNKNOWN
     }
 
     enum class Local : DataError {
         JSON_ERROR,
-        SERIALIZATION,
-        INDEX_ERROR,
         NO_CACHED_DATA,
         UNKNOWN
     }

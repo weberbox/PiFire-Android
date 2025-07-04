@@ -34,7 +34,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -53,9 +52,7 @@ import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.dashboard.presentation.screens.DashboardScreenDestination
-import com.weberbox.pifire.dashboard.presentation.screens.DashboardScreenPreview
 import com.weberbox.pifire.events.presentation.screens.EventsScreenDestination
-import com.weberbox.pifire.events.presentation.screens.EventsScreenPreview
 import com.weberbox.pifire.home.presentation.component.BottomBar
 import com.weberbox.pifire.home.presentation.component.DrawerSheet
 import com.weberbox.pifire.home.presentation.component.HomeAppBarActions
@@ -77,7 +74,6 @@ import com.weberbox.pifire.home.presentation.utils.navContentPadding
 import com.weberbox.pifire.home.presentation.utils.offsetDrawerWidth
 import com.weberbox.pifire.home.presentation.utils.permDrawerAdjustments
 import com.weberbox.pifire.pellets.presentation.screens.PelletsScreenDestination
-import com.weberbox.pifire.pellets.presentation.screens.PelletsScreenPreview
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -87,11 +83,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreenDestination(
     navController: NavHostController,
-    isInEditMode: Boolean = false,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     HomeScreen(
-        isInEditMode = isInEditMode,
         initialPage = Dashboard.page,
         navController = navController,
         state = viewModel.viewState.value,
@@ -103,6 +97,7 @@ fun HomeScreenDestination(
                 is HomeContract.Effect.Navigation.Changelog -> {
                     navController.safeNavigate(NavGraph.Changelog)
                 }
+
                 is HomeContract.Effect.Navigation.NavRoute -> {
                     navController.safeNavigate(
                         route = navigationEffect.route,
@@ -117,7 +112,6 @@ fun HomeScreenDestination(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreen(
-    isInEditMode: Boolean,
     initialPage: Int,
     navController: NavHostController,
     state: HomeContract.State,
@@ -365,42 +359,23 @@ private fun HomeScreen(
                             } else Modifier
                         )
                 ) { page ->
-                    if (isInEditMode) {
-                        when (page) {
-                            Pellets.page -> PelletsScreenPreview(
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
+                    when (page) {
+                        Pellets.page -> PelletsScreenDestination(
+                            navController = navController,
+                            contentPadding = contentPadding,
+                            hazeState = hazeState
+                        )
 
-                            Dashboard.page -> DashboardScreenPreview(
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
+                        Dashboard.page -> DashboardScreenDestination(
+                            navController = navController,
+                            contentPadding = contentPadding,
+                            hazeState = hazeState
+                        )
 
-                            Events.page -> EventsScreenPreview(
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
-                        }
-                    } else {
-                        when (page) {
-                            Pellets.page -> PelletsScreenDestination(
-                                navController = navController,
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
-
-                            Dashboard.page -> DashboardScreenDestination(
-                                navController = navController,
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
-
-                            Events.page -> EventsScreenDestination(
-                                contentPadding = contentPadding,
-                                hazeState = hazeState
-                            )
-                        }
+                        Events.page -> EventsScreenDestination(
+                            contentPadding = contentPadding,
+                            hazeState = hazeState
+                        )
                     }
                 }
             }
@@ -459,15 +434,13 @@ private fun HandleSideEffects(
 }
 
 @Composable
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, apiLevel = 35)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true, apiLevel = 35)
 private fun HomeScreenPreview() {
-    val isInEditMode = LocalView.current.isInEditMode
     PiFireTheme {
         Surface {
             HomeScreen(
                 navController = rememberNavController(),
-                isInEditMode = isInEditMode,
                 initialPage = Dashboard.page,
                 state = HomeContract.State(
                     showBottomBar = true,

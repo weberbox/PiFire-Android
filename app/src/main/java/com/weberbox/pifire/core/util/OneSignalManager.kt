@@ -1,13 +1,16 @@
 package com.weberbox.pifire.core.util
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentResolver
 import android.content.Context
 import android.media.AudioAttributes
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.net.toUri
+import com.onesignal.OSDeviceState
 import com.onesignal.OneSignal
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
@@ -27,13 +30,9 @@ class OneSignalManager @Inject constructor(
     init {
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.ERROR, OneSignal.LOG_LEVEL.NONE)
         OneSignal.setRequiresUserPrivacyConsent(true)
-        OneSignal.initWithContext(appContext.applicationContext)
+        OneSignal.initWithContext(appContext)
         OneSignal.setAppId(Secrets.ONESIGNAL_APP_ID)
-        initNotificationChannels(appContext.applicationContext)
-    }
-
-    fun promptForPushNotifications() {
-        OneSignal.promptForPushNotifications()
+        initNotificationChannels(appContext)
     }
 
     fun provideUserConsent(accepted: Boolean) {
@@ -118,6 +117,11 @@ class OneSignalManager @Inject constructor(
                     Timber.d("Device is not subscribed")
                     return status
                 }
+
+                OneSignalStatus.ONESIGNAL_NOTIFICATION_PERMISSION_DENIED -> {
+                    Timber.d("Notification permission denied")
+                    return status
+                }
             }
         }
         return OneSignalStatus.ONESIGNAL_NO_CONSENT
@@ -128,30 +132,41 @@ class OneSignalManager @Inject constructor(
             return OneSignalStatus.ONESIGNAL_NO_CONSENT
         }
 
-        val deviceState = OneSignal.getDeviceState()
-        if (deviceState == null) {
-            return OneSignalStatus.ONESIGNAL_DEVICE_ERROR
-        } else if (deviceState.pushToken == null) {
-            return OneSignalStatus.ONESIGNAL_NULL_TOKEN
-        } else if (!deviceState.isSubscribed) {
-            return OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED
-        }
-
-        val playerID = deviceState.userId ?: return OneSignalStatus.ONESIGNAL_NO_ID
-
-        val devicesHash = getDevicesHash()
-
-        if (!devicesHash.containsKey(playerID)) {
-            return OneSignalStatus.ONESIGNAL_NOT_REGISTERED
-        }
-
-        for ((key, value) in devicesHash) {
-            if (key == playerID && value.appVersion != BuildConfig.VERSION_NAME) {
-                return OneSignalStatus.ONESIGNAL_APP_UPDATED
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!appContext.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                return OneSignalStatus.ONESIGNAL_NOTIFICATION_PERMISSION_DENIED
             }
         }
 
-        return OneSignalStatus.ONESIGNAL_REGISTERED
+        val deviceState =
+            OneSignal.getDeviceState() ?: return OneSignalStatus.ONESIGNAL_DEVICE_ERROR
+
+        val deviceValidationStatus = validateDeviceState(deviceState)
+        if (deviceValidationStatus != OneSignalStatus.ONESIGNAL_REGISTERED) {
+            return deviceValidationStatus
+        }
+
+        val playerID = deviceState.userId ?: return OneSignalStatus.ONESIGNAL_NO_ID
+        return validatePlayerRegistration(playerID)
+    }
+
+    private fun validateDeviceState(deviceState: OSDeviceState): OneSignalStatus {
+        return when {
+            deviceState.pushToken == null -> OneSignalStatus.ONESIGNAL_NULL_TOKEN
+            !deviceState.isSubscribed -> OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED
+            else -> OneSignalStatus.ONESIGNAL_REGISTERED
+        }
+    }
+
+    private suspend fun validatePlayerRegistration(playerID: String): OneSignalStatus {
+        val devicesHash = getDevicesHash()
+
+        val deviceInfo = devicesHash[playerID] ?: return OneSignalStatus.ONESIGNAL_NOT_REGISTERED
+        return if (deviceInfo.appVersion != BuildConfig.VERSION_NAME) {
+            OneSignalStatus.ONESIGNAL_APP_UPDATED
+        } else {
+            OneSignalStatus.ONESIGNAL_REGISTERED
+        }
     }
 
     private suspend fun getDevice(playerID: String): OneSignalDeviceInfo {
@@ -180,127 +195,95 @@ class OneSignalManager @Inject constructor(
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            val channelIdBase = context.getString(R.string.notification_channel_base)
-            val nameBase: CharSequence = context.getString(R.string.notification_channel_base_name)
-            val descriptionBase = context.getString(R.string.notification_desc_base)
-
-            val baseAlerts = NotificationChannel(
-                channelIdBase, nameBase,
-                NotificationManager.IMPORTANCE_HIGH
+            val channels = listOf(
+                NotificationChannelConfig(
+                    channelId = context.getString(R.string.notification_channel_base),
+                    name = context.getString(R.string.notification_channel_base_name),
+                    description = context.getString(R.string.notification_desc_base)
+                ),
+                NotificationChannelConfig(
+                    channelId = context.getString(R.string.notification_channel_temp),
+                    name = context.getString(R.string.notification_channel_temp_name),
+                    description = context.getString(R.string.notification_desc_temp),
+                    soundResourceId = R.raw.temp_achieved
+                ),
+                NotificationChannelConfig(
+                    channelId = context.getString(R.string.notification_channel_timer),
+                    name = context.getString(R.string.notification_channel_timer_name),
+                    description = context.getString(R.string.notification_desc_timer),
+                    soundResourceId = R.raw.timer_alarm,
+                    useVibrationPattern = true
+                ),
+                NotificationChannelConfig(
+                    channelId = context.getString(R.string.notification_channel_error),
+                    name = context.getString(R.string.notification_channel_error_name),
+                    description = context.getString(R.string.notification_desc_error),
+                    soundResourceId = R.raw.grill_error,
+                    useVibrationPattern = true
+                ),
+                NotificationChannelConfig(
+                    channelId = context.getString(R.string.notification_channel_pellets),
+                    name = context.getString(R.string.notification_channel_pellets_name),
+                    description = context.getString(R.string.notification_desc_pellets),
+                    soundResourceId = R.raw.pellet_alarm,
+                    useVibrationPattern = true
+                )
             )
-            baseAlerts.description = descriptionBase
-            baseAlerts.enableLights(true)
-            baseAlerts.setShowBadge(true)
-            baseAlerts.enableVibration(true)
-            baseAlerts.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(baseAlerts)
 
-            val channelIdTemp = context.getString(R.string.notification_channel_temp)
-            val nameTemp: CharSequence = context.getString(R.string.notification_channel_temp_name)
-            val descriptionTemp = context.getString(R.string.notification_desc_temp)
-            val tempAlertUri = (ContentResolver.SCHEME_ANDROID_RESOURCE +
-                    "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.temp_achieved).toUri()
-            val importanceTemp = NotificationManager.IMPORTANCE_HIGH
-
-            val tempAlerts = NotificationChannel(
-                channelIdTemp, nameTemp,
-                importanceTemp
-            )
-            tempAlerts.description = descriptionTemp
-            tempAlerts.enableLights(true)
-            tempAlerts.setShowBadge(true)
-            tempAlerts.enableVibration(true)
-            tempAlerts.setSound(
-                tempAlertUri, AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
-            tempAlerts.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(tempAlerts)
-
-            val channelIdTimer = context.getString(R.string.notification_channel_timer)
-            val nameTimer: CharSequence =
-                context.getString(R.string.notification_channel_timer_name)
-            val descriptionTimer = context.getString(R.string.notification_desc_timer)
-            val timerAlertUri = (ContentResolver.SCHEME_ANDROID_RESOURCE +
-                    "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.timer_alarm).toUri()
-            val importanceTimer = NotificationManager.IMPORTANCE_HIGH
-
-            val timerAlerts = NotificationChannel(
-                channelIdTimer, nameTimer,
-                importanceTimer
-            )
-            timerAlerts.description = descriptionTimer
-            timerAlerts.enableLights(true)
-            timerAlerts.setShowBadge(true)
-            timerAlerts.enableVibration(true)
-            timerAlerts.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            timerAlerts.setSound(
-                timerAlertUri, AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
-            timerAlerts.lockscreenVisibility =
-                NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(timerAlerts)
-
-            val channelIdError = context.getString(R.string.notification_channel_error)
-            val nameError: CharSequence =
-                context.getString(R.string.notification_channel_error_name)
-            val descriptionError = context.getString(R.string.notification_desc_error)
-            val errorAlertUri = (ContentResolver.SCHEME_ANDROID_RESOURCE +
-                    "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.grill_error).toUri()
-            val importanceError = NotificationManager.IMPORTANCE_HIGH
-
-            val errorAlerts = NotificationChannel(
-                channelIdError, nameError,
-                importanceError
-            )
-            errorAlerts.description = descriptionError
-            errorAlerts.enableLights(true)
-            errorAlerts.setShowBadge(true)
-            errorAlerts.enableVibration(true)
-            errorAlerts.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            errorAlerts.setSound(
-                errorAlertUri, AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
-            errorAlerts.lockscreenVisibility =
-                NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(errorAlerts)
-
-            val channelIdPellets = context.getString(R.string.notification_channel_pellets)
-            val namePellets: CharSequence =
-                context.getString(R.string.notification_channel_pellets_name)
-            val descriptionPellets = context.getString(R.string.notification_desc_pellets)
-            val pelletsAlertUri = (ContentResolver.SCHEME_ANDROID_RESOURCE +
-                    "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.pellet_alarm).toUri()
-            val importancePellets = NotificationManager.IMPORTANCE_HIGH
-
-            val pelletAlerts = NotificationChannel(
-                channelIdPellets, namePellets,
-                importancePellets
-            )
-            pelletAlerts.description = descriptionPellets
-            pelletAlerts.enableLights(true)
-            pelletAlerts.setShowBadge(true)
-            pelletAlerts.enableVibration(true)
-            pelletAlerts.vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            pelletAlerts.setSound(
-                pelletsAlertUri, AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
-            pelletAlerts.lockscreenVisibility =
-                NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(pelletAlerts)
+            channels.forEach { config ->
+                createNotificationChannel(
+                    notificationManager = notificationManager,
+                    config = config
+                )
+            }
         }
     }
+
+    private data class NotificationChannelConfig(
+        val channelId: String,
+        val name: String,
+        val description: String,
+        val soundResourceId: Int? = null,
+        val useVibrationPattern: Boolean = false
+    )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(
+        notificationManager: NotificationManager,
+        config: NotificationChannelConfig
+    ) {
+        val channel = NotificationChannel(
+            config.channelId,
+            config.name,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = config.description
+            enableLights(true)
+            setShowBadge(true)
+            enableVibration(true)
+            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+
+            if (config.useVibrationPattern) {
+                vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
+            }
+
+            config.soundResourceId?.let { resourceId ->
+                val soundUri = buildNotificationUri(resourceId)
+                setSound(soundUri, createAudioAttributes())
+            }
+        }
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun buildNotificationUri(resourceId: Int) =
+        (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                BuildConfig.APPLICATION_ID + "/" + resourceId).toUri()
+
+    private fun createAudioAttributes() = AudioAttributes.Builder()
+        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+        .build()
 }
 
 enum class OneSignalStatus {
@@ -311,5 +294,6 @@ enum class OneSignalStatus {
     ONESIGNAL_DEVICE_ERROR,
     ONESIGNAL_NULL_TOKEN,
     ONESIGNAL_REGISTERED,
-    ONESIGNAL_NOT_SUBSCRIBED
+    ONESIGNAL_NOT_SUBSCRIBED,
+    ONESIGNAL_NOTIFICATION_PERMISSION_DENIED,
 }

@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.component.OutlineFieldWithState
 import com.weberbox.pifire.common.presentation.model.ErrorStatus
 import com.weberbox.pifire.common.presentation.model.FieldInput
@@ -38,6 +37,7 @@ import com.weberbox.pifire.common.presentation.state.ErrorStatusSaver
 import com.weberbox.pifire.common.presentation.state.FieldInputSaver
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
 
 @Composable
@@ -99,7 +99,7 @@ internal fun CredentialsSheet(
                 username = FieldInput(value = it, hasInteracted = true)
                 usernameError = ErrorStatus(
                     isError = username.value.isBlank(),
-                    errorMsg = UiText(R.string.text_blank_error)
+                    errorMsg = UiText(R.string.error_text_blank)
                 )
             }
         )
@@ -116,7 +116,7 @@ internal fun CredentialsSheet(
                 password = FieldInput(value = it, hasInteracted = true)
                 passwordError = ErrorStatus(
                     isError = password.value.isBlank(),
-                    errorMsg = UiText(R.string.text_blank_error)
+                    errorMsg = UiText(R.string.error_text_blank)
                 )
             }
         )

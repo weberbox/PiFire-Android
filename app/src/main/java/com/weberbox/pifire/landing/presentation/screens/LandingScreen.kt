@@ -161,11 +161,11 @@ private fun LandingScreen(
                         )
                     )
                 },
-                text = { Text(text = stringResource(R.string.add_server_button)) },
+                text = { Text(text = stringResource(R.string.landing_add_server)) },
                 icon = {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.add_server_button)
+                        contentDescription = stringResource(R.string.landing_add_server)
                     )
                 }
             )
@@ -217,7 +217,7 @@ private fun LandingScreen(
                                         onEventSent(LandingContract.Event.SelectServer(uuid))
                                     } else {
                                         activity?.showAlerter(
-                                            message = R.string.error_server_offline,
+                                            message = R.string.alerter_server_offline,
                                             isError = true
                                         )
                                     }

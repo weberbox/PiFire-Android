@@ -112,7 +112,7 @@ fun HeadersSheet(
                     key = FieldInput(value = it, hasInteracted = true)
                     keyError = ErrorStatus(
                         isError = it.isBlank(),
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 }
             )
@@ -126,7 +126,7 @@ fun HeadersSheet(
                     value = FieldInput(value = it, hasInteracted = true)
                     valueError = ErrorStatus(
                         isError = it.isBlank(),
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 }
             )

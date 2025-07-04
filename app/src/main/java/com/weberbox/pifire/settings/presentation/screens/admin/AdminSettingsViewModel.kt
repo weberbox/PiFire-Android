@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
+import com.weberbox.pifire.common.presentation.base.BaseViewModel
+import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.AdminContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -153,7 +153,7 @@ class AdminSettingsViewModel @Inject constructor(
                 is Result.Success -> {
                     setEffect {
                         AdminContract.Effect.Notification(
-                            text = UiText(R.string.admin_action_completed),
+                            text = UiText(R.string.alerter_admin_action_completed),
                             error = false
                         )
                     }

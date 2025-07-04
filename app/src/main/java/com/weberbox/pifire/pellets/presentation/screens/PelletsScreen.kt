@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -60,9 +61,35 @@ fun PelletsScreenDestination(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: PelletsViewModel = hiltViewModel()
+    viewModel: PelletsViewModel? = null
 ) {
-    PelletsScreen(
+    return when {
+        LocalInspectionMode.current -> {
+            PelletsScreenPreview(
+                contentPadding = contentPadding,
+                hazeState = hazeState
+            )
+        }
+
+        else -> {
+            PelletsScreen(
+                navController = navController,
+                contentPadding = contentPadding,
+                hazeState = hazeState,
+                viewModel = viewModel ?: hiltViewModel()
+            )
+        }
+    }
+}
+
+@Composable
+private fun PelletsScreen(
+    navController: NavHostController,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: PelletsViewModel
+) {
+    PelletsScreenContent(
         hazeState = hazeState,
         contentPadding = contentPadding,
         state = viewModel.viewState.value,
@@ -85,7 +112,7 @@ fun PelletsScreenDestination(
 }
 
 @Composable
-private fun PelletsScreen(
+private fun PelletsScreenContent(
     hazeState: HazeState,
     contentPadding: PaddingValues,
     state: PelletsContract.State,
@@ -329,7 +356,7 @@ internal fun PelletsScreenPreview(
 ) {
     PiFireTheme {
         Surface {
-            PelletsScreen(
+            PelletsScreenContent(
                 hazeState = hazeState,
                 contentPadding = contentPadding,
                 state = PelletsContract.State(

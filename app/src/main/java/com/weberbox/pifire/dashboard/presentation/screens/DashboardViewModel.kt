@@ -371,7 +371,7 @@ class DashboardViewModel @Inject constructor(
 
                 else -> setEffect {
                     DashContract.Effect.Notification(
-                        text = UiText(R.string.control_smoke_plus_disabled),
+                        text = UiText(R.string.alerter_smoke_plus_disabled),
                         error = false
                     )
                 }
@@ -388,7 +388,7 @@ class DashboardViewModel @Inject constructor(
 
                 else -> setEffect {
                     DashContract.Effect.Notification(
-                        text = UiText(R.string.control_pwm_control_disabled),
+                        text = UiText(R.string.alerter_pwm_control_disabled),
                         error = false
                     )
                 }
@@ -521,7 +521,7 @@ class DashboardViewModel @Inject constructor(
                         }
                         setEffect {
                             DashContract.Effect.Notification(
-                                text = UiText(R.string.not_connected_cached_results),
+                                text = UiText(R.string.alerter_cached_results),
                                 error = true
                             )
                         }

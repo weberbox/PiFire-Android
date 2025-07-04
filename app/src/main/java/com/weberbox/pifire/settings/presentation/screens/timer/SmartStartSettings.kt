@@ -284,7 +284,7 @@ private fun SmartStartSettingsContent(
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.add_smart_profile),
+                    text = stringResource(R.string.settings_smart_start_add_profile),
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )

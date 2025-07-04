@@ -44,6 +44,8 @@ import com.weberbox.pifire.common.presentation.util.DialogAction
 import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.showAlerter
+import com.weberbox.pifire.core.util.NotificationsPermissionDetailsProvider
+import com.weberbox.pifire.core.util.rememberPermissionState
 import com.weberbox.pifire.setup.presentation.component.SetupBottomNavRow
 import com.weberbox.pifire.setup.presentation.contract.PushContract
 import com.weberbox.pifire.setup.presentation.model.SetupStep
@@ -171,9 +173,14 @@ private fun HandleSideEffects(
 ) {
     val activity = LocalActivity.current
     val scope = rememberCoroutineScope()
+    val notificationPermission = rememberPermissionState(
+        permissionDetailsProvider = NotificationsPermissionDetailsProvider()
+    )
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
+                is PushContract.Effect.RequestPermission ->
+                    notificationPermission.launchPermissionRequest()
                 is PushContract.Effect.Navigation -> onNavigationRequested(effect)
                 is PushContract.Effect.Notification -> {
                     activity?.showAlerter(

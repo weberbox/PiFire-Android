@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pellets_hopper_level">Pellet Level</string>
+    <string name="pellets_usage">Estimated Usage</string>
+    <string name="pellets_current_brand">Brand:</string>
+    <string name="pellets_current_wood">Wood:</string>
+    <string name="pellets_current_rating">Rating:</string>
+    <string name="pellets_current_date">Date Loaded:</string>
+    <string name="pellets_current_comments">Comments:</string>
+
+    <string name="pellets_brand">Brand</string>
+    <string name="pellets_wood">Wood</string>
+    <string name="pellets_rating">Rating</string>
+    <string name="pellets_comments">Comments</string>
+
+    <string name="pellets_brands">Brands</string>
+    <string name="pellets_woods">Wood Types</string>
+    <string name="pellets_editor">Pellet Profiles Editor</string>
+    <string name="pellets_log">Pellet Log</string>
+    <string name="pellets_add_brand">Add New Brand</string>
+    <string name="pellets_add_wood">Add New Wood</string>
+    <string name="pellets_add_profile">Add New Profile</string>
+</resources>

@@ -132,7 +132,7 @@ class PwmSheetViewModel : ViewModel() {
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 )
             }
@@ -216,7 +216,7 @@ class PwmSheetViewModel : ViewModel() {
                     ),
                     dutyError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.text_blank_error)
+                        errorMsg = UiText(R.string.error_text_blank)
                     )
                 )
             }

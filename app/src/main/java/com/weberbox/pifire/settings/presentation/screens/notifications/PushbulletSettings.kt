@@ -206,6 +206,7 @@ private fun HandleSideEffects(
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
+                is NotifContract.Effect.RequestPermission -> {}
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }

@@ -65,7 +65,7 @@ fun Activity.showAlerter(
     isError: Boolean = false
 ) {
     this.showAlerter(
-        title = title,
+        title = title?.let { UiText(it) },
         message = UiText(message),
         icon = icon,
         backgroundColor = backgroundColor,
@@ -80,7 +80,7 @@ fun Activity.showAlerter(
 }
 
 fun Activity.showAlerter(
-    @StringRes title: Int? = null,
+    title: UiText? = null,
     message: UiText,
     @DrawableRes icon: Int = R.drawable.ic_info,
     backgroundColor: Color = alerterInfo,
@@ -110,7 +110,7 @@ fun Activity.showAlerter(
         .also { alerter ->
             if (enableSwipeToDismiss) alerter.enableSwipeToDismiss()
             if (disableOutsideTouch) alerter.disableOutsideTouch()
-            if (title != null) alerter.setTitle(title)
+            if (title != null) alerter.setTitle(title.asString(this))
         }
         .show()
 }

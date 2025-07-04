@@ -130,7 +130,7 @@ class EventsViewModel @Inject constructor(
                     }
                     setEffect {
                         EventsContract.Effect.Notification(
-                            text = UiText(R.string.not_connected_cached_results),
+                            text = UiText(R.string.alerter_cached_results),
                             error = true
                         )
                     }

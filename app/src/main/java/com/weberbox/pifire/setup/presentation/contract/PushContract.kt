@@ -1,10 +1,10 @@
 package com.weberbox.pifire.setup.presentation.contract
 
-import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.base.ViewEvent
 import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
 import com.weberbox.pifire.common.presentation.util.DialogEvent
+import com.weberbox.pifire.common.presentation.util.UiText
 
 class PushContract {
 
@@ -20,6 +20,7 @@ class PushContract {
     sealed class Effect : ViewSideEffect {
         data class Notification(val text: UiText, val error: Boolean) : Effect()
         data class Dialog(val dialogEvent: DialogEvent) : Effect()
+        data object RequestPermission : Effect()
 
         sealed class Navigation : Effect() {
             data object Back : Navigation()

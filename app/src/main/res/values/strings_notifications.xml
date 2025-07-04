@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_base">pifire_base_alerts</string>
+    <string name="notification_channel_temp">pifire_temp_alerts</string>
+    <string name="notification_channel_timer">pifire_timer_alerts</string>
+    <string name="notification_channel_error">pifire_error_alerts</string>
+    <string name="notification_channel_pellets">pifire_pellet_alerts</string>
+    <string name="notification_channel_base_name">General Notifications</string>
+    <string name="notification_channel_temp_name">Temp Notifications</string>
+    <string name="notification_channel_timer_name">Timer Notifications</string>
+    <string name="notification_channel_error_name">Error Notifications</string>
+    <string name="notification_channel_pellets_name">Pellet Notifications</string>
+    <string name="notification_desc_base">General Grill Notifications</string>
+    <string name="notification_desc_temp">Notifications For Temperature Targets And Set Points</string>
+    <string name="notification_desc_timer">Notifications For Timer Alarms</string>
+    <string name="notification_desc_error">Notifications For Grill Errors</string>
+    <string name="notification_desc_pellets">Notifications About Pellet Levels Etc</string>
+</resources>

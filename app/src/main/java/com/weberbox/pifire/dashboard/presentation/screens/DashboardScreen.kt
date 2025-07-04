@@ -33,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,9 +98,35 @@ fun DashboardScreenDestination(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: DashboardViewModel = hiltViewModel()
+    viewModel: DashboardViewModel? = null
 ) {
-    DashboardScreen(
+    return when {
+        LocalInspectionMode.current -> {
+            DashboardScreenPreview(
+                contentPadding = contentPadding,
+                hazeState = hazeState
+            )
+        }
+
+        else -> {
+            DashboardScreen(
+                navController = navController,
+                contentPadding = contentPadding,
+                hazeState = hazeState,
+                viewModel = viewModel ?: hiltViewModel()
+            )
+        }
+    }
+}
+
+@Composable
+private fun DashboardScreen(
+    navController: NavHostController,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: DashboardViewModel
+) {
+    DashboardScreenContent(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
@@ -119,7 +146,7 @@ fun DashboardScreenDestination(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun DashboardScreen(
+private fun DashboardScreenContent(
     state: DashContract.State,
     effectFlow: Flow<DashContract.Effect>?,
     onEventSent: (event: DashContract.Event) -> Unit,
@@ -490,7 +517,7 @@ internal fun DashboardScreenPreview(
 ) {
     PiFireTheme {
         Surface {
-            DashboardScreen(
+            DashboardScreenContent(
                 state = DashContract.State(
                     dash = buildDash(),
                     timerData = TimerData(),

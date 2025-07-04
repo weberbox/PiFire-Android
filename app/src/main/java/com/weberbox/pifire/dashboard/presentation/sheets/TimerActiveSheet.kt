@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.dashboard.presentation.component.ModeButton
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract.DashEvent
 
@@ -46,7 +46,7 @@ internal fun TimerActiveSheet(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             ModeButton(
-                mode = stringResource(R.string.timer_stop),
+                mode = stringResource(R.string.stop),
                 icon = Icons.Outlined.StopCircle,
                 onClick = {
                     onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_STOP))
@@ -54,7 +54,7 @@ internal fun TimerActiveSheet(
             )
             if (paused) {
                 ModeButton(
-                    mode = stringResource(R.string.timer_resume),
+                    mode = stringResource(R.string.resume),
                     icon = Icons.Outlined.PlayCircle,
                     onClick = {
                         onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_START))
@@ -62,7 +62,7 @@ internal fun TimerActiveSheet(
                 )
             } else {
                 ModeButton(
-                    mode = stringResource(R.string.timer_pause),
+                    mode = stringResource(R.string.pause),
                     icon = Icons.Outlined.PauseCircle,
                     onClick = {
                         onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_PAUSE))

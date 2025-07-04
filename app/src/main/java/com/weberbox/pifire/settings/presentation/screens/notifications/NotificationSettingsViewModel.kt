@@ -24,11 +24,10 @@ import javax.inject.Inject
 class NotificationSettingsViewModel @Inject constructor(
     private val oneSignalManager: OneSignalManager,
     private val settingsRepo: SettingsRepo
-): BaseViewModel<NotifContract.Event, NotifContract.State, NotifContract.Effect>() {
+) : BaseViewModel<NotifContract.Event, NotifContract.State, NotifContract.Effect>() {
 
     init {
         collectServerData()
-        checkOneSignalStatus()
     }
 
     override fun setInitialState() = NotifContract.State(
@@ -79,6 +78,9 @@ class NotificationSettingsViewModel @Inject constructor(
                         serverData = server,
                         isInitialLoading = false
                     )
+                }
+                if (server.settings.onesignalEnabled) {
+                    checkOneSignalStatus()
                 }
             }
         }
@@ -251,11 +253,8 @@ class NotificationSettingsViewModel @Inject constructor(
 
     private fun setOneSignalEnabled(enabled: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (enabled) {
-                checkOneSignalStatus()
-                oneSignalManager.promptForPushNotifications()
-            }
             handleResult(settingsRepo.setOneSignalEnabled(enabled))
+            if (enabled) checkOneSignalStatus()
         }
     }
 
@@ -274,7 +273,6 @@ class NotificationSettingsViewModel @Inject constructor(
             }
 
             is Result.Success -> {
-                settingsRepo.updateServerSettings(result.data)
                 withContext(Dispatchers.Main) {
                     setState {
                         copy(
@@ -287,9 +285,10 @@ class NotificationSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun checkOneSignalStatus() {
-        viewModelScope.launch {
-            when (oneSignalManager.checkOneSignalStatus()) {
+    private suspend fun checkOneSignalStatus() {
+        val result = oneSignalManager.checkOneSignalStatus()
+        withContext(Dispatchers.Main) {
+            when (result) {
                 OneSignalStatus.ONESIGNAL_REGISTERED -> {}
                 OneSignalStatus.ONESIGNAL_APP_UPDATED -> {}
                 OneSignalStatus.ONESIGNAL_NO_ID -> {
@@ -343,6 +342,12 @@ class NotificationSettingsViewModel @Inject constructor(
                             text = UiText(R.string.settings_onesignal_subscribe_message),
                             error = true
                         )
+                    }
+                }
+
+                OneSignalStatus.ONESIGNAL_NOTIFICATION_PERMISSION_DENIED -> {
+                    setEffect {
+                        NotifContract.Effect.RequestPermission
                     }
                 }
             }

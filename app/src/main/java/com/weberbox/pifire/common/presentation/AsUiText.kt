@@ -13,14 +13,6 @@ object AsUiText {
                 R.string.data_error_json_parsing
             )
 
-            DataError.Local.SERIALIZATION -> UiText(
-                R.string.data_error_serialization
-            )
-
-            DataError.Local.INDEX_ERROR -> UiText(
-                R.string.data_error_indexing
-            )
-
             DataError.Local.NO_CACHED_DATA -> UiText(
                 R.string.data_error_no_cached_data
             )
@@ -45,20 +37,12 @@ object AsUiText {
                 R.string.data_error_http_on_failure
             )
 
-            DataError.Network.URI_ERROR -> UiText(
-                R.string.data_error_uri_error
-            )
-
             DataError.Network.AUTHENTICATION -> UiText(
                 R.string.data_error_http_certificate_error
             )
 
             DataError.Network.NULL_RESPONSE -> UiText(
                 R.string.data_error_http_response_null
-            )
-
-            DataError.Network.UNSUCCESSFUL -> UiText(
-                R.string.data_error_http_unsuccessful
             )
 
             DataError.Network.CERTIFICATE -> UiText(

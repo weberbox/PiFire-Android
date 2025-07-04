@@ -41,7 +41,7 @@ internal fun LandingTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(R.string.my_smokers),
+                text = stringResource(R.string.landing_my_smokers),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )

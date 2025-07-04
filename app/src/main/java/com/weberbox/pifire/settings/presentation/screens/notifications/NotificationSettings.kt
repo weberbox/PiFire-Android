@@ -39,6 +39,8 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.config.Secrets
+import com.weberbox.pifire.core.util.NotificationsPermissionDetailsProvider
+import com.weberbox.pifire.core.util.rememberPermissionState
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -47,6 +49,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
 import me.zhanghai.compose.preference.TwoTargetSwitchPreference
+import timber.log.Timber
 
 @Composable
 fun NotificationSettingsDestination(
@@ -83,6 +86,8 @@ private fun NotificationSettings(
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    Timber.d("Enabled: ${state.serverData.settings.onesignalEnabled}")
 
     HandleSideEffects(
         effectFlow = effectFlow,
@@ -251,9 +256,16 @@ private fun HandleSideEffects(
     onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
+    val notificationPermission = rememberPermissionState(
+        permissionDetailsProvider = NotificationsPermissionDetailsProvider()
+    )
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
+                is NotifContract.Effect.RequestPermission -> {
+                    notificationPermission.launchPermissionRequest()
+                }
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -261,7 +273,8 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
+                        duration = 6000
                     )
                 }
             }

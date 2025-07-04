@@ -47,6 +47,7 @@ class NotifContract {
 
     sealed class Effect : ViewSideEffect {
         data class Notification(val text: UiText, val error: Boolean) : Effect()
+        data object RequestPermission : Effect()
 
         sealed class Navigation : Effect() {
             data object Back : Navigation()

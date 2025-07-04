@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_admin">Admin Options</string>
+    <string name="settings_admin_debug">Debug Mode</string>
+    <string name="settings_admin_debug_summary">This mode enables server verbose debug logging. May impact performance</string>
+    <string name="settings_admin_manual_summary">Allows manual control of the Auger, Fan, Igniter and Power outputs</string>
+    <string name="settings_admin_manual_note">If enabled this will cancel the current mode</string>
+
+    <string name="settings_cat_data_manage">Data Management</string>
+    <string name="settings_admin_delete_history">History Log</string>
+    <string name="settings_admin_delete_history_note">Delete all history logs</string>
+    <string name="settings_admin_delete_history_text">Are you sure that you want to permanently delete the history log? This operation cannot be undone.</string>
+    <string name="settings_admin_delete_events">Event Log</string>
+    <string name="settings_admin_delete_events_note">Delete all event logs</string>
+    <string name="settings_admin_delete_events_text">Are you sure that you want to permanently delete the events log? This operation cannot be undone.</string>
+    <string name="settings_admin_delete_pellets_log">Pellets Log</string>
+    <string name="settings_admin_delete_pellets_log_note">Delete all pellet logs</string>
+    <string name="settings_admin_delete_pellets_log_text">Are you sure that you want to permanently delete the pellets log? This operation cannot be undone.</string>
+    <string name="settings_admin_delete_pellets">Pellet Database</string>
+    <string name="settings_admin_delete_pellets_note">Delete all pellet database information</string>
+    <string name="settings_admin_delete_pellets_text">Are you sure that you want to permanently delete the pellets database? This operation cannot be undone.</string>
+    <string name="settings_admin_factory_reset">Factory Reset</string>
+    <string name="settings_admin_factory_reset_note">Remove all user settings and restore to default</string>
+    <string name="settings_admin_factory_reset_text">Are you sure that you want to reset to factory defaults? This operation cannot be undone.</string>
+
+    <string name="settings_cat_scripts">Scripts Management</string>
+    <string name="settings_admin_restart_control">Restart Control</string>
+    <string name="settings_admin_restart_control_text">Are you sure that you want to restart the control script</string>
+    <string name="settings_admin_restart_webapp">Restart WebApp</string>
+    <string name="settings_admin_restart_webapp_text">Are you sure that you want to restart the webapp script</string>
+    <string name="settings_admin_restart_supervisor">Restart Supervisor</string>
+    <string name="settings_admin_restart_supervisor_text">Are you sure that you want to restart supervisor</string>
+
+    <string name="settings_cat_power">System Power</string>
+    <string name="settings_admin_reboot">Reboot System</string>
+    <string name="settings_admin_reboot_text">Are you sure that you want to reboot the system</string>
+    <string name="settings_admin_shutdown">Shutdown System</string>
+    <string name="settings_admin_shutdown_text">Are you sure that you want to shutdown the system</string>
+
+    <string name="settings_cat_boot">Boot Configuration</string>
+    <string name="settings_admin_boot_to_monitor">Boot to Monitor</string>
+    <string name="settings_admin_boot_to_monitor_summary">Enable boot into monitor mode</string>
+</resources>

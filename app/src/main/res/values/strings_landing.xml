@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="landing_my_smokers">My Smokers</string>
+    <string name="landing_add_server">Add Smoker</string>
+    <string name="landing_select_online_title">Auto select smoker</string>
+    <string name="landing_select_online_summary">Automatically select the first online smoker when opening app</string>
+</resources>

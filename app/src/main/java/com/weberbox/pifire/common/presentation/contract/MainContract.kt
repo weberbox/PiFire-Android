@@ -20,5 +20,10 @@ class MainContract {
     sealed class Effect : ViewSideEffect {
         data object CheckForAppUpdates : Effect()
         data class Notification(val text: UiText, val error: Boolean) : Effect()
+
+        sealed class Navigation : Effect() {
+            data class NavRoute(val route: Any, val popUp: Boolean = false) : Navigation()
+        }
+
     }
 }

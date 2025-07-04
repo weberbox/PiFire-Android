@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_startup">Startup Settings</string>
+    <string name="settings_startup_duration">Startup Timer</string>
+    <string name="settings_startup_note">Amount of time for startup before transitioning to smoke or attempting a reignite</string>
+    <string name="settings_startup_goto_title">Mode After Startup</string>
+    <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
+    <string name="settings_startup_hold_temp">Hold Temp</string>
+    <string name="settings_startup_exit_temp">Exit Startup @ Temperature</string>
+    <string name="settings_startup_exit_temp_value">Temperature</string>
+    <string name="settings_startup_prime">Always Prime on Startup</string>
+    <string name="settings_startup_prime_value">Amount</string>
+
+    <string name="settings_smart_start">Smart Start</string>
+    <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>
+    <string name="settings_smart_start_temp">Temp</string>
+    <string name="settings_smart_start_startup">Startup</string>
+    <string name="settings_smart_start_auger_on">AugerOn</string>
+    <string name="settings_smart_start_p_mode">P-Mode</string>
+    <string name="settings_smart_start_exit_temp">Exit Startup Temperature</string>
+    <string name="settings_smart_start_exit_temp_note">Set this value to 0 to disable this startup exit temperature</string>
+    <string name="settings_smart_start_profiles_title">Smart Start Profiles</string>
+    <string name="settings_smart_start_profiles_summary">Configure Smart Start profiles</string>
+    <string name="settings_smart_start_editor_title">Smart Start Profile Editor</string>
+    <string name="settings_smart_start_add_profile">Add Profile</string>
+
+    <string name="settings_cat_shutdown">Shutdown Settings</string>
+    <string name="settings_shutdown_duration">Shutdown Timer</string>
+    <string name="settings_shutdown_note">Amount of time fan will run after shutdown is selected</string>
+    <string name="settings_auto_power_off">Auto Power Off</string>
+    <string name="settings_auto_power_off_note">When enabled the Raspberry Pi will auto power off after the Grill Shutdown Mode has ended</string>
+</resources>
