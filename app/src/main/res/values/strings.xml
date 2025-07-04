@@ -17,9 +17,10 @@
     <string name="menu_trigger_lid_open">Manually Trigger Lid Open</string>
 
     <!-- Generic -->
+    <string name="true_text">True</string>
+    <string name="continue_text">Continue</string>
     <string name="items">Items</string>
     <string name="confirm">Confirm</string>
-    <string name="continue_">Continue</string>
     <string name="exit">Exit</string>
     <string name="close">Close</string>
     <string name="cancel">Cancel</string>

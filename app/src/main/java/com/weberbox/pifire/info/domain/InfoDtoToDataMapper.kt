@@ -3,6 +3,7 @@ package com.weberbox.pifire.info.domain
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.common.data.interfaces.Mapper
 import com.weberbox.pifire.common.presentation.util.getFormattedDate
+import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.info.data.model.InfoDto
 import com.weberbox.pifire.info.presentation.model.GPIODeviceData
 import com.weberbox.pifire.info.presentation.model.GPIOInOutData
@@ -137,7 +138,9 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             appFlavor = BuildConfig.FLAVOR,
             appBuildDate = getFormattedDate(BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm"),
             appGitBranch = BuildConfig.GIT_BRANCH,
-            appGitRev = BuildConfig.GIT_REV
+            appGitRev = BuildConfig.GIT_REV,
+            alphaBuild = BuildConfig.ALPHA_BUILD,
+            devBuild = AppConfig.IS_DEV_BUILD
         )
     }
 }

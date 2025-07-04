@@ -228,7 +228,8 @@ class UpdateManager @Inject constructor(
 data class AppUpdateConfigData(
     val appVersionCode: Int,
     val type: UpdateType,
-    val message: String = ""
+    val message: String = "",
+    val isAlpha: Boolean = false
 )
 
 @Serializable

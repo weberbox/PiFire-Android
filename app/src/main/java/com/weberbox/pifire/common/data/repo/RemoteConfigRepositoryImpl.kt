@@ -35,7 +35,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
             return parsed.find { it.appVersionCode == currentAppVersion }
         } catch (e: Exception) {
             currentCoroutineContext().ensureActive()
-            Timber.e(e,"Firebase Server Support fetch exception")
+            Timber.e(e, "Firebase Server Support fetch exception")
             null
         }
     }
@@ -44,6 +44,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
         val defaults = mapOf(
             AppConfig.APP_UPDATE_CONFIG to readRawJsonFile(R.raw.app_update_config)
         )
+
         return try {
             remoteConfig.setDefaultsAsync(defaults).await()
             remoteConfig.fetchAndActivate().await().also {
@@ -55,13 +56,15 @@ class RemoteConfigRepositoryImpl @Inject constructor(
             val currentAppVersion = BuildConfig.VERSION_CODE
 
             val latestUpdate = parsed
-                .sortedByDescending { it.appVersionCode }
-                .firstOrNull { it.appVersionCode > currentAppVersion }
+                .filter { update ->
+                    update.appVersionCode > currentAppVersion &&
+                            (BuildConfig.ALPHA_BUILD || !update.isAlpha)
+                }.maxByOrNull { it.appVersionCode }
 
-            return latestUpdate
+            latestUpdate
         } catch (e: Exception) {
             currentCoroutineContext().ensureActive()
-            Timber.e(e,"Firebase App Update fetch exception")
+            Timber.e(e, "Firebase App Update fetch exception")
             null
         }
     }

@@ -2,16 +2,19 @@
   {
     "appVersionCode": 3000000,
     "type": "FLEXIBLE",
-    "message": "App was completely rewritten in Kotlin and Compose adding many new features and improvements!"
+    "message": "App was completely rewritten in Kotlin and Compose adding many new features and improvements!",
+    "isAlpha": false
   },
   {
     "appVersionCode": 2030000,
     "type": "FLEXIBLE",
-    "message": "New features and performance improvements!"
+    "message": "New features and performance improvements!",
+    "isAlpha": false
   },
   {
     "appVersionCode": 2020100,
     "type": "IMMEDIATE",
-    "message": "Critical security patch. Please update immediately."
+    "message": "Critical security patch. Please update immediately.",
+    "isAlpha": false
   }
 ]

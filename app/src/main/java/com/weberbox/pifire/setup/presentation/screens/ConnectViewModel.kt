@@ -119,7 +119,7 @@ class ConnectViewModel @Inject constructor(
                         message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
                         dismissible = false,
                         positiveAction = DialogAction(
-                            buttonText = UiText(R.string.continue_),
+                            buttonText = UiText(R.string.continue_text),
                             action = {
                                 getServerVersions()
                             }
@@ -238,7 +238,7 @@ class ConnectViewModel @Inject constructor(
                         ),
                         negativeAction = if (supportResult.isMandatory) null else
                             DialogAction(
-                                buttonText = UiText(R.string.continue_),
+                                buttonText = UiText(R.string.continue_text),
                                 action = {
                                     toggleLoading(true)
                                     getServerSettings()
@@ -271,7 +271,7 @@ class ConnectViewModel @Inject constructor(
                         ),
                         negativeAction = if (supportResult.isMandatory) null else
                             DialogAction(
-                                buttonText = UiText(R.string.continue_),
+                                buttonText = UiText(R.string.continue_text),
                                 action = {
                                     toggleLoading(true)
                                     getServerSettings()
@@ -292,7 +292,7 @@ class ConnectViewModel @Inject constructor(
                             R.string.dialog_untested_app_version_message
                         ),
                         positiveAction = DialogAction(
-                            buttonText = UiText(R.string.continue_),
+                            buttonText = UiText(R.string.continue_text),
                             action = {
                                 toggleLoading(true)
                                 getServerSettings()

@@ -31,7 +31,9 @@ data class InfoData(
         val appFlavor: String = "",
         val appBuildDate: String = "",
         val appGitBranch: String = "",
-        val appGitRev: String = ""
+        val appGitRev: String = "",
+        val alphaBuild: Boolean = false,
+        val devBuild: Boolean = false
     ) {
         @Serializable
         data class Module(

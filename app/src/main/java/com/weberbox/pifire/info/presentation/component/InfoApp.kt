@@ -19,7 +19,6 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.component.HeaderCard
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.info.presentation.model.InfoData.Info
 
 @Composable
@@ -111,7 +110,24 @@ internal fun InfoApp(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            if (AppConfig.IS_DEV_BUILD) {
+            if (info.alphaBuild) {
+                Text(
+                    text = stringResource(R.string.info_app_alpha_build),
+                    modifier = Modifier.padding(
+                        top = MaterialTheme.spacing.smallOne,
+                        bottom = MaterialTheme.spacing.smallOne
+                    ),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = stringResource(R.string.true_text),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            if (info.devBuild) {
                 Text(
                     text = stringResource(R.string.info_app_build_git_branch),
                     modifier = Modifier.padding(
@@ -159,7 +175,9 @@ private fun InfoAppPreview() {
             appBuildType = "Debug",
             appBuildDate = "04/21/2025",
             appGitRev = "147",
-            appGitBranch = "development"
+            appGitBranch = "development",
+            alphaBuild = true,
+            devBuild = true
         )
     }
     PiFireTheme {

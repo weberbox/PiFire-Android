@@ -162,7 +162,7 @@ private fun EventAlertDialogPreview() {
                         title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
                         message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
                         positiveAction = DialogAction(
-                            buttonText = UiText(R.string.continue_),
+                            buttonText = UiText(R.string.continue_text),
                             action = {}
                         ),
                         negativeAction = DialogAction(
