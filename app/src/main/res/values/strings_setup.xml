@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_terms">Terms</string>
+    <string name="setup_auth">Authentication</string>
+    <string name="setup_connect">Connect</string>
+    <string name="setup_push">Consent</string>
+    <string name="setup_finish">Finish</string>
+    <string name="setup_grill_name">Grill Name</string>
+    <string name="setup_server_address">Server Address</string>
+    <string name="setup_qr_invalid_url">Scanned QR does not contain a valid URL</string>
+    <string name="setup_error_play_services">Google Play Services were not detected on this device, to use the QR Scan function Play Services must be installed</string>
+    <string name="setup_auth_title">PiFire Authentication</string>
+    <string name="setup_auth_text">If your PiFire server requires authentication enter it here or continue if not required</string>
+    <string name="setup_connect_title">Enter PiFire Address</string>
+    <string name="setup_connect_text">Enter your PiFire server address. You should set this to be a static IP address or set it up to be a resolvable DNS address</string>
+    <string name="setup_finish_title">Complete Setup</string>
+    <string name="setup_finish_text">Connection to your PiFire server is now complete. Name your grill below and continue to finish the setup process</string>
+    <string name="setup_scan_qr">Scan QR Code</string>
+    <string name="setup_scan_qr_canceled">Scanning Canceled</string>
+    <string name="setup_scan_qr_failed">Scanning Failed</string>
+    <string name="setup_server_auth_error_title">Authentication Failure</string>
+    <string name="setup_server_auth_error_message">PiFire has responded with an authentication error. Verify your credentials are correct and try again</string>
+    <string name="setup_server_self_signed_title">Certificate Error</string>
+    <string name="setup_server_self_signed_message">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
+    <string name="setup_push_consent_title">OneSignal Data Privacy</string>
+    <string name="setup_push_dialog_declined_title">Skip Consent</string>
+    <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
+    <string name="setup_begin_terms_title">Terms of Use</string>
+    <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_pwm_fan_control">Temp Fan Control</string>
+    <string name="settings_pwm_fan_control_enabled">Temp Control by Default</string>
+    <string name="settings_pwm_fan_control_note">If enabled Temp Fan Control will override Smoke Plus fan ramping. The fan will adjust with temperature and still cycle on and off but will not ramp up to speed.</string>
+    <string name="settings_pwm_fan_table_note">If Current Grill Temp is over Set Temp Fan will be set to Minimum Duty Cycle. If the Grill temp is below the Set Temp the Duty Cycles below will be used. Example: If Current Grill Temp drops below Set Temp by 1–3 ° a 20% PWM will be set. If the Grill Temp drops below the Set Temp by 15° a 75% Duty Cycle will be set.</string>
+    <string name="settings_pwm_fan_update_time">Update Time</string>
+    <string name="settings_cat_fan_settings">General Fan Settings</string>
+    <string name="settings_pwm_frequency">Frequency</string>
+    <string name="settings_pwm_min_duty_cycle">Min Duty Cycle</string>
+    <string name="settings_pwm_max_duty_cycle">Max Duty Cycle</string>
+    <string name="settings_pwm_control_temp">Temp</string>
+    <string name="settings_pwm_control_range">Temp Range</string>
+    <string name="settings_pwm_control_duty">Duty Cycle</string>
+    <string name="settings_pwm_control_title">PWM Profiles</string>
+    <string name="settings_pwm_control_summary">Configure Control Profiles</string>
+
+    <string name="settings_pwm_editor_title">PWM Profile Editor</string>
+    <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
+    <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
+    <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
+</resources>

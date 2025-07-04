@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_confirm_action">Confirm Action</string>
+    <string name="dialog_confirm_delete_generic">Are you sure that you want to permanently delete this item?</string>
+    <string name="dialog_confirm_delete_item">Are you sure that you want to permanently delete \n %1$s?</string>
+    <string name="dialog_restart_control_title">Restart Control</string>
+    <string name="dialog_restart_control_message">Do you want to restart the control script?</string>
+    <string name="dialog_cancel_lid_detect_title">Cancel Lid Open</string>
+    <string name="dialog_cancel_lid_detect_message">Do you want to cancel Lid Open and resume PID Operation?</string>
+    <string name="dialog_auth_with_unsecure_protocol_title">Security Warning</string>
+    <string name="dialog_auth_with_unsecure_protocol_message">It looks like you are attempting to use an authentication method but are using an unsecure protocol (http). If you continue your credentials will not be sent in a secure manner. Continue at your own risk or setup a secure connection to your PiFire server</string>
+    <string name="dialog_probe_edit">Probe Edit</string>
+    <string name="dialog_probe_edit_enabled">Visible</string>
+    <string name="dialog_probe_edit_disabled">Hidden</string>
+    <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
+    <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>
+    <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. \n\nYour current version is %3$s build %4$s \n\nPlease check for an update to this application</string>
+    <string name="dialog_untested_app_version_title">Untested Version</string>
+    <string name="dialog_untested_app_version_message">Your current version of this application is untested with PiFire, it may or may not work as expected. Continue at your own risk</string>
+
+    <string name="dialog_probe_type_target">Target Temp Notifications</string>
+    <string name="dialog_probe_type_high_limit">High Limit Temp Notifications</string>
+    <string name="dialog_probe_type_low_limit">Low Limit Temp Notifications</string>
+
+    <string name="dialog_permission_required_title">Permission Required</string>
+    <string name="dialog_notification_permission_rational">To receive push notifications from PiFire you must grant this app notification permissions, press Grant to re-request or cancel if you do not want to receive notifications</string>
+    <string name="dialog_notification_permission_declined">It seems you permanently declined the notification permission. If you want to receive push notifications you will need to enable them in app settings</string>
+</resources>

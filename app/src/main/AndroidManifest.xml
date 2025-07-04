@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
-
     <application
-        android:name=".application.PiFireApplication"
+        android:name=".application.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,40 +16,22 @@
         android:label="${appName}"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="false"
         android:theme="@style/Theme.PiFire"
-        tools:targetApi="s">
+        android:supportsRtl="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="locked"
-            android:theme="@style/Theme.PiFire.Starting"
-            tools:ignore="DiscouragedApi">
+            android:theme="@style/Theme.PiFire.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activities.ServerSetupActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.PiFire.NoActionBar"
-            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
-        <activity
-            android:name=".ui.activities.PreferencesActivity"
-            android:theme="@style/Theme.PiFire.SettingsTheme" />
 
-        <receiver
-            android:name=".receiver.AppUpdateReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-
-        <meta-data android:name="com.onesignal.NotificationServiceExtension"
-            android:value="com.weberbox.pifire.service.NotificationServiceExtension" />
+        <meta-data
+            android:name="com.onesignal.NotificationServiceExtension"
+            android:value="com.weberbox.pifire.core.service.NotificationServiceExtension" />
         <meta-data
             android:name="io.sentry.auto-init"
             android:value="false" />
@@ -63,5 +40,4 @@
             android:value="${environment}" />
 
     </application>
-
 </manifest>

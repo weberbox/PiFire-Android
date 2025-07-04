@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_temp_units">Temp Units</string>
+    <string name="settings_grill_temp_units">Displayed Units</string>
+    <string name="settings_units_note">Changing the scale/units will restart the grill controller (stopping any currently running modes) and automatically erase history.</string>
+
+    <string name="settings_cat_probe_edit">Probe Name &amp; Type</string>
+    <string name="settings_probes_not_found">No Probes Found</string>
+    <string name="settings_probes_no_profile">Probe type does not use profiles</string>
+    <string name="settings_probe_name">Probe Name</string>
+</resources>

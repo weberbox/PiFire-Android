@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_ifttt">IFTTT WebHooks</string>
+    <string name="settings_ifttt_api">API Key</string>
+
+    <string name="settings_cat_pushover">PushOver</string>
+    <string name="settings_pushover_api">API Key</string>
+    <string name="settings_pushover_keys">User Keys</string>
+    <string name="settings_pushover_url">Public URL</string>
+    <string name="settings_pushover_note">Add commas for multiple user keys. Leave blank to disable.</string>
+
+    <string name="settings_cat_pushbullet">PushBullet</string>
+    <string name="settings_pushbullet_api">API Key</string>
+    <string name="settings_pushbullet_url">Public URL</string>
+
+    <string name="settings_cat_influxdb">InfluxDB</string>
+    <string name="settings_influxdb_url">URL</string>
+    <string name="settings_influxdb_token">Token</string>
+    <string name="settings_influxdb_org">Org</string>
+    <string name="settings_influxdb_bucket">Bucket</string>
+
+    <string name="settings_cat_mqtt">MQTT</string>
+    <string name="settings_mqtt_id">PiFire Unique ID</string>
+    <string name="settings_mqtt_broker">MQTT Broker</string>
+    <string name="settings_mqtt_port">MQTT Port</string>
+    <string name="settings_mqtt_update_sec">Refresh Rate</string>
+    <string name="settings_mqtt_topic">Home Assistant Discovery Topic</string>
+    <string name="settings_mqtt_id_note"> Enter a unique name for this instance of PiFire. This name is used as the root mqtt topic for this device. Changing it later will result in new mqtt topics being created, and if using Home Assistant will result in new sensors being created.</string>
+    <string name="settings_mqtt_port_note">Enter the IP or host name of your mqtt broker and port. ex:homeassistant.local 1883</string>
+    <string name="settings_mqtt_user_note">Leave the username and password blank if your broker does not require authentication</string>
+    <string name="settings_mqtt_update_sec_note">Specify in seconds, how often you would like to publish PiFire data to the mqtt broker.</string>
+    <string name="settings_mqtt_topic_note">The Home Assistant MQTT integration. can automatically add PiFire and its devices if you specify the discovery topic name here</string>
+
+    <string name="settings_cat_apprise">Apprise</string>
+    <string name="settings_apprise_locations">Apprise Locations</string>
+    <string name="settings_apprise_no_locations">No locations defined</string>
+    <string name="settings_apprise_add_location">Add Location</string>
+    <string name="settings_apprise_locations_note">format://user@location/authorization</string>
+
+    <string name="settings_cat_onesignal">Push Notifications</string>
+    <string name="settings_onesignal_consent_title">OneSignal Consent</string>
+    <string name="settings_onesignal_consent_1">OneSignal is used to deliver notifications from PiFire. No Personally Identifiable Information is being collected by OneSignal. Notification data sent through OneSignal\'s API will be deleted after ~30 days.</string>
+    <string name="settings_onesignal_consent_2">Once you accept, this device will register with OneSignal. Consent can be revoked to prevent further communication with OneSignal.</string>
+    <string name="settings_onesignal_consent_3">OneSignal.com must not be blocked (e.g. in PiHole) for device registration to succeed</string>
+    <string name="settings_onesignal_declined">Status: Not Accepted</string>
+    <string name="settings_onesignal_accepted">Status: Accepted</string>
+    <string name="settings_onesignal_alert_consent_message">To receive notifications from PiFire consent to the OneSignal data privacy.</string>
+    <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole) The registration process can take up to 2 minutes.</string>
+    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take a couple minutes.</string>
+    <string name="settings_onesignal_error_message">There was an unexpected error with OneSignal. Please try again later.</string>
+    <string name="settings_onesignal_token_message">OneSignal cannot obtain a push token from Google. If this device does not have Google Play Services installed push notifications will not be available</string>
+    <string name="settings_onesignal_subscribe_message">This device is not subscribed to OneSignal servers. Verify notifications for this app are not disabled in device settings. If notifications are not disabled the device will now attempt to subscribe</string>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="info_system_info">System Information</string>
+    <string name="info_cpu">CPU Model</string>
+    <string name="info_cpu_temp">CPU Temp</string>
+    <string name="info_network">Network Info</string>
+    <string name="info_gpio_in_out">GPIO Input/Output Info</string>
+    <string name="info_gpio_output_name">Output Name</string>
+    <string name="info_gpio_output_pin">Output Pin</string>
+    <string name="info_gpio_input_name">Input Name</string>
+    <string name="info_gpio_input_pin">Input Pin</string>
+    <string name="info_gpio_device">GPIO Device Info</string>
+    <string name="info_gpio_device_name">Device</string>
+    <string name="info_gpio_device_function">Function</string>
+    <string name="info_gpio_device_pin">Pin</string>
+    <string name="info_uptime">PiFire Uptime</string>
+    <string name="info_modules_head">Module</string>
+    <string name="info_modules_config">Configured</string>
+    <string name="info_modules">PiFire Modules</string>
+    <string name="info_modules_display">Display</string>
+    <string name="info_modules_dist">Distance</string>
+    <string name="info_modules_platform">Platform</string>
+    <string name="info_pip_modules">Python Modules</string>
+    <string name="info_pip_name">Module</string>
+    <string name="info_pip_version">Version</string>
+    <string name="info_credits">Credits and Licenses</string>
+    <string name="info_server_info">PiFire Info</string>
+    <string name="info_server_version">PiFire Version</string>
+    <string name="info_server_build">PiFire Build</string>
+    <string name="info_app_info">App Info</string>
+    <string name="info_app_version">App Version</string>
+    <string name="info_app_version_code">Version Code</string>
+    <string name="info_app_build_type">Build Type</string>
+    <string name="info_app_flavor">App Flavor</string>
+    <string name="info_app_build_date">Build Date</string>
+    <string name="info_app_alpha_build">Alpha Build</string>
+    <string name="info_app_build_git_branch">Git Branch</string>
+    <string name="info_app_build_git_rev">Git Revisions</string>
+    <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; %1$s\n\nPiFire Android created by James Weber, &#169; %1$s</string>
+</resources>

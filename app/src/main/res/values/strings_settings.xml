@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_server">Smoker Settings</string>
+    <string name="settings_app_title">App Settings</string>
+    <string name="settings_app_summary">Theme, events amount, temps increment</string>
+    <string name="settings_admin_title">Admin Settings</string>
+    <string name="settings_admin_summary">Manual, debug, data management, power</string>
+    <string name="settings_probe_title">Probe Settings</string>
+    <string name="settings_probe_summary">Profiles, probe name, temp units</string>
+    <string name="settings_naming_title">Grill Name</string>
+    <string name="settings_naming_summary">Set a custom grill name</string>
+    <string name="settings_work_title">Work Mode</string>
+    <string name="settings_work_summary">PID, cycle, P-Mode, smoke plus, lid</string>
+    <string name="settings_pwm_title">PWM Settings</string>
+    <string name="settings_pwm_summary">Temp control, profiles, fan settings</string>
+    <string name="settings_pellets_title">Pellet Settings</string>
+    <string name="settings_pellets_summary">Warnings, distance, auger rate, igniter</string>
+    <string name="settings_timers_title">Startup &amp; Shutdown</string>
+    <string name="settings_timers_summary">Duration, temps, priming, smart start, power</string>
+    <string name="settings_safety_title">Safety Settings</string>
+    <string name="settings_safety_summary">Startup check, min-max temps, reignite</string>
+    <string name="settings_operating_temps_title">Operating Temperatures</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_notifications_summary">Various notification providers</string>
+    <string name="settings_manual">Manual Mode</string>
+
+    <string name="settings_info">Info:</string>
+    <string name="settings_note">Note:</string>
+    <string name="settings_warning">Warning:</string>
+    <string name="settings_danger">Danger:</string>
+    <string name="settings_min_error">Value must be %1$s or greater</string>
+    <string name="settings_max_error">Value must be %1$s or less</string>
+    <string name="settings_number_error">Value must be a number</string>
+
+    <string name="settings_seconds_format">%1$s seconds</string>
+    <string name="settings_minutes_format">%1$s minutes</string>
+    <string name="settings_grams_format">%1$s grams</string>
+    <string name="settings_percent_format">%1$s %%</string>
+    <string name="settings_temp_format">%1$s %2$s</string>
+    <string name="settings_hz_format">%1$s Hz</string>
+    <string name="settings_cm_format">%1$s cm</string>
+    <string name="settings_gs_format">%1$s g/s</string>
+</resources>

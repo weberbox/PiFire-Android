@@ -1,92 +1,70 @@
-{
-  "licenses":[
-    [
-      "PiFire Android",
-      "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE"
-    ],
-    [
-      "PiFire",
-      "https://github.com/nebhead/PiFire/blob/main/license.txt"
-    ],
-    [
-      "Socket.IO",
-      "https://github.com/socketio/socket.io-client-java/blob/master/LICENSE"
-    ],
-    [
-      "AnimatedBottomBar",
-      "https://github.com/Droppers/AnimatedBottomBar/blob/master/LICENSE"
-    ],
-    [
-      "zxing-android-embedded",
-      "https://github.com/journeyapps/zxing-android-embedded/blob/master/COPYING"
-    ],
-    [
-      "EasyPrefs",
-      "https://github.com/Pixplicity/EasyPrefs/blob/master/license.txt"
-    ],
-    [
-      "Sentry",
-      "https://github.com/getsentry/sentry-java/blob/main/LICENSE"
-    ],
-    [
-      "Timber",
-      "https://github.com/JakeWharton/timber/blob/trunk/LICENSE.txt"
-    ],
-    [
-      "RecyclerViewFastScroller",
-      "https://github.com/quiph/RecyclerView-FastScroller/blob/master/LICENSE"
-    ],
-    [
-      "OverlappingPanels",
-      "https://github.com/discord/OverlappingPanels/blob/master/LICENSE"
-    ],
-    [
-      "TedPermission",
-      "https://github.com/ParkSangGwon/TedPermission"
-    ],
-    [
-      "AndroidVeil",
-      "https://github.com/skydoves/AndroidVeil/blob/master/LICENSE"
-    ],
-    [
-      "Alerter",
-      "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
-    ],
-    [
-      "MaterialRatingBar",
-      "https://github.com/zhanghai/MaterialRatingBar"
-    ],
-    [
-      "OkHttp",
-      "https://github.com/square/okhttp/blob/master/LICENSE.txt"
-    ],
-    [
-      "Android-Stepper",
-      "https://github.com/acefalobi/android-stepper/blob/master/LICENSE"
-    ],
-    [
-      "OneSignal",
-      "https://github.com/OneSignal/OneSignal-Android-SDK/blob/main/LICENSE"
-    ],
-    [
-      "Lottie",
-      "https://github.com/airbnb/lottie-android/blob/master/LICENSE"
-    ],
-    [
-      "Changelog Lib",
-      "https://github.com/weberbox/changeloglib/blob/master/LICENSE"
-    ],
-    [
-      "Material Dialog",
-      "https://github.com/PatilShreyas/MaterialDialog-Android/blob/master/LICENSE"
-    ],
-    [
-      "KeyboardVisibilityEvent",
-      "https://github.com/yshrsmz/KeyboardVisibilityEvent/blob/master/LICENSE"
-    ],
-    [
-      "MaterialDesign Icons",
-      "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
-    ]
-  ]
-}
+[
+  {
+    "project": "PiFire Android",
+    "license": "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE"
+  },
+  {
+    "project": "PiFire",
+    "license": "https://github.com/nebhead/PiFire/blob/main/license.txt"
+  },
+  {
+    "project": "Socket.IO",
+    "license": "https://github.com/socketio/socket.io-client-java/blob/master/LICENSE"
+  },
+  {
+    "project": "Sentry",
+    "license": "https://github.com/getsentry/sentry-java/blob/main/LICENSE"
+  },
+  {
+    "project": "Timber",
+    "license": "https://github.com/JakeWharton/timber/blob/trunk/LICENSE.txt"
+  },
+  {
+    "project": "Alerter",
+    "license": "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
+  },
+  {
+    "project": "ComposePreference",
+    "license": "https://github.com/zhanghai/ComposePreference/blob/master/LICENSE"
+  },
+  {
+    "project": "Compose Unstyled",
+    "license": "https://github.com/composablehorizons/compose-unstyled/blob/main/LICENSE"
+  },
+  {
+    "project": "Haze",
+    "license": "https://github.com/chrisbanes/haze/blob/main/LICENSE"
+  },
+  {
+    "project": "Compose Ratingbar",
+    "license": "https://github.com/a914-gowtham/compose-ratingbar/blob/main/LICENSE"
+  },
+  {
+    "project": "OkHttp",
+    "license": "https://github.com/square/okhttp/blob/master/LICENSE.txt"
+  },
+  {
+    "project": "Retrofit",
+    "license": "https://github.com/square/retrofit/blob/trunk/LICENSE.txt"
+  },
+  {
+    "project": "OneSignal",
+    "license": "https://github.com/OneSignal/OneSignal-Android-SDK/blob/main/LICENSE"
+  },
+  {
+    "project": "Lottie",
+    "license": "https://github.com/airbnb/lottie-android/blob/master/LICENSE"
+  },
+  {
+    "project": "MaterialDesign Icons",
+    "license": "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
+  },
+  {
+    "project": "Coil",
+    "license": "https://github.com/coil-kt/coil/blob/main/LICENSE.txt"
+  },
+  {
+    "project": "Zoomable",
+    "license": "https://github.com/usuiat/Zoomable/blob/main/LICENSE"
+  }
+]

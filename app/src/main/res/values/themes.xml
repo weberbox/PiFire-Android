@@ -1,60 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="Theme.PiFire" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
     <style name="Theme.PiFire.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/colorPrimaryDark</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/bg_splash</item>
-        <item name="postSplashScreenTheme">@style/Theme.PiFire.NoActionBar</item>
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="postSplashScreenTheme">@android:style/Theme.Material.NoActionBar</item>
     </style>
 
-    <style name="Theme.PiFire" parent="Theme.MaterialComponents">
-        <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor" >?attr/colorPrimary</item>
-        <item name="android:actionMenuTextAppearance">@style/Text18AllerBold</item>
-        <item name="android:windowActivityTransitions">true</item>
-        <item name="android:colorControlActivated">@color/colorAccent</item>
-        <item name="colorOfflineStatus">@color/colorAccentRed</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="android:actionModeBackground">@color/colorAccent</item>
-        <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
-        <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
-        <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="Theme.PiFire.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.PiFire.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-
-    <style name="Theme.PiFire.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
-
-    <style name="Theme.PiFire.SettingsTheme" parent="@style/Theme.MaterialComponents">
-        <item name="android:windowBackground">@color/colorPrimaryDark</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
-        <item name="android:textColorPrimaryInverse">@color/abc_primary_text_material_light</item>
-        <item name="android:textColorSecondary">@color/abc_primary_text_material_dark</item>
-        <item name="android:textColorSecondaryInverse">@color/abc_primary_text_material_light</item>
-        <item name="android:divider">#ff999999</item>
-        <item name="android:windowActionBar">true</item>
-        <item name="actionBarStyle">@style/PreferencesActionBar</item>
-        <item name="android:statusBarColor">@color/colorAccent</item>
-        <item name="colorOfflineStatus">@color/colorAccentRed</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="alertDialogTheme">@style/AlertDialogThemeMaterial</item>
-        <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="android:colorControlActivated">@color/colorAccent</item>
-        <item name="snackbarStyle">@style/SnackbarThemeMaterial</item>
-        <item name="snackbarButtonStyle">@style/SnackbarButtonThemeMaterial</item>
-        <item name="snackbarTextViewStyle">@style/SnackbarTextThemeMaterial</item>
-        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
-    </style>
 </resources>

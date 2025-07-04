@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="recipes_cook_time">Cook Time:</string>
+    <string name="recipes_prep_time">Prep Time:</string>
+    <string name="recipes_difficulty">Difficulty:</string>
+    <string name="recipes_probes">Food Probes:</string>
+    <string name="recipes_author">Author:</string>
+    <string name="recipes_rating">Rating:</string>
+    <string name="recipes_description">Description</string>
+    <string name="recipes_steps">Program Steps</string>
+    <string name="recipes_ingredients">Ingredients</string>
+    <string name="recipes_instructions">Instructions</string>
+    <string name="recipes_item_step">Step</string>
+    <string name="recipes_item_number">#</string>
+    <string name="recipes_item_qty">Quantity</string>
+    <string name="recipes_item_ingredient">Ingredient</string>
+    <string name="recipes_item_direction">Direction</string>
+    <string name="recipes_step_mode">Mode:</string>
+    <string name="recipes_step_mode_hold">%1$s @%2$d°%3$s</string>
+    <string name="recipes_step_step">Step %1$d</string>
+    <string name="recipes_step_startup_header">Transition to the next step after:</string>
+    <string name="recipes_step_options_header">Transition to the next step after one of the following trigger(s):</string>
+    <string name="recipes_step_options_startup">Startup completes successfully</string>
+    <string name="recipes_step_options_primary">Primary reaches %1$d°%2$s</string>
+    <string name="recipes_step_options_food">Food Probe %1$d reaches %2$d°%3$s</string>
+    <string name="recipes_step_options_timer">%1$d minutes elapses</string>
+    <string name="recipes_step_options_user">The user presses continue</string>
+    <string name="recipes_step_notif_header">Notifications:</string>
+    <string name="recipes_step_notif">\"%1$s\"</string>
+    <string name="recipes_header_about">About This Recipe</string>
+    <string name="recipes_delete_running">Cannot delete recipe that is currently running!</string>
+    <string name="recipes_voice_input_message">Say a keyword or title to start a search</string>
+</resources>

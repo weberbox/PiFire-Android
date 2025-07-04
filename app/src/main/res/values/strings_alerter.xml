@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alerter_cached_results">Connection to PiFire Failed - Showing cached results. Refresh to try again</string>
+    <string name="alerter_smoke_plus_disabled">Feature is only available in Hold and Smoke modes</string>
+    <string name="alerter_pwm_control_disabled">Feature is only available in Hold mode</string>
+    <string name="alerter_admin_action_completed">Action completed successfully</string>
+    <string name="alerter_socket_connection_failed">The connection to PiFire failed. Check your connection and try again</string>
+    <string name="alerter_server_offline">Smoker is offline, check your connection and verify controller is powered on</string>
+</resources>

@@ -1,36 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="alerter_icon_size_small">30dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="recycler_padding">4dp</dimen>
-    <dimen name="large_spacing">20dp</dimen>
-    <dimen name="default_spacing">14dp</dimen>
-    <dimen name="medium_spacing">12dp</dimen>
-    <dimen name="small_spacing">8dp</dimen>
-    <dimen name="picker_top_bottom_padding">90dp</dimen>
-    <dimen name="table_corner_radius">10dp</dimen>
-    <dimen name="button_corner_radius">10dp</dimen>
-    <dimen name="setup_stepper_padding">30dp</dimen>
-
-    <dimen name="radiusTop">16dp</dimen>
-
-    <dimen name="text_title_size">16sp</dimen>
-    <dimen name="text_message_size">14sp</dimen>
-
-    <dimen name="dash_margin">@dimen/_10sdp</dimen>
-    <dimen name="dash_half_margin">@dimen/_5sdp</dimen>
-    <dimen name="dash_margin_functions">@dimen/_4sdp</dimen>
-    <dimen name="dash_margin_probe_icon">@dimen/_12sdp</dimen>
-    <dimen name="dash_margin_func_side">@dimen/_3sdp</dimen>
-    <dimen name="dash_padding_start">@dimen/_10sdp</dimen>
-    <dimen name="dash_padding_end">@dimen/_10sdp</dimen>
-    <dimen name="dash_padding_top">@dimen/_8sdp</dimen>
-    <dimen name="dash_padding_bottom">@dimen/_4sdp</dimen>
-    <dimen name="dash_icon">@dimen/_18sdp</dimen>
-    <dimen name="dash_text_temps">@dimen/_58sdp</dimen>
-    <dimen name="dash_text_targets">@dimen/_30ssp</dimen>
-    <dimen name="dash_text_title">@dimen/_12ssp</dimen>
-    <dimen name="dash_text_hints">@dimen/_12ssp</dimen>
-    <dimen name="dash_text_large">@dimen/_42ssp</dimen>
 </resources>

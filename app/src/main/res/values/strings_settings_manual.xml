@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_manual_functions">Manual Functions</string>
+    <string name="settings_manual_fan">Toggle Fan</string>
+    <string name="settings_manual_auger">Toggle Auger</string>
+    <string name="settings_manual_igniter">Toggle Igniter</string>
+    <string name="settings_manual_power">Toggle Power</string>
+    <string name="settings_manual_pwm">Duty Cycle</string>
+</resources>

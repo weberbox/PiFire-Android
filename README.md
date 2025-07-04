@@ -7,9 +7,9 @@ This app was created to work with the PiFire smoker project. I wanted a native A
 **Note:** I am not a developer by trade and this is just a hobby for me. While I try my best to keep the app stable you may find bugs or experience a crash. If you see something in the code that could be done better please let me know, I am always willing to learn more.
 
 ## Screenshots
-| Dashboard                                    | Event Log                                   | Pellet Manager                                        | Drawer                                 |
-|----------------------------------------------|---------------------------------------------|-------------------------------------------------------|----------------------------------------|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Event Log](docs/screenshots/eventlog.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png) | ![Drawer](docs/screenshots/drawer.png) |
+| Dashboard                                    | Recipes                                  | Pellet Manager                                        | Drawer                                 |
+|----------------------------------------------|------------------------------------------|-------------------------------------------------------|----------------------------------------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Recipes](docs/screenshots/recipes.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png) | ![Drawer](docs/screenshots/drawer.png) |
 
 ### Warnings
 
@@ -17,31 +17,26 @@ The creator of this project takes no responsibility for any damage that you may 
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021-2023.
+Android Application created by James Weber, copyright 2021-2025.
 
 This app used the following open-source libraries and/or code inspired from these projects.
 
 - [PiFire](https://github.com/nebhead/PiFire)
 - [Socket.IO](https://github.com/socketio/socket.io-client-java)
-- [AnimatedBottomBar](https://github.com/Droppers/AnimatedBottomBar)
-- [zxing-android-embedded](https://github.com/journeyapps/zxing-android-embedded)
-- [EasyPrefs](https://github.com/Pixplicity/EasyPrefs)
-- [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
-- [RecyclerViewFastScroller](https://github.com/quiph/RecyclerView-FastScroller)
-- [KeyboardVisibilityEvent](https://github.com/yshrsmz/KeyboardVisibilityEvent)
 - [Sentry](https://github.com/getsentry/sentry-java)
 - [Timber](https://github.com/JakeWharton/timber)
-- [OverlappingPanels](https://github.com/discord/OverlappingPanels)
-- [TedPermission](https://github.com/ParkSangGwon/TedPermission)
-- [AndroidVeil](https://github.com/skydoves/AndroidVeil)
 - [Alerter](https://github.com/Tapadoo/Alerter)
-- [MaterialRatingBar](https://github.com/zhanghai/MaterialRatingBar)
-- [Material Dialog](https://github.com/PatilShreyas/MaterialDialog-Android)
-- [Android-Stepper](https://github.com/acefalobi/android-stepper)
-- [Lottie](https://github.com/airbnb/lottie-android)
-- [Changelog Lib](https://github.com/weberbox/changeloglib)
-- [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
+- [ComposePreference](https://github.com/zhanghai/ComposePreference)
+- [Compose Unstyled](https://github.com/composablehorizons/compose-unstyled)
+- [Haze](https://github.com/chrisbanes/haze)
+- [Compose Ratingbar](https://github.com/a914-gowtham/compose-ratingbar)
 - [OkHttp](https://github.com/square/okhttp)
+- [Retrofit](https://github.com/square/retrofit)
+- [OneSignal](https://github.com/OneSignal/OneSignal-Android-SDK)
+- [Lottie](https://github.com/airbnb/lottie-android)
+- [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
+- [Coil](https://github.com/coil-kt/coil)
+- [Zoomable](https://github.com/usuiat/Zoomable)
 
 ### Licensing
 
@@ -50,7 +45,7 @@ This project is licensed under the GNU GPLv3 license.
 ```
 PiFire Android - Native Android app for the PiFire smoker project
 
-Copyright (c) 2021-2023 James Weber
+Copyright (c) 2021-2025 James Weber
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
