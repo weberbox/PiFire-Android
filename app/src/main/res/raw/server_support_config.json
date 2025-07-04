@@ -4,7 +4,7 @@
     "isMandatory": true,
     "minServerInfo": {
       "version": "1.10.0",
-      "build": "25"
+      "build": "29"
     },
     "maxServerInfo": {
       "version": "",
