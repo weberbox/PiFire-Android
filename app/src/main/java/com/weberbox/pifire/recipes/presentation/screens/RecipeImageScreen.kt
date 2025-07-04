@@ -6,7 +6,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -31,12 +31,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
@@ -57,6 +55,7 @@ import com.weberbox.pifire.setup.presentation.component.RecipeAsyncImage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import net.engawapg.lib.zoomable.rememberZoomState
 
 @Composable
 fun RecipeImagesScreenDestination(
@@ -124,73 +123,68 @@ private fun RecipeImagesScreen(
 
             else -> {
                 LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                Surface {
-                    Box(
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Brush.verticalGradient(colorStops = colorStops))
+                        .background(Brush.verticalGradient(colors = paletteColor.brushColor))
+                        .windowInsetsPadding(WindowInsets.safeDrawing),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    FilledIconButton(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .background(Brush.verticalGradient(colorStops = colorStops))
-                            .background(Brush.verticalGradient(colors = paletteColor.brushColor))
-                            .windowInsetsPadding(WindowInsets.safeDrawing),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        FilledIconButton(
-                            modifier = Modifier
-                                .align(Alignment.TopStart)
-                                .padding(
-                                    start = MaterialTheme.spacing.extraSmall,
-                                    top = MaterialTheme.spacing.smallTwo
-                                ),
-                            onClick = {
-                                onNavigationRequested(
-                                    ImagesContract.Effect.Navigation.Back
-                                )
-                            },
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.inverseOnSurface
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = stringResource(R.string.close)
-                            )
-                        }
-                        HorizontalPager(
-                            state = pagerState,
-                            pageSpacing = MaterialTheme.spacing.smallOne,
-                            contentPadding = PaddingValues(
-                                horizontal = MaterialTheme.spacing.smallOne
+                            .padding(
+                                start = MaterialTheme.spacing.extraSmall,
+                                top = MaterialTheme.spacing.smallTwo
                             ),
-                            beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT
-                        ) { index ->
-                            if (state.imageList.isNotEmpty()) {
-                                val image = remember { state.imageList[index] }
-                                if (index == 0) currentImage = image
-                                RecipeAsyncImage(
-                                    image = image,
-                                    modifier = Modifier.pagerCubeInDepthTransition(
+                        onClick = {
+                            onNavigationRequested(
+                                ImagesContract.Effect.Navigation.Back
+                            )
+                        },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.inverseOnSurface
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.close)
+                        )
+                    }
+                    HorizontalPager(
+                        state = pagerState,
+                        pageSpacing = MaterialTheme.spacing.smallOne,
+                        contentPadding = PaddingValues(
+                            horizontal = MaterialTheme.spacing.smallOne
+                        ),
+                        beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT
+                    ) { index ->
+                        if (state.imageList.isNotEmpty()) {
+                            val image = remember { state.imageList[index] }
+                            if (index == 0) currentImage = image
+                            RecipeAsyncImage(
+                                image = image,
+                                zoomState = rememberZoomState(),
+                                modifier = Modifier
+                                    .pagerCubeInDepthTransition(
                                         page = index,
                                         pagerState = pagerState
-                                    ),
-                                )
-                            }
-                        }
-                        Row(
-                            Modifier
-                                .align(Alignment.BottomCenter)
-                                .wrapContentHeight()
-                                .fillMaxWidth()
-                                .padding(bottom = MaterialTheme.spacing.smallOne),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            PagerIndicator(
-                                numberOfPages = pagerState.pageCount,
-                                selectedPage = pagerState.currentPage,
-                                defaultRadius = 8.dp,
-                                selectedLength = 20.dp,
-                                space = 5.dp,
-                                animationDurationInMillis = 500,
+                                    )
                             )
                         }
+                    }
+                    Row(
+                        Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth()
+                            .padding(bottom = MaterialTheme.spacing.smallOne),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        PagerIndicator(
+                            numberOfPages = pagerState.pageCount,
+                            selectedPage = pagerState.currentPage,
+                            animationDurationInMillis = 500,
+                        )
                     }
                 }
             }

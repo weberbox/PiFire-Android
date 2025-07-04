@@ -27,57 +27,79 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe
 import com.weberbox.pifire.recipes.presentation.util.coinImageBuilder
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image
+import net.engawapg.lib.zoomable.ScrollGesturePropagation
+import net.engawapg.lib.zoomable.ZoomState
+import net.engawapg.lib.zoomable.zoomable
 
 @Composable
 internal fun RecipeAsyncImage(
     image: Any?,
     modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Fit
+    contentScale: ContentScale = ContentScale.FillWidth,
+    zoomState: ZoomState? = null
 ) {
     val colorStops = arrayOf(
         0.5f to MaterialTheme.colorScheme.surfaceContainerHighest,
         1f to MaterialTheme.colorScheme.surfaceContainer
     )
 
-    SubcomposeAsyncImage(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(MaterialTheme.shapes.large),
-        model = coinImageBuilder(image),
-        loading = {
-            Box(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.large)
-                    .background(Brush.radialGradient(colorStops = colorStops)),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularLoadingIndicator(
-                    isLoading = true,
-                    modifier = Modifier.size(150.dp)
-                )
-            }
-        },
-        error = {
-            Box(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.large)
-                    .background(Brush.radialGradient(colorStops = colorStops)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    modifier = Modifier.fillMaxSize(0.7f),
-                    imageVector = Icons.Outlined.NoPhotography,
-                    contentDescription = null
-                )
-            }
-        },
-        contentDescription = null,
-        contentScale = contentScale
-    )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .then(
+                zoomState?.let {
+                    Modifier.zoomable(
+                        zoomState = zoomState,
+                        scrollGesturePropagation =
+                            ScrollGesturePropagation.NotZoomed
+                    )
+                } ?: Modifier
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        SubcomposeAsyncImage(
+            modifier = modifier
+                .fillMaxWidth()
+                .clip(MaterialTheme.shapes.large),
+            model = coinImageBuilder(image),
+            loading = {
+                Box(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.large)
+                        .background(Brush.radialGradient(colorStops = colorStops)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularLoadingIndicator(
+                        isLoading = true,
+                        modifier = Modifier.size(150.dp)
+                    )
+                }
+            },
+            error = {
+                Box(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.large)
+                        .background(Brush.radialGradient(colorStops = colorStops)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.fillMaxSize(0.7f),
+                        imageVector = Icons.Outlined.NoPhotography,
+                        contentDescription = null
+                    )
+                }
+            },
+            onSuccess = { state ->
+                zoomState?.setContentSize(state.painter.intrinsicSize)
+            },
+            contentDescription = null,
+            contentScale = contentScale
+        )
+    }
 }
 
 @Composable

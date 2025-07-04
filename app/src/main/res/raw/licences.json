@@ -62,5 +62,9 @@
   {
     "project": "Coil",
     "license": "https://github.com/coil-kt/coil/blob/main/LICENSE.txt"
+  },
+  {
+    "project": "Zoomable",
+    "license": "https://github.com/usuiat/Zoomable/blob/main/LICENSE"
   }
 ]

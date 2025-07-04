@@ -162,6 +162,7 @@ dependencies {
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.kotlinx)
+    implementation(libs.zoomable)
     implementation(libs.onesignal)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)

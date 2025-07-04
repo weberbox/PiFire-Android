@@ -36,6 +36,7 @@ This app used the following open-source libraries and/or code inspired from thes
 - [Lottie](https://github.com/airbnb/lottie-android)
 - [MaterialDesign Icons](https://github.com/Templarian/MaterialDesign)
 - [Coil](https://github.com/coil-kt/coil)
+- [Zoomable](https://github.com/usuiat/Zoomable)
 
 ### Licensing
 

@@ -33,6 +33,7 @@ socketIO = "2.1.2"
 leakCanary = "2.14"
 gradle = "8.11.0"
 kotlin = "2.2.0"
+zoomable = "2.8.1"
 #noinspection NewerVersionAvailable
 onesignal = "4.8.12"
 #jUnit = "5.9.1"
@@ -88,6 +89,7 @@ squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = 
 squareup-retrofit-kotlinx = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }
 onesignal = { module = "com.onesignal:OneSignal", version.ref = "onesignal" }
+zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 socket-io = { module = "io.socket:socket.io-client", version.ref = "socketIO" }
 desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
 #test-junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jUnit" }

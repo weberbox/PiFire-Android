@@ -319,9 +319,6 @@ private fun DashboardScreenContent(
                             PagerIndicator(
                                 numberOfPages = pagerState.pageCount,
                                 selectedPage = pagerState.currentPage,
-                                defaultRadius = 8.dp,
-                                selectedLength = 20.dp,
-                                space = 5.dp,
                                 animationDurationInMillis = 500,
                             )
                         }

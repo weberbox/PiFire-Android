@@ -27,9 +27,9 @@ fun PagerIndicator(
     selectedPage: Int = 0,
     selectedColor: Color = Color.LightGray,
     defaultColor: Color = Color.DarkGray,
-    defaultRadius: Dp = MaterialTheme.size.mediumOne,
-    selectedLength: Dp = MaterialTheme.size.extraLarge,
-    space: Dp = MaterialTheme.spacing.mediumFour,
+    defaultRadius: Dp = MaterialTheme.size.small,
+    selectedLength: Dp = MaterialTheme.size.mediumOne,
+    space: Dp = MaterialTheme.spacing.extraSmallOne,
     animationDurationInMillis: Int = 300,
 ) {
     Row(
