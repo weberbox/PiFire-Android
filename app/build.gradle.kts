@@ -48,12 +48,7 @@ android {
 
     buildTypes {
         release {
-            manifestPlaceholders += mapOf(
-                "putAll" to mapOf(
-                    "appName" to "PiFire",
-                    "environment" to "production"
-                )
-            )
+            manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
