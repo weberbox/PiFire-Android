@@ -13,6 +13,7 @@ import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
 import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.common.presentation.util.toImmutableList
 import com.weberbox.pifire.recipes.data.api.RecipesApi
 import com.weberbox.pifire.recipes.data.repo.RecipesRepo
 import com.weberbox.pifire.recipes.presentation.contract.DetailsContract
@@ -22,7 +23,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel

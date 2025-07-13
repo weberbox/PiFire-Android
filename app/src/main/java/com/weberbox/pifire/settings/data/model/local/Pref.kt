@@ -23,5 +23,7 @@ data class Pref<T>(
         val appTheme = Pref("pref_app_theme", AppTheme.System)
         val dynamicColor = Pref("pref_dynamic_color", false)
         val holdTempToolTip = Pref("pref_hold_temp_tooltip", true)
+        val biometricSettingsPrompt = Pref("pref_settings_biometrics", false)
+        val biometricServerPrompt = Pref("pref_server_biometrics", false)
     }
 }

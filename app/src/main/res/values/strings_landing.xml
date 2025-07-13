@@ -2,6 +2,7 @@
 <resources>
     <string name="landing_my_smokers">My Smokers</string>
     <string name="landing_add_server">Add Smoker</string>
-    <string name="landing_select_online_title">Auto select smoker</string>
+    <string name="landing_cat_auto_select">Auto Selection</string>
+    <string name="landing_select_online_title">Select smoker</string>
     <string name="landing_select_online_summary">Automatically select the first online smoker when opening app</string>
 </resources>

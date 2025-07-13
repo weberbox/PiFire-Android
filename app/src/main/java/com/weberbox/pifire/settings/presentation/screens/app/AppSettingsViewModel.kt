@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.model.AppTheme
 import com.weberbox.pifire.core.singleton.Prefs
-import com.weberbox.pifire.settings.presentation.contract.AppContract
 import com.weberbox.pifire.settings.data.model.local.Pref
+import com.weberbox.pifire.settings.presentation.contract.AppContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +22,7 @@ class AppSettingsViewModel @Inject constructor(
     override fun setInitialState() = AppContract.State(
         appTheme = AppTheme.System,
         userEmail = "",
+        biometricsEnabled = false,
         isInitialLoading = true,
         isDataError = false
     )
@@ -33,6 +34,9 @@ class AppSettingsViewModel @Inject constructor(
 
             is AppContract.Event.UpdateUserEmail ->
                 prefs.set(Pref.sentryUserEmail, event.email)
+
+            is AppContract.Event.BiometricsEnabled ->
+                prefs.set(Pref.biometricSettingsPrompt, event.enabled)
         }
     }
 
@@ -53,6 +57,15 @@ class AppSettingsViewModel @Inject constructor(
                     copy(
                         userEmail = it,
                         isInitialLoading = false
+                    )
+                }
+            }
+        }
+        viewModelScope.launch {
+            prefs.collectPrefsFlow(Pref.biometricSettingsPrompt).collect {
+                setState {
+                    copy(
+                        biometricsEnabled = it
                     )
                 }
             }

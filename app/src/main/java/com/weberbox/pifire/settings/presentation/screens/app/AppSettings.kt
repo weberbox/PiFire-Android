@@ -43,6 +43,7 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.util.rememberBiometricPromptManager
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.presentation.contract.AppContract
 import kotlinx.coroutines.flow.Flow
@@ -52,6 +53,7 @@ import me.zhanghai.compose.preference.ListPreference
 import me.zhanghai.compose.preference.ListPreferenceType
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
+import me.zhanghai.compose.preference.SwitchPreference
 import me.zhanghai.compose.preference.listPreference
 import me.zhanghai.compose.preference.preferenceCategory
 import me.zhanghai.compose.preference.switchPreference
@@ -144,6 +146,7 @@ private fun AppContent(
     onEventSent: (event: AppContract.Event) -> Unit,
     contentPadding: PaddingValues,
 ) {
+    val biometricManager = rememberBiometricPromptManager()
     val emailSheet = rememberCustomModalBottomSheetState()
     LazyColumn(
         contentPadding = contentPadding,
@@ -189,6 +192,38 @@ private fun AppContent(
             title = { Text(text = stringResource(R.string.settings_app_bottom_bar_title))},
             summary = { Text(text = stringResource(R.string.settings_app_bottom_bar_summary)) }
         )
+        preferenceCategory(
+            key = "settings_cat_biometrics",
+            title = { Text(text = stringResource(R.string.settings_cat_biometrics_title)) }
+        )
+        item {
+            SwitchPreference(
+                value = state.biometricsEnabled,
+                title = {
+                    Text(
+                        text = stringResource(
+                            R.string.settings_biometrics_title
+                        )
+                    )
+                },
+                summary = {
+                    Text(
+                        text = stringResource(R.string.settings_biometrics_summary)
+                    )
+                },
+                onValueChange = { enabled ->
+                    if (enabled) {
+                        biometricManager?.authenticate(
+                            onAuthenticationSuccess = {
+                                onEventSent(AppContract.Event.BiometricsEnabled(true))
+                            }
+                        )
+                    } else {
+                        onEventSent(AppContract.Event.BiometricsEnabled(false))
+                    }
+                }
+            )
+        }
         preferenceCategory(
             key = "settings_cat_events",
             title = { Text(text = stringResource(R.string.settings_cat_events_title)) }
@@ -293,6 +328,7 @@ private fun AppSettingsPreview() {
                     state = AppContract.State(
                         appTheme = AppTheme.System,
                         userEmail = "",
+                        biometricsEnabled = false,
                         isInitialLoading = false,
                         isDataError = false
                     ),

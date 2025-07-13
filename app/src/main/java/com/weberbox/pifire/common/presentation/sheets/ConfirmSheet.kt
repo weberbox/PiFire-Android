@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.theme.SettingsTheme
+import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 
 @Composable
@@ -107,7 +107,7 @@ fun ConfirmSheet(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 private fun ButtonSheetPreview() {
-    SettingsTheme {
+    PiFireTheme {
         Surface {
             ConfirmSheet(
                 title = stringResource(R.string.dialog_confirm_action),

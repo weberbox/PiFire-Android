@@ -164,7 +164,7 @@ private fun ServerSettingsContent(
             onClick = { addressSheet.open() }
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_basic_auth_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_auth_title)) }
         )
         TwoTargetSwitchPreference(
             value = state.serverData.credentialsEnabled,

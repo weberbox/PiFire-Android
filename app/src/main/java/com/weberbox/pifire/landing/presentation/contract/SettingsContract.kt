@@ -4,26 +4,23 @@ import com.weberbox.pifire.common.presentation.base.ViewEvent
 import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
 import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.landing.presentation.model.ServerData
 
-class LandingContract {
+class SettingsContract {
 
     sealed class Event : ViewEvent {
-        data class SelectServer(val uuid: String): Event()
-        data class DeleteServer(val uuid: String): Event()
-        data object Back: Event()
+        data object Back : Event()
+        data class AutoSelectEnabled(val enabled: Boolean) : Event()
+        data class BiometricsEnabled(val enabled: Boolean) : Event()
     }
 
     data class State(
-        val serverData: ServerData,
+        val autSelectEnabled: Boolean,
+        val biometricsEnabled: Boolean,
         val isInitialLoading: Boolean,
-        val isLoading: Boolean,
-        val isDataError: Boolean,
-        val biometricServerPrompt: Boolean
+        val isDataError: Boolean
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {
-        data class BiometricServerPrompt(val uuid: String) : Effect()
         data class Notification(val text: UiText, val error: Boolean) : Effect()
 
         sealed class Navigation : Effect() {

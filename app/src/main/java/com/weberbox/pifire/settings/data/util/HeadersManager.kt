@@ -2,6 +2,7 @@ package com.weberbox.pifire.settings.data.util
 
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.common.domain.Uuid
+import com.weberbox.pifire.common.presentation.util.toImmutableMap
 import com.weberbox.pifire.settings.data.model.local.HeadersData
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
@@ -11,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import okhttp3.Credentials.basic
-import okhttp3.internal.toImmutableMap
 import javax.inject.Inject
 
 class HeadersManager @Inject constructor(

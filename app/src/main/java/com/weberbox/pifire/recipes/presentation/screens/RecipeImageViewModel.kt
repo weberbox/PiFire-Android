@@ -6,13 +6,13 @@ import androidx.navigation.toRoute
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
+import com.weberbox.pifire.common.presentation.util.toImmutableList
 import com.weberbox.pifire.recipes.presentation.contract.ImagesContract
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.internal.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +42,9 @@ class RecipeImageViewModel @Inject constructor(
             sessionStateHolder.recipesDataState.collect { stateData ->
                 stateData?.also { data ->
                     data.recipes.find { it.recipeFilename == filename }?.also { recipe ->
-                        val images = recipe.assets.map { decodeBase64Image(it.encodedImage) }
+                        val images = recipe.assets.map {
+                            decodeBase64Image(it.encodedImage)
+                        }
                         withContext(Dispatchers.Main) {
                             setState {
                                 copy(

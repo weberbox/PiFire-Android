@@ -1,9 +1,28 @@
 {
   "changelog": [
     {
-      "version": "3.0.0",
+      "version": "3.1.0",
       "date": "",
       "current": true,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added biometric authentication option to server selection and settings"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed an issue when checking if PiFire version is supported after selecting server"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.0.0",
+      "date": "",
+      "current": false,
       "logs": [
         {
           "type": "note",

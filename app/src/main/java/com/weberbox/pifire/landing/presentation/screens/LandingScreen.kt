@@ -3,6 +3,7 @@ package com.weberbox.pifire.landing.presentation.screens
 import android.app.Activity
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -60,6 +61,8 @@ import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
+import com.weberbox.pifire.core.util.BiometricPromptManager
+import com.weberbox.pifire.core.util.rememberBiometricPromptManager
 import com.weberbox.pifire.landing.presentation.component.LandingTopBar
 import com.weberbox.pifire.landing.presentation.component.ServerItem
 import com.weberbox.pifire.landing.presentation.contract.LandingContract
@@ -103,7 +106,7 @@ private fun LandingScreen(
     onEventSent: (event: LandingContract.Event) -> Unit,
     onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
 ) {
-    val activity = LocalActivity.current
+    val activity = LocalActivity.current as? AppCompatActivity
     val windowInsets = WindowInsets.safeDrawing
     val hazeState = rememberHazeState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -112,10 +115,13 @@ private fun LandingScreen(
     var fabVisible by remember { mutableStateOf(true) }
     var previousIndex by remember { mutableIntStateOf(0) }
     var previousScrollOffset by remember { mutableIntStateOf(0) }
+    val biometricManager = rememberBiometricPromptManager()
 
     HandleSideEffects(
         activity = activity,
+        biometricManager = biometricManager,
         effectFlow = effectFlow,
+        onEventSent = onEventSent,
         onNavigationRequested = onNavigationRequested
     )
 
@@ -143,7 +149,36 @@ private fun LandingScreen(
                 state = state,
                 hazeState = hazeState,
                 onSearchUpdated = { searchQuery = it },
-                onNavigationRequested = onNavigationRequested
+                onNavigationRequested = { navigationEffect ->
+                    when (navigationEffect) {
+                        is LandingContract.Effect.Navigation.Back ->
+                            onNavigationRequested(LandingContract.Effect.Navigation.Back)
+
+                        is LandingContract.Effect.Navigation.NavRoute -> {
+                            when (navigationEffect.route) {
+                                is NavGraph.LandingDest.Settings -> {
+                                    checkAuthentication(
+                                        state = state,
+                                        biometricManager = biometricManager,
+                                        onSuccess = {
+                                            onNavigationRequested(
+                                                LandingContract.Effect.Navigation.NavRoute(
+                                                    route = navigationEffect.route,
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+
+                                else -> onNavigationRequested(
+                                    LandingContract.Effect.Navigation.NavRoute(
+                                        route = navigationEffect.route,
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             )
         },
         floatingActionButton = {
@@ -214,7 +249,17 @@ private fun LandingScreen(
                                 server = server,
                                 onClick = { uuid ->
                                     if (server.online) {
-                                        onEventSent(LandingContract.Event.SelectServer(uuid))
+                                        checkAuthentication(
+                                            state = state,
+                                            biometricManager = biometricManager,
+                                            onSuccess = {
+                                                onEventSent(
+                                                    LandingContract.Event.SelectServer(
+                                                        uuid = uuid
+                                                    )
+                                                )
+                                            }
+                                        )
                                     } else {
                                         activity?.showAlerter(
                                             message = R.string.alerter_server_offline,
@@ -223,14 +268,33 @@ private fun LandingScreen(
                                     }
                                 },
                                 onEdit = { uuid ->
-                                    onNavigationRequested(
-                                        LandingContract.Effect.Navigation.NavRoute(
-                                            NavGraph.LandingDest.ServerSettings(uuid)
-                                        )
+                                    checkAuthentication(
+                                        state = state,
+                                        biometricManager = biometricManager,
+                                        onSuccess = {
+                                            onNavigationRequested(
+                                                LandingContract.Effect.Navigation.NavRoute(
+                                                    route = NavGraph.LandingDest.ServerSettings(
+                                                        uuid = uuid
+                                                    )
+                                                )
+                                            )
+                                        }
                                     )
                                 },
                                 onDelete = { uuid, name ->
-                                    serverDeleteSheet.open(Pair(uuid, name))
+                                    checkAuthentication(
+                                        state = state,
+                                        biometricManager = biometricManager,
+                                        onSuccess = {
+                                            serverDeleteSheet.open(
+                                                data = Pair(
+                                                    first = uuid,
+                                                    second = name
+                                                )
+                                            )
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -284,10 +348,26 @@ private fun LandingScreen(
     }
 }
 
+private fun checkAuthentication(
+    state: LandingContract.State,
+    biometricManager: BiometricPromptManager?,
+    onSuccess: () -> Unit,
+) {
+    if (state.biometricServerPrompt) {
+        biometricManager?.authenticate(
+            onAuthenticationSuccess = onSuccess
+        )
+    } else {
+        onSuccess()
+    }
+}
+
 @Composable
 private fun HandleSideEffects(
     activity: Activity?,
+    biometricManager: BiometricPromptManager?,
     effectFlow: Flow<LandingContract.Effect>?,
+    onEventSent: (event: LandingContract.Event) -> Unit,
     onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
 ) {
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -303,14 +383,24 @@ private fun HandleSideEffects(
                         isError = effect.error
                     )
                 }
+
+                is LandingContract.Effect.BiometricServerPrompt -> {
+                    biometricManager?.authenticate(
+                        onAuthenticationSuccess = {
+                            onEventSent(
+                                LandingContract.Event.SelectServer(effect.uuid)
+                            )
+                        }
+                    )
+                }
             }
         }?.collect()
     }
 }
 
 @Composable
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, apiLevel = 35)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true, apiLevel = 35)
 //@DeviceSizePreviews
 private fun LandingScreenPreview() {
     PiFireTheme {
@@ -320,7 +410,8 @@ private fun LandingScreenPreview() {
                     serverData = buildServerData(),
                     isInitialLoading = false,
                     isLoading = false,
-                    isDataError = false
+                    isDataError = false,
+                    biometricServerPrompt = false
                 ),
                 effectFlow = null,
                 onEventSent = { },
