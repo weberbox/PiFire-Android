@@ -212,15 +212,11 @@ private fun AppContent(
                     )
                 },
                 onValueChange = { enabled ->
-                    if (enabled) {
-                        biometricManager?.authenticate(
-                            onAuthenticationSuccess = {
-                                onEventSent(AppContract.Event.BiometricsEnabled(true))
-                            }
-                        )
-                    } else {
-                        onEventSent(AppContract.Event.BiometricsEnabled(false))
-                    }
+                    biometricManager?.authenticate(
+                        onAuthenticationSuccess = {
+                            onEventSent(AppContract.Event.BiometricsEnabled(enabled))
+                        }
+                    )
                 }
             )
         }

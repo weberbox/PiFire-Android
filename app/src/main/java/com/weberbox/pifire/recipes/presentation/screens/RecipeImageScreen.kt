@@ -126,8 +126,7 @@ private fun RecipeImagesScreen(
                         .fillMaxSize()
                         .background(Brush.verticalGradient(colorStops = colorStops))
                         .background(Brush.verticalGradient(colors = paletteColor.brushColor))
-                        .windowInsetsPadding(WindowInsets.safeDrawing),
-                    verticalArrangement = Arrangement.SpaceBetween
+                        .windowInsetsPadding(WindowInsets.safeDrawing)
                 ) {
                     FilledIconButton(
                         modifier = Modifier
@@ -150,6 +149,9 @@ private fun RecipeImagesScreen(
                         )
                     }
                     HorizontalPager(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
                         state = pagerState,
                         pageSpacing = MaterialTheme.spacing.smallOne,
                         contentPadding = PaddingValues(

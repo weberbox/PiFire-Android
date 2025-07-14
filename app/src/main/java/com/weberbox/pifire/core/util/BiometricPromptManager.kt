@@ -1,9 +1,9 @@
 package com.weberbox.pifire.core.util
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
-import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,10 @@ import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.PromptInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.util.UiText
@@ -21,31 +24,40 @@ import com.weberbox.pifire.common.presentation.util.showAlerter
 
 @Composable
 fun rememberBiometricPromptManager(): BiometricPromptManager? {
-    val activity = LocalActivity.current as? AppCompatActivity
-    var biometricManager: BiometricPromptManager? = null
+    val context = LocalContext.current
+    val activity = context as? AppCompatActivity ?: return null
+
+    val managerRef = remember { mutableStateOf<BiometricPromptManager?>(null) }
 
     val launchEnroll = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { biometricManager?.retryLastAuth() }
+        onResult = {
+            managerRef.value?.retryLastAuth()
+        }
     )
 
-    return remember(activity) {
-        activity?.let {
-            BiometricPromptManager(
-                activity = it,
-                launchEnroll = { intent -> launchEnroll.launch(intent) }
-            ).also { manager ->
-                biometricManager = manager
-            }
+    val biometricManager = remember(activity) {
+        BiometricPromptManager(
+            context = activity,
+            launchEnroll = { intent -> launchEnroll.launch(intent) }
+        )
+    }
+
+    DisposableEffect(activity) {
+        managerRef.value = biometricManager
+        onDispose {
+            managerRef.value = null
         }
     }
+
+    return biometricManager
 }
 
 class BiometricPromptManager(
-    private val activity: AppCompatActivity,
+    private val context: Context,
     private val launchEnroll: (Intent) -> Unit
 ) {
-    private val manager = BiometricManager.from(activity)
+    private val manager = BiometricManager.from(context)
     private val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         BIOMETRIC_STRONG or DEVICE_CREDENTIAL
     } else {
@@ -53,11 +65,16 @@ class BiometricPromptManager(
     }
     private var lastAuthRequest: (() -> Unit)? = null
 
+    private fun getActivity(): AppCompatActivity? {
+        return context as? AppCompatActivity
+    }
+
     fun authenticate(
-        title: String = activity.getString(R.string.dialog_biometric_title),
-        description: String = activity.getString(R.string.dialog_biometric_description),
+        title: String = context.getString(R.string.dialog_biometric_title),
+        description: String = context.getString(R.string.dialog_biometric_description),
         onAuthenticationSuccess: () -> Unit
     ) {
+        val activity = getActivity() ?: return
 
         lastAuthRequest = {
             authenticate(title, description, onAuthenticationSuccess)
@@ -70,7 +87,7 @@ class BiometricPromptManager(
             .setConfirmationRequired(false)
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            promptInfo.setNegativeButtonText(activity.getString(R.string.cancel))
+            promptInfo.setNegativeButtonText(context.getString(R.string.cancel))
         }
 
         when (manager.canAuthenticate(authenticators)) {
@@ -111,7 +128,7 @@ class BiometricPromptManager(
             else -> Unit
         }
 
-        val executor = ContextCompat.getMainExecutor(activity)
+        val executor = ContextCompat.getMainExecutor(context)
         val prompt = BiometricPrompt(
             activity, executor,
             object : BiometricPrompt.AuthenticationCallback() {
@@ -137,6 +154,7 @@ class BiometricPromptManager(
     }
 
     fun retryLastAuth() {
+        val activity = getActivity() ?: return
         if (manager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS) {
             lastAuthRequest?.invoke()
         } else {

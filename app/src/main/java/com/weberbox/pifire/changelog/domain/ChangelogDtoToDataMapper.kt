@@ -13,6 +13,7 @@ object ChangelogDtoToDataMapper : Mapper<ChangelogDto, ChangelogData> {
                 version = data.version.orEmpty(),
                 date = data.date.orEmpty(),
                 current = data.current == true,
+                isAlpha = data.isAlpha == true,
                 logs = data.logs.map { log ->
                     Log(
                         type = log.type ?: "new",

@@ -4,6 +4,7 @@
       "version": "3.1.0",
       "date": "",
       "current": true,
+      "isAlpha": true,
       "logs": [
         {
           "type": "new",
@@ -23,6 +24,7 @@
       "version": "3.0.0",
       "date": "",
       "current": false,
+      "isAlpha": true,
       "logs": [
         {
           "type": "note",

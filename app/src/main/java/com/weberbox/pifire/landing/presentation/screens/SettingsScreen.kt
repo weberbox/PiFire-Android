@@ -190,15 +190,11 @@ fun SettingsScreenContent(
                 )
             },
             onValueChange = { enabled ->
-                if (enabled) {
-                    biometricManager?.authenticate(
-                        onAuthenticationSuccess = {
-                            onEventSent(SettingsContract.Event.BiometricsEnabled(true))
-                        }
-                    )
-                } else {
-                    onEventSent(SettingsContract.Event.BiometricsEnabled(false))
-                }
+                biometricManager?.authenticate(
+                    onAuthenticationSuccess = {
+                        onEventSent(SettingsContract.Event.BiometricsEnabled(enabled))
+                    }
+                )
             }
         )
     }

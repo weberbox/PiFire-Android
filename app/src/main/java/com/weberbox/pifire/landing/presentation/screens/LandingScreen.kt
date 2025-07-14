@@ -149,36 +149,7 @@ private fun LandingScreen(
                 state = state,
                 hazeState = hazeState,
                 onSearchUpdated = { searchQuery = it },
-                onNavigationRequested = { navigationEffect ->
-                    when (navigationEffect) {
-                        is LandingContract.Effect.Navigation.Back ->
-                            onNavigationRequested(LandingContract.Effect.Navigation.Back)
-
-                        is LandingContract.Effect.Navigation.NavRoute -> {
-                            when (navigationEffect.route) {
-                                is NavGraph.LandingDest.Settings -> {
-                                    checkAuthentication(
-                                        state = state,
-                                        biometricManager = biometricManager,
-                                        onSuccess = {
-                                            onNavigationRequested(
-                                                LandingContract.Effect.Navigation.NavRoute(
-                                                    route = navigationEffect.route,
-                                                )
-                                            )
-                                        }
-                                    )
-                                }
-
-                                else -> onNavigationRequested(
-                                    LandingContract.Effect.Navigation.NavRoute(
-                                        route = navigationEffect.route,
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
+                onNavigationRequested = onNavigationRequested
             )
         },
         floatingActionButton = {

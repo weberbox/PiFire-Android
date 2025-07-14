@@ -10,6 +10,7 @@ data class ChangelogData(
         val version: String = "",
         val date: String = "",
         val current: Boolean = false,
+        val isAlpha: Boolean = false,
         val logs: List<Log> = listOf()
     )
 
