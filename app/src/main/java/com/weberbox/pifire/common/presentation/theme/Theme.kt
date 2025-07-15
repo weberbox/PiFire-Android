@@ -82,51 +82,6 @@ fun PiFireTheme(
     }
 }
 
-@Composable
-fun SettingsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit,
-) {
-    val context = LocalContext.current
-    val colorScheme =
-        when {
-            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            }
-
-            darkTheme -> mediumContrastDarkColorScheme
-            else -> mediumContrastLightColorScheme
-        }
-
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (context as Activity).window
-            WindowCompat.setDecorFitsSystemWindows(window, false)
-            val windowBackgroundColor = colorScheme.background.toArgb()
-            window.setBackgroundDrawable(windowBackgroundColor.toDrawable())
-            val insetsController = WindowCompat.getInsetsController(window, view)
-            insetsController.isAppearanceLightStatusBars = !darkTheme
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                @Suppress("DEPRECATION")
-                window.statusBarColor = Color.Transparent.toArgb()
-                @Suppress("DEPRECATION")
-                window.navigationBarColor = Color.Transparent.toArgb()
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                insetsController.isAppearanceLightNavigationBars = !darkTheme
-            }
-        }
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content
-    )
-}
-
 @Suppress("unused")
 private val lightScheme = lightColorScheme(
     primary = primaryLight,

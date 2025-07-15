@@ -23,6 +23,7 @@ internal fun LogHeader(
     current: Boolean,
     version: String,
     date: String,
+    isAlpha: Boolean,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -51,6 +52,15 @@ internal fun LogHeader(
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
+                if (isAlpha) {
+                    Text(
+                        text = " - Alpha Release",
+                        modifier = modifier.padding(end = 5.dp),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = if (current) MaterialTheme.colorScheme.tertiaryContainer else
+                            MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.inverseOnSurface,
@@ -70,7 +80,8 @@ private fun LogHeaderPreview() {
             LogHeader(
                 current = true,
                 version = "3.0.0",
-                date = "4-24-2025"
+                date = "",
+                isAlpha = true
             )
         }
     }

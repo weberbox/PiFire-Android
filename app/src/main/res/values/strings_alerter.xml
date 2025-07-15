@@ -6,4 +6,8 @@
     <string name="alerter_admin_action_completed">Action completed successfully</string>
     <string name="alerter_socket_connection_failed">The connection to PiFire failed. Check your connection and try again</string>
     <string name="alerter_server_offline">Smoker is offline, check your connection and verify controller is powered on</string>
+    <string name="alerter_biometric_not_enrolled">Biometrics are not enrolled</string>
+    <string name="alerter_biometric_not_supported">Biometric features are not supported on this device</string>
+    <string name="alerter_biometric_not_available">Biometric features are currently unavailable</string>
+    <string name="alerter_biometric_still_not_enrolled">Biometric features are still not enrolled. Try again</string>
 </resources>

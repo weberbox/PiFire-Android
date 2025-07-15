@@ -1,6 +1,5 @@
 package com.weberbox.pifire.recipes.presentation.screens
 
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
@@ -41,11 +40,11 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.PagerIndicator
+import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
 import com.weberbox.pifire.common.presentation.modifier.pagerCubeInDepthTransition
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.LockScreenOrientation
 import com.weberbox.pifire.common.presentation.util.rememberPaletteColorState
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
@@ -122,14 +121,12 @@ private fun RecipeImagesScreen(
             }
 
             else -> {
-                LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Brush.verticalGradient(colorStops = colorStops))
                         .background(Brush.verticalGradient(colors = paletteColor.brushColor))
-                        .windowInsetsPadding(WindowInsets.safeDrawing),
-                    verticalArrangement = Arrangement.SpaceBetween
+                        .windowInsetsPadding(WindowInsets.safeDrawing)
                 ) {
                     FilledIconButton(
                         modifier = Modifier
@@ -152,6 +149,9 @@ private fun RecipeImagesScreen(
                         )
                     }
                     HorizontalPager(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
                         state = pagerState,
                         pageSpacing = MaterialTheme.spacing.smallOne,
                         contentPadding = PaddingValues(
@@ -166,6 +166,7 @@ private fun RecipeImagesScreen(
                                 image = image,
                                 zoomState = rememberZoomState(),
                                 modifier = Modifier
+                                    .limitWidthFraction()
                                     .pagerCubeInDepthTransition(
                                         page = index,
                                         pagerState = pagerState

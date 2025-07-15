@@ -20,6 +20,9 @@
     <string name="settings_app_bottom_bar_title">Bottom Navigation Bar</string>
     <string name="settings_app_bottom_bar_summary">Show or hide the bottom bar on the dashboard</string>
 
+    <string name="settings_biometrics_title">Require Biometrics</string>
+    <string name="settings_biometrics_summary">Require biometric to access server/PiFire settings</string>
+
     <string name="settings_cat_crash">Crash Reporting</string>
     <string name="settings_enable_crash">Enable</string>
     <string name="settings_crash_summary">If the application crashes this will send a report to the developer</string>

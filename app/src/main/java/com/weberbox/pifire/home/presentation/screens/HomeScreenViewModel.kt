@@ -55,6 +55,7 @@ class HomeScreenViewModel @Inject constructor(
         isConnected = true,
         isHoldMode = false,
         lidOpenDetectEnabled = false,
+        biometricSettingsPrompt = false,
         grillName = "",
         isInitialLoading = true,
         isDataError = false
@@ -105,6 +106,15 @@ class HomeScreenViewModel @Inject constructor(
                 }
             }
         }
+        viewModelScope.launch {
+            prefs.collectPrefsFlow(Pref.biometricSettingsPrompt).collect {
+                setState {
+                    copy(
+                        biometricSettingsPrompt = it
+                    )
+                }
+            }
+        }
     }
 
     private fun collectConnectedState() {
@@ -143,96 +153,115 @@ class HomeScreenViewModel @Inject constructor(
 
     private fun checkServerSupported() {
         viewModelScope.launch {
-            settingsRepo.getCurrentServer()?.settings?.also { settings ->
-                val supportResult = serverSupportManager.isServerVersionSupported(
-                    ServerInfo(
-                        version = settings.serverVersion,
-                        build = settings.serverBuild
-                    )
-                )
-
-                when (supportResult) {
-                    is ServerSupportResult.Supported -> {}
-
-                    is ServerSupportResult.UnsupportedMin -> {
-                        DialogController.sendEvent(
-                            DialogEvent(
-                                title = UiText(
-                                    R.string.dialog_unsupported_server_version_title,
-                                ),
-                                message = UiText(
-                                    R.string.dialog_unsupported_server_min_message,
-                                    uiTextArgsOf(
-                                        supportResult.minVersion,
-                                        supportResult.minBuild,
-                                        supportResult.currentVersion,
-                                        supportResult.currentBuild
-                                    )
-                                ),
-                                dismissible = !supportResult.isMandatory,
-                                positiveAction = DialogAction(
-                                    buttonText = UiText(R.string.exit),
-                                    action = { signOut() }
-                                ),
-                                negativeAction = if (supportResult.isMandatory) null else
-                                    DialogAction(
-                                        buttonText = UiText(R.string.close),
-                                        action = { }
-                                    )
+            when (val result = settingsRepo.getSettings()) {
+                is Result.Error -> {
+                    settingsRepo.getCurrentServer()?.settings?.also { settings ->
+                        val supportResult = serverSupportManager.isServerVersionSupported(
+                            ServerInfo(
+                                version = settings.serverVersion,
+                                build = settings.serverBuild
                             )
                         )
-                    }
-
-                    is ServerSupportResult.UnsupportedMax -> {
-                        DialogController.sendEvent(
-                            DialogEvent(
-                                title = UiText(
-                                    R.string.dialog_unsupported_server_version_title
-                                ),
-                                message = UiText(
-                                    R.string.dialog_unsupported_server_max_message,
-                                    uiTextArgsOf(
-                                        supportResult.maxVersion,
-                                        supportResult.maxBuild,
-                                        supportResult.currentVersion,
-                                        supportResult.currentBuild
-                                    )
-                                ),
-                                dismissible = !supportResult.isMandatory,
-                                positiveAction = DialogAction(
-                                    buttonText = UiText(R.string.exit),
-                                    action = { signOut() }
-                                ),
-                                negativeAction = if (supportResult.isMandatory) null else
-                                    DialogAction(
-                                        buttonText = UiText(R.string.close),
-                                        action = { }
-                                    )
-                            )
-                        )
-                    }
-
-                    is ServerSupportResult.Untested -> {
-                        DialogController.sendEvent(
-                            DialogEvent(
-                                title = UiText(
-                                    R.string.dialog_untested_app_version_title
-                                ),
-                                message = UiText(
-                                    R.string.dialog_untested_app_version_message
-                                ),
-                                positiveAction = DialogAction(
-                                    buttonText = UiText(R.string.close),
-                                    action = { }
-                                ),
-                                negativeAction = DialogAction(
-                                    buttonText = UiText(R.string.exit),
-                                    action = { signOut() }
-                                )
-                            )
-                        )
+                        checkSupportResult(supportResult)
                     }
                 }
+
+                is Result.Success -> {
+                    val supportResult = serverSupportManager.isServerVersionSupported(
+                        ServerInfo(
+                            version = result.data.settings.serverVersion,
+                            build = result.data.settings.serverBuild
+                        )
+                    )
+                    checkSupportResult(supportResult)
+                }
+            }
+        }
+    }
+
+    private suspend fun checkSupportResult(
+        supportResult: ServerSupportResult
+    ) {
+        when (supportResult) {
+            is ServerSupportResult.Supported -> {}
+
+            is ServerSupportResult.UnsupportedMin -> {
+                DialogController.sendEvent(
+                    DialogEvent(
+                        title = UiText(
+                            R.string.dialog_unsupported_server_version_title,
+                        ),
+                        message = UiText(
+                            R.string.dialog_unsupported_server_min_message,
+                            uiTextArgsOf(
+                                supportResult.minVersion,
+                                supportResult.minBuild,
+                                supportResult.currentVersion,
+                                supportResult.currentBuild
+                            )
+                        ),
+                        dismissible = !supportResult.isMandatory,
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.exit),
+                            action = { signOut() }
+                        ),
+                        negativeAction = if (supportResult.isMandatory) null else
+                            DialogAction(
+                                buttonText = UiText(R.string.close),
+                                action = { }
+                            )
+                    )
+                )
+            }
+
+            is ServerSupportResult.UnsupportedMax -> {
+                DialogController.sendEvent(
+                    DialogEvent(
+                        title = UiText(
+                            R.string.dialog_unsupported_server_version_title
+                        ),
+                        message = UiText(
+                            R.string.dialog_unsupported_server_max_message,
+                            uiTextArgsOf(
+                                supportResult.maxVersion,
+                                supportResult.maxBuild,
+                                supportResult.currentVersion,
+                                supportResult.currentBuild
+                            )
+                        ),
+                        dismissible = !supportResult.isMandatory,
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.exit),
+                            action = { signOut() }
+                        ),
+                        negativeAction = if (supportResult.isMandatory) null else
+                            DialogAction(
+                                buttonText = UiText(R.string.close),
+                                action = { }
+                            )
+                    )
+                )
+            }
+
+            is ServerSupportResult.Untested -> {
+                DialogController.sendEvent(
+                    DialogEvent(
+                        title = UiText(
+                            R.string.dialog_untested_app_version_title
+                        ),
+                        message = UiText(
+                            R.string.dialog_untested_app_version_message
+                        ),
+                        positiveAction = DialogAction(
+                            buttonText = UiText(R.string.close),
+                            action = { }
+                        ),
+                        negativeAction = DialogAction(
+                            buttonText = UiText(R.string.exit),
+                            action = { signOut() }
+                        )
+                    )
+                )
             }
         }
     }

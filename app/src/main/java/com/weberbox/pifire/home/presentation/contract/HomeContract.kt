@@ -17,6 +17,7 @@ class HomeContract {
         val isConnected: Boolean,
         val isHoldMode: Boolean,
         val lidOpenDetectEnabled: Boolean,
+        val biometricSettingsPrompt: Boolean,
         val grillName: String,
         val isInitialLoading: Boolean,
         val isDataError: Boolean

@@ -49,6 +49,7 @@ class LandingViewModel @Inject constructor(
     private var pollerJobs = mutableListOf<Job>()
     private var autoSelectServer by mutableStateOf(prefs.get(Pref.landingAutoSelect))
     private var firstLaunch by mutableStateOf(true)
+    private var requireServerBiometrics by mutableStateOf(true)
 
     init {
         firstLaunch = savedStateHandle.toRoute<NavGraph.LandingDest.Landing>().firstLaunch
@@ -60,7 +61,8 @@ class LandingViewModel @Inject constructor(
         serverData = ServerData(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
+        biometricServerPrompt = false
     )
 
     override fun handleEvents(event: LandingContract.Event) {
@@ -75,6 +77,16 @@ class LandingViewModel @Inject constructor(
         viewModelScope.launch {
             prefs.collectPrefsFlow(Pref.landingAutoSelect).collect {
                 autoSelectServer = it
+            }
+        }
+        viewModelScope.launch {
+            prefs.collectPrefsFlow(Pref.biometricServerPrompt).collect {
+                requireServerBiometrics = it
+                setState {
+                    copy(
+                        biometricServerPrompt = it
+                    )
+                }
             }
         }
     }
@@ -135,10 +147,19 @@ class LandingViewModel @Inject constructor(
                 val resultUuid = result.data.uuid
                 setOnlineState(resultUuid, true)
                 if (autoSelectServer && firstLaunch) {
-                    if (resultUuid.isNotBlank()) {
-                        viewModelScope.launch {
-                            delay(500)
-                            selectServer(uuid)
+                    if (requireServerBiometrics) {
+                        firstLaunch = false
+                        setEffect {
+                            LandingContract.Effect.BiometricServerPrompt(
+                                uuid = uuid,
+                            )
+                        }
+                    } else {
+                        if (resultUuid.isNotBlank()) {
+                            viewModelScope.launch {
+                                delay(500)
+                                selectServer(uuid)
+                            }
                         }
                     }
                 }

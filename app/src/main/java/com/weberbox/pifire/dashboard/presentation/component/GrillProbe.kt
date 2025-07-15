@@ -40,7 +40,7 @@ import com.weberbox.pifire.common.icons.outlined.CarDefrostRear
 import com.weberbox.pifire.common.icons.outlined.FlagCheckered
 import com.weberbox.pifire.common.presentation.base.cardColorStops
 import com.weberbox.pifire.common.presentation.component.AnimatedCounter
-import com.weberbox.pifire.common.presentation.theme.SettingsTheme
+import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.elevation
 import com.weberbox.pifire.common.presentation.theme.size
 import com.weberbox.pifire.common.presentation.theme.spacing
@@ -292,7 +292,7 @@ internal fun GrillProbe(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 private fun GrillProbePreview() {
-    SettingsTheme {
+    PiFireTheme {
         Surface {
             GrillProbe(
                 probe = buildGrillProbe(),

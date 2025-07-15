@@ -51,6 +51,8 @@ import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.util.BiometricPromptManager
+import com.weberbox.pifire.core.util.rememberBiometricPromptManager
 import com.weberbox.pifire.dashboard.presentation.screens.DashboardScreenDestination
 import com.weberbox.pifire.events.presentation.screens.EventsScreenDestination
 import com.weberbox.pifire.home.presentation.component.BottomBar
@@ -128,6 +130,7 @@ private fun HomeScreen(
     val isPermDrawerNavigation = isPermDrawerNavigation()
     val isRailNavigation = isRailNavigation()
     val isBottomBarNavigation = isBottomBarNavigation()
+    val biometricManager = rememberBiometricPromptManager()
 
     val pagerState = rememberPagerState(
         initialPage = initialPage,
@@ -194,6 +197,19 @@ private fun HomeScreen(
                                     is NavGraph.LandingDest.Landing ->
                                         onEventSent(HomeContract.Event.SignOut)
 
+                                    is NavGraph.SettingsDest ->
+                                        checkAuthentication(
+                                            state = state,
+                                            biometricManager = biometricManager,
+                                            onSuccess = {
+                                                onNavigationRequested(
+                                                    HomeContract.Effect.Navigation.NavRoute(
+                                                        navRequest.destination
+                                                    )
+                                                )
+                                            }
+                                        )
+
                                     else ->
                                         onNavigationRequested(
                                             HomeContract.Effect.Navigation.NavRoute(
@@ -230,6 +246,19 @@ private fun HomeScreen(
                                     when (navRequest.destination) {
                                         is NavGraph.LandingDest.Landing ->
                                             onEventSent(HomeContract.Event.SignOut)
+
+                                        is NavGraph.SettingsDest ->
+                                            checkAuthentication(
+                                                state = state,
+                                                biometricManager = biometricManager,
+                                                onSuccess = {
+                                                    onNavigationRequested(
+                                                        HomeContract.Effect.Navigation.NavRoute(
+                                                            navRequest.destination
+                                                        )
+                                                    )
+                                                }
+                                            )
 
                                         else ->
                                             onNavigationRequested(
@@ -383,6 +412,20 @@ private fun HomeScreen(
     }
 }
 
+private fun checkAuthentication(
+    state: HomeContract.State,
+    biometricManager: BiometricPromptManager?,
+    onSuccess: () -> Unit,
+) {
+    if (state.biometricSettingsPrompt) {
+        biometricManager?.authenticate(
+            onAuthenticationSuccess = onSuccess
+        )
+    } else {
+        onSuccess()
+    }
+}
+
 @Composable
 private fun HomeDrawerSheet(
     pagerState: PagerState,
@@ -447,6 +490,7 @@ private fun HomeScreenPreview() {
                     isConnected = true,
                     isHoldMode = true,
                     lidOpenDetectEnabled = true,
+                    biometricSettingsPrompt = false,
                     isInitialLoading = false,
                     grillName = "Development",
                     isDataError = false,

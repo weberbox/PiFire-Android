@@ -1,9 +1,38 @@
 {
   "changelog": [
     {
-      "version": "3.0.0",
+      "version": "3.1.0",
       "date": "",
       "current": true,
+      "isAlpha": true,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added biometric authentication option to server selection and settings. You can find these new options in the landing settings and app settings"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed an issue when checking if the PiFire version is supported after selecting server"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed an issue with recipe images overlapping other items on screen. Removed the portrait only mode for recipe image viewing"
+        },
+        {
+          "type": "imp",
+          "text": "Show alpha build changelog items only on alpha releases"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.0.0",
+      "date": "",
+      "current": false,
+      "isAlpha": true,
       "logs": [
         {
           "type": "note",

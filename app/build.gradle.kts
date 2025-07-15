@@ -9,16 +9,16 @@ plugins {
     alias(libs.plugins.sentry.android.gradle)
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.jetbrains.kotlin.kapt)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
-val vMinor = 0
+val vMinor = 1
 val vPatch = 0
 val isAlpha = true
 
@@ -35,7 +35,7 @@ android {
         versionName = "${vMajor}.${vMinor}.${vPatch}"
     }
 
-    if(keystoreProperties.isNotEmpty()) {
+    if (keystoreProperties.isNotEmpty()) {
         signingConfigs {
             create("release") {
                 keyAlias = keystoreProperties["keyAlias"] as String
@@ -48,7 +48,6 @@ android {
 
     buildTypes {
         release {
-            manifestPlaceholders += mapOf()
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
             isShrinkResources = true
@@ -145,6 +144,7 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.splashscreen)
     implementation(libs.androidx.crypto)
+    implementation(libs.androidx.biometric)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)

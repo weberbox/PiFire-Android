@@ -11,11 +11,13 @@ class AppContract {
     sealed class Event : ViewEvent {
         data class UpdateAppTheme(val theme: AppTheme) : Event()
         data class UpdateUserEmail(val email: String) : Event()
+        data class BiometricsEnabled(val enabled: Boolean) : Event()
     }
 
     data class State(
         val appTheme: AppTheme,
         val userEmail: String,
+        val biometricsEnabled: Boolean,
         val isInitialLoading: Boolean,
         val isDataError: Boolean
     ) : ViewState

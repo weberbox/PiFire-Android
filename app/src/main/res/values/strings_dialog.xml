@@ -25,4 +25,9 @@
     <string name="dialog_permission_required_title">Permission Required</string>
     <string name="dialog_notification_permission_rational">To receive push notifications from PiFire you must grant this app notification permissions, press Grant to re-request or cancel if you do not want to receive notifications</string>
     <string name="dialog_notification_permission_declined">It seems you permanently declined the notification permission. If you want to receive push notifications you will need to enable them in app settings</string>
+
+    <string name="dialog_biometric_title">Authenticate</string>
+    <string name="dialog_biometric_description">Authentication required to continue</string>
+    <string name="dialog_biometric_subtitle">Touch the fingerprint sensor</string>
+    <string name="dialog_biometric_negative">Use account password</string>
 </resources>
