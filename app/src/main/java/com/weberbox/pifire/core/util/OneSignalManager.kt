@@ -51,7 +51,10 @@ class OneSignalManager @Inject constructor(
                         if (registrationResult == OneSignalStatus.ONESIGNAL_NOT_REGISTERED) {
                             settingsRepo.setOneSignalAppID(Secrets.ONESIGNAL_APP_ID)
                         }
-                        registerOneSignalDevice(playerID, getDevice(playerID))
+                        registerOneSignalDevice(
+                            playerID = playerID,
+                            deviceInfo = getDevice(playerID)
+                        )
                     }
                 }
             }
@@ -62,7 +65,7 @@ class OneSignalManager @Inject constructor(
         playerID: String,
         deviceInfo: OneSignalDeviceInfo
     ) {
-        val device = mapOf(Pair(playerID, deviceInfo))
+        val device = mapOf(playerID to deviceInfo)
         when (val result = settingsRepo.registerOneSignalDevice(device)) {
             is Result.Error -> {
                 Timber.d("Failed to register with PiFire: ${result.error}")
@@ -88,6 +91,7 @@ class OneSignalManager @Inject constructor(
                 }
 
                 OneSignalStatus.ONESIGNAL_NOT_REGISTERED -> {
+                    Timber.d("App registering with PiFire")
                     registerDevice(status)
                     return status
                 }
@@ -173,17 +177,11 @@ class OneSignalManager @Inject constructor(
         val devicesHash = getDevicesHash()
         val existingDevice = devicesHash[playerID]
 
-        return if (existingDevice != null) {
-            OneSignalDeviceInfo(
-                appVersion = BuildConfig.VERSION_NAME
-            )
-        } else {
-            OneSignalDeviceInfo(
-                deviceName = Build.MODEL,
-                friendlyName = "",
-                appVersion = BuildConfig.VERSION_NAME
-            )
-        }
+        return OneSignalDeviceInfo(
+            deviceName = Build.MODEL,
+            friendlyName = existingDevice?.friendlyName ?: "",
+            appVersion = BuildConfig.VERSION_NAME
+        )
     }
 
     private suspend fun getDevicesHash(): Map<String, OneSignalDeviceInfo> {
