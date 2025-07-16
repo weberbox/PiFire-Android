@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -104,12 +103,7 @@ private fun PidSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_cat_cntrlr_pid),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_cat_cntrlr_pid),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(WorkContract.Effect.Navigation.Back) }
             )

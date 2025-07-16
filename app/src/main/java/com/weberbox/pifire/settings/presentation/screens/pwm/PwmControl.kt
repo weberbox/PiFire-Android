@@ -106,12 +106,7 @@ private fun PwmControl(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_pwm_control_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_pwm_control_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) }
             )

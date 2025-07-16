@@ -16,7 +16,7 @@
 
     <string name="settings_cat_biometrics_title">Biometrics</string>
     <string name="settings_server_biometrics_title">Require Biometrics</string>
-    <string name="settings_server_biometrics_summary">Require biometric authentication when connecting to a remote server or editing any server settings</string>
+    <string name="settings_server_biometrics_summary">Require biometric authentication to connect or edit server settings</string>
 
     <string name="settings_cat_auth_title">Authentication</string>
     <string name="settings_basic_auth_title">Basic Auth</string>

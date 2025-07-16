@@ -10,14 +10,28 @@ class AppContract {
 
     sealed class Event : ViewEvent {
         data class UpdateAppTheme(val theme: AppTheme) : Event()
-        data class UpdateUserEmail(val email: String) : Event()
+        data class DynamicColorEnabled(val enabled: Boolean) : Event()
+        data class KeepScreenOn(val enabled: Boolean) : Event()
+        data class ShowBottomBar(val enabled: Boolean) : Event()
         data class BiometricsEnabled(val enabled: Boolean) : Event()
+        data class SetEventsAmount(val amount: Int) : Event()
+        data class IncrementTemps(val enabled: Boolean) : Event()
+        data class SentryEnabled(val enabled: Boolean) : Event()
+        data class SentryDebugEnabled(val enabled: Boolean) : Event()
+        data class UpdateUserEmail(val email: String) : Event()
     }
 
     data class State(
         val appTheme: AppTheme,
-        val userEmail: String,
+        val dynamicColorEnabled: Boolean,
+        val keepScreenOn: Boolean,
+        val showBottomBar: Boolean,
         val biometricsEnabled: Boolean,
+        val eventsAmount: Int,
+        val incrementTemps: Boolean,
+        val sentryEnabled: Boolean,
+        val sentryDebugEnabled: Boolean,
+        val userEmail: String,
         val isInitialLoading: Boolean,
         val isDataError: Boolean
     ) : ViewState

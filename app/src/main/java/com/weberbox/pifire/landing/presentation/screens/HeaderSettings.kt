@@ -108,12 +108,7 @@ private fun HeaderSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_extra_headers),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_extra_headers),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(HeadersContract.Effect.Navigation.Back) }
             )

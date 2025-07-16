@@ -105,12 +105,7 @@ private fun SmartStartSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_smart_start_profiles_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_smart_start_profiles_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) }
             )

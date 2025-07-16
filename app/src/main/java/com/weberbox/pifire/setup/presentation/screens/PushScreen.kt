@@ -17,6 +17,8 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -76,6 +78,7 @@ fun PushScreenDestination(
                         )
                     }
                 }
+
                 is PushContract.Effect.Navigation.Back -> onBackDispatcher?.onBackPressed()
             }
         }
@@ -151,6 +154,16 @@ private fun PushScreen(
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
                     checked = state.consent,
+                    thumbContent = {
+                        Icon(
+                            modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
+                            imageVector = if (state.consent) Icons.Filled.Check else
+                                Icons.Filled.Close,
+                            tint = if (state.consent) MaterialTheme.colorScheme.onSurface else
+                                MaterialTheme.colorScheme.inverseOnSurface,
+                            contentDescription = null
+                        )
+                    },
                     onCheckedChange = {
                         onEventSent(PushContract.Event.ToggleConsent(it))
                     }
@@ -181,6 +194,7 @@ private fun HandleSideEffects(
             when (effect) {
                 is PushContract.Effect.RequestPermission ->
                     notificationPermission.launchPermissionRequest()
+
                 is PushContract.Effect.Navigation -> onNavigationRequested(effect)
                 is PushContract.Effect.Notification -> {
                     activity?.showAlerter(

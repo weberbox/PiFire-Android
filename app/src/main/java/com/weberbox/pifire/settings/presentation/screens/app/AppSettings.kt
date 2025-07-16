@@ -4,11 +4,14 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +28,6 @@ import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -44,7 +46,7 @@ import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.util.rememberBiometricPromptManager
-import com.weberbox.pifire.settings.data.model.local.Pref
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.contract.AppContract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -52,11 +54,9 @@ import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.ListPreference
 import me.zhanghai.compose.preference.ListPreferenceType
 import me.zhanghai.compose.preference.Preference
+import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
-import me.zhanghai.compose.preference.SwitchPreference
-import me.zhanghai.compose.preference.listPreference
-import me.zhanghai.compose.preference.preferenceCategory
-import me.zhanghai.compose.preference.switchPreference
+import me.zhanghai.compose.preference.ProvidePreferenceTheme
 
 @Composable
 fun AppSettingsDestination(
@@ -105,12 +105,7 @@ private fun AppSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_app_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_app_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(AppContract.Effect.Navigation.Back) }
             )
@@ -128,6 +123,7 @@ private fun AppSettings(
                 state.isDataError -> DataError {
                     onNavigationRequested(AppContract.Effect.Navigation.Back)
                 }
+
                 else -> {
                     AppContent(
                         state = state,
@@ -148,28 +144,24 @@ private fun AppContent(
 ) {
     val biometricManager = rememberBiometricPromptManager()
     val emailSheet = rememberCustomModalBottomSheetState()
-    LazyColumn(
-        contentPadding = contentPadding,
-        modifier = Modifier.fillMaxSize(),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding)
     ) {
-        preferenceCategory(
-            key = "settings_cat_ui",
-            title = { Text(text = stringResource(R.string.settings_cat_app_ui)) }
+        PreferenceCategory(title = { Text(text = stringResource(R.string.settings_cat_app_ui)) })
+        ListPreference(
+            value = state.appTheme,
+            values = AppTheme.entries,
+            title = { Text(text = stringResource(R.string.settings_app_theme_title)) },
+            summary = { Text(text = stringResource(state.appTheme.title)) },
+            onValueChange = { onEventSent(AppContract.Event.UpdateAppTheme(it)) },
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
-        item {
-            ListPreference(
-                value = state.appTheme,
-                values = AppTheme.entries,
-                title = { Text(text = stringResource(R.string.settings_app_theme_title)) },
-                summary = { Text(text = stringResource(state.appTheme.title)) },
-                onValueChange = { onEventSent(AppContract.Event.UpdateAppTheme(it)) },
-                type = ListPreferenceType.DROPDOWN_MENU,
-            )
-        }
-        switchPreference(
-            key = Pref.dynamicColor.key,
-            enabled = { Build.VERSION.SDK_INT >= Build.VERSION_CODES.S },
-            defaultValue = Pref.dynamicColor.defaultValue,
+        SwitchPreference(
+            value = state.dynamicColorEnabled,
+            enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
             title = { Text(text = stringResource(R.string.settings_app_dynamic_color_title)) },
             summary = {
                 Text(
@@ -178,95 +170,92 @@ private fun AppContent(
                     else
                         stringResource(R.string.settings_app_dynamic_color_disabled)
                 )
+            },
+            onValueChange = { onEventSent(AppContract.Event.DynamicColorEnabled(it)) },
+        )
+        SwitchPreference(
+            value = state.keepScreenOn,
+            title = { Text(text = stringResource(R.string.settings_app_screen_on_title)) },
+            summary = { Text(text = stringResource(R.string.settings_app_screen_on_summary)) },
+            onValueChange = {
+                onEventSent(AppContract.Event.KeepScreenOn(it))
             }
         )
-        switchPreference(
-            key = Pref.keepScreenOn.key,
-            defaultValue = Pref.keepScreenOn.defaultValue,
-            title = { Text(text = stringResource(R.string.settings_app_screen_on_title)) },
-            summary = { Text(text = stringResource(R.string.settings_app_screen_on_summary)) }
+        SwitchPreference(
+            value = state.showBottomBar,
+            title = { Text(text = stringResource(R.string.settings_app_bottom_bar_title)) },
+            summary = { Text(text = stringResource(R.string.settings_app_bottom_bar_summary)) },
+            onValueChange = {
+                onEventSent(AppContract.Event.ShowBottomBar(it))
+            }
         )
-        switchPreference(
-            key = Pref.showBottomBar.key,
-            defaultValue = Pref.showBottomBar.defaultValue,
-            title = { Text(text = stringResource(R.string.settings_app_bottom_bar_title))},
-            summary = { Text(text = stringResource(R.string.settings_app_bottom_bar_summary)) }
-        )
-        preferenceCategory(
-            key = "settings_cat_biometrics",
+        PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_biometrics_title)) }
         )
-        item {
-            SwitchPreference(
-                value = state.biometricsEnabled,
-                title = {
-                    Text(
-                        text = stringResource(
-                            R.string.settings_biometrics_title
-                        )
+        SwitchPreference(
+            value = state.biometricsEnabled,
+            title = {
+                Text(
+                    text = stringResource(
+                        R.string.settings_biometrics_title
                     )
-                },
-                summary = {
-                    Text(
-                        text = stringResource(R.string.settings_biometrics_summary)
-                    )
-                },
-                onValueChange = { enabled ->
-                    biometricManager?.authenticate(
-                        onAuthenticationSuccess = {
-                            onEventSent(AppContract.Event.BiometricsEnabled(enabled))
-                        }
-                    )
-                }
-            )
-        }
-        preferenceCategory(
-            key = "settings_cat_events",
+                )
+            },
+            summary = {
+                Text(
+                    text = stringResource(R.string.settings_biometrics_summary)
+                )
+            },
+            onValueChange = { enabled ->
+                biometricManager?.authenticate(
+                    onAuthenticationSuccess = {
+                        onEventSent(AppContract.Event.BiometricsEnabled(enabled))
+                    }
+                )
+            }
+        )
+        PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_events_title)) }
         )
-        listPreference(
-            key = Pref.eventsAmount.key,
-            defaultValue = Pref.eventsAmount.defaultValue,
+        ListPreference(
+            value = state.eventsAmount,
             values = listOf(10, 20, 30, 40, 50, 60),
             title = { Text(text = stringResource(R.string.settings_app_events_amount_title)) },
-            summary = { Text(text = "$it ${stringResource(R.string.items)}") },
+            summary = { Text(text = "${state.eventsAmount} ${stringResource(R.string.items)}") },
+            onValueChange = { onEventSent(AppContract.Event.SetEventsAmount(it)) },
             type = ListPreferenceType.DROPDOWN_MENU,
         )
-        preferenceCategory(
-            key = "settings_cat_temps",
+        PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_app_temps)) }
         )
-        switchPreference(
-            key = Pref.incrementTemps.key,
-            defaultValue = Pref.incrementTemps.defaultValue,
+        SwitchPreference(
+            value = state.incrementTemps,
             title = { Text(text = stringResource(R.string.settings_app_increment_temps)) },
-            summary = { Text(text = stringResource(R.string.settings_app_increment_temps_summary)) }
+            summary = { Text(text = stringResource(R.string.settings_app_increment_temps_summary)) },
+            onValueChange = { onEventSent(AppContract.Event.IncrementTemps(it)) }
         )
-        preferenceCategory(
-            key = "settings_cat_crash",
-            title = { Text(text = stringResource(R.string.settings_cat_crash)) }
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_cat_analytics)) }
         )
-        switchPreference(
-            key = Pref.sentryEnabled.key,
-            defaultValue = Pref.sentryEnabled.defaultValue,
+        SwitchPreference(
+            value = state.sentryEnabled,
             title = { Text(text = stringResource(R.string.settings_enable_crash)) },
-            summary = { Text(text = stringResource(R.string.settings_crash_summary)) }
+            summary = { Text(text = stringResource(R.string.settings_crash_summary)) },
+            onValueChange = { onEventSent(AppContract.Event.SentryEnabled(it)) }
         )
         if (AppConfig.DEBUG) {
-            switchPreference(
-                key = Pref.sentryDebugEnabled.key,
-                defaultValue = Pref.sentryDebugEnabled.defaultValue,
+            SwitchPreference(
+                value = state.sentryDebugEnabled,
                 title = { Text(text = stringResource(R.string.settings_dev_crash_title)) },
-                summary = { Text(text = stringResource(R.string.settings_dev_crash_summary)) }
+                summary = { Text(text = stringResource(R.string.settings_dev_crash_summary)) },
+                onValueChange = { onEventSent(AppContract.Event.SentryDebugEnabled(it)) }
             )
         }
-        item {
-            Preference(
-                title = { Text(text = stringResource(R.string.settings_crash_email)) },
-                summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) }
-            ) {
-                emailSheet.open()
-            }
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_crash_email)) },
+            summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) }
+        ) {
+            emailSheet.open()
         }
     }
     BottomSheet(
@@ -314,17 +303,24 @@ private fun HandleSideEffects(
 }
 
 @Composable
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 private fun AppSettingsPreview() {
     PiFireTheme {
-        ProvidePreferenceLocals {
+        ProvidePreferenceTheme {
             Surface {
                 AppSettings(
                     state = AppContract.State(
                         appTheme = AppTheme.System,
-                        userEmail = "",
+                        dynamicColorEnabled = false,
+                        keepScreenOn = true,
+                        showBottomBar = true,
                         biometricsEnabled = false,
+                        eventsAmount = 20,
+                        incrementTemps = false,
+                        sentryEnabled = true,
+                        sentryDebugEnabled = false,
+                        userEmail = "",
                         isInitialLoading = false,
                         isDataError = false
                     ),

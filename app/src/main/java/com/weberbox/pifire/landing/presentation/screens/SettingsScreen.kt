@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -38,12 +37,12 @@ import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.util.rememberBiometricPromptManager
 import com.weberbox.pifire.landing.presentation.contract.SettingsContract
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
-import me.zhanghai.compose.preference.SwitchPreference
 
 @Composable
 fun SettingsScreenDestination(
@@ -92,12 +91,7 @@ private fun SettingsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.nav_settings),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.nav_settings),
                 scrollBehavior = scrollBehavior,
                 onNavigate = {
                     onNavigationRequested(SettingsContract.Effect.Navigation.Back)

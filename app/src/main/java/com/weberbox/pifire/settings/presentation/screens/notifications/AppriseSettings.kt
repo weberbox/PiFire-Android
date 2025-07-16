@@ -109,12 +109,7 @@ private fun AppriseSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_apprise_locations),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_apprise_locations),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
             )

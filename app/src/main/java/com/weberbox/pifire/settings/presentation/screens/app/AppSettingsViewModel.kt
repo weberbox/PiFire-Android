@@ -21,8 +21,15 @@ class AppSettingsViewModel @Inject constructor(
 
     override fun setInitialState() = AppContract.State(
         appTheme = AppTheme.System,
-        userEmail = "",
+        dynamicColorEnabled = false,
+        keepScreenOn = false,
+        showBottomBar = true,
         biometricsEnabled = false,
+        eventsAmount = 20,
+        incrementTemps = true,
+        sentryEnabled = true,
+        sentryDebugEnabled = false,
+        userEmail = "",
         isInitialLoading = true,
         isDataError = false
     )
@@ -32,42 +39,55 @@ class AppSettingsViewModel @Inject constructor(
             is AppContract.Event.UpdateAppTheme ->
                 prefs.set(Pref.appTheme, event.theme)
 
-            is AppContract.Event.UpdateUserEmail ->
-                prefs.set(Pref.sentryUserEmail, event.email)
+            is AppContract.Event.DynamicColorEnabled ->
+                prefs.set(Pref.dynamicColor, event.enabled)
+
+            is AppContract.Event.KeepScreenOn ->
+                prefs.set(Pref.keepScreenOn, event.enabled)
+
+            is AppContract.Event.ShowBottomBar ->
+                prefs.set(Pref.showBottomBar, event.enabled)
 
             is AppContract.Event.BiometricsEnabled ->
                 prefs.set(Pref.biometricSettingsPrompt, event.enabled)
+
+            is AppContract.Event.SetEventsAmount ->
+                prefs.set(Pref.eventsAmount, event.amount)
+
+            is AppContract.Event.IncrementTemps ->
+                prefs.set(Pref.incrementTemps, event.enabled)
+
+            is AppContract.Event.SentryDebugEnabled ->
+                prefs.set(Pref.sentryEnabled, event.enabled)
+
+            is AppContract.Event.SentryEnabled ->
+                prefs.set(Pref.sentryDebugEnabled, event.enabled)
+
+            is AppContract.Event.UpdateUserEmail ->
+                prefs.set(Pref.sentryUserEmail, event.email)
         }
     }
 
     private fun collectPrefsFlow() {
+        collectAndUpdateState(Pref.appTheme) { copy(appTheme = it, isInitialLoading = false) }
+        collectAndUpdateState(Pref.dynamicColor) { copy(dynamicColorEnabled = it) }
+        collectAndUpdateState(Pref.keepScreenOn) { copy(keepScreenOn = it) }
+        collectAndUpdateState(Pref.showBottomBar) { copy(showBottomBar = it) }
+        collectAndUpdateState(Pref.biometricSettingsPrompt) { copy(biometricsEnabled = it) }
+        collectAndUpdateState(Pref.eventsAmount) { copy(eventsAmount = it) }
+        collectAndUpdateState(Pref.incrementTemps) { copy(incrementTemps = it) }
+        collectAndUpdateState(Pref.sentryEnabled) { copy(sentryEnabled = it) }
+        collectAndUpdateState(Pref.sentryDebugEnabled) { copy(sentryDebugEnabled = it) }
+        collectAndUpdateState(Pref.sentryUserEmail) { copy(userEmail = it) }
+    }
+
+    private fun <T> collectAndUpdateState(
+        pref: Pref<T>,
+        update: AppContract.State.(T) -> AppContract.State
+    ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.appTheme).collect {
-                setState {
-                    copy(
-                        appTheme = it,
-                        isInitialLoading = false
-                    )
-                }
-            }
-        }
-        viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.sentryUserEmail).collect {
-                setState {
-                    copy(
-                        userEmail = it,
-                        isInitialLoading = false
-                    )
-                }
-            }
-        }
-        viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.biometricSettingsPrompt).collect {
-                setState {
-                    copy(
-                        biometricsEnabled = it
-                    )
-                }
+            prefs.collectPrefsFlow(pref).collect { value ->
+                setState { update(value) }
             }
         }
     }

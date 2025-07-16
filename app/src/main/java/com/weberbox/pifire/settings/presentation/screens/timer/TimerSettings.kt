@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,6 +48,7 @@ import com.weberbox.pifire.common.presentation.util.slideDownExpandEnterTransiti
 import com.weberbox.pifire.common.presentation.util.slideOutShrinkExitTransition
 import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.component.getSummaryGrams
 import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
@@ -63,7 +63,6 @@ import me.zhanghai.compose.preference.ListPreferenceType
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
-import me.zhanghai.compose.preference.SwitchPreference
 
 @Composable
 fun TimerSettingsDestination(
@@ -112,12 +111,7 @@ private fun TimerSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_timers_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_timers_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) }
             )

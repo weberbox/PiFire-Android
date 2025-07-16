@@ -97,24 +97,8 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun collectPrefsFlow() {
-        viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.showBottomBar).collect {
-                setState {
-                    copy(
-                        showBottomBar = it
-                    )
-                }
-            }
-        }
-        viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.biometricSettingsPrompt).collect {
-                setState {
-                    copy(
-                        biometricSettingsPrompt = it
-                    )
-                }
-            }
-        }
+        collectAndUpdateState(Pref.showBottomBar) { copy(showBottomBar = it) }
+        collectAndUpdateState(Pref.biometricSettingsPrompt) { copy(biometricSettingsPrompt = it) }
     }
 
     private fun collectConnectedState() {
@@ -276,6 +260,17 @@ class HomeScreenViewModel @Inject constructor(
                 setEffect {
                     HomeContract.Effect.Navigation.Changelog
                 }
+            }
+        }
+    }
+
+    private fun <T> collectAndUpdateState(
+        pref: Pref<T>,
+        update: HomeContract.State.(T) -> HomeContract.State
+    ) {
+        viewModelScope.launch {
+            prefs.collectPrefsFlow(pref).collect { value ->
+                setState { update(value) }
             }
         }
     }
