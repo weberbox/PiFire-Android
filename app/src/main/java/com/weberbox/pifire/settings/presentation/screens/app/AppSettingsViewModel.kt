@@ -57,10 +57,10 @@ class AppSettingsViewModel @Inject constructor(
             is AppContract.Event.IncrementTemps ->
                 prefs.set(Pref.incrementTemps, event.enabled)
 
-            is AppContract.Event.SentryDebugEnabled ->
+            is AppContract.Event.SentryEnabled ->
                 prefs.set(Pref.sentryEnabled, event.enabled)
 
-            is AppContract.Event.SentryEnabled ->
+            is AppContract.Event.SentryDebugEnabled ->
                 prefs.set(Pref.sentryDebugEnabled, event.enabled)
 
             is AppContract.Event.UpdateUserEmail ->

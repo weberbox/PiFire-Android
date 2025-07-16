@@ -29,5 +29,5 @@
     <string name="settings_dev_crash_title">Debug Crash</string>
     <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
     <string name="settings_crash_email">Email</string>
-    <string name="settings_crash_email_summary">Include your email address with the error report</string>
+    <string name="settings_crash_email_summary">Includes your email address with the crash report</string>
 </resources>
