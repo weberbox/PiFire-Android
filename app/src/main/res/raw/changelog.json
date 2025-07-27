@@ -1,9 +1,37 @@
 {
   "changelog": [
     {
-      "version": "3.1.0",
+      "version": "3.1.1",
       "date": "",
       "current": true,
+      "isAlpha": true,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Fixed a couple issues with wireless probes related to battery percentage"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed an issue with crash reporting toggle in settings"
+        },
+        {
+          "type": "fix",
+          "text": "Fixed an issue with OneSignal when the device registers or re-registers with PiFire"
+        },
+        {
+          "type": "imp",
+          "text": "Updated settings screens to have improved switch preference visuals"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.1.0",
+      "date": "",
+      "current": false,
       "isAlpha": true,
       "logs": [
         {
