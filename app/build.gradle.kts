@@ -19,7 +19,7 @@ private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
 val vMinor = 1
-val vPatch = 0
+val vPatch = 1
 val isAlpha = true
 
 android {

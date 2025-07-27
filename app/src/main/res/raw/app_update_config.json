@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3010100,
+    "type": "IMMEDIATE",
+    "message": "Fix issue with battery percentage on wireless probes. Improved settings switch visuals. PiFire version 1.10.0 build 29+ is required",
+    "isAlpha": true
+  },
+  {
     "appVersionCode": 3010000,
     "type": "IMMEDIATE",
     "message": "Fix issue with PiFire version checking after selecting server. Add biometric authentication option to server selection and settings. PiFire version 1.10.0 build 29+ is required",
