@@ -89,7 +89,7 @@ data class DashDto(
         @Serializable
         data class Status(
             val batteryCharging: Boolean? = null,
-            val batteryPercentage: Int? = null,
+            val batteryPercentage: Double? = null,
             val batteryVoltage: Double? = null,
             val connected: Boolean? = null,
             val error: Boolean? = null

@@ -17,8 +17,7 @@ class SettingsViewModel @Inject constructor(
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
 
     init {
-        collectAutoSelectFlow()
-        collectBiometricsFlow()
+        collectPrefsFlow()
     }
 
     override fun setInitialState() = SettingsContract.State(
@@ -41,31 +40,24 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun collectAutoSelectFlow() {
+    private fun collectPrefsFlow() {
+        collectAndUpdateState(Pref.landingAutoSelect) {
+            copy(
+                autSelectEnabled = it,
+                isInitialLoading = false
+            )
+        }
+        collectAndUpdateState(Pref.biometricServerPrompt) { copy(biometricsEnabled = it) }
+    }
+
+    private fun <T> collectAndUpdateState(
+        pref: Pref<T>,
+        update: SettingsContract.State.(T) -> SettingsContract.State
+    ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.landingAutoSelect).collect {
-                setState {
-                    copy(
-                        isInitialLoading = false,
-                        autSelectEnabled = it
-                    )
-                }
+            prefs.collectPrefsFlow(pref).collect { value ->
+                setState { update(value) }
             }
         }
     }
-
-    private fun collectBiometricsFlow() {
-        viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.biometricServerPrompt).collect {
-                setState {
-                    copy(
-                        isInitialLoading = false,
-                        biometricsEnabled = it
-                    )
-                }
-            }
-        }
-    }
-
-
 }

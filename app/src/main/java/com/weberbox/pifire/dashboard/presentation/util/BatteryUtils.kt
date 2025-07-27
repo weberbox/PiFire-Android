@@ -12,10 +12,11 @@ import androidx.compose.material.icons.outlined.BatteryFull
 import androidx.compose.ui.graphics.vector.ImageVector
 
 internal fun getBatteryIcon(percentage: Int): ImageVector {
-    return when (percentage) {
+    val clamped = percentage.coerceIn(0, 100)
+    return when (clamped) {
         in 1..14 -> Icons.Outlined.Battery1Bar
         in 15..29 -> Icons.Outlined.Battery2Bar
-        in 32..43 -> Icons.Outlined.Battery3Bar
+        in 30..43 -> Icons.Outlined.Battery3Bar
         in 44..58 -> Icons.Outlined.Battery4Bar
         in 59..73 -> Icons.Outlined.Battery5Bar
         in 74..88 -> Icons.Outlined.Battery6Bar

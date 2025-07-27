@@ -91,7 +91,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
                 status = Probe.Status(
                     batteryCharging = it.status?.batteryCharging
                         ?: probeDefaults.status.batteryCharging,
-                    batteryPercentage = it.status?.batteryPercentage
+                    batteryPercentage = it.status?.batteryPercentage?.toInt()
                         ?: probeDefaults.status.batteryPercentage,
                     batteryVoltage = it.status?.batteryVoltage
                         ?: probeDefaults.status.batteryVoltage,
@@ -133,7 +133,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             status = Probe.Status(
                 batteryCharging = from.primaryProbe?.status?.batteryCharging
                     ?: probeDefaults.status.batteryCharging,
-                batteryPercentage = from.primaryProbe?.status?.batteryPercentage
+                batteryPercentage = from.primaryProbe?.status?.batteryPercentage?.toInt()
                     ?: probeDefaults.status.batteryPercentage,
                 batteryVoltage = from.primaryProbe?.status?.batteryVoltage
                     ?: probeDefaults.status.batteryVoltage,

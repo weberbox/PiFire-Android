@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,6 +43,7 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.component.getSummaryHz
 import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
@@ -56,7 +56,6 @@ import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
-import me.zhanghai.compose.preference.SwitchPreference
 
 @Composable
 fun PwmSettingsDestination(
@@ -105,12 +104,7 @@ private fun PwmSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_pwm_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_pwm_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) }
             )

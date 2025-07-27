@@ -119,12 +119,7 @@ private fun ProbeSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_probe_title),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_probe_title),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(ProbeContract.Effect.Navigation.Back) }
             )

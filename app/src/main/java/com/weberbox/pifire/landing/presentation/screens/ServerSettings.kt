@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -45,6 +44,7 @@ import com.weberbox.pifire.landing.presentation.contract.ServerContract
 import com.weberbox.pifire.landing.presentation.sheets.CredentialsSheet
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
 import com.weberbox.pifire.settings.presentation.component.PreferenceWarning
+import com.weberbox.pifire.settings.presentation.component.TwoTargetSwitchPreference
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -52,7 +52,6 @@ import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
-import me.zhanghai.compose.preference.TwoTargetSwitchPreference
 
 @Composable
 fun ServerSettingsDestination(
@@ -101,12 +100,7 @@ private fun ServerSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_server),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_server),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(ServerContract.Effect.Navigation.Back) }
             )

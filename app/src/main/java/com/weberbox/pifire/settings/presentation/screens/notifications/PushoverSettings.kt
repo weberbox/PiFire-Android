@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -97,12 +96,7 @@ private fun PushoverSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.settings_cat_pushover),
-                        fontWeight = FontWeight.Bold
-                    )
-                },
+                title = stringResource(R.string.settings_cat_pushover),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
             )

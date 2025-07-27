@@ -1,5 +1,6 @@
 package com.weberbox.pifire.common.presentation.component
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,15 +27,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SearchBarState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.util.lerp
 import com.weberbox.pifire.common.presentation.base.hazeAppBarStyle
 import com.weberbox.pifire.common.presentation.theme.spacing
 import dev.chrisbanes.haze.HazeState
@@ -44,13 +52,39 @@ import dev.chrisbanes.haze.hazeEffect
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsAppBar(
-    title: @Composable () -> Unit = {},
+    title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     onNavigate: (() -> Unit)? = null,
 ) {
     val windowInsets = WindowInsets.safeDrawing
+    val collapsedFraction = scrollBehavior.state.collapsedFraction
+    val animatedScale by animateFloatAsState(
+        targetValue = lerp(1.0f, 0.70f, collapsedFraction),
+        label = "ScaleTextAnimation"
+    )
+    val targetXOffset = lerp(
+        start = MaterialTheme.spacing.default,
+        stop = -MaterialTheme.spacing.smallThree,
+        fraction = collapsedFraction
+    )
+
     LargeTopAppBar(
-        title = title,
+        title = {
+            Text(
+                text = title,
+                modifier = Modifier
+                    .graphicsLayer {
+                        scaleX = animatedScale
+                        scaleY = animatedScale
+                        translationX = targetXOffset.toPx()
+                    },
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
         modifier = Modifier.fillMaxWidth(),
         windowInsets = windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         scrollBehavior = scrollBehavior,
