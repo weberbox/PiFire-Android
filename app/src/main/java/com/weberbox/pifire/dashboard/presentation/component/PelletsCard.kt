@@ -36,6 +36,7 @@ import com.weberbox.pifire.core.constants.AppConfig
 internal fun PelletsCard(
     modifier: Modifier = Modifier,
     level: Int,
+    hasDistanceSensor: Boolean = false,
     onClick: (() -> Unit)? = null,
 ) {
     Card(
@@ -91,7 +92,7 @@ internal fun PelletsCard(
                             .padding(bottom = MaterialTheme.spacing.smallOne)
                     ) {
                         AnimatedCounter(
-                            count = "$level%",
+                            count = if (hasDistanceSensor) "$level%" else "--",
                             style = MaterialTheme.typography.displayMedium
                         )
                         Text(
@@ -106,7 +107,10 @@ internal fun PelletsCard(
                             top = MaterialTheme.spacing.smallOne
                         )
                     ) {
-                        val progress = level.toFloat() / 100f
+                        val progress = when {
+                            hasDistanceSensor -> level.toFloat() / 100f
+                            else -> 0f
+                        }
                         val color = when {
                             level <= AppConfig.LOW_PELLET_WARNING && progress > 0 ->
                                 MaterialTheme.colorScheme.errorContainer

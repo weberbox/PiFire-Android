@@ -606,6 +606,10 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setStartExitTemp(temp))
     }
 
+    override suspend fun setStartToHoldPrompt(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setStartToHoldPrompt(enabled))
+    }
+
     override suspend fun setSmartStartEnabled(enabled: Boolean): Result<Server, DataError> {
         return transformResult(settingsApi.setSmartStartEnabled(enabled))
     }

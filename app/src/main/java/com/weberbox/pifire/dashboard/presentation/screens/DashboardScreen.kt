@@ -345,6 +345,7 @@ private fun DashboardScreenContent(
                             }
                             PelletsCard(
                                 level = state.dash.hopperLevel,
+                                hasDistanceSensor = state.dash.hasDistanceSensor,
                                 modifier = Modifier.weight(1f),
                                 onClick = {
                                     if (state.isConnected) {

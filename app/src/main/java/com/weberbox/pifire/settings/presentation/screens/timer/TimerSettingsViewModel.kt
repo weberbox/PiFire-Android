@@ -3,8 +3,8 @@ package com.weberbox.pifire.settings.presentation.screens.timer
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
+import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.settings.data.model.remote.Startup.SmartStart.SSProfile
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.TimerContract
@@ -35,26 +35,48 @@ class TimerSettingsViewModel @Inject constructor(
     override fun handleEvents(event: TimerContract.Event) {
         toggleLoading(true)
         when (event) {
-            is TimerContract.Event.SetAutoPowerOffEnabled -> setAutoPowerOffEnabled(event.enabled)
-            is TimerContract.Event.SetPrimeOnStartup -> setPrimeOnStartup(event.amount)
-            is TimerContract.Event.SetShutdownDuration -> setShutdownDuration(event.duration)
-            is TimerContract.Event.SetSmartStartEnabled -> setSmartStartEnabled(event.enabled)
-            is TimerContract.Event.SetSmartStartExitTemp -> setSmartStartExitTemp(event.temp)
-            is TimerContract.Event.SetStartExitTemp -> setStartExitTemp(event.temp)
-            is TimerContract.Event.SetStartToMode -> setStartToMode(event.mode)
-            is TimerContract.Event.SetStartToModeTemp -> setStartToModeTemp(event.temp)
-            is TimerContract.Event.SetStartupDuration -> setStartupDuration(event.duration)
+            is TimerContract.Event.SetAutoPowerOffEnabled ->
+                launchAndHandle { settingsRepo.setAutoPowerOffEnabled(event.enabled) }
+
+            is TimerContract.Event.SetPrimeOnStartup ->
+                launchAndHandle { settingsRepo.setPrimeOnStartup(event.amount) }
+
+            is TimerContract.Event.SetShutdownDuration ->
+                launchAndHandle { settingsRepo.setShutdownDuration(event.duration) }
+
+            is TimerContract.Event.SetSmartStartEnabled ->
+                launchAndHandle { settingsRepo.setSmartStartEnabled(event.enabled) }
+
+            is TimerContract.Event.SetSmartStartExitTemp ->
+                launchAndHandle { settingsRepo.setSmartStartExitTemp(event.temp) }
+
+            is TimerContract.Event.SetStartExitTemp ->
+                launchAndHandle { settingsRepo.setStartExitTemp(event.temp) }
+
+            is TimerContract.Event.SetStartToHoldPrompt ->
+                launchAndHandle { settingsRepo.setStartToHoldPrompt(event.enabled) }
+
+            is TimerContract.Event.SetStartToMode ->
+                launchAndHandle { settingsRepo.setStartToMode(event.mode) }
+
+            is TimerContract.Event.SetStartToModeTemp ->
+                launchAndHandle { settingsRepo.setStartToModeTemp(event.temp) }
+
+            is TimerContract.Event.SetStartupDuration ->
+                launchAndHandle { settingsRepo.setStartupDuration(event.duration) }
+
             is TimerContract.Event.DeleteSmartStartItem ->
                 deleteSmartStartItem(event.smartStartItems)
 
-            is TimerContract.Event.SetSmartStartItem -> setSmartStartItem(
-                event.index,
-                event.temp,
-                event.startUp,
-                event.augerOn,
-                event.pMode,
-                event.smartStartItems
-            )
+            is TimerContract.Event.SetSmartStartItem ->
+                setSmartStartItem(
+                    index = event.index,
+                    temp = event.temp,
+                    startUp = event.startUp,
+                    augerOn = event.augerOn,
+                    pMode = event.pMode,
+                    smartStartItems = event.smartStartItems
+                )
         }
     }
 
@@ -71,57 +93,9 @@ class TimerSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun setShutdownDuration(duration: Int) {
+    private fun launchAndHandle(block: suspend () -> Result<Server, DataError>) {
         viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setShutdownDuration(duration))
-        }
-    }
-
-    private fun setStartupDuration(duration: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setStartupDuration(duration))
-        }
-    }
-
-    private fun setPrimeOnStartup(amount: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setPrimeOnStartup(amount))
-        }
-    }
-
-    private fun setStartExitTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setStartExitTemp(temp))
-        }
-    }
-
-    private fun setAutoPowerOffEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setAutoPowerOffEnabled(enabled))
-        }
-    }
-
-    private fun setSmartStartEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setSmartStartEnabled(enabled))
-        }
-    }
-
-    private fun setSmartStartExitTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setSmartStartExitTemp(temp))
-        }
-    }
-
-    private fun setStartToMode(mode: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setStartToMode(mode))
-        }
-    }
-
-    private fun setStartToModeTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setStartToModeTemp(temp))
+            handleResult(block())
         }
     }
 

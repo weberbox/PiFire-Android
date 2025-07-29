@@ -18,8 +18,8 @@ plugins {
 private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
-val vMinor = 1
-val vPatch = 1
+val vMinor = 2
+val vPatch = 0
 val isAlpha = true
 
 android {

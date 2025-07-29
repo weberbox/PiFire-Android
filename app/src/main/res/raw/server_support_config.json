@@ -1,5 +1,17 @@
 [
   {
+    "appVersionCode": 3020000,
+    "isMandatory": true,
+    "minServerInfo": {
+      "version": "1.10.0",
+      "build": "35"
+    },
+    "maxServerInfo": {
+      "version": "",
+      "build": ""
+    }
+  },
+  {
     "appVersionCode": 3010100,
     "isMandatory": true,
     "minServerInfo": {

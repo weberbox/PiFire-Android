@@ -6,6 +6,7 @@
     <string name="settings_startup_goto_title">Mode After Startup</string>
     <string name="settings_startup_goto_note">Select what mode to transition to after initial startup. Default is Smoke Mode.</string>
     <string name="settings_startup_hold_temp">Hold Temp</string>
+    <string name="settings_startup_hold_prompt">Ask for hold temp on startup</string>
     <string name="settings_startup_exit_temp">Exit Startup @ Temperature</string>
     <string name="settings_startup_exit_temp_value">Temperature</string>
     <string name="settings_startup_prime">Always Prime on Startup</string>

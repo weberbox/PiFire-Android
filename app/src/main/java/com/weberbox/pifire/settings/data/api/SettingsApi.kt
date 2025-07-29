@@ -124,6 +124,8 @@ interface SettingsApi {
     suspend fun setStartupDuration(duration: Int): Result<String, DataError>
     suspend fun setPrimeOnStartup(amount: Int): Result<String, DataError>
     suspend fun setStartExitTemp(temp: Int): Result<String, DataError>
+
+    suspend fun setStartToHoldPrompt(enabled: Boolean): Result<String, DataError>
     suspend fun setSmartStartEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setSmartStartExitTemp(temp: Int): Result<String, DataError>
     suspend fun setSmartStartTable(tempRange: List<Int>, profiles: List<SSProfile>)

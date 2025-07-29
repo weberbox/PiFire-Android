@@ -133,6 +133,7 @@ data class SettingsData(
             val startupExitTemp: Int = Setting.startupExitTemp.value,
             val startupGotoMode: String = Setting.startupGotoMode.value,
             val startupGotoTemp: Int = Setting.startupGotoTemp.value,
+            val startToHoldPrompt: Boolean = Setting.startToHoldPrompt.value,
             val smartStartEnabled: Boolean = Setting.smartStartEnabled.value,
             val smartStartExitTemp: Int = Setting.smartStartExitTemp.value,
             val smartStartTempList: List<Temp> = Setting.smartStartTempList.value,

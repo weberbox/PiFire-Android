@@ -3,11 +3,14 @@ package com.weberbox.pifire.info.domain
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.common.data.interfaces.Mapper
 import com.weberbox.pifire.common.presentation.util.getFormattedDate
+import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.info.data.model.InfoDto
 import com.weberbox.pifire.info.presentation.model.GPIODeviceData
 import com.weberbox.pifire.info.presentation.model.GPIOInOutData
 import com.weberbox.pifire.info.presentation.model.InfoData.Info
+import com.weberbox.pifire.info.presentation.util.formatBytes
+import com.weberbox.pifire.info.presentation.util.formatPercentage
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -20,7 +23,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         val cycle = AtomicInteger()
 
         from.outPins?.forEach { (key: String, value: Int?) ->
-            val pin = value?.toString() ?: ""
+            val pin = value?.toString() ?: "-"
             if (key.contains("dc_fan") || key.contains("pwm")) {
                 from.dcFan?.also { dcFan ->
                     if (dcFan) {
@@ -43,7 +46,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         }
 
         from.inPins?.forEach { (key: String, value: Int?) ->
-            val pin = value?.toString() ?: ""
+            val pin = value?.toString() ?: "-"
             if (key.contains("dc_fan") || key.contains("pwm")) {
                 from.dcFan?.also { dcFan ->
                     if (dcFan) {
@@ -93,6 +96,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
+        @Compatibility(versionBelow = "1.10.0", build = "35")
         var cpuSeparated: Array<String>
         var cpuInfo = String()
         from.cpuInfo?.forEach { cpu ->
@@ -103,6 +107,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
+        @Compatibility(versionBelow = "1.10.0", build = "35")
         var inetSeparated: Array<String?>
         val networkString = StringBuilder()
         from.ifConfig?.forEach { network ->
@@ -119,6 +124,34 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
 
         return Info(
             uuid = from.uuid.orEmpty(),
+            platformInfo = Info.PlatformInfo(
+                systemModel = from.platformInfo?.systemModel ?: "Unknown",
+                cpuModel = from.platformInfo?.cpuModel ?: "Unknown",
+                cpuHardware = from.platformInfo?.cpuHardware ?: "Unknown",
+                cpuCores = from.platformInfo?.cpuCores?.toString() ?: "Unknown",
+                cpuFrequency = from.platformInfo?.cpuFrequency?.toString() ?: "Unknown",
+                totalRam = formatBytes(from.platformInfo?.totalRam),
+                availableRam = formatBytes(from.platformInfo?.availableRam)
+            ),
+            osInfo = Info.OsInfo(
+                prettyName = from.osInfo?.prettyName ?: "Unknown",
+                version = from.osInfo?.version ?: "Unknown",
+                codeName = from.osInfo?.codeName ?: "Unknown",
+                architecture = from.osInfo?.architecture ?: "Unknown"
+            ),
+            networkMap = from.networkInfo
+                ?.filterKeys { it != "lo" }
+                ?.mapValues { (_, value) ->
+                    Info.NetworkInfo(
+                        ipAddress = value.ipAddress ?: "Unknown",
+                        macAddress = value.macAddress ?: "Unknown"
+                    )
+                } ?: emptyMap(),
+            wifiQualityValue = from.wifiQualityValue?.toString() ?: "Unknown",
+            wifiQualityMax = from.wifiQualityMax?.toString() ?: "Unknown",
+            wifiQualityPercentage = formatPercentage(from.wifiQualityPercentage),
+            cpuThrottled = from.cpuThrottled ?: false,
+            cpuUnderVolt = from.cpuUnderVolt ?: false,
             cpuInfo = cpuInfo,
             networkInfo = networkString.toString(),
             uptime = from.upTime?.trim().orEmpty(),

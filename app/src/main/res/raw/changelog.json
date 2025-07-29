@@ -1,9 +1,25 @@
 {
   "changelog": [
     {
-      "version": "3.1.1",
+      "version": "3.2.0",
       "date": "",
       "current": true,
+      "isAlpha": true,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added Platform, Network, OS, Health and Wifi info to the Info Screen"
+        },
+        {
+          "type": "new",
+          "text": "Added option for Start To Hold Prompt in Startup & Shutdown settings page"
+        }
+      ]
+    },
+    {
+      "version": "3.1.1",
+      "date": "",
+      "current": false,
       "isAlpha": true,
       "logs": [
         {

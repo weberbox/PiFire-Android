@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.contract.MainContract
+import com.weberbox.pifire.common.presentation.feature.FeatureSupport
 import com.weberbox.pifire.common.presentation.model.AppTheme
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
@@ -35,12 +36,14 @@ class MainViewModel @Inject constructor(
     init {
         checkForAppUpdates()
         collectPrefsFlow()
+        collectSessionState()
         checkProcessKilled()
     }
 
     override fun setInitialState() = MainContract.State(
         appTheme = AppTheme.System,
-        dynamicColor = false
+        dynamicColor = false,
+        featureSupport = FeatureSupport()
     )
 
     override fun handleEvents(event: MainContract.Event) {
@@ -56,22 +59,34 @@ class MainViewModel @Inject constructor(
     }
 
     private fun collectPrefsFlow() {
+        collectAndUpdateState(Pref.appTheme) { copy(appTheme = it) }
+        collectAndUpdateState(Pref.dynamicColor) { copy(dynamicColor = it) }
+    }
+
+    private fun collectSessionState() {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.appTheme).collect { appTheme ->
-                setState {
-                    copy(
-                        appTheme = appTheme
-                    )
+            sessionStateHolder.settingsDataState.collect { settingsData ->
+                settingsData?.also { data ->
+                    setState {
+                        copy(
+                            featureSupport = FeatureSupport(
+                                currentVersion = data.settings.serverVersion,
+                                currentBuild = data.settings.serverBuild
+                            )
+                        )
+                    }
                 }
             }
         }
+    }
+
+    private fun <T> collectAndUpdateState(
+        pref: Pref<T>,
+        update: MainContract.State.(T) -> MainContract.State
+    ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.dynamicColor).collect { dynamicColor ->
-                setState {
-                    copy(
-                        dynamicColor = dynamicColor
-                    )
-                }
+            prefs.collectPrefsFlow(pref).collect { value ->
+                setState { update(value) }
             }
         }
     }

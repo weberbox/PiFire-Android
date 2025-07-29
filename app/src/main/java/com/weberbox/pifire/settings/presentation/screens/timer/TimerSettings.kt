@@ -35,6 +35,8 @@ import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
+import com.weberbox.pifire.common.presentation.feature.Feature
+import com.weberbox.pifire.common.presentation.feature.FeatureGate
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
@@ -195,18 +197,40 @@ private fun TimerSettingsContent(
             enter = slideDownExpandEnterTransition(),
             exit = slideOutShrinkExitTransition()
         ) {
-            Preference(
-                title = { Text(text = stringResource(R.string.settings_startup_hold_temp)) },
-                summary = {
-                    Text(
-                        text = getSummaryTemp(
-                            state.serverData.settings.startupGotoTemp.toString(),
-                            state.serverData.settings.tempUnits
+            Column {
+                Preference(
+                    title = { Text(text = stringResource(R.string.settings_startup_hold_temp)) },
+                    summary = {
+                        Text(
+                            text = getSummaryTemp(
+                                state.serverData.settings.startupGotoTemp.toString(),
+                                state.serverData.settings.tempUnits
+                            )
                         )
+                    },
+                    onClick = { startupGotoTempSheet.open() }
+                )
+                FeatureGate(
+                    feature = Feature.StartToHoldPrompt
+                ) {
+                    SwitchPreference(
+                        value = state.serverData.settings.startToHoldPrompt,
+                        onValueChange = {
+                            onEventSent(TimerContract.Event.SetStartToHoldPrompt(it))
+                        },
+                        title = {
+                            Text(
+                                text = stringResource(R.string.settings_startup_hold_prompt)
+                            )
+                        },
+                        summary = {
+                            Text(
+                                text = getSummary(state.serverData.settings.startToHoldPrompt)
+                            )
+                        }
                     )
-                },
-                onClick = { startupGotoTempSheet.open() }
-            )
+                }
+            }
         }
         PreferenceNote(stringResource(R.string.settings_startup_goto_note))
         SwitchPreference(
