@@ -96,7 +96,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
-        @Compatibility(versionBelow = "1.10.0", build = "35")
+        @Compatibility(versionBelow = "1.10.0", build = "37")
         var cpuSeparated: Array<String>
         var cpuInfo = String()
         from.cpuInfo?.forEach { cpu ->
@@ -107,7 +107,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
-        @Compatibility(versionBelow = "1.10.0", build = "35")
+        @Compatibility(versionBelow = "1.10.0", build = "37")
         var inetSeparated: Array<String?>
         val networkString = StringBuilder()
         from.ifConfig?.forEach { network ->

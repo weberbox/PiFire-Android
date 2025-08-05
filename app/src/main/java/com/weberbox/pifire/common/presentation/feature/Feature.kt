@@ -7,5 +7,5 @@ sealed class Feature(
     val maxBuild: String? = null
 ) {
     object StartToHoldPrompt : Feature("1.10.0", "33")
-    object NewSystemInfo : Feature("1.10.0", "35")
+    object NewSystemInfo : Feature("1.10.0", "37")
 }

@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3020000,
+    "type": "FLEXIBLE",
+    "message": "Added new system, os, health, network and wifi info to Info Screen. Added Start to Hold Prompt setting. PiFire version 1.10.0 build 29+ is required",
+    "isAlpha": true
+  },
+  {
     "appVersionCode": 3010100,
     "type": "IMMEDIATE",
     "message": "Fix issue with battery percentage on wireless probes. Improved settings switch visuals. PiFire version 1.10.0 build 29+ is required",

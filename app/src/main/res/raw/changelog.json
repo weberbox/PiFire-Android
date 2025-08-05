@@ -8,11 +8,15 @@
       "logs": [
         {
           "type": "new",
-          "text": "Added Platform, Network, OS, Health and Wifi info to the Info Screen"
+          "text": "Added Platform, Network, OS, Health and Wifi info to the Info Screen. Requires PiFire v1.10.0 build 37+"
         },
         {
           "type": "new",
-          "text": "Added option for Start To Hold Prompt in Startup & Shutdown settings page"
+          "text": "Added option for Start To Hold Prompt in Startup & Shutdown settings page. Requires PiFire v1.10.0 build 33+"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
         }
       ]
     },
