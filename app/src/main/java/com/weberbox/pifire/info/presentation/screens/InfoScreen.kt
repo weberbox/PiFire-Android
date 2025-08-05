@@ -61,7 +61,7 @@ fun InfoScreenDestination(
                 is InfoContract.Effect.Navigation.LicenseDetails ->
                     navController.safeNavigate(
                         route = LicenseDetails(
-                            viewModel.viewState.value.licenseData
+                            licenses = viewModel.viewState.value.licenseData
                         ),
                         popUp = false
                     )
@@ -185,8 +185,32 @@ private fun InfoScreenPreview() {
 
 internal fun buildInfo(): Info {
     return Info(
+        platformInfo = Info.PlatformInfo(
+            systemModel = "Raspberry Pi 4",
+            cpuModel = "ARM Cortex-A72",
+            cpuHardware = "BCM2711",
+            cpuCores = "4",
+            cpuFrequency = "1.5GHz",
+            totalRam = "4GB",
+            availableRam = "2GB"
+        ),
+        osInfo = Info.OsInfo(
+            prettyName = "Ubuntu 20.04.3 LTS",
+            version = "20.04",
+            codeName = "Focal Fossa",
+            architecture = "x86_64"
+        ),
+        networkMap = mapOf(
+            "eth0" to Info.NetworkInfo(
+                ipAddress = "192.168.1.2",
+                macAddress = "00:00:00:00:00"
+            )
+        ),
+        wifiQualityValue = "60",
+        wifiQualityMax = "70",
+        wifiQualityPercentage = "80",
         cpuInfo = "Intel(R) Xeon(R) CPU-D-1520 @ 2.20GHz",
-        cpuTemp = "40.0C",
+        cpuTemp = "40",
         networkInfo = "Ethernet",
         outPins = listOf(
             GPIOInOutData(

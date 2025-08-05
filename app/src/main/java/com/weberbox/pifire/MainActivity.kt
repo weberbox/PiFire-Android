@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         PiFireTheme(
             darkTheme = determineDarkMode(state.appTheme),
-            dynamicColor = state.dynamicColor
+            dynamicColor = state.dynamicColor,
+            featureSupport = state.featureSupport
         ) {
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) }

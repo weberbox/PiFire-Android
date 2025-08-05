@@ -18,24 +18,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
-
-@Immutable
-data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color
-)
-
-@Suppress("unused")
-val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
-)
+import com.weberbox.pifire.common.presentation.feature.FeatureSupport
+import com.weberbox.pifire.common.presentation.feature.LocalFeatureSupport
 
 @Composable
 fun PiFireTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
+    featureSupport: FeatureSupport = FeatureSupport(),
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -72,7 +62,8 @@ fun PiFireTheme(
     CompositionLocalProvider(
         LocalSpacing provides Spacing(),
         LocalElevation provides Elevation(),
-        LocalSize provides Size()
+        LocalSize provides Size(),
+        LocalFeatureSupport provides featureSupport
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
@@ -81,6 +72,19 @@ fun PiFireTheme(
         )
     }
 }
+
+@Immutable
+data class ColorFamily(
+    val color: Color,
+    val onColor: Color,
+    val colorContainer: Color,
+    val onColorContainer: Color
+)
+
+@Suppress("unused")
+val unspecified_scheme = ColorFamily(
+    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
+)
 
 @Suppress("unused")
 private val lightScheme = lightColorScheme(

@@ -27,7 +27,10 @@ data class Startup(
         val afterStartUpMode: String? = null,
 
         @SerialName("primary_setpoint")
-        val primarySetPoint: Int? = null
+        val primarySetPoint: Int? = null,
+
+        @SerialName("start_to_hold_prompt")
+        val startToHoldPrompt: Boolean? = null
     )
 
     @Serializable

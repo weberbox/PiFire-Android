@@ -122,6 +122,7 @@ data class Setting<T>(
         val startupExitTemp = Setting("startup_exit_temp", 0)
         val startupGotoMode = Setting("after_startup_mode", "Smoke")
         val startupGotoTemp = Setting("primary_setpoint", 165)
+        val startToHoldPrompt = Setting("start_to_hold_prompt", false)
         val smartStartEnabled = Setting("enabled", false)
         val smartStartExitTemp = Setting("exit_temp", 120)
         val smartStartTempList = Setting("temp_range_list", listOf<Int>())

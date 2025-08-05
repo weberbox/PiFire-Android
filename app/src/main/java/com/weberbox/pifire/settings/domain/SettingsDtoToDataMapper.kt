@@ -126,6 +126,8 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                     ?: Setting.startupGotoMode.value,
                 startupGotoTemp = from.startup?.startToMode?.primarySetPoint
                     ?: Setting.startupGotoTemp.value,
+                startToHoldPrompt = from.startup?.startToMode?.startToHoldPrompt
+                    ?: Setting.startToHoldPrompt.value,
                 smartStartEnabled = from.startup?.smartStart?.enabled
                     ?: Setting.smartStartEnabled.value,
                 smartStartExitTemp = from.startup?.smartStart?.exitTemp

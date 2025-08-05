@@ -19,6 +19,7 @@ class TimerContract {
         data class SetSmartStartExitTemp(val temp: Int) : Event()
         data class SetStartToMode(val mode: String) : Event()
         data class SetStartToModeTemp(val temp: Int) : Event()
+        data class SetStartToHoldPrompt(val enabled: Boolean) : Event()
         data class DeleteSmartStartItem(val smartStartItems: List<SmartStart>) : Event()
         data class SetSmartStartItem(
             val index: Int,

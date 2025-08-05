@@ -1060,6 +1060,19 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
+    override suspend fun setStartToHoldPrompt(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                startup = Startup(
+                    startToMode = StartToMode(
+                        startToHoldPrompt = enabled
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
     override suspend fun setSmartStartEnabled(enabled: Boolean): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(startup = Startup(smartStart = SmartStart(enabled = enabled)))
