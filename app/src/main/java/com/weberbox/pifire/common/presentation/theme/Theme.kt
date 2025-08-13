@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
-import com.weberbox.pifire.common.presentation.feature.FeatureSupport
-import com.weberbox.pifire.common.presentation.feature.LocalFeatureSupport
+import com.weberbox.pifire.core.util.FeatureSupport
+import com.weberbox.pifire.core.util.LocalFeatureSupport
 
 @Composable
 fun PiFireTheme(

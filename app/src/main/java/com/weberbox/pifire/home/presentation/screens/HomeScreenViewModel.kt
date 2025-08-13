@@ -1,5 +1,7 @@
 package com.weberbox.pifire.home.presentation.screens
 
+import android.content.Intent
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
@@ -13,6 +15,8 @@ import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
+import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.core.singleton.SocketManager
 import com.weberbox.pifire.core.util.OneSignalManager
@@ -215,8 +219,20 @@ class HomeScreenViewModel @Inject constructor(
                         ),
                         dismissible = !supportResult.isMandatory,
                         positiveAction = DialogAction(
-                            buttonText = UiText(R.string.exit),
-                            action = { signOut() }
+                            buttonText = UiText(R.string.update),
+                            action = {
+                                signOut()
+                                setEffect {
+                                    HomeContract.Effect.OpenUpdateIntent(
+                                        Intent(Intent.ACTION_VIEW).apply {
+                                            data = if (AppConfig.IS_PLAY_BUILD)
+                                                Constants.PLAY_RELEASE_LINK.toUri()
+                                            else
+                                                Constants.GITHUB_RELEASE_LINK.toUri()
+                                        }
+                                    )
+                                }
+                            }
                         ),
                         negativeAction = if (supportResult.isMandatory) null else
                             DialogAction(

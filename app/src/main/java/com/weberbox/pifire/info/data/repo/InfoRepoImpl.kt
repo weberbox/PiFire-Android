@@ -1,12 +1,11 @@
 package com.weberbox.pifire.info.data.repo
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parseGetResponse
 import com.weberbox.pifire.common.data.parser.parseResponse
-import com.weberbox.pifire.common.data.util.readRawJsonFile
+import com.weberbox.pifire.common.data.util.readJsonFromAssets
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
 import com.weberbox.pifire.info.data.api.InfoApi
 import com.weberbox.pifire.info.domain.InfoDtoToDataMapper
@@ -59,7 +58,7 @@ class InfoRepoImpl @Inject constructor(
     }
 
     override suspend fun getLicences(): Result<Licenses, DataError> {
-        val jsonString = readRawJsonFile(R.raw.licences)
+        val jsonString = readJsonFromAssets("licences.json")
         return if (jsonString.isNotBlank()) {
             parseResponse(jsonString, json, LicenseDtoToDataMapper).let { data ->
                 when (data) {

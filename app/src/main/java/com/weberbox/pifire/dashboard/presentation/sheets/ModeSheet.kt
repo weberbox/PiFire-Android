@@ -46,6 +46,7 @@ internal fun ModeSheet(
     onEvent: (DashEvent) -> Unit,
     onPrime: () -> Unit,
     onHold: () -> Unit,
+    onStart: () -> Unit
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     var swipeVisible by remember { mutableStateOf(false) }
@@ -83,7 +84,7 @@ internal fun ModeSheet(
                             is DashEvent.HoldDialog -> onHold()
                             is DashEvent.PrimeDialog -> onPrime()
                             is DashEvent.Start -> {
-                                if (startupCheck) swipeVisible = true else onEvent(mode.event)
+                                if (startupCheck) swipeVisible = true else onStart()
                             }
                             else -> onEvent(mode.event)
                         }
@@ -110,7 +111,7 @@ internal fun ModeSheet(
                     sliderBtnBackgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
                     sliderBtnIcon = Icons.Outlined.Lock,
                     onSliderChange = { sliderPosition = it },
-                    onBtnSwipe = { onEvent(DashEvent.Start) }
+                    onBtnSwipe = { onStart() }
                 )
             }
         }
@@ -130,7 +131,8 @@ private fun ModeSheetPreview() {
                 startupCheck = false,
                 onEvent = {},
                 onHold = {},
-                onPrime = {}
+                onPrime = {},
+                onStart = {}
             )
         }
     }

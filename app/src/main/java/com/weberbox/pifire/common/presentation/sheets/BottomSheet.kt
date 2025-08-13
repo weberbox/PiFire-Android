@@ -141,7 +141,8 @@ private fun BottomSheetPreview() {
                         startupCheck = false,
                         onEvent = {},
                         onHold = {},
-                        onPrime = {}
+                        onPrime = {},
+                        onStart = {}
                     )
                 }
             )

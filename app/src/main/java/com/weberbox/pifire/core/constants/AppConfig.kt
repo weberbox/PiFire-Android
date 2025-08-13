@@ -51,4 +51,7 @@ object AppConfig {
 
     // Server Version Support
     const val SERVER_SUPPORT_CONFIG: String = "server_support_config"
+
+    // Feature Support Config
+    const val FEATURE_SUPPORT_CONFIG: String = "feature_support_config"
 }

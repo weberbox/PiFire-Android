@@ -52,6 +52,7 @@ import com.weberbox.pifire.common.presentation.component.ToolTipBox
 import com.weberbox.pifire.common.presentation.modifier.isElementVisible
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.CachedDataError
+import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
@@ -161,6 +162,7 @@ private fun DashboardScreenContent(
     val timerSheet = rememberCustomModalBottomSheetState()
     val modeSheet = rememberCustomModalBottomSheetState()
     val holdPickerSheet = rememberCustomModalBottomSheetState()
+    val startToHoldSheet = rememberCustomModalBottomSheetState()
     val tooltipState = rememberTooltipState(initialIsVisible = false, isPersistent = true)
     var outputsToolbar by rememberSaveable { mutableStateOf(false) }
     var isVisibleOnScreen by remember { mutableStateOf(false) }
@@ -169,6 +171,7 @@ private fun DashboardScreenContent(
         activity = activity,
         isVisibleOnScreen = isVisibleOnScreen,
         tooltipState = tooltipState,
+        startToHoldSheet = startToHoldSheet,
         effectFlow = effectFlow,
         onNavigationRequested = onNavigationRequested,
     )
@@ -466,6 +469,7 @@ private fun DashboardScreenContent(
                     timerSheet = timerSheet,
                     modeSheet = modeSheet,
                     holdPickerSheet = holdPickerSheet,
+                    startToHoldSheet = startToHoldSheet,
                     onEventSent = onEventSent
                 )
             }
@@ -479,6 +483,7 @@ private fun HandleSideEffects(
     activity: Activity?,
     isVisibleOnScreen: Boolean,
     tooltipState: TooltipState,
+    startToHoldSheet: CustomModalBottomSheetState,
     effectFlow: Flow<DashContract.Effect>?,
     onNavigationRequested: (DashContract.Effect.Navigation) -> Unit
 ) {
@@ -500,6 +505,10 @@ private fun HandleSideEffects(
 
                 is DashContract.Effect.HideHoldTempToolTip -> {
                     tooltipState.dismiss()
+                }
+
+                is DashContract.Effect.ShowStartupHoldDialog -> {
+                    startToHoldSheet.open()
                 }
             }
         }?.collect()

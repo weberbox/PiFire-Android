@@ -7,6 +7,8 @@ import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.InputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.LocalFeatureSupport
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract.DashEvent
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.Probe
@@ -19,8 +21,10 @@ internal fun DashBottomSheets(
     timerSheet: CustomModalBottomSheetState,
     modeSheet: CustomModalBottomSheetState,
     holdPickerSheet: CustomModalBottomSheetState,
+    startToHoldSheet: CustomModalBottomSheetState,
     onEventSent: (event: DashContract.Event) -> Unit,
 ) {
+    val featureSupport = LocalFeatureSupport.current
     val primePickerSheet = rememberCustomModalBottomSheetState()
     BottomSheet(
         sheetState = grillSheet.sheetState,
@@ -88,6 +92,14 @@ internal fun DashBottomSheets(
             onHold = {
                 modeSheet.close()
                 holdPickerSheet.open()
+            },
+            onStart = {
+                modeSheet.close()
+                onEventSent(
+                    DashContract.Event.StartUpRequested(
+                        holdDialogSupported = featureSupport.isSupported(Feature.StartToHoldPrompt)
+                    )
+                )
             }
         )
     }
@@ -121,6 +133,21 @@ internal fun DashBottomSheets(
                 holdPickerSheet.close()
             },
             onCancel = { holdPickerSheet.close() }
+        )
+    }
+    BottomSheet(
+        sheetState = startToHoldSheet.sheetState
+    ) {
+        StartToHoldSheet(
+            probeData = state.dash.primaryProbe,
+            startupTemp = state.dash.startupGotoTemp,
+            units = state.dash.tempUnits,
+            increment = state.incrementTemps,
+            onConfirm = { temp ->
+                onEventSent(DashContract.Event.SetStartupHoldTemp(temp))
+                startToHoldSheet.close()
+            },
+            onCancel = { startToHoldSheet.close() }
         )
     }
 }

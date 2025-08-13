@@ -83,7 +83,9 @@ class DashboardViewModel @Inject constructor(
             is DashContract.Event.HideHoldTempTip -> hideHoldTempTip()
             is DashContract.Event.ToggleLidDetect -> toggleLidOpen()
             is DashContract.Event.RestartControl -> restartControlDialog()
+            is DashContract.Event.SetStartupHoldTemp -> setStartupHoldTemp(event.temp)
             is DashContract.Event.CheckHopperLevel -> checkHopperLevel()
+            is DashContract.Event.StartUpRequested -> startUpRequested(event.holdDialogSupported)
         }
     }
 
@@ -113,8 +115,8 @@ class DashboardViewModel @Inject constructor(
                     )
 
                     is DashEvent.ToggleFan -> dashApi.sendToggleFan(enabled = event.enabled)
-                    is DashEvent.ToggleAuger -> dashApi.sendToggleAuger(enabled =event.enabled)
-                    is DashEvent.ToggleIgniter -> dashApi.sendToggleIgniter(enabled =event.enabled)
+                    is DashEvent.ToggleAuger -> dashApi.sendToggleAuger(enabled = event.enabled)
+                    is DashEvent.ToggleIgniter -> dashApi.sendToggleIgniter(enabled = event.enabled)
 
                     else -> Result.Success(data = Unit)
                 }
@@ -285,6 +287,27 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    private fun startUpRequested(holdDialogSupported: Boolean) {
+        when {
+            holdDialogSupported -> {
+                if (viewState.value.dash.startToHoldPrompt &&
+                    viewState.value.dash.startupGotoMode.equals(
+                        other = RunningMode.Hold.name,
+                        ignoreCase = true
+                    )
+                ) {
+                    setEffect {
+                        DashContract.Effect.ShowStartupHoldDialog
+                    }
+                } else {
+                    sendDashEvent(DashEvent.Start)
+                }
+            }
+
+            else -> sendDashEvent(DashEvent.Start)
+        }
+    }
+
     private fun restartControlDialog() {
         viewModelScope.launch {
             DialogController.sendEvent(
@@ -312,6 +335,13 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    private fun setStartupHoldTemp(temp: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsRepo.setStartToModeTemp(temp.toInt())
+            sendDashEvent(DashEvent.Start)
+        }
+    }
+
     private fun restartControl() {
         viewModelScope.launch(Dispatchers.IO) {
             val result = settingsRepo.restartControl()
@@ -327,6 +357,7 @@ class DashboardViewModel @Inject constructor(
                         }
 
                     }
+
                     is Result.Success -> {
                         setLoadingState(false)
                     }

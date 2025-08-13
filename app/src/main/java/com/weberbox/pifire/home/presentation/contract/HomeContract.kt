@@ -1,5 +1,6 @@
 package com.weberbox.pifire.home.presentation.contract
 
+import android.content.Intent
 import com.weberbox.pifire.common.presentation.base.ViewEvent
 import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
@@ -25,6 +26,7 @@ class HomeContract {
 
     sealed class Effect : ViewSideEffect {
         data class Notification(val text: UiText, val error: Boolean) : Effect()
+        data class OpenUpdateIntent(val intent: Intent) : Effect()
 
         sealed class Navigation : Effect() {
             data object Back : Navigation()

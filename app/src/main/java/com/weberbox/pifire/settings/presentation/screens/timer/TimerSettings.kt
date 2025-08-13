@@ -35,8 +35,6 @@ import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
-import com.weberbox.pifire.common.presentation.feature.Feature
-import com.weberbox.pifire.common.presentation.feature.FeatureGate
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
@@ -48,6 +46,8 @@ import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.common.presentation.util.slideDownExpandEnterTransition
 import com.weberbox.pifire.common.presentation.util.slideOutShrinkExitTransition
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.SwitchPreference

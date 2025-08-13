@@ -1,9 +1,29 @@
 {
   "changelog": [
     {
-      "version": "3.2.0",
+      "version": "3.2.1",
       "date": "",
       "current": true,
+      "isAlpha": true,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Added dialog for Start To Hold Temperature Prompt. Requires PiFire v1.10.0 build 33+"
+        },
+        {
+          "type": "imp",
+          "text": "Improve supported feature implementation"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.2.0",
+      "date": "",
+      "current": false,
       "isAlpha": true,
       "logs": [
         {

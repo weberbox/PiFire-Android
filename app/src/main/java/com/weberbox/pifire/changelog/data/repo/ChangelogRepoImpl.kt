@@ -1,12 +1,11 @@
 package com.weberbox.pifire.changelog.data.repo
 
-import com.weberbox.pifire.R
 import com.weberbox.pifire.changelog.data.model.ChangelogDto
 import com.weberbox.pifire.changelog.domain.ChangelogDtoToDataMapper
 import com.weberbox.pifire.changelog.presentation.model.ChangelogData
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.util.readRawJsonFile
+import com.weberbox.pifire.common.data.util.readJsonFromAssets
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.Json
@@ -19,7 +18,7 @@ class ChangelogRepoImpl @Inject constructor(
 
     override suspend fun getChangelogData(): Result<ChangelogData, DataError> {
         try {
-            val jsonString = readRawJsonFile(R.raw.changelog)
+            val jsonString = readJsonFromAssets("changelog.json")
             val changelogDto = json.decodeFromString<ChangelogDto>(jsonString)
             val changelogData = ChangelogDtoToDataMapper.map(changelogDto)
 

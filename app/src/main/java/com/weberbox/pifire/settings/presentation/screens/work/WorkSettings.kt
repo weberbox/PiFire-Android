@@ -45,6 +45,7 @@ import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSh
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
+import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.settings.presentation.component.PreferenceInfo
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.SwitchPreference
@@ -247,7 +248,7 @@ private fun WorkSettingsContent(
         )
         PreferenceNote(stringResource(R.string.settings_pmode_note)) {
             Intent(Intent.ACTION_VIEW).apply {
-                data = context.getString(R.string.def_pmode_link).toUri()
+                data = Constants.P_MODE_LINK.toUri()
                 context.startActivity(this)
             }
         }

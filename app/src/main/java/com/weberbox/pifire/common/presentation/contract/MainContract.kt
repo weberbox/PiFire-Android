@@ -3,9 +3,9 @@ package com.weberbox.pifire.common.presentation.contract
 import com.weberbox.pifire.common.presentation.base.ViewEvent
 import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
-import com.weberbox.pifire.common.presentation.feature.FeatureSupport
 import com.weberbox.pifire.common.presentation.model.AppTheme
 import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.util.FeatureSupport
 
 class MainContract {
 

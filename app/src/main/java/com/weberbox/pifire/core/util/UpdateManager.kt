@@ -217,7 +217,7 @@ class UpdateManager @Inject constructor(
 
     private fun openGithubLink(activity: Activity) {
         Intent(Intent.ACTION_VIEW).apply {
-            data = activity.getString(R.string.def_github_releases_link).toUri()
+            data = Constants.GITHUB_RELEASE_LINK.toUri()
             activity.startActivity(this)
             activity.finish()
         }
