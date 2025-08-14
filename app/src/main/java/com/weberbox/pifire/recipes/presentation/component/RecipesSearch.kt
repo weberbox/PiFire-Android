@@ -203,19 +203,21 @@ internal fun RecipesSearchResults(
             ListItem(
                 headlineContent = { Text(recipe.metadata.title) },
                 supportingContent = {
-                    Row(
-                        modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            MaterialTheme.spacing.extraSmall
-                        )
-                    ) {
-                        Text(
-                            text = recipe.metadata.description,
-                            style = MaterialTheme.typography.bodySmall,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                    if (recipe.metadata.description.isNotBlank()) {
+                        Row(
+                            modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                MaterialTheme.spacing.extraSmall
+                            )
+                        ) {
+                            Text(
+                                text = recipe.metadata.description,
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 },
                 leadingContent = {
@@ -226,12 +228,12 @@ internal fun RecipesSearchResults(
                 },
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                 modifier = Modifier
-                        .clickable { onResultClick(recipe.metadata.title) }
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = MaterialTheme.spacing.smallThree,
-                            vertical = MaterialTheme.spacing.extraSmall
-                        )
+                    .clickable { onResultClick(recipe.metadata.title) }
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = MaterialTheme.spacing.smallThree,
+                        vertical = MaterialTheme.spacing.extraSmall
+                    )
             )
         }
     }
