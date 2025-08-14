@@ -1,15 +1,11 @@
 package com.weberbox.pifire.common.presentation.sheets
 
 import android.content.res.Configuration
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
@@ -37,6 +33,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.composables.core.DragIndication
 import com.composables.core.ModalBottomSheet
 import com.composables.core.ModalBottomSheetState
+import com.composables.core.Scrim
 import com.composables.core.Sheet
 import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
@@ -57,18 +54,10 @@ fun BottomSheet(
 ) {
     val windowInsets by remember { mutableStateOf(WindowInsets) }
     ModalBottomSheet(state = sheetState) {
-        AnimatedVisibility(
-            visible = sheetState.targetDetent != SheetDetent.Hidden,
+        Scrim(
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .focusable(false)
-                    .background(Color.Black.copy(0.6f))
-            )
-        }
+            exit = fadeExitTransition(),
+        )
         Sheet(
             modifier = Modifier
                 .windowInsetsPadding(windowInsets.ime)
