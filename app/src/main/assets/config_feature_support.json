@@ -10,7 +10,7 @@
     "StartToHoldPrompt": {
       "enabled": true,
       "minVersion": "1.10.0",
-      "minBuild": "33",
+      "minBuild": "43",
       "maxVersion": "",
       "maxBuild": ""
     }

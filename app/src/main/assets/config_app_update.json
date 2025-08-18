@@ -2,7 +2,7 @@
   {
     "appVersionCode": 3020100,
     "type": "FLEXIBLE",
-    "message": "Added dialog for Start To Hold Temperature Prompt. PiFire version 1.10.0 build 29+ is required",
+    "message": "Added dialog for Start To Hold Temperature Prompt. PiFire version 1.10.0 build 43+ is required",
     "isAlpha": true
   },
   {
