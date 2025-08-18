@@ -8,7 +8,7 @@
       "logs": [
         {
           "type": "new",
-          "text": "Added dialog for Start To Hold Temperature Prompt. Requires PiFire v1.10.0 build 33+"
+          "text": "Added dialog for Start To Hold Temperature Prompt. Requires PiFire v1.10.0 build 43+"
         },
         {
           "type": "imp",
@@ -32,7 +32,7 @@
         },
         {
           "type": "new",
-          "text": "Added option for Start To Hold Prompt in Startup & Shutdown settings page. Requires PiFire v1.10.0 build 33+"
+          "text": "Added option for Start To Hold Prompt in Startup & Shutdown settings page. Requires PiFire v1.10.0 build 43+"
         },
         {
           "type": "imp",

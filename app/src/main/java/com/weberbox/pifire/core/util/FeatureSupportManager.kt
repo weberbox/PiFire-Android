@@ -6,9 +6,9 @@ import androidx.compose.ui.platform.LocalView
 import com.weberbox.pifire.common.data.model.SemanticVersion
 import kotlinx.serialization.Serializable
 
-sealed class Feature {
-    object StartToHoldPrompt : Feature()
-    object NewSystemInfo : Feature()
+enum class Feature {
+    StartToHoldPrompt,
+    NewSystemInfo
 }
 
 class FeatureSupport(
@@ -17,7 +17,7 @@ class FeatureSupport(
     private val featureMap: FeatureFlagsConfig = emptyMap()
 ) {
     fun isSupported(feature: Feature): Boolean {
-        val config = featureMap[feature::class.simpleName]
+        val config = featureMap[feature.name]
 
         val enabled = config?.enabled ?: false
         if (!enabled) return false
