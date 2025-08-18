@@ -2,10 +2,11 @@ package com.weberbox.pifire.common.data.repo
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.weberbox.pifire.BuildConfig
-import com.weberbox.pifire.R
-import com.weberbox.pifire.common.data.util.readRawJsonFile
+import com.weberbox.pifire.common.data.util.readJsonFromAssets
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.util.AppUpdateConfigData
+import com.weberbox.pifire.core.util.FeatureFlagsConfig
+import com.weberbox.pifire.core.util.RemoteFeatureConfigData
 import com.weberbox.pifire.core.util.ServerSupportConfigData
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -20,7 +21,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
 ) : RemoteConfigRepository {
     override suspend fun fetchServerSupportConfig(): ServerSupportConfigData? {
         val defaults = mapOf(
-            AppConfig.SERVER_SUPPORT_CONFIG to readRawJsonFile(R.raw.server_support_config)
+            AppConfig.SERVER_SUPPORT_CONFIG to readJsonFromAssets("config_server_support.json")
         )
         return try {
             remoteConfig.setDefaultsAsync(defaults).await()
@@ -32,7 +33,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
             val parsed = json.decodeFromString<List<ServerSupportConfigData>>(jsonString)
             val currentAppVersion = BuildConfig.VERSION_CODE
 
-            return parsed.find { it.appVersionCode == currentAppVersion }
+            parsed.find { it.appVersionCode == currentAppVersion }
         } catch (e: Exception) {
             currentCoroutineContext().ensureActive()
             Timber.e(e, "Firebase Server Support fetch exception")
@@ -42,7 +43,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
 
     override suspend fun fetchAppUpdateConfig(): AppUpdateConfigData? {
         val defaults = mapOf(
-            AppConfig.APP_UPDATE_CONFIG to readRawJsonFile(R.raw.app_update_config)
+            AppConfig.APP_UPDATE_CONFIG to readJsonFromAssets("config_app_update.json")
         )
 
         return try {
@@ -66,6 +67,28 @@ class RemoteConfigRepositoryImpl @Inject constructor(
             currentCoroutineContext().ensureActive()
             Timber.e(e, "Firebase App Update fetch exception")
             null
+        }
+    }
+
+    override suspend fun fetchFeatureSupportConfig(): Map<String, RemoteFeatureConfigData> {
+        val defaults = mapOf(
+            AppConfig.FEATURE_SUPPORT_CONFIG to readJsonFromAssets("config_feature_support.json")
+        )
+
+        return try {
+            remoteConfig.setDefaultsAsync(defaults).await()
+            remoteConfig.fetchAndActivate().await().also {
+                if (!it) Timber.d("Feature Support Using Local Configs")
+            }
+
+            val jsonString = remoteConfig.getString(AppConfig.FEATURE_SUPPORT_CONFIG)
+            val parsed = json.decodeFromString<List<FeatureFlagsConfig>>(jsonString)
+
+            parsed.firstOrNull() ?: emptyMap()
+        } catch (e: Exception) {
+            currentCoroutineContext().ensureActive()
+            Timber.e(e, "Firebase Feature Support fetch exception")
+            emptyMap()
         }
     }
 }

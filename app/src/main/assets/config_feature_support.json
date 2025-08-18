@@ -1,0 +1,18 @@
+[
+  {
+    "NewSystemInfo": {
+      "enabled": true,
+      "minVersion": "1.10.0",
+      "minBuild": "37",
+      "maxVersion": "",
+      "maxBuild": ""
+    },
+    "StartToHoldPrompt": {
+      "enabled": true,
+      "minVersion": "1.10.0",
+      "minBuild": "33",
+      "maxVersion": "",
+      "maxBuild": ""
+    }
+  }
+]

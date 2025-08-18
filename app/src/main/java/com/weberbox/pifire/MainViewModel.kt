@@ -2,14 +2,15 @@ package com.weberbox.pifire
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.common.data.repo.RemoteConfigRepository
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.contract.MainContract
-import com.weberbox.pifire.common.presentation.feature.FeatureSupport
 import com.weberbox.pifire.common.presentation.model.AppTheme
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.core.singleton.SocketManager
+import com.weberbox.pifire.core.util.FeatureSupport
 import com.weberbox.pifire.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.events.data.repo.EventsRepo
 import com.weberbox.pifire.pellets.data.repo.PelletsRepo
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val remoteConfigRepository: RemoteConfigRepository,
     private val sessionStateHolder: SessionStateHolder,
     private val savedStateHandle: SavedStateHandle,
     private val socketManager: SocketManager,
@@ -67,11 +69,13 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             sessionStateHolder.settingsDataState.collect { settingsData ->
                 settingsData?.also { data ->
+                    val featureMap = remoteConfigRepository.fetchFeatureSupportConfig()
                     setState {
                         copy(
                             featureSupport = FeatureSupport(
                                 currentVersion = data.settings.serverVersion,
-                                currentBuild = data.settings.serverBuild
+                                currentBuild = data.settings.serverBuild,
+                                featureMap = featureMap
                             )
                         )
                     }

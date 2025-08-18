@@ -7,9 +7,9 @@ import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.log.DebugLogTree
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.core.singleton.SentryIO
-import com.weberbox.pifire.core.util.DebugLogTree
 import com.weberbox.pifire.settings.data.model.local.Pref
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber

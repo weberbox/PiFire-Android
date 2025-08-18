@@ -11,6 +11,7 @@ import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
@@ -39,7 +40,10 @@ fun ToolTipBox(
     tooltipState: TooltipState,
     content: @Composable () -> Unit
 ) {
-    val positionProvider = rememberTooltipPositionProvider(spacing)
+    val positionProvider = rememberTooltipPositionProvider(
+        positioning = TooltipAnchorPosition.Below,
+        spacingBetweenTooltipAndAnchor = spacing
+    )
     TooltipBox(
         enableUserInput = enableUserInput,
         positionProvider = positionProvider,
@@ -79,7 +83,10 @@ fun ToolTipBox(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 private fun ToolTipBoxPreview() {
-    val tooltipState = rememberTooltipState(true, true)
+    val tooltipState = rememberTooltipState(
+        initialIsVisible = true,
+        isPersistent = true
+    )
     PiFireTheme {
         Surface {
             Column(

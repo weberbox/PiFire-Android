@@ -40,6 +40,7 @@
     <string name="reboot">Reboot</string>
     <string name="restart">Restart</string>
     <string name="shutdown">Shutdown</string>
+    <string name="startup">Startup</string>
     <string name="options">Options</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>

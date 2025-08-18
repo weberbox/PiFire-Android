@@ -12,6 +12,7 @@
     <string name="dialog_probe_edit">Probe Edit</string>
     <string name="dialog_probe_edit_enabled">Visible</string>
     <string name="dialog_probe_edit_disabled">Hidden</string>
+    <string name="dialog_start_to_hold_temp_title">Change Hold Temp?</string>
     <string name="dialog_unsupported_server_version_title">Unsupported Version</string>
     <string name="dialog_unsupported_server_min_message">Your current PiFire version is unsupported please update PiFire to the minimum version of %1$s build %2$s \n\nYour current version is %3$s build %4$s</string>
     <string name="dialog_unsupported_server_max_message">Your current PiFire version is unsupported by this app. The maximum PiFire version supported is %1$s build %2$s. \n\nYour current version is %3$s build %4$s \n\nPlease check for an update to this application</string>

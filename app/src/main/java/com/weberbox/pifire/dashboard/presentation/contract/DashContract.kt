@@ -20,6 +20,8 @@ class DashContract {
         data object RestartControl : Event()
         data object CheckHopperLevel : Event()
         data class ProbeNotify(val notifyDto: NotifyDto) : Event()
+        data class SetStartupHoldTemp(val temp: String) : Event()
+        data class StartUpRequested(val holdDialogSupported: Boolean) : Event()
         data class SendEvent(val event: DashEvent): Event()
     }
 
@@ -62,6 +64,7 @@ class DashContract {
 
     sealed class Effect : ViewSideEffect {
         data object HideHoldTempToolTip : Effect()
+        data object ShowStartupHoldDialog : Effect()
         data class Notification(val text: UiText, val error: Boolean) : Effect()
 
         sealed class Navigation : Effect() {

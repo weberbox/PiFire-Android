@@ -14,11 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.common.presentation.component.PullToRefresh
-import com.weberbox.pifire.common.presentation.feature.Feature
-import com.weberbox.pifire.common.presentation.feature.FeatureGate
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.size
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.info.presentation.contract.InfoContract
 import com.weberbox.pifire.info.presentation.screens.buildInfo
 import com.weberbox.pifire.info.presentation.screens.buildLicenseData
@@ -79,6 +79,7 @@ internal fun InfoList(
                 onEventSent = onEventSent
             )
             InfoUptime(info = state.info)
+            InfoServer(state.info)
             InfoApp(info = state.info)
             InfoCredits(
                 licenseData = state.licenseData,

@@ -140,7 +140,6 @@ interface SettingsRepo {
     suspend fun setStartupDuration(duration: Int): Result<Server, DataError>
     suspend fun setPrimeOnStartup(amount: Int): Result<Server, DataError>
     suspend fun setStartExitTemp(temp: Int): Result<Server, DataError>
-
     suspend fun setStartToHoldPrompt(enabled: Boolean): Result<Server, DataError>
     suspend fun setSmartStartEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setSmartStartExitTemp(temp: Int): Result<Server, DataError>

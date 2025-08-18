@@ -1,4 +1,4 @@
-package com.weberbox.pifire.core.util
+package com.weberbox.pifire.core.log
 
 import android.os.Build
 import android.util.Log

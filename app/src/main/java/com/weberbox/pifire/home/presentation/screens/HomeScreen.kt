@@ -471,6 +471,9 @@ private fun HandleSideEffects(
                     )
                 }
 
+                is HomeContract.Effect.OpenUpdateIntent -> {
+                    activity?.startActivity(effect.intent)
+                }
             }
         }?.collect()
     }
