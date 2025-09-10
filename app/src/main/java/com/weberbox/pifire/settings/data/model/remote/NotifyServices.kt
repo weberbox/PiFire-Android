@@ -24,7 +24,10 @@ data class NotifyServices(
     val influxDB: InfluxDB? = null,
 
     @SerialName("mqtt")
-    val mqtt: Mqtt? = null
+    val mqtt: Mqtt? = null,
+
+    @SerialName("wled")
+    val wled: WLed? = null
 ) {
 
     @Serializable
@@ -144,4 +147,65 @@ data class NotifyServices(
         @SerialName("username")
         val username: String? = null
     )
+
+    @Serializable
+    data class WLed(
+        @SerialName("enabled")
+        val enabled: Boolean? = null,
+
+        @SerialName("device_address")
+        val address: String? = null,
+
+        @SerialName("notify_duration")
+        val duration: Int? = null,
+
+        @SerialName("mode_presets")
+        val modePresets: ModePresets? = null,
+
+        @SerialName("event_presets")
+        val eventsPresets: EventsPresets? = null
+    ) {
+
+        @Serializable
+        data class ModePresets(
+            @SerialName("Stop")
+            val stop: Int? = null,
+
+            @SerialName("Startup")
+            val startup: Int? = null,
+
+            @SerialName("Reignite")
+            val reignite: Int? = null,
+
+            @SerialName("Smoke")
+            val smoke: Int? = null,
+
+            @SerialName("Hold")
+            val hold: Int? = null,
+
+            @SerialName("Shutdown")
+            val shutdown: Int? = null,
+
+            @SerialName("Prime")
+            val prime: Int? = null
+        )
+
+        @Serializable
+        data class EventsPresets(
+            @SerialName("Temp_Achieved")
+            val tempAchieved: Int? = null,
+
+            @SerialName("Recipe_Next")
+            val recipeNext: Int? = null,
+
+            @SerialName("Grill_Error")
+            val grillError: Int? = null,
+
+            @SerialName("Pellet_Level_Low")
+            val pelletLevel: Int? = null,
+
+            @SerialName("Timer_Expired")
+            val timerExpired: Int? = null
+        )
+    }
 }

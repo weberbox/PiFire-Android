@@ -38,6 +38,8 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.config.Secrets
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.core.util.NotificationsPermissionDetailsProvider
 import com.weberbox.pifire.core.util.rememberPermissionState
 import com.weberbox.pifire.settings.presentation.component.TwoTargetSwitchPreference
@@ -238,6 +240,23 @@ private fun NotificationSettingsContent(
                 )
             }
         )
+        FeatureGate(
+            feature = Feature.WLEDNotifications
+        ) {
+            TwoTargetSwitchPreference(
+                value = state.serverData.settings.wledEnabled,
+                onValueChange = { onEventSent(NotifContract.Event.SetWLEDEnabled(it)) },
+                title = { Text(text = stringResource(R.string.settings_cat_wled)) },
+                summary = { Text(text = getSummary(state.serverData.settings.wledEnabled)) },
+                onClick = {
+                    onNavigationRequested(
+                        NotifContract.Effect.Navigation.NavRoute(
+                            NavGraph.SettingsDest.WLED
+                        )
+                    )
+                }
+            )
+        }
     }
 }
 

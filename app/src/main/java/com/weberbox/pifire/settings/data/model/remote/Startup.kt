@@ -18,7 +18,10 @@ data class Startup(
     val startToMode: StartToMode? = null,
 
     @SerialName("smartstart")
-    val smartStart: SmartStart? = null
+    val smartStart: SmartStart? = null,
+
+    @SerialName("pwm_duty_cycle")
+    val pwmStartupDuty: Int? = null
 ) {
 
     @Serializable

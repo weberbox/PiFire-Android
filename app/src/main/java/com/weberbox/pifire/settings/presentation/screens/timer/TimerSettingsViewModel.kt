@@ -77,6 +77,9 @@ class TimerSettingsViewModel @Inject constructor(
                     pMode = event.pMode,
                     smartStartItems = event.smartStartItems
                 )
+
+            is TimerContract.Event.SetStartupPWMDuty ->
+                launchAndHandle { settingsRepo.setStartupPWMDuty(event.duty) }
         }
     }
 

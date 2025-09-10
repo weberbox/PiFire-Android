@@ -55,6 +55,21 @@ interface SettingsApi {
     suspend fun setMqttUsername(username: String): Result<String, DataError>
     suspend fun setAppriseEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setAppriseLocations(locations: List<String>): Result<String, DataError>
+    suspend fun setWLEDEnabled(enabled: Boolean): Result<String, DataError>
+    suspend fun setWLEDAddress(address: String): Result<String, DataError>
+    suspend fun setWLEDDuration(duration: Int): Result<String, DataError>
+    suspend fun setWLedModeHold(mode: Int): Result<String, DataError>
+    suspend fun setWLedModePrime(mode: Int): Result<String, DataError>
+    suspend fun setWLedModeReignite(mode: Int): Result<String, DataError>
+    suspend fun setWLedModeShutdown(mode: Int): Result<String, DataError>
+    suspend fun setWLedModeSmoke(mode: Int): Result<String, DataError>
+    suspend fun setWLedModeStartup(mode: Int): Result<String, DataError>
+    suspend fun setWLedModeStop(mode: Int): Result<String, DataError>
+    suspend fun setWLedEventGrill(event: Int): Result<String, DataError>
+    suspend fun setWLedEventPellets(event: Int): Result<String, DataError>
+    suspend fun setWLedEventRecipe(event: Int): Result<String, DataError>
+    suspend fun setWLedEventTemp(event: Int): Result<String, DataError>
+    suspend fun setWLedEventTimer(event: Int): Result<String, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<String, DataError>
     suspend fun registerOneSignalDevice(devices: Map<String, OneSignalDeviceInfo>):
@@ -123,6 +138,7 @@ interface SettingsApi {
     suspend fun setReigniteRetries(retries: Int): Result<String, DataError>
     suspend fun setStartupDuration(duration: Int): Result<String, DataError>
     suspend fun setPrimeOnStartup(amount: Int): Result<String, DataError>
+    suspend fun setStartupPWMDuty(duty: Int): Result<String, DataError>
     suspend fun setStartExitTemp(temp: Int): Result<String, DataError>
 
     suspend fun setStartToHoldPrompt(enabled: Boolean): Result<String, DataError>

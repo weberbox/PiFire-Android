@@ -60,6 +60,9 @@ sealed class NavGraph {
         @Serializable data object Pushbullet
         @Serializable data object InfluxDb
         @Serializable data object Apprise
+
+        @Serializable
+        data object WLED
     }
 
     @Serializable

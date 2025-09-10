@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.io.FileInputStream
 import java.util.EnumSet
@@ -19,7 +20,7 @@ private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
 val vMinor = 2
-val vPatch = 1
+val vPatch = 2
 val isAlpha = true
 
 android {
@@ -48,6 +49,7 @@ android {
 
     buildTypes {
         release {
+            manifestPlaceholders += mapOf()
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
             isShrinkResources = true
@@ -115,12 +117,11 @@ android {
         val flavor = variant.flavorName
         val buildType = variant.buildType.name
         val versionName = variant.versionName
-        variant.outputs
-            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-            .forEach { output ->
-                val outputFileName = "${appName}-${flavor}-${buildType}-${versionName}.apk"
-                output.outputFileName = outputFileName
-            }
+
+        outputs.configureEach {
+            (this as? ApkVariantOutputImpl)?.outputFileName =
+                "${appName}-${flavor}-${buildType}-${versionName}.apk"
+        }
     }
 }
 

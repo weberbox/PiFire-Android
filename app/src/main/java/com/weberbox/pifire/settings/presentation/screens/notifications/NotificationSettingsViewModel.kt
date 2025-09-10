@@ -67,6 +67,21 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotifContract.Event.SetPushOverEnabled -> setPushOverEnabled(event.enabled)
             is NotifContract.Event.SetPushOverUrl -> setPushOverUrl(event.url)
             is NotifContract.Event.SetPushOverUserKeys -> setPushOverUserKeys(event.userKeys)
+            is NotifContract.Event.SetWLEDEnabled -> setWLEDEnabled(event.enabled)
+            is NotifContract.Event.SetWLedAddress -> setWLEDAddress(event.address)
+            is NotifContract.Event.SetWLedDuration -> setWLEDDuration(event.duration)
+            is NotifContract.Event.SetWLedEventGrill -> setWLEDEventGrill(event.event)
+            is NotifContract.Event.SetWLedEventPellets -> setWLEDEventPellets(event.event)
+            is NotifContract.Event.SetWLedEventRecipe -> setWLEDEventRecipe(event.event)
+            is NotifContract.Event.SetWLedEventTemp -> setWLEDEventTemp(event.event)
+            is NotifContract.Event.SetWLedEventTimer -> setWLEDEventTimer(event.event)
+            is NotifContract.Event.SetWLedModeHold -> setWLedModeHold(event.mode)
+            is NotifContract.Event.SetWLedModePrime -> setWLedModePrime(event.mode)
+            is NotifContract.Event.SetWLedModeReignite -> setWLedModeReignite(event.mode)
+            is NotifContract.Event.SetWLedModeShutdown -> setWLedModeShutdown(event.mode)
+            is NotifContract.Event.SetWLedModeSmoke -> setWLedModeSmoke(event.mode)
+            is NotifContract.Event.SetWLedModeStartup -> setWLedModeStartup(event.mode)
+            is NotifContract.Event.SetWLedModeStop -> setWLedModeStop(event.mode)
         }
     }
 
@@ -248,6 +263,96 @@ class NotificationSettingsViewModel @Inject constructor(
         val updatedLocations = locations.filterNot { it == location }
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(settingsRepo.setAppriseLocations(updatedLocations))
+        }
+    }
+
+    private fun setWLEDEnabled(enabled: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLEDEnabled(enabled))
+        }
+    }
+
+    private fun setWLEDAddress(address: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLEDAddress(address))
+        }
+    }
+
+    private fun setWLEDDuration(duration: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLEDDuration(duration))
+        }
+    }
+
+    private fun setWLedModeHold(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeHold(mode))
+        }
+    }
+
+    private fun setWLedModePrime(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModePrime(mode))
+        }
+    }
+
+    private fun setWLedModeReignite(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeReignite(mode))
+        }
+    }
+
+    private fun setWLedModeShutdown(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeShutdown(mode))
+        }
+    }
+
+    private fun setWLedModeSmoke(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeSmoke(mode))
+        }
+    }
+
+    private fun setWLedModeStartup(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeStartup(mode))
+        }
+    }
+
+    private fun setWLedModeStop(mode: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedModeStop(mode))
+        }
+    }
+
+    private fun setWLEDEventGrill(event: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedEventGrill(event))
+        }
+    }
+
+    private fun setWLEDEventPellets(event: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedEventPellets(event))
+        }
+    }
+
+    private fun setWLEDEventRecipe(event: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedEventRecipe(event))
+        }
+    }
+
+    private fun setWLEDEventTemp(event: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedEventTemp(event))
+        }
+    }
+
+    private fun setWLEDEventTimer(event: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedEventTimer(event))
         }
     }
 

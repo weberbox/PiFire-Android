@@ -100,9 +100,11 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 pwmMinDutyCycle = from.pwm?.minDutyCycle ?: Setting.pwmMinDutyCycle.value,
                 pwmMaxDutyCycle = from.pwm?.maxDutyCycle ?: Setting.pwmMaxDutyCycle.value,
                 pwmTempRangeList = from.pwm?.tempRangeList ?: Setting.pwmTempRangeList.value,
-                pwmProfiles = from.pwm?.profiles?.map { profile -> PwmProfile(
-                    dutyCycle = profile.dutyCycle ?: 0
-                ) } ?: emptyList(),
+                pwmProfiles = from.pwm?.profiles?.map { profile ->
+                    PwmProfile(
+                        dutyCycle = profile.dutyCycle ?: 0
+                    )
+                } ?: emptyList(),
                 pwmControlList = PwmControlMapper.map(from.pwm?.tempRangeList, from.pwm?.profiles),
                 safetyStartupCheck = from.safety?.startupCheck ?: Setting.safetyStartupCheck.value,
                 safetyMinStartupTemp = from.safety?.minStartupTemp
@@ -126,6 +128,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                     ?: Setting.startupGotoMode.value,
                 startupGotoTemp = from.startup?.startToMode?.primarySetPoint
                     ?: Setting.startupGotoTemp.value,
+                startupPWMDuty = from.startup?.pwmStartupDuty ?: Setting.startupPWMDuty.value,
                 startToHoldPrompt = from.startup?.startToMode?.startToHoldPrompt
                     ?: Setting.startToHoldPrompt.value,
                 smartStartEnabled = from.startup?.smartStart?.enabled
@@ -159,9 +162,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 pushoverUrl = notify?.pushover?.publicURL ?: Setting.pushoverUrl.value,
                 onesignalEnabled = notify?.onesignal?.enabled ?: Setting.onesignalEnabled.value,
                 onesignalUuid = notify?.onesignal?.uuid ?: Setting.onesignalUuid.value,
-                onesignalDevices = OneSignalDeviceMapper.map(
-                    from.notifyServices?.onesignal?.devices
-                ),
+                onesignalDevices = OneSignalDeviceMapper.map(from.notifyServices?.onesignal?.devices),
                 influxDbEnabled = notify?.influxDB?.enabled ?: Setting.influxdbEnabled.value,
                 influxDbUrl = notify?.influxDB?.url ?: Setting.influxdbUrl.value,
                 influxDbToken = notify?.influxDB?.token ?: Setting.influxdbToken.value,
@@ -176,7 +177,30 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 mqttPort = notify?.mqtt?.port ?: Setting.mqttPort.value,
                 mqttUpdateSec = notify?.mqtt?.updateSec ?: Setting.mqttUpdateSec.value,
                 appriseEnabled = notify?.apprise?.enabled ?: Setting.appriseEnabled.value,
-                appriseLocations = notify?.apprise?.locations ?: Setting.appriseLocations.value
+                appriseLocations = notify?.apprise?.locations ?: Setting.appriseLocations.value,
+                wledEnabled = notify?.wled?.enabled ?: Setting.wledEnabled.value,
+                wledAddress = notify?.wled?.address ?: Setting.wledAddress.value,
+                wledDuration = notify?.wled?.duration ?: Setting.wledDuration.value,
+                wledModeHold = notify?.wled?.modePresets?.hold ?: Setting.wledModeHold.value,
+                wledModePrime = notify?.wled?.modePresets?.prime ?: Setting.wledModePrime.value,
+                wledModeReignite = notify?.wled?.modePresets?.reignite
+                    ?: Setting.wledModeReignite.value,
+                wledModeShutdown = notify?.wled?.modePresets?.shutdown
+                    ?: Setting.wledModeShutdown.value,
+                wledModeSmoke = notify?.wled?.modePresets?.smoke ?: Setting.wledModeSmoke.value,
+                wledModeStartup = notify?.wled?.modePresets?.startup
+                    ?: Setting.wledModeStartup.value,
+                wledModeStop = notify?.wled?.modePresets?.stop ?: Setting.wledModeStop.value,
+                wledEventGrill = notify?.wled?.eventsPresets?.grillError
+                    ?: Setting.wledEventGrill.value,
+                wledEventPellets = notify?.wled?.eventsPresets?.pelletLevel
+                    ?: Setting.wledEventPellets.value,
+                wledEventRecipe = notify?.wled?.eventsPresets?.recipeNext
+                    ?: Setting.wledEventRecipe.value,
+                wledEventTemp = notify?.wled?.eventsPresets?.tempAchieved
+                    ?: Setting.wledEventTemp.value,
+                wledEventTimer = notify?.wled?.eventsPresets?.timerExpired
+                    ?: Setting.wledEventTimer.value
             )
         )
     }

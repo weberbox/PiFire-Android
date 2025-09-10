@@ -71,6 +71,21 @@ interface SettingsRepo {
     suspend fun setMqttUsername(username: String): Result<Server, DataError>
     suspend fun setAppriseEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setAppriseLocations(locations: List<String>): Result<Server, DataError>
+    suspend fun setWLEDEnabled(enabled: Boolean): Result<Server, DataError>
+    suspend fun setWLEDAddress(address: String): Result<Server, DataError>
+    suspend fun setWLEDDuration(duration: Int): Result<Server, DataError>
+    suspend fun setWLedModeHold(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModePrime(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModeReignite(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModeShutdown(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModeSmoke(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModeStartup(mode: Int): Result<Server, DataError>
+    suspend fun setWLedModeStop(mode: Int): Result<Server, DataError>
+    suspend fun setWLedEventGrill(event: Int): Result<Server, DataError>
+    suspend fun setWLedEventPellets(event: Int): Result<Server, DataError>
+    suspend fun setWLedEventRecipe(event: Int): Result<Server, DataError>
+    suspend fun setWLedEventTemp(event: Int): Result<Server, DataError>
+    suspend fun setWLedEventTimer(event: Int): Result<Server, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<Server, DataError>
     suspend fun registerOneSignalDevice(device: Map<String, OneSignalDeviceInfo>):
@@ -139,6 +154,7 @@ interface SettingsRepo {
     suspend fun setReigniteRetries(retries: Int): Result<Server, DataError>
     suspend fun setStartupDuration(duration: Int): Result<Server, DataError>
     suspend fun setPrimeOnStartup(amount: Int): Result<Server, DataError>
+    suspend fun setStartupPWMDuty(duty: Int): Result<Server, DataError>
     suspend fun setStartExitTemp(temp: Int): Result<Server, DataError>
     suspend fun setStartToHoldPrompt(enabled: Boolean): Result<Server, DataError>
     suspend fun setSmartStartEnabled(enabled: Boolean): Result<Server, DataError>

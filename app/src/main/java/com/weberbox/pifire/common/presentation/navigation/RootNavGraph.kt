@@ -46,6 +46,7 @@ import com.weberbox.pifire.settings.presentation.screens.notifications.Notificat
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushbulletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushoverSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.pellets.PelletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.probe.ProbeSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.pwm.PwmControlDestination
@@ -255,6 +256,10 @@ fun NavGraphBuilder.settingsNavGraph(
         composable<NavGraph.SettingsDest.Apprise> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
             AppriseSettingsDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLED> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedSettingsDestination(navController, viewModel)
         }
     }
 }

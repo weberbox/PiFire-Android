@@ -11,6 +11,8 @@
     <string name="settings_startup_exit_temp_value">Temperature</string>
     <string name="settings_startup_prime">Always Prime on Startup</string>
     <string name="settings_startup_prime_value">Amount</string>
+    <string name="settings_startup_pwm_duty">DC Fan Duty Cycle</string>
+    <string name="settings_startup_pwm_duty_note">Duty cycle for the DC fan during startup/reignite cycles. PiFire will honor min/max duty cycle in the PWM Settings</string>
 
     <string name="settings_smart_start">Smart Start</string>
     <string name="settings_smart_start_note">Smart Start will sample the temperature from your grill probe on startup to determine the best startup time and Smoke mode cycle settings. If this mode is enabled, it will override the startup and smoke cycle settings.</string>

@@ -349,6 +349,66 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setAppriseLocations(locations))
     }
 
+    override suspend fun setWLEDEnabled(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLEDEnabled(enabled))
+    }
+
+    override suspend fun setWLEDAddress(address: String): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLEDAddress(address))
+    }
+
+    override suspend fun setWLEDDuration(duration: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLEDDuration(duration))
+    }
+
+    override suspend fun setWLedModeHold(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeHold(mode))
+    }
+
+    override suspend fun setWLedModePrime(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModePrime(mode))
+    }
+
+    override suspend fun setWLedModeReignite(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeReignite(mode))
+    }
+
+    override suspend fun setWLedModeShutdown(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeShutdown(mode))
+    }
+
+    override suspend fun setWLedModeSmoke(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeSmoke(mode))
+    }
+
+    override suspend fun setWLedModeStartup(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeStartup(mode))
+    }
+
+    override suspend fun setWLedModeStop(mode: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedModeStop(mode))
+    }
+
+    override suspend fun setWLedEventGrill(event: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedEventGrill(event))
+    }
+
+    override suspend fun setWLedEventPellets(event: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedEventPellets(event))
+    }
+
+    override suspend fun setWLedEventRecipe(event: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedEventRecipe(event))
+    }
+
+    override suspend fun setWLedEventTemp(event: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedEventTemp(event))
+    }
+
+    override suspend fun setWLedEventTimer(event: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedEventTimer(event))
+    }
+
     override suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError> {
         return transformResult(settingsApi.setOneSignalEnabled(enabled))
     }
@@ -600,6 +660,10 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setPrimeOnStartup(amount: Int): Result<Server, DataError> {
         return transformResult(settingsApi.setPrimeOnStartup(amount))
+    }
+
+    override suspend fun setStartupPWMDuty(duty: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setStartupPWMDuty(duty))
     }
 
     override suspend fun setStartExitTemp(temp: Int): Result<Server, DataError> {

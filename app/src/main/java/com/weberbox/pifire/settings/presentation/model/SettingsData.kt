@@ -133,6 +133,7 @@ data class SettingsData(
             val startupExitTemp: Int = Setting.startupExitTemp.value,
             val startupGotoMode: String = Setting.startupGotoMode.value,
             val startupGotoTemp: Int = Setting.startupGotoTemp.value,
+            val startupPWMDuty: Int = Setting.startupPWMDuty.value,
             val startToHoldPrompt: Boolean = Setting.startToHoldPrompt.value,
             val smartStartEnabled: Boolean = Setting.smartStartEnabled.value,
             val smartStartExitTemp: Int = Setting.smartStartExitTemp.value,
@@ -191,7 +192,24 @@ data class SettingsData(
 
             // Apprise
             val appriseEnabled: Boolean = Setting.appriseEnabled.value,
-            val appriseLocations: List<Location> = Setting.appriseLocations.value
+            val appriseLocations: List<Location> = Setting.appriseLocations.value,
+
+            // WLED
+            val wledEnabled: Boolean = Setting.wledEnabled.value,
+            val wledAddress: String = Setting.wledAddress.value,
+            val wledDuration: Int = Setting.wledDuration.value,
+            val wledModeStop: Int = Setting.wledModeStop.value,
+            val wledModeStartup: Int = Setting.wledModeStartup.value,
+            val wledModeReignite: Int = Setting.wledModeReignite.value,
+            val wledModeSmoke: Int = Setting.wledModeSmoke.value,
+            val wledModeHold: Int = Setting.wledModeHold.value,
+            val wledModeShutdown: Int = Setting.wledModeShutdown.value,
+            val wledModePrime: Int = Setting.wledModePrime.value,
+            val wledEventTemp: Int = Setting.wledEventTemp.value,
+            val wledEventRecipe: Int = Setting.wledEventRecipe.value,
+            val wledEventGrill: Int = Setting.wledEventGrill.value,
+            val wledEventPellets: Int = Setting.wledEventPellets.value,
+            val wledEventTimer: Int = Setting.wledEventTimer.value
         )
     }
 }

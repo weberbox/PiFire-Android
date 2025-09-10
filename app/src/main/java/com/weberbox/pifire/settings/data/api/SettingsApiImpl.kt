@@ -474,6 +474,195 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
+    override suspend fun setWLEDEnabled(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(enabled = enabled)
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLEDAddress(address: String): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(address = address)
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLEDDuration(duration: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(duration = duration)
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeHold(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(hold = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModePrime(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(prime = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeReignite(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(reignite = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeShutdown(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(shutdown = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeSmoke(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(smoke = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeStartup(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(startup = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedModeStop(mode: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        modePresets = NotifyServices.WLed.ModePresets(stop = mode)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedEventGrill(event: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        eventsPresets = NotifyServices.WLed.EventsPresets(grillError = event)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedEventPellets(event: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        eventsPresets = NotifyServices.WLed.EventsPresets(pelletLevel = event)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedEventRecipe(event: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        eventsPresets = NotifyServices.WLed.EventsPresets(recipeNext = event)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedEventTemp(event: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        eventsPresets = NotifyServices.WLed.EventsPresets(tempAchieved = event)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setWLedEventTimer(event: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    wled = NotifyServices.WLed(
+                        eventsPresets = NotifyServices.WLed.EventsPresets(timerExpired = event)
+                    )
+                )
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
     override suspend fun setOneSignalEnabled(enabled: Boolean): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(
@@ -1049,6 +1238,13 @@ class SettingsApiImpl @Inject constructor(
     override suspend fun setPrimeOnStartup(amount: Int): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(startup = Startup(primeOnStartup = amount))
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setStartupPWMDuty(duty: Int): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(startup = Startup(pwmStartupDuty = duty))
         )
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }

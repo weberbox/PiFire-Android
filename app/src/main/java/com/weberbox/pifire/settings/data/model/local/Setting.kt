@@ -122,6 +122,7 @@ data class Setting<T>(
         val startupExitTemp = Setting("startup_exit_temp", 0)
         val startupGotoMode = Setting("after_startup_mode", "Smoke")
         val startupGotoTemp = Setting("primary_setpoint", 165)
+        val startupPWMDuty = Setting("pwm_duty_cycle", 100)
         val startToHoldPrompt = Setting("start_to_hold_prompt", false)
         val smartStartEnabled = Setting("enabled", false)
         val smartStartExitTemp = Setting("exit_temp", 120)
@@ -181,6 +182,23 @@ data class Setting<T>(
         val mqttPass = Setting("password", "")
         val mqttPort = Setting("port", 1883)
         val mqttUpdateSec = Setting("update_sec", 30)
+
+        // WLED
+        val wledEnabled = Setting("enabled", false)
+        val wledAddress = Setting("address", "wled.local")
+        val wledDuration = Setting("duration", 120)
+        val wledModeStop = Setting("modeStop", 8)
+        val wledModeStartup = Setting("modeStartup", 5)
+        val wledModeReignite = Setting("modeReignite", 5)
+        val wledModeSmoke = Setting("modeSmoke", 6)
+        val wledModeHold = Setting("modeHold", 6)
+        val wledModeShutdown = Setting("modeShutdown", 7)
+        val wledModePrime = Setting("modePrime", 5)
+        val wledEventTemp = Setting("eventTemp", 7)
+        val wledEventRecipe = Setting("eventRecipe", 7)
+        val wledEventGrill = Setting("eventGrill", 7)
+        val wledEventPellets = Setting("eventPellets", 7)
+        val wledEventTimer = Setting("eventTimer", 7)
     }
 }
 
