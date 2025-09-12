@@ -33,12 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.icons.Icon
@@ -156,11 +156,11 @@ private fun ProbeSettingsContent(
     onEventSent: (event: ProbeContract.Event) -> Unit,
     contentPadding: PaddingValues
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val probeSheet = rememberInputModalBottomSheetState<ProbeInfo>()
     val tempSelections = arrayToHashMap(
-        context.resources.getStringArray(R.array.grill_temp_unit_entries),
-        context.resources.getStringArray(R.array.grill_temp_unit_values)
+        resources.getStringArray(R.array.grill_temp_unit_entries),
+        resources.getStringArray(R.array.grill_temp_unit_values)
     )
     LinearLoadingIndicator(
         isLoading = state.isLoading,

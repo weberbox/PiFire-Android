@@ -131,6 +131,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.hilt.navigation)
+    implementation(libs.androidx.hilt.viewmodel)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

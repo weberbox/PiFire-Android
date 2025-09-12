@@ -74,6 +74,9 @@ data class ProbeSettings(
             @SerialName("module")
             val module: String? = null,
 
+            @SerialName("module_filename")
+            val moduleFilename: String? = null,
+
             @SerialName("ports")
             val ports: List<String>? = null
         ) {

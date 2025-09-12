@@ -1,17 +1,17 @@
 [versions]
-androidxComposeBom = "2025.08.01"
+androidxComposeBom = "2025.09.00"
 firebaseBom = "34.2.0"
 androidxPalette = "1.0.0"
-androidxComposeFonts = "1.9.0"
+androidxComposeFonts = "1.9.1"
 androidxSplashscreen = "1.0.1"
 androidxDatastore = "1.1.7"
-androidXActivityKtx = "1.10.1"
+androidXActivityKtx = "1.11.0"
 androidxCrypto = "1.1.0"
 androidxBiometrics = "1.1.0"
 googleScanner = "16.1.0"
-material3Android = "1.5.0-alpha03"
-navigationCompose = "2.9.3"
-navigationHiltCompose = "1.2.0"
+material3Android = "1.5.0-alpha04"
+navigationCompose = "2.9.4"
+navigationHiltCompose = "1.3.0"
 kotlinSerialization = "1.9.0"
 coroutinesVersion = "1.10.2"
 composablesCore = "1.43.1"
@@ -53,6 +53,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref= "navigationCompose"}
 androidx-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref= "navigationHiltCompose"}
+androidx-hilt-viewmodel = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "navigationHiltCompose" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref= "androidXActivityKtx" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }

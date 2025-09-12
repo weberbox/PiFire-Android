@@ -24,10 +24,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
@@ -140,7 +140,7 @@ private fun PidSettingsContent(
     onEventSent: (event: WorkContract.Event) -> Unit,
     contentPadding: PaddingValues
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val pidPbSheet = rememberCustomModalBottomSheetState()
     val pidTdSheet = rememberCustomModalBottomSheetState()
     val pidTiSheet = rememberCustomModalBottomSheetState()
@@ -152,8 +152,8 @@ private fun PidSettingsContent(
     val uMinSheet = rememberCustomModalBottomSheetState()
     val uMaxSheet = rememberCustomModalBottomSheetState()
     val pidSelections = arrayToHashMap(
-        context.resources.getStringArray(R.array.controller_config_entries),
-        context.resources.getStringArray(R.array.controller_config_values)
+        resources.getStringArray(R.array.controller_config_entries),
+        resources.getStringArray(R.array.controller_config_values)
     )
     LinearLoadingIndicator(
         isLoading = state.isLoading,
