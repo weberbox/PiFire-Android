@@ -82,6 +82,24 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotifContract.Event.SetWLedModeSmoke -> setWLedModeSmoke(event.mode)
             is NotifContract.Event.SetWLedModeStartup -> setWLedModeStartup(event.mode)
             is NotifContract.Event.SetWLedModeStop -> setWLedModeStop(event.mode)
+            is NotifContract.Event.SetWLedUseProfiles -> setWLedUseProfiles(event.useProfiles)
+            is NotifContract.Event.SetWLEDNightMode -> setWLEDNightMode(event.enabled)
+            is NotifContract.Event.SetWLedCookingColor -> setWLedCookingColor(event.color)
+            is NotifContract.Event.SetWLedIdleBrightness -> setWLedIdleBrightness(event.brightness)
+            is NotifContract.Event.SetWLedLedCount -> setWLedLedCount(event.count)
+            is NotifContract.Event.SetWLedProfileBooting -> setWLedProfileBooting(event.profile)
+            is NotifContract.Event.SetWLedProfileCooking -> setWLedProfileCooking(event.profile)
+            is NotifContract.Event.SetWLedProfileCooling -> setWLedProfileCooldown(event.profile)
+            is NotifContract.Event.SetWLedProfileFault -> setWLedProfileFault(event.profile)
+            is NotifContract.Event.SetWLedProfileIdle -> setWLedProfileIdle(event.profile)
+            is NotifContract.Event.SetWLedProfileNight -> setWLedProfileNight(event.profile)
+            is NotifContract.Event.SetWLedProfileOvershoot -> setWLedProfileOvershoot(event.profile)
+            is NotifContract.Event.SetWLedProfilePellets -> setWLedProfilePellets(event.profile)
+            is NotifContract.Event.SetWLedProfilePreheat -> setWLedProfilePreheat(event.profile)
+            is NotifContract.Event.SetWLedProfileProbe -> setWLedProfileProbe(event.profile)
+            is NotifContract.Event.SetWLedProfileTarget -> setWLedProfileTarget(event.profile)
+            is NotifContract.Event.SetWLedProfileTimer -> setWLedProfileTimer(event.profile)
+            is NotifContract.Event.SetWLedUseSuggestedProfiles -> setWLedUseSuggestedProfiles(event.useProfiles)
         }
     }
 
@@ -323,6 +341,114 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun setWLedModeStop(mode: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(settingsRepo.setWLedModeStop(mode))
+        }
+    }
+
+    private fun setWLedUseProfiles(useProfiles: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedUseProfiles(useProfiles))
+        }
+    }
+
+    private fun setWLedUseSuggestedProfiles(useProfiles: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedUseSuggestedProfiles(useProfiles))
+        }
+    }
+
+    private fun setWLEDNightMode(enabled: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedNightMode(enabled))
+        }
+    }
+
+    private fun setWLedCookingColor(color: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedCookingColor(color))
+        }
+    }
+
+    private fun setWLedIdleBrightness(brightness: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedIdleBrightness(brightness))
+        }
+    }
+
+    private fun setWLedLedCount(count: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedLedCount(count))
+        }
+    }
+
+    private fun setWLedProfileBooting(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileBooting(profile))
+        }
+    }
+
+    private fun setWLedProfileCooking(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileCooking(profile))
+        }
+    }
+
+    private fun setWLedProfileCooldown(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileCooldown(profile))
+        }
+    }
+
+    private fun setWLedProfileFault(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileFault(profile))
+        }
+    }
+
+    private fun setWLedProfileIdle(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileIdle(profile))
+        }
+    }
+
+    private fun setWLedProfileNight(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileNight(profile))
+        }
+    }
+
+    private fun setWLedProfileOvershoot(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileOvershoot(profile))
+        }
+    }
+
+    private fun setWLedProfilePellets(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfilePellets(profile))
+        }
+    }
+
+    private fun setWLedProfilePreheat(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfilePreheat(profile))
+        }
+    }
+
+    private fun setWLedProfileProbe(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileProbe(profile))
+        }
+    }
+
+    private fun setWLedProfileTarget(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileTarget(profile))
+        }
+    }
+
+    private fun setWLedProfileTimer(profile: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setWLedProfileTimer(profile))
         }
     }
 

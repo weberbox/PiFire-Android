@@ -17,7 +17,7 @@
     "WLEDNotifications": {
       "enabled": true,
       "minVersion": "1.10.0",
-      "minBuild": "48",
+      "minBuild": "51",
       "maxVersion": "",
       "maxBuild": ""
     },

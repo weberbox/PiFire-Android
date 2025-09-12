@@ -46,7 +46,9 @@ import com.weberbox.pifire.settings.presentation.screens.notifications.Notificat
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushbulletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushoverSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedProfilesDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSuggestedProfilesDestination
 import com.weberbox.pifire.settings.presentation.screens.pellets.PelletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.probe.ProbeSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.pwm.PwmControlDestination
@@ -260,6 +262,14 @@ fun NavGraphBuilder.settingsNavGraph(
         composable<NavGraph.SettingsDest.WLED> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
             WLedSettingsDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLEDProfiles> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedProfilesDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLEDSuggestedProfiles> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedSuggestedProfilesDestination(navController, viewModel)
         }
     }
 }

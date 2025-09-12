@@ -33,7 +33,6 @@ import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
@@ -42,27 +41,26 @@ import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSh
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.settings.data.model.local.Setting
-import com.weberbox.pifire.settings.presentation.component.PreferenceInfo
-import com.weberbox.pifire.settings.presentation.component.PreferenceNote
-import com.weberbox.pifire.settings.presentation.component.TwoTargetSwitchPreference
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
-import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
+import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
 import com.weberbox.pifire.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import me.zhanghai.compose.preference.ListPreference
+import me.zhanghai.compose.preference.ListPreferenceType
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
 
 @Composable
-fun WLedSettingsDestination(
+fun WLedProfilesDestination(
     navController: NavHostController,
     viewModel: NotificationSettingsViewModel = hiltViewModel()
 ) {
     ProvidePreferenceTheme {
-        WLedSettings(
+        WLedProfiles(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -83,7 +81,7 @@ fun WLedSettingsDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun WLedSettings(
+private fun WLedProfiles(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -103,7 +101,7 @@ private fun WLedSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = stringResource(R.string.settings_cat_wled),
+                title = stringResource(R.string.settings_cat_wled_profiles),
                 scrollBehavior = scrollBehavior,
                 onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
             )
@@ -126,7 +124,6 @@ private fun WLedSettings(
                     WLedContent(
                         state = state,
                         onEventSent = onEventSent,
-                        onNavigationRequested = onNavigationRequested,
                         contentPadding = contentPadding
                     )
                 }
@@ -139,11 +136,10 @@ private fun WLedSettings(
 private fun WLedContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
     contentPadding: PaddingValues
 ) {
-    val addressSheet = rememberCustomModalBottomSheetState()
-    val durationSheet = rememberCustomModalBottomSheetState()
+    val idleBrightnessSheet = rememberCustomModalBottomSheetState()
+    val ledCountSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
         contentPadding = contentPadding
@@ -154,81 +150,72 @@ private fun WLedContent(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding)
     ) {
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_wled_address)) },
-            summary = { Text(text = getSummary(state.serverData.settings.wledAddress)) },
-            onClick = { addressSheet.open() }
-        )
-        PreferenceNote(note = stringResource(R.string.settings_wled_address_note))
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_wled_duration)) },
+        ListPreference(
+            value = state.serverData.settings.wledCookingColor,
+            values = listOf("Blue", "Green"),
+            onValueChange = { onEventSent(NotifContract.Event.SetWLedCookingColor(it.lowercase())) },
+            title = { Text(text = stringResource(R.string.settings_wled_cooking_color)) },
             summary = {
                 Text(
-                    text = getSummarySeconds(state.serverData.settings.wledDuration.toString())
-                )
-            },
-            onClick = { durationSheet.open() }
-        )
-        PreferenceNote(note = stringResource(R.string.settings_wled_duration_note))
-        TwoTargetSwitchPreference(
-            value = state.serverData.settings.wledUseProfiles,
-            onValueChange = { onEventSent(NotifContract.Event.SetWLedUseProfiles(it)) },
-            title = { Text(text = stringResource(R.string.settings_wled_use_profiles)) },
-            summary = { Text(text = getSummary(state.serverData.settings.wledUseProfiles)) },
-            onClick = {
-                onNavigationRequested(
-                    NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.WLEDProfiles
+                    text = getSummary(
+                        state.serverData.settings.wledCookingColor.replaceFirstChar { it.uppercase() }
                     )
                 )
-            }
+            },
+            type = ListPreferenceType.DROPDOWN_MENU
         )
-        PreferenceInfo(info = stringResource(R.string.settings_wled_use_profiles_note))
-        TwoTargetSwitchPreference(
-            value = state.serverData.settings.wledUseSuggestedProfiles,
-            onValueChange = { onEventSent(NotifContract.Event.SetWLedUseSuggestedProfiles(it)) },
-            title = { Text(text = stringResource(R.string.settings_wled_use_suggested_profiles)) },
-            summary = { Text(text = getSummary(state.serverData.settings.wledUseSuggestedProfiles)) },
-            onClick = {
-                onNavigationRequested(
-                    NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.WLEDSuggestedProfiles
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_wled_idle_brightness)) },
+            summary = {
+                Text(
+                    text = getSummaryPercent(
+                        state.serverData.settings.wledIdleBrightness.toString()
                     )
                 )
-            }
-        )
-        PreferenceInfo(info = stringResource(R.string.settings_wled_use_suggested_profiles_note))
-    }
-    BottomSheet(
-        sheetState = addressSheet.sheetState
-    ) {
-        InputValidationSheet(
-            input = state.serverData.settings.wledAddress,
-            title = stringResource(R.string.settings_wled_address),
-            placeholder = stringResource(R.string.settings_wled_address),
-            onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedAddress(it))
-                addressSheet.close()
             },
-            onDelete = {
-                onEventSent(NotifContract.Event.SetWLedAddress(Setting.wledAddress.value))
-                addressSheet.close()
-            }
+            onClick = { idleBrightnessSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_wled_led_count)) },
+            summary = { Text(text = getSummary(state.serverData.settings.wledLedCount.toString())) },
+            onClick = { ledCountSheet.open() }
+        )
+        SwitchPreference(
+            value = state.serverData.settings.wledNightMode,
+            onValueChange = { onEventSent(NotifContract.Event.SetWLEDNightMode(it)) },
+            title = { Text(text = stringResource(R.string.settings_wled_night_mode)) },
+            summary = { Text(text = getSummary(state.serverData.settings.wledNightMode)) }
         )
     }
     BottomSheet(
-        sheetState = durationSheet.sheetState
+        sheetState = idleBrightnessSheet.sheetState
     ) {
         InputValidationSheet(
-            input = state.serverData.settings.wledDuration.toString(),
-            title = stringResource(R.string.settings_wled_duration),
-            placeholder = stringResource(R.string.settings_wled_duration),
+            input = state.serverData.settings.wledIdleBrightness.toString(),
+            title = stringResource(R.string.settings_wled_idle_brightness),
+            placeholder = stringResource(R.string.settings_wled_idle_brightness),
             validationOptions = ValidationOptions(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedDuration(it.toInt()))
-                durationSheet.close()
+                onEventSent(NotifContract.Event.SetWLedIdleBrightness(it.toInt()))
+                idleBrightnessSheet.close()
+            }
+        )
+    }
+    BottomSheet(
+        sheetState = ledCountSheet.sheetState
+    ) {
+        InputValidationSheet(
+            input = state.serverData.settings.wledModeHold.toString(),
+            title = stringResource(R.string.settings_wled_led_count),
+            placeholder = stringResource(R.string.settings_wled_led_count),
+            validationOptions = ValidationOptions(
+                keyboardType = KeyboardType.NumberPassword
+            ),
+            onUpdate = {
+                onEventSent(NotifContract.Event.SetWLedLedCount(it.toInt()))
+                ledCountSheet.close()
             }
         )
     }
@@ -262,11 +249,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun WLedSettingsPreview() {
+private fun WLedProfilePreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                WLedSettings(
+                WLedProfiles(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

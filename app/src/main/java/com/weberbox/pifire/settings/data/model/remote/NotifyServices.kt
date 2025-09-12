@@ -163,7 +163,19 @@ data class NotifyServices(
         val modePresets: ModePresets? = null,
 
         @SerialName("event_presets")
-        val eventsPresets: EventsPresets? = null
+        val eventsPresets: EventsPresets? = null,
+
+        @SerialName("use_profiles")
+        val useProfiles: Boolean? = null,
+
+        @SerialName("use_suggested_presets")
+        val useSuggestedProfiles: Boolean? = null,
+
+        @SerialName("suggested_config")
+        val suggestedConfig: SuggestedConfig? = null,
+
+        @SerialName("profile_numbers")
+        val profileNumbers: ProfileNumbers? = null
     ) {
 
         @Serializable
@@ -206,6 +218,60 @@ data class NotifyServices(
 
             @SerialName("Timer_Expired")
             val timerExpired: Int? = null
+        )
+
+        @Serializable
+        data class SuggestedConfig(
+            @SerialName("cooking_color")
+            val cookingColor: String? = null,
+
+            @SerialName("idle_brightness")
+            val idleBrightness: Int? = null,
+
+            @SerialName("led_count")
+            val ledCount: Int? = null,
+
+            @SerialName("night_mode")
+            val nightMode: Boolean? = null,
+        )
+
+        @Serializable
+        data class ProfileNumbers(
+            @SerialName("booting")
+            val booting: Int? = null,
+
+            @SerialName("cooking")
+            val cooking: Int? = null,
+
+            @SerialName("cooldown")
+            val cooldown: Int? = null,
+
+            @SerialName("error_fault")
+            val errorFault: Int? = null,
+
+            @SerialName("idle")
+            val idle: Int? = null,
+
+            @SerialName("low_pellets")
+            val lowPellets: Int? = null,
+
+            @SerialName("night_mode")
+            val nightMode: Int? = null,
+
+            @SerialName("overshoot_alarm")
+            val overshootAlarm: Int? = null,
+
+            @SerialName("preheat")
+            val preheat: Int? = null,
+
+            @SerialName("probe_alarm")
+            val probeAlarm: Int? = null,
+
+            @SerialName("target_reached")
+            val targetReached: Int? = null,
+
+            @SerialName("timer_done")
+            val timerDone: Int? = null
         )
     }
 }

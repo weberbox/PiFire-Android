@@ -409,6 +409,94 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setWLedEventTimer(event))
     }
 
+    override suspend fun setWLedUseProfiles(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedUseProfiles(enabled))
+    }
+
+    override suspend fun setWLedUseSuggestedProfiles(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedUseSuggestedProfiles(enabled))
+    }
+
+    override suspend fun setWLedNightMode(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedNightMode(enabled))
+    }
+
+    override suspend fun setWLedCookingColor(color: String): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedCookingColor(color))
+    }
+
+    override suspend fun setWLedIdleBrightness(brightness: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedIdleBrightness(brightness))
+    }
+
+    override suspend fun setWLedLedCount(count: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedLedCount(count))
+    }
+
+    override suspend fun setWLedProfileColor(color: String): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileColor(color))
+    }
+
+    override suspend fun setWLedProfileBrightness(brightness: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileBrightness(brightness))
+    }
+
+    override suspend fun setWLedProfileCount(count: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileCount(count))
+    }
+
+    override suspend fun setWLedProfileNight(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileNight(enabled))
+    }
+
+    override suspend fun setWLedProfileBooting(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileBooting(profile))
+    }
+
+    override suspend fun setWLedProfileCooking(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileCooking(profile))
+    }
+
+    override suspend fun setWLedProfileCooldown(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileCooldown(profile))
+    }
+
+    override suspend fun setWLedProfileFault(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileFault(profile))
+    }
+
+    override suspend fun setWLedProfileIdle(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileIdle(profile))
+    }
+
+    override suspend fun setWLedProfilePellets(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfilePellets(profile))
+    }
+
+    override suspend fun setWLedProfileNight(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileNight(profile))
+    }
+
+    override suspend fun setWLedProfileOvershoot(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileOvershoot(profile))
+    }
+
+    override suspend fun setWLedProfilePreheat(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfilePreheat(profile))
+    }
+
+    override suspend fun setWLedProfileProbe(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileProbe(profile))
+    }
+
+    override suspend fun setWLedProfileTarget(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileTarget(profile))
+    }
+
+    override suspend fun setWLedProfileTimer(profile: Int): Result<Server, DataError> {
+        return transformResult(settingsApi.setWLedProfileTimer(profile))
+    }
+
     override suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError> {
         return transformResult(settingsApi.setOneSignalEnabled(enabled))
     }

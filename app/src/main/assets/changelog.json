@@ -8,7 +8,7 @@
       "logs": [
         {
           "type": "new",
-          "text": "Added WLED Notification settings. Requires PiFire v1.10.0 build 48+"
+          "text": "Added WLED Notification settings. Requires PiFire v1.10.0 build 51+"
         },
         {
           "type": "new",

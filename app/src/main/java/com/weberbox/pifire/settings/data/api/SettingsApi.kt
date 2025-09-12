@@ -70,6 +70,28 @@ interface SettingsApi {
     suspend fun setWLedEventRecipe(event: Int): Result<String, DataError>
     suspend fun setWLedEventTemp(event: Int): Result<String, DataError>
     suspend fun setWLedEventTimer(event: Int): Result<String, DataError>
+    suspend fun setWLedUseProfiles(enabled: Boolean): Result<String, DataError>
+    suspend fun setWLedUseSuggestedProfiles(enabled: Boolean): Result<String, DataError>
+    suspend fun setWLedNightMode(enabled: Boolean): Result<String, DataError>
+    suspend fun setWLedCookingColor(color: String): Result<String, DataError>
+    suspend fun setWLedIdleBrightness(brightness: Int): Result<String, DataError>
+    suspend fun setWLedLedCount(count: Int): Result<String, DataError>
+    suspend fun setWLedProfileColor(color: String): Result<String, DataError>
+    suspend fun setWLedProfileBrightness(brightness: Int): Result<String, DataError>
+    suspend fun setWLedProfileCount(count: Int): Result<String, DataError>
+    suspend fun setWLedProfileNight(enabled: Boolean): Result<String, DataError>
+    suspend fun setWLedProfileBooting(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileCooking(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileCooldown(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileFault(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileIdle(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfilePellets(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileNight(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileOvershoot(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfilePreheat(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileProbe(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileTarget(profile: Int): Result<String, DataError>
+    suspend fun setWLedProfileTimer(profile: Int): Result<String, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<String, DataError>
     suspend fun registerOneSignalDevice(devices: Map<String, OneSignalDeviceInfo>):

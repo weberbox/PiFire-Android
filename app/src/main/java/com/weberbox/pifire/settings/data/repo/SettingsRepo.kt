@@ -86,6 +86,28 @@ interface SettingsRepo {
     suspend fun setWLedEventRecipe(event: Int): Result<Server, DataError>
     suspend fun setWLedEventTemp(event: Int): Result<Server, DataError>
     suspend fun setWLedEventTimer(event: Int): Result<Server, DataError>
+    suspend fun setWLedUseProfiles(enabled: Boolean): Result<Server, DataError>
+    suspend fun setWLedUseSuggestedProfiles(enabled: Boolean): Result<Server, DataError>
+    suspend fun setWLedNightMode(enabled: Boolean): Result<Server, DataError>
+    suspend fun setWLedCookingColor(color: String): Result<Server, DataError>
+    suspend fun setWLedIdleBrightness(brightness: Int): Result<Server, DataError>
+    suspend fun setWLedLedCount(count: Int): Result<Server, DataError>
+    suspend fun setWLedProfileColor(color: String): Result<Server, DataError>
+    suspend fun setWLedProfileBrightness(brightness: Int): Result<Server, DataError>
+    suspend fun setWLedProfileCount(count: Int): Result<Server, DataError>
+    suspend fun setWLedProfileNight(enabled: Boolean): Result<Server, DataError>
+    suspend fun setWLedProfileBooting(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileCooking(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileCooldown(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileFault(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileIdle(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfilePellets(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileNight(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileOvershoot(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfilePreheat(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileProbe(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileTarget(profile: Int): Result<Server, DataError>
+    suspend fun setWLedProfileTimer(profile: Int): Result<Server, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<Server, DataError>
     suspend fun registerOneSignalDevice(device: Map<String, OneSignalDeviceInfo>):

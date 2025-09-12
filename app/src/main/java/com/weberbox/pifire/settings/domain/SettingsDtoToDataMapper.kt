@@ -200,7 +200,42 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 wledEventTemp = notify?.wled?.eventsPresets?.tempAchieved
                     ?: Setting.wledEventTemp.value,
                 wledEventTimer = notify?.wled?.eventsPresets?.timerExpired
-                    ?: Setting.wledEventTimer.value
+                    ?: Setting.wledEventTimer.value,
+                wledUseProfiles = notify?.wled?.useProfiles ?: Setting.wledUseProfiles.value,
+                wledUseSuggestedProfiles = notify?.wled?.useSuggestedProfiles
+                    ?: Setting.wledUseSuggestedProfiles.value,
+                wledCookingColor = notify?.wled?.suggestedConfig?.cookingColor
+                    ?: Setting.wledCookingColor.value,
+                wledIdleBrightness = notify?.wled?.suggestedConfig?.idleBrightness
+                    ?: Setting.wledIdleBrightness.value,
+                wledLedCount = notify?.wled?.suggestedConfig?.ledCount
+                    ?: Setting.wledLedCount.value,
+                wledNightMode = notify?.wled?.suggestedConfig?.nightMode
+                    ?: Setting.wledNightMode.value,
+                wledProfileBooting = notify?.wled?.profileNumbers?.booting
+                    ?: Setting.wledProfileBooting.value,
+                wledProfileCooking = notify?.wled?.profileNumbers?.cooking
+                    ?: Setting.wledProfileCooking.value,
+                wledProfileCooldown = notify?.wled?.profileNumbers?.cooldown
+                    ?: Setting.wledProfileCooldown.value,
+                wledProfileFault = notify?.wled?.profileNumbers?.errorFault
+                    ?: Setting.wledProfileFault.value,
+                wledProfileIdle = notify?.wled?.profileNumbers?.idle
+                    ?: Setting.wledProfileIdle.value,
+                wledProfilePellets = notify?.wled?.profileNumbers?.lowPellets
+                    ?: Setting.wledProfilePellets.value,
+                wledProfileNight = notify?.wled?.profileNumbers?.nightMode
+                    ?: Setting.wledProfileNight.value,
+                wledProfileOvershoot = notify?.wled?.profileNumbers?.overshootAlarm
+                    ?: Setting.wledProfileOvershoot.value,
+                wledProfilePreheat = notify?.wled?.profileNumbers?.preheat
+                    ?: Setting.wledProfilePreheat.value,
+                wledProfileProbe = notify?.wled?.profileNumbers?.probeAlarm
+                    ?: Setting.wledProfileProbe.value,
+                wledProfileTarget = notify?.wled?.profileNumbers?.targetReached
+                    ?: Setting.wledProfileTarget.value,
+                wledProfileTimer = notify?.wled?.profileNumbers?.timerDone
+                    ?: Setting.wledProfileTimer.value
             )
         )
     }

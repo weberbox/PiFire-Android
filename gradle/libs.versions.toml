@@ -32,7 +32,7 @@ retrofit = "3.0.0"
 okhttp = "5.1.0"
 socketIO = "2.1.2"
 leakCanary = "2.14"
-gradle = "8.12.2"
+gradle = "8.13.0"
 kotlin = "2.2.20"
 zoomable = "2.8.1"
 #noinspection NewerVersionAvailable

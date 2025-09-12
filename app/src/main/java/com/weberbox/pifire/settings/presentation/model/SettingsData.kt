@@ -209,7 +209,26 @@ data class SettingsData(
             val wledEventRecipe: Int = Setting.wledEventRecipe.value,
             val wledEventGrill: Int = Setting.wledEventGrill.value,
             val wledEventPellets: Int = Setting.wledEventPellets.value,
-            val wledEventTimer: Int = Setting.wledEventTimer.value
+            val wledEventTimer: Int = Setting.wledEventTimer.value,
+
+            val wledUseProfiles: Boolean = Setting.wledUseProfiles.value,
+            val wledUseSuggestedProfiles: Boolean = Setting.wledUseSuggestedProfiles.value,
+            val wledCookingColor: String = Setting.wledCookingColor.value,
+            val wledIdleBrightness: Int = Setting.wledIdleBrightness.value,
+            val wledLedCount: Int = Setting.wledLedCount.value,
+            val wledNightMode: Boolean = Setting.wledNightMode.value,
+            val wledProfileBooting: Int = Setting.wledProfileBooting.value,
+            val wledProfileCooking: Int = Setting.wledProfileCooking.value,
+            val wledProfileCooldown: Int = Setting.wledProfileCooldown.value,
+            val wledProfileFault: Int = Setting.wledProfileFault.value,
+            val wledProfileIdle: Int = Setting.wledProfileIdle.value,
+            val wledProfilePellets: Int = Setting.wledProfilePellets.value,
+            val wledProfileNight: Int = Setting.wledProfileNight.value,
+            val wledProfileOvershoot: Int = Setting.wledProfileOvershoot.value,
+            val wledProfilePreheat: Int = Setting.wledProfilePreheat.value,
+            val wledProfileProbe: Int = Setting.wledProfileProbe.value,
+            val wledProfileTarget: Int = Setting.wledProfileTarget.value,
+            val wledProfileTimer: Int = Setting.wledProfileTimer.value,
         )
     }
 }
