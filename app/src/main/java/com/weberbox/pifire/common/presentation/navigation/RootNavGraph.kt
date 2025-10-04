@@ -1,6 +1,7 @@
 package com.weberbox.pifire.common.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,6 +10,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.weberbox.pifire.changelog.presentation.screens.ChangelogScreenDestination
+import com.weberbox.pifire.common.data.interfaces.Analytics
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
 import com.weberbox.pifire.common.presentation.util.scaleEnterTransition
@@ -63,7 +66,8 @@ import kotlin.reflect.typeOf
 
 @Composable
 fun RootNavGraph(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    analytics: Analytics
 ) {
     NavHost(
         navController = navController,
@@ -84,6 +88,22 @@ fun RootNavGraph(
         recipesNavGraph(navController)
         infoNavGraph(navController)
         settingsNavGraph(navController)
+    }
+
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            entry.destination.route?.let { route ->
+                val screenName = route
+                    .substringBefore("/")
+                    .substringAfterLast('.')
+                analytics.logEvent(
+                    name = AnalyticsEvent.ScreenView.name,
+                    params = mapOf(
+                        AnalyticsEvent.Param.ScreenName.key to screenName
+                    )
+                )
+            }
+        }
     }
 }
 

@@ -134,6 +134,7 @@ private fun RecipesScreen(
                         recipeData = state.recipesList,
                         searchQuery = textFieldState.text,
                         onResultClick = { result ->
+                            onEventSent(RecipesContract.Event.VoiceSearch)
                             textFieldState.setTextAndPlaceCursorAtEnd(result)
                             searchQuery = result
                         }
@@ -145,7 +146,9 @@ private fun RecipesScreen(
                         textFieldState = textFieldState,
                         hazeState = hazeState,
                         searchStyle = HazeMaterials.ultraThin(
-                            MaterialTheme.colorScheme.surfaceContainerHigh).copy(noiseFactor = 0f),
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+                        )
+                            .copy(noiseFactor = 0f),
                         onNavigate = {
                             onNavigationRequested(RecipesContract.Effect.Navigation.Back)
                         },
@@ -285,7 +288,7 @@ private fun RecipesScreenPreview() {
 }
 
 internal fun buildRecipe(): List<Recipe> {
-    return List(5) {
+    return List(5) { position ->
         Recipe(
             assets = listOf(
                 Asset(
@@ -312,7 +315,7 @@ internal fun buildRecipe(): List<Recipe> {
                 thumbnail = "3f2dc267-aa27-11ed-a7f4-97f849ebe8ec.jpg",
                 image = "3f2dc267-aa27-11ed-a7f4-97f849ebe8ec.jpg"
             ),
-            recipeFilename = "Test",
+            recipeFilename = "Test".plus(position.toString()),
             steps = listOf(
                 Step(
                     holdTemp = 0,

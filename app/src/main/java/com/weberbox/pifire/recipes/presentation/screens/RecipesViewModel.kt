@@ -2,7 +2,9 @@ package com.weberbox.pifire.recipes.presentation.screens
 
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.util.UiText
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
-    private val recipesRepo: RecipesRepo
+    private val recipesRepo: RecipesRepo,
+    private val analytics: Analytics
 ) : BaseViewModel<RecipesContract.Event, RecipesContract.State, RecipesContract.Effect>() {
 
     init {
@@ -33,6 +36,11 @@ class RecipesViewModel @Inject constructor(
     override fun handleEvents(event: RecipesContract.Event) {
         when (event) {
             is RecipesContract.Event.Refresh -> getRecipesData(true)
+            is RecipesContract.Event.VoiceSearch -> {
+                analytics.logEvent(
+                    name = AnalyticsEvent.VoiceSearch.name
+                )
+            }
         }
     }
 

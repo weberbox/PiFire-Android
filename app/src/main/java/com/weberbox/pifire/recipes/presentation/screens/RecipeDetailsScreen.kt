@@ -130,7 +130,6 @@ private fun RecipeDetailsScreen(
     onEventSent: (event: DetailsContract.Event) -> Unit,
     onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
 ) {
-    val context = LocalContext.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val deleteSheet = rememberCustomModalBottomSheetState()
@@ -167,8 +166,8 @@ private fun RecipeDetailsScreen(
                     onFabAction = { action ->
                         when (action) {
                             Action.Delete -> onEventSent(DetailsContract.Event.DeleteRecipeDialog)
-                            Action.Share -> shareRecipe(state.recipeData, context)
-                            Action.Print -> printRecipe(state.recipeData, context)
+                            Action.Share -> onEventSent(DetailsContract.Event.ShareRecipe)
+                            Action.Print -> onEventSent(DetailsContract.Event.PrintRecipe)
                             Action.Run -> onEventSent(DetailsContract.Event.RunRecipe)
                         }
                     }
@@ -352,6 +351,7 @@ private fun HandleSideEffects(
     onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
+    val context = LocalContext.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
@@ -367,6 +367,8 @@ private fun HandleSideEffects(
                 }
 
                 is DetailsContract.Effect.DeleteDialog -> deleteSheet.open()
+                is DetailsContract.Effect.PrintRecipe -> printRecipe(effect.recipeData, context)
+                is DetailsContract.Effect.ShareRecipe -> shareRecipe(effect.recipeData, context)
             }
         }?.collect()
     }

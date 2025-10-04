@@ -5,7 +5,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
@@ -41,6 +43,7 @@ class HomeScreenViewModel @Inject constructor(
     private val oneSignalManager: OneSignalManager,
     private val socketManager: SocketManager,
     private val settingsRepo: SettingsRepo,
+    private val analytics: Analytics,
     private val dashApi: DashApi,
     private val prefs: Prefs
 ) : BaseViewModel<HomeContract.Event, HomeContract.State, HomeContract.Effect>() {
@@ -98,6 +101,7 @@ class HomeScreenViewModel @Inject constructor(
                 popUp = true
             )
         }
+        analytics.logEvent(AnalyticsEvent.SignOut.name)
     }
 
     private fun collectPrefsFlow() {
@@ -174,6 +178,14 @@ class HomeScreenViewModel @Inject constructor(
             is ServerSupportResult.Supported -> {}
 
             is ServerSupportResult.UnsupportedMin -> {
+                analytics.logEvent(
+                    name = AnalyticsEvent.UnsupportedServerMin.name,
+                    params = mapOf(
+                        AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
+                        AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
+                    )
+                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
@@ -203,6 +215,14 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is ServerSupportResult.UnsupportedMax -> {
+                analytics.logEvent(
+                    name = AnalyticsEvent.UnsupportedServerMax.name,
+                    params = mapOf(
+                        AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
+                        AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
+                    )
+                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
@@ -244,6 +264,12 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is ServerSupportResult.Untested -> {
+                analytics.logEvent(
+                    name = AnalyticsEvent.UntestedServer.name,
+                    params = mapOf(
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
+                    )
+                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(

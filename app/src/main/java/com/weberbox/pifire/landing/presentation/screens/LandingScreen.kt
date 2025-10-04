@@ -148,7 +148,10 @@ private fun LandingScreen(
             LandingTopBar(
                 state = state,
                 hazeState = hazeState,
-                onSearchUpdated = { searchQuery = it },
+                onSearchUpdated = {
+                    searchQuery = it
+                    onEventSent(LandingContract.Event.VoiceSearch)
+                },
                 onNavigationRequested = onNavigationRequested
             )
         },
