@@ -2,8 +2,8 @@
   {
     "appVersionCode": 3020200,
     "type": "FLEXIBLE",
-    "message": "Added WLED Notification settings, Added Startup PWM Setting",
-    "isAlpha": true
+    "message": "Added WLED Notification settings, Added Startup PWM Setting. Release requires PiFire version 1.10.0 build 29+",
+    "isAlpha": false
   },
   {
     "appVersionCode": 3020100,

@@ -4,7 +4,7 @@
       "version": "3.2.2",
       "date": "",
       "current": true,
-      "isAlpha": true,
+      "isAlpha": false,
       "logs": [
         {
           "type": "new",
