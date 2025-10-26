@@ -21,7 +21,7 @@ private val keystoreProperties = getKeystoreProperties()
 val vMajor = 3
 val vMinor = 2
 val vPatch = 2
-val isAlpha = true
+val isAlpha = false
 
 android {
     compileSdk = 36
@@ -59,6 +59,7 @@ android {
                     "proguard-rules.pro"
                 )
             )
+            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
@@ -70,6 +71,7 @@ android {
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug", "environment" to "debug"))
             applicationIdSuffix = ".debug"
             isDebuggable = true
+            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
