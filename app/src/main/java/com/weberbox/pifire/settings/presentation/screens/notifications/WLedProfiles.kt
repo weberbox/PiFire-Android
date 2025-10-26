@@ -1,4 +1,4 @@
-package com.weberbox.pifire.landing.presentation.screens
+package com.weberbox.pifire.settings.presentation.screens.notifications
 
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
@@ -24,49 +24,50 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
+import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
-import com.weberbox.pifire.common.presentation.model.InputState
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
-import com.weberbox.pifire.common.presentation.sheets.InputStateSheet
+import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
+import com.weberbox.pifire.common.presentation.sheets.ValidationOptions
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.landing.presentation.contract.ServerContract
-import com.weberbox.pifire.landing.presentation.sheets.CredentialsSheet
-import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth
-import com.weberbox.pifire.settings.presentation.component.PreferenceWarning
-import com.weberbox.pifire.settings.presentation.component.TwoTargetSwitchPreference
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
+import com.weberbox.pifire.settings.presentation.component.getSummary
+import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
+import com.weberbox.pifire.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import me.zhanghai.compose.preference.ListPreference
+import me.zhanghai.compose.preference.ListPreferenceType
 import me.zhanghai.compose.preference.Preference
-import me.zhanghai.compose.preference.PreferenceCategory
-import me.zhanghai.compose.preference.ProvidePreferenceLocals
+import me.zhanghai.compose.preference.ProvidePreferenceTheme
 
 @Composable
-fun ServerSettingsDestination(
+fun WLedProfilesDestination(
     navController: NavHostController,
-    viewModel: ServerViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel()
 ) {
-    ProvidePreferenceLocals {
-        ServerSettings(
+    ProvidePreferenceTheme {
+        WLedProfiles(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is ServerContract.Effect.Navigation.Back -> navController.popBackStack()
-                    is ServerContract.Effect.Navigation.NavRoute -> {
+                    is NotifContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.safeNavigate(
                             route = navigationEffect.route,
                             popUp = navigationEffect.popUp
@@ -80,11 +81,11 @@ fun ServerSettingsDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ServerSettings(
-    state: ServerContract.State,
-    effectFlow: Flow<ServerContract.Effect>?,
-    onEventSent: (event: ServerContract.Event) -> Unit,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+private fun WLedProfiles(
+    state: NotifContract.State,
+    effectFlow: Flow<NotifContract.Effect>?,
+    onEventSent: (event: NotifContract.Event) -> Unit,
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -100,9 +101,9 @@ private fun ServerSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = stringResource(R.string.settings_server),
+                title = stringResource(R.string.settings_cat_wled_profiles),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(ServerContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
             )
         },
         containerColor = Color.Transparent,
@@ -116,15 +117,14 @@ private fun ServerSettings(
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
                 state.isDataError -> DataError {
-                    onNavigationRequested(ServerContract.Effect.Navigation.Back)
+                    onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
 
                 else -> {
-                    ServerSettingsContent(
+                    WLedContent(
                         state = state,
-                        contentPadding = contentPadding,
                         onEventSent = onEventSent,
-                        onNavigationRequested = onNavigationRequested
+                        contentPadding = contentPadding
                     )
                 }
             }
@@ -133,78 +133,89 @@ private fun ServerSettings(
 }
 
 @Composable
-private fun ServerSettingsContent(
-    state: ServerContract.State,
-    contentPadding: PaddingValues,
-    onEventSent: (event: ServerContract.Event) -> Unit,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+private fun WLedContent(
+    state: NotifContract.State,
+    onEventSent: (event: NotifContract.Event) -> Unit,
+    contentPadding: PaddingValues
 ) {
-    val credentialsSheet = rememberCustomModalBottomSheetState()
-    val addressSheet = rememberCustomModalBottomSheetState()
+    val idleBrightnessSheet = rememberCustomModalBottomSheetState()
+    val ledCountSheet = rememberCustomModalBottomSheetState()
+    LinearLoadingIndicator(
+        isLoading = state.isLoading,
+        contentPadding = contentPadding
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(contentPadding)
     ) {
-        PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_server_title)) }
-        )
-        Preference(
-            title = {
-                Text(text = stringResource(R.string.settings_server_address))
-            },
-            summary = { Text(text = state.serverData.address) },
-            onClick = { addressSheet.open() }
-        )
-        PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_auth_title)) }
-        )
-        TwoTargetSwitchPreference(
-            value = state.serverData.credentialsEnabled,
-            title = { Text(text = stringResource(R.string.settings_basic_auth_title)) },
-            summary = { Text(text = stringResource(R.string.settings_basic_auth_summary)) },
-            onClick = { credentialsSheet.open() },
-            onValueChange = { onEventSent(ServerContract.Event.EnableBasicAuth(it)) }
-        )
-        TwoTargetSwitchPreference(
-            value = state.serverData.headersEnabled,
-            title = { Text(text = stringResource(R.string.settings_extra_headers_title)) },
-            summary = { Text(text = stringResource(R.string.settings_extra_headers_summary)) },
-            onClick = {
-                onNavigationRequested(
-                    ServerContract.Effect.Navigation.NavRoute(
-                        NavGraph.LandingDest.HeaderSettings(state.serverData.uuid)
+        ListPreference(
+            value = state.serverData.settings.wledCookingColor,
+            values = listOf("Blue", "Green"),
+            onValueChange = { onEventSent(NotifContract.Event.SetWLedCookingColor(it.lowercase())) },
+            title = { Text(text = stringResource(R.string.settings_wled_cooking_color)) },
+            summary = {
+                Text(
+                    text = getSummary(
+                        state.serverData.settings.wledCookingColor.replaceFirstChar { it.uppercase() }
                     )
                 )
             },
-            onValueChange = { onEventSent(ServerContract.Event.EnableHeaders(it)) }
+            type = ListPreferenceType.DROPDOWN_MENU
         )
-        PreferenceWarning(stringResource(R.string.settings_auth_warning))
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_wled_idle_brightness)) },
+            summary = {
+                Text(
+                    text = getSummaryPercent(
+                        state.serverData.settings.wledIdleBrightness.toString()
+                    )
+                )
+            },
+            onClick = { idleBrightnessSheet.open() }
+        )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_wled_led_count)) },
+            summary = { Text(text = getSummary(state.serverData.settings.wledLedCount.toString())) },
+            onClick = { ledCountSheet.open() }
+        )
+        SwitchPreference(
+            value = state.serverData.settings.wledNightMode,
+            onValueChange = { onEventSent(NotifContract.Event.SetWLEDNightMode(it)) },
+            title = { Text(text = stringResource(R.string.settings_wled_night_mode)) },
+            summary = { Text(text = getSummary(state.serverData.settings.wledNightMode)) }
+        )
     }
     BottomSheet(
-        sheetState = addressSheet.sheetState
+        sheetState = idleBrightnessSheet.sheetState
     ) {
-        InputStateSheet(
-            inputState = state.serverAddress,
-            title = stringResource(R.string.settings_server_address),
-            placeholder = stringResource(R.string.settings_server_address),
-            onValueChange = { onEventSent(ServerContract.Event.ValidateAddress(it)) },
-            onDismiss = { addressSheet.close() },
-            onConfirm = {
-                addressSheet.close()
-                onEventSent(ServerContract.Event.UpdateAddress(it))
+        InputValidationSheet(
+            input = state.serverData.settings.wledIdleBrightness.toString(),
+            title = stringResource(R.string.settings_wled_idle_brightness),
+            placeholder = stringResource(R.string.settings_wled_idle_brightness),
+            validationOptions = ValidationOptions(
+                keyboardType = KeyboardType.NumberPassword
+            ),
+            onUpdate = {
+                onEventSent(NotifContract.Event.SetWLedIdleBrightness(it.toInt()))
+                idleBrightnessSheet.close()
             }
         )
     }
     BottomSheet(
-        sheetState = credentialsSheet.sheetState
+        sheetState = ledCountSheet.sheetState
     ) {
-        CredentialsSheet(
-            basicAuth = state.basicAuth,
-            onAction = {
-                onEventSent(ServerContract.Event.UpdateBasicAuth(it))
-                credentialsSheet.close()
+        InputValidationSheet(
+            input = state.serverData.settings.wledModeHold.toString(),
+            title = stringResource(R.string.settings_wled_led_count),
+            placeholder = stringResource(R.string.settings_wled_led_count),
+            validationOptions = ValidationOptions(
+                keyboardType = KeyboardType.NumberPassword
+            ),
+            onUpdate = {
+                onEventSent(NotifContract.Event.SetWLedLedCount(it.toInt()))
+                ledCountSheet.close()
             }
         )
     }
@@ -212,18 +223,19 @@ private fun ServerSettingsContent(
 
 @Composable
 private fun HandleSideEffects(
-    effectFlow: Flow<ServerContract.Effect>?,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+    effectFlow: Flow<NotifContract.Effect>?,
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
-                is ServerContract.Effect.Navigation -> {
+                is NotifContract.Effect.RequestPermission -> {}
+                is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
 
-                is ServerContract.Effect.Notification -> {
+                is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
                         isError = effect.error
@@ -237,18 +249,15 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun ServerSettingsPreview() {
+private fun WLedProfilePreview() {
     PiFireTheme {
-        ProvidePreferenceLocals {
+        ProvidePreferenceTheme {
             Surface {
-                ServerSettings(
-                    state = ServerContract.State(
-                        serverData = Server(
-                            address = "https://pifire.local"
-                        ),
-                        basicAuth = BasicAuth(),
-                        serverAddress = InputState(),
+                WLedProfiles(
+                    state = NotifContract.State(
+                        serverData = Server(),
                         isInitialLoading = false,
+                        isLoading = true,
                         isDataError = false
                     ),
                     effectFlow = null,

@@ -13,6 +13,7 @@ class TimerContract {
         data class SetShutdownDuration(val duration: Int) : Event()
         data class SetStartupDuration(val duration: Int) : Event()
         data class SetPrimeOnStartup(val amount: Int) : Event()
+        data class SetStartupPWMDuty(val duty: Int) : Event()
         data class SetStartExitTemp(val temp: Int) : Event()
         data class SetAutoPowerOffEnabled(val enabled: Boolean) : Event()
         data class SetSmartStartEnabled(val enabled: Boolean) : Event()

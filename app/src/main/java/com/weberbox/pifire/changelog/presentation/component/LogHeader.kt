@@ -13,10 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.common.presentation.theme.spacing
 
 @Composable
 internal fun LogHeader(
@@ -29,7 +32,7 @@ internal fun LogHeader(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(MaterialTheme.spacing.smallOne)
     ) {
         Column {
             Row(
@@ -41,21 +44,21 @@ internal fun LogHeader(
                     style = MaterialTheme.typography.titleLarge,
                     color = if (current) MaterialTheme.colorScheme.tertiaryContainer else
                         MaterialTheme.colorScheme.onSurface,
-                    modifier = modifier.padding(start = 5.dp),
+                    modifier = modifier.padding(start = MaterialTheme.spacing.extraSmallOne),
                     fontWeight = FontWeight.Bold
 
                 )
                 if (date.isNotBlank()) {
                     Text(
                         text = " - $date",
-                        modifier = modifier.padding(end = 5.dp),
+                        modifier = modifier.padding(end = MaterialTheme.spacing.extraSmallOne),
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
                 if (isAlpha) {
                     Text(
-                        text = " - Alpha Release",
-                        modifier = modifier.padding(end = 5.dp),
+                        text = stringResource(R.string.changelog_alpha_release),
+                        modifier = modifier.padding(end = MaterialTheme.spacing.extraSmallOne),
                         style = MaterialTheme.typography.titleSmall,
                         color = if (current) MaterialTheme.colorScheme.tertiaryContainer else
                             MaterialTheme.colorScheme.onSurface,
@@ -64,7 +67,7 @@ internal fun LogHeader(
             }
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.inverseOnSurface,
-                modifier = modifier.padding(top = 2.dp),
+                modifier = modifier.padding(top = MaterialTheme.spacing.extraExtraSmall),
                 thickness = 1.dp
             )
         }

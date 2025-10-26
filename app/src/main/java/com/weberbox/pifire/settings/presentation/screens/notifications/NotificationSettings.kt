@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
@@ -38,6 +38,8 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.config.Secrets
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.core.util.NotificationsPermissionDetailsProvider
 import com.weberbox.pifire.core.util.rememberPermissionState
 import com.weberbox.pifire.settings.presentation.component.TwoTargetSwitchPreference
@@ -238,6 +240,23 @@ private fun NotificationSettingsContent(
                 )
             }
         )
+        FeatureGate(
+            feature = Feature.WLEDNotifications
+        ) {
+            TwoTargetSwitchPreference(
+                value = state.serverData.settings.wledEnabled,
+                onValueChange = { onEventSent(NotifContract.Event.SetWLEDEnabled(it)) },
+                title = { Text(text = stringResource(R.string.settings_cat_wled)) },
+                summary = { Text(text = getSummary(state.serverData.settings.wledEnabled)) },
+                onClick = {
+                    onNavigationRequested(
+                        NotifContract.Effect.Navigation.NavRoute(
+                            NavGraph.SettingsDest.WLED
+                        )
+                    )
+                }
+            )
+        }
     }
 }
 

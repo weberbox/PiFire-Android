@@ -13,6 +13,20 @@
       "minBuild": "43",
       "maxVersion": "",
       "maxBuild": ""
+    },
+    "WLEDNotifications": {
+      "enabled": true,
+      "minVersion": "1.10.0",
+      "minBuild": "51",
+      "maxVersion": "",
+      "maxBuild": ""
+    },
+    "PWMStartupDuty": {
+      "enabled": true,
+      "minVersion": "1.10.0",
+      "minBuild": "47",
+      "maxVersion": "",
+      "maxBuild": ""
     }
   }
 ]

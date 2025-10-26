@@ -7,10 +7,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.util.CoroutinePoller
 import com.weberbox.pifire.common.data.util.UrlBuilder
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
@@ -42,6 +44,7 @@ class LandingViewModel @Inject constructor(
     private val landingRepo: LandingRepo,
     private val settingsRepo: SettingsRepo,
     private val socketManager: SocketManager,
+    private val analytics: Analytics,
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
     savedStateHandle: SavedStateHandle
@@ -70,6 +73,11 @@ class LandingViewModel @Inject constructor(
             is LandingContract.Event.Back -> setEffect { LandingContract.Effect.Navigation.Back }
             is LandingContract.Event.DeleteServer -> deleteServer(event.uuid)
             is LandingContract.Event.SelectServer -> selectServer(event.uuid)
+            is LandingContract.Event.VoiceSearch -> {
+                analytics.logEvent(
+                    name = AnalyticsEvent.VoiceSearch.name
+                )
+            }
         }
     }
 
@@ -220,6 +228,12 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun deleteServer(uuid: String) {
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "deleteServer"
+            )
+        )
         viewModelScope.launch {
             settingsRepo.deleteServer(uuid)
         }

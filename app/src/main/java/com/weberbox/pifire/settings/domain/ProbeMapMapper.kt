@@ -18,6 +18,7 @@ object ProbeMapMapper : DualItemMapper<List<ProbeDevice>?, List<ProbeInfo>?, Pro
                     ProbeMap.ProbeDevice(
                         device = device.device.orEmpty(),
                         module = device.module.orEmpty(),
+                        moduleFilename = device.moduleFilename.orEmpty(),
                         ports = device.ports.orEmpty()
                     )
                 }

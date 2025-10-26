@@ -7,6 +7,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.model.ErrorStatus
 import com.weberbox.pifire.common.presentation.model.FieldInput
@@ -30,6 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ServerViewModel @Inject constructor(
+    private val analytics: Analytics,
     private val settingsRepo: SettingsRepo,
     private val headersManager: HeadersManager,
     val savedStateHandle: SavedStateHandle
@@ -94,6 +97,13 @@ class ServerViewModel @Inject constructor(
     }
 
     private fun toggleHeadersEnabled(enabled: Boolean) {
+        analytics.logEvent(
+            name = AnalyticsEvent.PrefsChange.name,
+            params = mapOf(
+                AnalyticsEvent.Param.PrefKey.key to "extraHeaders",
+                AnalyticsEvent.Param.State.key to enabled
+            )
+        )
         viewModelScope.launch {
             if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
                 DialogController.sendEvent(
@@ -118,6 +128,13 @@ class ServerViewModel @Inject constructor(
     }
 
     private fun toggleCredentialsEnabled(enabled: Boolean) {
+        analytics.logEvent(
+            name = AnalyticsEvent.PrefsChange.name,
+            params = mapOf(
+                AnalyticsEvent.Param.PrefKey.key to "basicAuth",
+                AnalyticsEvent.Param.State.key to enabled
+            )
+        )
         viewModelScope.launch {
             if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
                 DialogController.sendEvent(

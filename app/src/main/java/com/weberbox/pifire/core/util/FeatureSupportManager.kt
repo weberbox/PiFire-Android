@@ -8,7 +8,9 @@ import kotlinx.serialization.Serializable
 
 enum class Feature {
     StartToHoldPrompt,
-    NewSystemInfo
+    NewSystemInfo,
+    WLEDNotifications,
+    PWMStartupDuty
 }
 
 class FeatureSupport(
@@ -42,13 +44,14 @@ class FeatureSupport(
 @Composable
 fun FeatureGate(
     feature: Feature,
+    enabled: Boolean = true,
     fallback: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     val isPreview = LocalView.current.isInEditMode
     val featureSupport = LocalFeatureSupport.current
 
-    if (isPreview || featureSupport.isSupported(feature)) {
+    if (isPreview || featureSupport.isSupported(feature) && enabled) {
         content()
     } else {
         fallback()

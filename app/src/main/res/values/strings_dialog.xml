@@ -31,4 +31,7 @@
     <string name="dialog_biometric_description">Authentication required to continue</string>
     <string name="dialog_biometric_subtitle">Touch the fingerprint sensor</string>
     <string name="dialog_biometric_negative">Use account password</string>
+
+    <string name="dialog_firebase_failed_title">Firebase Error</string>
+    <string name="dialog_firebase_failed_message">This app requires a connection to Firebase for server and feature support configuration as well as app updates. The app will use the default configurations, for proper operation please check if Firebase is being blocked by ad blockers like PiHole, AdGuard etc</string>
 </resources>

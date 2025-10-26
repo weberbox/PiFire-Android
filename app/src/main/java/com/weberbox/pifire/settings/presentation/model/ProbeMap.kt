@@ -23,6 +23,7 @@ data class ProbeMap(
     data class ProbeDevice(
         val device: String = "",
         val module: String = "",
+        val moduleFilename: String = "",
         val ports: List<String> = emptyList()
     )
 }

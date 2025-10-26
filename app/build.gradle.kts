@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.api.ApkVariantOutputImpl
 import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.io.FileInputStream
 import java.util.EnumSet
@@ -19,8 +20,8 @@ private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
 val vMinor = 2
-val vPatch = 1
-val isAlpha = true
+val vPatch = 2
+val isAlpha = false
 
 android {
     compileSdk = 36
@@ -48,6 +49,7 @@ android {
 
     buildTypes {
         release {
+            manifestPlaceholders += mapOf()
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
             isMinifyEnabled = true
             isShrinkResources = true
@@ -57,6 +59,7 @@ android {
                     "proguard-rules.pro"
                 )
             )
+            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
@@ -68,6 +71,7 @@ android {
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug", "environment" to "debug"))
             applicationIdSuffix = ".debug"
             isDebuggable = true
+            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
@@ -115,12 +119,11 @@ android {
         val flavor = variant.flavorName
         val buildType = variant.buildType.name
         val versionName = variant.versionName
-        variant.outputs
-            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-            .forEach { output ->
-                val outputFileName = "${appName}-${flavor}-${buildType}-${versionName}.apk"
-                output.outputFileName = outputFileName
-            }
+
+        outputs.configureEach {
+            (this as? ApkVariantOutputImpl)?.outputFileName =
+                "${appName}-${flavor}-${buildType}-${versionName}.apk"
+        }
     }
 }
 
@@ -130,6 +133,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.hilt.navigation)
+    implementation(libs.androidx.hilt.viewmodel)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

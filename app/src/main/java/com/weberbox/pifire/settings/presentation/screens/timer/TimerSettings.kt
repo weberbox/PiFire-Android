@@ -28,7 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
@@ -53,6 +53,7 @@ import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.component.getSummaryGrams
+import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
 import com.weberbox.pifire.settings.presentation.component.getSummarySeconds
 import com.weberbox.pifire.settings.presentation.component.getSummaryTemp
 import com.weberbox.pifire.settings.presentation.contract.TimerContract
@@ -156,6 +157,7 @@ private fun TimerSettingsContent(
     val startupGotoTempSheet = rememberCustomModalBottomSheetState()
     val startupExitTempSheet = rememberCustomModalBottomSheetState()
     val startupPrimeSheet = rememberCustomModalBottomSheetState()
+    val startupPWMDutySheet = rememberCustomModalBottomSheetState()
     val smartStartExitTempSheet = rememberCustomModalBottomSheetState()
     val shutdownDurationSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
@@ -293,6 +295,23 @@ private fun TimerSettingsContent(
                 },
                 onClick = { startupPrimeSheet.open() }
             )
+        }
+        FeatureGate(
+            feature = Feature.PWMStartupDuty,
+            enabled = state.serverData.settings.dcFan,
+        ) {
+            Column {
+                Preference(
+                    title = { Text(text = stringResource(R.string.settings_startup_pwm_duty)) },
+                    summary = {
+                        Text(
+                            text = getSummaryPercent(state.serverData.settings.startupPWMDuty.toString())
+                        )
+                    },
+                    onClick = { startupPWMDutySheet.open() }
+                )
+                PreferenceNote(note = stringResource(R.string.settings_startup_pwm_duty_note))
+            }
         }
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_smart_start)) },
@@ -438,6 +457,26 @@ private fun TimerSettingsContent(
                 startupPrimeSheet.close()
             },
             onDismiss = { startupPrimeSheet.close() }
+        )
+    }
+    BottomSheet(
+        sheetState = startupPWMDutySheet.sheetState
+    ) {
+        InputValidationSheet(
+            input = state.serverData.settings.startupPWMDuty.toString(),
+            title = stringResource(R.string.settings_startup_pwm_duty),
+            placeholder = stringResource(R.string.settings_startup_pwm_duty),
+            validationOptions = ValidationOptions(
+                allowBlank = false,
+                keyboardType = KeyboardType.NumberPassword,
+                min = 1.0,
+                max = 100.0
+            ),
+            onUpdate = {
+                onEventSent(TimerContract.Event.SetStartupPWMDuty(it.toInt()))
+                startupPWMDutySheet.close()
+            },
+            onDismiss = { startupPWMDutySheet.close() }
         )
     }
     BottomSheet(

@@ -2,4 +2,5 @@
 <resources>
     <string name="changelog_title">What\'s New</string>
     <string name="changelog_error">No changelog items found!</string>
+    <string name="changelog_alpha_release">" - Alpha Release"</string>
 </resources>

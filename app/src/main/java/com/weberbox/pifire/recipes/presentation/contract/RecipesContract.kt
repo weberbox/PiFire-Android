@@ -10,6 +10,7 @@ class RecipesContract {
 
     sealed class Event : ViewEvent {
         data object Refresh: Event()
+        data object VoiceSearch : Event()
     }
 
     data class State(

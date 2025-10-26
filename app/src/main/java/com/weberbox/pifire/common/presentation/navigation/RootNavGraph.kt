@@ -1,6 +1,7 @@
 package com.weberbox.pifire.common.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -9,6 +10,8 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.weberbox.pifire.changelog.presentation.screens.ChangelogScreenDestination
+import com.weberbox.pifire.common.data.interfaces.Analytics
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
 import com.weberbox.pifire.common.presentation.util.scaleEnterTransition
@@ -46,6 +49,9 @@ import com.weberbox.pifire.settings.presentation.screens.notifications.Notificat
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushbulletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.PushoverSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedProfilesDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSuggestedProfilesDestination
 import com.weberbox.pifire.settings.presentation.screens.pellets.PelletSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.probe.ProbeSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.pwm.PwmControlDestination
@@ -60,7 +66,8 @@ import kotlin.reflect.typeOf
 
 @Composable
 fun RootNavGraph(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    analytics: Analytics
 ) {
     NavHost(
         navController = navController,
@@ -81,6 +88,22 @@ fun RootNavGraph(
         recipesNavGraph(navController)
         infoNavGraph(navController)
         settingsNavGraph(navController)
+    }
+
+    LaunchedEffect(navController) {
+        navController.currentBackStackEntryFlow.collect { entry ->
+            entry.destination.route?.let { route ->
+                val screenName = route
+                    .substringBefore("/")
+                    .substringAfterLast('.')
+                analytics.logEvent(
+                    name = AnalyticsEvent.ScreenView.name,
+                    params = mapOf(
+                        AnalyticsEvent.Param.ScreenName.key to screenName
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -255,6 +278,18 @@ fun NavGraphBuilder.settingsNavGraph(
         composable<NavGraph.SettingsDest.Apprise> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
             AppriseSettingsDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLED> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedSettingsDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLEDProfiles> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedProfilesDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.WLEDSuggestedProfiles> {
+            val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
+            WLedSuggestedProfilesDestination(navController, viewModel)
         }
     }
 }

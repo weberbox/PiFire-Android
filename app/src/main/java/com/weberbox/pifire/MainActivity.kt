@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.EventAlertDialog
 import com.weberbox.pifire.common.presentation.contract.MainContract
@@ -47,6 +48,9 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var appUpdateManager: UpdateManager
+
+    @Inject
+    lateinit var analytics: Analytics
 
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -96,7 +100,10 @@ class MainActivity : AppCompatActivity() {
                 snackbarHost = { SnackbarHost(snackbarHostState) }
             ) {
                 EventAlertDialog(eventDialogState = eventDialog)
-                RootNavGraph(navController = navController)
+                RootNavGraph(
+                    navController = navController,
+                    analytics = analytics
+                )
             }
         }
     }

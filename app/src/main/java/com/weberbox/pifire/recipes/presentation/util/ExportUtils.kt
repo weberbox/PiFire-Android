@@ -45,12 +45,14 @@ internal fun printRecipe(recipe: Recipe, context: Context) {
 }
 
 internal fun shareRecipe(recipe: Recipe, context: Context) {
-    val sendIntent = Intent()
-    sendIntent.setAction(Intent.ACTION_SEND)
-    sendIntent.putExtra(Intent.EXTRA_TEXT, getRecipeString(recipe, context))
-    sendIntent.setType("text/plain")
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    context.startActivity(shareIntent)
+    if (recipe.recipeFilename.isNotBlank()) {
+        val sendIntent = Intent()
+        sendIntent.setAction(Intent.ACTION_SEND)
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getRecipeString(recipe, context))
+        sendIntent.setType("text/plain")
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
+    }
 }
 
 private fun getRecipeHtml(recipe: Recipe, context: Context): String {

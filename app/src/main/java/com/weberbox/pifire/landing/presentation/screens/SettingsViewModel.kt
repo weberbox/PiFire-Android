@@ -2,6 +2,8 @@ package com.weberbox.pifire.landing.presentation.screens
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.common.data.interfaces.Analytics
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.landing.presentation.contract.SettingsContract
@@ -13,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val prefs: Prefs,
+    private val analytics: Analytics,
     val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
 
@@ -33,11 +36,33 @@ class SettingsViewModel @Inject constructor(
                 setEffect { SettingsContract.Effect.Navigation.Back }
 
             is SettingsContract.Event.AutoSelectEnabled ->
-                prefs.set(Pref.landingAutoSelect, event.enabled)
+                handleAutoSelectEnabled(event.enabled)
 
             is SettingsContract.Event.BiometricsEnabled ->
-                prefs.set(Pref.biometricServerPrompt, event.enabled)
+                handleBiometricsEnabled(event.enabled)
         }
+    }
+
+    private fun handleAutoSelectEnabled(enabled: Boolean) {
+        prefs.set(Pref.landingAutoSelect, enabled)
+        analytics.logEvent(
+            name = AnalyticsEvent.PrefsChange.name,
+            params = mapOf(
+                AnalyticsEvent.Param.PrefKey.key to "autoSelectServer",
+                AnalyticsEvent.Param.State.key to enabled
+            )
+        )
+    }
+
+    private fun handleBiometricsEnabled(enabled: Boolean) {
+        prefs.set(Pref.biometricServerPrompt, enabled)
+        analytics.logEvent(
+            name = AnalyticsEvent.PrefsChange.name,
+            params = mapOf(
+                AnalyticsEvent.Param.PrefKey.key to "serverBiometrics",
+                AnalyticsEvent.Param.State.key to enabled
+            )
+        )
     }
 
     private fun collectPrefsFlow() {

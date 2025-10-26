@@ -16,12 +16,18 @@ import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.config.Secrets
+import com.weberbox.pifire.core.annotations.FutureDeprecation
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
+@FutureDeprecation(
+    comments = "OneSignal v4 is being deprecated for v5 which will cause current implementation to be unusable without API Auth. " +
+            "This is not possible due to the requests being sent from individual PiFire servers and the API key cannot be publicly shared.",
+    action = "Will need to find another provider or switch to a custom implementation using Firebase or ???"
+)
 class OneSignalManager @Inject constructor(
     @param:ApplicationContext private val appContext: Context,
     private val settingsRepo: SettingsRepo

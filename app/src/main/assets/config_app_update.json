@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3020200,
+    "type": "FLEXIBLE",
+    "message": "Added WLED Notification settings, Added Startup PWM Setting",
+    "isAlpha": true
+  },
+  {
     "appVersionCode": 3020100,
     "type": "FLEXIBLE",
     "message": "Added dialog for Start To Hold Temperature Prompt. PiFire version 1.10.0 build 43+ is required",

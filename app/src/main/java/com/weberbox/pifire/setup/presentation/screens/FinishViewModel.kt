@@ -5,11 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.common.domain.AnalyticsEvent
+import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.model.FieldInput
 import com.weberbox.pifire.common.presentation.model.InputState
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.util.validateName
 import com.weberbox.pifire.settings.data.api.SettingsApiImpl
 import com.weberbox.pifire.settings.data.model.local.HeadersData
@@ -29,7 +31,8 @@ class FinishViewModel @Inject constructor(
     private val serverDataCache: ServerDataCache,
     private val headersDataStore: DataStore<HeadersData>,
     private val dataStore: DataStore<SettingsData>,
-    private val settingsApi: SettingsApiImpl
+    private val settingsApi: SettingsApiImpl,
+    private val analytics: Analytics
 ) : BaseViewModel<FinishContract.Event, FinishContract.State, FinishContract.Effect>() {
     private var headersData by mutableStateOf(Headers())
     private var serverData by mutableStateOf(Server())
@@ -126,6 +129,13 @@ class FinishViewModel @Inject constructor(
                             )
                         }
                         serverDataCache.clearServerData()
+
+                        analytics.logEvent(
+                            name = AnalyticsEvent.ButtonClick.name,
+                            params = mapOf(
+                                AnalyticsEvent.Param.ButtonAction.key to "setupComplete"
+                            )
+                        )
 
                         setEffect {
                             FinishContract.Effect.Navigation.Forward

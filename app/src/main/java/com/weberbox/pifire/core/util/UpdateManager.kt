@@ -15,7 +15,9 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.repo.RemoteConfigRepository
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.util.DialogAction
 import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
@@ -34,6 +36,7 @@ import javax.inject.Inject
 
 class UpdateManager @Inject constructor(
     private val remoteConfigRepository: RemoteConfigRepository,
+    private val analytics: Analytics,
     private val prefs: Prefs
 ) {
     private var currentUpdate: AppUpdateConfigData? = null
@@ -68,6 +71,12 @@ class UpdateManager @Inject constructor(
                             )
                         )
                     )
+                    analytics.logEvent(
+                        name = AnalyticsEvent.UpdateAvailable.name,
+                        params = mapOf(
+                            AnalyticsEvent.Param.UpdateType.key to UpdateType.IMMEDIATE.name
+                        )
+                    )
                 }
 
                 UpdateType.FLEXIBLE -> {
@@ -98,6 +107,12 @@ class UpdateManager @Inject constructor(
                                         postponeUpdate()
                                     }
                                 )
+                            )
+                        )
+                        analytics.logEvent(
+                            name = AnalyticsEvent.UpdateAvailable.name,
+                            params = mapOf(
+                                AnalyticsEvent.Param.UpdateType.key to UpdateType.FLEXIBLE.name
                             )
                         )
                     }
@@ -213,6 +228,7 @@ class UpdateManager @Inject constructor(
         val delay = 24 * 60 * 60 * 1000 // 24 hours
         val postponedTime = System.currentTimeMillis() + delay
         prefs.set(Pref.updatePostponeTime, postponedTime)
+        analytics.logEvent(AnalyticsEvent.PostponeUpdate.name)
     }
 
     private fun openGithubLink(activity: Activity) {
@@ -221,6 +237,12 @@ class UpdateManager @Inject constructor(
             activity.startActivity(this)
             activity.finish()
         }
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "githubUpdateLink"
+            )
+        )
     }
 }
 

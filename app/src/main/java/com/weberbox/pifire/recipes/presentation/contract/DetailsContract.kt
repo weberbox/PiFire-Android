@@ -12,6 +12,8 @@ class DetailsContract {
         data object DeleteRecipeDialog : Event()
         data object DeleteRecipe : Event()
         data object RunRecipe : Event()
+        data object PrintRecipe : Event()
+        data object ShareRecipe : Event()
     }
 
     data class State(
@@ -25,6 +27,8 @@ class DetailsContract {
 
     sealed class Effect : ViewSideEffect {
         data class Notification(val text: UiText, val error: Boolean) : Effect()
+        data class PrintRecipe(val recipeData: Recipe) : Effect()
+        data class ShareRecipe(val recipeData: Recipe) : Effect()
         data object DeleteDialog : Effect()
 
         sealed class Navigation : Effect() {

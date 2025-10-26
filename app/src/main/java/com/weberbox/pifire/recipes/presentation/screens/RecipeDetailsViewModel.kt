@@ -7,7 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.weberbox.pifire.R
+import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
@@ -30,6 +32,7 @@ class RecipeDetailsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val recipesRepo: RecipesRepo,
     private val recipesApi: RecipesApi,
+    private val analytics: Analytics,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
 
@@ -54,6 +57,8 @@ class RecipeDetailsViewModel @Inject constructor(
             is DetailsContract.Event.DeleteRecipe -> deleteRecipe()
             is DetailsContract.Event.RunRecipe -> startRecipe()
             is DetailsContract.Event.DeleteRecipeDialog -> handleDeleteRequest()
+            is DetailsContract.Event.PrintRecipe -> handlePrintRequest()
+            is DetailsContract.Event.ShareRecipe -> handleShareRequest()
         }
     }
 
@@ -158,6 +163,12 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun startRecipe() {
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "startRecipe"
+            )
+        )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
             val result = recipesApi.startRecipe(currentRecipe.recipeFilename)
@@ -185,6 +196,12 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun deleteRecipe() {
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "deleteRecipe"
+            )
+        )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
             val result = recipesApi.deleteRecipe(currentRecipe.recipeFilename)
@@ -220,6 +237,26 @@ class RecipeDetailsViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handlePrintRequest() {
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "printRecipe"
+            )
+        )
+        setEffect { DetailsContract.Effect.PrintRecipe(viewState.value.recipeData) }
+    }
+
+    private fun handleShareRequest() {
+        analytics.logEvent(
+            name = AnalyticsEvent.ButtonClick.name,
+            params = mapOf(
+                AnalyticsEvent.Param.ButtonAction.key to "shareRecipe"
+            )
+        )
+        setEffect { DetailsContract.Effect.ShareRecipe(viewState.value.recipeData) }
     }
 
     private fun setLoadingStateTrue() {
