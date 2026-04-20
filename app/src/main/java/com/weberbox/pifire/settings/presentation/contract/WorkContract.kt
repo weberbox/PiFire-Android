@@ -22,6 +22,7 @@ class WorkContract {
         data class SetLidOpenDetectEnabled(val enabled: Boolean) : Event()
         data class SetLidOpenThresh(val thresh: Int) : Event()
         data class SetLidOpenPauseTime(val time: Int) : Event()
+        data class SetFanPidEnabled(val enabled: Boolean) : Event()
         data class SetKeepWarmEnabled(val enabled: Boolean) : Event()
         data class SetKeepWarmTemp(val temp: Int) : Event()
         data class SetCntrlrSelected(val selected: String) : Event()

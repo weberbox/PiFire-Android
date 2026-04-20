@@ -34,6 +34,7 @@ data class Setting<T>(
         val extData = Setting("ext_data", false)
         val updatedMessage = Setting("updated_message", false)
         val venv = Setting("venv", false)
+        val etaCalculation = Setting("eta_calculation", true)
 
         // Platform
         val dcFan = Setting("dc_fan", false)
@@ -72,6 +73,7 @@ data class Setting<T>(
         val lidOpenDetectEnabled = Setting("LidOpenDetectEnabled", false)
         val lidOpenThreshold = Setting("LidOpenThreshold", 15)
         val lidOpenPauseTime = Setting("LidOpenPauseTime", 60)
+        val fanPidEnabled = Setting("FanPidEnabled", false)
 
         // Dashboard
         val dashSelected = Setting("current", "Default")

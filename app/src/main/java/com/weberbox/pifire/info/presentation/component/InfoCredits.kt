@@ -67,7 +67,7 @@ internal fun InfoCredits(
             licenseData.list.take(limit).forEach { item ->
                 LicenseItem(item) {
                     val intent = Intent(Intent.ACTION_VIEW)
-                    intent.setData(it.toUri())
+                    intent.data = it.toUri()
                     context.startActivity(intent)
                 }
             }

@@ -19,9 +19,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import java.net.URISyntaxException
 import javax.inject.Inject
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class SocketManager @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
@@ -31,27 +31,47 @@ class SocketManager @Inject constructor(
     var socket: Socket? = null
     private var address: String? = null
 
-    private suspend fun startSocket(server: Server): Socket {
-        Timber.i("Creating Socket connection")
+    private suspend fun startSocket(server: Server): Socket? {
+        Timber.i("Creating Socket connection: ${server.address}")
 
-        val options = IO.Options().apply {
-            val headersMap = headersManager.buildServerHeadersList(server)
-
-            if (headersMap.isNotEmpty()) {
-                extraHeaders = headersMap
-            }
-        }
-
-        return IO.socket(server.address, options).apply {
-            on(Socket.EVENT_CONNECT) {
-                sessionStateHolder.tryEmitConnectedState(true)
+        return try {
+            val options = IO.Options().apply {
+                val headersMap = headersManager.buildServerHeadersList(server)
+                if (headersMap.isNotEmpty()) {
+                    extraHeaders = headersMap
+                }
             }
 
-            on(Socket.EVENT_DISCONNECT) {
-                sessionStateHolder.tryEmitConnectedState(false)
-            }
+            val socket = IO.socket(server.address, options)
 
-            connect()
+            socket.apply {
+                on(Socket.EVENT_CONNECT) {
+                    sessionStateHolder.tryEmitConnectedState(true)
+                }
+
+                on(Socket.EVENT_DISCONNECT) {
+                    sessionStateHolder.tryEmitConnectedState(false)
+                }
+
+                on(Socket.EVENT_CONNECT_ERROR) { args ->
+                    Timber.e("Socket connect error: ${args.firstOrNull()}")
+                    sessionStateHolder.tryEmitConnectedState(false)
+                }
+
+                connect()
+            }
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Invalid socket server address: ${server.address}")
+            sessionStateHolder.tryEmitConnectedState(false)
+            null
+        } catch (e: URISyntaxException) {
+            Timber.e(e, "Malformed socket URI: ${server.address}")
+            sessionStateHolder.tryEmitConnectedState(false)
+            null
+        } catch (e: Exception) {
+            Timber.e(e, "Unexpected error creating socket")
+            sessionStateHolder.tryEmitConnectedState(false)
+            null
         }
     }
 
@@ -134,7 +154,7 @@ class SocketManager @Inject constructor(
         vararg args: Any
     ): Result<String, DataError> {
         return if (connected()) {
-            suspendCoroutine { cont ->
+            suspendCancellableCoroutine { cont ->
                 socket?.emit(
                     event, *args,
                     AckWithTimeout(

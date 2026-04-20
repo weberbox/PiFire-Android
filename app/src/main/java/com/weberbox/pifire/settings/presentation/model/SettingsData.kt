@@ -46,6 +46,7 @@ data class SettingsData(
             val extData: Boolean = Setting.extData.value,
             val updatedMessage: Boolean = Setting.updatedMessage.value,
             val venv: Boolean = Setting.venv.value,
+            val etaCalculation: Boolean = Setting.etaCalculation.value,
 
             // Platform
             val dcFan: Boolean = Setting.dcFan.value,
@@ -83,6 +84,7 @@ data class SettingsData(
             val lidOpenDetectEnabled: Boolean = Setting.lidOpenDetectEnabled.value,
             val lidOpenThreshold: Int = Setting.lidOpenThreshold.value,
             val lidOpenPauseTime: Int = Setting.lidOpenPauseTime.value,
+            val fanPidEnabled: Boolean = Setting.fanPidEnabled.value,
 
             // Dashboard
             val dashSelected: String = Setting.dashSelected.value,

@@ -118,7 +118,7 @@ internal fun RecipesInputField(
                         scope.launch {
                             keyboardController?.hide()
                             while (isKeyboardOpen) {
-                                // Wait until keyboard is closed to animate or it flashes keyboard
+                                // Wait until keyboard is closed to animate, or it flashes keyboard
                                 delay(10)
                             }
                             searchBarState.animateToCollapsed()

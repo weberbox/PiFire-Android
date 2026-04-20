@@ -27,7 +27,7 @@ internal enum class ModeOptions(val title: Int, val icon: ImageVector, val event
 
     companion object {
         infix fun from(mode: String): ModeOptions = entries.firstOrNull {
-            it.name.lowercase() == mode.lowercase()
+            it.name.equals(mode, ignoreCase = true)
         } ?: Stop
     }
 }

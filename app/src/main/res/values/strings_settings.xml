@@ -9,7 +9,9 @@
     <string name="settings_probe_summary">Profiles, probe name, temp units</string>
     <string name="settings_naming_title">Grill Name</string>
     <string name="settings_naming_summary">Set a custom grill name</string>
-    <string name="settings_work_title">Work Mode</string>
+    <string name="settings_ui_title">UI Settings</string>
+    <string name="settings_ui_summary">Grill name, ETA calculations</string>
+    <string name="settings_work_title">Controller Settings</string>
     <string name="settings_work_summary">PID, cycle, P-Mode, smoke plus, lid</string>
     <string name="settings_pwm_title">PWM Settings</string>
     <string name="settings_pwm_summary">Temp control, profiles, fan settings</string>

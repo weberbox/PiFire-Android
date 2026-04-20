@@ -10,7 +10,9 @@ enum class Feature {
     StartToHoldPrompt,
     NewSystemInfo,
     WLEDNotifications,
-    PWMStartupDuty
+    PWMStartupDuty,
+    ETACalculations,
+    FanPidSettings,
 }
 
 class FeatureSupport(

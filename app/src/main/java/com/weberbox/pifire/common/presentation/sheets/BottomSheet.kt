@@ -1,6 +1,7 @@
 package com.weberbox.pifire.common.presentation.sheets
 
 import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.view.WindowInsetsControllerCompat
 import com.composables.core.DragIndication
 import com.composables.core.ModalBottomSheet
 import com.composables.core.ModalBottomSheetState
@@ -79,9 +79,9 @@ fun BottomSheet(
         ) {
             val window = LocalModalWindow.current
             LaunchedEffect(Unit) {
-                val windowInsetsController =
-                    WindowInsetsControllerCompat(window, window.decorView)
-                windowInsetsController.isAppearanceLightNavigationBars = true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    window.isNavigationBarContrastEnforced = false
+                }
             }
             Column(
                 modifier = modifier

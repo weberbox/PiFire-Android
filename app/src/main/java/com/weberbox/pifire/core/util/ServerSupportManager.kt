@@ -25,8 +25,8 @@ class ServerSupportManager @Inject constructor(
         val minBuild = min.build.toIntOrNull() ?: 0
         val maxBuild = max.build.toIntOrNull() ?: Int.MAX_VALUE
 
-        // Check version boundaries
-        if (currentVersion < minVersion)
+        // Version Checks
+        if (currentVersion < minVersion) {
             return ServerSupportResult.UnsupportedMin(
                 minVersion = min.version,
                 minBuild = min.build,
@@ -34,25 +34,9 @@ class ServerSupportManager @Inject constructor(
                 currentBuild = current.build,
                 isMandatory = config.isMandatory
             )
-        if (maxVersion != null && currentVersion > maxVersion)
-            return ServerSupportResult.UnsupportedMax(
-                maxVersion = max.version,
-                maxBuild = max.build,
-                currentVersion = current.version,
-                currentBuild = current.build,
-                isMandatory = config.isMandatory
-            )
+        }
 
-        // Check build boundaries
-        if (currentBuild < minBuild)
-            return ServerSupportResult.UnsupportedMin(
-                minVersion = min.version,
-                minBuild = min.build,
-                currentVersion = current.version,
-                currentBuild = current.build,
-                isMandatory = config.isMandatory
-            )
-        if (currentBuild > maxBuild)
+        if (maxVersion != null && currentVersion > maxVersion) {
             return ServerSupportResult.UnsupportedMax(
                 maxVersion = max.version,
                 maxBuild = max.build,
@@ -60,6 +44,28 @@ class ServerSupportManager @Inject constructor(
                 currentBuild = current.build,
                 isMandatory = config.isMandatory
             )
+        }
+
+        // Build Checks (only when versions match)
+        if (currentVersion == minVersion && currentBuild < minBuild) {
+            return ServerSupportResult.UnsupportedMin(
+                minVersion = min.version,
+                minBuild = min.build,
+                currentVersion = current.version,
+                currentBuild = current.build,
+                isMandatory = config.isMandatory
+            )
+        }
+
+        if (maxVersion != null && currentVersion == maxVersion && currentBuild > maxBuild) {
+            return ServerSupportResult.UnsupportedMax(
+                maxVersion = max.version,
+                maxBuild = max.build,
+                currentVersion = current.version,
+                currentBuild = current.build,
+                isMandatory = config.isMandatory
+            )
+        }
 
         return ServerSupportResult.Supported
     }

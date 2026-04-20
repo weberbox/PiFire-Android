@@ -1,4 +1,4 @@
-package com.weberbox.pifire.settings.presentation.screens.name
+package com.weberbox.pifire.settings.presentation.screens.ui
 
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
@@ -39,8 +39,11 @@ import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSh
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
+import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
-import com.weberbox.pifire.settings.presentation.contract.NameContract
+import com.weberbox.pifire.settings.presentation.contract.UIContract
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -49,19 +52,19 @@ import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
 
 @Composable
-fun NameSettingsDestination(
+fun UISettingsDestination(
     navController: NavHostController,
-    viewModel: NameSettingsViewModel = hiltViewModel()
+    viewModel: UISettingsViewModel = hiltViewModel()
 ) {
     ProvidePreferenceTheme {
-        NameSettings(
+        UISettings(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is NameContract.Effect.Navigation.Back -> navController.popBackStack()
-                    is NameContract.Effect.Navigation.NavRoute -> {
+                    is UIContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is UIContract.Effect.Navigation.NavRoute -> {
                         navController.safeNavigate(
                             route = navigationEffect.route,
                             popUp = navigationEffect.popUp
@@ -75,11 +78,11 @@ fun NameSettingsDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun NameSettings(
-    state: NameContract.State,
-    effectFlow: Flow<NameContract.Effect>?,
-    onEventSent: (event: NameContract.Event) -> Unit,
-    onNavigationRequested: (NameContract.Effect.Navigation) -> Unit
+private fun UISettings(
+    state: UIContract.State,
+    effectFlow: Flow<UIContract.Effect>?,
+    onEventSent: (event: UIContract.Event) -> Unit,
+    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -95,9 +98,9 @@ private fun NameSettings(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             SettingsAppBar(
-                title = stringResource(R.string.settings_naming_title),
+                title = stringResource(R.string.settings_ui_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NameContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(UIContract.Effect.Navigation.Back) }
             )
         },
         containerColor = Color.Transparent,
@@ -111,11 +114,11 @@ private fun NameSettings(
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
                 state.isDataError -> DataError {
-                    onNavigationRequested(NameContract.Effect.Navigation.Back)
+                    onNavigationRequested(UIContract.Effect.Navigation.Back)
                 }
 
                 else -> {
-                    NameContent(
+                    UIContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding
@@ -127,9 +130,9 @@ private fun NameSettings(
 }
 
 @Composable
-private fun NameContent(
-    state: NameContract.State,
-    onEventSent: (event: NameContract.Event) -> Unit,
+private fun UIContent(
+    state: UIContract.State,
+    onEventSent: (event: UIContract.Event) -> Unit,
     contentPadding: PaddingValues
 ) {
     val nameSheet = rememberCustomModalBottomSheetState()
@@ -151,6 +154,23 @@ private fun NameContent(
             summary = { Text(text = getSummary(state.grillName)) },
             onClick = { nameSheet.open() }
         )
+        FeatureGate(
+            feature = Feature.ETACalculations
+        ) {
+            PreferenceCategory(
+                title = { Text(text = stringResource(R.string.settings_cat_dashboard)) },
+            )
+            SwitchPreference(
+                value = state.etaCalculations,
+                title = { Text(text = stringResource(R.string.settings_eta_title)) },
+                summary = {
+                    Text(
+                        text = stringResource(R.string.settings_eta_summary)
+                    )
+                },
+                onValueChange = { onEventSent(UIContract.Event.SetETACalculations(it)) },
+            )
+        }
     }
     BottomSheet(
         sheetState = nameSheet.sheetState
@@ -160,7 +180,7 @@ private fun NameContent(
             placeholder = stringResource(R.string.settings_naming_title),
             title = stringResource(R.string.settings_naming_title),
             onUpdate = {
-                onEventSent(NameContract.Event.SetGrillName(it))
+                onEventSent(UIContract.Event.SetGrillName(it))
                 nameSheet.close()
             }
         )
@@ -169,18 +189,18 @@ private fun NameContent(
 
 @Composable
 private fun HandleSideEffects(
-    effectFlow: Flow<NameContract.Effect>?,
-    onNavigationRequested: (NameContract.Effect.Navigation) -> Unit
+    effectFlow: Flow<UIContract.Effect>?,
+    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
-                is NameContract.Effect.Navigation -> {
+                is UIContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
 
-                is NameContract.Effect.Notification -> {
+                is UIContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
                         isError = effect.error
@@ -194,13 +214,14 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun NameSettingsPreview() {
+private fun UISettingsPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                NameSettings(
-                    state = NameContract.State(
+                UISettings(
+                    state = UIContract.State(
                         grillName = "Development",
+                        etaCalculations = true,
                         isInitialLoading = false,
                         isLoading = true,
                         isDataError = false

@@ -99,7 +99,7 @@ class MainViewModel @Inject constructor(
         savedStateHandle.get<Boolean>("restored")?.also { restored ->
             // If restored exists that should mean the process was killed by the system so we
             // need to signOut as the socket will be dead and uiState will be incorrect
-            // we could restart the socket but it is probably better to just sign back in
+            // we could restart the socket, but it is probably better to just sign back in
             if (restored) signOut()
         }
         savedStateHandle["restored"] = true

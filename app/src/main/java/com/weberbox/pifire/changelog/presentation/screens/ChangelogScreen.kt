@@ -32,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.changelog.presentation.component.LogAnimation
 import com.weberbox.pifire.changelog.presentation.component.LogHeader
@@ -118,10 +117,7 @@ private fun ChangelogScreen(
                 .hazeSource(state = hazeState)
                 .fillMaxSize(),
         ) {
-            val visibleItems = state.changelogData.changelog.filter { item ->
-                !item.isAlpha || BuildConfig.ALPHA_BUILD
-            }
-            items(items = visibleItems) { item ->
+            items(items = state.changelogData.changelog) { item ->
                 Column {
                     LogHeader(
                         current = item.current,
@@ -134,7 +130,7 @@ private fun ChangelogScreen(
                     }
                 }
             }
-            if (visibleItems.isEmpty()) {
+            if (state.changelogData.changelog.isEmpty()) {
                 item {
                     Column(
                         modifier = Modifier

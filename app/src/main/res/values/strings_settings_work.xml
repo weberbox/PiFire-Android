@@ -25,7 +25,7 @@
     <string name="settings_cat_cntrlr_config">Controller Configuration (HOLD Mode)</string>
     <string name="settings_cat_cntrlr_pid">Controller Configuration</string>
     <string name="settings_cntrlr_title">Selected Controller Type</string>
-    <string name="settings_pid_cntrlr_title">Controller Settings</string>
+    <string name="settings_pid_cntrlr_title">PID Settings</string>
     <string name="settings_pid_cntrlr_summary">Setup PID and Cycle settings</string>
     <string name="settings_pid_cntrlr_pb_note">This is the temperature band centered around the set point, that the controller is active. If the error is less than PB/2, the command is 1.0. Higher PB\'s decrease controller response to error. [Default=60.0]</string>
     <string name="settings_pid_cntrlr_pb">Proportional Band(PB)</string>
@@ -58,6 +58,11 @@
     <string name="settings_lid_open_thresh">Open Threshold</string>
     <string name="settings_lid_open_pause">Open Pause Time</string>
     <string name="settings_lid_open_note">If enabled, the system will attempt to determine if the lid was opened and temporarily suspend the PID. If the temperature drops below the threshold (percentage of the hold temperature), a lid open event is triggered. Once lid open is detected, it will pause the PID for the specified amount of seconds.</string>
+
+    <string name="settings_cat_fan_pid">Fan PID Settings (HOLD Mode)</string>
+    <string name="settings_fan_pid_enabled">Fan PID Control (Experimental)</string>
+    <string name="settings_fan_pid_note">When enabled, the system will use a secondary PID-driven fan cycling strategy in HOLD mode when the auger duty cycle has reached its minimum. This cycles the fan on/off proportionally to the PID output to provide additional fine-grained temperature control. This is intended for <strong>AC fans</strong> or <strong>DC fans without PWM control</strong> enabled. It is <em>not compatible</em> with PWM fan control.</string>
+    <string name="settings_fan_pid_warning">This feature may behave unexpectedly in some configurations. Use with caution.</string>
 
     <string name="settings_cat_keep_warm">Keep Warm Settings</string>
     <string name="settings_keep_warm_s_plus">Smoke Plus During \'Keep Warm\'</string>

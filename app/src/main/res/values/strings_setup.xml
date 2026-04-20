@@ -21,7 +21,7 @@
     <string name="setup_server_auth_error_title">Authentication Failure</string>
     <string name="setup_server_auth_error_message">PiFire has responded with an authentication error. Verify your credentials are correct and try again</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>
-    <string name="setup_server_self_signed_message">This application will trust self signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
+    <string name="setup_server_self_signed_message">This application will trust self-signed certificates that are imported to Android credential storage. Please verify your certificate is imported or the application will fail to connect. If you are using a trusted certificate please check your server for other ssl issues</string>
     <string name="setup_push_consent_title">OneSignal Data Privacy</string>
     <string name="setup_push_dialog_declined_title">Skip Consent</string>
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>

@@ -3,8 +3,8 @@ package com.weberbox.pifire.settings.presentation.screens.work
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
+import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.WorkContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -46,6 +46,7 @@ class WorkSettingsViewModel @Inject constructor(
             is WorkContract.Event.SetLidOpenDetectEnabled -> setLidOpenDetectEnabled(event.enabled)
             is WorkContract.Event.SetLidOpenThresh -> setLidOpenThresh(event.thresh)
             is WorkContract.Event.SetLidOpenPauseTime -> setLidOpenPauseTime(event.time)
+            is WorkContract.Event.SetFanPidEnabled -> setFanPidEnabled(event.enabled)
             is WorkContract.Event.SetKeepWarmEnabled -> setKeepWarmEnabled(event.enabled)
             is WorkContract.Event.SetKeepWarmTemp -> setKeepWarmTemp(event.temp)
             is WorkContract.Event.SetCntrlrSelected -> setCntrlrSelected(event.selected)
@@ -159,6 +160,12 @@ class WorkSettingsViewModel @Inject constructor(
     private fun setLidOpenPauseTime(time: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(settingsRepo.setLidOpenPauseTime(time))
+        }
+    }
+
+    private fun setFanPidEnabled(enabled: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            handleResult(settingsRepo.setFanPidEnabled(enabled))
         }
     }
 

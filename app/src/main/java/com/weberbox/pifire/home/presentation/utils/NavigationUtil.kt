@@ -20,16 +20,10 @@ fun navigationType(): NavigationType {
     val windowWidth = windowWidthSize()
     val windowHeight = windowHeightSize()
 
-    return when {
-        windowWidth == WindowSize.EXPANDED && windowHeight == WindowSize.COMPACT ->
-            NavigationType.NavRail
-
-        windowWidth == WindowSize.MEDIUM ->
-            NavigationType.NavRail
-
-        windowWidth == WindowSize.EXPANDED ->
-            NavigationType.NavPermDrawer
-
+    return when (windowWidth) {
+        WindowSize.EXPANDED if windowHeight == WindowSize.COMPACT -> NavigationType.NavRail
+        WindowSize.MEDIUM -> NavigationType.NavRail
+        WindowSize.EXPANDED -> NavigationType.NavPermDrawer
         else -> NavigationType.NavBottomBar
     }
 }
@@ -45,7 +39,8 @@ fun Modifier.offsetDrawerWidth(): Modifier {
 @Composable
 fun Modifier.permDrawerAdjustments(): Modifier {
     return if (navigationType() == NavigationType.NavPermDrawer) {
-        this.windowInsetsPadding(WindowInsets.statusBars)
+        this
+            .windowInsetsPadding(WindowInsets.statusBars)
             .clip(RoundedCornerShape(topStart = 24.dp))
     } else this
 }

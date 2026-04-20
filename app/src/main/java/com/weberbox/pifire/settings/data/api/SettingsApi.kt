@@ -24,6 +24,7 @@ interface SettingsApi {
     suspend fun setDebugMode(enabled: Boolean): Result<String, DataError>
     suspend fun setBootToMonitor(enabled: Boolean): Result<String, DataError>
     suspend fun setGrillName(name: String): Result<String, DataError>
+    suspend fun setETACalculations(enabled: Boolean): Result<String, DataError>
     suspend fun getManualData(): Result<String, DataError>
     suspend fun setManualMode(enabled: Boolean): Result<String, DataError>
     suspend fun setManualFanOutput(enabled: Boolean): Result<String, DataError>
@@ -119,6 +120,7 @@ interface SettingsApi {
     suspend fun setLidOpenDetectEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setLidOpenThresh(thresh: Int): Result<String, DataError>
     suspend fun setLidOpenPauseTime(time: Int): Result<String, DataError>
+    suspend fun setFanPidEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setKeepWarmEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setKeepWarmTemp(temp: Int): Result<String, DataError>
     suspend fun setCntrlrSelected(selected: String): Result<String, DataError>

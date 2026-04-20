@@ -9,7 +9,7 @@ enum class AppTheme(val title: Int, val type: String) {
 
     companion object {
         infix fun from(type: String?): AppTheme = AppTheme.entries.firstOrNull {
-            it.type.lowercase() == type?.lowercase()
+            it.type.equals(type, ignoreCase = true)
         } ?: System
     }
 }

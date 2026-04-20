@@ -35,4 +35,7 @@ data class Globals(
     @SerialName("venv")
     val venv: Boolean? = null,
 
+    @SerialName("eta_calculation")
+    val etaCalculations: Boolean? = null
+
 )

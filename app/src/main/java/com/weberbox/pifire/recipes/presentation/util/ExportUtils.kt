@@ -47,9 +47,9 @@ internal fun printRecipe(recipe: Recipe, context: Context) {
 internal fun shareRecipe(recipe: Recipe, context: Context) {
     if (recipe.recipeFilename.isNotBlank()) {
         val sendIntent = Intent()
-        sendIntent.setAction(Intent.ACTION_SEND)
+        sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, getRecipeString(recipe, context))
-        sendIntent.setType("text/plain")
+        sendIntent.type = "text/plain"
         val shareIntent = Intent.createChooser(sendIntent, null)
         context.startActivity(shareIntent)
     }
