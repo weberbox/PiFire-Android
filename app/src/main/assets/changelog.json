@@ -8,18 +8,18 @@
       "logs": [
         {
           "type": "new",
-          "text": "Add ETA calculations setting"
+          "text": "Add ETA calculations setting. Requires PiFire 1.11.0 Build 5+"
         },
         {
           "type": "new",
-          "text": "Add Fan PID controller setting"
+          "text": "Add Fan PID controller setting. Requires PiFire 1.11.0 Build 8+"
         },
         {
-          "type": "imp",
+          "type": "fix",
           "text": "Bugfix server support build checking"
         },
         {
-          "type": "imp",
+          "type": "fix",
           "text": "Bugfix to catch invalid url on socket connection"
         },
         {
