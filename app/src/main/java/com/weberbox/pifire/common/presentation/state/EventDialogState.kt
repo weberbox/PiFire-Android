@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import com.composables.core.DialogState
-import com.composables.core.rememberDialogState
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.composeunstyled.DialogState
+import com.composeunstyled.rememberDialogState
 import com.weberbox.pifire.common.presentation.util.DialogAction
 import com.weberbox.pifire.common.presentation.util.DialogEvent
+import com.weberbox.pifire.common.presentation.util.UiText
 
 class EventDialogState(
     val state: DialogState,

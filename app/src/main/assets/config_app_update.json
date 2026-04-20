@@ -1,9 +1,15 @@
 [
   {
+    "appVersionCode": 3030000,
+    "type": "FLEXIBLE",
+    "message": "Bugfix to catch invalid url on socket connection, Bugfix server support build checking, Add ETA calculations setting, Add Fan PID controller setting",
+    "isAlpha": false
+  },
+  {
     "appVersionCode": 3020200,
     "type": "FLEXIBLE",
     "message": "Added WLED Notification settings, Added Startup PWM Setting",
-    "isAlpha": true
+    "isAlpha": false
   },
   {
     "appVersionCode": 3020100,

@@ -46,8 +46,11 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.Constants
+import com.weberbox.pifire.core.util.Feature
+import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.settings.presentation.component.PreferenceInfo
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
+import com.weberbox.pifire.settings.presentation.component.PreferenceWarning
 import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import com.weberbox.pifire.settings.presentation.component.getSummary
 import com.weberbox.pifire.settings.presentation.component.getSummaryPercent
@@ -368,6 +371,25 @@ private fun WorkSettingsContent(
             onClick = { lidPauseTimeSheet.open() }
         )
         PreferenceNote(stringResource(R.string.settings_lid_open_note))
+        FeatureGate(
+            feature = Feature.FanPidSettings
+        ) {
+            PreferenceCategory(
+                title = { Text(text = stringResource(R.string.settings_cat_fan_pid)) },
+            )
+            SwitchPreference(
+                value = state.serverData.settings.fanPidEnabled,
+                onValueChange = { onEventSent(WorkContract.Event.SetFanPidEnabled(it)) },
+                title = { Text(text = stringResource(R.string.settings_fan_pid_enabled)) },
+                summary = {
+                    Text(
+                        text = getSummary(state.serverData.settings.fanPidEnabled)
+                    )
+                }
+            )
+            PreferenceWarning(stringResource(R.string.settings_fan_pid_warning))
+            PreferenceNote(stringResource(R.string.settings_fan_pid_note))
+        }
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_keep_warm)) },
         )

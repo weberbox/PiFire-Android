@@ -237,13 +237,13 @@ fun SettingsContent(
                     }
                 )
                 HomePreference(
-                    title = stringResource(R.string.settings_naming_title),
-                    summary = stringResource(R.string.settings_naming_summary),
+                    title = stringResource(R.string.settings_ui_title),
+                    summary = stringResource(R.string.settings_ui_summary),
                     icon = Icons.Filled.OutdoorGrill,
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Name
+                                NavGraph.SettingsDest.UI
                             )
                         )
                     }

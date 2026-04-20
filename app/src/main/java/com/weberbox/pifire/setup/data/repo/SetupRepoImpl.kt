@@ -170,7 +170,7 @@ class SetupRepoImpl @Inject constructor(
             is Result.Error -> {
                 when (data.error) {
                     is DataError.Server -> {
-                        return getVersionsLegacy(
+                        getVersionsLegacy(
                             url = url.replace(
                                 oldValue = "get/versions",
                                 newValue = "settings"

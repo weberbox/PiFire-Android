@@ -15,7 +15,7 @@ enum class NotifType(val title: Int, val icon: ImageVector, val defaultVisibilit
 
     companion object {
         infix fun from(type: String): NotifType = NotifType.entries.firstOrNull {
-            it.name.lowercase() == type.lowercase()
+            it.name.equals(type, ignoreCase = true)
         } ?: Target
     }
 }

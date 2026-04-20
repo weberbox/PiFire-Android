@@ -225,6 +225,10 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setGrillName(name))
     }
 
+    override suspend fun setETACalculations(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setETACalculations(enabled))
+    }
+
     override suspend fun getManualData(): Result<Server, DataError> {
         return transformResult(settingsApi.getManualData())
     }
@@ -597,6 +601,10 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setLidOpenPauseTime(time: Int): Result<Server, DataError> {
         return transformResult(settingsApi.setLidOpenPauseTime(time))
+    }
+
+    override suspend fun setFanPidEnabled(enabled: Boolean): Result<Server, DataError> {
+        return transformResult(settingsApi.setFanPidEnabled(enabled))
     }
 
     override suspend fun setKeepWarmEnabled(enabled: Boolean): Result<Server, DataError> {

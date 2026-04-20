@@ -10,8 +10,8 @@ import androidx.compose.ui.unit.sp
 data class PickerWheelTextStyle(
     val color: Color = Color(0xFF404040),
     val fontSize: TextUnit = 24.sp,
-    val fontFamily: FontFamily = FontFamily.Companion.Default,
-    val fontWeight: FontWeight = FontWeight.Companion.Normal
+    val fontFamily: FontFamily = FontFamily.Default,
+    val fontWeight: FontWeight = FontWeight.Normal
 ) {
     fun toTextStyle(): TextStyle {
         return TextStyle(

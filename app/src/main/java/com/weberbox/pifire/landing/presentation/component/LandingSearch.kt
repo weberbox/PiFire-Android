@@ -115,7 +115,7 @@ internal fun LandingInputField(
                         if (searchBarState.currentValue == SearchBarValue.Expanded) {
                             keyboardController?.hide()
                             while (isKeyboardOpen) {
-                                // Wait until keyboard is closed to animate or it flashes keyboard
+                                // Wait until keyboard is closed to animate, or it flashes keyboard
                                 delay(10)
                             }
                             searchBarState.animateToCollapsed()

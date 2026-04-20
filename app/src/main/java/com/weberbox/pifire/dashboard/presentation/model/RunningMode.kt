@@ -31,7 +31,7 @@ enum class RunningMode(val title: Int, val icon: ImageVector) {
 
     companion object {
         infix fun from(mode: String): RunningMode = entries.firstOrNull {
-            it.name.lowercase() == mode.lowercase()
+            it.name.equals(mode, ignoreCase = true)
         } ?: Unknown
     }
 }

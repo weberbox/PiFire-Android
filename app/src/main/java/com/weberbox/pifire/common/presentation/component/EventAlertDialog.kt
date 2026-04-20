@@ -26,11 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.composables.core.Dialog
-import com.composables.core.DialogPanel
-import com.composables.core.DialogProperties
-import com.composables.core.Scrim
-import com.composables.core.rememberDialogState
+import com.composeunstyled.DialogProperties
+import com.composeunstyled.UnstyledDialog
+import com.composeunstyled.UnstyledDialogPanel
+import com.composeunstyled.UnstyledScrim
+import com.composeunstyled.rememberDialogState
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.state.EventDialogState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
@@ -49,18 +49,18 @@ fun EventAlertDialog(
     modifier: Modifier = Modifier,
     eventDialogState: EventDialogState
 ) {
-    Dialog(
+    UnstyledDialog(
         state = eventDialogState.state,
         properties = DialogProperties(
             dismissOnBackPress = eventDialogState.event.dismissible,
             dismissOnClickOutside = eventDialogState.event.dismissible
         )
     ) {
-        Scrim(
+        UnstyledScrim(
             enter = fadeEnterTransition(200),
             exit = fadeExitTransition(200)
         )
-        DialogPanel(
+        UnstyledDialogPanel(
             modifier = modifier
                 .displayCutoutPadding()
                 .systemBarsPadding()

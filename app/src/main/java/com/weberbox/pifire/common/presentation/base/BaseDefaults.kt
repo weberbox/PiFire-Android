@@ -64,7 +64,7 @@ fun pickerSelectedTextStyle(
         color = MaterialTheme.colorScheme.onSurface,
         fontSize = fontSize,
         fontFamily = MaterialTheme.typography.headlineLarge.fontFamily
-            ?: FontFamily.Companion.Default,
+            ?: FontFamily.Default,
         fontWeight = FontWeight.Bold
     )
 }
@@ -77,7 +77,7 @@ fun pickerUnselectedTextStyle(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = fontSize,
         fontFamily = MaterialTheme.typography.titleSmall.fontFamily
-            ?: FontFamily.Companion.Default,
+            ?: FontFamily.Default,
         fontWeight = FontWeight.Normal
     )
 }

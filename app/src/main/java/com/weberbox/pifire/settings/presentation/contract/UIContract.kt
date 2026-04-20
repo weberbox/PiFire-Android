@@ -5,14 +5,16 @@ import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
 import com.weberbox.pifire.common.presentation.util.UiText
 
-class NameContract {
+class UIContract {
 
     sealed class Event : ViewEvent {
         data class SetGrillName(val name: String) : Event()
+        data class SetETACalculations(val enabled: Boolean) : Event()
     }
 
     data class State(
         val grillName: String,
+        val etaCalculations: Boolean,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
         val isDataError: Boolean

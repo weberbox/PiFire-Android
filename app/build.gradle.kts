@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import com.android.build.api.variant.impl.VariantOutputImpl
 import io.sentry.android.gradle.extensions.InstrumentationFeature
 import java.io.FileInputStream
 import java.util.EnumSet
@@ -10,21 +10,20 @@ plugins {
     alias(libs.plugins.sentry.android.gradle)
     alias(libs.plugins.android.dagger.hilt)
     alias(libs.plugins.kotlin.parcelize)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.android.ksp)
 }
 
 private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
-val vMinor = 2
-val vPatch = 2
+val vMinor = 3
+val vPatch = 0
 val isAlpha = false
 
 android {
-    compileSdk = 36
+    compileSdk = 37
 
     namespace = "com.weberbox.pifire"
 
@@ -99,6 +98,7 @@ android {
     }
 
     buildFeatures {
+        resValues = true
         buildConfig = true
         compose = true
     }
@@ -108,27 +108,22 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
 
-    kapt {
-        correctErrorTypes = true
-    }
-
-    applicationVariants.configureEach {
-        val variant = this
+androidComponents {
+    onVariants { variant ->
         val appName = rootProject.name.lowercase()
         val flavor = variant.flavorName
-        val buildType = variant.buildType.name
-        val versionName = variant.versionName
-
-        outputs.configureEach {
-            (this as? ApkVariantOutputImpl)?.outputFileName =
-                "${appName}-${flavor}-${buildType}-${versionName}.apk"
+        val buildType = variant.buildType
+        variant.outputs.forEach {
+            val apkName = "${appName}-${flavor}-${buildType}-${it.versionName.get()}.apk"
+            (it as VariantOutputImpl).outputFileName = apkName
         }
     }
 }
 
 dependencies {
-    kapt(libs.google.dagger.hilt.complier)
+    ksp(libs.google.dagger.hilt.complier)
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.compose.navigation)

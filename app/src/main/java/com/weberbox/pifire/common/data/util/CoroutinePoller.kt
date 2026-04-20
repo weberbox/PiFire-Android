@@ -14,7 +14,7 @@ class CoroutinePoller<T>(
 ) {
     var job: Job? = null
 
-    fun poll(delay: Long) = callbackFlow<T> {
+    fun poll(delay: Long) = callbackFlow {
         job = launch(dispatcher) {
             while (isActive) {
                 val data = fetchData()

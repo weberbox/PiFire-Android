@@ -131,6 +131,15 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
+    override suspend fun setETACalculations(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                globals = Globals(etaCalculations = enabled)
+            )
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
     override suspend fun getManualData(): Result<String, DataError> {
         return socketManager.emitGet(ServerConstants.GA_MANUAL_DATA)
     }
@@ -1175,6 +1184,13 @@ class SettingsApiImpl @Inject constructor(
     override suspend fun setLidOpenPauseTime(time: Int): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(cycleData = CycleData(lidOpenPauseTime = time))
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
+    override suspend fun setFanPidEnabled(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(cycleData = CycleData(fanPidEnabled = enabled))
         )
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }

@@ -91,7 +91,7 @@
     <string name="settings_onesignal_accepted">Status: Accepted</string>
     <string name="settings_onesignal_alert_consent_message">To receive notifications from PiFire consent to the OneSignal data privacy.</string>
     <string name="settings_onesignal_id_error_message">This device has not registered with OneSignal servers. Verify OneSignal.com is not blocked (e.g. PiHole) The registration process can take up to 2 minutes.</string>
-    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take a couple minutes.</string>
+    <string name="settings_onesignal_register_message">This device will attempt to register with your PiFire server now. This process can take a couple of minutes.</string>
     <string name="settings_onesignal_error_message">There was an unexpected error with OneSignal. Please try again later.</string>
     <string name="settings_onesignal_token_message">OneSignal cannot obtain a push token from Google. If this device does not have Google Play Services installed push notifications will not be available</string>
     <string name="settings_onesignal_subscribe_message">This device is not subscribed to OneSignal servers. Verify notifications for this app are not disabled in device settings. If notifications are not disabled the device will now attempt to subscribe</string>

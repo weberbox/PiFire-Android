@@ -43,7 +43,8 @@ sealed class NavGraph {
         @Serializable data object Manual
         @Serializable data object App
         @Serializable data object Probe
-        @Serializable data object Name
+        @Serializable
+        data object UI
         @Serializable data object Work
         @Serializable data object Pid
         @Serializable data object Pwm

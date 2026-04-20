@@ -8,7 +8,7 @@
     <string name="dialog_cancel_lid_detect_title">Cancel Lid Open</string>
     <string name="dialog_cancel_lid_detect_message">Do you want to cancel Lid Open and resume PID Operation?</string>
     <string name="dialog_auth_with_unsecure_protocol_title">Security Warning</string>
-    <string name="dialog_auth_with_unsecure_protocol_message">It looks like you are attempting to use an authentication method but are using an unsecure protocol (http). If you continue your credentials will not be sent in a secure manner. Continue at your own risk or setup a secure connection to your PiFire server</string>
+    <string name="dialog_auth_with_unsecure_protocol_message">It looks like you are attempting to use an authentication method but are using an unsecure protocol (http). If you continue your credentials will not be sent in a secure manner. Continue at your own risk or set up a secure connection to your PiFire server</string>
     <string name="dialog_probe_edit">Probe Edit</string>
     <string name="dialog_probe_edit_enabled">Visible</string>
     <string name="dialog_probe_edit_disabled">Hidden</string>

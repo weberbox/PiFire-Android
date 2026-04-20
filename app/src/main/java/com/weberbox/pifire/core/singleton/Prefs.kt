@@ -96,7 +96,7 @@ class Prefs @Inject constructor(
                 val encrypted = Crypto.encrypt(bytes)
                 return Base64.getEncoder().encodeToString(encrypted)
             } catch (e: Exception) {
-                Timber.Forest.e(e, "Crypto Encrypt Exception")
+                Timber.e(e, "Crypto Encrypt Exception")
             }
         }
         return String()
@@ -108,7 +108,7 @@ class Prefs @Inject constructor(
                 val bytes = Base64.getDecoder().decode(value)
                 return Crypto.decrypt(bytes).decodeToString()
             } catch (e: Exception) {
-                Timber.Forest.e(e, "Crypto Decrypt Exception")
+                Timber.e(e, "Crypto Decrypt Exception")
             }
         }
         return String()

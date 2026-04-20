@@ -22,5 +22,5 @@
     <string name="settings_basic_auth_title">Basic Auth</string>
     <string name="settings_basic_auth_summary">Use basic authentication if PiFire is behind a reverse proxy</string>
     <string name="settings_credentials_title">Credentials</string>
-    <string name="settings_auth_warning">This app does not enforce a secure connection to PiFire and will send your credentials and/or headers regardless of the protocol being used (http or https). It is your responsibility to setup a secure connection (https) for all requests if you are using any type of authentication, otherwise your credentials and/or headers are being sent in an unsecure manner</string>
+    <string name="settings_auth_warning">This app does not enforce a secure connection to PiFire and will send your credentials and/or headers regardless of the protocol being used (http or https). It is your responsibility to set up a secure connection (https) for all requests if you are using any type of authentication, otherwise your credentials and/or headers are being sent in an unsecure manner</string>
 </resources>

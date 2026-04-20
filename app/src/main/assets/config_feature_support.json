@@ -27,6 +27,20 @@
       "minBuild": "47",
       "maxVersion": "",
       "maxBuild": ""
+    },
+    "ETACalculations": {
+      "enabled": true,
+      "minVersion": "1.11.0",
+      "minBuild": "5",
+      "maxVersion": "",
+      "maxBuild": ""
+    },
+    "FanPidSettings": {
+      "enabled": true,
+      "minVersion": "1.11.0",
+      "minBuild": "8",
+      "maxVersion": "",
+      "maxBuild": ""
     }
   }
 ]

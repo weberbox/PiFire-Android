@@ -40,6 +40,7 @@ interface SettingsRepo {
     suspend fun setDebugMode(enabled: Boolean): Result<Server, DataError>
     suspend fun setBootToMonitor(enabled: Boolean): Result<Server, DataError>
     suspend fun setGrillName(name: String): Result<Server, DataError>
+    suspend fun setETACalculations(enabled: Boolean): Result<Server, DataError>
     suspend fun getManualData(): Result<Server, DataError>
     suspend fun setManualMode(enabled: Boolean): Result<Server, DataError>
     suspend fun setManualFanOutput(enabled: Boolean): Result<Server, DataError>
@@ -135,6 +136,7 @@ interface SettingsRepo {
     suspend fun setLidOpenDetectEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setLidOpenThresh(thresh: Int): Result<Server, DataError>
     suspend fun setLidOpenPauseTime(time: Int): Result<Server, DataError>
+    suspend fun setFanPidEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setKeepWarmEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setKeepWarmTemp(temp: Int): Result<Server, DataError>
     suspend fun setCntrlrSelected(selected: String): Result<Server, DataError>

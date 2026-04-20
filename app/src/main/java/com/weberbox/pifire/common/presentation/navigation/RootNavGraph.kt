@@ -39,7 +39,6 @@ import com.weberbox.pifire.settings.presentation.screens.SettingsHomeDestination
 import com.weberbox.pifire.settings.presentation.screens.admin.AdminSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.admin.ManualSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.app.AppSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.name.NameSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.AppriseSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.IftttSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.notifications.InfluxDbSettingsDestination
@@ -59,6 +58,7 @@ import com.weberbox.pifire.settings.presentation.screens.pwm.PwmSettingsDestinat
 import com.weberbox.pifire.settings.presentation.screens.safety.SafetySettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.timer.SmartStartSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.timer.TimerSettingsDestination
+import com.weberbox.pifire.settings.presentation.screens.ui.UISettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.work.PidSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.work.WorkSettingsDestination
 import com.weberbox.pifire.setup.presentation.screens.SetupScreenDestination
@@ -220,8 +220,8 @@ fun NavGraphBuilder.settingsNavGraph(
         composable<NavGraph.SettingsDest.Probe> {
             ProbeSettingsDestination(navController)
         }
-        composable<NavGraph.SettingsDest.Name> {
-            NameSettingsDestination(navController)
+        composable<NavGraph.SettingsDest.UI> {
+            UISettingsDestination(navController)
         }
         composable<NavGraph.SettingsDest.Work> {
             WorkSettingsDestination(navController)

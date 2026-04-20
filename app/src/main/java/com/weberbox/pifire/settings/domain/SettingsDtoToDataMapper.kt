@@ -33,6 +33,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                     from.probeSettings?.probeMap?.probeInfo
                 ),
                 grillName = from.globals?.grillName ?: Setting.grillName.value,
+                etaCalculation = from.globals?.etaCalculations ?: Setting.etaCalculation.value,
                 adminDebug = from.globals?.debugMode ?: Setting.adminDebug.value,
                 primeIgnition = from.globals?.primeIgnition ?: Setting.primeIgnition.value,
                 bootToMonitor = from.globals?.bootToMonitor ?: Setting.bootToMonitor.value,
@@ -78,6 +79,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                     ?: Setting.lidOpenThreshold.value,
                 lidOpenPauseTime = from.cycleData?.lidOpenPauseTime
                     ?: Setting.lidOpenPauseTime.value,
+                fanPidEnabled = from.cycleData?.fanPidEnabled ?: Setting.fanPidEnabled.value,
                 dashSelected = dashboard?.current ?: Setting.dashSelected.value,
                 dashMaxFoodTempF = dashConfig?.maxFoodTempF ?: Setting.dashMaxFoodTempF.value,
                 dashMaxFoodTempC = dashConfig?.maxFoodTempC ?: Setting.dashMaxFoodTempC.value,

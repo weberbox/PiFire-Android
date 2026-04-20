@@ -1,10 +1,38 @@
 {
   "changelog": [
     {
-      "version": "3.2.2",
+      "version": "3.3.0",
       "date": "",
       "current": true,
-      "isAlpha": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Add ETA calculations setting"
+        },
+        {
+          "type": "new",
+          "text": "Add Fan PID controller setting"
+        },
+        {
+          "type": "imp",
+          "text": "Bugfix server support build checking"
+        },
+        {
+          "type": "imp",
+          "text": "Bugfix to catch invalid url on socket connection"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.2.2",
+      "date": "",
+      "current": false,
+      "isAlpha": false,
       "logs": [
         {
           "type": "new",

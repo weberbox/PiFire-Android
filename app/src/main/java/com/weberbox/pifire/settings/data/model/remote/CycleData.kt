@@ -30,6 +30,9 @@ data class CycleData(
     val lidOpenThreshold: Int? = null,
 
     @SerialName("LidOpenPauseTime")
-    val lidOpenPauseTime: Int? = null
+    val lidOpenPauseTime: Int? = null,
+
+    @SerialName("FanPidEnabled")
+    val fanPidEnabled: Boolean? = null
 
 )

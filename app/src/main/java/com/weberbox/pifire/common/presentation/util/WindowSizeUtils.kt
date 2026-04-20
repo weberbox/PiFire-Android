@@ -11,12 +11,8 @@ fun windowWidthSize(): WindowSize {
     val width = with(LocalDensity.current) { containerSize.width.toDp() }.value.toInt()
 
     return when {
-        width < WindowWidthSize.MEDIUM.dp ->
-            WindowSize.COMPACT
-
-        width < WindowWidthSize.EXPANDED.dp ->
-            WindowSize.MEDIUM
-
+        width < WindowWidthSize.MEDIUM.dp -> WindowSize.COMPACT
+        width < WindowWidthSize.EXPANDED.dp -> WindowSize.MEDIUM
         else -> WindowSize.EXPANDED
     }
 }

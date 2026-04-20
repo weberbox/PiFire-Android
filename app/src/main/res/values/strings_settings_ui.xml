@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_cat_grill_name">Grill Naming</string>
+    <string name="settings_cat_dashboard">Dashboard</string>
+    <string name="settings_eta_title">ETA Calculations</string>
+    <string name="settings_eta_summary">Show eta calculations on the dashboard</string>
+</resources>
