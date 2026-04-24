@@ -1,9 +1,29 @@
 {
   "changelog": [
     {
-      "version": "3.3.0",
+      "version": "3.3.1",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "imp",
+          "text": "Improve option card enabled visibility by changing to a green outline"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix to exception logging"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.3.0",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {

@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3030100,
+    "type": "FLEXIBLE",
+    "message": "Bugfix to catch invalid url on socket connection, Bugfix server support build checking, Add ETA calculations setting, Add Fan PID controller setting",
+    "isAlpha": false
+  },
+  {
     "appVersionCode": 3030000,
     "type": "FLEXIBLE",
     "message": "Bugfix to catch invalid url on socket connection, Bugfix server support build checking, Add ETA calculations setting, Add Fan PID controller setting",
