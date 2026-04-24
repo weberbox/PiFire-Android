@@ -54,7 +54,7 @@ class SocketManager @Inject constructor(
                 }
 
                 on(Socket.EVENT_CONNECT_ERROR) { args ->
-                    Timber.e("Socket connect error: ${args.firstOrNull()}")
+                    Timber.d("Socket connect error: ${args.firstOrNull()}")
                     sessionStateHolder.tryEmitConnectedState(false)
                 }
 

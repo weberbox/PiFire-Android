@@ -19,7 +19,7 @@ The creator of this project takes no responsibility for any damage that you may 
 
 ### Credits
 
-Android Application created by James Weber, copyright 2021-2025.
+Android Application created by James Weber, copyright 2021-2026.
 
 This app used the following open-source libraries and/or code inspired from these projects.
 
@@ -47,7 +47,7 @@ This project is licensed under the GNU GPLv3 license.
 ```
 PiFire Android - Native Android app for the PiFire smoker project
 
-Copyright (c) 2021-2025 James Weber
+Copyright (c) 2021-2026 James Weber
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

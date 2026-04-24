@@ -33,6 +33,7 @@ import com.weberbox.pifire.common.icons.Icon
 import com.weberbox.pifire.common.icons.filled.Smoke
 import com.weberbox.pifire.common.icons.filled.Speedometer
 import com.weberbox.pifire.common.presentation.base.cardColorStops
+import com.weberbox.pifire.common.presentation.modifier.cardOutline
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.elevation
 
@@ -44,14 +45,13 @@ internal fun OptionCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    val enabledColor = arrayOf(
-        0.0f to MaterialTheme.colorScheme.primary.copy(0.34f),
-        1f to MaterialTheme.colorScheme.surfaceContainerLow
-    )
     Card(
         modifier = modifier
             .height(100.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .cardOutline(
+                enabled = enabled
+            ),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
@@ -62,7 +62,7 @@ internal fun OptionCard(
             modifier = Modifier
                 .background(
                     Brush.horizontalGradient(
-                        colorStops = if (enabled) enabledColor else cardColorStops()
+                        colorStops = cardColorStops()
                     )
                 )
                 .padding(10.dp)
