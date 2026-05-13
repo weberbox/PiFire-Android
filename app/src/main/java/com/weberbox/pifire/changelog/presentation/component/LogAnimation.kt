@@ -51,6 +51,7 @@ internal fun LogAnimation(
                 .size(370.dp)
                 .background(gradientBackground())
         ) {
+            @Suppress("AssignedValueIsNeverRead")
             isAnimationVisible = false
         }
     }

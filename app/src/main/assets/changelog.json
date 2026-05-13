@@ -1,9 +1,25 @@
 {
   "changelog": [
     {
-      "version": "3.3.1",
+      "version": "3.3.2",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Bugfix unhandled exception in app update manager for Google play updates"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.3.1",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {
