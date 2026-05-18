@@ -5,10 +5,14 @@ import com.weberbox.pifire.BuildConfig
 @Suppress("KotlinConstantConditions")
 object AppConfig {
 
-    var DEBUG: Boolean = BuildConfig.DEBUG
+    val DEBUG: Boolean
+        get() = BuildConfig.DEBUG
 
-    const val IS_DEV_BUILD: Boolean = BuildConfig.FLAVOR == "dev"
-    const val IS_PLAY_BUILD: Boolean = BuildConfig.FLAVOR == "playstore"
+    val IS_DEV_BUILD: Boolean
+        get() = BuildConfig.FLAVOR == "dev"
+
+    val IS_PLAY_BUILD: Boolean
+        get() = BuildConfig.FLAVOR == "playstore"
 
     // DataStore
     const val SETTINGS_DATA_NAME = "settings_data"

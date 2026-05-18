@@ -59,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        if (AppConfig.IS_PLAY_BUILD) {
+            appUpdateManager.register(this)
+        }
+
         setContent {
             MainContent()
         }

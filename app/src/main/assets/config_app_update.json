@@ -1,8 +1,14 @@
 [
   {
-    "appVersionCode": 3030100,
+    "appVersionCode": 3030200,
     "type": "FLEXIBLE",
-    "message": "Bugfix to catch invalid url on socket connection, Bugfix server support build checking, Add ETA calculations setting, Add Fan PID controller setting",
+    "message": "Bugfix unhandled exception in app update manager for Google play updates. Older versions may crash on attempted updates and will need to be updated from the play store.",
+    "isAlpha": false
+  },
+  {
+    "appVersionCode": 3030100,
+    "type": "IMMEDIATE",
+    "message": "Improve option card enabled visibility by changing to a green outline, Bugfix to exception logging",
     "isAlpha": false
   },
   {
