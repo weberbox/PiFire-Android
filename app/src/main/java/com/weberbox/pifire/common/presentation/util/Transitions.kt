@@ -153,6 +153,7 @@ fun slideDownShrinkExitTransition(): ExitTransition {
     ) + shrinkVertically() + fadeOut()
 }
 
+@Suppress("RedundantWith")
 @Composable
 fun slideUpEnterTransition(): EnterTransition {
     val density = LocalDensity.current

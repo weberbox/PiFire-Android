@@ -2,14 +2,23 @@ package com.weberbox.pifire.landing.presentation.screens
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.BuildConfig
+import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.Analytics
 import com.weberbox.pifire.common.domain.AnalyticsEvent
 import com.weberbox.pifire.common.presentation.base.BaseViewModel
+import com.weberbox.pifire.common.presentation.util.DialogAction
+import com.weberbox.pifire.common.presentation.util.DialogController
+import com.weberbox.pifire.common.presentation.util.DialogEvent
+import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.common.presentation.util.getFormattedDate
+import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.landing.presentation.contract.SettingsContract
 import com.weberbox.pifire.settings.data.model.local.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +43,9 @@ class SettingsViewModel @Inject constructor(
         when (event) {
             is SettingsContract.Event.Back ->
                 setEffect { SettingsContract.Effect.Navigation.Back }
+
+            is SettingsContract.Event.AppInfoDialog ->
+                handleAboutDialog()
 
             is SettingsContract.Event.AutoSelectEnabled ->
                 handleAutoSelectEnabled(event.enabled)
@@ -63,6 +75,32 @@ class SettingsViewModel @Inject constructor(
                 AnalyticsEvent.Param.State.key to enabled
             )
         )
+    }
+
+    private fun handleAboutDialog() {
+        viewModelScope.launch {
+            DialogController.sendEvent(
+                DialogEvent(
+                    title = UiText(
+                        R.string.dialog_app_info_title,
+                    ),
+                    message = UiText(
+                        R.string.dialog_app_info_message,
+                        uiTextArgsOf(
+                            BuildConfig.VERSION_NAME,
+                            String.format(Locale.US, BuildConfig.VERSION_CODE.toString()),
+                            BuildConfig.BUILD_TYPE,
+                            BuildConfig.FLAVOR,
+                            getFormattedDate(BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm")
+                        )
+                    ),
+                    positiveAction = DialogAction(
+                        buttonText = UiText(R.string.close),
+                        action = { }
+                    )
+                )
+            )
+        }
     }
 
     private fun collectPrefsFlow() {

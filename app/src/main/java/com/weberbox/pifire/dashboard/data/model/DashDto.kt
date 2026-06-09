@@ -70,7 +70,7 @@ data class DashDto(
         val title: String? = null,
         val label: String? = null,
         val eta: Int? = null,
-        val temp: Int? = null,
+        val temp: Double? = null,
         val setTemp: Int? = null,
         val maxTemp: Int? = null,
         val target: Int? = null,

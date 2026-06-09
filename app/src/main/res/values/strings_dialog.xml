@@ -32,6 +32,9 @@
     <string name="dialog_biometric_subtitle">Touch the fingerprint sensor</string>
     <string name="dialog_biometric_negative">Use account password</string>
 
+    <string name="dialog_app_info_title">Application Info</string>
+    <string name="dialog_app_info_message">\nApp Version:\n%1$s \n\nVersion Code:\n%2$s \n\nBuild Type:\n%3$s \n\nApp Flavor:\n%4$s \n\nBuild Date:\n%5$s</string>
+
     <string name="dialog_firebase_failed_title">Firebase Error</string>
     <string name="dialog_firebase_failed_message">This app requires a connection to Firebase for server and feature support configuration as well as app updates. The app will use the default configurations, for proper operation please check if Firebase is being blocked by ad blockers like PiHole, AdGuard etc</string>
 </resources>

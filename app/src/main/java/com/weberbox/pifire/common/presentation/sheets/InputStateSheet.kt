@@ -31,6 +31,7 @@ import com.weberbox.pifire.common.presentation.model.InputState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun InputStateSheet(
@@ -44,7 +45,7 @@ fun InputStateSheet(
 ) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
-        delay(300)
+        delay(300.milliseconds)
         focusRequester.requestFocus()
     }
 

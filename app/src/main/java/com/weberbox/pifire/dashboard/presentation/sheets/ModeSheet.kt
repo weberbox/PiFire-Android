@@ -36,6 +36,7 @@ import com.weberbox.pifire.dashboard.presentation.component.SlideToStart
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract.DashEvent
 import com.weberbox.pifire.dashboard.presentation.util.getModeButtons
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun ModeSheet(
@@ -54,7 +55,7 @@ internal fun ModeSheet(
     LaunchedEffect(swipeVisible, remainingTime, sliderPosition) {
         if (sliderPosition <= 0f && swipeVisible) {
             while (remainingTime > 0) {
-                delay(1000)
+                delay(1000.milliseconds)
                 remainingTime--
             }
             swipeVisible = false

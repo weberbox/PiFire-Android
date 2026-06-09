@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
 
 class ElapsedTimer(private val timerScope: CoroutineScope) {
 
@@ -45,7 +46,7 @@ class ElapsedTimer(private val timerScope: CoroutineScope) {
         while (true) {
             emit(ElapsedData(startTime = startTime, timeElapsed = timeElapsed))
             timeElapsed = Instant.now().epochSecond.toInt() - startTime
-            delay(1000)
+            delay(1000.milliseconds)
         }
     }
 }

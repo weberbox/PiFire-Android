@@ -18,6 +18,10 @@
     <string name="settings_server_biometrics_title">Require Biometrics</string>
     <string name="settings_server_biometrics_summary">Require biometric authentication to connect or edit server settings</string>
 
+    <string name="settings_cat_app_title">About</string>
+    <string name="settings_app_info_title">App Info</string>
+    <string name="settings_app_info_summary">Application version, build date, etc</string>
+
     <string name="settings_cat_auth_title">Authentication</string>
     <string name="settings_basic_auth_title">Basic Auth</string>
     <string name="settings_basic_auth_summary">Use basic authentication if PiFire is behind a reverse proxy</string>

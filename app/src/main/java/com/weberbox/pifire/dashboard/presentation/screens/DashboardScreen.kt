@@ -190,7 +190,6 @@ private fun DashboardScreenContent(
         onDispose {
             window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
-
     }
 
     @Suppress("NAME_SHADOWING")

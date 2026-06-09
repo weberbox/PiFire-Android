@@ -19,7 +19,7 @@ private val keystoreProperties = getKeystoreProperties()
 
 val vMajor = 3
 val vMinor = 3
-val vPatch = 2
+val vPatch = 3
 val isAlpha = false
 
 android {
@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "com.weberbox.pifire"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = vMajor * 1000000 + vMinor * 10000 + vPatch * 100
         versionName = "${vMajor}.${vMinor}.${vPatch}"
     }

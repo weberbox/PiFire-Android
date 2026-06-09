@@ -37,6 +37,7 @@ import com.weberbox.pifire.common.presentation.model.FieldInput
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun InputValidationSheet(
@@ -87,7 +88,7 @@ private fun InputValidationContent(
 ) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
-        delay(300)
+        delay(300.milliseconds)
         focusRequester.requestFocus()
     }
 

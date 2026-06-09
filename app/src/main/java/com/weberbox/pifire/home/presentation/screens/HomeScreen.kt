@@ -160,6 +160,7 @@ private fun HomeScreen(
             }
         }
     }
+
     DisposableEffect(state.showBottomBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window?.isNavigationBarContrastEnforced = !state.showBottomBar
@@ -170,9 +171,11 @@ private fun HomeScreen(
             }
         }
     }
+
     LaunchedEffect(pagerState.currentPage) {
         title = navigationItems[pagerState.currentPage].title
     }
+
     LaunchedEffect(Unit) {
         if (drawerState.isOpen && isPermDrawerNavigation) drawerState.close()
     }

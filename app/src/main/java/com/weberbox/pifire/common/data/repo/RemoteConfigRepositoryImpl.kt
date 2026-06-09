@@ -21,6 +21,7 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.math.pow
+import kotlin.time.Duration.Companion.milliseconds
 
 class RemoteConfigRepositoryImpl @Inject constructor(
     private val remoteConfig: FirebaseRemoteConfig,
@@ -142,7 +143,7 @@ class RemoteConfigRepositoryImpl @Inject constructor(
 
                 val backoff = baseDelayMillis * (2.0.pow(attempt.toDouble())).toLong()
                 Timber.w(e, "Retry attempt ${attempt + 1} failed, retrying in $backoff ms")
-                delay(backoff)
+                delay(backoff.milliseconds)
             }
         }
         error("Unreachable") // compiler safety

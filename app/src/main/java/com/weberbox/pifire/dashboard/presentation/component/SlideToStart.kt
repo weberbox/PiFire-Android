@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun SlideToStart(
@@ -97,7 +98,7 @@ internal fun SlideToStart(
     LaunchedEffect(swipeVisible, remainingTime, sliderPositionPx) {
         if (sliderPositionPx <= 0f && swipeVisible) {
             while (remainingTime > 0) {
-                delay(1000)
+                delay(1000.milliseconds)
                 remainingTime--
             }
             swipeVisible = false

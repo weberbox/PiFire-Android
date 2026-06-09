@@ -37,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class LandingViewModel @Inject constructor(
@@ -165,7 +166,7 @@ class LandingViewModel @Inject constructor(
                     } else {
                         if (resultUuid.isNotBlank()) {
                             viewModelScope.launch {
-                                delay(500)
+                                delay(500.milliseconds)
                                 selectServer(uuid)
                             }
                         }

@@ -125,6 +125,7 @@ class OffsetDrawerState(
     internal var closeDrawerMotionSpec: FiniteAnimationSpec<Float> = snap()
     internal fun requireOffset(): Float = anchoredDraggableState.requireOffset()
 
+    @Suppress("AssignedValueIsNeverRead")
     private suspend fun animateTo(
         targetValue: DrawerValue,
         animationSpec: AnimationSpec<Float>,

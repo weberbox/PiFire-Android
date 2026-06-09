@@ -9,6 +9,7 @@ class SettingsContract {
 
     sealed class Event : ViewEvent {
         data object Back : Event()
+        data object AppInfoDialog : Event()
         data class AutoSelectEnabled(val enabled: Boolean) : Event()
         data class BiometricsEnabled(val enabled: Boolean) : Event()
     }
