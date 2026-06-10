@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class CountDownTimer(private val timerScope: CoroutineScope) {
     private var _timerState = MutableStateFlow(TimerData())
@@ -61,7 +62,7 @@ class CountDownTimer(private val timerScope: CoroutineScope) {
     private fun initTimer(totalSeconds: Long, totalDuration: Long): Flow<TimerData> =
         (totalSeconds - 1 downTo 0).asFlow()
             .onEach {
-                delay(1000)
+                delay(1000.milliseconds)
             }
             .conflate()
             .transform { remainingSeconds: Long ->

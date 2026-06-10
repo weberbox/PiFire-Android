@@ -1,9 +1,33 @@
 {
   "changelog": [
     {
-      "version": "3.3.2",
+      "version": "3.3.3",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "fix",
+          "text": "Bugfix JSON errors when using Celsius"
+        },
+        {
+          "type": "new",
+          "text": "Added Application Info dialog to landing screen settings"
+        },
+        {
+          "type": "imp",
+          "text": "Improve Google Play update handling"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.3.2",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {

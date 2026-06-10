@@ -163,6 +163,7 @@ sealed interface UiTextArgList : Parcelable {
     private companion object
 }
 
+@Suppress("JavaDefaultMethodsNotOverriddenByDelegation")
 private class UiTextArgListImpl(
     val sourceList: List<UiTextArg?>,
 ) : UiTextArgList, List<UiTextArg?> by sourceList {

@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3030300,
+    "type": "FLEXIBLE",
+    "message": "Bugfix JSON errors when using Celsius, Added Application Info dialog to landing screen settings, Improved Google Play update handling",
+    "isAlpha": false
+  },
+  {
     "appVersionCode": 3030200,
     "type": "FLEXIBLE",
     "message": "Bugfix unhandled exception in app update manager for Google play updates. Older versions may crash on attempted updates and will need to be updated from the play store.",

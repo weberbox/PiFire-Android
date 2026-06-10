@@ -8,6 +8,7 @@ import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.Probe
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.RecipeStatus
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.Timer
 import com.weberbox.pifire.dashboard.presentation.model.ProbeType
+import kotlin.math.roundToInt
 
 object DashDtoToDataMapper : Mapper<DashDto, Dash> {
     private val defaults = Dash()
@@ -74,7 +75,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
                 title = it.title ?: probeDefaults.title,
                 label = it.label ?: probeDefaults.label,
                 eta = it.eta ?: probeDefaults.eta,
-                temp = it.temp ?: probeDefaults.temp,
+                temp = it.temp?.roundToInt() ?: probeDefaults.temp,
                 setTemp = it.setTemp ?: probeDefaults.setTemp,
                 maxTemp = it.maxTemp ?: probeDefaults.maxTemp,
                 target = it.target ?: probeDefaults.target,
@@ -94,7 +95,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
                 status = Probe.Status(
                     batteryCharging = it.status?.batteryCharging
                         ?: probeDefaults.status.batteryCharging,
-                    batteryPercentage = it.status?.batteryPercentage?.toInt()
+                    batteryPercentage = it.status?.batteryPercentage?.roundToInt()
                         ?: probeDefaults.status.batteryPercentage,
                     batteryVoltage = it.status?.batteryVoltage
                         ?: probeDefaults.status.batteryVoltage,
@@ -110,7 +111,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             title = from.primaryProbe?.title ?: probeDefaults.title,
             label = from.primaryProbe?.label ?: probeDefaults.label,
             eta = from.primaryProbe?.eta ?: probeDefaults.eta,
-            temp = from.primaryProbe?.temp ?: probeDefaults.temp,
+            temp = from.primaryProbe?.temp?.roundToInt() ?: probeDefaults.temp,
             setTemp = from.primaryProbe?.setTemp ?: probeDefaults.setTemp,
             maxTemp = from.primaryProbe?.maxTemp ?: probeDefaults.maxTemp,
             target = from.primaryProbe?.target ?: probeDefaults.target,
@@ -136,7 +137,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             status = Probe.Status(
                 batteryCharging = from.primaryProbe?.status?.batteryCharging
                     ?: probeDefaults.status.batteryCharging,
-                batteryPercentage = from.primaryProbe?.status?.batteryPercentage?.toInt()
+                batteryPercentage = from.primaryProbe?.status?.batteryPercentage?.roundToInt()
                     ?: probeDefaults.status.batteryPercentage,
                 batteryVoltage = from.primaryProbe?.status?.batteryVoltage
                     ?: probeDefaults.status.batteryVoltage,

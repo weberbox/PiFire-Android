@@ -9,6 +9,7 @@ package com.weberbox.pifire.core.annotations
 )
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Compatibility(
+    @Suppress("unused")
     val versionBelow: String,
     val build: String,
     val message: String = ""

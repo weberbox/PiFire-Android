@@ -85,6 +85,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun RecipeDetailsScreenDestination(
@@ -244,7 +245,7 @@ private fun RecipeDetailsContent(
     LaunchedEffect(Unit) {
         if (state.recipeStep != -1 && !hasScrolled) {
             hasScrolled = true
-            delay(500)
+            delay(500.milliseconds)
             val paddingAdjustment = with(density) {
                 contentPadding.calculateTopPadding().toPx()
             }

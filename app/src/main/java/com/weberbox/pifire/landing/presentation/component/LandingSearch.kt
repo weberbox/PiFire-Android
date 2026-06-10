@@ -55,6 +55,7 @@ import dev.chrisbanes.haze.hazeEffect
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,7 +117,7 @@ internal fun LandingInputField(
                             keyboardController?.hide()
                             while (isKeyboardOpen) {
                                 // Wait until keyboard is closed to animate, or it flashes keyboard
-                                delay(10)
+                                delay(10.milliseconds)
                             }
                             searchBarState.animateToCollapsed()
                         } else {

@@ -40,6 +40,7 @@ import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.dashboard.presentation.util.formatRemainingTime
 import kotlinx.coroutines.delay
 import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 internal fun RemainingCard(
@@ -66,7 +67,7 @@ internal fun RemainingCard(
             }
             val totalSeconds = endTime - currentTime
             (totalSeconds - 1 downTo 0).onEach { out ->
-                delay(1000)
+                delay(1000.milliseconds)
                 remainingTime = out.toInt()
             }
         } else remainingTime = 0

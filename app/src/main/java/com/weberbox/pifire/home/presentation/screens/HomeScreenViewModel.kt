@@ -35,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -298,7 +299,7 @@ class HomeScreenViewModel @Inject constructor(
         if (storedAppVersion < currentVersion) {
             prefs.set(Pref.storedAppVersion, currentVersion)
             viewModelScope.launch {
-                delay(1200)
+                delay(1200.milliseconds)
                 setEffect {
                     HomeContract.Effect.Navigation.Changelog
                 }

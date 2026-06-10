@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class CoroutinePoller<T>(
     private val dispatcher: CoroutineDispatcher,
@@ -19,7 +20,7 @@ class CoroutinePoller<T>(
             while (isActive) {
                 val data = fetchData()
                 trySend(data)
-                delay(delay)
+                delay(delay.milliseconds)
             }
         }
         awaitClose {

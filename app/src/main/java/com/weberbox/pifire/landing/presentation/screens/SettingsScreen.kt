@@ -41,6 +41,7 @@ import com.weberbox.pifire.settings.presentation.component.SwitchPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceLocals
 
@@ -190,6 +191,16 @@ fun SettingsScreenContent(
                     }
                 )
             }
+        )
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_cat_app_title)) }
+        )
+        Preference(
+            title = {
+                Text(text = stringResource(R.string.settings_app_info_title))
+            },
+            summary = { Text(text = stringResource(R.string.settings_app_info_summary)) },
+            onClick = { onEventSent(SettingsContract.Event.AppInfoDialog) }
         )
     }
 }

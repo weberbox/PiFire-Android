@@ -16,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class ManualSettingsViewModel @Inject constructor(
@@ -127,7 +128,7 @@ class ManualSettingsViewModel @Inject constructor(
             }
 
             is Result.Success -> {
-                delay(1000)
+                delay(1000.milliseconds)
                 getManualData()
             }
         }

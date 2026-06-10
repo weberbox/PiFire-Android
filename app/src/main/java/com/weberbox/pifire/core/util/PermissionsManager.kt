@@ -83,8 +83,8 @@ private fun rememberPermissionState(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
+            permissionState.refreshPermissionStatus()
             if (!granted) {
-                permissionState.refreshPermissionStatus()
                 scope.showPermissionDialog(
                     permissionDetailsProvider = permissionDetailsProvider,
                     shouldShowRationale = permissionState.status.shouldShowRationale,
