@@ -38,7 +38,7 @@ object AsUiText {
             )
 
             DataError.Network.AUTHENTICATION -> UiText(
-                R.string.data_error_http_certificate_error
+                R.string.data_error_http_auth_error
             )
 
             DataError.Network.NULL_RESPONSE -> UiText(
@@ -46,7 +46,7 @@ object AsUiText {
             )
 
             DataError.Network.CERTIFICATE -> UiText(
-                R.string.data_error_http_auth_error
+                R.string.data_error_http_certificate_error
             )
 
             DataError.Network.UNKNOWN -> UiText(

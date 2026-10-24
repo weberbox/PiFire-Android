@@ -47,10 +47,8 @@ import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.CachedDataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.clearBackStackArg
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
-import com.weberbox.pifire.common.presentation.util.getBackStackArg
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.recipes.presentation.component.RecipeItem
@@ -75,13 +73,6 @@ fun RecipesScreenDestination(
     navController: NavHostController,
     viewModel: RecipesViewModel = hiltViewModel(),
 ) {
-    navController.getBackStackArg<Boolean>("refresh")?.also { refresh ->
-        if (refresh) {
-            viewModel.setEvent(RecipesContract.Event.Refresh)
-            navController.clearBackStackArg<Boolean>("refresh")
-        }
-    }
-
     RecipesScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,

@@ -1,5 +1,6 @@
 package com.weberbox.pifire.settings.data.model.remote
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleListSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,6 +22,7 @@ data class Pwm(
     val maxDutyCycle: Int? = null,
 
     @SerialName("temp_range_list")
+    @Serializable(with = IntOrDoubleListSerializer::class)
     val tempRangeList: List<Int>? = null,
 
     @SerialName("profiles")

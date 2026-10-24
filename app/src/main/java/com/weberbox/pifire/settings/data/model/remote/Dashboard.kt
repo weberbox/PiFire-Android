@@ -1,5 +1,6 @@
 package com.weberbox.pifire.settings.data.model.remote
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -42,15 +43,19 @@ data class Dashboard(
             @Serializable
             data class Config(
                 @SerialName("max_food_temp_C")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxFoodTempC: Int? = null,
 
                 @SerialName("max_food_temp_F")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxFoodTempF: Int? = null,
 
                 @SerialName("max_primary_temp_C")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxPrimaryTempC: Int? = null,
 
                 @SerialName("max_primary_temp_F")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxPrimaryTempF: Int? = null
 
             )
@@ -77,15 +82,19 @@ data class Dashboard(
             @Serializable
             data class Config(
                 @SerialName("max_food_temp_C")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxFoodTempC: Int? = null,
 
                 @SerialName("max_food_temp_F")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxFoodTempF: Int? = null,
 
                 @SerialName("max_primary_temp_C")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxPrimaryTempC: Int? = null,
 
                 @SerialName("max_primary_temp_F")
+                @Serializable(with = IntOrDoubleSerializer::class)
                 var maxPrimaryTempF: Int? = null
 
             )

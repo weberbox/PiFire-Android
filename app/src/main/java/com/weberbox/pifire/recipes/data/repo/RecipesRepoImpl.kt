@@ -10,7 +10,9 @@ import com.weberbox.pifire.recipes.domain.RecipesDtoToDataMapper
 import com.weberbox.pifire.recipes.presentation.model.RecipesData
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -21,8 +23,8 @@ class RecipesRepoImpl @Inject constructor(
     private val json: Json
 ) : RecipesRepo {
 
-    override suspend fun getRecipes(): Result<List<Recipe>, DataError> {
-        return recipesApi.getRecipes().let { result ->
+    override suspend fun getRecipes(): Result<List<Recipe>, DataError> = withContext(Dispatchers.IO) {
+        recipesApi.getRecipes().let { result ->
             when (result) {
                 is Result.Error -> Result.Error(result.error)
                 is Result.Success -> {
@@ -41,10 +43,10 @@ class RecipesRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCachedData(): Result<List<Recipe>, DataError> {
+    override suspend fun getCachedData(): Result<List<Recipe>, DataError> = withContext(Dispatchers.IO) {
         val data = dataStore.data.firstOrNull()
         val currentServer = sessionStateHolder.currentServerUuid
-        return if (data != null && currentServer.isNotBlank()) {
+        if (data != null && currentServer.isNotBlank()) {
             data.recipesMap[currentServer]?.let { recipes ->
                 sessionStateHolder.setRecipesData(recipes)
                 Result.Success(recipes.recipes)

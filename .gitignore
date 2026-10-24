@@ -37,3 +37,13 @@ local.properties
 .idea/modules.xml
 .idea/misc.xml
 *.jks
+
+# Secrets: this is a public repo, keep keys and config files out of it
+google-services.json
+Secrets.kt
+keystore.properties
+
+# Claude Code: personal settings and the running log of uncommitted work
+.claude/settings.local.json
+/CLAUDE.local.md
+/PENDING_CHANGES.md

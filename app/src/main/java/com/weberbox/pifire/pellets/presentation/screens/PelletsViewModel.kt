@@ -110,7 +110,8 @@ class PelletsViewModel @Inject constructor(
                                     pellets = result.data,
                                     isInitialLoading = false,
                                     isRefreshing = false,
-                                    isLoading = false
+                                    isLoading = false,
+                                    isDataError = false,
                                 )
                             }
                         }
@@ -153,7 +154,8 @@ class PelletsViewModel @Inject constructor(
                                 pellets = result.data,
                                 isInitialLoading = false,
                                 isLoading = false,
-                                isRefreshing = false
+                                isRefreshing = false,
+                                isDataError = false,
                             )
                         }
                     }
@@ -182,7 +184,8 @@ class PelletsViewModel @Inject constructor(
                         copy(
                             pellets = result.data,
                             isInitialLoading = false,
-                            isRefreshing = false
+                            isRefreshing = false,
+                            isDataError = false,
                         )
                     }
                     setEffect {

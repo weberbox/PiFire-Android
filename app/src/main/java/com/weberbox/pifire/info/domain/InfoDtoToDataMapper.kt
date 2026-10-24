@@ -173,7 +173,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             appGitBranch = BuildConfig.GIT_BRANCH,
             appGitRev = BuildConfig.GIT_REV,
             alphaBuild = BuildConfig.ALPHA_BUILD,
-            devBuild = AppConfig.IS_DEV_BUILD
+            debugBuild = AppConfig.DEBUG
         )
     }
 }

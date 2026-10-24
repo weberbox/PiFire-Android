@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
@@ -37,7 +38,6 @@ import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.core.util.Feature
 import com.weberbox.pifire.core.util.FeatureGate
 import com.weberbox.pifire.core.util.NotificationsPermissionDetailsProvider
@@ -147,7 +147,7 @@ private fun NotificationSettingsContent(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding)
     ) {
-        if (Secrets.ONESIGNAL_APP_ID.isNotBlank()) {
+        if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
             TwoTargetSwitchPreference(
                 value = state.serverData.settings.onesignalEnabled,
                 onValueChange = { onEventSent(NotifContract.Event.SetOneSignalEnabled(it)) },

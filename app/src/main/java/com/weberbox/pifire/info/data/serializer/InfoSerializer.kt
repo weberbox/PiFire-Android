@@ -15,6 +15,7 @@ object InfoSerializer : Serializer<InfoData> {
         isLenient = true
         coerceInputValues = true
         encodeDefaults = true
+        allowSpecialFloatingPointValues = true
     }
 
     override val defaultValue: InfoData

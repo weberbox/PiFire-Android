@@ -15,6 +15,7 @@ object PelletsSerializer : Serializer<PelletsData> {
         isLenient = true
         coerceInputValues = true
         encodeDefaults = true
+        allowSpecialFloatingPointValues = true
     }
 
     override val defaultValue: PelletsData

@@ -18,6 +18,11 @@ import com.weberbox.pifire.recipes.data.repo.RecipesRepo
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -66,20 +71,23 @@ class MainViewModel @Inject constructor(
     }
 
     private fun collectSessionState() {
+        // Feature config is fetched once; settings emit on every server update, so only rebuild
+        // FeatureSupport when the server version or build changes.
+        val serverVersion = sessionStateHolder.settingsDataState
+            .filterNotNull()
+            .map { data -> data.settings.serverVersion to data.settings.serverBuild }
+            .distinctUntilChanged()
+        val featureMap = flow { emit(remoteConfigRepository.fetchFeatureSupportConfig()) }
+
         viewModelScope.launch {
-            sessionStateHolder.settingsDataState.collect { settingsData ->
-                settingsData?.also { data ->
-                    val featureMap = remoteConfigRepository.fetchFeatureSupportConfig()
-                    setState {
-                        copy(
-                            featureSupport = FeatureSupport(
-                                currentVersion = data.settings.serverVersion,
-                                currentBuild = data.settings.serverBuild,
-                                featureMap = featureMap
-                            )
-                        )
-                    }
-                }
+            combine(serverVersion, featureMap) { (version, build), features ->
+                FeatureSupport(
+                    currentVersion = version,
+                    currentBuild = build,
+                    featureMap = features,
+                )
+            }.collect { featureSupport ->
+                setState { copy(featureSupport = featureSupport) }
             }
         }
     }

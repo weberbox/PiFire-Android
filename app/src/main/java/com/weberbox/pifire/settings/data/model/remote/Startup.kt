@@ -1,5 +1,7 @@
 package com.weberbox.pifire.settings.data.model.remote
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleListSerializer
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,6 +14,7 @@ data class Startup(
     val primeOnStartup: Int? = null,
 
     @SerialName("startup_exit_temp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val startExitTemp: Int? = null,
 
     @SerialName("start_to_mode")
@@ -30,6 +33,7 @@ data class Startup(
         val afterStartUpMode: String? = null,
 
         @SerialName("primary_setpoint")
+        @Serializable(with = IntOrDoubleSerializer::class)
         val primarySetPoint: Int? = null,
 
         @SerialName("start_to_hold_prompt")
@@ -42,12 +46,14 @@ data class Startup(
         val enabled: Boolean? = null,
 
         @SerialName("exit_temp")
+        @Serializable(with = IntOrDoubleSerializer::class)
         val exitTemp: Int? = null,
 
         @SerialName("profiles")
         val profiles: List<SSProfile>? = null,
 
         @SerialName("temp_range_list")
+        @Serializable(with = IntOrDoubleListSerializer::class)
         val tempRangeList: List<Int>? = null
     ) {
 

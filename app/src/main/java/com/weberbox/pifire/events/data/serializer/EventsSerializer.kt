@@ -15,6 +15,7 @@ object EventsSerializer : Serializer<EventsData> {
         isLenient = true
         coerceInputValues = true
         encodeDefaults = true
+        allowSpecialFloatingPointValues = true
     }
 
     override val defaultValue: EventsData

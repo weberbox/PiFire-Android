@@ -20,6 +20,8 @@ object JsonModule {
             coerceInputValues = true
             encodeDefaults = true
             explicitNulls = false
+            // Python's json.dumps sends NaN for e.g. a disconnected probe
+            allowSpecialFloatingPointValues = true
         }
     }
 

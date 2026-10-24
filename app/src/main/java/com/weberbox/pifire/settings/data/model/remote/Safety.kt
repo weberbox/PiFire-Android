@@ -1,17 +1,21 @@
 package com.weberbox.pifire.settings.data.model.remote
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Safety(
     @SerialName("minstartuptemp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val minStartupTemp: Int? = null,
     
     @SerialName("maxstartuptemp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val maxStartupTemp: Int? = null,
 
     @SerialName("maxtemp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val maxTemp: Int? = null,
 
     @SerialName("reigniteretries")

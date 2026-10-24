@@ -15,6 +15,7 @@ object RecipesSerializer : Serializer<RecipesData> {
         isLenient = true
         coerceInputValues = true
         encodeDefaults = true
+        allowSpecialFloatingPointValues = true
     }
 
     override val defaultValue: RecipesData

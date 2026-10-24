@@ -1,5 +1,7 @@
 package com.weberbox.pifire.recipes.data.model
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleListSerializer
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -141,6 +143,7 @@ data class RecipesDto(
                 @Serializable
                 data class Step(
                     @SerialName("hold_temp")
+                    @Serializable(with = IntOrDoubleSerializer::class)
                     val holdTemp: Int? = null,
 
                     @SerialName("message")
@@ -167,9 +170,11 @@ data class RecipesDto(
                     @Serializable
                     data class TriggerTemps(
                         @SerialName("food")
+                        @Serializable(with = IntOrDoubleListSerializer::class)
                         val food: List<Int>? = null,
 
                         @SerialName("primary")
+                        @Serializable(with = IntOrDoubleSerializer::class)
                         val primary: Int? = null
                     )
                 }

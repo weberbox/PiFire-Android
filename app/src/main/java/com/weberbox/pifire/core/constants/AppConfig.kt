@@ -8,9 +8,6 @@ object AppConfig {
     val DEBUG: Boolean
         get() = BuildConfig.DEBUG
 
-    val IS_DEV_BUILD: Boolean
-        get() = BuildConfig.FLAVOR == "dev"
-
     val IS_PLAY_BUILD: Boolean
         get() = BuildConfig.FLAVOR == "playstore"
 

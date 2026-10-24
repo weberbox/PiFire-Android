@@ -41,7 +41,7 @@ data class InfoData(
         val appGitBranch: String = "",
         val appGitRev: String = "",
         val alphaBuild: Boolean = false,
-        val devBuild: Boolean = false
+        val debugBuild: Boolean = false
     ) {
         @Serializable
         data class PlatformInfo(

@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.datastore.core.IOException
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
-import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.data.model.remote.Modules
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
@@ -55,7 +54,9 @@ class SentryIO @Inject constructor(
                 options.isAttachScreenshot = true
                 options.isEnableAutoSessionTracking = true
                 options.isEnableDeduplication = true
-                options.dsn = Secrets.SENTRY_IO_DSN
+                options.dsn = BuildConfig.SENTRY_DSN
+                // One Sentry project for every flavor; the environment tells them apart.
+                options.environment = "${BuildConfig.FLAVOR}-${BuildConfig.BUILD_TYPE}"
                 options.tracesSampleRate = 1.0
                 options.addIntegration(
                     SentryTimberIntegration(
@@ -140,7 +141,7 @@ class SentryIO @Inject constructor(
     }
 
     private fun sentryDSNSet(): Boolean {
-        return Secrets.SENTRY_IO_DSN.isNotEmpty()
+        return BuildConfig.SENTRY_DSN.isNotEmpty()
     }
 
     private fun sentryEnabled(): Boolean {

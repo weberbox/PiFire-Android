@@ -22,7 +22,7 @@
     <string name="data_error_offline">No connection to PiFire your request could not be completed. Please try again</string>
     <string name="data_error_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
     <string name="data_error_socket_timeout">Request to PiFire has timed out. Please check your connection</string>
-    <string name="data_error_http_auth_error">PiFire server requires authentications</string>
+    <string name="data_error_http_auth_error">PiFire server requires authentication</string>
     <string name="data_error_http_certificate_error">PiFire is using an untrusted certificate</string>
     <string name="data_error_http_response_null">PiFire response was null. Please try again</string>
     <string name="data_error_http_unsuccessful">PiFire responded with error code %1$s - %2$s</string>

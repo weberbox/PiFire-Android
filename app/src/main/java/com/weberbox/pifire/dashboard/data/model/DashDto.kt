@@ -1,5 +1,6 @@
 package com.weberbox.pifire.dashboard.data.model
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -31,6 +32,7 @@ data class DashDto(
     val hasDistanceSensor: Boolean? = null,
     val startupCheck: Boolean? = null,
     val startToHoldPrompt: Boolean? = null,
+    @Serializable(with = IntOrDoubleSerializer::class)
     val startupGotoTemp: Int? = null,
     val startupGotoMode: String? = null,
     val allowManualOutputs: Boolean? = null,
@@ -71,10 +73,15 @@ data class DashDto(
         val label: String? = null,
         val eta: Int? = null,
         val temp: Double? = null,
+        @Serializable(with = IntOrDoubleSerializer::class)
         val setTemp: Int? = null,
+        @Serializable(with = IntOrDoubleSerializer::class)
         val maxTemp: Int? = null,
+        @Serializable(with = IntOrDoubleSerializer::class)
         val target: Int? = null,
+        @Serializable(with = IntOrDoubleSerializer::class)
         val lowLimitTemp: Int? = null,
+        @Serializable(with = IntOrDoubleSerializer::class)
         val highLimitTemp: Int? = null,
         val targetReq: Boolean? = null,
         val lowLimitReq: Boolean? = null,

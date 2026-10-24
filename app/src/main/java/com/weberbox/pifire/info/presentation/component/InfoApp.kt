@@ -127,7 +127,7 @@ internal fun InfoApp(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            if (info.devBuild) {
+            if (info.debugBuild) {
                 Text(
                     text = stringResource(R.string.info_app_build_git_branch),
                     modifier = Modifier.padding(
@@ -171,13 +171,13 @@ private fun InfoAppPreview() {
         Info(
             appVersion = "3.0.0",
             appVersionCode = "300000",
-            appFlavor = "Dev",
+            appFlavor = "Playstore",
             appBuildType = "Debug",
             appBuildDate = "04/21/2025",
             appGitRev = "147",
             appGitBranch = "development",
             alphaBuild = true,
-            devBuild = true
+            debugBuild = true
         )
     }
     PiFireTheme {

@@ -15,7 +15,6 @@ import com.onesignal.OneSignal
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.config.Secrets
 import com.weberbox.pifire.core.annotations.FutureDeprecation
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
@@ -37,7 +36,7 @@ class OneSignalManager @Inject constructor(
         OneSignal.setLogLevel(OneSignal.LOG_LEVEL.ERROR, OneSignal.LOG_LEVEL.NONE)
         OneSignal.setRequiresUserPrivacyConsent(true)
         OneSignal.initWithContext(appContext)
-        OneSignal.setAppId(Secrets.ONESIGNAL_APP_ID)
+        OneSignal.setAppId(BuildConfig.ONESIGNAL_APP_ID)
         initNotificationChannels(appContext)
     }
 
@@ -55,7 +54,7 @@ class OneSignalManager @Inject constructor(
                 if (state.isSubscribed) {
                     state.userId?.also { playerID ->
                         if (registrationResult == OneSignalStatus.ONESIGNAL_NOT_REGISTERED) {
-                            settingsRepo.setOneSignalAppID(Secrets.ONESIGNAL_APP_ID)
+                            settingsRepo.setOneSignalAppID(BuildConfig.ONESIGNAL_APP_ID)
                         }
                         registerOneSignalDevice(
                             playerID = playerID,
@@ -84,7 +83,7 @@ class OneSignalManager @Inject constructor(
     }
 
     suspend fun checkOneSignalStatus(): OneSignalStatus {
-        if (Secrets.ONESIGNAL_APP_ID.isNotBlank()) {
+        if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
             when (val status = checkRegistration()) {
                 OneSignalStatus.ONESIGNAL_NO_ID -> {
                     Timber.d("Device has No ID")

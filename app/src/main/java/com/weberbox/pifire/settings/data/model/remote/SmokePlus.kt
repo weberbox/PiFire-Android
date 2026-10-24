@@ -1,5 +1,6 @@
 package com.weberbox.pifire.settings.data.model.remote
 
+import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,9 +10,11 @@ data class SmokePlus(
     val enabled: Boolean? = null,
 
     @SerialName("min_temp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val minTemp: Int? = null,
 
     @SerialName("max_temp")
+    @Serializable(with = IntOrDoubleSerializer::class)
     val maxTemp: Int? = null,
 
     @SerialName("on_time")

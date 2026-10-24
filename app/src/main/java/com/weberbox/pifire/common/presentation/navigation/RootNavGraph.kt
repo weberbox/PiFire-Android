@@ -34,7 +34,6 @@ import com.weberbox.pifire.pellets.presentation.screens.WoodsDetailsScreen
 import com.weberbox.pifire.recipes.presentation.screens.RecipeDetailsScreenDestination
 import com.weberbox.pifire.recipes.presentation.screens.RecipeImagesScreenDestination
 import com.weberbox.pifire.recipes.presentation.screens.RecipesScreenDestination
-import com.weberbox.pifire.recipes.presentation.screens.RecipesViewModel
 import com.weberbox.pifire.settings.presentation.screens.SettingsHomeDestination
 import com.weberbox.pifire.settings.presentation.screens.admin.AdminSettingsDestination
 import com.weberbox.pifire.settings.presentation.screens.admin.ManualSettingsDestination
@@ -161,8 +160,7 @@ fun NavGraphBuilder.recipesNavGraph(navController: NavHostController) {
         startDestination = NavGraph.RecipesDest.Recipes,
     ) {
         composable<NavGraph.RecipesDest.Recipes> {
-            val viewModel = it.sharedViewModel<RecipesViewModel>(navController)
-            RecipesScreenDestination(navController, viewModel)
+            RecipesScreenDestination(navController)
         }
         composable<NavGraph.RecipesDest.Details> {
             RecipeDetailsScreenDestination(navController)

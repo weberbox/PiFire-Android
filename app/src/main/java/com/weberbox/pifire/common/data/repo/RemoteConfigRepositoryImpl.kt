@@ -1,6 +1,8 @@
 package com.weberbox.pifire.common.data.repo
 
+import android.content.Context
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.data.util.readJsonFromAssets
@@ -13,6 +15,8 @@ import com.weberbox.pifire.core.util.AppUpdateConfigData
 import com.weberbox.pifire.core.util.FeatureFlagsConfig
 import com.weberbox.pifire.core.util.RemoteFeatureConfigData
 import com.weberbox.pifire.core.util.ServerSupportConfigData
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
@@ -24,84 +28,77 @@ import kotlin.math.pow
 import kotlin.time.Duration.Companion.milliseconds
 
 class RemoteConfigRepositoryImpl @Inject constructor(
+    @param:ApplicationContext private val appContext: Context,
     private val remoteConfig: FirebaseRemoteConfig,
-    private val json: Json
+    private val json: Json,
 ) : RemoteConfigRepository {
+    private val configSettings = FirebaseRemoteConfigSettings.Builder()
+        .setFetchTimeoutInSeconds(15)
+        .setMinimumFetchIntervalInSeconds(if (AppConfig.DEBUG) 0 else 3600)
+        .build()
+
     override suspend fun fetchServerSupportConfig(): ServerSupportConfigData? {
         val key = AppConfig.SERVER_SUPPORT_CONFIG
-        val defaults = mapOf(
-            key to readJsonFromAssets("config_server_support.json")
-        )
-        remoteConfig.setDefaultsAsync(defaults).await()
+        val bundled = readJsonFromAssets("config_server_support.json", context = appContext)
+        fetchAndActivate(key = key, bundled = bundled)
 
-        return try {
-            withRetryBackoff {
-                remoteConfig.fetchAndActivate().await().also {
-                    if (!it) Timber.d("Server Support Using Local Configs")
-                }
-
-                remoteConfig.fetchConfigJson<List<ServerSupportConfigData>>(key, json)
-                    .find { it.appVersionCode == BuildConfig.VERSION_CODE }
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "Firebase Server Support fetch exception, fallback to defaults")
-            remoteConfig.fetchConfigJson<List<ServerSupportConfigData>>(key, json)
-                .find { it.appVersionCode == BuildConfig.VERSION_CODE }
-        }
+        return decodeConfig<List<ServerSupportConfigData>>(key = key, bundled = bundled)
+            ?.find { it.appVersionCode == BuildConfig.VERSION_CODE }
     }
 
     override suspend fun fetchAppUpdateConfig(): AppUpdateConfigData? {
         val key = AppConfig.APP_UPDATE_CONFIG
-        val defaults = mapOf(
-            key to readJsonFromAssets("config_app_update.json")
-        )
-        remoteConfig.setDefaultsAsync(defaults).await()
+        val bundled = readJsonFromAssets("config_app_update.json", context = appContext)
+        if (!fetchAndActivate(key = key, bundled = bundled)) showFirebaseErrorDialog()
 
-        return try {
-            withRetryBackoff {
-                remoteConfig.fetchAndActivate().await().also {
-                    if (!it) Timber.d("App Update Using Local Configs")
-                }
-
-                remoteConfig.fetchConfigJson<List<AppUpdateConfigData>>(key, json)
-                    .filter {
-                        it.appVersionCode > BuildConfig.VERSION_CODE &&
-                                (BuildConfig.ALPHA_BUILD || !it.isAlpha)
-                    }
-                    .maxByOrNull { it.appVersionCode }
+        return decodeConfig<List<AppUpdateConfigData>>(key = key, bundled = bundled)
+            ?.filter {
+                it.appVersionCode > BuildConfig.VERSION_CODE &&
+                        (BuildConfig.ALPHA_BUILD || !it.isAlpha)
             }
-        } catch (e: Exception) {
-            Timber.e(e, "Firebase App Update fetch exception, fallback to defaults")
-            showFirebaseErrorDialog()
-            remoteConfig.fetchConfigJson<List<AppUpdateConfigData>>(key, json)
-                .filter {
-                    it.appVersionCode > BuildConfig.VERSION_CODE &&
-                            (BuildConfig.ALPHA_BUILD || !it.isAlpha)
-                }
-                .maxByOrNull { it.appVersionCode }
-        }
+            ?.maxByOrNull { it.appVersionCode }
     }
 
     override suspend fun fetchFeatureSupportConfig(): Map<String, RemoteFeatureConfigData> {
         val key = AppConfig.FEATURE_SUPPORT_CONFIG
-        val defaults = mapOf(
-            key to readJsonFromAssets("config_feature_support.json")
-        )
-        remoteConfig.setDefaultsAsync(defaults).await()
+        val bundled = readJsonFromAssets("config_feature_support.json", context = appContext)
+        fetchAndActivate(key = key, bundled = bundled)
 
+        return decodeConfig<List<FeatureFlagsConfig>>(key = key, bundled = bundled)
+            ?.firstOrNull() ?: emptyMap()
+    }
+
+    // Returns false when the fetch failed; the last activated or bundled values stay in use.
+    private suspend fun fetchAndActivate(key: String, bundled: String): Boolean {
         return try {
+            remoteConfig.setConfigSettingsAsync(configSettings).await()
+            remoteConfig.setDefaultsAsync(mapOf(key to bundled)).await()
             withRetryBackoff {
-                remoteConfig.fetchAndActivate().await().also {
-                    if (!it) Timber.d("App Update Using Local Configs")
+                remoteConfig.fetchAndActivate().await().also { activated ->
+                    if (!activated) Timber.d("No new Remote Config values for $key")
                 }
-
-                remoteConfig.fetchConfigJson<List<FeatureFlagsConfig>>(key, json)
-                    .firstOrNull() ?: emptyMap()
             }
+            true
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Timber.e(e, "Firebase Feature Support fetch exception, fallback to defaults")
-            remoteConfig.fetchConfigJson<List<FeatureFlagsConfig>>(key, json)
-                .firstOrNull() ?: emptyMap()
+            Timber.e(e, "Firebase fetch exception for $key, using local values")
+            false
+        }
+    }
+
+    // A malformed remote value falls back to the bundled asset instead of crashing the caller.
+    private inline fun <reified T> decodeConfig(key: String, bundled: String): T? {
+        return try {
+            json.decodeFromString<T>(remoteConfig.getString(key))
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Remote Config decode failed for $key, using bundled defaults")
+            try {
+                json.decodeFromString<T>(bundled)
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e, "Bundled config decode failed for $key")
+                null
+            }
         }
     }
 
@@ -116,14 +113,6 @@ class RemoteConfigRepositoryImpl @Inject constructor(
                 )
             )
         )
-    }
-
-    private inline fun <reified T> FirebaseRemoteConfig.fetchConfigJson(
-        key: String,
-        json: Json
-    ): T {
-        val jsonString = getString(key)
-        return json.decodeFromString(jsonString)
     }
 
     private suspend fun <T> withRetryBackoff(

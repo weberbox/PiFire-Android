@@ -16,7 +16,9 @@ import com.weberbox.pifire.settings.data.model.remote.ManualDto.Manual
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class DashApiImpl @Inject constructor(
     private val socketManager: SocketManager,
@@ -118,10 +120,15 @@ class DashApiImpl @Inject constructor(
     }
 
     override suspend fun setGrillHoldTemp(temp: String): Result<Unit, DataError> {
+        val setPoint = temp.toDoubleOrNull()?.takeIf { it.isFinite() }?.roundToInt()
+        if (setPoint == null) {
+            Timber.w("Invalid hold temp: $temp")
+            return Result.Error(DataError.Local.UNKNOWN)
+        }
         val json = json.encodeToString(
             ControlDto(
                 currentMode = RunningMode.Hold.name,
-                primarySetPoint = temp.toInt(),
+                primarySetPoint = setPoint,
                 updated = true
             )
         )

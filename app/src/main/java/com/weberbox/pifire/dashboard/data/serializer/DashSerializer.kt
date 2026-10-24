@@ -15,6 +15,7 @@ object DashSerializer : Serializer<DashData> {
         isLenient = true
         coerceInputValues = true
         encodeDefaults = true
+        allowSpecialFloatingPointValues = true
     }
 
     override val defaultValue: DashData

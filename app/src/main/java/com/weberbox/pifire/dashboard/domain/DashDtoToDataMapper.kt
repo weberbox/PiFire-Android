@@ -75,7 +75,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
                 title = it.title ?: probeDefaults.title,
                 label = it.label ?: probeDefaults.label,
                 eta = it.eta ?: probeDefaults.eta,
-                temp = it.temp?.roundToInt() ?: probeDefaults.temp,
+                temp = it.temp?.roundToIntOrNull() ?: probeDefaults.temp,
                 setTemp = it.setTemp ?: probeDefaults.setTemp,
                 maxTemp = it.maxTemp ?: probeDefaults.maxTemp,
                 target = it.target ?: probeDefaults.target,
@@ -95,7 +95,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
                 status = Probe.Status(
                     batteryCharging = it.status?.batteryCharging
                         ?: probeDefaults.status.batteryCharging,
-                    batteryPercentage = it.status?.batteryPercentage?.roundToInt()
+                    batteryPercentage = it.status?.batteryPercentage?.roundToIntOrNull()
                         ?: probeDefaults.status.batteryPercentage,
                     batteryVoltage = it.status?.batteryVoltage
                         ?: probeDefaults.status.batteryVoltage,
@@ -111,7 +111,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             title = from.primaryProbe?.title ?: probeDefaults.title,
             label = from.primaryProbe?.label ?: probeDefaults.label,
             eta = from.primaryProbe?.eta ?: probeDefaults.eta,
-            temp = from.primaryProbe?.temp?.roundToInt() ?: probeDefaults.temp,
+            temp = from.primaryProbe?.temp?.roundToIntOrNull() ?: probeDefaults.temp,
             setTemp = from.primaryProbe?.setTemp ?: probeDefaults.setTemp,
             maxTemp = from.primaryProbe?.maxTemp ?: probeDefaults.maxTemp,
             target = from.primaryProbe?.target ?: probeDefaults.target,
@@ -137,7 +137,8 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             status = Probe.Status(
                 batteryCharging = from.primaryProbe?.status?.batteryCharging
                     ?: probeDefaults.status.batteryCharging,
-                batteryPercentage = from.primaryProbe?.status?.batteryPercentage?.roundToInt()
+                batteryPercentage = from.primaryProbe?.status?.batteryPercentage
+                    ?.roundToIntOrNull()
                     ?: probeDefaults.status.batteryPercentage,
                 batteryVoltage = from.primaryProbe?.status?.batteryVoltage
                     ?: probeDefaults.status.batteryVoltage,
@@ -147,4 +148,7 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             )
         )
     )
+
+    // NaN (e.g. a disconnected probe) falls back to the default instead of throwing
+    private fun Double.roundToIntOrNull(): Int? = takeIf { it.isFinite() }?.roundToInt()
 }

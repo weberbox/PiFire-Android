@@ -260,7 +260,7 @@ internal fun buildInfo(): Info {
         serverBuild = "23",
         appVersion = "3.0.0",
         appVersionCode = "300000",
-        appFlavor = "Dev",
+        appFlavor = "Playstore",
         appBuildType = "Debug",
         appBuildDate = "04/21/2025",
         appGitRev = "147",
