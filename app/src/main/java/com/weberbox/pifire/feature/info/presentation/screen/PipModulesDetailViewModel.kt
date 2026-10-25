@@ -5,9 +5,7 @@ import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.feature.info.presentation.contract.ModulesContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,22 +29,20 @@ class PipModulesDetailViewModel @Inject constructor(
     }
 
     private fun collectModulesList() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             sessionStateHolder.infoDataState.collect { data ->
-                withContext(Dispatchers.Main) {
-                    data?.pipList.also { modules ->
-                        setState {
-                            copy(
-                                pipModules = modules.orEmpty(),
-                                isInitialLoading = false,
-                            )
-                        }
-                    } ?: setState {
+                data?.pipList.also { modules ->
+                    setState {
                         copy(
+                            pipModules = modules.orEmpty(),
                             isInitialLoading = false,
-                            isDataError = true,
                         )
                     }
+                } ?: setState {
+                    copy(
+                        isInitialLoading = false,
+                        isDataError = true,
+                    )
                 }
             }
         }

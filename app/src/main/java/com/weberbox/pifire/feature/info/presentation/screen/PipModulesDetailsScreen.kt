@@ -26,12 +26,12 @@ import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
 
 @Composable
-fun PipModulesDetailsScreen(
+fun PipModulesDetailsScreenDestination(
     navController: NavHostController,
     viewModel: PipModulesDetailViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
-    PipModulesDetailsContent(
+    PipModulesDetailsScreenContent(
         state = viewModel.viewState.value,
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
@@ -43,7 +43,7 @@ fun PipModulesDetailsScreen(
 }
 
 @Composable
-private fun PipModulesDetailsContent(
+private fun PipModulesDetailsScreenContent(
     state: ModulesContract.State,
     onNavigationRequested: (ModulesContract.Effect.Navigation) -> Unit,
 ) {
@@ -84,7 +84,7 @@ private fun PipModulesDetailsContent(
 private fun PipModulesDetailsScreenPreview() {
     PiFireTheme {
         Surface {
-            PipModulesDetailsContent(
+            PipModulesDetailsScreenContent(
                 state = ModulesContract.State(
                     pipModules = buildModules(),
                     isInitialLoading = false,

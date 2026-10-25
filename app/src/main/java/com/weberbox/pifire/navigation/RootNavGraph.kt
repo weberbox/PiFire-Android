@@ -20,8 +20,8 @@ import com.weberbox.pifire.feature.changelog.presentation.screen.ChangelogScreen
 import com.weberbox.pifire.feature.home.presentation.screen.HomeScreenDestination
 import com.weberbox.pifire.feature.info.data.model.Licenses
 import com.weberbox.pifire.feature.info.presentation.screen.InfoScreenDestination
-import com.weberbox.pifire.feature.info.presentation.screen.LicenseDetailsScreen
-import com.weberbox.pifire.feature.info.presentation.screen.PipModulesDetailsScreen
+import com.weberbox.pifire.feature.info.presentation.screen.LicenseDetailsScreenDestination
+import com.weberbox.pifire.feature.info.presentation.screen.PipModulesDetailsScreenDestination
 import com.weberbox.pifire.feature.landing.presentation.screen.HeaderSettingsScreenDestination
 import com.weberbox.pifire.feature.landing.presentation.screen.LandingScreenDestination
 import com.weberbox.pifire.feature.landing.presentation.screen.ServerSettingsScreenDestination
@@ -186,14 +186,14 @@ fun NavGraphBuilder.infoNavGraph(navController: NavHostController) {
         composable<NavGraph.InfoDest.PipModulesDetails>(
             enterTransition = { scaleEnterTransition() },
         ) {
-            PipModulesDetailsScreen(navController)
+            PipModulesDetailsScreenDestination(navController)
         }
         composable<NavGraph.InfoDest.LicenseDetails>(
             typeMap = mapOf(typeOf<Licenses>() to parcelableType<Licenses>()),
             enterTransition = { scaleEnterTransition() },
         ) {
             val args = it.toRoute<NavGraph.InfoDest.LicenseDetails>()
-            LicenseDetailsScreen(navController, args)
+            LicenseDetailsScreenDestination(navController, args)
         }
     }
 }

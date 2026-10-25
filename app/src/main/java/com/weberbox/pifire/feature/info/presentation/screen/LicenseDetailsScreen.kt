@@ -20,19 +20,19 @@ import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
 
 @Composable
-fun LicenseDetailsScreen(
+fun LicenseDetailsScreenDestination(
     navController: NavHostController,
     args: NavGraph.InfoDest.LicenseDetails,
 ) {
     val sourceEntry = rememberSourceEntry()
-    LicenseDetailsContent(
+    LicenseDetailsScreenContent(
         args = args,
         onNavigate = { navController.popBackStackFrom(from = sourceEntry) },
     )
 }
 
 @Composable
-private fun LicenseDetailsContent(
+private fun LicenseDetailsScreenContent(
     args: NavGraph.InfoDest.LicenseDetails,
     onNavigate: () -> Unit,
 ) {
@@ -58,7 +58,7 @@ private fun LicenseDetailsContent(
 private fun LicenseDetailsScreenPreview() {
     PiFireTheme {
         Surface {
-            LicenseDetailsContent(
+            LicenseDetailsScreenContent(
                 args = NavGraph.InfoDest.LicenseDetails(buildLicenseData()),
                 onNavigate = {},
             )

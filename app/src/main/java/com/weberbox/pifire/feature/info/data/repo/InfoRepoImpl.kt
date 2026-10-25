@@ -13,7 +13,9 @@ import com.weberbox.pifire.feature.info.data.api.InfoApi
 import com.weberbox.pifire.feature.info.data.mapper.InfoDtoToDataMapper
 import com.weberbox.pifire.feature.info.data.mapper.LicenseDtoToDataMapper
 import com.weberbox.pifire.feature.info.data.model.Licenses
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -24,19 +26,21 @@ class InfoRepoImpl @Inject constructor(
     private val json: Json,
 ) : InfoRepo {
 
-    override suspend fun getInfo(): Result<Info, DataError> = infoApi.getInfo().let { result ->
-        when (result) {
-            is Result.Error -> Result.Error(result.error)
+    override suspend fun getInfo(): Result<Info, DataError> = withContext(Dispatchers.IO) {
+        infoApi.getInfo().let { result ->
+            when (result) {
+                is Result.Error -> Result.Error(result.error)
 
-            is Result.Success -> {
-                parseGetResponse(result.data, json, InfoDtoToDataMapper).let { data ->
-                    when (data) {
-                        is Result.Error -> Result.Error(data.error)
+                is Result.Success -> {
+                    parseGetResponse(result.data, json, InfoDtoToDataMapper).let { data ->
+                        when (data) {
+                            is Result.Error -> Result.Error(data.error)
 
-                        is Result.Success -> {
-                            sessionStateHolder.setInfoData(data.data)
-                            updateInfoData(data.data)
-                            Result.Success(data.data)
+                            is Result.Success -> {
+                                sessionStateHolder.setInfoData(data.data)
+                                updateInfoData(data.data)
+                                Result.Success(data.data)
+                            }
                         }
                     }
                 }
@@ -44,10 +48,10 @@ class InfoRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCachedData(): Result<Info, DataError.Local> {
+    override suspend fun getCachedData(): Result<Info, DataError.Local> = withContext(Dispatchers.IO) {
         val data = dataStore.data.firstOrNull()
         val currentServer = sessionStateHolder.currentServerUuid
-        return if (data != null && currentServer.isNotBlank()) {
+        if (data != null && currentServer.isNotBlank()) {
             data.infoMap[currentServer]?.let { info ->
                 sessionStateHolder.setInfoData(info)
                 Result.Success(info)
@@ -57,9 +61,9 @@ class InfoRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getLicences(): Result<Licenses, DataError> {
+    override suspend fun getLicences(): Result<Licenses, DataError> = withContext(Dispatchers.IO) {
         val jsonString = readJsonFromAssets("licences.json")
-        return if (jsonString.isNotBlank()) {
+        if (jsonString.isNotBlank()) {
             parseResponse(jsonString, json, LicenseDtoToDataMapper).let { data ->
                 when (data) {
                     is Result.Error -> Result.Error(data.error)

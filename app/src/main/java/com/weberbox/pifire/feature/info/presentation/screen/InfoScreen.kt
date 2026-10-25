@@ -3,6 +3,7 @@ package com.weberbox.pifire.feature.info.presentation.screen
 import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawing
@@ -41,6 +42,7 @@ import com.weberbox.pifire.navigation.NavGraph.InfoDest.LicenseDetails
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -119,24 +121,42 @@ private fun InfoScreen(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         contentWindowInsets = windowInsets,
     ) { contentPadding ->
-        AnimatedContent(
-            targetState = state,
-            contentKey = { it.isInfoLoading or it.isDataError or it.isLicencesLoading },
-        ) { state ->
-            when {
-                state.isInfoLoading || state.isLicencesLoading -> InitialLoadingProgress()
+        InfoScreenContent(
+            state = state,
+            onEventSent = onEventSent,
+            onNavigationRequested = onNavigationRequested,
+            hazeState = hazeState,
+            contentPadding = contentPadding,
+        )
+    }
+}
 
-                state.isDataError -> CachedDataError { onEventSent(InfoContract.Event.Refresh) }
+@Composable
+private fun InfoScreenContent(
+    state: InfoContract.State,
+    onEventSent: (event: InfoContract.Event) -> Unit,
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
+    hazeState: HazeState,
+    contentPadding: PaddingValues,
+) {
+    @Suppress("NAME_SHADOWING")
+    AnimatedContent(
+        targetState = state,
+        contentKey = { it.isInfoLoading or it.isDataError or it.isLicencesLoading },
+    ) { state ->
+        when {
+            state.isInfoLoading || state.isLicencesLoading -> InitialLoadingProgress()
 
-                else -> {
-                    InfoList(
-                        state = state,
-                        onEventSent = onEventSent,
-                        onNavigationRequested = onNavigationRequested,
-                        hazeState = hazeState,
-                        contentPadding = contentPadding,
-                    )
-                }
+            state.isDataError -> CachedDataError { onEventSent(InfoContract.Event.Refresh) }
+
+            else -> {
+                InfoList(
+                    state = state,
+                    onEventSent = onEventSent,
+                    onNavigationRequested = onNavigationRequested,
+                    hazeState = hazeState,
+                    contentPadding = contentPadding,
+                )
             }
         }
     }
