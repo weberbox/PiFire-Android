@@ -4,14 +4,14 @@ import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.model.events.EventsData
+import com.weberbox.pifire.core.model.events.EventsData.Events
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.feature.events.data.api.EventsApi
 import com.weberbox.pifire.feature.events.data.mapper.EventsDtoToDataMapper
-import com.weberbox.pifire.feature.events.presentation.model.EventsData
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
 import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

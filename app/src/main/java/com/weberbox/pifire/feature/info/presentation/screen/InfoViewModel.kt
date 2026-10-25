@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.info.presentation.screen
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.info.InfoData.Info
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.feature.info.data.model.Licenses
 import com.weberbox.pifire.feature.info.data.repo.InfoRepo
 import com.weberbox.pifire.feature.info.presentation.contract.InfoContract
-import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

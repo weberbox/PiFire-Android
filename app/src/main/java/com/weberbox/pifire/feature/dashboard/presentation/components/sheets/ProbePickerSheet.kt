@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
+import com.weberbox.pifire.core.model.dashboard.ProbeType
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.ui.base.pickerSelectedTextStyle
 import com.weberbox.pifire.core.ui.base.pickerUnselectedTextStyle
@@ -49,9 +51,7 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.findLongestString
 import com.weberbox.pifire.core.ui.util.slideDownShrinkExitTransition
 import com.weberbox.pifire.core.ui.util.slideUpExpandEnterTransition
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
 import com.weberbox.pifire.feature.dashboard.presentation.model.NotifType
-import com.weberbox.pifire.feature.dashboard.presentation.model.ProbeType
 import com.weberbox.pifire.feature.dashboard.presentation.util.findClosestTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.getDefaultProbeTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.getProbeTempRange

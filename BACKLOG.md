@@ -38,8 +38,17 @@ One step per commit, compile all flavors after each.
    removed), screen files and `*ScreenDestination` renamed. Left: private composables inside the
    renamed settings/landing screens still lack the `Screen` suffix (fix with the five-part pattern),
    and `core/di` (`DataStoreModule`, `StateModule`, `HeadersModule`, ...) still imports features.
-4. Per feature, stop data depending on presentation: repos and DataStore serializers use data
-   models, not `presentation/model` types.
+4. Done (2026-10-25): no `data/` or `core/` code imports `presentation`. Cached server models
+   (`SettingsData` + its PWM/probe/smart-start/OneSignal types and `Setting`, `DashData`,
+   `EventsData`, `InfoData`, `PelletsData`, `RecipesData`) moved to `core/model/<feature>/`;
+   feature-only ones to `feature/<name>/data/model`; `RunningMode` and changelog `Log.icon` split
+   into data + UI extensions; info/pellets formatters to `data/util` (they still store display
+   strings with English unit suffixes, see Conventions).
+4b. `core` still imports feature data code. Move `Pref`, `Crypto` to `core/data`; headers
+   (`HeadersData`, `HeadersSerializer`, `HeadersManager`) to `core/network`; `SettingsRepo`/`SettingsApi`
+   to `core/repo` (used app-wide); feature DataStore providers from `core/di/DataStoreModule`,
+   `LandingApi`/`SetupApi` from `RetrofitModule` and `ServerDataCache` from `StateModule` into the
+   features' `<Name>DataModule`.
 5. Remove ViewModel access to apis/DataStore (see Conventions below).
 6. Rename `RemoteConfigRepository(Impl)` -> `RemoteConfigRepo(Impl)`.
 7. Tooling: `.editorconfig` + Spotless/ktlint (copy the reference project's config), unit tests (JUnit, MockK,

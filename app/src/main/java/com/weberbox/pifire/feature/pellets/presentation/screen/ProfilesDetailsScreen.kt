@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.DetailsScreen
@@ -26,7 +27,6 @@ import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.pellets.presentation.components.ProfileItem
 import com.weberbox.pifire.feature.pellets.presentation.components.sheets.ProfilesEditSheet
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 import com.weberbox.pifire.feature.pellets.presentation.model.ProfilesData
 import com.weberbox.pifire.navigation.navigateFrom

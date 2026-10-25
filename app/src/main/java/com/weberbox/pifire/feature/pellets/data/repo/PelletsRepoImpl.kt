@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.pellets.data.repo
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.pellets.PelletsData
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.feature.pellets.data.api.PelletsApi
 import com.weberbox.pifire.feature.pellets.data.mapper.PelletsDtoToDataMapper
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.transform

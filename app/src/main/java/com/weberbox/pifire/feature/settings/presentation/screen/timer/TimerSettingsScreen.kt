@@ -31,6 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.RunningMode
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.remoteconfig.Feature
 import com.weberbox.pifire.core.remoteconfig.FeatureGate
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
@@ -46,7 +48,6 @@ import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.core.ui.util.slideDownExpandEnterTransition
 import com.weberbox.pifire.core.ui.util.slideOutShrinkExitTransition
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.settings.presentation.components.PreferenceNote
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.components.getSummary
@@ -55,7 +56,6 @@ import com.weberbox.pifire.feature.settings.presentation.components.getSummaryPe
 import com.weberbox.pifire.feature.settings.presentation.components.getSummarySeconds
 import com.weberbox.pifire.feature.settings.presentation.components.getSummaryTemp
 import com.weberbox.pifire.feature.settings.presentation.contract.TimerContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom

@@ -1,8 +1,8 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.feature.settings.data.model.ManualData
 import com.weberbox.pifire.feature.settings.data.model.remote.ManualDto
-import com.weberbox.pifire.feature.settings.presentation.model.ManualData
 
 object ManualDtoToDataMapper : Mapper<ManualDto, ManualData> {
 

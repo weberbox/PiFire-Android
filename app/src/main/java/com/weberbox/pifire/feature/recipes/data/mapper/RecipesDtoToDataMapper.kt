@@ -1,15 +1,15 @@
 package com.weberbox.pifire.feature.recipes.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Asset
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Ingredient
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Instruction
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.MetaData
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Step
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Step.TriggerTemps
 import com.weberbox.pifire.feature.recipes.data.model.RecipesDto
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Asset
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Ingredient
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Instruction
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.MetaData
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Step
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Step.TriggerTemps
 
 object RecipesDtoToDataMapper : Mapper<RecipesDto, Recipes> {
     private val defaultAsset = Asset()

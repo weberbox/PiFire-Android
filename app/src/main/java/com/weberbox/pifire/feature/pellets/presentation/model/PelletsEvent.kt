@@ -1,6 +1,6 @@
 package com.weberbox.pifire.feature.pellets.presentation.model
 
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 
 sealed class PelletsEvent {
     data object HopperCheck : PelletsEvent()

@@ -33,11 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.base.outlinedTextFieldColors
 import com.weberbox.pifire.core.ui.components.DropdownTextField
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.feature.pellets.presentation.model.ProfileRatings
 import com.weberbox.pifire.feature.pellets.presentation.model.ProfilesData
 import com.weberbox.pifire.feature.pellets.presentation.screen.buildPellets

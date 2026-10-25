@@ -3,8 +3,8 @@ package com.weberbox.pifire.feature.setup.data.repo
 import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
-import com.weberbox.pifire.feature.setup.presentation.model.VersionsData
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.feature.setup.data.model.VersionsData
 
 interface SetupRepo {
 

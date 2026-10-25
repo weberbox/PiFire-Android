@@ -3,6 +3,9 @@ package com.weberbox.pifire.feature.settings.data.repo
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
+import com.weberbox.pifire.core.model.settings.SettingsData
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
@@ -12,9 +15,6 @@ import com.weberbox.pifire.feature.settings.data.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.feature.settings.data.model.remote.Pwm
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup
 import com.weberbox.pifire.feature.settings.data.util.ServerDataManager
-import com.weberbox.pifire.feature.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import dagger.Lazy
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.ErrorStatus
 import com.weberbox.pifire.core.ui.model.FieldInput
@@ -24,7 +25,6 @@ import com.weberbox.pifire.feature.landing.presentation.contract.ServerContract
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.BasicAuth
 import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.feature.settings.data.util.HeadersManager
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

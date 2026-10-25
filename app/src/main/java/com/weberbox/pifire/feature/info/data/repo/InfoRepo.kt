@@ -2,8 +2,8 @@ package com.weberbox.pifire.feature.info.data.repo
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
+import com.weberbox.pifire.core.model.info.InfoData.Info
+import com.weberbox.pifire.feature.info.data.model.Licenses
 
 interface InfoRepo {
     suspend fun getInfo(): Result<Info, DataError>

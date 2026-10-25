@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.ui.base.pickerSelectedTextStyle
 import com.weberbox.pifire.core.ui.base.pickerUnselectedTextStyle
 import com.weberbox.pifire.core.ui.components.PickerMark
@@ -39,7 +40,6 @@ import com.weberbox.pifire.core.ui.model.PickerWheelTextStyle
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.findLongestString
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
 import com.weberbox.pifire.feature.dashboard.presentation.util.findClosestTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.getDefaultProbeTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.getProbeTempRange

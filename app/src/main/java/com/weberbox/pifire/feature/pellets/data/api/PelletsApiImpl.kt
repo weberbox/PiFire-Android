@@ -3,10 +3,10 @@ package com.weberbox.pifire.feature.pellets.data.api
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.PelletsDto
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json

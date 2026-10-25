@@ -2,10 +2,10 @@ package com.weberbox.pifire.feature.settings.data.api
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.feature.settings.data.model.remote.Pwm.Profile
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup.SmartStart.SSProfile
-import com.weberbox.pifire.feature.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsApi {

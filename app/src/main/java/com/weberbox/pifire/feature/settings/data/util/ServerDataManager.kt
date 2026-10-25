@@ -1,13 +1,13 @@
 package com.weberbox.pifire.feature.settings.data.util
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData
-import com.weberbox.pifire.feature.events.presentation.model.EventsData
-import com.weberbox.pifire.feature.info.presentation.model.InfoData
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData
+import com.weberbox.pifire.core.model.dashboard.DashData
+import com.weberbox.pifire.core.model.events.EventsData
+import com.weberbox.pifire.core.model.info.InfoData
+import com.weberbox.pifire.core.model.pellets.PelletsData
+import com.weberbox.pifire.core.model.recipes.RecipesData
+import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData
 import javax.inject.Inject
 
 class ServerDataManager @Inject constructor(

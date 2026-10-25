@@ -5,6 +5,7 @@ import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.networkAvailable
 import com.weberbox.pifire.core.network.parseGetResponse
@@ -13,11 +14,10 @@ import com.weberbox.pifire.core.network.toNetworkError
 import com.weberbox.pifire.core.ui.util.getReasonPhrase
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.settings.data.mapper.SettingsDtoToDataMapper
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper
-import com.weberbox.pifire.feature.setup.presentation.model.VersionsData
+import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.Json

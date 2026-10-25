@@ -39,11 +39,11 @@ import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.feature.settings.data.model.ManualData
 import com.weberbox.pifire.feature.settings.presentation.components.PreferenceNote
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.components.getSummary
 import com.weberbox.pifire.feature.settings.presentation.contract.ManualContract
-import com.weberbox.pifire.feature.settings.presentation.model.ManualData
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry

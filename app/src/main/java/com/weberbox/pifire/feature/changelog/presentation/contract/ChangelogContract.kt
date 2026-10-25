@@ -4,7 +4,7 @@ import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
 
 class ChangelogContract {
 

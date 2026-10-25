@@ -1,9 +1,9 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.DualItemMapper
+import com.weberbox.pifire.core.model.settings.ProbeMap
 import com.weberbox.pifire.feature.settings.data.model.remote.ProbeSettings.ProbeMap.ProbeDevice
 import com.weberbox.pifire.feature.settings.data.model.remote.ProbeSettings.ProbeMap.ProbeInfo
-import com.weberbox.pifire.feature.settings.presentation.model.ProbeMap
 
 object ProbeMapMapper : DualItemMapper<List<ProbeDevice>?, List<ProbeInfo>?, ProbeMap> {
 

@@ -29,6 +29,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.remoteconfig.Feature
 import com.weberbox.pifire.core.remoteconfig.FeatureGate
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
@@ -43,7 +44,6 @@ import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.settings.presentation.components.TwoTargetSwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.components.getSummary
 import com.weberbox.pifire.feature.settings.presentation.contract.NotifContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom

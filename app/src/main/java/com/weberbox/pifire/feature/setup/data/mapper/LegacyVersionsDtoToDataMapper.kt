@@ -3,7 +3,7 @@ package com.weberbox.pifire.feature.setup.data.mapper
 import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.feature.setup.data.model.LegacyVersionsDto
-import com.weberbox.pifire.feature.setup.presentation.model.VersionsData
+import com.weberbox.pifire.feature.setup.data.model.VersionsData
 
 @Compatibility(versionBelow = "1.10.0", build = "25")
 object LegacyVersionsDtoToDataMapper : Mapper<LegacyVersionsDto, VersionsData> {

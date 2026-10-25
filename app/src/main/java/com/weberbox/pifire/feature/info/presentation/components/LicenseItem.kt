@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.toColorInt
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.info.presentation.model.Licenses.License
+import com.weberbox.pifire.feature.info.data.model.Licenses.License
 
 @Composable
 internal fun LicenseItem(

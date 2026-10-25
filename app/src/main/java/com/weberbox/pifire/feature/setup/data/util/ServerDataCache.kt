@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.setup.data.util
 
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 
 interface ServerDataCache {

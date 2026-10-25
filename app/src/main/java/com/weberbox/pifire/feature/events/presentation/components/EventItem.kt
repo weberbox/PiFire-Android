@@ -32,6 +32,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.events.EventType
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import com.weberbox.pifire.core.ui.base.cardColorStops
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.elevation
@@ -44,8 +46,6 @@ import com.weberbox.pifire.core.ui.theme.eventsScriptEnded
 import com.weberbox.pifire.core.ui.theme.eventsScriptStart
 import com.weberbox.pifire.core.ui.theme.eventsWarning
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.events.presentation.model.EventType
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
 import com.weberbox.pifire.feature.events.presentation.screen.buildEventsList
 
 @Composable

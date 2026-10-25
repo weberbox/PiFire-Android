@@ -9,8 +9,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.ui.util.formatMinutes
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
 import java.util.Collections
 import java.util.LinkedList
 

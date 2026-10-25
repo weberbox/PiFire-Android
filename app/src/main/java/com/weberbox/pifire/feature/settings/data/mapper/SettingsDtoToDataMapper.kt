@@ -1,11 +1,11 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
-import com.weberbox.pifire.feature.settings.data.model.local.Setting
+import com.weberbox.pifire.core.model.settings.PwmProfile
+import com.weberbox.pifire.core.model.settings.Setting
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SettingsData.Server.Settings
 import com.weberbox.pifire.feature.settings.data.model.remote.SettingsDto
-import com.weberbox.pifire.feature.settings.presentation.model.PwmProfile
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server.Settings
 
 object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
 

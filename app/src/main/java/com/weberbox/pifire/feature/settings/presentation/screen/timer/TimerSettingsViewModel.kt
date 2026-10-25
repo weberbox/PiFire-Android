@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.settings.presentation.screen.timer
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SmartStart
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup.SmartStart.SSProfile
 import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.feature.settings.presentation.contract.TimerContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
-import com.weberbox.pifire.feature.settings.presentation.model.SmartStart
 import com.weberbox.pifire.feature.settings.presentation.util.sortRangesByTemp
 import com.weberbox.pifire.feature.settings.presentation.util.updateRange
 import dagger.hilt.android.lifecycle.HiltViewModel

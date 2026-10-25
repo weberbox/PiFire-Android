@@ -2,12 +2,12 @@ package com.weberbox.pifire.feature.settings.data.util
 
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.Uuid
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.util.toImmutableMap
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.BasicAuth
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.ExtraHeader
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map

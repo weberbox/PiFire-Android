@@ -1,14 +1,14 @@
 package com.weberbox.pifire.feature.pellets.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.util.formatDateString
 import com.weberbox.pifire.core.ui.util.formatDateTimeString
 import com.weberbox.pifire.feature.pellets.data.model.PelletsDto
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletLog
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
-import com.weberbox.pifire.feature.pellets.presentation.util.gramsToImperial
-import com.weberbox.pifire.feature.pellets.presentation.util.gramsToMetric
+import com.weberbox.pifire.feature.pellets.data.util.gramsToImperial
+import com.weberbox.pifire.feature.pellets.data.util.gramsToMetric
 
 object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
     private val defaults = Pellets()

@@ -21,7 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData.Log
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Log
+import com.weberbox.pifire.feature.changelog.presentation.util.icon
 
 @Composable
 internal fun LogItem(

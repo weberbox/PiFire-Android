@@ -3,11 +3,12 @@ package com.weberbox.pifire.feature.settings.data.api
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.dashboard.RunningMode
+import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.settings.data.model.remote.Controller
 import com.weberbox.pifire.feature.settings.data.model.remote.Controller.Config
 import com.weberbox.pifire.feature.settings.data.model.remote.Controller.Config.Pid
@@ -30,7 +31,6 @@ import com.weberbox.pifire.feature.settings.data.model.remote.Startup
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup.SmartStart
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup.SmartStart.SSProfile
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup.StartToMode
-import com.weberbox.pifire.feature.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json

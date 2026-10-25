@@ -3,6 +3,7 @@ package com.weberbox.pifire.feature.dashboard.data.api
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto
@@ -10,7 +11,6 @@ import com.weberbox.pifire.core.network.model.PostDto.ControlDto.Recipe
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto.StepData
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.network.model.PostDto.TimerDto
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.settings.data.model.remote.ManualDto
 import com.weberbox.pifire.feature.settings.data.model.remote.ManualDto.Manual
 import kotlinx.coroutines.flow.Flow

@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SmartStart
 import com.weberbox.pifire.core.ui.components.DropdownTextField
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
 import com.weberbox.pifire.core.ui.icons.Icon
@@ -36,8 +38,6 @@ import com.weberbox.pifire.core.ui.icons.outlined.Target
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.asString
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
-import com.weberbox.pifire.feature.settings.presentation.model.SmartStart
 
 internal data class SmartStartEvent(
     val index: Int,

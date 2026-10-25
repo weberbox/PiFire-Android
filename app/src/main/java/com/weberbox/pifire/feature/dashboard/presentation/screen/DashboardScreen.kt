@@ -41,6 +41,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.RecipeStatus
+import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
@@ -79,11 +83,7 @@ import com.weberbox.pifire.feature.dashboard.presentation.components.WarningCard
 import com.weberbox.pifire.feature.dashboard.presentation.components.sheets.DashBottomSheets
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.RecipeStatus
 import com.weberbox.pifire.feature.dashboard.presentation.model.ElapsedData
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.dashboard.presentation.model.TimerData
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom

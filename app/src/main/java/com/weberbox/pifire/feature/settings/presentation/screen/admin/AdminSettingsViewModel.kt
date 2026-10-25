@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.feature.settings.presentation.contract.AdminContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

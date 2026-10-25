@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.recipes.presentation.util
 
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

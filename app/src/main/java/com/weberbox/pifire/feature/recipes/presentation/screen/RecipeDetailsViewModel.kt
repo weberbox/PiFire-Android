@@ -10,6 +10,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -18,7 +19,6 @@ import com.weberbox.pifire.core.ui.util.toImmutableList
 import com.weberbox.pifire.feature.recipes.data.api.RecipesApi
 import com.weberbox.pifire.feature.recipes.data.repo.RecipesRepo
 import com.weberbox.pifire.feature.recipes.presentation.contract.DetailsContract
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.feature.recipes.presentation.util.decodeBase64Image
 import com.weberbox.pifire.feature.recipes.presentation.util.decodeRecipeImages
 import com.weberbox.pifire.feature.recipes.presentation.util.recipeLookup

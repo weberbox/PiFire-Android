@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.recipes.data.serializer
 
 import androidx.datastore.core.Serializer
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData
+import com.weberbox.pifire.core.model.recipes.RecipesData
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber

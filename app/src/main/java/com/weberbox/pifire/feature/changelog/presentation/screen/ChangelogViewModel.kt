@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
 import com.weberbox.pifire.feature.changelog.data.repo.ChangelogRepo
 import com.weberbox.pifire.feature.changelog.presentation.contract.ChangelogContract
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

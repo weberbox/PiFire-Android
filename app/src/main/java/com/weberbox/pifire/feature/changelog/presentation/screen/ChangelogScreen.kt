@@ -38,13 +38,13 @@ import com.weberbox.pifire.core.ui.components.HazeAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Changelog
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Log
 import com.weberbox.pifire.feature.changelog.presentation.components.LogAnimation
 import com.weberbox.pifire.feature.changelog.presentation.components.LogHeader
 import com.weberbox.pifire.feature.changelog.presentation.components.LogItem
 import com.weberbox.pifire.feature.changelog.presentation.contract.ChangelogContract
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData.Changelog
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData.Log
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry

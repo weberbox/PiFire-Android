@@ -27,6 +27,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.ProbeType
+import com.weberbox.pifire.core.model.settings.ProbeMap.ProbeInfo
+import com.weberbox.pifire.core.model.settings.ProbeProfile
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.ui.components.DropdownTextField
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
@@ -38,10 +41,7 @@ import com.weberbox.pifire.core.ui.state.ErrorStatusSaver
 import com.weberbox.pifire.core.ui.state.FieldInputSaver
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.dashboard.presentation.model.ProbeType
 import com.weberbox.pifire.feature.settings.presentation.contract.ProbeContract.Event.UpdateProbe
-import com.weberbox.pifire.feature.settings.presentation.model.ProbeMap.ProbeInfo
-import com.weberbox.pifire.feature.settings.presentation.model.ProbeProfile
 
 @Composable
 internal fun ProbeSheet(

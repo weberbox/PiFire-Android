@@ -18,7 +18,7 @@ import com.weberbox.pifire.core.ui.util.slideEnterTransition
 import com.weberbox.pifire.core.ui.util.slidePopEnterTransition
 import com.weberbox.pifire.feature.changelog.presentation.screen.ChangelogScreenDestination
 import com.weberbox.pifire.feature.home.presentation.screen.HomeScreenDestination
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
+import com.weberbox.pifire.feature.info.data.model.Licenses
 import com.weberbox.pifire.feature.info.presentation.screen.InfoScreenDestination
 import com.weberbox.pifire.feature.info.presentation.screen.LicenseDetailsScreen
 import com.weberbox.pifire.feature.info.presentation.screen.PipModulesDetailsScreen

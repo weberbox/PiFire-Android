@@ -1,8 +1,8 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.feature.settings.data.model.remote.NotifyServices.OneSignalPush
-import com.weberbox.pifire.feature.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 
 
 object OneSignalDeviceMapper :

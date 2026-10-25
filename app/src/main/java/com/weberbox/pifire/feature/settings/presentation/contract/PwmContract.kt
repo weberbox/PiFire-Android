@@ -1,11 +1,11 @@
 package com.weberbox.pifire.feature.settings.presentation.contract
 
+import com.weberbox.pifire.core.model.settings.PwmControl
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.settings.presentation.model.PwmControl
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 
 class PwmContract {
 

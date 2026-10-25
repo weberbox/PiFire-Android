@@ -2,7 +2,7 @@ package com.weberbox.pifire.feature.dashboard.data.repo
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import kotlinx.coroutines.flow.Flow
 
 interface DashRepo {

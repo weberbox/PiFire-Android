@@ -1,11 +1,11 @@
 package com.weberbox.pifire.feature.info.presentation.contract
 
+import com.weberbox.pifire.core.model.info.InfoData.Info
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
+import com.weberbox.pifire.feature.info.data.model.Licenses
 
 class InfoContract {
 

@@ -1,13 +1,13 @@
 package com.weberbox.pifire.feature.dashboard.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Outputs
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.RecipeStatus
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Timer
+import com.weberbox.pifire.core.model.dashboard.ProbeType
 import com.weberbox.pifire.feature.dashboard.data.model.DashDto
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Outputs
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.RecipeStatus
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Timer
-import com.weberbox.pifire.feature.dashboard.presentation.model.ProbeType
 import kotlin.math.roundToInt
 
 object DashDtoToDataMapper : Mapper<DashDto, Dash> {

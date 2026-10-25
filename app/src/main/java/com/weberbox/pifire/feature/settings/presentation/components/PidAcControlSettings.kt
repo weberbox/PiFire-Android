@@ -10,13 +10,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.util.slideDownExpandEnterTransition
 import com.weberbox.pifire.core.ui.util.slideDownShrinkExitTransition
 import com.weberbox.pifire.feature.settings.presentation.contract.WorkContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
 

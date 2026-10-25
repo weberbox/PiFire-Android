@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.dashboard.presentation.util
 
 import com.weberbox.pifire.core.constants.AppConfig
-import com.weberbox.pifire.feature.dashboard.presentation.model.ProbeType
+import com.weberbox.pifire.core.model.dashboard.ProbeType
 import kotlin.math.abs
 
 internal fun getDefaultProbeTemp(probeType: ProbeType, units: String): Int {

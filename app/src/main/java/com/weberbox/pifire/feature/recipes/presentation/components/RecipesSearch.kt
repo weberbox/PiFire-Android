@@ -48,10 +48,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.keyboardAsState
 import com.weberbox.pifire.core.ui.util.showToast
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect

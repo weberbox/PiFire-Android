@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.dashboard.data.serializer
 
 import androidx.datastore.core.Serializer
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData
+import com.weberbox.pifire.core.model.dashboard.DashData
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber

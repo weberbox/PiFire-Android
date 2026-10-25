@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,7 +44,6 @@ import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
-import com.weberbox.pifire.feature.dashboard.presentation.components.sheets.ModeSheet
 
 @Composable
 fun BottomSheet(
@@ -124,15 +124,7 @@ private fun BottomSheetPreview() {
                     initialDetent = SheetDetent.FullyExpanded
                 ),
                 content = {
-                    ModeSheet(
-                        currentMode = "Stop",
-                        recipePaused = false,
-                        startupCheck = false,
-                        onEvent = {},
-                        onHold = {},
-                        onPrime = {},
-                        onStart = {}
-                    )
+                    Text(text = "Sheet content")
                 }
             )
         }

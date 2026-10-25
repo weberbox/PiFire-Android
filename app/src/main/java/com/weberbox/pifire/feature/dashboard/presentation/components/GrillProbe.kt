@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.ui.base.cardColorStops
 import com.weberbox.pifire.core.ui.components.AnimatedCounter
 import com.weberbox.pifire.core.ui.icons.Icon
@@ -46,7 +47,6 @@ import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
 import com.weberbox.pifire.feature.dashboard.presentation.util.formatEta
 import com.weberbox.pifire.feature.dashboard.presentation.util.formatSetTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.formatTemp

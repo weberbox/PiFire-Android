@@ -25,8 +25,8 @@ import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.feature.info.data.model.Licenses
 import com.weberbox.pifire.feature.info.presentation.contract.InfoContract
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
 import com.weberbox.pifire.feature.info.presentation.screen.buildLicenseData
 import java.util.Calendar
 

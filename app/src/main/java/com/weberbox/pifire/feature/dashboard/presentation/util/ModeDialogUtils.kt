@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.dashboard.presentation.util
 
+import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.feature.dashboard.presentation.model.ModeOptions
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 
 internal fun getModeButtons(mode: String, paused: Boolean): List<ModeOptions> {
     return when (mode) {

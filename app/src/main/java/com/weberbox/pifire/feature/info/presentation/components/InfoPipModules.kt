@@ -22,11 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.info.InfoData.Info
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.info.presentation.contract.InfoContract
-import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
 
 @Composable
 internal fun InfoPipModules(

@@ -1,12 +1,12 @@
 package com.weberbox.pifire.feature.pellets.presentation.contract
 
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletLog
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 
 class PelletsContract {

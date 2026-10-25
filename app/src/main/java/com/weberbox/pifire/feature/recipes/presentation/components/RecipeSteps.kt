@@ -27,12 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.RunningMode
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 import com.weberbox.pifire.feature.recipes.presentation.util.toBulletedList
 import kotlin.math.roundToInt

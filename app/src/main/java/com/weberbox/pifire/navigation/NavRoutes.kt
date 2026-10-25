@@ -1,6 +1,6 @@
 package com.weberbox.pifire.navigation
 
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
+import com.weberbox.pifire.feature.info.data.model.Licenses
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -8,6 +8,11 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Outputs
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Timer
+import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -20,12 +25,7 @@ import com.weberbox.pifire.feature.dashboard.data.api.DashApi
 import com.weberbox.pifire.feature.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Outputs
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Timer
 import com.weberbox.pifire.feature.dashboard.presentation.model.ElapsedData
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.dashboard.presentation.model.TimerData
 import com.weberbox.pifire.feature.dashboard.presentation.util.CountDownTimer
 import com.weberbox.pifire.feature.dashboard.presentation.util.ElapsedTimer

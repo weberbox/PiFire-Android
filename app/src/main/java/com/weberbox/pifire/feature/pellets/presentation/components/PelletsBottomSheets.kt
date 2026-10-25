@@ -5,6 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.components.sheets.CircularPickerSheet
 import com.weberbox.pifire.core.ui.components.sheets.ConfirmSheet
@@ -13,8 +15,6 @@ import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.InputModalBottomSheetState
 import com.weberbox.pifire.feature.pellets.presentation.components.sheets.ProfilesEditSheet
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletLog
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 import com.weberbox.pifire.feature.pellets.presentation.model.ProfilesData
 

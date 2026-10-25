@@ -1,11 +1,11 @@
 package com.weberbox.pifire.feature.dashboard.presentation.contract
 
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
 
 class DashContract {
 

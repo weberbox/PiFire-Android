@@ -8,6 +8,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.Constants
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.UrlBuilder
 import com.weberbox.pifire.core.remoteconfig.ServerInfo
 import com.weberbox.pifire.core.remoteconfig.ServerSupportManager
@@ -26,11 +27,10 @@ import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.core.ui.util.validateUrl
 import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.feature.settings.data.util.HeadersManager
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
+import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import com.weberbox.pifire.feature.setup.data.repo.SetupRepo
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.ConnectContract
-import com.weberbox.pifire.feature.setup.presentation.model.VersionsData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -2,8 +2,8 @@ package com.weberbox.pifire.feature.events.data.repo
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
+import com.weberbox.pifire.core.model.events.EventsData.Events
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import kotlinx.coroutines.flow.Flow
 
 interface EventsRepo {

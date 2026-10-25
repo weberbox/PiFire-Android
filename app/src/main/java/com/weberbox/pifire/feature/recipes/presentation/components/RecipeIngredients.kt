@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Ingredient
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Ingredient
 import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 
 @Composable

@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.pellets.data.serializer
 
 import androidx.datastore.core.Serializer
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData
+import com.weberbox.pifire.core.model.pellets.PelletsData
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber

@@ -10,7 +10,7 @@ import com.weberbox.pifire.core.ui.util.getReasonPhrase
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.landing.data.api.LandingApi
 import com.weberbox.pifire.feature.landing.data.mapper.ServerUuidDtoToDataMapper
-import com.weberbox.pifire.feature.landing.presentation.model.ServerUuidData
+import com.weberbox.pifire.feature.landing.data.model.ServerUuidData
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.Json

@@ -1,10 +1,10 @@
 package com.weberbox.pifire.feature.events.presentation.contract
 
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
 
 internal typealias GrillEvent = Event
 

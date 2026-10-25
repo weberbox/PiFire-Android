@@ -2,6 +2,7 @@ package com.weberbox.pifire.feature.dashboard.presentation.components.sheets
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.remoteconfig.Feature
 import com.weberbox.pifire.core.remoteconfig.LocalFeatureSupport
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
@@ -11,7 +12,6 @@ import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash.Probe
 
 @Composable
 internal fun DashBottomSheets(

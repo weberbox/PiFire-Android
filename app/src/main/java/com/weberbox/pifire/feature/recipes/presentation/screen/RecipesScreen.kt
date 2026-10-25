@@ -38,6 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Asset
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.MetaData
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.EmptyItems
@@ -53,10 +57,6 @@ import com.weberbox.pifire.feature.recipes.presentation.components.RecipeItem
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipesInputField
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipesSearchResults
 import com.weberbox.pifire.feature.recipes.presentation.contract.RecipesContract
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Asset
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.MetaData
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom

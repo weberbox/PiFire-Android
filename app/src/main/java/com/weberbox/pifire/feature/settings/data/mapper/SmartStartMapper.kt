@@ -1,8 +1,8 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.DualItemMapper
+import com.weberbox.pifire.core.model.settings.SmartStart
 import com.weberbox.pifire.feature.settings.data.model.remote.Startup
-import com.weberbox.pifire.feature.settings.presentation.model.SmartStart
 
 object SmartStartMapper :
     DualItemMapper<List<Int>?,  List<Startup.SmartStart.SSProfile>?, List<SmartStart>> {

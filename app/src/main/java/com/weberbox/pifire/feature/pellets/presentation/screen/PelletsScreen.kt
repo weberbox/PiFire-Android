@@ -23,6 +23,9 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
@@ -43,9 +46,6 @@ import com.weberbox.pifire.feature.pellets.presentation.components.PelletsProfil
 import com.weberbox.pifire.feature.pellets.presentation.components.PelletsUsage
 import com.weberbox.pifire.feature.pellets.presentation.components.PelletsWoods
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletLog
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.feature.pellets.presentation.model.ProfilesData
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom

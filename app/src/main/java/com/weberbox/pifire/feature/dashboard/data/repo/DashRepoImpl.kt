@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.dashboard.data.repo
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.dashboard.DashData
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.feature.dashboard.data.api.DashApi
 import com.weberbox.pifire.feature.dashboard.data.mapper.DashDtoToDataMapper
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData
-import com.weberbox.pifire.feature.dashboard.presentation.model.DashData.Dash
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.transform

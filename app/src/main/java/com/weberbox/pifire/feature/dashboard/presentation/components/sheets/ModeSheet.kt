@@ -35,6 +35,8 @@ import com.weberbox.pifire.feature.dashboard.presentation.components.ModeButton
 import com.weberbox.pifire.feature.dashboard.presentation.components.SlideToStart
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
 import com.weberbox.pifire.feature.dashboard.presentation.util.getModeButtons
+import com.weberbox.pifire.feature.dashboard.presentation.util.icon
+import com.weberbox.pifire.feature.dashboard.presentation.util.title
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 

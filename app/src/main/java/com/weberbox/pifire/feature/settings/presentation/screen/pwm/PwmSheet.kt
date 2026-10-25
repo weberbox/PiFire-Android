@@ -26,14 +26,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.settings.PwmControl
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
 import com.weberbox.pifire.core.ui.icons.Icon
 import com.weberbox.pifire.core.ui.icons.filled.Fan
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.asString
-import com.weberbox.pifire.feature.settings.presentation.model.PwmControl
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 
 internal data class PwmEvent(
     val index: Int,

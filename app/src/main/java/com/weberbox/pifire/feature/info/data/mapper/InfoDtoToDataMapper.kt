@@ -4,13 +4,13 @@ import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.model.info.GPIODeviceData
+import com.weberbox.pifire.core.model.info.GPIOInOutData
+import com.weberbox.pifire.core.model.info.InfoData.Info
 import com.weberbox.pifire.core.ui.util.getFormattedDate
 import com.weberbox.pifire.feature.info.data.model.InfoDto
-import com.weberbox.pifire.feature.info.presentation.model.GPIODeviceData
-import com.weberbox.pifire.feature.info.presentation.model.GPIOInOutData
-import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
-import com.weberbox.pifire.feature.info.presentation.util.formatBytes
-import com.weberbox.pifire.feature.info.presentation.util.formatPercentage
+import com.weberbox.pifire.feature.info.data.util.formatBytes
+import com.weberbox.pifire.feature.info.data.util.formatPercentage
 import java.util.Locale
 
 object InfoDtoToDataMapper : Mapper<InfoDto, Info> {

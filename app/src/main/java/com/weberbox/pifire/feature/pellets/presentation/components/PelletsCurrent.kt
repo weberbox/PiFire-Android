@@ -22,11 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
-import com.weberbox.pifire.feature.pellets.presentation.model.PelletsData.Pellets
 import com.weberbox.pifire.feature.pellets.presentation.screen.buildPellets
 
 @Composable

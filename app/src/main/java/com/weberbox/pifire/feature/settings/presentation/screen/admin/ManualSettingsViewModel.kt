@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.settings.presentation.screen.admin
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.feature.settings.data.model.ManualData
 import com.weberbox.pifire.feature.settings.data.repo.ManualRepoImpl
 import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.feature.settings.presentation.contract.ManualContract
-import com.weberbox.pifire.feature.settings.presentation.model.ManualData
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

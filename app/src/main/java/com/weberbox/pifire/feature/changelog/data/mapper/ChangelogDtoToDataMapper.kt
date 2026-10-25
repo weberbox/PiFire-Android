@@ -1,10 +1,10 @@
 package com.weberbox.pifire.feature.changelog.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Changelog
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Log
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogDto
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData.Changelog
-import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData.Log
 
 object ChangelogDtoToDataMapper : Mapper<ChangelogDto, ChangelogData> {
     override fun map(from: ChangelogDto) = ChangelogData(

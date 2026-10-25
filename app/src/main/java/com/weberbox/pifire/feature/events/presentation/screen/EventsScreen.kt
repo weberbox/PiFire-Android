@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.weberbox.pifire.core.model.events.EventType
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
@@ -31,8 +33,6 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.events.presentation.components.EventItem
 import com.weberbox.pifire.feature.events.presentation.contract.EventsContract
-import com.weberbox.pifire.feature.events.presentation.model.EventType
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState

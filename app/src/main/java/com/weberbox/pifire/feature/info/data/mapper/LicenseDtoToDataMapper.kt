@@ -11,8 +11,8 @@ import com.weberbox.pifire.core.ui.theme.eventsScriptEnded
 import com.weberbox.pifire.core.ui.theme.eventsScriptStart
 import com.weberbox.pifire.core.ui.theme.eventsWarning
 import com.weberbox.pifire.feature.info.data.model.LicenseDto
-import com.weberbox.pifire.feature.info.presentation.model.Licenses
-import com.weberbox.pifire.feature.info.presentation.model.Licenses.License
+import com.weberbox.pifire.feature.info.data.model.Licenses
+import com.weberbox.pifire.feature.info.data.model.Licenses.License
 import kotlin.random.Random
 
 object LicenseDtoToDataMapper : Mapper<List<LicenseDto>, Licenses> {

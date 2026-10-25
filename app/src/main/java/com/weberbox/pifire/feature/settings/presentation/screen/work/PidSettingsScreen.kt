@@ -31,6 +31,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.DataError
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
@@ -48,7 +49,6 @@ import com.weberbox.pifire.feature.settings.presentation.components.getSummaryPe
 import com.weberbox.pifire.feature.settings.presentation.components.getSummarySeconds
 import com.weberbox.pifire.feature.settings.presentation.components.sheets.PidBottomSheets
 import com.weberbox.pifire.feature.settings.presentation.contract.WorkContract
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.feature.settings.presentation.util.arrayToHashMap
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom

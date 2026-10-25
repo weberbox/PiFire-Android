@@ -43,8 +43,6 @@ import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.elevation
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.info.presentation.components.LicenseItem
-import com.weberbox.pifire.feature.info.presentation.screen.buildLicenseData
 
 @Composable
 fun HeaderCard(
@@ -213,8 +211,8 @@ private fun HeaderCardPreview() {
                             )
                             .fillMaxWidth()
                     ) {
-                        buildLicenseData().list.forEach { item ->
-                            LicenseItem(item) {}
+                        repeat(times = 3) { index ->
+                            Text(text = "Item ${index + 1}")
                         }
                     }
                 }

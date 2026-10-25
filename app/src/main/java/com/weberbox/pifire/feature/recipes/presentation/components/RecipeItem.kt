@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.ui.base.cardColorStops
 import com.weberbox.pifire.core.ui.icons.Icon
 import com.weberbox.pifire.core.ui.icons.filled.Speedometer
@@ -44,7 +45,6 @@ import com.weberbox.pifire.core.ui.theme.elevation
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.formatMinutes
 import com.weberbox.pifire.core.ui.util.rememberPaletteColorState
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 import com.weberbox.pifire.feature.recipes.presentation.util.decodeBase64Image
 import com.weberbox.pifire.feature.setup.presentation.components.RecipeAsyncImage

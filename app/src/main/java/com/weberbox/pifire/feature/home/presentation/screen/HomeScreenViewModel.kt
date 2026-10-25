@@ -11,6 +11,7 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.remoteconfig.ServerInfo
@@ -25,7 +26,6 @@ import com.weberbox.pifire.core.ui.util.DialogEvent
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.dashboard.data.api.DashApi
-import com.weberbox.pifire.feature.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.feature.home.presentation.contract.HomeContract
 import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo

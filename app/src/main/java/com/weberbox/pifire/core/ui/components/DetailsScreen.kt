@@ -26,8 +26,6 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.ui.base.gradientBackground
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.feature.info.presentation.components.LicenseItem
-import com.weberbox.pifire.feature.info.presentation.screen.buildLicenseData
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,10 +86,8 @@ private fun DetailsScreenPreview() {
                 title = stringResource(R.string.info_credits),
                 onNavigate = { }
             ) {
-                for (license in buildLicenseData().list) {
-                    item {
-                        LicenseItem(license) {}
-                    }
+                items(count = 5) { index ->
+                    Text(text = "Item ${index + 1}")
                 }
             }
         }

@@ -3,13 +3,13 @@ package com.weberbox.pifire.feature.recipes.data.repo
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.recipes.RecipesData
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes
+import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.feature.recipes.data.api.RecipesApi
 import com.weberbox.pifire.feature.recipes.data.mapper.RecipesDtoToDataMapper
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes
-import com.weberbox.pifire.feature.recipes.presentation.model.RecipesData.Recipes.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext

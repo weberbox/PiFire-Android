@@ -2,8 +2,8 @@ package com.weberbox.pifire.feature.settings.data.serializer
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SettingsData
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject

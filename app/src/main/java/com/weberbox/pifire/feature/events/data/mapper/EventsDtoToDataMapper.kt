@@ -1,12 +1,12 @@
 package com.weberbox.pifire.feature.events.data.mapper
 
 import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.events.EventType
+import com.weberbox.pifire.core.model.events.EventsData.Events
+import com.weberbox.pifire.core.model.events.EventsData.Events.Event
 import com.weberbox.pifire.core.ui.util.formatDateString
 import com.weberbox.pifire.core.ui.util.formatTimeString
 import com.weberbox.pifire.feature.events.data.model.EventsDto
-import com.weberbox.pifire.feature.events.presentation.model.EventType
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events
-import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
 
 object EventsDtoToDataMapper : Mapper<EventsDto, Events> {
     override fun map(from: EventsDto): Events {

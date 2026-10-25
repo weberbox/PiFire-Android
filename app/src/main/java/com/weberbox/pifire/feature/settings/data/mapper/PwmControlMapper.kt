@@ -1,8 +1,8 @@
 package com.weberbox.pifire.feature.settings.data.mapper
 
 import com.weberbox.pifire.core.common.model.DualItemMapper
+import com.weberbox.pifire.core.model.settings.PwmControl
 import com.weberbox.pifire.feature.settings.data.model.remote.Pwm.Profile
-import com.weberbox.pifire.feature.settings.presentation.model.PwmControl
 
 object PwmControlMapper : DualItemMapper<List<Int>, List<Profile>, List<PwmControl>> {
 

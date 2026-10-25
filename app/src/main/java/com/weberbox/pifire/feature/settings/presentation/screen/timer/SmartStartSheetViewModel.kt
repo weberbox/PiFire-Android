@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SmartStart
 import com.weberbox.pifire.core.ui.model.ErrorStatus
 import com.weberbox.pifire.core.ui.model.FieldInput
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
-import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
-import com.weberbox.pifire.feature.settings.presentation.model.SmartStart
 import java.text.DecimalFormat
 
 data class SmartStartSheetState(
