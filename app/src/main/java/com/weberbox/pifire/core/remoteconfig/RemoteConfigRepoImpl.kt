@@ -23,11 +23,11 @@ import javax.inject.Inject
 import kotlin.math.pow
 import kotlin.time.Duration.Companion.milliseconds
 
-class RemoteConfigRepositoryImpl @Inject constructor(
+class RemoteConfigRepoImpl @Inject constructor(
     @param:ApplicationContext private val appContext: Context,
     private val remoteConfig: FirebaseRemoteConfig,
     private val json: Json,
-) : RemoteConfigRepository {
+) : RemoteConfigRepo {
     private val configSettings = FirebaseRemoteConfigSettings.Builder()
         .setFetchTimeoutInSeconds(15)
         .setMinimumFetchIntervalInSeconds(if (AppConfig.DEBUG) 0 else 3600)

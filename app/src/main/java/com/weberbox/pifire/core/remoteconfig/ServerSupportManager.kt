@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
 class ServerSupportManager @Inject constructor(
-    private val remoteConfigRepository: RemoteConfigRepository
+    private val remoteConfigRepo: RemoteConfigRepo
 ) {
 
     suspend fun isServerVersionSupported(current: ServerInfo): ServerSupportResult {
-        val serverConfigData = remoteConfigRepository.fetchServerSupportConfig()
+        val serverConfigData = remoteConfigRepo.fetchServerSupportConfig()
         val config = serverConfigData ?: return ServerSupportResult.Untested
 
         val min = config.minServerInfo

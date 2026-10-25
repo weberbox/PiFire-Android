@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.remoteconfig.FeatureSupport
-import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepository
+import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepo
 import com.weberbox.pifire.core.repo.ConnectionRepo
 import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val remoteConfigRepository: RemoteConfigRepository,
+    private val remoteConfigRepo: RemoteConfigRepo,
     private val sessionStateHolder: SessionStateHolder,
     private val savedStateHandle: SavedStateHandle,
     private val connectionRepo: ConnectionRepo,
@@ -76,7 +76,7 @@ class MainViewModel @Inject constructor(
             .filterNotNull()
             .map { data -> data.settings.serverVersion to data.settings.serverBuild }
             .distinctUntilChanged()
-        val featureMap = flow { emit(remoteConfigRepository.fetchFeatureSupportConfig()) }
+        val featureMap = flow { emit(remoteConfigRepo.fetchFeatureSupportConfig()) }
 
         viewModelScope.launch {
             combine(serverVersion, featureMap) { (version, build), features ->

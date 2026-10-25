@@ -46,7 +46,7 @@ import javax.inject.Inject
 // Retained across rotation so a shown update dialog's actions still reach a live activity
 @ActivityRetainedScoped
 class UpdateManager @Inject constructor(
-    private val remoteConfigRepository: RemoteConfigRepository,
+    private val remoteConfigRepo: RemoteConfigRepo,
     private val analytics: Analytics,
     private val prefs: Prefs
 ) {
@@ -78,7 +78,7 @@ class UpdateManager @Inject constructor(
     }
 
     suspend fun checkForUpdate() {
-        remoteConfigRepository.fetchAppUpdateConfig()?.also { config ->
+        remoteConfigRepo.fetchAppUpdateConfig()?.also { config ->
             currentUpdate = config
             when (config.type) {
                 UpdateType.IMMEDIATE -> {
