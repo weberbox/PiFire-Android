@@ -161,7 +161,7 @@ private fun InputValidationContent(
                 enabled = state.input.hasInteracted && !state.error.isError,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier.weight(1f),
-                onClick = { onUpdate(state.input.value) }
+                onClick = { onUpdate(state.validationOptions.normalize(state.input.value)) }
             ) {
                 Text(
                     text = stringResource(R.string.save),

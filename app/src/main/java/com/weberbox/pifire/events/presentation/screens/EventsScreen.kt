@@ -31,6 +31,7 @@ import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.events.presentation.component.EventItem
 import com.weberbox.pifire.events.presentation.contract.EventsContract
+import com.weberbox.pifire.events.presentation.model.EventType
 import com.weberbox.pifire.events.presentation.model.EventsData.Events.Event
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
@@ -38,7 +39,6 @@ import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
-import java.util.UUID
 
 @Composable
 fun EventsScreenDestination(
@@ -186,51 +186,45 @@ internal fun EventsScreenPreview(
 
 internal fun buildEventsList() = listOf(
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-1",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Stop Mode Started",
-        title = "I",
-        color = "#64666666"
+        type = EventType.Info
     ),
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-2",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Hopper Level Checked @ 72%",
-        title = "I",
-        color = "#64666666"
+        type = EventType.Info
     ),
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-3",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[WARNING] Warning Text",
-        title = "W",
-        color = "#32FF4731"
+        type = EventType.Warning
     ),
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-4",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Ended",
-        title = "I",
-        color = "#64666666"
+        type = EventType.Info
     ),
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-5",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Starting",
-        title = "I",
-        color = "#64666666"
+        type = EventType.Info
     ),
     Event(
-        id = UUID.randomUUID().toString(),
+        id = "preview-6",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[DEBUG] * Debug Testing",
-        title = "D",
-        color = "#32004CFA"
+        type = EventType.Debug
     )
 )

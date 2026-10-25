@@ -3,13 +3,15 @@ package com.weberbox.pifire.settings.presentation.screens.pwm
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.common.presentation.AsUiText.asUiText
+import com.weberbox.pifire.common.presentation.base.BaseViewModel
 import com.weberbox.pifire.settings.data.model.remote.Pwm.Profile
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.PwmContract
 import com.weberbox.pifire.settings.presentation.model.PwmControl
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
+import com.weberbox.pifire.settings.presentation.util.sortRangesByTemp
+import com.weberbox.pifire.settings.presentation.util.updateRange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -104,23 +106,13 @@ class PwmSettingsViewModel @Inject constructor(
         dutyCycle: Int,
         controlItems: List<PwmControl>
     ) {
-        val tempsList = controlItems.map { item ->
-            item.temp
-        }.toMutableList()
-        val profilesList = controlItems.map { item ->
-            Profile(item.dutyCycle)
-        }.toMutableList()
-
-        if (index != -1) {
-            tempsList[index] = temp
-            tempsList.removeAt(tempsList.lastIndex)
-            profilesList[index] = Profile(dutyCycle)
-        } else {
-            tempsList[tempsList.lastIndex] = temp
-            profilesList.add(Profile(dutyCycle))
-        }
-        val temps = tempsList.sorted()
-        val profiles = profilesList.sortedBy { it.dutyCycle }.toMutableList()
+        val (temps, profiles) = updateRange(
+            index = index,
+            temp = temp,
+            profile = Profile(dutyCycle),
+            rowTemps = controlItems.map { item -> item.temp },
+            rowProfiles = controlItems.map { item -> Profile(item.dutyCycle) },
+        )
         viewModelScope.launch(Dispatchers.IO) {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMControl(temps, profiles))
@@ -128,16 +120,10 @@ class PwmSettingsViewModel @Inject constructor(
     }
 
     private fun deletePWMControlItem(controlItems: List<PwmControl>) {
-        val temps = controlItems.map { item ->
-            item.temp
-        }
-            .dropLast(2)
-            .sorted()
-        val profiles = controlItems.map { item ->
-            Profile(item.dutyCycle)
-        }
-            .dropLast(1)
-            .sortedBy { it.dutyCycle }
+        val (temps, profiles) = sortRangesByTemp(
+            temps = controlItems.map { item -> item.temp }.dropLast(2),
+            profiles = controlItems.map { item -> Profile(item.dutyCycle) }.dropLast(1),
+        )
 
         viewModelScope.launch(Dispatchers.IO) {
             toggleLoading(true)

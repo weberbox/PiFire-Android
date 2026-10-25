@@ -227,7 +227,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedDuration(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedDuration(value))
+                }
                 durationSheet.close()
             }
         )

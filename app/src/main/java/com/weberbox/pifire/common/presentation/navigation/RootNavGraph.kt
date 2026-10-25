@@ -129,8 +129,11 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     navigation<NavGraph.HomeDest>(
         startDestination = NavGraph.HomeDest.DashHome
     ) {
-        composable<NavGraph.HomeDest.DashHome> {
-            HomeScreenDestination(navController)
+        composable<NavGraph.HomeDest.DashHome> { backStackEntry ->
+            HomeScreenDestination(
+                navController = navController,
+                backStackEntry = backStackEntry,
+            )
         }
         composable<NavGraph.HomeDest.BrandsDetails>(
             enterTransition = { scaleEnterTransition() }

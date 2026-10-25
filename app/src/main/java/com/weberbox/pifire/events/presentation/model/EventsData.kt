@@ -20,8 +20,7 @@ data class EventsData(
             val date: String = "",
             val time: String = "",
             val message: String = "",
-            val title: String = "",
-            val color: String = "",
+            val type: EventType = EventType.Info,
         )
     }
 }

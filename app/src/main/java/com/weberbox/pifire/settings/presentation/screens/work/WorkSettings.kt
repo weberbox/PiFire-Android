@@ -430,7 +430,9 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetAugerOnTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetAugerOnTime(value))
+                }
                 onCycleTimeSheet.close()
             },
             onDismiss = { onCycleTimeSheet.close() }
@@ -449,7 +451,9 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetAugerOffTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetAugerOffTime(value))
+                }
                 offCycleTimeSheet.close()
             },
             onDismiss = { offCycleTimeSheet.close() }
@@ -476,7 +480,9 @@ private fun WorkSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetFanRampDutyCycle(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetFanRampDutyCycle(value))
+                }
                 sPlusDutyCycleSheet.close()
             },
             onDismiss = { sPlusDutyCycleSheet.close() }
@@ -495,7 +501,9 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetFanOnTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetFanOnTime(value))
+                }
                 sPlusOnTimeSheet.close()
             },
             onDismiss = { sPlusOnTimeSheet.close() }
@@ -514,7 +522,9 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetFanOffTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetFanOffTime(value))
+                }
                 sPlusOffTimeSheet.close()
             },
             onDismiss = { sPlusOffTimeSheet.close() }
@@ -533,7 +543,7 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetMinTemp(it.toInt()))
+                it.toIntOrNull()?.let { value -> onEventSent(WorkContract.Event.SetMinTemp(value)) }
                 sPlusMinTempSheet.close()
             },
             onDismiss = { sPlusMinTempSheet.close() }
@@ -552,7 +562,7 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetMaxTemp(it.toInt()))
+                it.toIntOrNull()?.let { value -> onEventSent(WorkContract.Event.SetMaxTemp(value)) }
                 sPlusMaxTempSheet.close()
             },
             onDismiss = { sPlusMaxTempSheet.close() }
@@ -572,7 +582,9 @@ private fun WorkSettingsContent(
                 max = 80.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetLidOpenThresh(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetLidOpenThresh(value))
+                }
                 lidThreshSheet.close()
             },
             onDismiss = { lidThreshSheet.close() }
@@ -592,7 +604,9 @@ private fun WorkSettingsContent(
                 max = 1000.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetLidOpenPauseTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetLidOpenPauseTime(value))
+                }
                 lidPauseTimeSheet.close()
             },
             onDismiss = { lidPauseTimeSheet.close() }
@@ -611,7 +625,9 @@ private fun WorkSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetKeepWarmTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetKeepWarmTemp(value))
+                }
                 keepWarmTempSheet.close()
             },
             onDismiss = { keepWarmTempSheet.close() }

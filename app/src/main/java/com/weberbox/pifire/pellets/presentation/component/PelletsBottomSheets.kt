@@ -35,19 +35,23 @@ internal fun PelletsBottomSheets(
     BottomSheet(
         sheetState = currentSheet.sheetState,
     ) {
-        CircularPickerSheet(
-            items = state.pellets.profilesList,
-            initialItem = state.pellets.profilesList.find {
-                it.id == state.pellets.currentPelletId
-            } ?: state.pellets.profilesList[0],
-            itemToString = { it.brand + " " + it.wood },
-            positiveButtonText = stringResource(R.string.load),
-            onNegative = { currentSheet.close() },
-            onPositive = {
-                onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.LoadProfile(it.id)))
-                currentSheet.close()
-            }
-        )
+        val profiles = state.pellets.profilesList
+        val initialProfile = profiles.find { it.id == state.pellets.currentPelletId }
+            ?: profiles.firstOrNull()
+        // No profiles means nothing to pick; the picker can't start on an empty list
+        if (initialProfile != null) {
+            CircularPickerSheet(
+                items = profiles,
+                initialItem = initialProfile,
+                itemToString = { it.brand + " " + it.wood },
+                positiveButtonText = stringResource(R.string.load),
+                onNegative = { currentSheet.close() },
+                onPositive = {
+                    onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.LoadProfile(it.id)))
+                    currentSheet.close()
+                }
+            )
+        }
     }
     BottomSheet(
         sheetState = brandAddSheet.sheetState

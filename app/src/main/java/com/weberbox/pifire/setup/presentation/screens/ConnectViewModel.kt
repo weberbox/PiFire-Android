@@ -90,16 +90,16 @@ class ConnectViewModel @Inject constructor(
     }
 
     private fun validateAddress(address: String) {
-        val lowercaseAddress = address.lowercase()
-        val errorStatus = validateUrl(lowercaseAddress)
+        val normalizedAddress = lowercaseSchemeAndHost(address)
+        val errorStatus = validateUrl(normalizedAddress)
         if (!errorStatus.isError) {
-            serverData = serverData.copy(address = createUrl(lowercaseAddress))
+            serverData = serverData.copy(address = createUrl(normalizedAddress))
         }
         setState {
             copy(
                 serverAddress = viewState.value.serverAddress.copy(
                     input = FieldInput(
-                        value = lowercaseAddress,
+                        value = address,
                         hasInteracted = true
                     ),
                     error = errorStatus
@@ -349,5 +349,21 @@ class ConnectViewModel @Inject constructor(
             .addPath("get")
             .addPath("versions")
             .build()
+    }
+
+    // A reverse proxy path, query or credentials can be case-sensitive; scheme and host are not
+    private fun lowercaseSchemeAndHost(address: String): String {
+        val schemeEnd = address.indexOf("://")
+        val authorityStart = if (schemeEnd >= 0) schemeEnd + 3 else 0
+        val authorityEnd = address.indexOfAny(
+            chars = charArrayOf('/', '?', '#'),
+            startIndex = authorityStart,
+        ).takeIf { it >= 0 } ?: address.length
+        val authority = address.substring(authorityStart, authorityEnd)
+        val hostStart = authority.lastIndexOf('@') + 1
+        return address.substring(0, authorityStart).lowercase() +
+                authority.substring(0, hostStart) +
+                authority.substring(hostStart).lowercase() +
+                address.substring(authorityEnd)
     }
 }

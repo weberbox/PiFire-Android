@@ -276,7 +276,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileBooting(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileBooting(value))
+                }
                 profileBootSheet.close()
             }
         )
@@ -292,7 +294,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileCooking(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileCooking(value))
+                }
                 profileCookingSheet.close()
             }
         )
@@ -308,7 +312,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileCooling(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileCooling(value))
+                }
                 profileCooldownSheet.close()
             }
         )
@@ -324,7 +330,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileFault(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileFault(value))
+                }
                 profileFaultSheet.close()
             }
         )
@@ -340,7 +348,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileIdle(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileIdle(value))
+                }
                 profileIdleSheet.close()
             }
         )
@@ -356,7 +366,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfilePellets(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfilePellets(value))
+                }
                 profilePelletsSheet.close()
             }
         )
@@ -372,7 +384,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileNight(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileNight(value))
+                }
                 profileNightSheet.close()
             }
         )
@@ -388,7 +402,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileOvershoot(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileOvershoot(value))
+                }
                 profileOvershootSheet.close()
             }
         )
@@ -404,7 +420,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfilePreheat(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfilePreheat(value))
+                }
                 profilePreheatSheet.close()
             }
         )
@@ -420,7 +438,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileProbe(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileProbe(value))
+                }
                 profileProbeSheet.close()
             }
         )
@@ -436,7 +456,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileTarget(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileTarget(value))
+                }
                 profileTargetSheet.close()
             }
         )
@@ -452,7 +474,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedProfileTimer(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedProfileTimer(value))
+                }
                 profileTimerSheet.close()
             }
         )

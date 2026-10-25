@@ -1,61 +1,56 @@
 package com.weberbox.pifire.common.presentation.state
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.composeunstyled.DialogState
 import com.composeunstyled.rememberDialogState
 import com.weberbox.pifire.common.presentation.util.DialogAction
+import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.DialogEvent
-import com.weberbox.pifire.common.presentation.util.UiText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class EventDialogState(
     val state: DialogState,
-    dialogEvent: DialogEvent
+    private val scope: CoroutineScope,
+    dialogEvent: DialogEvent?,
 ) {
-    private var eventState = mutableStateOf(dialogEvent)
-
-    val event: DialogEvent
-        get() = eventState.value
+    var event: DialogEvent? by mutableStateOf(dialogEvent)
+        private set
 
     fun show(dialogEvent: DialogEvent) {
-        eventState.value = dialogEvent
+        event = dialogEvent
+        DialogController.current = dialogEvent
         state.visible = true
     }
 
     fun dismiss() {
         state.visible = false
+        DialogController.current = null
     }
 
-    companion object {
-        fun Saver(dialogState: DialogState):
-                Saver<EventDialogState, DialogEvent> {
-            return Saver(
-                save = { it.eventState.value },
-                restore = { EventDialogState(dialogState, it) }
-            )
-        }
+    /** Runs in the host's scope, which outlives the dismissed dialog's content. */
+    fun runAction(action: DialogAction) {
+        dismiss()
+        scope.launch { action.action.invoke() }
     }
 }
 
 @Composable
-fun rememberEventDialogState(
-    initiallyVisible: Boolean = false,
-): EventDialogState {
-    val state = rememberDialogState(
-        initiallyVisible = initiallyVisible,
-    )
-    return rememberSaveable(saver = EventDialogState.Saver(state)) {
+fun rememberEventDialogState(): EventDialogState {
+    // After process death there is no event to restore, so nothing is shown
+    val restored = DialogController.current
+    val state = rememberDialogState(initiallyVisible = restored != null)
+    val scope = rememberCoroutineScope()
+    return remember(state, scope) {
         EventDialogState(
-            state, DialogEvent(
-                title = UiText("Error"),
-                message = UiText("Error"),
-                positiveAction = DialogAction(
-                    buttonText = UiText("Error"),
-                    action = {}
-                )
-            )
+            state = state,
+            scope = scope,
+            dialogEvent = restored,
         )
     }
 }

@@ -11,31 +11,42 @@ import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import java.text.DecimalFormat
 
+/**
+ * [KeyboardType.Number] and [KeyboardType.NumberPassword] accept whole numbers only and
+ * [KeyboardType.Decimal] accepts either decimal separator, so callers can parse the value passed
+ * to `onUpdate` with `toIntOrNull()` / `toDoubleOrNull()`. A null [min] or [max] means no limit.
+ */
 data class ValidationOptions(
     val keyboardType: KeyboardType = KeyboardType.Text,
     val allowBlank: Boolean = false,
-    val min: Double = 0.0,
-    val max: Double = 0.0
-)
+    val min: Double? = null,
+    val max: Double? = null,
+) {
+    val isInteger: Boolean
+        get() = keyboardType == KeyboardType.Number || keyboardType == KeyboardType.NumberPassword
+
+    val isNumeric: Boolean
+        get() = isInteger || keyboardType == KeyboardType.Decimal
+
+    /** The input as callers receive it: numbers trimmed and with a `.` decimal separator. */
+    fun normalize(input: String): String {
+        return if (isNumeric) input.trim().replace(',', '.') else input
+    }
+}
 
 data class ValidationState(
     val input: FieldInput = FieldInput(),
     val error: ErrorStatus = ErrorStatus(isError = false),
-    val validationOptions: ValidationOptions = ValidationOptions()
+    val validationOptions: ValidationOptions = ValidationOptions(),
 )
 
 class InputValidationViewModel : ViewModel() {
     private val _validationState = mutableStateOf(ValidationState())
     val validationState: State<ValidationState> = _validationState
 
-    private fun setState(reducer: ValidationState.() -> ValidationState) {
-        val newState = validationState.value.reducer()
-        _validationState.value = newState
-    }
-
     fun setInitialState(
         input: String,
-        validationOptions: ValidationOptions = ValidationOptions()
+        validationOptions: ValidationOptions = ValidationOptions(),
     ) {
         _validationState.value =
             ValidationState(
@@ -51,101 +62,47 @@ class InputValidationViewModel : ViewModel() {
     }
 
     fun validateInput(input: String) {
-        if (!validationState.value.validationOptions.allowBlank && input.isBlank()) {
-            setState {
-                copy(
-                    input = FieldInput(
-                        value = input,
-                        hasInteracted = true
-                    ),
-                    error = ErrorStatus(
-                        isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
-                )
-            }
-            return
-        }
-        if (validationState.value.validationOptions.keyboardType == KeyboardType.Number ||
-            validationState.value.validationOptions.keyboardType == KeyboardType.Decimal ||
-            validationState.value.validationOptions.keyboardType == KeyboardType.NumberPassword
-        ) {
-            try {
-                val number = input.toDouble()
-                if (validationState.value.validationOptions.min != 0.0 && number <
-                    validationState.value.validationOptions.min
-                ) {
-                    setState {
-                        copy(
-                            input = FieldInput(
-                                value = input,
-                                hasInteracted = true
-                            ),
-                            error = ErrorStatus(
-                                isError = true,
-                                errorMsg = UiText(
-                                    R.string.settings_min_error,
-                                    uiTextArgsOf(
-                                        DecimalFormat("0.##").format(
-                                            validationState.value.validationOptions.min
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    }
-                    return
-                } else if (validationState.value.validationOptions.max != 0.0 && number >
-                    validationState.value.validationOptions.max
-                ) {
-                    setState {
-                        copy(
-                            input = FieldInput(
-                                value = input,
-                                hasInteracted = true
-                            ),
-                            error = ErrorStatus(
-                                isError = true,
-                                errorMsg = UiText(
-                                    R.string.settings_max_error,
-                                    uiTextArgsOf(
-                                        DecimalFormat("0.##").format(
-                                            validationState.value.validationOptions.max
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    }
-                    return
-                }
-            } catch (_: NumberFormatException) {
-                setState {
-                    copy(
-                        input = FieldInput(
-                            value = input,
-                            hasInteracted = true
-                        ),
-                        error = ErrorStatus(
-                            isError = true,
-                            errorMsg = UiText(R.string.settings_number_error)
-                        )
-                    )
-                }
-                return
-            }
-        }
-        setState {
-            copy(
-                input = FieldInput(
-                    value = input,
-                    hasInteracted = true
-                ),
-                error = ErrorStatus(
-                    isError = false,
-                    errorMsg = null
-                )
+        val options = validationState.value.validationOptions
+        val errorMsg = findError(input = input, options = options)
+        _validationState.value = validationState.value.copy(
+            input = FieldInput(
+                value = input,
+                hasInteracted = true
+            ),
+            error = ErrorStatus(
+                isError = errorMsg != null,
+                errorMsg = errorMsg
             )
+        )
+    }
+
+    private fun findError(input: String, options: ValidationOptions): UiText? {
+        if (input.isBlank()) {
+            return if (options.allowBlank) null else UiText(R.string.error_text_blank)
+        }
+        if (!options.isNumeric) return null
+
+        val normalized = options.normalize(input)
+        val number = if (options.isInteger) {
+            normalized.toIntOrNull()?.toDouble()
+                ?: return UiText(R.string.settings_whole_number_error)
+        } else {
+            normalized.toDoubleOrNull()?.takeIf { it.isFinite() }
+                ?: return UiText(R.string.settings_number_error)
+        }
+
+        return when {
+            options.min != null && number < options.min -> UiText(
+                R.string.settings_min_error,
+                uiTextArgsOf(DecimalFormat("0.##").format(options.min))
+            )
+
+            options.max != null && number > options.max -> UiText(
+                R.string.settings_max_error,
+                uiTextArgsOf(DecimalFormat("0.##").format(options.max))
+            )
+
+            else -> null
         }
     }
 }

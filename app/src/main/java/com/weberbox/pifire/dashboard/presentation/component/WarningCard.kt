@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -50,79 +51,82 @@ internal fun WarningCard(
     initialState: Boolean = false
 ) {
     warnings.forEach { warning ->
-        var visible by rememberSaveable { mutableStateOf(true) }
-        val visibleState = remember { MutableTransitionState(initialState) }
+        // Keyed so each card keeps its own visibility when the list changes
+        key(warning) {
+            var visible by rememberSaveable { mutableStateOf(true) }
+            val visibleState = remember { MutableTransitionState(initialState) }
 
-        LaunchedEffect(visible) {
-            visibleState.targetState = visible
-        }
-        AnimatedVisibility(
-            visibleState = visibleState,
-            enter = slideDownExpandEnterTransition(),
-            exit = slideOutShrinkExitTransition()
-        ) {
-            Box(
-                modifier = Modifier
-                    .padding(
-                        start = MaterialTheme.spacing.smallOne,
-                        end = MaterialTheme.spacing.smallOne
-                    )
-                    .fillMaxWidth()
+            LaunchedEffect(visible) {
+                visibleState.targetState = visible
+            }
+            AnimatedVisibility(
+                visibleState = visibleState,
+                enter = slideDownExpandEnterTransition(),
+                exit = slideOutShrinkExitTransition()
             ) {
-                Card(
-                    modifier = modifier
-                        .doublePulseEffect(
-                            enabled = visibleState.targetState,
-                            targetScale = 1.1f,
-                            color = MaterialTheme.colorScheme.errorContainer,
-                            shape = MaterialTheme.shapes.large
+                Box(
+                    modifier = Modifier
+                        .padding(
+                            start = MaterialTheme.spacing.smallOne,
+                            end = MaterialTheme.spacing.smallOne
                         )
-                        .fillMaxWidth(),
-                    shape = MaterialTheme.shapes.large,
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = MaterialTheme.elevation.small
-                    )
+                        .fillMaxWidth()
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .background(Brush.horizontalGradient(colorStops = cardColorStops()))
-                            .padding(bottom = MaterialTheme.spacing.smallOne)
-                            .wrapContentHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(R.string.dash_warnings_title),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.errorContainer,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(
-                                top = MaterialTheme.spacing.smallOne,
-                                start = MaterialTheme.spacing.smallTwo
+                    Card(
+                        modifier = modifier
+                            .doublePulseEffect(
+                                enabled = visibleState.targetState,
+                                targetScale = 1.1f,
+                                color = MaterialTheme.colorScheme.errorContainer,
+                                shape = MaterialTheme.shapes.large
                             )
+                            .fillMaxWidth(),
+                        shape = MaterialTheme.shapes.large,
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = MaterialTheme.elevation.small
                         )
-                        Text(
-                            text = warning,
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(
-                                top = MaterialTheme.spacing.extraSmall,
-                                bottom = MaterialTheme.spacing.extraSmall,
-                                start = MaterialTheme.spacing.smallTwo,
-                                end = MaterialTheme.spacing.smallTwo
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .background(Brush.horizontalGradient(colorStops = cardColorStops()))
+                                .padding(bottom = MaterialTheme.spacing.smallOne)
+                                .wrapContentHeight(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.dash_warnings_title),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.errorContainer,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(
+                                    top = MaterialTheme.spacing.smallOne,
+                                    start = MaterialTheme.spacing.smallTwo
+                                )
                             )
+                            Text(
+                                text = warning,
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(
+                                    top = MaterialTheme.spacing.extraSmall,
+                                    bottom = MaterialTheme.spacing.extraSmall,
+                                    start = MaterialTheme.spacing.smallTwo,
+                                    end = MaterialTheme.spacing.smallTwo
+                                )
+                            )
+                        }
+                    }
+                    IconButton(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(y = (-3).dp),
+                        onClick = { visible = false }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = stringResource(R.string.close)
                         )
                     }
-                }
-                IconButton(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .offset(y = (-3).dp),
-                    onClick = { visible = false }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(R.string.close)
-                    )
                 }
             }
         }

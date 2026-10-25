@@ -1,6 +1,7 @@
 package com.weberbox.pifire.home.presentation.screens
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -36,6 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.withResumed
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.common.icons.Icon
@@ -77,18 +83,27 @@ import com.weberbox.pifire.home.presentation.utils.offsetDrawerWidth
 import com.weberbox.pifire.home.presentation.utils.permDrawerAdjustments
 import com.weberbox.pifire.pellets.presentation.screens.PelletsScreenDestination
 import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun HomeScreenDestination(
     navController: NavHostController,
+    backStackEntry: NavBackStackEntry,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+    val showDashboard by backStackEntry.savedStateHandle
+        .getStateFlow(key = SHOW_DASHBOARD_KEY, initialValue = false)
+        .collectAsStateWithLifecycle()
+
     HomeScreen(
         initialPage = Dashboard.page,
+        showDashboard = showDashboard,
+        onDashboardShown = { backStackEntry.savedStateHandle[SHOW_DASHBOARD_KEY] = false },
         navController = navController,
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
@@ -115,6 +130,8 @@ fun HomeScreenDestination(
 @Composable
 private fun HomeScreen(
     initialPage: Int,
+    showDashboard: Boolean,
+    onDashboardShown: () -> Unit,
     navController: NavHostController,
     state: HomeContract.State,
     effectFlow: Flow<HomeContract.Effect>?,
@@ -138,6 +155,7 @@ private fun HomeScreen(
     )
     val drawerState = rememberOffsetDrawerState()
     val scope = rememberCoroutineScope()
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
     var title by rememberSaveable { mutableStateOf(navigationItems[initialPage].title) }
 
     HandleSideEffects(
@@ -176,7 +194,14 @@ private fun HomeScreen(
         title = navigationItems[pagerState.currentPage].title
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(showDashboard) {
+        if (showDashboard) {
+            pagerState.scrollToPage(Dashboard.page)
+            onDashboardShown()
+        }
+    }
+
+    LaunchedEffect(isPermDrawerNavigation) {
         if (drawerState.isOpen && isPermDrawerNavigation) drawerState.close()
     }
 
@@ -204,6 +229,8 @@ private fun HomeScreen(
                                         checkAuthentication(
                                             state = state,
                                             biometricManager = biometricManager,
+                                            lifecycle = lifecycle,
+                                            scope = scope,
                                             onSuccess = {
                                                 onNavigationRequested(
                                                     HomeContract.Effect.Navigation.NavRoute(
@@ -254,6 +281,8 @@ private fun HomeScreen(
                                             checkAuthentication(
                                                 state = state,
                                                 biometricManager = biometricManager,
+                                                lifecycle = lifecycle,
+                                                scope = scope,
                                                 onSuccess = {
                                                     onNavigationRequested(
                                                         HomeContract.Effect.Navigation.NavRoute(
@@ -418,11 +447,16 @@ private fun HomeScreen(
 private fun checkAuthentication(
     state: HomeContract.State,
     biometricManager: BiometricPromptManager?,
+    lifecycle: Lifecycle,
+    scope: CoroutineScope,
     onSuccess: () -> Unit,
 ) {
     if (state.biometricSettingsPrompt) {
         biometricManager?.authenticate(
-            onAuthenticationSuccess = onSuccess
+            onAuthenticationSuccess = {
+                // The prompt can finish before the screen is resumed, where navigation is dropped
+                scope.launch { lifecycle.withResumed(onSuccess) }
+            }
         )
     } else {
         onSuccess()
@@ -475,7 +509,11 @@ private fun HandleSideEffects(
                 }
 
                 is HomeContract.Effect.OpenUpdateIntent -> {
-                    activity?.startActivity(effect.intent)
+                    try {
+                        activity?.startActivity(effect.intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Timber.w(e, "No activity to open the update link")
+                    }
                 }
             }
         }?.collect()
@@ -491,6 +529,8 @@ private fun HomeScreenPreview() {
             HomeScreen(
                 navController = rememberNavController(),
                 initialPage = Dashboard.page,
+                showDashboard = false,
+                onDashboardShown = {},
                 state = HomeContract.State(
                     showBottomBar = true,
                     isConnected = true,
@@ -508,3 +548,6 @@ private fun HomeScreenPreview() {
         }
     }
 }
+
+/** Set on Home's back stack entry to open it on the dashboard page when returning to it. */
+internal const val SHOW_DASHBOARD_KEY = "show_dashboard"

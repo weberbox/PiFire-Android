@@ -130,7 +130,7 @@ private fun ChangelogScreen(
                     }
                 }
             }
-            if (state.changelogData.changelog.isEmpty()) {
+            if (!state.isInitialLoading && state.changelogData.changelog.isEmpty()) {
                 item {
                     Column(
                         modifier = Modifier

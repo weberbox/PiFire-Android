@@ -233,10 +233,11 @@ internal fun FoodProbe(
                     Box(
                         modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                     ) {
+                        val temp = (probe.temp ?: 0).toFloat()
                         val progress = if (probe.target > 0f) {
-                            probe.temp.toFloat() / probe.target.toFloat()
+                            temp / probe.target.toFloat()
                         } else {
-                            probe.temp.toFloat() / probe.maxTemp.toFloat()
+                            temp / probe.maxTemp.toFloat()
                         }
                         VerticalProgress(
                             progress = {

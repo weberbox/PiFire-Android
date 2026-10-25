@@ -85,7 +85,7 @@ fun <T> DropdownTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     onValueChangedEvent: (T) -> Unit,
 ) {
-    var value by remember { mutableStateOf(selectedValue) }
+    var value by remember(selectedValue) { mutableStateOf(selectedValue) }
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(

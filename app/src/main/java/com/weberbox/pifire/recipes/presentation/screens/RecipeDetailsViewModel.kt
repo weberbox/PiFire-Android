@@ -21,6 +21,8 @@ import com.weberbox.pifire.recipes.data.repo.RecipesRepo
 import com.weberbox.pifire.recipes.presentation.contract.DetailsContract
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image
+import com.weberbox.pifire.recipes.presentation.util.decodeRecipeImages
+import com.weberbox.pifire.recipes.presentation.util.recipeLookup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -64,11 +66,11 @@ class RecipeDetailsViewModel @Inject constructor(
 
     private fun collectDataState(filename: String, step: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            sessionStateHolder.recipesDataState.collect { stateData ->
-                stateData?.also { data ->
-                    data.recipes.find { it.recipeFilename == filename }?.also { recipe ->
+            sessionStateHolder.recipesDataState.recipeLookup(filename).collect { lookup ->
+                lookup?.also {
+                    lookup.recipe?.also { recipe ->
                         currentRecipe = recipe
-                        val images = recipe.assets.map { decodeBase64Image(it.encodedImage) }
+                        val images = decodeRecipeImages(recipe)
                         withContext(Dispatchers.Main) {
                             setState {
                                 copy(

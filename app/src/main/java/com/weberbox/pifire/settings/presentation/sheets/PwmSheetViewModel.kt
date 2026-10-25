@@ -46,7 +46,9 @@ class PwmSheetViewModel : ViewModel() {
     ) {
         _server = server
 
-        val controlItem = if (index != -1) controlItems[index] else null
+        val controlItem = controlItems.getOrNull(index)
+        // Adding to an empty table (or after the last range) starts from the defaults
+        val lastItem = controlItems.lastOrNull() ?: PwmControl()
 
         val minTemp =
             when (index) {
@@ -65,7 +67,7 @@ class PwmSheetViewModel : ViewModel() {
 
         val setTemp =
             when (index) {
-                -1 -> controlItems[controlItems.lastIndex].temp
+                -1 -> lastItem.temp
                 controlItems.lastIndex -> controlItems[index].temp - 1
                 else -> controlItems[index].temp
             }
@@ -91,13 +93,11 @@ class PwmSheetViewModel : ViewModel() {
             }
 
         val temp by mutableStateOf(
-            controlItem?.temp?.toString()
-                ?: controlItems[controlItems.lastIndex].temp.toString()
+            (controlItem ?: lastItem).temp.toString()
         )
 
         val dutyCycle by mutableStateOf(
-            controlItem?.dutyCycle?.toString()
-                ?: controlItems[controlItems.lastIndex].dutyCycle.toString()
+            (controlItem ?: lastItem).dutyCycle.toString()
         )
 
         setState {
@@ -107,7 +107,8 @@ class PwmSheetViewModel : ViewModel() {
                 maxTemp = maxTemp,
                 setTemp = setTemp,
                 note = note,
-                deleteVisible = index >= controlItems.lastIndex,
+                // Deleting the only range would leave an empty table
+                deleteVisible = index >= controlItems.lastIndex && controlItems.size > 2,
                 tempInput = FieldInput(
                     value = temp,
                     hasInteracted = temp.isNotBlank()

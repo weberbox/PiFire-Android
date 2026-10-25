@@ -7,8 +7,8 @@ import com.weberbox.pifire.R
 import java.util.Locale
 
 @Composable
-internal fun formatTemp(temp: Int): String {
-    return if (temp == 0) "--" else
+internal fun formatTemp(temp: Int?): String {
+    return if (temp == null) "--" else
         String.format(Locale.US, "%s%s", temp, "°")
 }
 

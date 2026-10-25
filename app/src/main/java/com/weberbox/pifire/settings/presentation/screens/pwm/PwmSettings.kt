@@ -231,7 +231,9 @@ private fun PwmSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(PwmContract.Event.SetPWMTempUpdateTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PwmContract.Event.SetPWMTempUpdateTime(value))
+                }
                 updateTimeSheet.close()
             },
             onDismiss = { updateTimeSheet.close() }
@@ -250,7 +252,9 @@ private fun PwmSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(PwmContract.Event.SetPWMFanFrequency(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PwmContract.Event.SetPWMFanFrequency(value))
+                }
                 frequencySheet.close()
             },
             onDismiss = { frequencySheet.close() }
@@ -270,7 +274,9 @@ private fun PwmSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(PwmContract.Event.SetPWMMinDutyCycle(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PwmContract.Event.SetPWMMinDutyCycle(value))
+                }
                 minDutyCycleSheet.close()
             },
             onDismiss = { minDutyCycleSheet.close() }
@@ -290,7 +296,9 @@ private fun PwmSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(PwmContract.Event.SetPWMMaxDutyCycle(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PwmContract.Event.SetPWMMaxDutyCycle(value))
+                }
                 maxDutyCycleSheet.close()
             },
             onDismiss = { maxDutyCycleSheet.close() }

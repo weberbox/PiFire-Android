@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- One-letter badges for an event's type -->
+    <string name="events_badge_script">S</string>
+    <string name="events_badge_mode">M</string>
+    <string name="events_badge_error">E</string>
+    <string name="events_badge_warning">W</string>
+    <string name="events_badge_debug">D</string>
+    <string name="events_badge_info">I</string>
+</resources>

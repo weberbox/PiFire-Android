@@ -48,6 +48,8 @@ import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image
 import com.weberbox.pifire.setup.presentation.component.RecipeAsyncImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 internal fun RecipeItem(
@@ -58,14 +60,14 @@ internal fun RecipeItem(
     var recipeImage: ByteArray? by remember { mutableStateOf(null) }
     val paletteColor by rememberPaletteColorState()
 
-    LaunchedEffect(Unit) {
-        details.assets.forEach { asset ->
-            if (asset.filename == details.metadata.thumbnail) {
-                if (asset.encodedThumb.isNotBlank()) {
-                    recipeImage = decodeBase64Image(asset.encodedThumb)
-                    paletteColor.updateStartingColor(recipeImage)
-                }
-            }
+    LaunchedEffect(details.recipeFilename, details.metadata.thumbnail) {
+        val thumb = details.assets.find { asset ->
+            asset.filename == details.metadata.thumbnail && asset.encodedThumb.isNotBlank()
+        } ?: return@LaunchedEffect
+        withContext(Dispatchers.Default) {
+            val image = decodeBase64Image(thumb.encodedThumb)
+            paletteColor.updateStartingColor(image)
+            recipeImage = image
         }
     }
 

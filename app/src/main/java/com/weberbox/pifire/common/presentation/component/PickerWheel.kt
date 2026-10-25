@@ -55,7 +55,10 @@ fun <T> PickerWheel(
     itemToString: (T) -> String,
     longestText: String,
 ) {
-    var localSelectedItem by remember { mutableIntStateOf(selectedItem) }
+    // Nothing to select, and the index math below divides by items.size
+    if (items.isEmpty()) return
+
+    var localSelectedItem by remember(selectedItem) { mutableIntStateOf(selectedItem) }
 
     val listState = if (isLooping) {
         rememberLazyListState(
@@ -86,9 +89,11 @@ fun <T> PickerWheel(
 
     val maxOffset = with(density) { unselectedTextLineHeightPx + space.toPx() }
 
-    val firstIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
-    val firstVisibleOffset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
-    val isScrolling by remember { derivedStateOf { listState.isScrollInProgress } }
+    val firstIndex by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex } }
+    val firstVisibleOffset by remember(listState) {
+        derivedStateOf { listState.firstVisibleItemScrollOffset }
+    }
+    val isScrolling by remember(listState) { derivedStateOf { listState.isScrollInProgress } }
     val progress = (firstVisibleOffset / maxOffset).coerceIn(0f, 1f)
     val unitsWidthInDp by remember { mutableStateOf(0.dp) }
 

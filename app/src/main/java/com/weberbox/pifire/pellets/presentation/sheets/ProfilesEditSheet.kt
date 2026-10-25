@@ -49,10 +49,11 @@ internal fun ProfilesEditSheet(
     onConfirm: (PelletProfile, Boolean) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var currentBrand by remember { mutableStateOf(profilesData.currentBrand) }
-    var currentWood by remember { mutableStateOf(profilesData.currentWood) }
-    var rating by remember { mutableIntStateOf(profilesData.rating) }
-    var comments by remember { mutableStateOf(profilesData.comments) }
+    // Keyed so opening the sheet for another profile doesn't keep the previous one's values
+    var currentBrand by remember(profilesData) { mutableStateOf(profilesData.currentBrand) }
+    var currentWood by remember(profilesData) { mutableStateOf(profilesData.currentWood) }
+    var rating by remember(profilesData) { mutableIntStateOf(profilesData.rating) }
+    var comments by remember(profilesData) { mutableStateOf(profilesData.comments) }
     var pelletProfile by remember { mutableStateOf(PelletProfile()) }
 
     Column(

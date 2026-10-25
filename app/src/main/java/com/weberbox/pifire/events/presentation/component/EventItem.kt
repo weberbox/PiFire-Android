@@ -26,15 +26,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
+import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.cardColorStops
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.elevation
+import com.weberbox.pifire.common.presentation.theme.eventsDebug
+import com.weberbox.pifire.common.presentation.theme.eventsError
+import com.weberbox.pifire.common.presentation.theme.eventsInfo
+import com.weberbox.pifire.common.presentation.theme.eventsModeEnded
+import com.weberbox.pifire.common.presentation.theme.eventsModeStarted
+import com.weberbox.pifire.common.presentation.theme.eventsScriptEnded
+import com.weberbox.pifire.common.presentation.theme.eventsScriptStart
+import com.weberbox.pifire.common.presentation.theme.eventsWarning
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.events.presentation.model.EventType
 import com.weberbox.pifire.events.presentation.model.EventsData.Events.Event
 import com.weberbox.pifire.events.presentation.screens.buildEventsList
 
@@ -69,10 +79,10 @@ internal fun EventItem(
                 modifier = modifier
                     .fillMaxHeight()
                     .size(MaterialTheme.spacing.large)
-                    .background(Color(event.color.toColorInt()))
+                    .background(event.type.color())
             ) {
                 Text(
-                    text = event.title,
+                    text = stringResource(event.type.badgeRes()),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
@@ -114,6 +124,27 @@ internal fun EventItem(
             }
         }
     }
+}
+
+
+private fun EventType.color(): Color = when (this) {
+    EventType.ScriptStarted -> eventsScriptStart
+    EventType.ScriptEnded -> eventsScriptEnded
+    EventType.ModeStarted -> eventsModeStarted
+    EventType.ModeEnded -> eventsModeEnded
+    EventType.Error -> eventsError
+    EventType.Warning -> eventsWarning
+    EventType.Debug -> eventsDebug
+    EventType.Info -> eventsInfo
+}
+
+private fun EventType.badgeRes(): Int = when (this) {
+    EventType.ScriptStarted, EventType.ScriptEnded -> R.string.events_badge_script
+    EventType.ModeStarted, EventType.ModeEnded -> R.string.events_badge_mode
+    EventType.Error -> R.string.events_badge_error
+    EventType.Warning -> R.string.events_badge_warning
+    EventType.Debug -> R.string.events_badge_debug
+    EventType.Info -> R.string.events_badge_info
 }
 
 @Composable

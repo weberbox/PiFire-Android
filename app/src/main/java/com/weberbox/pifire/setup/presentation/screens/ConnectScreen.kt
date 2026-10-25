@@ -185,7 +185,8 @@ private fun ConnectScreen(
             Spacer(Modifier.weight(1f))
             SetupBottomNavRow(
                 enabled = !state.serverAddress.error.isError &&
-                        state.serverAddress.input.hasInteracted,
+                        state.serverAddress.input.hasInteracted &&
+                        !state.isLoading,
                 onBackClick = { onNavigationRequested(ConnectContract.Effect.Navigation.Back) },
                 onNextClick = {
                     onEventSent(ConnectContract.Event.GetServerVersions)

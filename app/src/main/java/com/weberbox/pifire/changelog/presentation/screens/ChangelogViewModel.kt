@@ -36,6 +36,7 @@ class ChangelogViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Error -> {
+                        setState { copy(isInitialLoading = false, isDataError = true) }
                         setEffect {
                             ChangelogContract.Effect.Notification(
                                 text = result.error.asUiText(),
@@ -44,12 +45,12 @@ class ChangelogViewModel @Inject constructor(
                         }
                     }
 
-
                     is Result.Success -> {
                         setState {
                             copy(
                                 changelogData = result.data,
-                                isInitialLoading = false
+                                isInitialLoading = false,
+                                isDataError = false,
                             )
                         }
                     }

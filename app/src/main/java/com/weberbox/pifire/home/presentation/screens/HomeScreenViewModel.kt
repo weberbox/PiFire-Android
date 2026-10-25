@@ -242,7 +242,8 @@ class HomeScreenViewModel @Inject constructor(
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.update),
                             action = {
-                                signOut()
+                                // Before signing out, which navigates away from the screen
+                                // that handles this effect
                                 setEffect {
                                     HomeContract.Effect.OpenUpdateIntent(
                                         Intent(Intent.ACTION_VIEW).apply {
@@ -253,6 +254,7 @@ class HomeScreenViewModel @Inject constructor(
                                         }
                                     )
                                 }
+                                signOut()
                             }
                         ),
                         negativeAction = if (supportResult.isMandatory) null else

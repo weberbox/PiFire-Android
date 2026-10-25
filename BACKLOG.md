@@ -42,46 +42,15 @@ One step per commit, compile all flavors after each.
    coroutines-test, Konsist `ArchitectureTest` for the layout rules), then add them to CLAUDE.md.
 
 ## Bugs: presentation
-- [changelog] ChangelogViewModel.kt:38-45: error path leaves `isInitialLoading` true.
-- [settings] notifications/MqttSettings.kt:236-290: port/update-seconds use a text keyboard and
-  `toInt()` -> crash on "abc".
-- [input] common/presentation/sheets/InputValidationViewModel.kt:74-98: validates `toDouble()` but
-  callers `toInt()` (crash on "60.5"); comma decimals rejected; `min/max == 0.0` means "no limit"
-  (PelletSettings.kt:298 can hit it). Integer mode, locale parsing, nullable bounds.
-- [dialog] common/presentation/component/EventAlertDialog.kt:85-139: actions run in a scope that
-  dies with the dialog; ConnectViewModel "Continue" can hang with the spinner on.
-- [dialog] DialogController + EventDialogState.kt:50: after rotation restored dialog actions are `{}`.
-- [pellets] pellets/presentation/component/PelletsBottomSheets.kt:40-42: `profilesList[0]` on empty.
-- [dash] DashboardViewModel.kt:266-268,338-342: ignored `Result`s; Start sent after failed hold-temp
-  save; state set from IO.
-- [dash] dashboard/presentation/component/ErrorCard.kt:53-55 (and WarningCard): per-item remember
-  without `key(error)`.
-- [dash] dashboard/presentation/util/CountDownTimer.kt:24-26, ElapsedTimer.kt:24-25: don't restart
-  when end/start changes.
-- [dash] DashboardScreen.kt:170-202,464: timer ticks in root state recompose the whole dashboard
-  every second.
-- [recipes] RecipeImageScreen.kt:85-164: pager initial page, rotation re-scroll, palette set in
-  composition for page 0 only.
-- [recipes] RecipeItem.kt:61-69, RecipeDetailsViewModel.kt:67-84: Base64 decoding on Main / on
-  every emission. RecipesSearch.kt:90: `result?.get(0)` on empty speech result.
-- [setup] OutlineFieldWithState.kt:41-52: only syncs from VM while empty (QR scan mismatch).
-- [setup] ConnectScreen.kt:186-192: Next enabled while loading (double submit).
-- [setup] ConnectViewModel.kt:93: lowercases the whole URL; lowercase scheme/host only.
-- [state] common/presentation/state/InputModalBottomSheetState.kt:27: `dataState.value!!` after a
-  failed restore.
-- [picker] common/presentation/component/PickerWheel.kt:52,99-145: `% items.size` on empty list,
-  `remember` without key, scroll read in composition.
-- [settings] PwmSheetViewModel.kt:66-103, SmartStartSheetViewModel.kt:69-112: add after deleting all
-  -> IOOBE. PwmSettingsViewModel.kt:122-123: temps and duty cycles sorted separately.
-- [home] HomeScreenViewModel.kt:243-256: sign-out emitted before `OpenUpdateIntent`.
-- [home] HomeScreen.kt:179-181,204-214: drawer effect not keyed; navigation after biometric dropped
-  if not RESUMED.
-- [dash] dashboard/presentation/util/StringUtils.kt:213-227: 0 degrees shows as "--".
-- [events] events/domain/EventsDtoToDataMapper.kt:29: random UUID keys; hex colors in mapper
-  (:47-62) re-parsed per composition.
-- [recipes] RecipeDetailsScreen.kt:109-117: pop to and re-navigate `HomeDest` recreates Home.
-- [misc] remember without keys: ProfilesEditSheet.kt:52-56, DropdownTextField.kt:88,
-  RecipeDetailsScreen.kt:280. RecipeImageViewModel.kt:59 no fetch after process death.
+- [picker] common/presentation/component/PickerWheel.kt: scroll offset is read in composition to
+  interpolate size/color, so every scroll frame recomposes the wheel. Move it to
+  `graphicsLayer`/draw.
+- [settings] settings/presentation/util/RangeUtils.kt `updateRange`: editing the top ("above")
+  row's temp is dropped (that row's temp is derived from the one below). Disable the temp field
+  for that row or apply it to the row below.
+- [update] core/util/UpdateManager.kt: dialog actions capture the activity, so after rotation a
+  restored update dialog's buttons act on the destroyed one (no-op). Resolve the current activity
+  when the action runs.
 
 ## Conventions to fix
 - ViewModels using apis/DTOs: DashboardViewModel, HomeScreenViewModel, PelletsViewModel,
@@ -91,9 +60,8 @@ One step per commit, compile all flavors after each.
 - SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
 - Hardcoded strings: LandingViewModel.kt:115 `"Smoker ${index+1}"`, PidBottomSheets.kt "Error"
   values, ManualSettings.kt:181, PwmControl.kt:219-227, default names in DashData/PelletsData,
-  WeightUtil suffixes, ExportUtils.kt:299, EventDialogState.kt:52-55.
-- Hardcoded colors: ServerItem.kt:72, PelletsLevel.kt:58,65, EventsDtoToDataMapper.kt:47-62;
-  Compose colors in a domain mapper.
+  WeightUtil suffixes, ExportUtils.kt:299.
+- Hardcoded colors: ServerItem.kt:72, PelletsLevel.kt:58,65.
 - Lists without keys: BrandsDetails, WoodsDetails, ProfilesDetails, LogsDetails, Changelog,
   PipModulesDetails, LicenseDetails screens.
 - Dispatchers in ViewModels (24) with `withContext(Main)` before `setEffect`: move IO into repos.

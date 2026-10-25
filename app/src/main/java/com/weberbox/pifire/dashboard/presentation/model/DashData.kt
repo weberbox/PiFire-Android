@@ -87,7 +87,8 @@ data class DashData(
             val label: String = "probe",
             val enabled: Boolean = true,
             val eta: Int = 0,
-            val temp: Int = 0,
+            // Null when the probe has no reading; 0 is a real temperature on Celsius servers
+            val temp: Int? = null,
             val setTemp: Int = 0,
             val maxTemp: Int = 300,
             val target: Int = 0,

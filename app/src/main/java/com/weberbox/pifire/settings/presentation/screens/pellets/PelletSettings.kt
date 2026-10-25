@@ -259,7 +259,9 @@ private fun PelletsSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(PelletsContract.Event.SetWarningTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PelletsContract.Event.SetWarningTime(value))
+                }
                 warningTimeSheet.close()
             },
             onDismiss = { warningTimeSheet.close() }
@@ -279,7 +281,9 @@ private fun PelletsSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(PelletsContract.Event.SetWarningLevel(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PelletsContract.Event.SetWarningLevel(value))
+                }
                 warningLevelSheet.close()
             },
             onDismiss = { warningLevelSheet.close() }
@@ -298,7 +302,9 @@ private fun PelletsSettingsContent(
                 max = (state.serverData.settings.pelletsEmpty - 1).toDouble()
             ),
             onUpdate = {
-                onEventSent(PelletsContract.Event.SetFullLevel(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PelletsContract.Event.SetFullLevel(value))
+                }
                 fullLevelSheet.close()
             },
             onDismiss = { fullLevelSheet.close() }
@@ -318,7 +324,9 @@ private fun PelletsSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(PelletsContract.Event.SetEmptyLevel(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(PelletsContract.Event.SetEmptyLevel(value))
+                }
                 emptyLevelSheet.close()
             },
             onDismiss = { emptyLevelSheet.close() }
@@ -337,7 +345,9 @@ private fun PelletsSettingsContent(
                 min = 0.0
             ),
             onUpdate = {
-                onEventSent(PelletsContract.Event.SetAugerRate(it.toDouble()))
+                it.toDoubleOrNull()?.let { value ->
+                    onEventSent(PelletsContract.Event.SetAugerRate(value))
+                }
                 augerRateSheet.close()
             },
             onDismiss = { augerRateSheet.close() }

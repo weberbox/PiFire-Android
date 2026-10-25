@@ -20,7 +20,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,7 +29,6 @@ import com.composeunstyled.DialogProperties
 import com.composeunstyled.UnstyledDialog
 import com.composeunstyled.UnstyledDialogPanel
 import com.composeunstyled.UnstyledScrim
-import com.composeunstyled.rememberDialogState
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.state.EventDialogState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
@@ -42,19 +40,20 @@ import com.weberbox.pifire.common.presentation.util.asString
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
 import com.weberbox.pifire.common.presentation.util.scaleEnterTransition
-import kotlinx.coroutines.launch
 
 @Composable
 fun EventAlertDialog(
     modifier: Modifier = Modifier,
     eventDialogState: EventDialogState
 ) {
+    val event = eventDialogState.event ?: return
     UnstyledDialog(
         state = eventDialogState.state,
         properties = DialogProperties(
-            dismissOnBackPress = eventDialogState.event.dismissible,
-            dismissOnClickOutside = eventDialogState.event.dismissible
-        )
+            dismissOnBackPress = event.dismissible,
+            dismissOnClickOutside = event.dismissible
+        ),
+        onDismiss = { eventDialogState.dismiss() },
     ) {
         UnstyledScrim(
             enter = fadeEnterTransition(200),
@@ -72,7 +71,8 @@ fun EventAlertDialog(
             exit = fadeExitTransition(200)
         ) {
             DialogContent(
-                eventDialogState = eventDialogState
+                event = event,
+                onAction = { action -> eventDialogState.runAction(action) },
             )
         }
     }
@@ -80,9 +80,9 @@ fun EventAlertDialog(
 
 @Composable
 private fun DialogContent(
-    eventDialogState: EventDialogState
+    event: DialogEvent,
+    onAction: (DialogAction) -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -94,12 +94,12 @@ private fun DialogContent(
             )
         ) {
             Text(
-                text = eventDialogState.event.title.asString(),
+                text = event.title.asString(),
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(Modifier.height(MaterialTheme.spacing.small))
             Text(
-                text = eventDialogState.event.message.asString(),
+                text = event.message.asString(),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -110,37 +110,27 @@ private fun DialogContent(
                 .align(Alignment.End),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
         ) {
-            eventDialogState.event.negativeAction?.let { event ->
+            event.negativeAction?.let { action ->
                 OutlinedButton(
                     contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.smallThree),
-                    onClick = {
-                        eventDialogState.dismiss()
-                        scope.launch {
-                            event.action.invoke()
-                        }
-                    }
+                    onClick = { onAction(action) }
                 ) {
                     Text(
-                        text = event.buttonText.asString(),
+                        text = action.buttonText.asString(),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
-            eventDialogState.event.positiveAction.let { event ->
+            event.positiveAction.let { action ->
                 Button(
                     contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.smallThree),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.inverseSurface,
                     ),
-                    onClick = {
-                        eventDialogState.dismiss()
-                        scope.launch {
-                            event.action.invoke()
-                        }
-                    },
+                    onClick = { onAction(action) },
                 ) {
                     Text(
-                        text = event.buttonText.asString(),
+                        text = action.buttonText.asString(),
                         color = MaterialTheme.colorScheme.inverseOnSurface
                     )
                 }
@@ -156,21 +146,19 @@ private fun EventAlertDialogPreview() {
     PiFireTheme {
         Surface {
             DialogContent(
-                eventDialogState = EventDialogState(
-                    state = rememberDialogState(),
-                    dialogEvent = DialogEvent(
-                        title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
-                        message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
-                        positiveAction = DialogAction(
-                            buttonText = UiText(R.string.continue_text),
-                            action = {}
-                        ),
-                        negativeAction = DialogAction(
-                            buttonText = UiText(R.string.cancel),
-                            action = {}
-                        )
+                event = DialogEvent(
+                    title = UiText(R.string.dialog_auth_with_unsecure_protocol_title),
+                    message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
+                    positiveAction = DialogAction(
+                        buttonText = UiText(R.string.continue_text),
+                        action = {}
+                    ),
+                    negativeAction = DialogAction(
+                        buttonText = UiText(R.string.cancel),
+                        action = {}
                     )
-                )
+                ),
+                onAction = {},
             )
         }
     }

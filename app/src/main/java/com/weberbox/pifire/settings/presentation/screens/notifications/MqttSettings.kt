@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -35,6 +36,7 @@ import com.weberbox.pifire.common.presentation.component.SettingsAppBar
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
+import com.weberbox.pifire.common.presentation.sheets.ValidationOptions
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.util.safeNavigate
@@ -237,8 +239,15 @@ private fun MqttSettingsContent(
             input = state.serverData.settings.mqttPort.toString(),
             title = stringResource(R.string.settings_mqtt_port),
             placeholder = stringResource(R.string.settings_mqtt_port),
+            validationOptions = ValidationOptions(
+                keyboardType = KeyboardType.NumberPassword,
+                min = 1.0,
+                max = 65535.0,
+            ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetMqttPort(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetMqttPort(value))
+                }
                 portSheet.close()
             },
             onDismiss = { portSheet.close() }
@@ -285,9 +294,15 @@ private fun MqttSettingsContent(
             input = state.serverData.settings.mqttUpdateSec.toString(),
             title = stringResource(R.string.settings_mqtt_update_sec),
             placeholder = stringResource(R.string.settings_mqtt_update_sec),
+            validationOptions = ValidationOptions(
+                keyboardType = KeyboardType.NumberPassword,
+                min = 1.0,
+            ),
             onUpdate = {
                 updateSecSheet.close()
-                onEventSent(NotifContract.Event.SetMqttUpdateSec(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetMqttUpdateSec(value))
+                }
             },
             onDismiss = { updateSecSheet.close() }
         )

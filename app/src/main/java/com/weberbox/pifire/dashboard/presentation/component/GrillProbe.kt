@@ -270,10 +270,11 @@ internal fun GrillProbe(
                         count = formatTemp(probe.temp),
                         style = MaterialTheme.typography.displaySmall
                     )
+                    val temp = (probe.temp ?: 0).toFloat()
                     val progress = if (probe.setTemp > 0f) {
-                        probe.temp.toFloat() / probe.setTemp.toFloat()
+                        temp / probe.setTemp.toFloat()
                     } else {
-                        probe.temp.toFloat() / probe.maxTemp.toFloat()
+                        temp / probe.maxTemp.toFloat()
                     }
                     CircularProgressIndicator(
                         modifier = Modifier.size(MaterialTheme.size.extraExtraLarge),

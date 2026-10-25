@@ -33,6 +33,7 @@ import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.Instant
@@ -50,19 +51,19 @@ class DashboardViewModel @Inject constructor(
     private val timerIntent = CountDownTimer(timerScope = viewModelScope)
     private val elapsedIntent = ElapsedTimer(timerScope = viewModelScope)
 
+    // Separate from the screen state so the per-second ticks only recompose the timer cards
+    val timerData: StateFlow<TimerData> = timerIntent.timerState
+    val elapsedData: StateFlow<ElapsedData> = elapsedIntent.elapsedState
+
     init {
         collectPrefsFlow()
         collectConnectedState()
-        collectTimerState()
-        collectElapsedState()
         listenDashData()
         getDashData(forced = false)
     }
 
     override fun setInitialState() = DashContract.State(
         dash = Dash(),
-        timerData = TimerData(),
-        elapsedData = ElapsedData(),
         incrementTemps = true,
         keepScreenOn = false,
         isInitialLoading = true,
@@ -169,30 +170,6 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    private fun collectTimerState() {
-        viewModelScope.launch {
-            timerIntent.timerState.collect {
-                setState {
-                    copy(
-                        timerData = it
-                    )
-                }
-            }
-        }
-    }
-
-    private fun collectElapsedState() {
-        viewModelScope.launch {
-            elapsedIntent.elapsedState.collect {
-                setState {
-                    copy(
-                        elapsedData = it
-                    )
-                }
-            }
-        }
-    }
-
     private fun listenDashData() {
         viewModelScope.launch(Dispatchers.IO) {
             dashRepo.listenDashData().collect { result ->
@@ -265,7 +242,7 @@ class DashboardViewModel @Inject constructor(
                         buttonText = UiText(R.string.yes),
                         action = {
                             setLoadingState(true)
-                            dashApi.sendToggleLidOpen(false)
+                            handleResult(dashApi.sendToggleLidOpen(false))
                         }
                     ),
                     negativeAction =
@@ -336,9 +313,14 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun setStartupHoldTemp(temp: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            settingsRepo.setStartToModeTemp(temp.toInt())
-            sendDashEvent(DashEvent.Start)
+        val holdTemp = temp.toIntOrNull() ?: return
+        setLoadingState(true)
+        viewModelScope.launch {
+            // Only start once the hold temp is saved, or the grill would start at the old one
+            when (val result = settingsRepo.setStartToModeTemp(holdTemp)) {
+                is Result.Error -> handleResult(Result.Error(result.error))
+                is Result.Success -> sendDashEvent(DashEvent.Start)
+            }
         }
     }
 
@@ -374,9 +356,16 @@ class DashboardViewModel @Inject constructor(
             val totalDuration = endTimeEpochSeconds - timer.start.toLong()
             val secondsRemaining = endTimeEpochSeconds - timer.paused.toLong()
             if (timer.paused > 0) {
-                timerIntent.pauseTimer(secondsRemaining, totalSeconds, totalDuration)
+                timerIntent.pauseTimer(
+                    secondsRemaining = secondsRemaining,
+                    totalSeconds = totalSeconds,
+                    totalDuration = totalDuration,
+                )
             } else {
-                timerIntent.startTimer(totalSeconds, totalDuration)
+                timerIntent.startTimer(
+                    endEpochSeconds = endTimeEpochSeconds.toLong(),
+                    totalDuration = totalDuration,
+                )
             }
         } else {
             timerIntent.cancelTimer()

@@ -1,64 +1,57 @@
 package com.weberbox.pifire.events.domain
 
-import androidx.compose.ui.graphics.toArgb
 import com.weberbox.pifire.common.data.interfaces.Mapper
-import com.weberbox.pifire.common.presentation.theme.eventsDebug
-import com.weberbox.pifire.common.presentation.theme.eventsError
-import com.weberbox.pifire.common.presentation.theme.eventsInfo
-import com.weberbox.pifire.common.presentation.theme.eventsModeEnded
-import com.weberbox.pifire.common.presentation.theme.eventsModeStarted
-import com.weberbox.pifire.common.presentation.theme.eventsScriptEnded
-import com.weberbox.pifire.common.presentation.theme.eventsScriptStart
-import com.weberbox.pifire.common.presentation.theme.eventsWarning
 import com.weberbox.pifire.common.presentation.util.formatDateString
 import com.weberbox.pifire.common.presentation.util.formatTimeString
 import com.weberbox.pifire.events.data.model.EventsDto
+import com.weberbox.pifire.events.presentation.model.EventType
 import com.weberbox.pifire.events.presentation.model.EventsData.Events
 import com.weberbox.pifire.events.presentation.model.EventsData.Events.Event
-import java.util.UUID
-
-internal typealias EventColor = String
-internal typealias EventTitle = String
 
 object EventsDtoToDataMapper : Mapper<EventsDto, Events> {
-    override fun map(from: EventsDto) = Events(
-        uuid = from.uuid.orEmpty(),
-        events = from.events?.map {
-            val titleColor = parseTitleColor(it.message.orEmpty())
-            Event(
-                id = UUID.randomUUID().toString(),
-                date = formatDateString(
-                    input = it.date.orEmpty(),
-                    inputFormat = "yyyy-MM-dd"
-                ),
-                time = formatTimeString(
-                    input = it.time.orEmpty(),
-                    inputFormat = "HH:mm:ss"
-                ),
-                message = it.message.orEmpty(),
-                title = titleColor.first,
-                color = titleColor.second
-            )
-        } ?: emptyList()
+    override fun map(from: EventsDto): Events {
+        // Ids come from the event itself so list keys stay stable across updates; repeats of the
+        // same message in the same second get a counter
+        val seen = mutableMapOf<String, Int>()
+        return Events(
+            uuid = from.uuid.orEmpty(),
+            events = from.events?.map {
+                val baseId = "${it.date}|${it.time}|${it.message}"
+                val count = seen.getOrDefault(baseId, 0)
+                seen[baseId] = count + 1
+                mapEvent(
+                    from = it,
+                    id = if (count == 0) baseId else "$baseId#$count",
+                )
+            } ?: emptyList()
+        )
+    }
+
+    private fun mapEvent(from: EventsDto.Event, id: String) = Event(
+        id = id,
+        date = formatDateString(
+            input = from.date.orEmpty(),
+            inputFormat = "yyyy-MM-dd"
+        ),
+        time = formatTimeString(
+            input = from.time.orEmpty(),
+            inputFormat = "HH:mm:ss"
+        ),
+        message = from.message.orEmpty(),
+        type = parseEventType(from.message.orEmpty()),
     )
 }
 
-private fun parseTitleColor(message: String): Pair<EventTitle, EventColor> {
-    if (message.lowercase().contains("script starting")) {
-        return Pair("S", String.format("#%08X", eventsScriptStart.toArgb()))
-    } else if (message.lowercase().contains("mode started")) {
-        return Pair("M", String.format("#%08X", eventsModeStarted.toArgb()))
-    } else if (message.lowercase().contains("script ended")) {
-        return Pair("S", String.format("#%08X", eventsScriptEnded.toArgb()))
-    } else if (message.lowercase().contains("error")) {
-        return Pair("E", String.format("#%08X", eventsError.toArgb()))
-    } else if (message.lowercase().contains("mode ended")) {
-        return Pair("M", String.format("#%08X", eventsModeEnded.toArgb()))
-    } else if (message.lowercase().contains("warning")) {
-        return Pair("W", String.format("#%08X", eventsWarning.toArgb()))
-    } else if (message.lowercase().contains("*")) {
-        return Pair("D", String.format("#%08X", eventsDebug.toArgb()))
-    } else {
-        return Pair("I", String.format("#%08X", eventsInfo.toArgb()))
+private fun parseEventType(message: String): EventType {
+    val lowercase = message.lowercase()
+    return when {
+        lowercase.contains("script starting") -> EventType.ScriptStarted
+        lowercase.contains("mode started") -> EventType.ModeStarted
+        lowercase.contains("script ended") -> EventType.ScriptEnded
+        lowercase.contains("error") -> EventType.Error
+        lowercase.contains("mode ended") -> EventType.ModeEnded
+        lowercase.contains("warning") -> EventType.Warning
+        lowercase.contains("*") -> EventType.Debug
+        else -> EventType.Info
     }
 }

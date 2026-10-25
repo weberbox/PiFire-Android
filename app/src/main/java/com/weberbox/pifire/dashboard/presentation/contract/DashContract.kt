@@ -6,8 +6,6 @@ import com.weberbox.pifire.common.presentation.base.ViewSideEffect
 import com.weberbox.pifire.common.presentation.base.ViewState
 import com.weberbox.pifire.common.presentation.util.UiText
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash
-import com.weberbox.pifire.dashboard.presentation.model.ElapsedData
-import com.weberbox.pifire.dashboard.presentation.model.TimerData
 
 class DashContract {
 
@@ -50,8 +48,6 @@ class DashContract {
 
     data class State(
         val dash: Dash,
-        val timerData: TimerData,
-        val elapsedData: ElapsedData,
         val incrementTemps: Boolean,
         val keepScreenOn: Boolean,
         val isInitialLoading: Boolean,

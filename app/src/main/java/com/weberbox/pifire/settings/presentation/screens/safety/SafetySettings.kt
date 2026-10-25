@@ -260,7 +260,9 @@ fun SafetySettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(SafetyContract.Event.SetOverrideTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(SafetyContract.Event.SetOverrideTime(value))
+                }
                 overrideTimeSheet.close()
             },
             onDismiss = { overrideTimeSheet.close() }
@@ -279,7 +281,9 @@ fun SafetySettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(SafetyContract.Event.SetMinStartTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(SafetyContract.Event.SetMinStartTemp(value))
+                }
                 minStartupTempSheet.close()
             },
             onDismiss = { minStartupTempSheet.close() }
@@ -298,7 +302,9 @@ fun SafetySettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(SafetyContract.Event.SetMaxStartTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(SafetyContract.Event.SetMaxStartTemp(value))
+                }
                 maxStartupTempSheet.close()
             },
             onDismiss = { maxStartupTempSheet.close() }
@@ -317,7 +323,9 @@ fun SafetySettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(SafetyContract.Event.SetMaxGrillTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(SafetyContract.Event.SetMaxGrillTemp(value))
+                }
                 maxTempSheet.close()
             },
             onDismiss = { maxTempSheet.close() }

@@ -56,15 +56,21 @@ internal fun PidBottomSheets(
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
                     ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidPb(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidPb(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcPb(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidAcPb(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpPb(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidSpPb(value))
+                        }
                     }
                 }
                 pidPbSheet.close()
@@ -102,15 +108,21 @@ internal fun PidBottomSheets(
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
                     ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidTd(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidTd(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcTd(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidAcTd(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpTd(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidSpTd(value))
+                        }
                     }
                 }
                 pidTdSheet.close()
@@ -148,15 +160,21 @@ internal fun PidBottomSheets(
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
                     ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidTi(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidTi(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcTi(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidAcTi(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpTi(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidSpTi(value))
+                        }
                     }
                 }
                 pidTiSheet.close()
@@ -190,11 +208,15 @@ internal fun PidBottomSheets(
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
                     ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcStable(it.toInt()))
+                        it.toIntOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidAcStable(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpStable(it.toInt()))
+                        it.toIntOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidSpStable(value))
+                        }
                     }
                 }
                 pidStableSheet.close()
@@ -232,15 +254,21 @@ internal fun PidBottomSheets(
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
                     ServerConstants.CNTRLR_PID -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidCenter(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidCenter(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_AC -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidAcCenter(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidAcCenter(value))
+                        }
                     }
 
                     ServerConstants.CNTRLR_PID_SP -> {
-                        onEventSent(WorkContract.Event.SetCntrlrPidSpCenter(it.toDouble()))
+                        it.toDoubleOrNull()?.let { value ->
+                            onEventSent(WorkContract.Event.SetCntrlrPidSpCenter(value))
+                        }
                     }
                 }
                 pidCenterSheet.close()
@@ -260,7 +288,9 @@ internal fun PidBottomSheets(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrPidSpTau(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetCntrlrPidSpTau(value))
+                }
                 pidTauSheet.close()
             },
             onDismiss = { pidTauSheet.close() }
@@ -279,7 +309,9 @@ internal fun PidBottomSheets(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrPidSpTheta(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetCntrlrPidSpTheta(value))
+                }
                 pidThetaSheet.close()
             },
             onDismiss = { pidThetaSheet.close() }
@@ -298,7 +330,9 @@ internal fun PidBottomSheets(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlrTime(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetCntrlrTime(value))
+                }
                 holdCycleTimeSheet.close()
             },
             onDismiss = { holdCycleTimeSheet.close() }
@@ -318,7 +352,9 @@ internal fun PidBottomSheets(
                 max = 0.99
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlruMin(it.toDouble()))
+                it.toDoubleOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetCntrlruMin(value))
+                }
                 uMinSheet.close()
             },
             onDismiss = { uMinSheet.close() }
@@ -338,7 +374,9 @@ internal fun PidBottomSheets(
                 max = 1.0
             ),
             onUpdate = {
-                onEventSent(WorkContract.Event.SetCntrlruMax(it.toDouble()))
+                it.toDoubleOrNull()?.let { value ->
+                    onEventSent(WorkContract.Event.SetCntrlruMax(value))
+                }
                 uMaxSheet.close()
             },
             onDismiss = { uMaxSheet.close() }

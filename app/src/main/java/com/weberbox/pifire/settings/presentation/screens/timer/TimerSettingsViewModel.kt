@@ -10,6 +10,8 @@ import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.TimerContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.settings.presentation.model.SmartStart
+import com.weberbox.pifire.settings.presentation.util.sortRangesByTemp
+import com.weberbox.pifire.settings.presentation.util.updateRange
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -110,48 +112,27 @@ class TimerSettingsViewModel @Inject constructor(
         pMode: Int,
         smartStartItems: List<SmartStart>
     ) {
-        val tempsList = smartStartItems.map { item ->
-            item.temp
-        }.toMutableList()
-        val profilesList = smartStartItems.map { item ->
-            SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
-        }.toMutableList()
-
-        if (index != -1) {
-            tempsList[index] = temp
-            tempsList.removeAt(tempsList.lastIndex)
-            profilesList[index] = SSProfile(
-                startUpTime = startUp,
-                augerOnTime = augerOn,
-                pMode = pMode
-            )
-        } else {
-            tempsList[tempsList.lastIndex] = temp
-            profilesList.add(
-                SSProfile(
-                    startUpTime = startUp,
-                    augerOnTime = augerOn,
-                    pMode = pMode
-                )
-            )
-        }
-        val temps = tempsList.sorted()
-        val profiles = profilesList.sortedBy { it.pMode }.toMutableList()
+        val (temps, profiles) = updateRange(
+            index = index,
+            temp = temp,
+            profile = SSProfile(startUpTime = startUp, augerOnTime = augerOn, pMode = pMode),
+            rowTemps = smartStartItems.map { item -> item.temp },
+            rowProfiles = smartStartItems.map { item ->
+                SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
+            },
+        )
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(settingsRepo.setSmartStartTable(temps, profiles))
         }
     }
 
     private fun deleteSmartStartItem(smartStartItems: List<SmartStart>) {
-        val temps = smartStartItems.map { item ->
-            item.temp
-        }
-            .dropLast(2)
-            .sorted()
-        val profiles = smartStartItems.map { item ->
-            SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
-        }
-            .dropLast(1)
+        val (temps, profiles) = sortRangesByTemp(
+            temps = smartStartItems.map { item -> item.temp }.dropLast(2),
+            profiles = smartStartItems.map { item ->
+                SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
+            }.dropLast(1),
+        )
 
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(settingsRepo.setSmartStartTable(temps, profiles))

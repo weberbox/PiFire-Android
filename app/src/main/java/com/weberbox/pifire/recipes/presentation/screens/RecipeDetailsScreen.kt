@@ -67,6 +67,7 @@ import com.weberbox.pifire.common.presentation.util.fadeExitTransition
 import com.weberbox.pifire.common.presentation.util.navBackWithResult
 import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
+import com.weberbox.pifire.home.presentation.screens.SHOW_DASHBOARD_KEY
 import com.weberbox.pifire.recipes.presentation.component.FloatingActionMenu
 import com.weberbox.pifire.recipes.presentation.component.RecipeAbout
 import com.weberbox.pifire.recipes.presentation.component.RecipeDescription
@@ -106,15 +107,18 @@ fun RecipeDetailsScreenDestination(
                         popUp = navigationEffect.popUp
                     )
 
-                is DetailsContract.Effect.Navigation.DashHome ->
-                    navController.safeNavigate(
-                        route = NavGraph.HomeDest,
-                        builder = {
-                            popUpTo(NavGraph.HomeDest) {
-                                inclusive = true
-                            }
-                        }
-                    )
+                is DetailsContract.Effect.Navigation.DashHome -> {
+                    // Return to the Home already on the back stack instead of recreating it
+                    val homeEntry = runCatching {
+                        navController.getBackStackEntry<NavGraph.HomeDest.DashHome>()
+                    }.getOrNull()
+                    if (homeEntry != null) {
+                        homeEntry.savedStateHandle[SHOW_DASHBOARD_KEY] = true
+                        navController.popBackStack<NavGraph.HomeDest.DashHome>(inclusive = false)
+                    } else {
+                        navController.safeNavigate(route = NavGraph.HomeDest, popUp = true)
+                    }
+                }
 
                 is DetailsContract.Effect.Navigation.BackRefresh ->
                     navController.navBackWithResult("refresh", true)
@@ -277,7 +281,7 @@ private fun RecipeDetailsContent(
                 preferredItemWidth = 600.dp,
                 itemSpacing = MaterialTheme.spacing.small
             ) { index ->
-                val image = remember { state.recipeImages[index] }
+                val image = state.recipeImages.getOrNull(index)
                 RecipeAsyncImage(
                     image = image,
                     modifier = Modifier

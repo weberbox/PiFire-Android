@@ -52,8 +52,10 @@ fun OutlineFieldWithState(
     var passwordVisible by remember { mutableStateOf(false) }
     var textFieldValueState by remember { mutableStateOf(TextFieldValue()) }
 
+    // Typing updates both sides with the same text, so this only fires when the ViewModel sets a
+    // new value itself (restored state, a scanned QR code)
     LaunchedEffect(fieldInput) {
-        if (textFieldValueState.text.isEmpty()) {
+        if (textFieldValueState.text != fieldInput.value) {
             textFieldValueState = textFieldValueState.copy(
                 text = fieldInput.value, selection = when {
                     fieldInput.value.isEmpty() -> TextRange.Zero

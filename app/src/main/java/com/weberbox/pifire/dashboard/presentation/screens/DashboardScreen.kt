@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.icons.Icon
@@ -90,6 +91,8 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.ceil
@@ -129,6 +132,8 @@ private fun DashboardScreen(
 ) {
     DashboardScreenContent(
         state = viewModel.viewState.value,
+        timerData = viewModel.timerData,
+        elapsedData = viewModel.elapsedData,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
         hazeState = hazeState,
@@ -149,6 +154,8 @@ private fun DashboardScreen(
 @Composable
 private fun DashboardScreenContent(
     state: DashContract.State,
+    timerData: StateFlow<TimerData>,
+    elapsedData: StateFlow<ElapsedData>,
     effectFlow: Flow<DashContract.Effect>?,
     onEventSent: (event: DashContract.Event) -> Unit,
     hazeState: HazeState,
@@ -334,8 +341,8 @@ private fun DashboardScreenContent(
                             )
                         ) {
                             with(state.dash.timer) {
-                                TimerCard(
-                                    time = state.timerData.remainingTime,
+                                TickingTimerCard(
+                                    timerData = timerData,
                                     keepWarm = keepWarm,
                                     shutdown = shutdown,
                                     paused = timerPaused,
@@ -365,8 +372,8 @@ private fun DashboardScreenContent(
                                 MaterialTheme.spacing.smallOne
                             )
                         ) {
-                            ElapsedCard(
-                                time = state.elapsedData.elapsedTime,
+                            TickingElapsedCard(
+                                elapsedData = elapsedData,
                                 modifier = Modifier.weight(1f)
                             )
                             with(state.dash.outputs) {
@@ -526,8 +533,6 @@ internal fun DashboardScreenPreview(
             DashboardScreenContent(
                 state = DashContract.State(
                     dash = buildDash(),
-                    timerData = TimerData(),
-                    elapsedData = ElapsedData(),
                     incrementTemps = true,
                     keepScreenOn = false,
                     isInitialLoading = false,
@@ -537,6 +542,8 @@ internal fun DashboardScreenPreview(
                     isConnected = true,
                     holdTempToolTip = false
                 ),
+                timerData = MutableStateFlow(TimerData()),
+                elapsedData = MutableStateFlow(ElapsedData()),
                 effectFlow = null,
                 onEventSent = {},
                 hazeState = hazeState,
@@ -545,6 +552,39 @@ internal fun DashboardScreenPreview(
             )
         }
     }
+}
+
+// Collected here, not in the screen, so each tick recomposes only this card
+@Composable
+private fun TickingTimerCard(
+    timerData: StateFlow<TimerData>,
+    keepWarm: Boolean,
+    shutdown: Boolean,
+    paused: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val timer by timerData.collectAsStateWithLifecycle()
+    TimerCard(
+        time = timer.remainingTime,
+        keepWarm = keepWarm,
+        shutdown = shutdown,
+        paused = paused,
+        modifier = modifier,
+        onClick = onClick,
+    )
+}
+
+@Composable
+private fun TickingElapsedCard(
+    elapsedData: StateFlow<ElapsedData>,
+    modifier: Modifier = Modifier,
+) {
+    val elapsed by elapsedData.collectAsStateWithLifecycle()
+    ElapsedCard(
+        time = elapsed.elapsedTime,
+        modifier = modifier,
+    )
 }
 
 private fun buildDash(): Dash {

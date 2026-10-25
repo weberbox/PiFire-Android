@@ -23,8 +23,13 @@ class InputModalBottomSheetState<T : Any>(
 ) {
     val dataState = mutableStateOf(data)
 
+    init {
+        // Without data (e.g. it failed to restore) the content can't render, so keep it closed
+        if (data == null) sheetState.targetDetent = SheetDetent.Hidden
+    }
+
     internal val data: T
-        get() = dataState.value!!
+        get() = requireNotNull(dataState.value) { "Sheet content read before open(data)" }
 
     fun open(data: T) {
         dataState.value = data

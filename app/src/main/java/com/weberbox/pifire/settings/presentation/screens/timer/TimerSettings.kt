@@ -398,7 +398,9 @@ private fun TimerSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetStartupDuration(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetStartupDuration(value))
+                }
                 startupDurationSheet.close()
             },
             onDismiss = { startupDurationSheet.close() }
@@ -417,7 +419,9 @@ private fun TimerSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetStartToModeTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetStartToModeTemp(value))
+                }
                 startupGotoTempSheet.close()
             },
             onDismiss = { startupGotoTempSheet.close() }
@@ -435,7 +439,9 @@ private fun TimerSettingsContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetStartExitTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetStartExitTemp(value))
+                }
                 startupExitTempSheet.close()
             },
             onDismiss = { startupExitTempSheet.close() }
@@ -453,7 +459,9 @@ private fun TimerSettingsContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetPrimeOnStartup(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetPrimeOnStartup(value))
+                }
                 startupPrimeSheet.close()
             },
             onDismiss = { startupPrimeSheet.close() }
@@ -473,7 +481,9 @@ private fun TimerSettingsContent(
                 max = 100.0
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetStartupPWMDuty(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetStartupPWMDuty(value))
+                }
                 startupPWMDutySheet.close()
             },
             onDismiss = { startupPWMDutySheet.close() }
@@ -491,7 +501,9 @@ private fun TimerSettingsContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetSmartStartExitTemp(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetSmartStartExitTemp(value))
+                }
                 smartStartExitTempSheet.close()
             },
             onDismiss = { smartStartExitTempSheet.close() }
@@ -510,7 +522,9 @@ private fun TimerSettingsContent(
                 min = 1.0
             ),
             onUpdate = {
-                onEventSent(TimerContract.Event.SetShutdownDuration(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(TimerContract.Event.SetShutdownDuration(value))
+                }
                 shutdownDurationSheet.close()
             },
             onDismiss = { shutdownDurationSheet.close() }

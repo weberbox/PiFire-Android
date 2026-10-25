@@ -198,7 +198,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedIdleBrightness(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedIdleBrightness(value))
+                }
                 idleBrightnessSheet.close()
             }
         )
@@ -214,7 +216,9 @@ private fun WLedContent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             onUpdate = {
-                onEventSent(NotifContract.Event.SetWLedLedCount(it.toInt()))
+                it.toIntOrNull()?.let { value ->
+                    onEventSent(NotifContract.Event.SetWLedLedCount(value))
+                }
                 ledCountSheet.close()
             }
         )

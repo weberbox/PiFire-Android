@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -51,9 +51,11 @@ import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.recipes.presentation.contract.ImagesContract
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image
 import com.weberbox.pifire.setup.presentation.component.RecipeAsyncImage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import net.engawapg.lib.zoomable.rememberZoomState
 
 @Composable
@@ -102,16 +104,20 @@ private fun RecipeImagesScreen(
         contentKey = { it.isInitialLoading or it.isDataError }
     ) { state ->
         val paletteColor by rememberPaletteColorState()
-        var currentImage: ByteArray? by remember { mutableStateOf(null) }
+        // Saved so rotating doesn't jump back to the image the screen was opened on
+        var initialPageShown by rememberSaveable { mutableStateOf(false) }
 
-        LaunchedEffect(currentImage) {
-            currentImage?.let {
-                paletteColor.updateStartingColor(currentImage)
+        LaunchedEffect(state.imageList) {
+            if (!initialPageShown && state.imageList.isNotEmpty()) {
+                pagerState.scrollToPage(state.imageIndex.coerceIn(0, state.imageList.lastIndex))
+                initialPageShown = true
             }
         }
 
-        LaunchedEffect(state.imageIndex) {
-            if (state.imageIndex != 0) pagerState.animateScrollToPage(state.imageIndex)
+        LaunchedEffect(pagerState.currentPage, state.imageList) {
+            state.imageList.getOrNull(pagerState.currentPage)?.let { image ->
+                withContext(Dispatchers.Default) { paletteColor.updateStartingColor(image) }
+            }
         }
 
         when {
@@ -159,9 +165,7 @@ private fun RecipeImagesScreen(
                         ),
                         beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT
                     ) { index ->
-                        if (state.imageList.isNotEmpty()) {
-                            val image = remember { state.imageList[index] }
-                            if (index == 0) currentImage = image
+                        state.imageList.getOrNull(index)?.let { image ->
                             RecipeAsyncImage(
                                 image = image,
                                 zoomState = rememberZoomState(),

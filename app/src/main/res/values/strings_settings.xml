@@ -33,6 +33,7 @@
     <string name="settings_min_error">Value must be %1$s or greater</string>
     <string name="settings_max_error">Value must be %1$s or less</string>
     <string name="settings_number_error">Value must be a number</string>
+    <string name="settings_whole_number_error">Value must be a whole number</string>
 
     <string name="settings_seconds_format">%1$s seconds</string>
     <string name="settings_minutes_format">%1$s minutes</string>

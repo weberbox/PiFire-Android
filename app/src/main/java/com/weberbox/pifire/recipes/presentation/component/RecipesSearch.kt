@@ -87,9 +87,10 @@ internal fun RecipesInputField(
         if (it.resultCode == Activity.RESULT_OK) {
             val data = it.data
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            if (result?.get(0) != null) {
-                textFieldState.setTextAndPlaceCursorAtEnd(result[0])
-                onSearch(result[0])
+                ?.firstOrNull()
+            if (result != null) {
+                textFieldState.setTextAndPlaceCursorAtEnd(result)
+                onSearch(result)
             } else {
                 context.showToast(R.string.error_no_speech_detected)
             }

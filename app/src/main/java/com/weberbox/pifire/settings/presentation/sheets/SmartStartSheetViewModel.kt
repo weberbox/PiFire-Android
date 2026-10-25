@@ -47,7 +47,9 @@ class SmartStartSheetViewModel : ViewModel() {
     ) {
         _server = server
 
-        val smartStartItem = if (index != -1) smartStartItems[index] else null
+        val smartStartItem = smartStartItems.getOrNull(index)
+        // Adding to an empty table (or after the last range) starts from the defaults
+        val lastItem = smartStartItems.lastOrNull() ?: SmartStart()
 
         val minTemp =
             when (index) {
@@ -66,7 +68,7 @@ class SmartStartSheetViewModel : ViewModel() {
 
         val setTemp =
             when (index) {
-                -1 -> smartStartItems[smartStartItems.lastIndex].temp
+                -1 -> lastItem.temp
                 smartStartItems.lastIndex -> smartStartItems[index].temp - 1
                 else -> smartStartItems[index].temp
             }
@@ -92,23 +94,19 @@ class SmartStartSheetViewModel : ViewModel() {
             }
 
         val temp by mutableStateOf(
-            smartStartItem?.temp?.toString()
-                ?: smartStartItems[smartStartItems.lastIndex].temp.toString()
+            (smartStartItem ?: lastItem).temp.toString()
         )
 
         val startUp by mutableStateOf(
-            smartStartItem?.startUp?.toString()
-                ?: smartStartItems[smartStartItems.lastIndex].startUp.toString()
+            (smartStartItem ?: lastItem).startUp.toString()
         )
 
         val augerOn by mutableStateOf(
-            smartStartItem?.augerOn?.toString()
-                ?: smartStartItems[smartStartItems.lastIndex].augerOn.toString()
+            (smartStartItem ?: lastItem).augerOn.toString()
         )
 
         val pMode by mutableStateOf(
-            smartStartItem?.pMode?.toString()
-                ?: smartStartItems[smartStartItems.lastIndex].pMode.toString()
+            (smartStartItem ?: lastItem).pMode.toString()
         )
 
         setState {
@@ -119,7 +117,8 @@ class SmartStartSheetViewModel : ViewModel() {
                 setTemp = setTemp,
                 note = note,
                 pMode = pMode,
-                deleteVisible = index >= smartStartItems.lastIndex,
+                // Deleting the only range would leave an empty table
+                deleteVisible = index >= smartStartItems.lastIndex && smartStartItems.size > 2,
                 tempInput = FieldInput(
                     value = temp,
                     hasInteracted = temp.isNotBlank()

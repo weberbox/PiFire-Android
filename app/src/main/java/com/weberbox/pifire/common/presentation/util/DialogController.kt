@@ -27,6 +27,12 @@ object DialogController {
     private val _events = Channel<DialogEvent>()
     val events = _events.receiveAsFlow()
 
+    /**
+     * The dialog on screen, kept here so it survives activity recreation with working actions
+     * (lambdas can't be saved in a Bundle). Main thread only; cleared on dismiss.
+     */
+    internal var current: DialogEvent? = null
+
     suspend fun sendEvent(event: DialogEvent) {
         _events.send(event)
     }
