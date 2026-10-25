@@ -30,6 +30,8 @@ line once it's done.
 - (2026-10-25) Repos share `core/repo/ServerDataSync` (fetch/cache/listen) and
   `core/network/httpRequest` (HTTP errors). `SettingsRepoImpl` keeps one forwarding method per
   server setting: ViewModels may only call repos, and each is a one-line `transformResult(...)`.
+- (2026-10-25) `PickerWheel` reads the scroll offset only in layout (row height) and draw (text
+  scale, color): text is drawn at the selected size and scaled down. Verify the look on a device.
 - (2026-10-25) Sentry instruments release builds too. R8 mappings upload only with a Sentry auth
   token (`SENTRY_AUTH_TOKEN` or `sentry.properties`); without one, release crash reports stay
   obfuscated.
@@ -63,8 +65,3 @@ One step per commit, compile all flavors after each.
 7. Done (2026-10-25): JUnit/MockK/coroutines-test/Turbine, first unit tests, a Konsist
    `ArchitectureTest` for the CLAUDE.md rules, and Spotless/ktlint from `.editorconfig` (the
    reformat commit is in `.git-blame-ignore-revs`).
-
-## Bugs: presentation
-- [picker] core/ui/components/PickerWheel.kt: scroll offset is read in composition to
-  interpolate size/color, so every scroll frame recomposes the wheel. Move it to
-  `graphicsLayer`/draw.

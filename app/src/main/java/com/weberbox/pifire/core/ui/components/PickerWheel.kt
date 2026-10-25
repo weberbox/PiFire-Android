@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,25 +20,26 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.core.ui.model.PickerWheelTextStyle
 import com.weberbox.pifire.core.ui.theme.spacing
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.filter
+import kotlin.math.roundToInt
 
 @Composable
 fun <T> PickerWheel(
@@ -71,120 +72,70 @@ fun <T> PickerWheel(
         rememberLazyListState(initialFirstVisibleItemIndex = localSelectedItem)
     }
 
-    val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
 
     val selectedTextLineHeightPx = measureTextHeight(selectedTextStyle)
-    val selectedTextLineHeightDp = with(density) { selectedTextLineHeightPx.toDp() }
-
     val unselectedTextLineHeightPx = measureTextHeight(unselectedTextStyle)
     val unselectedTextLineHeightDp = with(density) { unselectedTextLineHeightPx.toDp() }
-
-    val selectedTextLineWidthPx = measureTextWidth(longestText, selectedTextStyle)
-    val selectedTextLineWidthDp = with(density) { selectedTextLineWidthPx.toDp() }
+    val selectedTextLineWidthDp = with(density) { measureTextWidth(longestText, selectedTextStyle).toDp() }
 
     val wheelHeight =
         (unselectedTextLineHeightDp * (extraRow * 2)) + (space * (extraRow * 2 + 2)) +
-            selectedTextLineHeightDp
+            with(density) { selectedTextLineHeightPx.toDp() }
 
     val maxOffset = with(density) { unselectedTextLineHeightPx + space.toPx() }
 
-    val firstIndex by remember(listState) { derivedStateOf { listState.firstVisibleItemIndex } }
-    val firstVisibleOffset by remember(listState) {
-        derivedStateOf { listState.firstVisibleItemScrollOffset }
-    }
-    val isScrolling by remember(listState) { derivedStateOf { listState.isScrollInProgress } }
-    val progress = (firstVisibleOffset / maxOffset).coerceIn(0f, 1f)
-    val unitsWidthInDp by remember { mutableStateOf(0.dp) }
+    // The scroll position changes every frame, so it's only read in the layout and draw phases
+    // below; composition reruns only when the selected item changes.
+    fun progress(): Float = (listState.firstVisibleItemScrollOffset / maxOffset).coerceIn(0f, 1f)
 
-    val sizeInterpolator = { index: Int ->
-        when (index) {
-            firstIndex -> transition(
-                selectedTextStyle.fontSize.value,
-                unselectedTextStyle.fontSize.value,
-                progress,
-            )
-
-            firstIndex + 1 -> transition(
-                unselectedTextStyle.fontSize.value,
-                selectedTextStyle.fontSize.value,
-                progress,
-            )
-
-            else -> unselectedTextStyle.fontSize.value
+    fun valueAt(index: Int, selected: Float, unselected: Float): Float {
+        val first = listState.firstVisibleItemIndex
+        return when (index) {
+            first -> transition(selected, unselected, progress())
+            first + 1 -> transition(unselected, selected, progress())
+            else -> unselected
         }
     }
 
-    val heightInterpolator = { index: Int ->
-        when (index) {
-            firstIndex -> transition(selectedTextLineHeightPx, unselectedTextLineHeightPx, progress)
-
-            firstIndex + 1 -> transition(
-                unselectedTextLineHeightPx,
-                selectedTextLineHeightPx,
-                progress,
-            )
-
-            else -> unselectedTextLineHeightPx
-        }
-    }
-
-    val colorInterpolator = { index: Int ->
-        when (index) {
-            firstIndex -> transition(selectedTextStyle.color, unselectedTextStyle.color, progress)
-
-            firstIndex + 1 -> transition(
-                unselectedTextStyle.color,
-                selectedTextStyle.color,
-                progress,
-            )
-
+    fun colorAt(index: Int): Color {
+        val first = listState.firstVisibleItemIndex
+        return when (index) {
+            first -> transition(selectedTextStyle.color, unselectedTextStyle.color, progress())
+            first + 1 -> transition(unselectedTextStyle.color, selectedTextStyle.color, progress())
             else -> unselectedTextStyle.color
         }
     }
 
-    LaunchedEffect(firstVisibleOffset) {
-        val selected = if (isLooping) {
-            (
-                firstIndex + if (firstVisibleOffset > maxOffset / 2) {
-                    extraRow +
-                        1
-                } else {
-                    extraRow
-                }
-                ) % items.size
-        } else {
-            (firstIndex + if (firstVisibleOffset > maxOffset / 2) 1 else 0) % items.size
+    val selectedIndex by remember(listState, isLooping, extraRow, items.size, maxOffset) {
+        derivedStateOf {
+            val pastHalf = if (listState.firstVisibleItemScrollOffset > maxOffset / 2) 1 else 0
+            (listState.firstVisibleItemIndex + pastHalf + if (isLooping) extraRow else 0) % items.size
         }
-        onItemSelected(selected)
-        localSelectedItem = selected
     }
 
-    LaunchedEffect(isScrolling) {
-        if (!isScrolling) {
-            coroutineScope.launch {
-                listState.animateScrollToItem(
-                    firstIndex +
-                        if (firstVisibleOffset > maxOffset / 2) 1 else 0,
-                )
-            }
-        }
+    LaunchedEffect(selectedIndex) {
+        onItemSelected(selectedIndex)
+        localSelectedItem = selectedIndex
     }
+
+    // Snap to the nearest item when a scroll ends
+    LaunchedEffect(listState, maxOffset) {
+        snapshotFlow { listState.isScrollInProgress }
+            .filter { scrolling -> !scrolling }
+            .collect {
+                val pastHalf = if (listState.firstVisibleItemScrollOffset > maxOffset / 2) 1 else 0
+                listState.animateScrollToItem(listState.firstVisibleItemIndex + pastHalf)
+            }
+    }
+
+    val selectedFontSize = selectedTextStyle.fontSize.value
+    val unselectedFontSize = unselectedTextStyle.fontSize.value
 
     Box(
         modifier = modifier
             .height(wheelHeight)
-            .width(selectedTextLineWidthDp)
-            .then(
-                unitsString?.let {
-                    Modifier.offset {
-                        IntOffset(
-                            x = unitsWidthInDp.roundToPx(),
-                            y = 0,
-                        )
-                    }
-                } ?: Modifier,
-            ),
+            .width(selectedTextLineWidthDp),
         contentAlignment = Alignment.Center,
     ) {
         LazyColumn(
@@ -223,37 +174,56 @@ fun <T> PickerWheel(
             items(count = if (isLooping) Int.MAX_VALUE else items.size) { index ->
                 val itemIndex = index % items.size
                 val item = items[itemIndex]
-                val countIndex = index % Int.MAX_VALUE
                 val isItemSelected = localSelectedItem == itemIndex
-                val adjustedIndex = if (isLooping) countIndex - extraRow else itemIndex
+                val adjustedIndex = if (isLooping) index - extraRow else itemIndex
                 val unitsAlpha = animateFloatAsState(
                     targetValue = if (isItemSelected) 1f else 0f,
                     animationSpec = tween(durationMillis = 400),
                 )
 
                 Row(
-                    modifier = Modifier.height(
-                        with(density) {
-                            heightInterpolator(adjustedIndex).toDp()
-                        },
-                    ),
+                    modifier = Modifier.layout { measurable, constraints ->
+                        val height = valueAt(
+                            index = adjustedIndex,
+                            selected = selectedTextLineHeightPx,
+                            unselected = unselectedTextLineHeightPx,
+                        ).roundToInt()
+                        val placeable = measurable.measure(
+                            constraints.copy(minHeight = 0, maxHeight = Constraints.Infinity),
+                        )
+                        layout(placeable.width, height) {
+                            placeable.place(x = 0, y = (height - placeable.height) / 2)
+                        }
+                    },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    Text(
+                    // Drawn at the selected size and scaled down, so a scroll only redraws it
+                    BasicText(
                         text = itemToString(item),
-                        color = colorInterpolator(adjustedIndex),
-                        fontSize = sizeInterpolator(adjustedIndex).sp,
-                        fontWeight = if (isItemSelected) {
-                            selectedTextStyle.fontWeight
-                        } else {
-                            unselectedTextStyle.fontWeight
+                        modifier = Modifier.graphicsLayer {
+                            val scale = valueAt(
+                                index = adjustedIndex,
+                                selected = selectedFontSize,
+                                unselected = unselectedFontSize,
+                            ) / selectedFontSize
+                            scaleX = scale
+                            scaleY = scale
                         },
-                        fontFamily = if (isItemSelected) {
-                            selectedTextStyle.fontFamily
-                        } else {
-                            unselectedTextStyle.fontFamily
-                        },
+                        style = TextStyle(
+                            fontSize = selectedTextStyle.fontSize,
+                            fontWeight = if (isItemSelected) {
+                                selectedTextStyle.fontWeight
+                            } else {
+                                unselectedTextStyle.fontWeight
+                            },
+                            fontFamily = if (isItemSelected) {
+                                selectedTextStyle.fontFamily
+                            } else {
+                                unselectedTextStyle.fontFamily
+                            },
+                        ),
+                        color = { colorAt(adjustedIndex) },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
