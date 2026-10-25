@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        appUpdateManager.attach(this)
         if (AppConfig.IS_PLAY_BUILD) {
             appUpdateManager.register(this)
         }
@@ -202,6 +203,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        appUpdateManager.detach(this)
         if (AppConfig.IS_PLAY_BUILD) {
             appUpdateManager.unregister()
         }
@@ -209,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkForUpdates() {
         lifecycleScope.launch {
-            appUpdateManager.checkForUpdate(this@MainActivity)
+            appUpdateManager.checkForUpdate()
         }
     }
 }

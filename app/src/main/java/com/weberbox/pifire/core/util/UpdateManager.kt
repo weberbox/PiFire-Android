@@ -36,12 +36,16 @@ import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.singleton.Prefs
 import com.weberbox.pifire.settings.data.model.local.Pref
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.Serializable
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
+// Retained across rotation so a shown update dialog's actions still reach a live activity
+@ActivityRetainedScoped
 class UpdateManager @Inject constructor(
     private val remoteConfigRepository: RemoteConfigRepository,
     private val analytics: Analytics,
@@ -52,14 +56,29 @@ class UpdateManager @Inject constructor(
     private var updateLauncher: ActivityResultLauncher<IntentSenderRequest>? = null
     private var installStateUpdatedListener: InstallStateUpdatedListener? = null
     private var launchedUpdateType: Int? = null
+    private var currentActivity: WeakReference<ComponentActivity>? = null
+
+    /** Call from every `onCreate`, so dialog actions use the activity that is on screen now. */
+    fun attach(activity: ComponentActivity) {
+        currentActivity = WeakReference(activity)
+    }
+
+    fun detach(activity: ComponentActivity) {
+        if (currentActivity?.get() === activity) currentActivity = null
+    }
+
+    private fun launchInCurrentActivity(block: suspend (ComponentActivity) -> Unit) {
+        val activity = currentActivity?.get() ?: return
+        activity.lifecycleScope.launch { block(activity) }
+    }
 
     private fun getAppUpdateManager(context: Context): AppUpdateManager {
-        return appUpdateManager ?: AppUpdateManagerFactory.create(context).also {
+        return appUpdateManager ?: AppUpdateManagerFactory.create(context.applicationContext).also {
             appUpdateManager = it
         }
     }
 
-    suspend fun checkForUpdate(activity: ComponentActivity) {
+    suspend fun checkForUpdate() {
         remoteConfigRepository.fetchAppUpdateConfig()?.also { config ->
             currentUpdate = config
             when (config.type) {
@@ -77,7 +96,7 @@ class UpdateManager @Inject constructor(
                             positiveAction = DialogAction(
                                 buttonText = UiText(R.string.update),
                                 action = {
-                                    activity.lifecycleScope.launch {
+                                    launchInCurrentActivity { activity ->
                                         if (AppConfig.IS_PLAY_BUILD) {
                                             launchUpdate(activity)
                                         } else {
@@ -115,7 +134,7 @@ class UpdateManager @Inject constructor(
                                     buttonText = UiText(R.string.update),
                                     action = {
                                         // The activity scope outlives the dismissed dialog
-                                        activity.lifecycleScope.launch {
+                                        launchInCurrentActivity { activity ->
                                             if (AppConfig.IS_PLAY_BUILD) {
                                                 launchUpdate(activity)
                                             } else {
