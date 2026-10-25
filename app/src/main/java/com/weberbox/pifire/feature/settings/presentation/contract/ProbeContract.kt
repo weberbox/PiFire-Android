@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.settings.presentation.contract
 
+import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
@@ -10,7 +10,7 @@ import com.weberbox.pifire.core.ui.util.UiText
 class ProbeContract {
 
     sealed class Event : ViewEvent {
-        data class UpdateProbe(val probeDto: ProbesDto) : Event()
+        data class UpdateProbe(val probeInfo: ProbeInfoUpdate) : Event()
         data class SetTempUnits(val units: String) : Event()
     }
 

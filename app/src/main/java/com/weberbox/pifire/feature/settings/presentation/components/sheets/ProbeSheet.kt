@@ -28,9 +28,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.model.dashboard.ProbeType
+import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
 import com.weberbox.pifire.core.model.settings.ProbeMap.ProbeInfo
 import com.weberbox.pifire.core.model.settings.ProbeProfile
-import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.ui.components.DropdownTextField
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
 import com.weberbox.pifire.core.ui.icons.Icon
@@ -150,7 +150,7 @@ internal fun ProbeSheet(
                 onClick = {
                     onEvent(
                         UpdateProbe(
-                            ProbesDto(
+                            ProbeInfoUpdate(
                                 name = probeName.value,
                                 label = probeLabel,
                                 profileId = selectedProfile.id,

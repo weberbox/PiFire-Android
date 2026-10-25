@@ -67,4 +67,10 @@ class RecipesRepoImpl @Inject constructor(
             data.copy(recipesMap = updatedMap)
         }
     }
+
+    override suspend fun deleteRecipe(filename: String): Result<Unit, DataError> =
+        recipesApi.deleteRecipe(filename = filename)
+
+    override suspend fun startRecipe(filename: String): Result<Unit, DataError> =
+        recipesApi.startRecipe(filename = filename)
 }

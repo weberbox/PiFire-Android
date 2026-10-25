@@ -9,7 +9,6 @@ import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.pellets.data.api.PelletsApi
 import com.weberbox.pifire.feature.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
@@ -23,7 +22,6 @@ import javax.inject.Inject
 class PelletsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val pelletsRepo: PelletsRepo,
-    private val pelletsApi: PelletsApi
 ) : BaseViewModel<PelletsContract.Event, PelletsContract.State, PelletsContract.Effect>() {
 
     init {
@@ -56,20 +54,20 @@ class PelletsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(
                 when (event) {
-                    is PelletsEvent.HopperCheck -> pelletsApi.getPelletLevel()
-                    is PelletsEvent.AddBrand -> pelletsApi.addPelletBrand(event.brand)
-                    is PelletsEvent.AddProfile -> pelletsApi.addPelletProfile(
+                    is PelletsEvent.HopperCheck -> pelletsRepo.getPelletLevel()
+                    is PelletsEvent.AddBrand -> pelletsRepo.addPelletBrand(event.brand)
+                    is PelletsEvent.AddProfile -> pelletsRepo.addPelletProfile(
                         event.profile,
                         event.load
                     )
 
-                    is PelletsEvent.AddWood -> pelletsApi.addPelletWood(event.wood)
-                    is PelletsEvent.DeleteBrand -> pelletsApi.deletePelletBrand(event.brand)
-                    is PelletsEvent.DeleteLog -> pelletsApi.deletePelletLog(event.logDate)
-                    is PelletsEvent.DeleteProfile -> pelletsApi.deletePelletProfile(event.profile)
-                    is PelletsEvent.DeleteWood -> pelletsApi.deletePelletWood(event.wood)
-                    is PelletsEvent.EditProfile -> pelletsApi.editPelletProfile(event.profile)
-                    is PelletsEvent.LoadProfile -> pelletsApi.loadPelletProfile(event.profile)
+                    is PelletsEvent.AddWood -> pelletsRepo.addPelletWood(event.wood)
+                    is PelletsEvent.DeleteBrand -> pelletsRepo.deletePelletBrand(event.brand)
+                    is PelletsEvent.DeleteLog -> pelletsRepo.deletePelletLog(event.logDate)
+                    is PelletsEvent.DeleteProfile -> pelletsRepo.deletePelletProfile(event.profile)
+                    is PelletsEvent.DeleteWood -> pelletsRepo.deletePelletWood(event.wood)
+                    is PelletsEvent.EditProfile -> pelletsRepo.editPelletProfile(event.profile)
+                    is PelletsEvent.LoadProfile -> pelletsRepo.loadPelletProfile(event.profile)
                 }
             )
         }

@@ -7,7 +7,7 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.DialogAction
 import com.weberbox.pifire.core.ui.util.DialogController
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val prefs: Prefs,
+    private val prefsRepo: PrefsRepo,
     private val analytics: Analytics,
     val savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
@@ -56,7 +56,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun handleAutoSelectEnabled(enabled: Boolean) {
-        prefs.set(Pref.landingAutoSelect, enabled)
+        prefsRepo.set(Pref.landingAutoSelect, enabled)
         analytics.logEvent(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
@@ -67,7 +67,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun handleBiometricsEnabled(enabled: Boolean) {
-        prefs.set(Pref.biometricServerPrompt, enabled)
+        prefsRepo.set(Pref.biometricServerPrompt, enabled)
         analytics.logEvent(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
@@ -118,7 +118,7 @@ class SettingsViewModel @Inject constructor(
         update: SettingsContract.State.(T) -> SettingsContract.State
     ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(pref).collect { value ->
+            prefsRepo.prefFlow(pref).collect { value ->
                 setState { update(value) }
             }
         }

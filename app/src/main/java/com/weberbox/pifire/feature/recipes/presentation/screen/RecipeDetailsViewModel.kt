@@ -16,7 +16,6 @@ import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.toImmutableList
-import com.weberbox.pifire.feature.recipes.data.api.RecipesApi
 import com.weberbox.pifire.feature.recipes.data.repo.RecipesRepo
 import com.weberbox.pifire.feature.recipes.presentation.contract.DetailsContract
 import com.weberbox.pifire.feature.recipes.presentation.util.decodeBase64Image
@@ -33,7 +32,6 @@ import javax.inject.Inject
 class RecipeDetailsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val recipesRepo: RecipesRepo,
-    private val recipesApi: RecipesApi,
     private val analytics: Analytics,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
@@ -173,7 +171,7 @@ class RecipeDetailsViewModel @Inject constructor(
         )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
-            val result = recipesApi.startRecipe(currentRecipe.recipeFilename)
+            val result = recipesRepo.startRecipe(currentRecipe.recipeFilename)
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Error -> {
@@ -206,7 +204,7 @@ class RecipeDetailsViewModel @Inject constructor(
         )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
-            val result = recipesApi.deleteRecipe(currentRecipe.recipeFilename)
+            val result = recipesRepo.deleteRecipe(currentRecipe.recipeFilename)
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Error -> {

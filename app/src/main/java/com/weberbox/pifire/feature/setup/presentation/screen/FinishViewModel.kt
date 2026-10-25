@@ -3,21 +3,18 @@ package com.weberbox.pifire.feature.setup.presentation.screen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.datastore.core.DataStore
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.api.SettingsApiImpl
-import com.weberbox.pifire.core.network.headers.HeadersData
 import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.FieldInput
 import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.validateName
+import com.weberbox.pifire.feature.setup.data.repo.SetupRepo
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.FinishContract
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,9 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FinishViewModel @Inject constructor(
     private val serverDataCache: ServerDataCache,
-    private val headersDataStore: DataStore<HeadersData>,
-    private val dataStore: DataStore<SettingsData>,
-    private val settingsApi: SettingsApiImpl,
+    private val setupRepo: SetupRepo,
     private val analytics: Analytics
 ) : BaseViewModel<FinishContract.Event, FinishContract.State, FinishContract.Effect>() {
     private var headersData by mutableStateOf(Headers())
@@ -104,7 +99,7 @@ class FinishViewModel @Inject constructor(
     }
 
     private suspend fun setGrillName(name: String) {
-        settingsApi.setGrillName(name).let { result ->
+        setupRepo.completeSetup(server = serverData, headers = headersData).let { result ->
             withContext(Dispatchers.Main) {
                 toggleLoading(false)
                 when (result) {
@@ -118,18 +113,6 @@ class FinishViewModel @Inject constructor(
                     }
 
                     is Result.Success -> {
-                        dataStore.updateData { data ->
-                            data.copy(
-                                serverMap = data.serverMap.plus(serverData.uuid to serverData)
-                            )
-                        }
-                        headersDataStore.updateData { data ->
-                            data.copy(
-                                headersMap = data.headersMap.plus(serverData.uuid to headersData)
-                            )
-                        }
-                        serverDataCache.clearServerData()
-
                         analytics.logEvent(
                             name = AnalyticsEvent.ButtonClick.name,
                             params = mapOf(

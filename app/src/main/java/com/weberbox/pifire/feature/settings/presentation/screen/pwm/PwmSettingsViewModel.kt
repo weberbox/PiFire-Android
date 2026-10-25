@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.PwmControl
+import com.weberbox.pifire.core.model.settings.PwmProfile
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.model.settings.Pwm.Profile
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -109,9 +109,9 @@ class PwmSettingsViewModel @Inject constructor(
         val (temps, profiles) = updateRange(
             index = index,
             temp = temp,
-            profile = Profile(dutyCycle),
+            profile = PwmProfile(dutyCycle = dutyCycle),
             rowTemps = controlItems.map { item -> item.temp },
-            rowProfiles = controlItems.map { item -> Profile(item.dutyCycle) },
+            rowProfiles = controlItems.map { item -> PwmProfile(dutyCycle = item.dutyCycle) },
         )
         viewModelScope.launch(Dispatchers.IO) {
             toggleLoading(true)
@@ -122,7 +122,7 @@ class PwmSettingsViewModel @Inject constructor(
     private fun deletePWMControlItem(controlItems: List<PwmControl>) {
         val (temps, profiles) = sortRangesByTemp(
             temps = controlItems.map { item -> item.temp }.dropLast(2),
-            profiles = controlItems.map { item -> Profile(item.dutyCycle) }.dropLast(1),
+            profiles = controlItems.map { item -> PwmProfile(dutyCycle = item.dutyCycle) }.dropLast(1),
         )
 
         viewModelScope.launch(Dispatchers.IO) {

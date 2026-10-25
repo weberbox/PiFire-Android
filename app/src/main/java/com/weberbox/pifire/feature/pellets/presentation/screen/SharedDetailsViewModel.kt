@@ -7,7 +7,6 @@ import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
-import com.weberbox.pifire.feature.pellets.data.api.PelletsApi
 import com.weberbox.pifire.feature.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class SharedDetailsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val pelletsRepo: PelletsRepo,
-    private val pelletsApi: PelletsApi
 ) : BaseViewModel<PelletsContract.Event, PelletsContract.State, PelletsContract.Effect>() {
 
     init {
@@ -53,12 +51,12 @@ class SharedDetailsViewModel @Inject constructor(
             setLoadingStateTrue()
             handleResult(
                 when (event) {
-                    is PelletsEvent.DeleteBrand -> pelletsApi.deletePelletBrand(event.brand)
-                    is PelletsEvent.DeleteWood -> pelletsApi.deletePelletWood(event.wood)
-                    is PelletsEvent.DeleteProfile -> pelletsApi.deletePelletProfile(event.profile)
-                    is PelletsEvent.EditProfile -> pelletsApi.editPelletProfile(event.profile)
-                    is PelletsEvent.LoadProfile -> pelletsApi.loadPelletProfile(event.profile)
-                    is PelletsEvent.DeleteLog -> pelletsApi.deletePelletLog(event.logDate)
+                    is PelletsEvent.DeleteBrand -> pelletsRepo.deletePelletBrand(event.brand)
+                    is PelletsEvent.DeleteWood -> pelletsRepo.deletePelletWood(event.wood)
+                    is PelletsEvent.DeleteProfile -> pelletsRepo.deletePelletProfile(event.profile)
+                    is PelletsEvent.EditProfile -> pelletsRepo.editPelletProfile(event.profile)
+                    is PelletsEvent.LoadProfile -> pelletsRepo.loadPelletProfile(event.profile)
+                    is PelletsEvent.DeleteLog -> pelletsRepo.deletePelletLog(event.logDate)
 
                     // Only above events supported shouldn't make it here
                     else -> Result.Success(Unit)

@@ -25,11 +25,6 @@ class DashApiImpl @Inject constructor(
     private val json: Json
 ) : DashApi {
 
-    @Suppress("unused")
-    override suspend fun requestDashUpdate(): Result<Unit, DataError> {
-        return socketManager.emitPost(ServerConstants.GF_LISTEN_APP_DATA, true)
-    }
-
     override suspend fun getDashData(): Result<String, DataError> {
         return socketManager.emitGet(ServerConstants.GA_DASH_DATA)
     }
@@ -210,7 +205,7 @@ class DashApiImpl @Inject constructor(
         shutdown: Boolean,
         keepWarm: Boolean
     ): Result<Unit, DataError> {
-        val json = Json.encodeToString(
+        val payload = json.encodeToString(
             PostDto(
                 timerDto = TimerDto(
                     hoursRange = hours,
@@ -222,7 +217,7 @@ class DashApiImpl @Inject constructor(
         )
         return socketManager.emitPost(
             ServerConstants.PA_TIMER_ACTION,
-            ServerConstants.PT_TIMER_START, json
+            ServerConstants.PT_TIMER_START, payload
         )
     }
 

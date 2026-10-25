@@ -9,4 +9,7 @@ interface RecipesRepo {
     suspend fun getRecipes(): Result<List<Recipe>, DataError>
     suspend fun getCachedData(): Result<List<Recipe>, DataError>
     suspend fun updateRecipesData(recipes: Recipes)
+
+    suspend fun deleteRecipe(filename: String): Result<Unit, DataError>
+    suspend fun startRecipe(filename: String): Result<Unit, DataError>
 }

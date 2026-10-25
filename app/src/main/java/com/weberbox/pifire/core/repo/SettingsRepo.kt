@@ -3,11 +3,11 @@ package com.weberbox.pifire.core.repo
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
+import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
+import com.weberbox.pifire.core.model.settings.PwmProfile
 import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
-import com.weberbox.pifire.core.network.model.settings.Pwm.Profile
-import com.weberbox.pifire.core.network.model.settings.Startup.SmartStart.SSProfile
+import com.weberbox.pifire.core.model.settings.SmartStartProfile
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepo {
@@ -121,7 +121,7 @@ interface SettingsRepo {
     suspend fun setPelletsEmpty(level: Int): Result<Server, DataError>
     suspend fun setPelletsFull(level: Int): Result<Server, DataError>
     suspend fun setPelletsAugerRate(rate: Double): Result<Server, DataError>
-    suspend fun setUpdateProbeInfo(probesDto: ProbesDto): Result<Server, DataError>
+    suspend fun setUpdateProbeInfo(probeInfo: ProbeInfoUpdate): Result<Server, DataError>
     suspend fun setTempUnits(units: String): Result<Server, DataError>
     suspend fun setAugerOnTime(time: Int): Result<Server, DataError>
     suspend fun setAugerOffTime(time: Int): Result<Server, DataError>
@@ -166,7 +166,7 @@ interface SettingsRepo {
     suspend fun setPWMMaxDutyCycle(dutyCycle: Int): Result<Server, DataError>
     suspend fun setPWMControl(
         tempRange: List<Int>,
-        profiles: List<Profile>
+        profiles: List<PwmProfile>
     ): Result<Server, DataError>
 
     suspend fun setSafetyStartupCheck(enabled: Boolean): Result<Server, DataError>
@@ -183,7 +183,7 @@ interface SettingsRepo {
     suspend fun setStartToHoldPrompt(enabled: Boolean): Result<Server, DataError>
     suspend fun setSmartStartEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setSmartStartExitTemp(temp: Int): Result<Server, DataError>
-    suspend fun setSmartStartTable(tempRange: List<Int>, profiles: List<SSProfile>)
+    suspend fun setSmartStartTable(tempRange: List<Int>, profiles: List<SmartStartProfile>)
             : Result<Server, DataError>
 
     suspend fun setStartToMode(mode: String): Result<Server, DataError>

@@ -11,13 +11,13 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.dashboard.RunningMode
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.remoteconfig.ServerInfo
 import com.weberbox.pifire.core.remoteconfig.ServerSupportManager
 import com.weberbox.pifire.core.remoteconfig.ServerSupportResult
+import com.weberbox.pifire.core.repo.ConnectionRepo
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -27,7 +27,7 @@ import com.weberbox.pifire.core.ui.util.DialogController
 import com.weberbox.pifire.core.ui.util.DialogEvent
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
-import com.weberbox.pifire.feature.dashboard.data.api.DashApi
+import com.weberbox.pifire.feature.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.feature.home.presentation.contract.HomeContract
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,14 +39,14 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
+    private val dashRepo: DashRepo,
     private val serverSupportManager: ServerSupportManager,
     private val sessionStateHolder: SessionStateHolder,
     private val oneSignalManager: OneSignalManager,
-    private val socketManager: SocketManager,
+    private val connectionRepo: ConnectionRepo,
     private val settingsRepo: SettingsRepo,
     private val analytics: Analytics,
-    private val dashApi: DashApi,
-    private val prefs: Prefs
+    private val prefsRepo: PrefsRepo
 ) : BaseViewModel<HomeContract.Event, HomeContract.State, HomeContract.Effect>() {
 
     init {
@@ -78,7 +78,7 @@ class HomeScreenViewModel @Inject constructor(
 
     private fun triggerLidOpen() {
         viewModelScope.launch {
-            when (val result = dashApi.sendToggleLidOpen(true)) {
+            when (val result = dashRepo.sendToggleLidOpen(true)) {
                 is Result.Error -> {
                     setEffect {
                         HomeContract.Effect.Notification(
@@ -94,7 +94,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun signOut() {
-        socketManager.disconnect()
+        connectionRepo.disconnect()
         sessionStateHolder.clearSessionState()
         setEffect {
             HomeContract.Effect.Navigation.NavRoute(
@@ -296,10 +296,10 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun checkIfAppUpdated() {
-        val storedAppVersion = prefs.get(Pref.storedAppVersion)
+        val storedAppVersion = prefsRepo.get(Pref.storedAppVersion)
         val currentVersion = BuildConfig.VERSION_CODE
         if (storedAppVersion < currentVersion) {
-            prefs.set(Pref.storedAppVersion, currentVersion)
+            prefsRepo.set(Pref.storedAppVersion, currentVersion)
             viewModelScope.launch {
                 delay(1200.milliseconds)
                 setEffect {
@@ -314,7 +314,7 @@ class HomeScreenViewModel @Inject constructor(
         update: HomeContract.State.(T) -> HomeContract.State
     ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(pref).collect { value ->
+            prefsRepo.prefFlow(pref).collect { value ->
                 setState { update(value) }
             }
         }

@@ -1,12 +1,17 @@
 package com.weberbox.pifire.feature.setup.data.repo
 
+import androidx.datastore.core.DataStore
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.SocketManager
+import com.weberbox.pifire.core.network.api.SettingsApi
+import com.weberbox.pifire.core.network.headers.HeadersData
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import com.weberbox.pifire.core.network.networkAvailable
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
@@ -18,14 +23,21 @@ import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
+import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.Json
+import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class SetupRepoImpl @Inject constructor(
     private val socketManager: SocketManager,
     private val setupApi: SetupApi,
+    private val settingsApi: SettingsApi,
+    private val settingsDataStore: DataStore<SettingsData>,
+    private val headersDataStore: DataStore<HeadersData>,
+    private val serverDataCache: ServerDataCache,
     private val json: Json
 ) : SetupRepo {
 
@@ -179,6 +191,28 @@ class SetupRepoImpl @Inject constructor(
             }
 
             is Result.Success -> Result.Success(data.data)
+        }
+    }
+
+    override suspend fun completeSetup(
+        server: Server,
+        headers: Headers,
+    ): Result<Unit, DataError> {
+        return when (val result = settingsApi.setGrillName(server.name)) {
+            is Result.Error -> Result.Error(result.error)
+            is Result.Success -> try {
+                settingsDataStore.updateData { data ->
+                    data.copy(serverMap = data.serverMap.plus(server.uuid to server))
+                }
+                headersDataStore.updateData { data ->
+                    data.copy(headersMap = data.headersMap.plus(server.uuid to headers))
+                }
+                serverDataCache.clearServerData()
+                Result.Success(Unit)
+            } catch (e: IOException) {
+                Timber.e(e, "Failed saving the new server")
+                Result.Error(DataError.Local.UNKNOWN)
+            }
         }
     }
 }

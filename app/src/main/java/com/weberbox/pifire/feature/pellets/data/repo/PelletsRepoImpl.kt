@@ -5,6 +5,7 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.pellets.PelletsData
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.session.SessionStateHolder
@@ -91,4 +92,34 @@ class PelletsRepoImpl @Inject constructor(
             data.copy(pelletsMap = updatedMap)
         }
     }
+
+    override suspend fun getPelletLevel(): Result<Unit, DataError> =
+        pelletsApi.getPelletLevel()
+
+    override suspend fun addPelletWood(wood: String): Result<Unit, DataError> =
+        pelletsApi.addPelletWood(wood = wood)
+
+    override suspend fun deletePelletWood(wood: String): Result<Unit, DataError> =
+        pelletsApi.deletePelletWood(wood = wood)
+
+    override suspend fun addPelletBrand(brand: String): Result<Unit, DataError> =
+        pelletsApi.addPelletBrand(brand = brand)
+
+    override suspend fun deletePelletBrand(brand: String): Result<Unit, DataError> =
+        pelletsApi.deletePelletBrand(brand = brand)
+
+    override suspend fun deletePelletLog(logDate: String): Result<Unit, DataError> =
+        pelletsApi.deletePelletLog(logDate = logDate)
+
+    override suspend fun loadPelletProfile(profile: String): Result<Unit, DataError> =
+        pelletsApi.loadPelletProfile(profile = profile)
+
+    override suspend fun addPelletProfile(profile: PelletProfile, load: Boolean): Result<Unit, DataError> =
+        pelletsApi.addPelletProfile(profile = profile, load = load)
+
+    override suspend fun editPelletProfile(profile: PelletProfile): Result<Unit, DataError> =
+        pelletsApi.editPelletProfile(profile = profile)
+
+    override suspend fun deletePelletProfile(profile: String): Result<Unit, DataError> =
+        pelletsApi.deletePelletProfile(profile = profile)
 }

@@ -14,11 +14,11 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.common.util.CoroutinePoller
 import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.settings.SettingsData
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.UrlBuilder
 import com.weberbox.pifire.core.network.headers.HeadersManager
+import com.weberbox.pifire.core.repo.ConnectionRepo
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -41,10 +41,10 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class LandingViewModel @Inject constructor(
-    private val prefs: Prefs,
+    private val prefsRepo: PrefsRepo,
     private val landingRepo: LandingRepo,
     private val settingsRepo: SettingsRepo,
-    private val socketManager: SocketManager,
+    private val connectionRepo: ConnectionRepo,
     private val analytics: Analytics,
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
@@ -53,7 +53,7 @@ class LandingViewModel @Inject constructor(
     private val pollerJobs = mutableListOf<Job>()
     private var servers: Map<String, SettingsData.Server> = emptyMap()
     private var pollingActive = false
-    private var autoSelectServer by mutableStateOf(prefs.get(Pref.landingAutoSelect))
+    private var autoSelectServer by mutableStateOf(prefsRepo.get(Pref.landingAutoSelect))
     private var firstLaunch by mutableStateOf(true)
     private var requireServerBiometrics by mutableStateOf(true)
 
@@ -96,12 +96,12 @@ class LandingViewModel @Inject constructor(
 
     private fun collectPrefsFlow() {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.landingAutoSelect).collect {
+            prefsRepo.prefFlow(Pref.landingAutoSelect).collect {
                 autoSelectServer = it
             }
         }
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.biometricServerPrompt).collect {
+            prefsRepo.prefFlow(Pref.biometricServerPrompt).collect {
                 requireServerBiometrics = it
                 setState {
                     copy(
@@ -215,7 +215,7 @@ class LandingViewModel @Inject constructor(
         toggleLoading(true)
         viewModelScope.launch {
             settingsRepo.selectServer(uuid)?.let { server ->
-                when (socketManager.initSocket(server)) {
+                when (connectionRepo.connect(server)) {
                     false -> {
                         toggleLoading(false)
                         setEffect {

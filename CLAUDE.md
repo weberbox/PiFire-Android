@@ -19,8 +19,8 @@ Standing decisions, known bugs and parked work are in `BACKLOG.md`: check it bef
 changing an area it lists, and add new follow-ups there.
 
 **Migration in progress.** The code predates these rules. The package layout below is in place,
-but some code still breaks the rules inside it (DTOs in presentation, ViewModels calling `*Api` or
-DataStore directly, dispatchers in ViewModels). When
+but some code still breaks the rules inside it (dispatchers in ViewModels, screens not yet in the
+five-part pattern; see `BACKLOG.md`). When
 you edit a file, make the touched code follow the rules, but do larger moves only as part of a
 planned restructure step (tracked in `BACKLOG.md`), one feature at a time, so diffs stay
 reviewable.

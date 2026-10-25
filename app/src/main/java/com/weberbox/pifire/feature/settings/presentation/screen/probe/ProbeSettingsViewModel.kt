@@ -3,8 +3,8 @@ package com.weberbox.pifire.feature.settings.presentation.screen.probe
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -35,7 +35,7 @@ class ProbeSettingsViewModel @Inject constructor(
         toggleLoading(true)
         when (event) {
             is ProbeContract.Event.SetTempUnits -> setTempUnits(event.units)
-            is ProbeContract.Event.UpdateProbe -> updateProbe(event.probeDto)
+            is ProbeContract.Event.UpdateProbe -> updateProbe(event.probeInfo)
         }
     }
 
@@ -52,9 +52,9 @@ class ProbeSettingsViewModel @Inject constructor(
         }
     }
 
-    private fun updateProbe(probesDto: ProbesDto) {
+    private fun updateProbe(probeInfo: ProbeInfoUpdate) {
         viewModelScope.launch(Dispatchers.IO) {
-            handleResult(settingsRepo.setUpdateProbeInfo(probesDto))
+            handleResult(settingsRepo.setUpdateProbeInfo(probeInfo))
         }
     }
 

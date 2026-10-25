@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.model.dashboard.ProbeType
-import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.ui.base.pickerSelectedTextStyle
 import com.weberbox.pifire.core.ui.base.pickerUnselectedTextStyle
 import com.weberbox.pifire.core.ui.components.PickerMark
@@ -51,6 +50,7 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.findLongestString
 import com.weberbox.pifire.core.ui.util.slideDownShrinkExitTransition
 import com.weberbox.pifire.core.ui.util.slideUpExpandEnterTransition
+import com.weberbox.pifire.feature.dashboard.data.model.ProbeNotify
 import com.weberbox.pifire.feature.dashboard.presentation.model.NotifType
 import com.weberbox.pifire.feature.dashboard.presentation.util.findClosestTemp
 import com.weberbox.pifire.feature.dashboard.presentation.util.getDefaultProbeTemp
@@ -66,7 +66,7 @@ internal fun ProbePickerSheet(
     isLooping: Boolean = true,
     extraRows: Int = 1,
     itemSpace: Dp = MaterialTheme.spacing.mediumOne,
-    onConfirm: (NotifyDto) -> Unit
+    onConfirm: (ProbeNotify) -> Unit
 ) {
     val temps by remember {
         mutableStateOf(
@@ -407,7 +407,7 @@ internal fun ProbePickerSheet(
             OutlinedButton(
                 onClick = {
                     onConfirm(
-                        NotifyDto(
+                        ProbeNotify(
                             label = probeData.label
                         )
                     )
@@ -425,7 +425,7 @@ internal fun ProbePickerSheet(
             Button(
                 onClick = {
                     onConfirm(
-                        NotifyDto(
+                        ProbeNotify(
                             label = probeData.label,
                             targetTemp = if (targetReq) targetTemp else null,
                             lowLimitTemp = if (lowLimitReq) lowLimitTemp else null,

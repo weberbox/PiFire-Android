@@ -6,7 +6,6 @@ import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import kotlinx.coroutines.flow.Flow
 
 interface DashApi {
-    suspend fun requestDashUpdate(): Result<Unit, DataError>
     suspend fun getDashData(): Result<String, DataError>
     suspend fun listenDashData(): Flow<Result<String, DataError>>
     suspend fun sendSmokeMode(): Result<Unit, DataError>

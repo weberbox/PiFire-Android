@@ -4,6 +4,7 @@ import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
 
 interface SetupRepo {
@@ -22,4 +23,10 @@ interface SetupRepo {
     suspend fun getSettingsData(
         server: Server,
     ): Result<Server, DataError>
+
+    /** Sends the grill name, then saves the new server and its headers and clears the setup cache. */
+    suspend fun completeSetup(
+        server: Server,
+        headers: Headers,
+    ): Result<Unit, DataError>
 }

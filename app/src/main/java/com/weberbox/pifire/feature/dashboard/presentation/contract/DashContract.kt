@@ -1,11 +1,11 @@
 package com.weberbox.pifire.feature.dashboard.presentation.contract
 
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash
-import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.feature.dashboard.data.model.ProbeNotify as ProbeNotifyData
 
 class DashContract {
 
@@ -17,7 +17,7 @@ class DashContract {
         data object ToggleLidDetect : Event()
         data object RestartControl : Event()
         data object CheckHopperLevel : Event()
-        data class ProbeNotify(val notifyDto: NotifyDto) : Event()
+        data class ProbeNotify(val probeNotify: ProbeNotifyData) : Event()
         data class SetStartupHoldTemp(val temp: String) : Event()
         data class StartUpRequested(val holdDialogSupported: Boolean) : Event()
         data class SendEvent(val event: DashEvent): Event()

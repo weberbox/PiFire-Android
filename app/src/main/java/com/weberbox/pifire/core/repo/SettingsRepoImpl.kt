@@ -4,8 +4,11 @@ import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
+import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
+import com.weberbox.pifire.core.model.settings.PwmProfile
 import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SmartStartProfile
 import com.weberbox.pifire.core.network.api.SettingsApi
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
 import com.weberbox.pifire.core.network.model.settings.Pwm
@@ -539,7 +542,13 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setPelletsAugerRate(rate))
     }
 
-    override suspend fun setUpdateProbeInfo(probesDto: ProbesDto): Result<Server, DataError> {
+    override suspend fun setUpdateProbeInfo(probeInfo: ProbeInfoUpdate): Result<Server, DataError> {
+        val probesDto = ProbesDto(
+            name = probeInfo.name,
+            label = probeInfo.label,
+            profileId = probeInfo.profileId,
+            enabled = probeInfo.enabled,
+        )
         return transformResult(settingsApi.setUpdateProbeInfo(probesDto))
     }
 
@@ -713,9 +722,10 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setPWMControl(
         tempRange: List<Int>,
-        profiles: List<Pwm.Profile>
+        profiles: List<PwmProfile>
     ): Result<Server, DataError> {
-        return transformResult(settingsApi.setPWMControl(tempRange, profiles))
+        val profileDtos = profiles.map { Pwm.Profile(dutyCycle = it.dutyCycle) }
+        return transformResult(settingsApi.setPWMControl(tempRange, profileDtos))
     }
 
     override suspend fun setSafetyStartupCheck(enabled: Boolean): Result<Server, DataError> {
@@ -776,9 +786,16 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setSmartStartTable(
         tempRange: List<Int>,
-        profiles: List<Startup.SmartStart.SSProfile>
+        profiles: List<SmartStartProfile>
     ): Result<Server, DataError> {
-        return transformResult(settingsApi.setSmartStartTable(tempRange, profiles))
+        val profileDtos = profiles.map {
+            Startup.SmartStart.SSProfile(
+                startUpTime = it.startUpTime,
+                augerOnTime = it.augerOnTime,
+                pMode = it.pMode,
+            )
+        }
+        return transformResult(settingsApi.setSmartStartTable(tempRange, profileDtos))
     }
 
     override suspend fun setStartToMode(mode: String): Result<Server, DataError> {

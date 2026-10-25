@@ -3,10 +3,10 @@ package com.weberbox.pifire.application
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.remoteconfig.FeatureSupport
 import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepository
+import com.weberbox.pifire.core.repo.ConnectionRepo
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -30,13 +30,13 @@ class MainViewModel @Inject constructor(
     private val remoteConfigRepository: RemoteConfigRepository,
     private val sessionStateHolder: SessionStateHolder,
     private val savedStateHandle: SavedStateHandle,
-    private val socketManager: SocketManager,
+    private val connectionRepo: ConnectionRepo,
     private val pelletsRepo: PelletsRepo,
     private val settingsRepo: SettingsRepo,
     private val dashRepo: DashRepo,
     private val eventsRepo: EventsRepo,
     private val recipesRepo: RecipesRepo,
-    private val prefs: Prefs
+    private val prefsRepo: PrefsRepo
 ) : BaseViewModel<MainContract.Event, MainContract.State, MainContract.Effect>() {
 
     init {
@@ -96,7 +96,7 @@ class MainViewModel @Inject constructor(
         update: MainContract.State.(T) -> MainContract.State
     ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(pref).collect { value ->
+            prefsRepo.prefFlow(pref).collect { value ->
                 setState { update(value) }
             }
         }
@@ -113,7 +113,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun signOut() {
-        socketManager.disconnect()
+        connectionRepo.disconnect()
         sessionStateHolder.clearSessionState()
         setEffect {
             MainContract.Effect.Navigation.NavRoute(

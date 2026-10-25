@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.AppTheme
 import com.weberbox.pifire.feature.settings.presentation.contract.AppContract
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppSettingsViewModel @Inject constructor(
-    private val prefs: Prefs,
+    private val prefsRepo: PrefsRepo,
     private val analytics: Analytics,
 ) : BaseViewModel<AppContract.Event, AppContract.State, AppContract.Effect>() {
 
@@ -40,7 +40,7 @@ class AppSettingsViewModel @Inject constructor(
     override fun handleEvents(event: AppContract.Event) {
         when (event) {
             is AppContract.Event.UpdateAppTheme -> {
-                prefs.set(Pref.appTheme, event.theme)
+                prefsRepo.set(Pref.appTheme, event.theme)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -51,7 +51,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.DynamicColorEnabled -> {
-                prefs.set(Pref.dynamicColor, event.enabled)
+                prefsRepo.set(Pref.dynamicColor, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -62,7 +62,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.KeepScreenOn -> {
-                prefs.set(Pref.keepScreenOn, event.enabled)
+                prefsRepo.set(Pref.keepScreenOn, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -73,7 +73,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.ShowBottomBar -> {
-                prefs.set(Pref.showBottomBar, event.enabled)
+                prefsRepo.set(Pref.showBottomBar, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -84,7 +84,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.BiometricsEnabled -> {
-                prefs.set(Pref.biometricSettingsPrompt, event.enabled)
+                prefsRepo.set(Pref.biometricSettingsPrompt, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -95,7 +95,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.SetEventsAmount -> {
-                prefs.set(Pref.eventsAmount, event.amount)
+                prefsRepo.set(Pref.eventsAmount, event.amount)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -106,7 +106,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.IncrementTemps -> {
-                prefs.set(Pref.incrementTemps, event.enabled)
+                prefsRepo.set(Pref.incrementTemps, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -117,7 +117,7 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.SentryEnabled -> {
-                prefs.set(Pref.sentryEnabled, event.enabled)
+                prefsRepo.set(Pref.sentryEnabled, event.enabled)
                 analytics.logEvent(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
@@ -128,10 +128,10 @@ class AppSettingsViewModel @Inject constructor(
             }
 
             is AppContract.Event.SentryDebugEnabled ->
-                prefs.set(Pref.sentryDebugEnabled, event.enabled)
+                prefsRepo.set(Pref.sentryDebugEnabled, event.enabled)
 
             is AppContract.Event.UpdateUserEmail ->
-                prefs.set(Pref.sentryUserEmail, event.email)
+                prefsRepo.set(Pref.sentryUserEmail, event.email)
         }
     }
 
@@ -153,7 +153,7 @@ class AppSettingsViewModel @Inject constructor(
         update: AppContract.State.(T) -> AppContract.State
     ) {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(pref).collect { value ->
+            prefsRepo.prefFlow(pref).collect { value ->
                 setState { update(value) }
             }
         }

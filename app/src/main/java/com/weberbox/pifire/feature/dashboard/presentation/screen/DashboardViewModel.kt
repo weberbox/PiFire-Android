@@ -8,13 +8,12 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Pref
-import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Outputs
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Timer
 import com.weberbox.pifire.core.model.dashboard.RunningMode
-import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
+import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -23,7 +22,7 @@ import com.weberbox.pifire.core.ui.util.DialogAction
 import com.weberbox.pifire.core.ui.util.DialogController
 import com.weberbox.pifire.core.ui.util.DialogEvent
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.dashboard.data.api.DashApi
+import com.weberbox.pifire.feature.dashboard.data.model.ProbeNotify
 import com.weberbox.pifire.feature.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
@@ -43,9 +42,8 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dashRepo: DashRepo,
-    private val dashApi: DashApi,
     private val settingsRepo: SettingsRepo,
-    private val prefs: Prefs,
+    private val prefsRepo: PrefsRepo,
 ) : BaseViewModel<DashContract.Event, DashContract.State, DashContract.Effect>() {
     private var showHoldTempTip by mutableStateOf(false)
     private val timerIntent = CountDownTimer(timerScope = viewModelScope)
@@ -80,7 +78,7 @@ class DashboardViewModel @Inject constructor(
             is DashContract.Event.PWMControl -> sendPwmControl()
             is DashContract.Event.SmokePlus -> sendSmokePlus()
             is DashContract.Event.SendEvent -> sendDashEvent(event.event)
-            is DashContract.Event.ProbeNotify -> setProbeNotify(event.notifyDto)
+            is DashContract.Event.ProbeNotify -> setProbeNotify(event.probeNotify)
             is DashContract.Event.HideHoldTempTip -> hideHoldTempTip()
             is DashContract.Event.ToggleLidDetect -> toggleLidOpen()
             is DashContract.Event.RestartControl -> restartControlDialog()
@@ -95,29 +93,29 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             handleResult(
                 when (event) {
-                    is DashEvent.Monitor -> dashApi.sendMonitorMode()
-                    is DashEvent.RecipeUnPause -> dashApi.sendRecipeUnPause()
-                    is DashEvent.Shutdown -> dashApi.sendShutdownMode()
-                    is DashEvent.Smoke -> dashApi.sendSmokeMode()
-                    is DashEvent.Start -> dashApi.sendStartGrill()
-                    is DashEvent.Stop -> dashApi.sendStopMode()
-                    is DashEvent.GrillHoldTemp -> dashApi.setGrillHoldTemp(event.temp)
-                    is DashEvent.PrimeGrill -> dashApi.sendPrimeGrill(
+                    is DashEvent.Monitor -> dashRepo.sendMonitorMode()
+                    is DashEvent.RecipeUnPause -> dashRepo.sendRecipeUnPause()
+                    is DashEvent.Shutdown -> dashRepo.sendShutdownMode()
+                    is DashEvent.Smoke -> dashRepo.sendSmokeMode()
+                    is DashEvent.Start -> dashRepo.sendStartGrill()
+                    is DashEvent.Stop -> dashRepo.sendStopMode()
+                    is DashEvent.GrillHoldTemp -> dashRepo.setGrillHoldTemp(event.temp)
+                    is DashEvent.PrimeGrill -> dashRepo.sendPrimeGrill(
                         primeAmount = event.primeAmount,
                         nextMode = event.nextMode
                     )
 
-                    is DashEvent.TimerAction -> dashApi.sendTimerAction(action = event.action)
-                    is DashEvent.TimerTime -> dashApi.sendTimerTime(
+                    is DashEvent.TimerAction -> dashRepo.sendTimerAction(action = event.action)
+                    is DashEvent.TimerTime -> dashRepo.sendTimerTime(
                         hours = event.hours,
                         minutes = event.minutes,
                         shutdown = event.shutdown,
                         keepWarm = event.keepWarm
                     )
 
-                    is DashEvent.ToggleFan -> dashApi.sendToggleFan(enabled = event.enabled)
-                    is DashEvent.ToggleAuger -> dashApi.sendToggleAuger(enabled = event.enabled)
-                    is DashEvent.ToggleIgniter -> dashApi.sendToggleIgniter(enabled = event.enabled)
+                    is DashEvent.ToggleFan -> dashRepo.sendToggleFan(enabled = event.enabled)
+                    is DashEvent.ToggleAuger -> dashRepo.sendToggleAuger(enabled = event.enabled)
+                    is DashEvent.ToggleIgniter -> dashRepo.sendToggleIgniter(enabled = event.enabled)
 
                     else -> Result.Success(data = Unit)
                 }
@@ -127,7 +125,7 @@ class DashboardViewModel @Inject constructor(
 
     private fun collectPrefsFlow() {
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.incrementTemps).collect {
+            prefsRepo.prefFlow(Pref.incrementTemps).collect {
                 setState {
                     copy(
                         incrementTemps = it
@@ -136,7 +134,7 @@ class DashboardViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.keepScreenOn).collect {
+            prefsRepo.prefFlow(Pref.keepScreenOn).collect {
                 setState {
                     copy(
                         keepScreenOn = it
@@ -145,7 +143,7 @@ class DashboardViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            prefs.collectPrefsFlow(Pref.holdTempToolTip).collect {
+            prefsRepo.prefFlow(Pref.holdTempToolTip).collect {
                 showHoldTempTip = it
             }
         }
@@ -217,7 +215,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun hideHoldTempTip() {
-        prefs.set(Pref.holdTempToolTip, false)
+        prefsRepo.set(Pref.holdTempToolTip, false)
         setState {
             copy(
                 holdTempToolTip = false
@@ -242,7 +240,7 @@ class DashboardViewModel @Inject constructor(
                         buttonText = UiText(R.string.yes),
                         action = {
                             setLoadingState(true)
-                            handleResult(dashApi.sendToggleLidOpen(false))
+                            handleResult(dashRepo.sendToggleLidOpen(false))
                         }
                     ),
                     negativeAction =
@@ -259,7 +257,7 @@ class DashboardViewModel @Inject constructor(
         if (viewState.value.dash.hasDistanceSensor) {
             setLoadingState(true)
             viewModelScope.launch(Dispatchers.IO) {
-                handleResult(dashApi.checkHopperLevel())
+                handleResult(dashRepo.checkHopperLevel())
             }
         }
     }
@@ -419,21 +417,21 @@ class DashboardViewModel @Inject constructor(
     private fun setSmokePlus(enabled: Boolean) {
         setLoadingState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            handleResult(dashApi.setSmokePlus(enabled))
+            handleResult(dashRepo.setSmokePlus(enabled))
         }
     }
 
     private fun setPWMControl(enabled: Boolean) {
         setLoadingState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            handleResult(dashApi.setPWMControl(enabled))
+            handleResult(dashRepo.setPWMControl(enabled))
         }
     }
 
-    private fun setProbeNotify(notifyDto: NotifyDto) {
+    private fun setProbeNotify(probeNotify: ProbeNotify) {
         setLoadingState(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val result = dashApi.setProbeNotify(notifyDto)
+            val result = dashRepo.setProbeNotify(probeNotify)
             withContext(Dispatchers.Main) {
                 when (result) {
                     is Result.Error -> {

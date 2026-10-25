@@ -49,7 +49,10 @@ One step per commit, compile all flavors after each.
    `core/network`, bound in `core/di/RepoModule`; `Pref`/`Crypto`/`SettingsSerializer` in
    `core/data`; headers in `core/network/headers`; feature DataStores, `LandingApi`/`SetupApi`
    and `ServerDataCache` provided by the features' `<Name>DataModule`.
-5. Remove ViewModel access to apis/DataStore (see Conventions below).
+5. Done (2026-10-25): ViewModels inject repos only (plus `SessionStateHolder` and the manager
+   classes): api calls go through feature repos, `FinishViewModel` uses `SetupRepo.completeSetup`,
+   new `core/repo` `PrefsRepo` and `ConnectionRepo` replace `Prefs`/`SocketManager`. No DTOs in
+   presentation (`ProbeNotify`, `ProbeInfoUpdate`, `PwmProfile`, `SmartStartProfile` instead).
 6. Rename `RemoteConfigRepository(Impl)` -> `RemoteConfigRepo(Impl)`.
 7. Tooling: `.editorconfig` + Spotless/ktlint (copy the reference project's config), unit tests (JUnit, MockK,
    coroutines-test, Konsist `ArchitectureTest` for the layout rules), then add them to CLAUDE.md.
@@ -60,10 +63,6 @@ One step per commit, compile all flavors after each.
   `graphicsLayer`/draw.
 
 ## Conventions to fix
-- ViewModels using apis/DTOs: DashboardViewModel, HomeScreenViewModel, PelletsViewModel,
-  SharedDetailsViewModel, RecipeDetailsViewModel, ProbeSettingsViewModel, FinishViewModel
-  (`SettingsApiImpl` + DataStores). DTOs in presentation: `NotifyDto` (DashContract,
-  ProbePickerSheet), `PostDto.ProbesDto` (ProbeContract, ProbeSheet).
 - SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
 - Hardcoded strings: LandingViewModel.kt:115 `"Smoker ${index+1}"`, PidBottomSheets.kt "Error"
   values, ManualSettings.kt:181, PwmControl.kt:219-227, default names in DashData/PelletsData,
@@ -74,4 +73,3 @@ One step per commit, compile all flavors after each.
 - Dispatchers in ViewModels (24) with `withContext(Main)` before `setEffect`: move IO into repos.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.
-- Dead code: `DashApiImpl.requestDashUpdate`, `Secrets.AWS_FCM_*`. `DashApiImpl.kt:206` default `Json`.

@@ -5,7 +5,7 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.model.settings.SmartStart
-import com.weberbox.pifire.core.network.model.settings.Startup.SmartStart.SSProfile
+import com.weberbox.pifire.core.model.settings.SmartStartProfile
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -115,10 +115,14 @@ class TimerSettingsViewModel @Inject constructor(
         val (temps, profiles) = updateRange(
             index = index,
             temp = temp,
-            profile = SSProfile(startUpTime = startUp, augerOnTime = augerOn, pMode = pMode),
+            profile = SmartStartProfile(startUpTime = startUp, augerOnTime = augerOn, pMode = pMode),
             rowTemps = smartStartItems.map { item -> item.temp },
             rowProfiles = smartStartItems.map { item ->
-                SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
+                SmartStartProfile(
+                    startUpTime = item.startUp,
+                    augerOnTime = item.augerOn,
+                    pMode = item.pMode,
+                )
             },
         )
         viewModelScope.launch(Dispatchers.IO) {
@@ -130,7 +134,11 @@ class TimerSettingsViewModel @Inject constructor(
         val (temps, profiles) = sortRangesByTemp(
             temps = smartStartItems.map { item -> item.temp }.dropLast(2),
             profiles = smartStartItems.map { item ->
-                SSProfile(startUpTime = item.startUp, augerOnTime = item.augerOn, pMode = item.pMode)
+                SmartStartProfile(
+                    startUpTime = item.startUp,
+                    augerOnTime = item.augerOn,
+                    pMode = item.pMode,
+                )
             }.dropLast(1),
         )
 

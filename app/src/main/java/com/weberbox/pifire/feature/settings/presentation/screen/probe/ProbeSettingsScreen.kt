@@ -289,7 +289,7 @@ private fun ProbeSettingsContent(
             probeInfo = probeSheet.data,
             profiles = state.serverData.settings.probeProfiles.values.toList(),
             onEvent = {
-                onEventSent(ProbeContract.Event.UpdateProbe(it.probeDto))
+                onEventSent(ProbeContract.Event.UpdateProbe(it.probeInfo))
                 probeSheet.close()
             },
             onDismiss = { probeSheet.close() }
