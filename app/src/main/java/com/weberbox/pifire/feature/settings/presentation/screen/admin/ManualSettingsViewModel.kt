@@ -11,10 +11,8 @@ import com.weberbox.pifire.feature.settings.data.model.ManualData
 import com.weberbox.pifire.feature.settings.data.repo.ManualRepoImpl
 import com.weberbox.pifire.feature.settings.presentation.contract.ManualContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -48,28 +46,26 @@ class ManualSettingsViewModel @Inject constructor(
     }
 
     private fun getManualData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             val result = manualRepo.getManualData()
-            withContext(Dispatchers.Main) {
-                toggleLoading(false)
-                when (result) {
-                    is Result.Error<ManualData, DataError> -> {
-                        setEffect {
-                            ManualContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
+            toggleLoading(false)
+            when (result) {
+                is Result.Error<ManualData, DataError> -> {
+                    setEffect {
+                        ManualContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
                     }
+                }
 
-                    is Result.Success<ManualData, DataError> -> {
-                        setState {
-                            copy(
-                                manualData = result.data,
-                                isInitialLoading = false,
-                            )
-                        }
+                is Result.Success<ManualData, DataError> -> {
+                    setState {
+                        copy(
+                            manualData = result.data,
+                            isInitialLoading = false,
+                        )
                     }
                 }
             }
@@ -77,37 +73,37 @@ class ManualSettingsViewModel @Inject constructor(
     }
 
     private fun setManualMode(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualMode(enabled))
         }
     }
 
     private fun setManualFanOutput(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualFanOutput(enabled))
         }
     }
 
     private fun setManualAugerOutput(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualAugerOutput(enabled))
         }
     }
 
     private fun setManualIgniterOutput(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualIgniterOutput(enabled))
         }
     }
 
     private fun setManualPowerOutput(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualPowerOutput(enabled))
         }
     }
 
     private fun setManualPWMOutput(pwm: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setManualPWMOutput(pwm))
         }
     }
@@ -115,14 +111,12 @@ class ManualSettingsViewModel @Inject constructor(
     private suspend fun handleResult(result: Result<Server, DataError>) {
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    toggleLoading(false)
-                    setEffect {
-                        ManualContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                toggleLoading(false)
+                setEffect {
+                    ManualContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 

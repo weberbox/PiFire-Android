@@ -13,9 +13,7 @@ import com.weberbox.pifire.feature.settings.presentation.contract.PwmContract
 import com.weberbox.pifire.feature.settings.presentation.util.sortRangesByTemp
 import com.weberbox.pifire.feature.settings.presentation.util.updateRange
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,35 +70,35 @@ class PwmSettingsViewModel @Inject constructor(
     }
 
     private fun setPWMControlDefault(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMControlDefault(enabled))
         }
     }
 
     private fun setPWMTempUpdateTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMTempUpdateTime(time))
         }
     }
 
     private fun setPWMFanFrequency(frequency: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMFanFrequency(frequency))
         }
     }
 
     private fun setPWMMinDutyCycle(dutyCycle: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMMinDutyCycle(dutyCycle))
         }
     }
 
     private fun setPWMMaxDutyCycle(dutyCycle: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMMaxDutyCycle(dutyCycle))
         }
@@ -119,7 +117,7 @@ class PwmSettingsViewModel @Inject constructor(
             rowTemps = controlItems.map { item -> item.temp },
             rowProfiles = controlItems.map { item -> PwmProfile(dutyCycle = item.dutyCycle) },
         )
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMControl(temps, profiles))
         }
@@ -131,7 +129,7 @@ class PwmSettingsViewModel @Inject constructor(
             profiles = controlItems.map { item -> PwmProfile(dutyCycle = item.dutyCycle) }.dropLast(1),
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             toggleLoading(true)
             handleResult(settingsRepo.setPWMControl(temps, profiles))
         }
@@ -141,25 +139,21 @@ class PwmSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        PwmContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    PwmContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }

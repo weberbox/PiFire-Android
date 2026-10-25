@@ -10,9 +10,7 @@ import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.feature.settings.presentation.contract.ProbeContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,13 +51,13 @@ class ProbeSettingsViewModel @Inject constructor(
     }
 
     private fun updateProbe(probeInfo: ProbeInfoUpdate) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setUpdateProbeInfo(probeInfo))
         }
     }
 
     private fun setTempUnits(units: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setTempUnits(units))
         }
     }
@@ -68,25 +66,21 @@ class ProbeSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        ProbeContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    ProbeContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }

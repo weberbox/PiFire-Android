@@ -9,9 +9,7 @@ import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.feature.settings.presentation.contract.SafetyContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,43 +55,43 @@ class SafetySettingsViewModel @Inject constructor(
     }
 
     private fun setAllowManualChanges(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAllowManualChanges(enabled))
         }
     }
 
     private fun setOverrideTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setOverrideTime(time))
         }
     }
 
     private fun setSafetyStartupCheck(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setSafetyStartupCheck(enabled))
         }
     }
 
     private fun setMinStartTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMinStartTemp(temp))
         }
     }
 
     private fun setMaxStartTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMaxStartTemp(temp))
         }
     }
 
     private fun setMaxGrillTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMaxGrillTemp(temp))
         }
     }
 
     private fun setReigniteRetries(retries: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setReigniteRetries(retries))
         }
     }
@@ -102,25 +100,21 @@ class SafetySettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        SafetyContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    SafetyContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }

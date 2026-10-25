@@ -13,9 +13,7 @@ import com.weberbox.pifire.feature.settings.presentation.contract.TimerContract
 import com.weberbox.pifire.feature.settings.presentation.util.sortRangesByTemp
 import com.weberbox.pifire.feature.settings.presentation.util.updateRange
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -99,7 +97,7 @@ class TimerSettingsViewModel @Inject constructor(
     }
 
     private fun launchAndHandle(block: suspend () -> Result<Server, DataError>) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(block())
         }
     }
@@ -125,7 +123,7 @@ class TimerSettingsViewModel @Inject constructor(
                 )
             },
         )
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setSmartStartTable(temps, profiles))
         }
     }
@@ -142,7 +140,7 @@ class TimerSettingsViewModel @Inject constructor(
             }.dropLast(1),
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setSmartStartTable(temps, profiles))
         }
     }
@@ -151,25 +149,21 @@ class TimerSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        TimerContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    TimerContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }

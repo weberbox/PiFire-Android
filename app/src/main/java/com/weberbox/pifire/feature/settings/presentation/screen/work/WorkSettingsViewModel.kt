@@ -9,9 +9,7 @@ import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.feature.settings.presentation.contract.WorkContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -86,217 +84,217 @@ class WorkSettingsViewModel @Inject constructor(
     }
 
     private fun setAugerOnTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAugerOnTime(time))
         }
     }
 
     private fun setAugerOffTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAugerOffTime(time))
         }
     }
 
     private fun setPMode(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPMode(mode))
         }
     }
 
     private fun setSPlusEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setSPlusEnabled(enabled))
         }
     }
 
     private fun setFanRampEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setFanRampEnabled(enabled))
         }
     }
 
     private fun setFanRampDutyCycle(dutyCycle: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setFanRampDutyCycle(dutyCycle))
         }
     }
 
     private fun setFanOnTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setFanOnTime(time))
         }
     }
 
     private fun setFanOffTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setFanOffTime(time))
         }
     }
 
     private fun setMinTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMinTemp(temp))
         }
     }
 
     private fun setMaxTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMaxTemp(temp))
         }
     }
 
     private fun setLidOpenDetectEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setLidOpenDetectEnabled(enabled))
         }
     }
 
     private fun setLidOpenThresh(thresh: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setLidOpenThresh(thresh))
         }
     }
 
     private fun setLidOpenPauseTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setLidOpenPauseTime(time))
         }
     }
 
     private fun setFanPidEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setFanPidEnabled(enabled))
         }
     }
 
     private fun setKeepWarmEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setKeepWarmEnabled(enabled))
         }
     }
 
     private fun setKeepWarmTemp(temp: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setKeepWarmTemp(temp))
         }
     }
 
     private fun setCntrlrSelected(selected: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrSelected(selected))
         }
     }
 
     private fun setCntrlrPidPb(pb: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidPb(pb))
         }
     }
 
     private fun setCntrlrPidTd(td: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidTd(td))
         }
     }
 
     private fun setCntrlrPidTi(ti: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidTi(ti))
         }
     }
 
     private fun setCntrlrPidCenter(center: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidCenter(center))
         }
     }
 
     private fun setCntrlrPidAcPb(pb: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidAcPb(pb))
         }
     }
 
     private fun setCntrlrPidAcTd(td: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidAcTd(td))
         }
     }
 
     private fun setCntrlrPidAcTi(ti: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidAcTi(ti))
         }
     }
 
     private fun setCntrlrPidAcStable(stable: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidAcStable(stable))
         }
     }
 
     private fun setCntrlrPidAcCenter(center: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidAcCenter(center))
         }
     }
 
     private fun setCntrlrPidSpPb(pb: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpPb(pb))
         }
     }
 
     private fun setCntrlrPidSpTd(td: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpTd(td))
         }
     }
 
     private fun setCntrlrPidSpTi(ti: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpTi(ti))
         }
     }
 
     private fun setCntrlrPidSpStable(stable: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpStable(stable))
         }
     }
 
     private fun setCntrlrPidSpCenter(center: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpCenter(center))
         }
     }
 
     private fun setCntrlrPidSpTau(tau: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpTau(tau))
         }
     }
 
     private fun setCntrlrPidSpTheta(theta: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrPidSpTheta(theta))
         }
     }
 
     private fun setCntrlrTime(time: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlrTime(time))
         }
     }
 
     private fun setCntrlruMin(uMin: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlruMin(uMin))
         }
     }
 
     private fun setCntrlruMax(uMax: Double) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setCntrlruMax(uMax))
         }
     }
@@ -305,25 +303,21 @@ class WorkSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.IO) {
-                    setEffect {
-                        WorkContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    WorkContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.IO) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }

@@ -15,9 +15,7 @@ import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.feature.settings.presentation.contract.NotifContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -131,139 +129,139 @@ class NotificationSettingsViewModel @Inject constructor(
         }
 
     private fun setIFTTTEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setIFTTTEnabled(enabled))
         }
     }
 
     private fun setIFTTTAPIKey(apiKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setIFTTTAPIKey(apiKey))
         }
     }
 
     private fun setPushOverEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushOverEnabled(enabled))
         }
     }
 
     private fun setPushOverAPIKey(apiKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushOverAPIKey(apiKey))
         }
     }
 
     private fun setPushOverUserKeys(userKeys: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushOverUserKeys(userKeys))
         }
     }
 
     private fun setPushOverUrl(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushOverUrl(url))
         }
     }
 
     private fun setPushBulletEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushBulletEnabled(enabled))
         }
     }
 
     private fun setPushBulletAPIKey(apiKey: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushBulletAPIKey(apiKey))
         }
     }
 
     private fun setPushBulletURL(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setPushBulletURL(url))
         }
     }
 
     private fun setInfluxDBEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setInfluxDBEnabled(enabled))
         }
     }
 
     private fun setInfluxDBUrl(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setInfluxDBUrl(url))
         }
     }
 
     private fun setInfluxDBToken(token: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setInfluxDBToken(token))
         }
     }
 
     private fun setInfluxDBOrg(org: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setInfluxDBOrg(org))
         }
     }
 
     private fun setInfluxDBBucket(bucket: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setInfluxDBBucket(bucket))
         }
     }
 
     private fun setMqttEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttEnabled(enabled))
         }
     }
 
     private fun setMqttBroker(broker: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttBroker(broker))
         }
     }
 
     private fun setMqttTopic(topic: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttTopic(topic))
         }
     }
 
     private fun setMqttId(id: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttId(id))
         }
     }
 
     private fun setMqttUsername(username: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttUsername(username))
         }
     }
 
     private fun setMqttPassword(password: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttPassword(password))
         }
     }
 
     private fun setMqttPort(port: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttPort(port))
         }
     }
 
     private fun setMqttUpdateSec(updateSec: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setMqttUpdateSec(updateSec))
         }
     }
 
     private fun setAppriseEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAppriseEnabled(enabled))
         }
     }
@@ -271,7 +269,7 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun updateAppriseLocation(location: Location) {
         val locations = viewState.value.serverData.settings.appriseLocations
         val updatedLocations = locations.plus(location)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAppriseLocations(updatedLocations))
         }
     }
@@ -279,211 +277,211 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun deleteAppriseLocation(location: Location) {
         val locations = viewState.value.serverData.settings.appriseLocations
         val updatedLocations = locations.filterNot { it == location }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setAppriseLocations(updatedLocations))
         }
     }
 
     private fun setWLEDEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLEDEnabled(enabled))
         }
     }
 
     private fun setWLEDAddress(address: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLEDAddress(address))
         }
     }
 
     private fun setWLEDDuration(duration: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLEDDuration(duration))
         }
     }
 
     private fun setWLedModeHold(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeHold(mode))
         }
     }
 
     private fun setWLedModePrime(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModePrime(mode))
         }
     }
 
     private fun setWLedModeReignite(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeReignite(mode))
         }
     }
 
     private fun setWLedModeShutdown(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeShutdown(mode))
         }
     }
 
     private fun setWLedModeSmoke(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeSmoke(mode))
         }
     }
 
     private fun setWLedModeStartup(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeStartup(mode))
         }
     }
 
     private fun setWLedModeStop(mode: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedModeStop(mode))
         }
     }
 
     private fun setWLedUseProfiles(useProfiles: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedUseProfiles(useProfiles))
         }
     }
 
     private fun setWLedUseSuggestedProfiles(useProfiles: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedUseSuggestedProfiles(useProfiles))
         }
     }
 
     private fun setWLEDNightMode(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedNightMode(enabled))
         }
     }
 
     private fun setWLedCookingColor(color: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedCookingColor(color))
         }
     }
 
     private fun setWLedIdleBrightness(brightness: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedIdleBrightness(brightness))
         }
     }
 
     private fun setWLedLedCount(count: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedLedCount(count))
         }
     }
 
     private fun setWLedProfileBooting(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileBooting(profile))
         }
     }
 
     private fun setWLedProfileCooking(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileCooking(profile))
         }
     }
 
     private fun setWLedProfileCooldown(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileCooldown(profile))
         }
     }
 
     private fun setWLedProfileFault(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileFault(profile))
         }
     }
 
     private fun setWLedProfileIdle(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileIdle(profile))
         }
     }
 
     private fun setWLedProfileNight(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileNight(profile))
         }
     }
 
     private fun setWLedProfileOvershoot(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileOvershoot(profile))
         }
     }
 
     private fun setWLedProfilePellets(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfilePellets(profile))
         }
     }
 
     private fun setWLedProfilePreheat(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfilePreheat(profile))
         }
     }
 
     private fun setWLedProfileProbe(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileProbe(profile))
         }
     }
 
     private fun setWLedProfileTarget(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileTarget(profile))
         }
     }
 
     private fun setWLedProfileTimer(profile: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedProfileTimer(profile))
         }
     }
 
     private fun setWLEDEventGrill(event: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedEventGrill(event))
         }
     }
 
     private fun setWLEDEventPellets(event: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedEventPellets(event))
         }
     }
 
     private fun setWLEDEventRecipe(event: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedEventRecipe(event))
         }
     }
 
     private fun setWLEDEventTemp(event: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedEventTemp(event))
         }
     }
 
     private fun setWLEDEventTimer(event: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setWLedEventTimer(event))
         }
     }
 
     private fun setOneSignalEnabled(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setOneSignalEnabled(enabled))
             if (enabled) checkOneSignalStatus()
         }
@@ -493,24 +491,20 @@ class NotificationSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            serverData = result.data,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
                 }
             }
         }
@@ -518,70 +512,68 @@ class NotificationSettingsViewModel @Inject constructor(
 
     private suspend fun checkOneSignalStatus() {
         val result = oneSignalManager.checkOneSignalStatus()
-        withContext(Dispatchers.Main) {
-            when (result) {
-                OneSignalStatus.ONESIGNAL_REGISTERED -> {}
+        when (result) {
+            OneSignalStatus.ONESIGNAL_REGISTERED -> {}
 
-                OneSignalStatus.ONESIGNAL_APP_UPDATED -> {}
+            OneSignalStatus.ONESIGNAL_APP_UPDATED -> {}
 
-                OneSignalStatus.ONESIGNAL_NO_ID -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_id_error_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_NO_ID -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_id_error_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_NO_CONSENT -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_alert_consent_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_NO_CONSENT -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_alert_consent_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_NOT_REGISTERED -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_register_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_NOT_REGISTERED -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_register_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_DEVICE_ERROR -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_error_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_DEVICE_ERROR -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_error_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_NULL_TOKEN -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_token_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_NULL_TOKEN -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_token_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED -> {
-                    setEffect {
-                        NotifContract.Effect.Notification(
-                            text = UiText(R.string.settings_onesignal_subscribe_message),
-                            error = true,
-                        )
-                    }
+            OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED -> {
+                setEffect {
+                    NotifContract.Effect.Notification(
+                        text = UiText(R.string.settings_onesignal_subscribe_message),
+                        error = true,
+                    )
                 }
+            }
 
-                OneSignalStatus.ONESIGNAL_NOTIFICATION_PERMISSION_DENIED -> {
-                    setEffect {
-                        NotifContract.Effect.RequestPermission
-                    }
+            OneSignalStatus.ONESIGNAL_NOTIFICATION_PERMISSION_DENIED -> {
+                setEffect {
+                    NotifContract.Effect.RequestPermission
                 }
             }
         }

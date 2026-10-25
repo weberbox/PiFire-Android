@@ -74,7 +74,7 @@ class ArchitectureTest {
     @Test
     fun `ViewModels don't switch dispatchers`() {
         files
-            .filter { it.name.endsWith("ViewModel") && it.name !in VIEW_MODELS_WITH_DISPATCHERS }
+            .filter { it.name.endsWith("ViewModel") }
             .assertFalse { file -> file.hasImport { it.name == "kotlinx.coroutines.Dispatchers" } }
     }
 
@@ -153,16 +153,6 @@ class ArchitectureTest {
         // Sheet-local ViewModels created with viewModel(), not Hilt; they hold no injected deps.
         val PLAIN_VIEW_MODELS = setOf("InputValidationViewModel", "PwmSheetViewModel", "SmartStartSheetViewModel")
 
-        // Not migrated yet (BACKLOG.md "Dispatchers in ViewModels"); remove each as its repo takes over the IO.
-        val VIEW_MODELS_WITH_DISPATCHERS = setOf(
-            "AdminSettingsViewModel",
-
-            "ManualSettingsViewModel", "NotificationSettingsViewModel", "PelletSettingsViewModel",
-            "ProbeSettingsViewModel",
-            "PwmSettingsViewModel", "SafetySettingsViewModel",
-            "TimerSettingsViewModel", "UISettingsViewModel",
-            "WorkSettingsViewModel",
-        )
         val PRINTLN = Regex("""\bprintln\(""")
         val NOT_NULL_ASSERTION = Regex("""[\w)\]]!!""")
         val RAW_NAVIGATION = Regex("""\.(navigate|popBackStack)\(""")

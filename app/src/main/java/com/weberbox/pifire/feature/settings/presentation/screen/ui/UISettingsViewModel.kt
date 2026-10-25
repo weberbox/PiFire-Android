@@ -9,9 +9,7 @@ import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.feature.settings.presentation.contract.UIContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -53,13 +51,13 @@ class UISettingsViewModel @Inject constructor(
     }
 
     private fun setGrillName(name: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setGrillName(name))
         }
     }
 
     private fun setETACalculations(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setETACalculations(enabled))
         }
     }
@@ -68,26 +66,22 @@ class UISettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        UIContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    UIContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            grillName = result.data.settings.grillName,
-                            etaCalculations = result.data.settings.etaCalculation,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        grillName = result.data.settings.grillName,
+                        etaCalculations = result.data.settings.etaCalculation,
+                        isLoading = false,
+                    )
                 }
             }
         }

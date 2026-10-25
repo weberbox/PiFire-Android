@@ -11,9 +11,7 @@ import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.feature.settings.presentation.contract.AdminContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -66,97 +64,95 @@ class AdminSettingsViewModel @Inject constructor(
     }
 
     private fun deleteHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.deleteHistory())
         }
     }
 
     private fun deleteEvents() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.deleteEvents())
         }
     }
 
     private fun deletePelletsLog() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.deletePelletLogs())
         }
     }
 
     private fun deletePellets() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.deletePellets())
         }
     }
 
     private fun factoryReset() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.factoryReset())
         }
     }
 
     private fun restartControl() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.restartControl())
         }
     }
 
     private fun restartWebApp() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.restartWebApp())
         }
     }
 
     private fun restartSupervisor() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.restartSupervisor())
         }
     }
 
     private fun rebootSystem() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.rebootSystem())
         }
     }
 
     private fun shutdownSystem() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleAdminResult(settingsRepo.shutdownSystem())
         }
     }
 
     private fun setDebugMode(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setDebugMode(enabled))
         }
     }
 
     private fun setBootToMonitor(enabled: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(settingsRepo.setBootToMonitor(enabled))
         }
     }
 
     private suspend fun handleAdminResult(result: Result<Unit, DataError>) {
         toggleLoading(false)
-        withContext(Dispatchers.Main) {
-            when (result) {
-                is Result.Error -> {
-                    setEffect {
-                        AdminContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+        when (result) {
+            is Result.Error -> {
+                setEffect {
+                    AdminContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
+            }
 
-                is Result.Success -> {
-                    setEffect {
-                        AdminContract.Effect.Notification(
-                            text = UiText(R.string.alerter_admin_action_completed),
-                            error = false,
-                        )
-                    }
+            is Result.Success -> {
+                setEffect {
+                    AdminContract.Effect.Notification(
+                        text = UiText(R.string.alerter_admin_action_completed),
+                        error = false,
+                    )
                 }
             }
         }
@@ -166,26 +162,22 @@ class AdminSettingsViewModel @Inject constructor(
         toggleLoading(false)
         when (result) {
             is Result.Error -> {
-                withContext(Dispatchers.Main) {
-                    setEffect {
-                        AdminContract.Effect.Notification(
-                            text = result.error.asUiText(),
-                            error = true,
-                        )
-                    }
+                setEffect {
+                    AdminContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
                 }
             }
 
             is Result.Success -> {
                 settingsRepo.updateServerSettings(result.data)
-                withContext(Dispatchers.Main) {
-                    setState {
-                        copy(
-                            adminDebug = result.data.settings.adminDebug,
-                            bootToMonitor = result.data.settings.bootToMonitor,
-                            isLoading = false,
-                        )
-                    }
+                setState {
+                    copy(
+                        adminDebug = result.data.settings.adminDebug,
+                        bootToMonitor = result.data.settings.bootToMonitor,
+                        isLoading = false,
+                    )
                 }
             }
         }
