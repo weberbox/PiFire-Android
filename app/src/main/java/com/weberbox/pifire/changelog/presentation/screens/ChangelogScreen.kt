@@ -45,7 +45,9 @@ import com.weberbox.pifire.common.presentation.component.HazeAppBar
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.size
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
@@ -56,6 +58,7 @@ fun ChangelogScreenDestination(
     showAnimation: Boolean = true,
     viewModel: ChangelogViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ChangelogScreen(
         showAnimation = showAnimation,
         state = viewModel.viewState.value,
@@ -63,11 +66,13 @@ fun ChangelogScreenDestination(
         onEventSent = { event -> viewModel.setEvent(event) },
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
-                is ChangelogContract.Effect.Navigation.Back -> navController.popBackStack()
+                is ChangelogContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                 is ChangelogContract.Effect.Navigation.NavRoute -> {
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
                 }
             }

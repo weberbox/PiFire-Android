@@ -232,7 +232,7 @@ class LandingViewModel @Inject constructor(
                         setEffect {
                             LandingContract.Effect.Navigation.NavRoute(
                                 route = NavGraph.HomeDest,
-                                popUp = true
+                                popUpToRoute = NavGraph.LandingDest.Landing::class
                             )
                         }
                     }

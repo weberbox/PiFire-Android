@@ -49,7 +49,9 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.recipes.presentation.component.RecipeItem
 import com.weberbox.pifire.recipes.presentation.component.RecipesInputField
@@ -73,6 +75,7 @@ fun RecipesScreenDestination(
     navController: NavHostController,
     viewModel: RecipesViewModel = hiltViewModel(),
 ) {
+    val sourceEntry = rememberSourceEntry()
     RecipesScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
@@ -80,14 +83,15 @@ fun RecipesScreenDestination(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is RecipesContract.Effect.Navigation.Back ->
-                    navController.popBackStack()
+                    navController.popBackStackFrom(from = sourceEntry)
 
                 is RecipesContract.Effect.Navigation.RecipeDetails ->
-                    navController.safeNavigate(
-                        NavGraph.RecipesDest.Details(
+                    navController.navigateFrom(
+                        from = sourceEntry,
+                        route = NavGraph.RecipesDest.Details(
                             filename = navigationEffect.filename,
                             step = -1
-                        )
+                        ),
                     )
             }
         }

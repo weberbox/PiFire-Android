@@ -53,7 +53,9 @@ import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomShe
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.size
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.annotations.DeviceSizePreviews
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
@@ -77,6 +79,7 @@ fun ProbeSettingsDestination(
     navController: NavHostController,
     viewModel: ProbeSettingsViewModel = hiltViewModel(),
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         ProbeSettings(
             state = viewModel.viewState.value,
@@ -84,11 +87,13 @@ fun ProbeSettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is ProbeContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is ProbeContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is ProbeContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

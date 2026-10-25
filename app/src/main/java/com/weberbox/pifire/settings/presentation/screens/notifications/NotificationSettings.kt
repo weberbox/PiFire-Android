@@ -36,7 +36,9 @@ import com.weberbox.pifire.common.presentation.component.SettingsAppBar
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.util.Feature
 import com.weberbox.pifire.core.util.FeatureGate
@@ -56,6 +58,7 @@ fun NotificationSettingsDestination(
     navController: NavHostController,
     viewModel: NotificationSettingsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         NotificationSettings(
             state = viewModel.viewState.value,
@@ -63,11 +66,13 @@ fun NotificationSettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is NotifContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is NotifContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

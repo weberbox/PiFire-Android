@@ -36,7 +36,11 @@ class PwmContract {
 
         sealed class Navigation : Effect() {
             data object Back : Navigation()
-            data class NavRoute(val route: Any, val popUp: Boolean = false) : Navigation()
+            data class NavRoute(
+                val route: Any,
+                val popUpToRoute: Any? = null,
+                val inclusive: Boolean = true,
+            ) : Navigation()
         }
     }
 }

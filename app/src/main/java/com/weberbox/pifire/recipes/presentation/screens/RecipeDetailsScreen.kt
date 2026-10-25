@@ -64,8 +64,10 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
-import com.weberbox.pifire.common.presentation.util.navBackWithResult
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navBackWithResultFrom
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.home.presentation.screens.SHOW_DASHBOARD_KEY
 import com.weberbox.pifire.recipes.presentation.component.FloatingActionMenu
@@ -93,18 +95,21 @@ fun RecipeDetailsScreenDestination(
     navController: NavHostController,
     viewModel: RecipeDetailsViewModel = hiltViewModel(),
 ) {
+    val sourceEntry = rememberSourceEntry()
     RecipeDetailsScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
-                is DetailsContract.Effect.Navigation.Back -> navController.popBackStack()
+                is DetailsContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
 
                 is DetailsContract.Effect.Navigation.NavRoute ->
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
 
                 is DetailsContract.Effect.Navigation.DashHome -> {
@@ -114,14 +119,26 @@ fun RecipeDetailsScreenDestination(
                     }.getOrNull()
                     if (homeEntry != null) {
                         homeEntry.savedStateHandle[SHOW_DASHBOARD_KEY] = true
-                        navController.popBackStack<NavGraph.HomeDest.DashHome>(inclusive = false)
+                        navController.popBackStackFrom(
+                            from = sourceEntry,
+                            route = NavGraph.HomeDest.DashHome,
+                            inclusive = false,
+                        )
                     } else {
-                        navController.safeNavigate(route = NavGraph.HomeDest, popUp = true)
+                        navController.navigateFrom(
+                            from = sourceEntry,
+                            route = NavGraph.HomeDest,
+                            popUpToRoute = NavGraph.RecipesDest.Details::class,
+                        )
                     }
                 }
 
                 is DetailsContract.Effect.Navigation.BackRefresh ->
-                    navController.navBackWithResult("refresh", true)
+                    navController.navBackWithResultFrom(
+                        from = sourceEntry,
+                        key = RecipesViewModel.REFRESH_KEY,
+                        arg = true,
+                    )
             }
         }
     )

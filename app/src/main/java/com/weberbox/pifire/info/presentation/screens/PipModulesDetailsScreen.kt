@@ -18,6 +18,8 @@ import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.screens.DetailsScreen
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.info.presentation.component.PipItem
 import com.weberbox.pifire.info.presentation.component.buildModules
 import com.weberbox.pifire.info.presentation.contract.ModulesContract
@@ -27,12 +29,13 @@ fun PipModulesDetailsScreen(
     navController: NavHostController,
     viewModel: PipModulesDetailViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     PipModulesDetailsContent(
         state = viewModel.viewState.value,
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is ModulesContract.Effect.Navigation.Back ->
-                    navController.popBackStack()
+                    navController.popBackStackFrom(from = sourceEntry)
             }
         }
     )

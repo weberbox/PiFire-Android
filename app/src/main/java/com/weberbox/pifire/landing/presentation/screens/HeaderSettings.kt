@@ -50,7 +50,9 @@ import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomShe
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.size
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.landing.presentation.contract.HeadersContract
 import com.weberbox.pifire.landing.presentation.sheets.HeadersSheet
@@ -65,6 +67,7 @@ fun HeaderSettingsDestination(
     navController: NavHostController,
     viewModel: HeadersViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         HeaderSettings(
             state = viewModel.viewState.value,
@@ -72,11 +75,13 @@ fun HeaderSettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is HeadersContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is HeadersContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is HeadersContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

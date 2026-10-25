@@ -45,7 +45,9 @@ import com.weberbox.pifire.common.presentation.modifier.pagerCubeInDepthTransiti
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
 import com.weberbox.pifire.common.presentation.util.rememberPaletteColorState
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.recipes.presentation.contract.ImagesContract
@@ -63,13 +65,14 @@ fun RecipeImagesScreenDestination(
     navController: NavHostController,
     viewModel: RecipeImageViewModel = hiltViewModel(),
 ) {
+    val sourceEntry = rememberSourceEntry()
     RecipeImagesScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
-                is ImagesContract.Effect.Navigation.Back -> navController.popBackStack()
+                is ImagesContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
             }
         }
     )

@@ -30,7 +30,9 @@ import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
 import com.weberbox.pifire.common.presentation.navigation.NavGraph.InfoDest.LicenseDetails
 import com.weberbox.pifire.common.presentation.screens.CachedDataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.info.presentation.component.InfoList
 import com.weberbox.pifire.info.presentation.contract.InfoContract
@@ -49,6 +51,7 @@ fun InfoScreenDestination(
     navController: NavHostController,
     viewModel: InfoViewModel = hiltViewModel(),
 ) {
+    val sourceEntry = rememberSourceEntry()
     InfoScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
@@ -56,20 +59,22 @@ fun InfoScreenDestination(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is InfoContract.Effect.Navigation.Back ->
-                    navController.popBackStack()
+                    navController.popBackStackFrom(from = sourceEntry)
 
                 is InfoContract.Effect.Navigation.LicenseDetails ->
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = LicenseDetails(
                             licenses = viewModel.viewState.value.licenseData
                         ),
-                        popUp = false
                     )
 
                 is InfoContract.Effect.Navigation.NavRoute ->
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
             }
         }

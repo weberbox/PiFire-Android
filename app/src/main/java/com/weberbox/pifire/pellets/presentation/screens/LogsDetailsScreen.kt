@@ -22,7 +22,9 @@ import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.ConfirmSheet
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.pellets.presentation.component.LogItem
 import com.weberbox.pifire.pellets.presentation.contract.PelletsContract
@@ -37,6 +39,7 @@ fun LogsDetailsScreen(
     navController: NavHostController,
     viewModel: SharedDetailsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     LogsDetailsContent(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
@@ -44,12 +47,14 @@ fun LogsDetailsScreen(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is PelletsContract.Effect.Navigation.Back ->
-                    navController.popBackStack()
+                    navController.popBackStackFrom(from = sourceEntry)
 
                 is PelletsContract.Effect.Navigation.NavRoute -> {
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
                 }
             }

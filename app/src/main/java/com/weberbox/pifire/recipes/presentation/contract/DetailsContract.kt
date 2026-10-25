@@ -35,7 +35,11 @@ class DetailsContract {
             data object Back : Navigation()
             data object BackRefresh : Navigation()
             data object DashHome : Navigation()
-            data class NavRoute(val route: Any, val popUp: Boolean = false) : Navigation()
+            data class NavRoute(
+                val route: Any,
+                val popUpToRoute: Any? = null,
+                val inclusive: Boolean = true,
+            ) : Navigation()
         }
     }
 }

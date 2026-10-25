@@ -39,7 +39,8 @@ import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.setup.presentation.component.HorizontalDashedStepper
 import com.weberbox.pifire.setup.presentation.model.SetupStep
@@ -51,11 +52,16 @@ fun SetupScreenDestination(
     isInEditMode: Boolean = false,
     viewModel: SetupViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     SetupScreen(
         isInEditMode = isInEditMode,
         onNavigateLanding = {
             viewModel.clearServerDataCache()
-            navController.safeNavigate(NavGraph.LandingDest.Landing(false), true)
+            navController.navigateFrom(
+                from = sourceEntry,
+                route = NavGraph.LandingDest.Landing(false),
+                popUpToRoute = NavGraph.ServerSetup,
+            )
         }
     )
 }

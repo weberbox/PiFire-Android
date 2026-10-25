@@ -37,7 +37,9 @@ import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
 import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.util.Feature
 import com.weberbox.pifire.core.util.FeatureGate
@@ -56,6 +58,7 @@ fun UISettingsDestination(
     navController: NavHostController,
     viewModel: UISettingsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         UISettings(
             state = viewModel.viewState.value,
@@ -63,11 +66,13 @@ fun UISettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is UIContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is UIContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is UIContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

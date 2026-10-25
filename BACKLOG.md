@@ -24,8 +24,8 @@ line once it's done.
 
 ## Restructure plan
 One step per commit, compile all flavors after each.
-1. Port `navigateFrom` / `popBackStackFrom` / `rememberSourceEntry` from the reference project into
-   `NavHostUtils`; replace raw `popBackStack()` (~45 sites) and `safeNavigate`.
+1. Done (2026-10-24): `navigateFrom` / `popBackStackFrom` / `rememberSourceEntry` in `NavHostUtils`;
+   contracts use `NavRoute(route, popUpToRoute, inclusive)`. Only `MainActivity` navigates raw.
 2. Merge `common/` into `core/` (`core/common`, `core/ui`, `core/network`, `core/session`,
    `core/remoteconfig`, ...); move `NavRoutes`/`NavTypes`/`RootNavGraph`/`NavHostUtils` to `navigation/`.
    Also move `settings/data/serializer/IntOrDoubleSerializer.kt` to `core/network` (dashboard and
@@ -45,12 +45,6 @@ One step per commit, compile all flavors after each.
 - [picker] common/presentation/component/PickerWheel.kt: scroll offset is read in composition to
   interpolate size/color, so every scroll frame recomposes the wheel. Move it to
   `graphicsLayer`/draw.
-- [settings] settings/presentation/util/RangeUtils.kt `updateRange`: editing the top ("above")
-  row's temp is dropped (that row's temp is derived from the one below). Disable the temp field
-  for that row or apply it to the row below.
-- [update] core/util/UpdateManager.kt: dialog actions capture the activity, so after rotation a
-  restored update dialog's buttons act on the destroyed one (no-op). Resolve the current activity
-  when the action runs.
 
 ## Conventions to fix
 - ViewModels using apis/DTOs: DashboardViewModel, HomeScreenViewModel, PelletsViewModel,

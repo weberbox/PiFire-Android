@@ -99,7 +99,7 @@ class HomeScreenViewModel @Inject constructor(
         setEffect {
             HomeContract.Effect.Navigation.NavRoute(
                 route = NavGraph.LandingDest.Landing(false),
-                popUp = true
+                popUpToRoute = NavGraph.HomeDest.DashHome
             )
         }
         analytics.logEvent(AnalyticsEvent.SignOut.name)

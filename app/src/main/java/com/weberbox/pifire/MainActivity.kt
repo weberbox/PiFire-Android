@@ -36,7 +36,6 @@ import com.weberbox.pifire.common.presentation.util.DialogController
 import com.weberbox.pifire.common.presentation.util.ObserveAsEvents
 import com.weberbox.pifire.common.presentation.util.SnackbarController
 import com.weberbox.pifire.common.presentation.util.SnackbarEvent
-import com.weberbox.pifire.common.presentation.util.safeNavigate
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.util.UpdateManager
@@ -89,8 +88,15 @@ class MainActivity : AppCompatActivity() {
             effectFlow = effectFlow,
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
+                    // Outside any NavHost destination, so there's no source entry to guard on
                     is MainContract.Effect.Navigation.NavRoute ->
-                        navController.safeNavigate(navigationEffect.route)
+                        navController.navigate(route = navigationEffect.route) {
+                            navigationEffect.popUpToRoute?.let { popUpToRoute ->
+                                popUpTo(route = popUpToRoute) {
+                                    inclusive = navigationEffect.inclusive
+                                }
+                            }
+                        }
                 }
             }
         )

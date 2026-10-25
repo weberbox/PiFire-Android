@@ -122,7 +122,8 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
-    private companion object {
-        const val REFRESH_KEY = "refresh"
+    companion object {
+        // RecipeDetails sets it on this screen's back stack entry
+        internal const val REFRESH_KEY = "refresh"
     }
 }

@@ -37,10 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.withResumed
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -54,7 +51,9 @@ import com.weberbox.pifire.common.presentation.modifier.customTouch
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.util.BiometricPromptManager
@@ -83,7 +82,6 @@ import com.weberbox.pifire.home.presentation.utils.offsetDrawerWidth
 import com.weberbox.pifire.home.presentation.utils.permDrawerAdjustments
 import com.weberbox.pifire.pellets.presentation.screens.PelletsScreenDestination
 import dev.chrisbanes.haze.rememberHazeState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -96,6 +94,7 @@ fun HomeScreenDestination(
     backStackEntry: NavBackStackEntry,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     val showDashboard by backStackEntry.savedStateHandle
         .getStateFlow(key = SHOW_DASHBOARD_KEY, initialValue = false)
         .collectAsStateWithLifecycle()
@@ -110,15 +109,17 @@ fun HomeScreenDestination(
         onEventSent = { event -> viewModel.setEvent(event) },
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
-                is HomeContract.Effect.Navigation.Back -> navController.popBackStack()
+                is HomeContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                 is HomeContract.Effect.Navigation.Changelog -> {
-                    navController.safeNavigate(NavGraph.Changelog)
+                    navController.navigateFrom(from = sourceEntry, route = NavGraph.Changelog)
                 }
 
                 is HomeContract.Effect.Navigation.NavRoute -> {
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
                 }
             }
@@ -155,7 +156,6 @@ private fun HomeScreen(
     )
     val drawerState = rememberOffsetDrawerState()
     val scope = rememberCoroutineScope()
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
     var title by rememberSaveable { mutableStateOf(navigationItems[initialPage].title) }
 
     HandleSideEffects(
@@ -229,8 +229,6 @@ private fun HomeScreen(
                                         checkAuthentication(
                                             state = state,
                                             biometricManager = biometricManager,
-                                            lifecycle = lifecycle,
-                                            scope = scope,
                                             onSuccess = {
                                                 onNavigationRequested(
                                                     HomeContract.Effect.Navigation.NavRoute(
@@ -281,8 +279,6 @@ private fun HomeScreen(
                                             checkAuthentication(
                                                 state = state,
                                                 biometricManager = biometricManager,
-                                                lifecycle = lifecycle,
-                                                scope = scope,
                                                 onSuccess = {
                                                     onNavigationRequested(
                                                         HomeContract.Effect.Navigation.NavRoute(
@@ -447,16 +443,11 @@ private fun HomeScreen(
 private fun checkAuthentication(
     state: HomeContract.State,
     biometricManager: BiometricPromptManager?,
-    lifecycle: Lifecycle,
-    scope: CoroutineScope,
     onSuccess: () -> Unit,
 ) {
     if (state.biometricSettingsPrompt) {
         biometricManager?.authenticate(
-            onAuthenticationSuccess = {
-                // The prompt can finish before the screen is resumed, where navigation is dropped
-                scope.launch { lifecycle.withResumed(onSuccess) }
-            }
+            onAuthenticationSuccess = onSuccess
         )
     } else {
         onSuccess()

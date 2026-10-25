@@ -48,7 +48,9 @@ import com.weberbox.pifire.common.presentation.sheets.BottomSheet
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.settings.presentation.contract.TimerContract
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
@@ -63,6 +65,7 @@ fun SmartStartSettingsDestination(
     navController: NavHostController,
     viewModel: TimerSettingsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         SmartStartSettings(
             state = viewModel.viewState.value,
@@ -70,11 +73,13 @@ fun SmartStartSettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is TimerContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is TimerContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is TimerContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

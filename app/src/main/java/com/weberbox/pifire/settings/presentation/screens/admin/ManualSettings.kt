@@ -38,7 +38,9 @@ import com.weberbox.pifire.common.presentation.component.LinearLoadingIndicator
 import com.weberbox.pifire.common.presentation.component.SettingsAppBar
 import com.weberbox.pifire.common.presentation.screens.DataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.settings.presentation.component.PreferenceNote
 import com.weberbox.pifire.settings.presentation.component.SwitchPreference
@@ -57,6 +59,7 @@ fun ManualSettingsDestination(
     navController: NavHostController,
     viewModel: ManualSettingsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         ManualSettings(
             state = viewModel.viewState.value,
@@ -64,11 +67,13 @@ fun ManualSettingsDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is ManualContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is ManualContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is ManualContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

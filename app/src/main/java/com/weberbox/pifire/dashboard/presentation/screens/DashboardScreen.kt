@@ -58,7 +58,8 @@ import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSh
 import com.weberbox.pifire.common.presentation.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.common.presentation.util.slideDownExitTransition
 import com.weberbox.pifire.common.presentation.util.slideUpEnterTransition
@@ -130,6 +131,7 @@ private fun DashboardScreen(
     hazeState: HazeState,
     viewModel: DashboardViewModel
 ) {
+    val sourceEntry = rememberSourceEntry()
     DashboardScreenContent(
         state = viewModel.viewState.value,
         timerData = viewModel.timerData,
@@ -141,9 +143,11 @@ private fun DashboardScreen(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is DashContract.Effect.Navigation.NavRoute ->
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
             }
         },

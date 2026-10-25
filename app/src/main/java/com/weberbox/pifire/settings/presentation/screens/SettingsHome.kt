@@ -61,7 +61,9 @@ import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.CachedDataError
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.annotations.DeviceSizePreviews
 import com.weberbox.pifire.settings.presentation.contract.SettingsContract
@@ -79,6 +81,7 @@ fun SettingsHomeDestination(
     navController: NavHostController,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
         SettingsHome(
             state = viewModel.viewState.value,
@@ -86,11 +89,13 @@ fun SettingsHomeDestination(
             onEventSent = { event -> viewModel.setEvent(event) },
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
-                    is SettingsContract.Effect.Navigation.Back -> navController.popBackStack()
+                    is SettingsContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
                     is SettingsContract.Effect.Navigation.NavRoute -> {
-                        navController.safeNavigate(
+                        navController.navigateFrom(
+                            from = sourceEntry,
                             route = navigationEffect.route,
-                            popUp = navigationEffect.popUp
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
                         )
                     }
                 }

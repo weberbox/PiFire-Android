@@ -60,7 +60,8 @@ import com.weberbox.pifire.common.presentation.theme.PiFireTheme
 import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
 import com.weberbox.pifire.common.presentation.util.fadeExitTransition
-import com.weberbox.pifire.common.presentation.util.safeNavigate
+import com.weberbox.pifire.common.presentation.util.navigateFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.common.presentation.util.showAlerter
 import com.weberbox.pifire.core.util.BiometricPromptManager
 import com.weberbox.pifire.core.util.rememberBiometricPromptManager
@@ -80,6 +81,7 @@ fun LandingScreenDestination(
     navController: NavHostController,
     viewModel: LandingViewModel = hiltViewModel()
 ) {
+    val sourceEntry = rememberSourceEntry()
     val activity = LocalActivity.current
     LandingScreen(
         state = viewModel.viewState.value,
@@ -89,9 +91,11 @@ fun LandingScreenDestination(
             when (navigationEffect) {
                 is LandingContract.Effect.Navigation.Back -> activity?.finish()
                 is LandingContract.Effect.Navigation.NavRoute -> {
-                    navController.safeNavigate(
+                    navController.navigateFrom(
+                        from = sourceEntry,
                         route = navigationEffect.route,
-                        popUp = navigationEffect.popUp
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
                     )
                 }
             }
@@ -173,7 +177,7 @@ private fun LandingScreen(
                     onNavigationRequested(
                         LandingContract.Effect.Navigation.NavRoute(
                             route = NavGraph.ServerSetup,
-                            popUp = true
+                            popUpToRoute = NavGraph.LandingDest.Landing::class
                         )
                     )
                 },

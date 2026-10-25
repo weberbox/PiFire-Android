@@ -10,11 +10,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.common.presentation.screens.DetailsScreen
 import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.common.presentation.util.popBackStackFrom
+import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
 import com.weberbox.pifire.info.presentation.component.LicenseItem
 
 @Composable
@@ -22,10 +23,22 @@ fun LicenseDetailsScreen(
     navController: NavHostController,
     args: NavGraph.InfoDest.LicenseDetails
 ) {
+    val sourceEntry = rememberSourceEntry()
+    LicenseDetailsContent(
+        args = args,
+        onNavigate = { navController.popBackStackFrom(from = sourceEntry) },
+    )
+}
+
+@Composable
+private fun LicenseDetailsContent(
+    args: NavGraph.InfoDest.LicenseDetails,
+    onNavigate: () -> Unit,
+) {
     val context = LocalContext.current
     DetailsScreen(
         title = stringResource(R.string.info_credits),
-        onNavigate = { navController.popBackStack() }
+        onNavigate = onNavigate
     ) {
         items(items = args.licenses.list) { project ->
             LicenseItem(project) {
@@ -44,9 +57,9 @@ fun LicenseDetailsScreen(
 private fun LicenseDetailsScreenPreview() {
     PiFireTheme {
         Surface {
-            LicenseDetailsScreen(
-                navController = rememberNavController(),
-                args = NavGraph.InfoDest.LicenseDetails(buildLicenseData())
+            LicenseDetailsContent(
+                args = NavGraph.InfoDest.LicenseDetails(buildLicenseData()),
+                onNavigate = {},
             )
         }
     }

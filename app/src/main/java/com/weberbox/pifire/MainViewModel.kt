@@ -119,7 +119,7 @@ class MainViewModel @Inject constructor(
         setEffect {
             MainContract.Effect.Navigation.NavRoute(
                 route = NavGraph.LandingDest.Landing(false),
-                popUp = true
+                popUpToRoute = NavGraph.HomeDest.DashHome
             )
         }
     }

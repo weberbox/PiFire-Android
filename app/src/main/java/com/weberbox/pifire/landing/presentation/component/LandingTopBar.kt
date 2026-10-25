@@ -84,8 +84,7 @@ internal fun LandingTopBar(
                     onClick = {
                         onNavigationRequested(
                             LandingContract.Effect.Navigation.NavRoute(
-                                route = NavGraph.LandingDest.Settings,
-                                popUp = false
+                                route = NavGraph.LandingDest.Settings
                             )
                         )
                     }
