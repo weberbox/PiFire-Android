@@ -238,12 +238,14 @@ private data class SerializableArg(val value: Serializable) : UiTextArg {
 private data class ParcelableArg(val value: Parcelable) : UiTextArg {
 
     constructor(parcel: Parcel) : this(
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            parcel.readParcelable(Parcelable::class.java.classLoader, Parcelable::class.java)!!
-        } else {
-            @Suppress("DEPRECATION")
-            parcel.readParcelable(Parcelable::class.java.classLoader)!!
-        }
+        requireNotNull(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                parcel.readParcelable(Parcelable::class.java.classLoader, Parcelable::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                parcel.readParcelable<Parcelable>(Parcelable::class.java.classLoader)
+            }
+        ) { "UiText Parcelable argument was not written" }
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

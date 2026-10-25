@@ -53,9 +53,12 @@ One step per commit, compile all flavors after each.
    classes): api calls go through feature repos, `FinishViewModel` uses `SetupRepo.completeSetup`,
    new `core/repo` `PrefsRepo` and `ConnectionRepo` replace `Prefs`/`SocketManager`. No DTOs in
    presentation (`ProbeNotify`, `ProbeInfoUpdate`, `PwmProfile`, `SmartStartProfile` instead).
-6. Rename `RemoteConfigRepository(Impl)` -> `RemoteConfigRepo(Impl)`.
-7. Tooling: `.editorconfig` + Spotless/ktlint (copy the reference project's config), unit tests (JUnit, MockK,
-   coroutines-test, Konsist `ArchitectureTest` for the layout rules), then add them to CLAUDE.md.
+6. Done (2026-10-25): `RemoteConfigRepository(Impl)` renamed `RemoteConfigRepo(Impl)`.
+7. Tooling. Done (2026-10-25): JUnit/MockK/coroutines-test/Turbine, first unit tests (version
+   parsing, network errors, input validation, range tables, dash/events mappers) and a Konsist
+   `ArchitectureTest` for the CLAUDE.md rules; in CLAUDE.md. Left: `.editorconfig` + Spotless/ktlint
+   (reference project's config); the first `spotlessApply` reformats most files, so do it as its
+   own commit and list that commit in `.git-blame-ignore-revs`.
 
 ## Bugs: presentation
 - [picker] core/ui/components/PickerWheel.kt: scroll offset is read in composition to

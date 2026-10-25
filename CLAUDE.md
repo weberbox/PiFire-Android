@@ -33,6 +33,7 @@ Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `p
 |---|---|
 | Compile both flavors | `./gradlew :app:compileGithubDebugKotlin :app:compilePlaystoreDebugKotlin` |
 | Lint | `./gradlew :app:lintPlaystoreDebug` |
+| Unit tests (incl. `ArchitectureTest`) | `./gradlew :app:testPlaystoreDebugUnitTest` |
 | Release build | `./gradlew :app:assemblePlaystoreRelease :app:assembleGithubRelease` |
 
 - Always compile **both** flavors. `AppConfig.IS_PLAY_BUILD` switches behavior at runtime (Play
@@ -47,9 +48,13 @@ Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `p
 - After changing DTOs, `@Serializable` models, DataStore serializers, or anything Hilt/Firebase
   finds at runtime, build a release APK and add keep rules to `app/proguard-rules.pro`, grouped and
   commented.
-- There are no tests or formatter yet (see `BACKLOG.md`). Until there are, match the surrounding
-  formatting: 4-space indent, trailing commas in multi-line lists, `modifier = Modifier` on one line
-  and then one call per line once a chain has two or more calls.
+- Unit tests (JUnit 4, MockK, coroutines-test, Turbine) live in `app/src/test`, mirroring the main
+  package. `architecture/ArchitectureTest` (Konsist) checks the layout and dependency rules below;
+  keep it passing, and when a rule needs an exception, add it there with a comment saying why.
+  Add tests for new pure logic (mappers, parsing, validation, helpers).
+- There is no formatter yet (see `BACKLOG.md`). Until there is, match the surrounding formatting:
+  4-space indent, trailing commas in multi-line lists, `modifier = Modifier` on one line and then
+  one call per line once a chain has two or more calls.
 
 ## Project layout
 App code is in `app/src/main/java/com/weberbox/pifire/`. Target layout:
@@ -259,6 +264,7 @@ Other screen rules:
 
 ## Checklist before finishing a task
 - [ ] Both flavors compile. Release build checked if DTOs, serialization or reflection changed.
+- [ ] Unit tests pass, including `ArchitectureTest`.
 - [ ] ViewModels inject repos only; no DTOs in ViewModels, contracts or composables.
 - [ ] DTO changes tolerate missing, null, Int-vs-Double and unknown fields from any PiFire version.
 - [ ] No hardcoded UI strings or colors; spacing uses `MaterialTheme.spacing`.
