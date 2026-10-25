@@ -18,11 +18,12 @@ Write everything in American English (code, identifiers, comments, strings, docs
 Standing decisions, known bugs and parked work are in `BACKLOG.md`: check it before
 changing an area it lists, and add new follow-ups there.
 
-**Migration in progress.** The code predates these rules: the layout below is the target, and much
-of the app still uses the old one (`common/`, `component/`, `screens/`, `sheets/`, DI in
-`core/di`, DTOs in presentation, ViewModels calling `*Api` directly). When you edit a file, make
-the touched code follow the rules, but move packages only as part of a planned restructure step
-(tracked in `BACKLOG.md`), one feature at a time, so diffs stay reviewable.
+**Migration in progress.** The code predates these rules. The package layout below is in place,
+but some code still breaks the rules inside it (data using `presentation/model` types, DTOs in
+presentation, ViewModels calling `*Api` or DataStore directly, `core` importing features). When
+you edit a file, make the touched code follow the rules, but do larger moves only as part of a
+planned restructure step (tracked in `BACKLOG.md`), one feature at a time, so diffs stay
+reviewable.
 
 ## Build & verify
 Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `playstore`

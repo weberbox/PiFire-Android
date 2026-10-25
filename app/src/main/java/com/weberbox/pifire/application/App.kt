@@ -13,7 +13,7 @@ import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.data.util.getAppLanguage
 import com.weberbox.pifire.core.log.DebugLogTree
 import com.weberbox.pifire.core.log.SentryIO
-import com.weberbox.pifire.settings.data.model.local.Pref
+import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject

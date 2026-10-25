@@ -1,0 +1,34 @@
+package com.weberbox.pifire.feature.changelog.data.repo
+
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.data.util.readJsonFromAssets
+import com.weberbox.pifire.feature.changelog.data.mapper.ChangelogDtoToDataMapper
+import com.weberbox.pifire.feature.changelog.data.model.ChangelogDto
+import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.serialization.json.Json
+import timber.log.Timber
+import javax.inject.Inject
+
+class ChangelogRepoImpl @Inject constructor(
+    private val json: Json
+) : ChangelogRepo {
+
+    override suspend fun getChangelogData(): Result<ChangelogData, DataError> {
+        try {
+            val jsonString = readJsonFromAssets("changelog.json")
+            val changelogDto = json.decodeFromString<ChangelogDto>(jsonString)
+            val changelogData = ChangelogDtoToDataMapper.map(changelogDto)
+
+            return Result.Success(changelogData)
+
+        } catch (e: Exception) {
+            currentCoroutineContext().ensureActive()
+            Timber.e(e, "Changelog JSON Error")
+        }
+        return Result.Error(DataError.Local.JSON_ERROR)
+    }
+
+}

@@ -1,8 +1,9 @@
 # Backlog
 
 Standing decisions, known bugs and deferred work. Format: `- [area] file: what, and the suggested fix`.
-Paths are relative to `app/src/main/java/com/weberbox/pifire/` (features still in their
-pre-restructure layout; `core/` and `navigation/` restructured).
+Paths are relative to `app/src/main/java/com/weberbox/pifire/`. Lines written before the 2026-10-24
+restructure may name old paths (`settings/...` is now `feature/settings/...`, `screens/` is
+`screen/`).
 Findings from the 2026-10-22 review; verify each against the code before fixing, and delete the
 line once it's done.
 
@@ -32,10 +33,11 @@ One step per commit, compile all flavors after each.
    in `navigation/`; `MainActivity`/`MainViewModel`/`MainContract` in `application/`. Left for
    later steps: `core` still imports feature types (`SettingsData.Server`, `HeadersManager`,
    `SettingsRepo`, `Crypto`); move them to `core` with their feature (step 3/4).
-3. Per feature, move to `feature/<name>/`, rename `component`->`components`, `screens`->`screen`,
-   `sheets` -> `components/sheets` (or `screen/` if it has a ViewModel), DTO mappers from `domain/`
-   to `data/mapper`, and split its Hilt bindings out of `core/di/{RepoModule,ApiModule}` into
-   `data/di/<Name>DataModule`. Rename screen files without the `Screen` suffix.
+3. Done (2026-10-24): every feature in `feature/<name>/` with `components`/`screen`/`util`,
+   mappers in `data/mapper`, bindings in `data/di/<Name>DataModule` (`ApiModule`/`RepoModule`
+   removed), screen files and `*ScreenDestination` renamed. Left: private composables inside the
+   renamed settings/landing screens still lack the `Screen` suffix (fix with the five-part pattern),
+   and `core/di` (`DataStoreModule`, `StateModule`, `HeadersModule`, ...) still imports features.
 4. Per feature, stop data depending on presentation: repos and DataStore serializers use data
    models, not `presentation/model` types.
 5. Remove ViewModel access to apis/DataStore (see Conventions below).

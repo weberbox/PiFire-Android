@@ -1,0 +1,13 @@
+package com.weberbox.pifire.feature.info.data.repo
+
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.feature.info.presentation.model.InfoData.Info
+import com.weberbox.pifire.feature.info.presentation.model.Licenses
+
+interface InfoRepo {
+    suspend fun getInfo(): Result<Info, DataError>
+    suspend fun getCachedData(): Result<Info, DataError.Local>
+    suspend fun getLicences(): Result<Licenses, DataError>
+    suspend fun updateInfoData(info: Info)
+}

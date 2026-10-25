@@ -1,8 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import com.weberbox.pifire.core.constants.Constants
-import com.weberbox.pifire.landing.data.api.LandingApi
-import com.weberbox.pifire.setup.data.api.SetupApi
+import com.weberbox.pifire.feature.landing.data.api.LandingApi
+import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

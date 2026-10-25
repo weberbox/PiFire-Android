@@ -4,10 +4,10 @@ import android.content.Context
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.data.pref.Prefs
-import com.weberbox.pifire.settings.data.model.local.Pref
-import com.weberbox.pifire.settings.data.model.remote.Modules
-import com.weberbox.pifire.settings.data.repo.SettingsRepo
-import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
+import com.weberbox.pifire.feature.settings.data.model.local.Pref
+import com.weberbox.pifire.feature.settings.data.model.remote.Modules
+import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
+import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import io.sentry.Hint
 import io.sentry.IScope
 import io.sentry.Sentry

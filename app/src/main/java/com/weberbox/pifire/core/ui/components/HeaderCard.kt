@@ -43,8 +43,8 @@ import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.elevation
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.info.presentation.component.LicenseItem
-import com.weberbox.pifire.info.presentation.screens.buildLicenseData
+import com.weberbox.pifire.feature.info.presentation.components.LicenseItem
+import com.weberbox.pifire.feature.info.presentation.screen.buildLicenseData
 
 @Composable
 fun HeaderCard(

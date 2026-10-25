@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.weberbox.pifire.changelog.presentation.screens.ChangelogScreenDestination
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
@@ -17,49 +16,50 @@ import com.weberbox.pifire.core.ui.util.fadeExitTransition
 import com.weberbox.pifire.core.ui.util.scaleEnterTransition
 import com.weberbox.pifire.core.ui.util.slideEnterTransition
 import com.weberbox.pifire.core.ui.util.slidePopEnterTransition
-import com.weberbox.pifire.home.presentation.screens.HomeScreenDestination
-import com.weberbox.pifire.info.presentation.model.Licenses
-import com.weberbox.pifire.info.presentation.screens.InfoScreenDestination
-import com.weberbox.pifire.info.presentation.screens.LicenseDetailsScreen
-import com.weberbox.pifire.info.presentation.screens.PipModulesDetailsScreen
-import com.weberbox.pifire.landing.presentation.screens.HeaderSettingsDestination
-import com.weberbox.pifire.landing.presentation.screens.LandingScreenDestination
-import com.weberbox.pifire.landing.presentation.screens.ServerSettingsDestination
-import com.weberbox.pifire.landing.presentation.screens.SettingsScreenDestination
-import com.weberbox.pifire.pellets.presentation.screens.BrandsDetailsScreen
-import com.weberbox.pifire.pellets.presentation.screens.LogsDetailsScreen
-import com.weberbox.pifire.pellets.presentation.screens.ProfilesDetailsScreen
-import com.weberbox.pifire.pellets.presentation.screens.WoodsDetailsScreen
-import com.weberbox.pifire.recipes.presentation.screens.RecipeDetailsScreenDestination
-import com.weberbox.pifire.recipes.presentation.screens.RecipeImagesScreenDestination
-import com.weberbox.pifire.recipes.presentation.screens.RecipesScreenDestination
-import com.weberbox.pifire.settings.presentation.screens.SettingsHomeDestination
-import com.weberbox.pifire.settings.presentation.screens.admin.AdminSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.admin.ManualSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.app.AppSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.AppriseSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.IftttSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.InfluxDbSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.MqttSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.NotificationSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.NotificationSettingsViewModel
-import com.weberbox.pifire.settings.presentation.screens.notifications.PushSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.PushbulletSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.PushoverSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.WLedProfilesDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.notifications.WLedSuggestedProfilesDestination
-import com.weberbox.pifire.settings.presentation.screens.pellets.PelletSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.probe.ProbeSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.pwm.PwmControlDestination
-import com.weberbox.pifire.settings.presentation.screens.pwm.PwmSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.safety.SafetySettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.timer.SmartStartSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.timer.TimerSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.ui.UISettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.work.PidSettingsDestination
-import com.weberbox.pifire.settings.presentation.screens.work.WorkSettingsDestination
-import com.weberbox.pifire.setup.presentation.screens.SetupScreenDestination
+import com.weberbox.pifire.feature.changelog.presentation.screen.ChangelogScreenDestination
+import com.weberbox.pifire.feature.home.presentation.screen.HomeScreenDestination
+import com.weberbox.pifire.feature.info.presentation.model.Licenses
+import com.weberbox.pifire.feature.info.presentation.screen.InfoScreenDestination
+import com.weberbox.pifire.feature.info.presentation.screen.LicenseDetailsScreen
+import com.weberbox.pifire.feature.info.presentation.screen.PipModulesDetailsScreen
+import com.weberbox.pifire.feature.landing.presentation.screen.HeaderSettingsScreenDestination
+import com.weberbox.pifire.feature.landing.presentation.screen.LandingScreenDestination
+import com.weberbox.pifire.feature.landing.presentation.screen.ServerSettingsScreenDestination
+import com.weberbox.pifire.feature.landing.presentation.screen.SettingsScreenDestination
+import com.weberbox.pifire.feature.pellets.presentation.screen.BrandsDetailsScreen
+import com.weberbox.pifire.feature.pellets.presentation.screen.LogsDetailsScreen
+import com.weberbox.pifire.feature.pellets.presentation.screen.ProfilesDetailsScreen
+import com.weberbox.pifire.feature.pellets.presentation.screen.WoodsDetailsScreen
+import com.weberbox.pifire.feature.recipes.presentation.screen.RecipeDetailsScreenDestination
+import com.weberbox.pifire.feature.recipes.presentation.screen.RecipeImagesScreenDestination
+import com.weberbox.pifire.feature.recipes.presentation.screen.RecipesScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.SettingsHomeScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.admin.AdminSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.admin.ManualSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.app.AppSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.AppriseSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.IftttSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.InfluxDbSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.MqttSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.NotificationSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.NotificationSettingsViewModel
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.PushSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.PushbulletSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.PushoverSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.WLedProfilesScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.WLedSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.WLedSuggestedProfilesScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.pellets.PelletSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.probe.ProbeSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.pwm.PwmControlScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.pwm.PwmSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.safety.SafetySettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.timer.SmartStartSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.timer.TimerSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.ui.UISettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.work.PidSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.work.WorkSettingsScreenDestination
+import com.weberbox.pifire.feature.setup.presentation.screen.SetupScreenDestination
 import kotlin.reflect.typeOf
 
 @Composable
@@ -116,10 +116,10 @@ fun NavGraphBuilder.landingNavGraph(navController: NavHostController) {
             SettingsScreenDestination(navController)
         }
         composable<NavGraph.LandingDest.ServerSettings> {
-            ServerSettingsDestination(navController)
+            ServerSettingsScreenDestination(navController)
         }
         composable<NavGraph.LandingDest.HeaderSettings> {
-            HeaderSettingsDestination(navController)
+            HeaderSettingsScreenDestination(navController)
         }
     }
 }
@@ -206,90 +206,90 @@ fun NavGraphBuilder.settingsNavGraph(
         startDestination = NavGraph.SettingsDest.SettingsHome
     ) {
         composable<NavGraph.SettingsDest.SettingsHome> {
-            SettingsHomeDestination(navController)
+            SettingsHomeScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Admin> {
-            AdminSettingsDestination(navController)
+            AdminSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Manual> {
-            ManualSettingsDestination(navController)
+            ManualSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.App> {
-            AppSettingsDestination(navController)
+            AppSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Probe> {
-            ProbeSettingsDestination(navController)
+            ProbeSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.UI> {
-            UISettingsDestination(navController)
+            UISettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Work> {
-            WorkSettingsDestination(navController)
+            WorkSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Pid> {
-            PidSettingsDestination(navController)
+            PidSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Pwm> {
-            PwmSettingsDestination(navController)
+            PwmSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.PwmControl> {
-            PwmControlDestination(navController)
+            PwmControlScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Pellets> {
-            PelletSettingsDestination(navController)
+            PelletSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Timer> {
-            TimerSettingsDestination(navController)
+            TimerSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.SmartStart> {
-            SmartStartSettingsDestination(navController)
+            SmartStartSettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Safety> {
-            SafetySettingsDestination(navController)
+            SafetySettingsScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Notifications> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            NotificationSettingsDestination(navController, viewModel)
+            NotificationSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Push> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            PushSettingsDestination(navController, viewModel)
+            PushSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Ifttt> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            IftttSettingsDestination(navController, viewModel)
+            IftttSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Pushover> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            PushoverSettingsDestination(navController, viewModel)
+            PushoverSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Pushbullet> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            PushbulletSettingsDestination(navController, viewModel)
+            PushbulletSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.InfluxDb> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            InfluxDbSettingsDestination(navController, viewModel)
+            InfluxDbSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Mqtt> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            MqttSettingsDestination(navController, viewModel)
+            MqttSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.Apprise> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            AppriseSettingsDestination(navController, viewModel)
+            AppriseSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.WLED> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            WLedSettingsDestination(navController, viewModel)
+            WLedSettingsScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.WLEDProfiles> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            WLedProfilesDestination(navController, viewModel)
+            WLedProfilesScreenDestination(navController, viewModel)
         }
         composable<NavGraph.SettingsDest.WLEDSuggestedProfiles> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
-            WLedSuggestedProfilesDestination(navController, viewModel)
+            WLedSuggestedProfilesScreenDestination(navController, viewModel)
         }
     }
 }

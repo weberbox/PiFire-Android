@@ -2,8 +2,8 @@ package com.weberbox.pifire.core.di
 
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.session.SessionStateHolder
-import com.weberbox.pifire.setup.data.util.ServerDataCache
-import com.weberbox.pifire.setup.data.util.ServerDataCacheImpl
+import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
+import com.weberbox.pifire.feature.setup.data.util.ServerDataCacheImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,0 +1,230 @@
+package com.weberbox.pifire.feature.events.presentation.screen
+
+import android.content.res.Configuration
+import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.core.ui.components.CachedDataError
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.components.PullToRefresh
+import com.weberbox.pifire.core.ui.modifier.isElementVisible
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.feature.events.presentation.components.EventItem
+import com.weberbox.pifire.feature.events.presentation.contract.EventsContract
+import com.weberbox.pifire.feature.events.presentation.model.EventType
+import com.weberbox.pifire.feature.events.presentation.model.EventsData.Events.Event
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+
+@Composable
+fun EventsScreenDestination(
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: EventsViewModel? = null
+) {
+    return when {
+        LocalInspectionMode.current -> {
+            EventsScreenPreview(
+                contentPadding = contentPadding,
+                hazeState = hazeState
+            )
+        }
+
+        else -> {
+            EventsScreen(
+                contentPadding = contentPadding,
+                hazeState = hazeState,
+                viewModel = viewModel ?: hiltViewModel()
+            )
+        }
+    }
+}
+
+@Composable
+private fun EventsScreen(
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: EventsViewModel
+) {
+    EventsScreenContent(
+        state = viewModel.viewState.value,
+        effectFlow = viewModel.effect,
+        onEventSent = { event -> viewModel.setEvent(event) },
+        hazeState = hazeState,
+        contentPadding = contentPadding,
+    )
+}
+
+@Composable
+private fun EventsScreenContent(
+    state: EventsContract.State,
+    effectFlow: Flow<EventsContract.Effect>?,
+    onEventSent: (event: EventsContract.Event) -> Unit,
+    hazeState: HazeState,
+    contentPadding: PaddingValues,
+) {
+    var isVisibleOnScreen by remember { mutableStateOf(false) }
+
+    HandleSideEffects(
+        isVisibleOnScreen = isVisibleOnScreen,
+        effectFlow = effectFlow
+    )
+
+    @Suppress("NAME_SHADOWING")
+    AnimatedContent(
+        modifier = Modifier.isElementVisible {
+            isVisibleOnScreen = it
+        },
+        targetState = state,
+        contentKey = { it.isInitialLoading or it.isDataError }
+    ) { state ->
+        when {
+            state.isInitialLoading -> InitialLoadingProgress()
+            state.isDataError -> CachedDataError { onEventSent(EventsContract.Event.Refresh) }
+            else -> {
+                PullToRefresh(
+                    isRefreshing = state.isRefreshing,
+                    onRefresh = {
+                        onEventSent(EventsContract.Event.Refresh)
+                    },
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding
+                ) {
+                    LazyColumn(
+                        contentPadding = contentPadding,
+                        modifier = Modifier
+                            .hazeSource(state = hazeState)
+                            .fillMaxSize()
+                            .padding(
+                                vertical = MaterialTheme.spacing.smallOne,
+                                horizontal = MaterialTheme.spacing.smallOne
+                            ),
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                    ) {
+                        items(
+                            items = state.eventsList,
+                            key = { it.id }
+                        ) { item ->
+                            EventItem(item)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    isVisibleOnScreen: Boolean,
+    effectFlow: Flow<EventsContract.Effect>?
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is EventsContract.Effect.Notification ->
+                    if (isVisibleOnScreen) {
+                        activity?.showAlerter(
+                            message = effect.text,
+                            isError = effect.error
+                        )
+                    }
+            }
+        }?.collect()
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+internal fun EventsScreenPreview(
+    contentPadding: PaddingValues = PaddingValues(),
+    hazeState: HazeState = rememberHazeState()
+) {
+    PiFireTheme {
+        Surface {
+            EventsScreenContent(
+                state = EventsContract.State(
+                    eventsList = buildEventsList(),
+                    isInitialLoading = false,
+                    isDataError = false,
+                    isRefreshing = false
+                ),
+                effectFlow = null,
+                onEventSent = {},
+                hazeState = hazeState,
+                contentPadding = contentPadding,
+            )
+        }
+    }
+}
+
+internal fun buildEventsList() = listOf(
+    Event(
+        id = "preview-1",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[INFO] Stop Mode Started",
+        type = EventType.Info
+    ),
+    Event(
+        id = "preview-2",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[INFO] Hopper Level Checked @ 72%",
+        type = EventType.Info
+    ),
+    Event(
+        id = "preview-3",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[WARNING] Warning Text",
+        type = EventType.Warning
+    ),
+    Event(
+        id = "preview-4",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[INFO] Script Ended",
+        type = EventType.Info
+    ),
+    Event(
+        id = "preview-5",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[INFO] Script Starting",
+        type = EventType.Info
+    ),
+    Event(
+        id = "preview-6",
+        date = "04-25-2025",
+        time = "6:18 PM",
+        message = "[DEBUG] * Debug Testing",
+        type = EventType.Debug
+    )
+)

@@ -4,8 +4,8 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.session.SessionStateHolder
-import com.weberbox.pifire.settings.data.util.HeadersManager
-import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
+import com.weberbox.pifire.feature.settings.data.util.HeadersManager
+import com.weberbox.pifire.feature.settings.presentation.model.SettingsData.Server
 import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket

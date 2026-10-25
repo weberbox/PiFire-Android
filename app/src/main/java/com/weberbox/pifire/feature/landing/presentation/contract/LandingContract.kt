@@ -1,0 +1,41 @@
+package com.weberbox.pifire.feature.landing.presentation.contract
+
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.feature.landing.presentation.model.ServerData
+
+class LandingContract {
+
+    sealed class Event : ViewEvent {
+        data class SelectServer(val uuid: String): Event()
+        data class DeleteServer(val uuid: String): Event()
+        data object VoiceSearch : Event()
+        data object StartPolling : Event()
+        data object StopPolling : Event()
+        data object Back: Event()
+    }
+
+    data class State(
+        val serverData: ServerData,
+        val isInitialLoading: Boolean,
+        val isLoading: Boolean,
+        val isDataError: Boolean,
+        val biometricServerPrompt: Boolean
+    ) : ViewState
+
+    sealed class Effect : ViewSideEffect {
+        data class BiometricServerPrompt(val uuid: String) : Effect()
+        data class Notification(val text: UiText, val error: Boolean) : Effect()
+
+        sealed class Navigation : Effect() {
+            data object Back : Navigation()
+            data class NavRoute(
+                val route: Any,
+                val popUpToRoute: Any? = null,
+                val inclusive: Boolean = true,
+            ) : Navigation()
+        }
+    }
+}

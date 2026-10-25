@@ -34,7 +34,7 @@ import com.weberbox.pifire.core.ui.util.SnackbarAction
 import com.weberbox.pifire.core.ui.util.SnackbarController
 import com.weberbox.pifire.core.ui.util.SnackbarEvent
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.settings.data.model.local.Pref
+import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

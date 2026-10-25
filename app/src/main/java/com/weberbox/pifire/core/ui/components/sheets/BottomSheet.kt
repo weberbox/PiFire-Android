@@ -43,7 +43,7 @@ import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
-import com.weberbox.pifire.dashboard.presentation.sheets.ModeSheet
+import com.weberbox.pifire.feature.dashboard.presentation.components.sheets.ModeSheet
 
 @Composable
 fun BottomSheet(

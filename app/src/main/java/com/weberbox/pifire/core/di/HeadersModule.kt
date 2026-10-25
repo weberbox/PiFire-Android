@@ -1,8 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.settings.data.model.local.HeadersData
-import com.weberbox.pifire.settings.data.util.HeadersManager
+import com.weberbox.pifire.feature.settings.data.model.local.HeadersData
+import com.weberbox.pifire.feature.settings.data.util.HeadersManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

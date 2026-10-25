@@ -1,0 +1,31 @@
+package com.weberbox.pifire.feature.changelog.presentation.contract
+
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.feature.changelog.presentation.model.ChangelogData
+
+class ChangelogContract {
+
+    sealed class Event : ViewEvent
+
+    data class State(
+        val changelogData: ChangelogData,
+        val isInitialLoading: Boolean,
+        val isDataError: Boolean
+    ) : ViewState
+
+    sealed class Effect : ViewSideEffect {
+        data class Notification(val text: UiText, val error: Boolean) : Effect()
+
+        sealed class Navigation : Effect() {
+            data object Back : Navigation()
+            data class NavRoute(
+                val route: Any,
+                val popUpToRoute: Any? = null,
+                val inclusive: Boolean = true,
+            ) : Navigation()
+        }
+    }
+}
