@@ -31,7 +31,6 @@ import com.weberbox.pifire.feature.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.feature.home.presentation.contract.HomeContract
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -139,7 +138,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun checkOneSignalStatus() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             oneSignalManager.checkOneSignalStatus()
         }
     }

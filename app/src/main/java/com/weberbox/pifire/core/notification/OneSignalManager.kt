@@ -20,6 +20,8 @@ import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.util.checkPermission
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -81,7 +83,10 @@ class OneSignalManager @Inject constructor(
         }
     }
 
-    suspend fun checkOneSignalStatus(): OneSignalStatus {
+    // The SDK and the registration call block, so this runs on IO and callers can stay on Main
+    suspend fun checkOneSignalStatus(): OneSignalStatus = withContext(Dispatchers.IO) { checkStatus() }
+
+    private suspend fun checkStatus(): OneSignalStatus {
         if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
             when (val status = checkRegistration()) {
                 OneSignalStatus.ONESIGNAL_NO_ID -> {
