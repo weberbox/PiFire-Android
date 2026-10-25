@@ -13,9 +13,7 @@ import com.weberbox.pifire.feature.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +50,7 @@ class PelletsViewModel @Inject constructor(
 
     private fun sendPelletsEvent(event: PelletsEvent) {
         setLoadingStateTrue()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(
                 when (event) {
                     is PelletsEvent.HopperCheck -> pelletsRepo.getPelletLevel()
@@ -97,30 +95,28 @@ class PelletsViewModel @Inject constructor(
     private fun listenPelletsData() {
         viewModelScope.launch {
             pelletsRepo.listenPelletsData().collect { result ->
-                withContext(Dispatchers.Main) {
-                    when (result) {
-                        is Result.Error -> {
-                            if (result.error != DataError.Network.SOCKET_ERROR) {
-                                setEffect {
-                                    PelletsContract.Effect.Notification(
-                                        text = result.error.asUiText(),
-                                        error = true,
-                                    )
-                                }
-                            }
-                            setState { copy(isRefreshing = false, isLoading = false) }
-                        }
-
-                        is Result.Success -> {
-                            setState {
-                                copy(
-                                    pellets = result.data,
-                                    isInitialLoading = false,
-                                    isRefreshing = false,
-                                    isLoading = false,
-                                    isDataError = false,
+                when (result) {
+                    is Result.Error -> {
+                        if (result.error != DataError.Network.SOCKET_ERROR) {
+                            setEffect {
+                                PelletsContract.Effect.Notification(
+                                    text = result.error.asUiText(),
+                                    error = true,
                                 )
                             }
+                        }
+                        setState { copy(isRefreshing = false, isLoading = false) }
+                    }
+
+                    is Result.Success -> {
+                        setState {
+                            copy(
+                                pellets = result.data,
+                                isInitialLoading = false,
+                                isRefreshing = false,
+                                isLoading = false,
+                                isDataError = false,
+                            )
                         }
                     }
                 }
@@ -134,55 +130,21 @@ class PelletsViewModel @Inject constructor(
             when (val result = pelletsRepo.getPellets()) {
                 is Result.Error -> {
                     if (forced) {
-                        withContext(Dispatchers.Main) {
-                            setEffect {
-                                PelletsContract.Effect.Notification(
-                                    text = result.error.asUiText(),
-                                    error = true,
-                                )
-                            }
-                            setState {
-                                copy(
-                                    isInitialLoading = false,
-                                    isLoading = false,
-                                    isRefreshing = false,
-                                )
-                            }
+                        setEffect {
+                            PelletsContract.Effect.Notification(
+                                text = result.error.asUiText(),
+                                error = true,
+                            )
                         }
-                    } else {
-                        getCachedData()
-                    }
-                }
-
-                is Result.Success -> {
-                    withContext(Dispatchers.Main) {
                         setState {
                             copy(
-                                pellets = result.data,
                                 isInitialLoading = false,
                                 isLoading = false,
                                 isRefreshing = false,
-                                isDataError = false,
                             )
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun getCachedData() {
-        val result = pelletsRepo.getCachedData()
-        withContext(Dispatchers.Main) {
-            when (result) {
-                is Result.Error -> {
-                    setState {
-                        copy(
-                            pellets = Pellets(),
-                            isInitialLoading = false,
-                            isRefreshing = false,
-                            isDataError = true,
-                        )
+                    } else {
+                        getCachedData()
                     }
                 }
 
@@ -191,14 +153,9 @@ class PelletsViewModel @Inject constructor(
                         copy(
                             pellets = result.data,
                             isInitialLoading = false,
+                            isLoading = false,
                             isRefreshing = false,
                             isDataError = false,
-                        )
-                    }
-                    setEffect {
-                        PelletsContract.Effect.Notification(
-                            text = UiText(R.string.alerter_cached_results),
-                            error = true,
                         )
                     }
                 }
@@ -206,24 +163,55 @@ class PelletsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleResult(result: Result<Unit, DataError>) {
-        withContext(Dispatchers.Main) {
-            when (result) {
-                is Result.Error -> {
-                    if (result.error != DataError.Network.SOCKET_ERROR) {
-                        setEffect {
-                            PelletsContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
-                    }
-                    setState { copy(isRefreshing = false, isLoading = false) }
+    private suspend fun getCachedData() {
+        val result = pelletsRepo.getCachedData()
+        when (result) {
+            is Result.Error -> {
+                setState {
+                    copy(
+                        pellets = Pellets(),
+                        isInitialLoading = false,
+                        isRefreshing = false,
+                        isDataError = true,
+                    )
                 }
+            }
 
-                is Result.Success -> {
-                    // listenPelletsData clears loading
+            is Result.Success -> {
+                setState {
+                    copy(
+                        pellets = result.data,
+                        isInitialLoading = false,
+                        isRefreshing = false,
+                        isDataError = false,
+                    )
                 }
+                setEffect {
+                    PelletsContract.Effect.Notification(
+                        text = UiText(R.string.alerter_cached_results),
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleResult(result: Result<Unit, DataError>) {
+        when (result) {
+            is Result.Error -> {
+                if (result.error != DataError.Network.SOCKET_ERROR) {
+                    setEffect {
+                        PelletsContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
+                    }
+                }
+                setState { copy(isRefreshing = false, isLoading = false) }
+            }
+
+            is Result.Success -> {
+                // listenPelletsData clears loading
             }
         }
     }

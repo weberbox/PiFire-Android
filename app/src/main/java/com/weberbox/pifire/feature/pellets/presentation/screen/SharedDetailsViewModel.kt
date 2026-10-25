@@ -11,9 +11,7 @@ import com.weberbox.pifire.feature.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +46,7 @@ class SharedDetailsViewModel @Inject constructor(
     }
 
     private fun sendPelletsEvent(event: PelletsEvent) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             setLoadingStateTrue()
             handleResult(
                 when (event) {
@@ -114,67 +112,60 @@ class SharedDetailsViewModel @Inject constructor(
     private fun getPelletsData() {
         setState { copy(isRefreshing = true) }
         viewModelScope.launch {
-            val result = pelletsRepo.getPellets()
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        setEffect {
-                            PelletsContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
-                        setState {
-                            copy(
-                                isInitialLoading = false,
-                                isLoading = false,
-                                isRefreshing = false,
-                                isDataError = false,
-                            )
-                        }
-                    }
-
-                    is Result.Success -> {
-                        setState {
-                            copy(
-                                pellets = result.data,
-                                isInitialLoading = false,
-                                isLoading = false,
-                                isRefreshing = false,
-                                isDataError = false,
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun handleResult(result: Result<Unit, DataError>) {
-        withContext(Dispatchers.Main) {
-            when (result) {
+            when (val result = pelletsRepo.getPellets()) {
                 is Result.Error -> {
-                    if (result.error != DataError.Network.SOCKET_ERROR) {
-                        setEffect {
-                            PelletsContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
+                    setEffect {
+                        PelletsContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
                     }
-                    setState { copy(isRefreshing = false, isLoading = false) }
+                    setState {
+                        copy(
+                            isInitialLoading = false,
+                            isLoading = false,
+                            isRefreshing = false,
+                            isDataError = false,
+                        )
+                    }
                 }
 
                 is Result.Success -> {
-                    // collectDataState clears loading
+                    setState {
+                        copy(
+                            pellets = result.data,
+                            isInitialLoading = false,
+                            isLoading = false,
+                            isRefreshing = false,
+                            isDataError = false,
+                        )
+                    }
                 }
             }
         }
     }
 
-    private suspend fun setLoadingStateTrue() {
-        withContext(Dispatchers.Main) {
-            setState { copy(isLoading = true) }
+    private fun handleResult(result: Result<Unit, DataError>) {
+        when (result) {
+            is Result.Error -> {
+                if (result.error != DataError.Network.SOCKET_ERROR) {
+                    setEffect {
+                        PelletsContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
+                    }
+                }
+                setState { copy(isRefreshing = false, isLoading = false) }
+            }
+
+            is Result.Success -> {
+                // collectDataState clears loading
+            }
         }
+    }
+
+    private fun setLoadingStateTrue() {
+        setState { copy(isLoading = true) }
     }
 }

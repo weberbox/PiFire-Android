@@ -38,12 +38,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun ProfilesDetailsScreen(
+fun ProfilesDetailsScreenDestination(
     navController: NavHostController,
     viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
-    ProfilesDetailsContent(
+    ProfilesDetailsScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
@@ -66,19 +66,32 @@ fun ProfilesDetailsScreen(
 }
 
 @Composable
-private fun ProfilesDetailsContent(
+private fun ProfilesDetailsScreen(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
-    val profileEditSheet = rememberInputModalBottomSheetState<ProfilesData>()
-    val profileDeleteSheet = rememberInputModalBottomSheetState<PelletProfile>()
-
     HandleSideEffects(
         effectFlow = effectFlow,
         onNavigationRequested = onNavigationRequested,
     )
+
+    ProfilesDetailsScreenContent(
+        state = state,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun ProfilesDetailsScreenContent(
+    state: PelletsContract.State,
+    onEventSent: (event: PelletsContract.Event) -> Unit,
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
+) {
+    val profileEditSheet = rememberInputModalBottomSheetState<ProfilesData>()
+    val profileDeleteSheet = rememberInputModalBottomSheetState<PelletProfile>()
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -208,7 +221,7 @@ private fun HandleSideEffects(
 private fun ProfilesDetailsScreenPreview() {
     PiFireTheme {
         Surface {
-            ProfilesDetailsContent(
+            ProfilesDetailsScreenContent(
                 state = PelletsContract.State(
                     pellets = buildPellets(),
                     isInitialLoading = false,
@@ -217,7 +230,6 @@ private fun ProfilesDetailsScreenPreview() {
                     isRefreshing = false,
                     isConnected = true,
                 ),
-                effectFlow = null,
                 onEventSent = { },
                 onNavigationRequested = { },
             )

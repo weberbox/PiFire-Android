@@ -158,9 +158,9 @@ class ArchitectureTest {
             "AdminSettingsViewModel", "ConnectViewModel", "DashboardViewModel",
             "FinishViewModel", "HomeScreenViewModel", "LandingViewModel",
             "ManualSettingsViewModel", "NotificationSettingsViewModel", "PelletSettingsViewModel",
-            "PelletsViewModel", "ProbeSettingsViewModel",
+            "ProbeSettingsViewModel",
             "PwmSettingsViewModel", "RecipeDetailsViewModel", "SafetySettingsViewModel",
-            "SharedDetailsViewModel", "TimerSettingsViewModel", "UISettingsViewModel",
+            "TimerSettingsViewModel", "UISettingsViewModel",
             "WorkSettingsViewModel",
         )
         val PRINTLN = Regex("""\bprintln\(""")

@@ -26,10 +26,10 @@ import com.weberbox.pifire.feature.landing.presentation.screen.HeaderSettingsScr
 import com.weberbox.pifire.feature.landing.presentation.screen.LandingScreenDestination
 import com.weberbox.pifire.feature.landing.presentation.screen.ServerSettingsScreenDestination
 import com.weberbox.pifire.feature.landing.presentation.screen.SettingsScreenDestination
-import com.weberbox.pifire.feature.pellets.presentation.screen.BrandsDetailsScreen
-import com.weberbox.pifire.feature.pellets.presentation.screen.LogsDetailsScreen
-import com.weberbox.pifire.feature.pellets.presentation.screen.ProfilesDetailsScreen
-import com.weberbox.pifire.feature.pellets.presentation.screen.WoodsDetailsScreen
+import com.weberbox.pifire.feature.pellets.presentation.screen.BrandsDetailsScreenDestination
+import com.weberbox.pifire.feature.pellets.presentation.screen.LogsDetailsScreenDestination
+import com.weberbox.pifire.feature.pellets.presentation.screen.ProfilesDetailsScreenDestination
+import com.weberbox.pifire.feature.pellets.presentation.screen.WoodsDetailsScreenDestination
 import com.weberbox.pifire.feature.recipes.presentation.screen.RecipeDetailsScreenDestination
 import com.weberbox.pifire.feature.recipes.presentation.screen.RecipeImagesScreenDestination
 import com.weberbox.pifire.feature.recipes.presentation.screen.RecipesScreenDestination
@@ -137,22 +137,22 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
         composable<NavGraph.HomeDest.BrandsDetails>(
             enterTransition = { scaleEnterTransition() },
         ) {
-            BrandsDetailsScreen(navController)
+            BrandsDetailsScreenDestination(navController)
         }
         composable<NavGraph.HomeDest.WoodsDetails>(
             enterTransition = { scaleEnterTransition() },
         ) {
-            WoodsDetailsScreen(navController)
+            WoodsDetailsScreenDestination(navController)
         }
         composable<NavGraph.HomeDest.ProfilesDetails>(
             enterTransition = { scaleEnterTransition() },
         ) {
-            ProfilesDetailsScreen(navController)
+            ProfilesDetailsScreenDestination(navController)
         }
         composable<NavGraph.HomeDest.LogsDetails>(
             enterTransition = { scaleEnterTransition() },
         ) {
-            LogsDetailsScreen(navController)
+            LogsDetailsScreenDestination(navController)
         }
     }
 }

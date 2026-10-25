@@ -90,27 +90,37 @@ private fun PelletsScreen(
     viewModel: PelletsViewModel,
 ) {
     val sourceEntry = rememberSourceEntry()
+    var isVisibleOnScreen by remember { mutableStateOf(false) }
+    val onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit = { navigationEffect ->
+        when (navigationEffect) {
+            is PelletsContract.Effect.Navigation.Back ->
+                navController.popBackStackFrom(from = sourceEntry)
+
+            is PelletsContract.Effect.Navigation.NavRoute -> {
+                navController.navigateFrom(
+                    from = sourceEntry,
+                    route = navigationEffect.route,
+                    popUpToRoute = navigationEffect.popUpToRoute,
+                    inclusive = navigationEffect.inclusive,
+                )
+            }
+        }
+    }
+
+    // Only notify while this pager page is on screen
+    HandleSideEffects(
+        isVisibleOnScreen = isVisibleOnScreen,
+        effectFlow = viewModel.effect,
+        onNavigationRequested = onNavigationRequested,
+    )
+
     PelletsScreenContent(
         hazeState = hazeState,
         contentPadding = contentPadding,
         state = viewModel.viewState.value,
-        effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
-        onNavigationRequested = { navigationEffect ->
-            when (navigationEffect) {
-                is PelletsContract.Effect.Navigation.Back ->
-                    navController.popBackStackFrom(from = sourceEntry)
-
-                is PelletsContract.Effect.Navigation.NavRoute -> {
-                    navController.navigateFrom(
-                        from = sourceEntry,
-                        route = navigationEffect.route,
-                        popUpToRoute = navigationEffect.popUpToRoute,
-                        inclusive = navigationEffect.inclusive,
-                    )
-                }
-            }
-        },
+        onNavigationRequested = onNavigationRequested,
+        onVisibilityChanged = { isVisibleOnScreen = it },
     )
 }
 
@@ -119,9 +129,9 @@ private fun PelletsScreenContent(
     hazeState: HazeState,
     contentPadding: PaddingValues,
     state: PelletsContract.State,
-    effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
+    onVisibilityChanged: (Boolean) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val currentSheet = rememberCustomModalBottomSheetState()
@@ -133,19 +143,9 @@ private fun PelletsScreenContent(
     val profileEditSheet = rememberInputModalBottomSheetState<ProfilesData>()
     val profileDeleteSheet = rememberInputModalBottomSheetState<PelletProfile>()
     val logDeleteSheet = rememberInputModalBottomSheetState<PelletLog>()
-    var isVisibleOnScreen by remember { mutableStateOf(false) }
-
-    HandleSideEffects(
-        isVisibleOnScreen = isVisibleOnScreen,
-        effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested,
-    )
-
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
-        modifier = Modifier.isElementVisible {
-            isVisibleOnScreen = it
-        },
+        modifier = Modifier.isElementVisible(onVisibilityChanged),
         targetState = state,
         contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
@@ -372,7 +372,7 @@ internal fun PelletsScreenPreview(
                     isRefreshing = false,
                     isConnected = true,
                 ),
-                effectFlow = null,
+                onVisibilityChanged = {},
                 onEventSent = {},
                 onNavigationRequested = { },
             )

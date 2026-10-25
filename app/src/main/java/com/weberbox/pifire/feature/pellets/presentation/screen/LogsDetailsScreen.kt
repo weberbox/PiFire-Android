@@ -36,12 +36,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 
 @Composable
-fun LogsDetailsScreen(
+fun LogsDetailsScreenDestination(
     navController: NavHostController,
     viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
-    LogsDetailsContent(
+    LogsDetailsScreen(
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
@@ -64,18 +64,31 @@ fun LogsDetailsScreen(
 }
 
 @Composable
-private fun LogsDetailsContent(
+private fun LogsDetailsScreen(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
     onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
-    val logDeleteSheet = rememberInputModalBottomSheetState<PelletLog>()
-
     HandleSideEffects(
         effectFlow = effectFlow,
         onNavigationRequested = onNavigationRequested,
     )
+
+    LogsDetailsScreenContent(
+        state = state,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun LogsDetailsScreenContent(
+    state: PelletsContract.State,
+    onEventSent: (event: PelletsContract.Event) -> Unit,
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
+) {
+    val logDeleteSheet = rememberInputModalBottomSheetState<PelletLog>()
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
@@ -172,7 +185,7 @@ private fun HandleSideEffects(
 private fun LogsDetailsScreenPreview() {
     PiFireTheme {
         Surface {
-            LogsDetailsContent(
+            LogsDetailsScreenContent(
                 state = PelletsContract.State(
                     pellets = buildPellets(),
                     isInitialLoading = false,
@@ -181,7 +194,6 @@ private fun LogsDetailsScreenPreview() {
                     isRefreshing = false,
                     isConnected = true,
                 ),
-                effectFlow = null,
                 onEventSent = { },
                 onNavigationRequested = { },
             )

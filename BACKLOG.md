@@ -67,6 +67,6 @@ One step per commit, compile all flavors after each.
 - SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
 - Dispatchers in ViewModels with `withContext(Main)` before `setEffect`: move IO into repos and
   bring the screen into the five-part pattern, one feature per commit. `ArchitectureTest`
-  (`VIEW_MODELS_WITH_DISPATCHERS`) lists the ViewModels left. Done: changelog, events, info.
+  (`VIEW_MODELS_WITH_DISPATCHERS`) lists the ViewModels left. Done: changelog, events, info, pellets.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.
