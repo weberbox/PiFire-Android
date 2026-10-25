@@ -3,6 +3,7 @@ package com.weberbox.pifire.core.repo
 import androidx.datastore.core.DataStore
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.common.model.map
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.core.model.settings.ProbeInfoUpdate
 import com.weberbox.pifire.core.model.settings.PwmProfile
@@ -15,6 +16,7 @@ import com.weberbox.pifire.core.network.model.settings.Pwm
 import com.weberbox.pifire.core.network.model.settings.Startup
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
+import com.weberbox.pifire.core.repo.ServerDataSync
 import com.weberbox.pifire.core.repo.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.core.session.SessionStateHolder
 import dagger.Lazy
@@ -22,9 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -37,62 +37,25 @@ class SettingsRepoImpl @Inject constructor(
     private val json: Json,
 ) : SettingsRepo {
 
-    override suspend fun getSettings(): Result<Server, DataError> = withContext(Dispatchers.IO) {
-        settingsApi.getSettings().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
+    private val sync = ServerDataSync(
+        currentServerUuid = { sessionStateHolder.currentServerUuid },
+        publish = sessionStateHolder::setSettingsData,
+        readCache = { serverUuid -> dataStore.data.firstOrNull()?.serverMap?.get(serverUuid) },
+        writeCache = ::updateServerSettings,
+    )
 
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, SettingsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
+    override suspend fun getSettings(): Result<Server, DataError> = sync.fetch(
+        request = settingsApi::getSettings,
+        parse = { parseGetResponse(it, json, SettingsDtoToDataMapper) },
+    )
 
-                            is Result.Success -> {
-                                sessionStateHolder.setSettingsData(data.data)
-                                updateServerSettings(data.data)
-                                Result.Success(data.data)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    override suspend fun listenSettingsData(): Flow<Result<Server, DataError>> = sync.listen(
+        updates = settingsApi.listenSettingsData(),
+        parse = { parseResponse(it, json, SettingsDtoToDataMapper) },
+    )
 
-    override suspend fun listenSettingsData(): Flow<Result<Server, DataError>> {
-        val flow = settingsApi.listenSettingsData()
-        val parsed: Flow<Result<Server, DataError>> = flow.transform { result ->
-            when (result) {
-                is Result.Error -> emit(Result.Error(result.error))
-
-                is Result.Success -> {
-                    parseResponse(result.data, json, SettingsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> emit(Result.Error(data.error))
-
-                            is Result.Success -> {
-                                sessionStateHolder.setSettingsData(data.data)
-                                emit(Result.Success(data.data))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return parsed.flowOn(Dispatchers.IO)
-    }
-
-    override suspend fun getCachedData(): Result<Server, DataError.Local> = withContext(Dispatchers.IO) {
-        val data = dataStore.data.firstOrNull()
-        val currentServer = sessionStateHolder.currentServerUuid
-        if (data != null && currentServer.isNotBlank()) {
-            data.serverMap[currentServer]?.let { server ->
-                Result.Success(server)
-            } ?: Result.Error(DataError.Local.NO_CACHED_DATA)
-        } else {
-            Result.Error(DataError.Local.NO_CACHED_DATA)
-        }
-    }
+    override suspend fun getCachedData(): Result<Server, DataError.Local> =
+        sync.cached(publishToSession = false)
 
     override suspend fun updateServerSettings(server: Server) {
         dataStore.updateData { data ->

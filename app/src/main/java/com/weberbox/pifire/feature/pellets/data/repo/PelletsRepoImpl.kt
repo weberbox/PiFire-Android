@@ -8,15 +8,12 @@ import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
+import com.weberbox.pifire.core.repo.ServerDataSync
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.feature.pellets.data.api.PelletsApi
 import com.weberbox.pifire.feature.pellets.data.mapper.PelletsDtoToDataMapper
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.transform
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -27,63 +24,24 @@ class PelletsRepoImpl @Inject constructor(
     private val json: Json,
 ) : PelletsRepo {
 
-    override suspend fun getPellets(): Result<Pellets, DataError> = withContext(Dispatchers.IO) {
-        pelletsApi.getPellets().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
+    private val sync = ServerDataSync(
+        currentServerUuid = { sessionStateHolder.currentServerUuid },
+        publish = sessionStateHolder::setPelletsData,
+        readCache = { serverUuid -> dataStore.data.firstOrNull()?.pelletsMap?.get(serverUuid) },
+        writeCache = ::updatePelletsData,
+    )
 
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, PelletsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
+    override suspend fun getPellets(): Result<Pellets, DataError> = sync.fetch(
+        request = pelletsApi::getPellets,
+        parse = { parseGetResponse(it, json, PelletsDtoToDataMapper) },
+    )
 
-                            is Result.Success -> {
-                                sessionStateHolder.setPelletsData(data.data)
-                                updatePelletsData(data.data)
-                                Result.Success(data.data)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    override suspend fun getCachedData(): Result<Pellets, DataError.Local> = sync.cached()
 
-    override suspend fun getCachedData(): Result<Pellets, DataError.Local> = withContext(Dispatchers.IO) {
-        val data = dataStore.data.firstOrNull()
-        val currentServer = sessionStateHolder.currentServerUuid
-        if (data != null && currentServer.isNotBlank()) {
-            data.pelletsMap[currentServer]?.let { pellets ->
-                sessionStateHolder.setPelletsData(pellets)
-                Result.Success(pellets)
-            } ?: Result.Error(DataError.Local.NO_CACHED_DATA)
-        } else {
-            Result.Error(DataError.Local.NO_CACHED_DATA)
-        }
-    }
-
-    override suspend fun listenPelletsData(): Flow<Result<Pellets, DataError>> {
-        val flow = pelletsApi.listenPelletsData()
-        val parsed: Flow<Result<Pellets, DataError>> = flow.transform { result ->
-            when (result) {
-                is Result.Error -> emit(Result.Error(result.error))
-
-                is Result.Success -> {
-                    parseResponse(result.data, json, PelletsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> emit(Result.Error(data.error))
-
-                            is Result.Success -> {
-                                sessionStateHolder.setPelletsData(data.data)
-                                emit(Result.Success(data.data))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return parsed.flowOn(Dispatchers.IO)
-    }
+    override suspend fun listenPelletsData(): Flow<Result<Pellets, DataError>> = sync.listen(
+        updates = pelletsApi.listenPelletsData(),
+        parse = { parseResponse(it, json, PelletsDtoToDataMapper) },
+    )
 
     override suspend fun getPelletsDataState(): Flow<Pellets?> = sessionStateHolder.pelletsDataState
 
