@@ -77,31 +77,30 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
+        // Older servers send raw /proc/cpuinfo and ifconfig lines; an odd line is skipped, not fatal
         @Compatibility(versionBelow = "1.10.0", build = "37")
-        var cpuSeparated: Array<String>
-        var cpuInfo = String()
-        from.cpuInfo?.forEach { cpu ->
-            if (cpu.contains("model name")) {
-                cpuSeparated =
-                    cpu.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                cpuInfo = cpuSeparated[1].trim()
-            }
-        }
+        val cpuInfo = from.cpuInfo
+            ?.lastOrNull { it.contains("model name") }
+            ?.substringAfter(delimiter = ":", missingDelimiterValue = "")
+            ?.trim()
+            .orEmpty()
 
         @Compatibility(versionBelow = "1.10.0", build = "37")
-        var inetSeparated: Array<String?>
-        val networkString = StringBuilder()
-        from.ifConfig?.forEach { network ->
-            if (network.contains("netmask")) {
-                if (!network.contains("127.0.0.1")) {
-                    inetSeparated = network.trim().split(" ".toRegex())
-                        .dropLastWhile { it.isEmpty() }.toTypedArray()
-                    networkString.append("Address:    ").append(inetSeparated[1]).append("\n\n")
-                    networkString.append("Netmask:    ").append(inetSeparated[4]).append("\n\n")
-                    networkString.append("Broadcast:    ").append(inetSeparated[7])
-                }
+        val networkInfo = from.ifConfig
+            ?.firstOrNull { it.contains("netmask") && !it.contains("127.0.0.1") }
+            ?.trim()
+            ?.split(" ".toRegex())
+            ?.filter { it.isNotEmpty() }
+            ?.let { parts ->
+                fun after(key: String) = parts.indexOf(key)
+                    .takeIf { it >= 0 }
+                    ?.let { parts.getOrNull(it + 1) }
+                    .orEmpty()
+                "Address:    ${after("inet")}\n\n" +
+                    "Netmask:    ${after("netmask")}\n\n" +
+                    "Broadcast:    ${after("broadcast")}"
             }
-        }
+            .orEmpty()
 
         return Info(
             uuid = from.uuid.orEmpty(),
@@ -134,7 +133,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             cpuThrottled = from.cpuThrottled ?: false,
             cpuUnderVolt = from.cpuUnderVolt ?: false,
             cpuInfo = cpuInfo,
-            networkInfo = networkString.toString(),
+            networkInfo = networkInfo,
             uptime = from.upTime?.trim().orEmpty(),
             cpuTemp = from.cpuTemp.orEmpty(),
             outPins = gpioOutPins,

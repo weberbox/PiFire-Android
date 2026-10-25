@@ -32,9 +32,10 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
         logsList = from.pellets?.log?.map { (date, id) ->
             PelletLog(
                 pelletID = id,
-                pelletName = from.pellets.profiles?.get(id)?.brand + " " + from.pellets.profiles?.get(
-                    id,
-                )?.wood,
+                // A log can outlive its deleted profile
+                pelletName = from.pellets.profiles?.get(id)
+                    ?.let { listOfNotNull(it.brand, it.wood).joinToString(separator = " ") }
+                    .orEmpty(),
                 pelletRating = from.pellets.profiles?.get(id)?.rating ?: defaults.currentRating,
                 pelletDate = formatDateString(
                     input = date,
@@ -42,7 +43,7 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
                 ),
                 logDate = date,
             )
-        } ?: listOf(PelletLog()),
+        } ?: emptyList(),
         brandsList = from.pellets?.brands ?: defaults.brandsList,
         woodsList = from.pellets?.woods ?: defaults.woodsList,
         profilesList = from.pellets?.profiles?.map { (id, profile) ->
@@ -53,7 +54,7 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
                 comments = profile.comments ?: defaults.currentComments,
                 id = id,
             )
-        } ?: listOf(PelletProfile()),
+        } ?: emptyList(),
         hopperLevel = from.pellets?.current?.hopperLevel ?: defaults.hopperLevel,
     )
 }
