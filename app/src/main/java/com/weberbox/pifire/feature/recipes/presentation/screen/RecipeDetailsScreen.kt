@@ -212,7 +212,7 @@ private fun RecipeDetailsScreen(
                 }
 
                 else -> {
-                    RecipeDetailsContent(
+                    RecipeDetailsScreenContent(
                         state = state,
                         scrollState = scrollState,
                         contentPadding = contentPadding,
@@ -249,7 +249,7 @@ private fun RecipeDetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecipeDetailsContent(
+private fun RecipeDetailsScreenContent(
     modifier: Modifier = Modifier,
     state: DetailsContract.State,
     scrollState: ScrollState,

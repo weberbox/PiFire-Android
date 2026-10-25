@@ -86,6 +86,22 @@ private fun RecipeImagesScreen(
     onEventSent: (event: ImagesContract.Event) -> Unit,
     onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit,
 ) {
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
+
+    RecipeImagesScreenContent(
+        state = state,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun RecipeImagesScreenContent(
+    state: ImagesContract.State,
+    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit,
+) {
     val pagerState = rememberPagerState(
         initialPage = state.imageIndex,
         pageCount = { state.imageList.size },
@@ -93,11 +109,6 @@ private fun RecipeImagesScreen(
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainer,
         1f to MaterialTheme.colorScheme.surfaceContainerLow,
-    )
-
-    HandleSideEffects(
-        effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
@@ -226,7 +237,6 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-// @DeviceSizePreviews
 private fun RecipeImagesScreenPreview() {
     PiFireTheme {
         Surface {

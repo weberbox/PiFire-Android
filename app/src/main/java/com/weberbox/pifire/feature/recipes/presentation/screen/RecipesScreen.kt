@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -61,6 +62,7 @@ import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
@@ -165,71 +167,90 @@ private fun RecipesScreen(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         contentWindowInsets = windowInsets,
     ) { contentPadding ->
-        AnimatedContent(
-            targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError },
-        ) { state ->
-            when {
-                state.isInitialLoading -> InitialLoadingProgress()
+        RecipesScreenContent(
+            state = state,
+            searchQuery = searchQuery,
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            onEventSent = onEventSent,
+            onNavigationRequested = onNavigationRequested,
+        )
+    }
+}
 
-                state.isDataError -> CachedDataError {
-                    onEventSent(RecipesContract.Event.Refresh)
+@Composable
+private fun RecipesScreenContent(
+    state: RecipesContract.State,
+    searchQuery: String,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    onEventSent: (event: RecipesContract.Event) -> Unit,
+    onNavigationRequested: (RecipesContract.Effect.Navigation) -> Unit,
+) {
+    AnimatedContent(
+        targetState = state,
+        contentKey = { it.isInitialLoading or it.isDataError },
+    ) { state ->
+        when {
+            state.isInitialLoading -> InitialLoadingProgress()
+
+            state.isDataError -> CachedDataError {
+                onEventSent(RecipesContract.Event.Refresh)
+            }
+
+            else -> {
+                val filteredList = remember(searchQuery, state.recipesList) {
+                    state.recipesList.filter { item ->
+                        item.metadata.title.contains(searchQuery, ignoreCase = true)
+                    }
                 }
-
-                else -> {
-                    val filteredList = remember(searchQuery, state.recipesList) {
-                        state.recipesList.filter { item ->
-                            item.metadata.title.contains(searchQuery, ignoreCase = true)
-                        }
-                    }
-                    PullToRefresh(
-                        isRefreshing = state.isRefreshing,
-                        onRefresh = { onEventSent(RecipesContract.Event.Refresh) },
-                        modifier = Modifier.fillMaxSize(),
+                PullToRefresh(
+                    isRefreshing = state.isRefreshing,
+                    onRefresh = { onEventSent(RecipesContract.Event.Refresh) },
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                ) {
+                    LazyColumn(
                         contentPadding = contentPadding,
+                        verticalArrangement = Arrangement.spacedBy(
+                            MaterialTheme.spacing.extraSmallOne,
+                        ),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .hazeSource(state = hazeState)
+                            .padding(
+                                horizontal = MaterialTheme.spacing.smallOne,
+                                vertical = MaterialTheme.spacing.extraSmallOne,
+                            )
+                            .fillMaxSize(),
                     ) {
-                        LazyColumn(
-                            contentPadding = contentPadding,
-                            verticalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.extraSmallOne,
-                            ),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .hazeSource(state = hazeState)
-                                .padding(
-                                    horizontal = MaterialTheme.spacing.smallOne,
-                                    vertical = MaterialTheme.spacing.extraSmallOne,
-                                )
-                                .fillMaxSize(),
-                        ) {
-                            items(
-                                items = filteredList,
-                                key = { it.recipeFilename },
-                            ) { recipe ->
-                                RecipeItem(
-                                    details = recipe,
-                                    onRecipeClick = {
-                                        onNavigationRequested(
-                                            RecipesContract.Effect.Navigation.RecipeDetails(
-                                                filename = recipe.recipeFilename,
-                                            ),
-                                        )
-                                    },
-                                )
-                            }
+                        items(
+                            items = filteredList,
+                            key = { it.recipeFilename },
+                        ) { recipe ->
+                            RecipeItem(
+                                details = recipe,
+                                onRecipeClick = {
+                                    onNavigationRequested(
+                                        RecipesContract.Effect.Navigation.RecipeDetails(
+                                            filename = recipe.recipeFilename,
+                                        ),
+                                    )
+                                },
+                            )
                         }
                     }
-                    AnimatedVisibility(
-                        visible = filteredList.isEmpty(),
-                        enter = fadeEnterTransition(),
-                        exit = fadeExitTransition(),
-                    ) {
-                        EmptyItems(
-                            title = stringResource(R.string.error_no_results_recipes_title),
-                            summary = stringResource(R.string.error_no_results_recipes_summary),
-                            icon = Icons.Filled.NoFood,
-                        )
-                    }
+                }
+                AnimatedVisibility(
+                    visible = filteredList.isEmpty(),
+                    enter = fadeEnterTransition(),
+                    exit = fadeExitTransition(),
+                ) {
+                    EmptyItems(
+                        title = stringResource(R.string.error_no_results_recipes_title),
+                        summary = stringResource(R.string.error_no_results_recipes_summary),
+                        icon = Icons.Filled.NoFood,
+                    )
                 }
             }
         }

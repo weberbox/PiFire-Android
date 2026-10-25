@@ -23,9 +23,7 @@ import com.weberbox.pifire.feature.recipes.presentation.util.decodeRecipeImages
 import com.weberbox.pifire.feature.recipes.presentation.util.recipeLookup
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,23 +61,21 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun collectDataState(filename: String, step: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             sessionStateHolder.recipesDataState.recipeLookup(filename).collect { lookup ->
                 lookup?.also {
                     lookup.recipe?.also { recipe ->
                         currentRecipe = recipe
                         val images = decodeRecipeImages(recipe)
-                        withContext(Dispatchers.Main) {
-                            setState {
-                                copy(
-                                    recipeData = recipe,
-                                    recipeStep = step,
-                                    recipeImages = images.toImmutableList(),
-                                    isInitialLoading = false,
-                                    isLoading = false,
-                                    isDataError = false,
-                                )
-                            }
+                        setState {
+                            copy(
+                                recipeData = recipe,
+                                recipeStep = step,
+                                recipeImages = images.toImmutableList(),
+                                isInitialLoading = false,
+                                isLoading = false,
+                                isDataError = false,
+                            )
                         }
                     } ?: setDataStateError()
                 } ?: getRecipesData(filename, step)
@@ -88,7 +84,7 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun getRecipesData(filename: String, step: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (val result = recipesRepo.getRecipes()) {
                 is Result.Error -> {
                     getCachedData(filename, step)
@@ -98,17 +94,15 @@ class RecipeDetailsViewModel @Inject constructor(
                     result.data.find { it.recipeFilename == filename }?.also { recipe ->
                         currentRecipe = recipe
                         val images = recipe.assets.map { decodeBase64Image(it.encodedImage) }
-                        withContext(Dispatchers.Main) {
-                            setState {
-                                copy(
-                                    recipeData = recipe,
-                                    recipeStep = step,
-                                    recipeImages = images.toImmutableList(),
-                                    isInitialLoading = false,
-                                    isLoading = false,
-                                    isDataError = false,
-                                )
-                            }
+                        setState {
+                            copy(
+                                recipeData = recipe,
+                                recipeStep = step,
+                                recipeImages = images.toImmutableList(),
+                                isInitialLoading = false,
+                                isLoading = false,
+                                isDataError = false,
+                            )
                         }
                     } ?: setDataStateError()
                 }
@@ -117,18 +111,16 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun getCachedData(filename: String, step: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (val result = recipesRepo.getCachedData()) {
                 is Result.Error -> {
-                    withContext(Dispatchers.Main) {
-                        setState {
-                            copy(
-                                recipeStep = step,
-                                isInitialLoading = false,
-                                isLoading = false,
-                                isDataError = true,
-                            )
-                        }
+                    setState {
+                        copy(
+                            recipeStep = step,
+                            isInitialLoading = false,
+                            isLoading = false,
+                            isDataError = true,
+                        )
                     }
                 }
 
@@ -136,25 +128,21 @@ class RecipeDetailsViewModel @Inject constructor(
                     result.data.find { it.recipeFilename == filename }?.also { recipe ->
                         currentRecipe = recipe
                         val images = recipe.assets.map { decodeBase64Image(it.encodedImage) }
-                        withContext(Dispatchers.Main) {
-                            withContext(Dispatchers.Main) {
-                                setState {
-                                    copy(
-                                        recipeData = recipe,
-                                        recipeStep = step,
-                                        recipeImages = images.toImmutableList(),
-                                        isInitialLoading = false,
-                                        isLoading = false,
-                                        isDataError = false,
-                                    )
-                                }
-                                setEffect {
-                                    DetailsContract.Effect.Notification(
-                                        text = UiText(R.string.alerter_cached_results),
-                                        error = true,
-                                    )
-                                }
-                            }
+                        setState {
+                            copy(
+                                recipeData = recipe,
+                                recipeStep = step,
+                                recipeImages = images.toImmutableList(),
+                                isInitialLoading = false,
+                                isLoading = false,
+                                isDataError = false,
+                            )
+                        }
+                        setEffect {
+                            DetailsContract.Effect.Notification(
+                                text = UiText(R.string.alerter_cached_results),
+                                error = true,
+                            )
                         }
                     } ?: setDataStateError()
                 }
@@ -170,25 +158,23 @@ class RecipeDetailsViewModel @Inject constructor(
             ),
         )
         setLoadingStateTrue()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = recipesRepo.startRecipe(currentRecipe.recipeFilename)
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        setState { copy(isLoading = false) }
-                        setEffect {
-                            DetailsContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
+            when (result) {
+                is Result.Error -> {
+                    setState { copy(isLoading = false) }
+                    setEffect {
+                        DetailsContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
                     }
+                }
 
-                    is Result.Success -> {
-                        setState { copy(isLoading = false) }
-                        setEffect {
-                            DetailsContract.Effect.Navigation.DashHome
-                        }
+                is Result.Success -> {
+                    setState { copy(isLoading = false) }
+                    setEffect {
+                        DetailsContract.Effect.Navigation.DashHome
                     }
                 }
             }
@@ -203,24 +189,22 @@ class RecipeDetailsViewModel @Inject constructor(
             ),
         )
         setLoadingStateTrue()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = recipesRepo.deleteRecipe(currentRecipe.recipeFilename)
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        setState { copy(isLoading = false) }
-                        setEffect {
-                            DetailsContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
+            when (result) {
+                is Result.Error -> {
+                    setState { copy(isLoading = false) }
+                    setEffect {
+                        DetailsContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
                     }
+                }
 
-                    is Result.Success -> {
-                        setState { copy(isLoading = false) }
-                        setEffect { DetailsContract.Effect.Navigation.BackRefresh }
-                    }
+                is Result.Success -> {
+                    setState { copy(isLoading = false) }
+                    setEffect { DetailsContract.Effect.Navigation.BackRefresh }
                 }
             }
         }
@@ -263,15 +247,13 @@ class RecipeDetailsViewModel @Inject constructor(
         setState { copy(isLoading = true) }
     }
 
-    private suspend fun setDataStateError() {
-        withContext(Dispatchers.Main) {
-            setState {
-                copy(
-                    isInitialLoading = false,
-                    isLoading = false,
-                    isDataError = true,
-                )
-            }
+    private fun setDataStateError() {
+        setState {
+            copy(
+                isInitialLoading = false,
+                isLoading = false,
+                isDataError = true,
+            )
         }
     }
 }

@@ -159,7 +159,7 @@ class ArchitectureTest {
             "FinishViewModel", "HomeScreenViewModel", "LandingViewModel",
             "ManualSettingsViewModel", "NotificationSettingsViewModel", "PelletSettingsViewModel",
             "ProbeSettingsViewModel",
-            "PwmSettingsViewModel", "RecipeDetailsViewModel", "SafetySettingsViewModel",
+            "PwmSettingsViewModel", "SafetySettingsViewModel",
             "TimerSettingsViewModel", "UISettingsViewModel",
             "WorkSettingsViewModel",
         )
