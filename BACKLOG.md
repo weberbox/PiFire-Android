@@ -27,6 +27,9 @@ line once it's done.
   IO; `ArchitectureTest` checks no ViewModel imports `Dispatchers`). `HomeScreen` is the app shell
   around the pager, so its layout stays inline; pager pages and the setup steps have no Scaffold
   of their own.
+- (2026-10-25) Repos share `core/repo/ServerDataSync` (fetch/cache/listen) and
+  `core/network/httpRequest` (HTTP errors). `SettingsRepoImpl` keeps one forwarding method per
+  server setting: ViewModels may only call repos, and each is a one-line `transformResult(...)`.
 - (2026-10-25) Sentry instruments release builds too. R8 mappings upload only with a Sentry auth
   token (`SENTRY_AUTH_TOKEN` or `sentry.properties`); without one, release crash reports stay
   obfuscated.
@@ -65,7 +68,3 @@ One step per commit, compile all flavors after each.
 - [picker] core/ui/components/PickerWheel.kt: scroll offset is read in composition to
   interpolate size/color, so every scroll frame recomposes the wheel. Move it to
   `graphicsLayer`/draw.
-
-## Conventions to fix
-- Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
-  HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.

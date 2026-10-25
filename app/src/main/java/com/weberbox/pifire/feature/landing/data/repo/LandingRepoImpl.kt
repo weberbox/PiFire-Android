@@ -1,20 +1,12 @@
 package com.weberbox.pifire.feature.landing.data.repo
 
-import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
-import com.weberbox.pifire.core.network.networkAvailable
+import com.weberbox.pifire.core.network.httpRequest
 import com.weberbox.pifire.core.network.parseGetResponse
-import com.weberbox.pifire.core.network.toNetworkError
-import com.weberbox.pifire.core.ui.util.getReasonPhrase
-import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.landing.data.api.LandingApi
 import com.weberbox.pifire.feature.landing.data.mapper.ServerUuidDtoToDataMapper
 import com.weberbox.pifire.feature.landing.data.model.ServerUuidData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -26,47 +18,15 @@ class LandingRepoImpl @Inject constructor(
     override suspend fun getServerUuid(
         url: String,
         headers: Map<String, String>,
-    ): Result<ServerUuidData, DataError> = withContext(Dispatchers.IO) {
-        if (networkAvailable()) {
-            try {
-                landingApi.getServerUuid(url, headers).let { response ->
-                    if (response.isSuccessful) {
-                        return@withContext response.body()?.let { r ->
-                            parseGetResponse(
-                                response = r.string(),
-                                json = json,
-                                mapper = ServerUuidDtoToDataMapper,
-                                logException = false,
-                            ).let { data ->
-                                r.close()
-                                when (data) {
-                                    is Result.Error -> Result.Error(data.error)
-                                    is Result.Success -> Result.Success(data.data)
-                                }
-                            }
-                        } ?: Result.Error(DataError.Network.NULL_RESPONSE)
-                    } else {
-                        return@withContext if (response.code() == 401) {
-                            Result.Error(DataError.Network.AUTHENTICATION)
-                        } else {
-                            Result.Error(
-                                DataError.UiText(
-                                    R.string.data_error_http_unsuccessful,
-                                    uiTextArgsOf(
-                                        response.code().toString(),
-                                        getReasonPhrase(response.code()),
-                                    ),
-                                ),
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                currentCoroutineContext().ensureActive()
-                return@withContext Result.Error(e.toNetworkError())
-            }
-        } else {
-            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
-        }
-    }
+    ): Result<ServerUuidData, DataError> = httpRequest(
+        request = { landingApi.getServerUuid(url, headers) },
+        parse = { body ->
+            parseGetResponse(
+                response = body,
+                json = json,
+                mapper = ServerUuidDtoToDataMapper,
+                logException = false,
+            )
+        },
+    )
 }

@@ -1,7 +1,6 @@
 package com.weberbox.pifire.feature.setup.data.repo
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.R
 import com.weberbox.pifire.core.annotations.Compatibility
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
@@ -12,21 +11,16 @@ import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.api.SettingsApi
 import com.weberbox.pifire.core.network.headers.HeadersData
 import com.weberbox.pifire.core.network.headers.HeadersData.Headers
-import com.weberbox.pifire.core.network.networkAvailable
+import com.weberbox.pifire.core.network.httpRequest
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
-import com.weberbox.pifire.core.network.toNetworkError
 import com.weberbox.pifire.core.repo.mapper.SettingsDtoToDataMapper
-import com.weberbox.pifire.core.ui.util.getReasonPhrase
-import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -46,96 +40,25 @@ class SetupRepoImpl @Inject constructor(
     override suspend fun getVersions(
         url: String,
         headerMap: Map<String, String>,
-    ): Result<VersionsData, DataError> = withContext(Dispatchers.IO) {
-        if (networkAvailable()) {
-            try {
-                setupApi.getVersions(url, headerMap).let { response ->
-                    if (response.isSuccessful) {
-                        return@withContext response.body()?.let { r ->
-                            parseGetResponse(
-                                response = r.string(),
-                                json = json,
-                                mapper = VersionsDtoToDataMapper,
-                            ).let { data ->
-                                r.close()
-                                checkLegacyResponse(
-                                    url = url,
-                                    headerMap = headerMap,
-                                    data = data,
-                                )
-                            }
-                        } ?: Result.Error(DataError.Network.NULL_RESPONSE)
-                    } else {
-                        return@withContext if (response.code() == 401) {
-                            Result.Error(DataError.Network.AUTHENTICATION)
-                        } else {
-                            Result.Error(
-                                DataError.UiText(
-                                    R.string.data_error_http_unsuccessful,
-                                    uiTextArgsOf(
-                                        response.code().toString(),
-                                        getReasonPhrase(response.code()),
-                                    ),
-                                ),
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                currentCoroutineContext().ensureActive()
-                return@withContext Result.Error(e.toNetworkError())
-            }
-        } else {
-            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
-        }
-    }
+    ): Result<VersionsData, DataError> = httpRequest(
+        request = { setupApi.getVersions(url, headerMap) },
+        parse = { body ->
+            checkLegacyResponse(
+                url = url,
+                headerMap = headerMap,
+                data = parseGetResponse(response = body, json = json, mapper = VersionsDtoToDataMapper),
+            )
+        },
+    )
 
     @Compatibility(versionBelow = "1.10.0", build = "25")
     override suspend fun getVersionsLegacy(
         url: String,
         headerMap: Map<String, String>,
-    ): Result<VersionsData, DataError> = withContext(Dispatchers.IO) {
-        if (networkAvailable()) {
-            try {
-                setupApi.getVersions(url, headerMap).let { response ->
-                    if (response.isSuccessful) {
-                        return@withContext response.body()?.let { r ->
-                            parseResponse(
-                                response = r.string(),
-                                json = json,
-                                mapper = LegacyVersionsDtoToDataMapper,
-                            ).let { data ->
-                                r.close()
-                                when (data) {
-                                    is Result.Error -> Result.Error(data.error)
-                                    is Result.Success -> Result.Success(data.data)
-                                }
-                            }
-                        } ?: Result.Error(DataError.Network.NULL_RESPONSE)
-                    } else {
-                        return@withContext if (response.code() == 401) {
-                            Result.Error(DataError.Network.AUTHENTICATION)
-                        } else {
-                            Result.Error(
-                                DataError.UiText(
-                                    R.string.data_error_http_unsuccessful,
-                                    uiTextArgsOf(
-                                        response.code().toString(),
-                                        getReasonPhrase(response.code()),
-                                    ),
-                                ),
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                currentCoroutineContext().ensureActive()
-                return@withContext Result.Error(e.toNetworkError())
-            }
-        } else {
-            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
-        }
-    }
+    ): Result<VersionsData, DataError> = httpRequest(
+        request = { setupApi.getVersions(url, headerMap) },
+        parse = { body -> parseResponse(response = body, json = json, mapper = LegacyVersionsDtoToDataMapper) },
+    )
 
     override suspend fun getSettingsData(
         server: Server,

@@ -19,7 +19,7 @@ Standing decisions, known bugs and parked work are in `BACKLOG.md`: check it bef
 changing an area it lists, and add new follow-ups there.
 
 **Migration in progress.** The code predates these rules. The package layout below is in place,
-and the remaining rule exceptions are listed under Conventions in `BACKLOG.md`. When
+and the deliberate exceptions to it are recorded under Decisions in `BACKLOG.md`. When
 you edit a file, make the touched code follow the rules, but do larger moves only as part of a
 planned restructure step (tracked in `BACKLOG.md`), one feature at a time, so diffs stay
 reviewable.
