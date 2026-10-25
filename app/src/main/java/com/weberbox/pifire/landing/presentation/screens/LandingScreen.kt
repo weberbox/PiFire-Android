@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.common.presentation.base.SIDE_EFFECTS_KEY
@@ -124,6 +125,12 @@ private fun LandingScreen(
         onEventSent = onEventSent,
         onNavigationRequested = onNavigationRequested
     )
+
+    // Only poll servers while Landing is visible, not behind Settings or in the background
+    LifecycleStartEffect(Unit) {
+        onEventSent(LandingContract.Event.StartPolling)
+        onStopOrDispose { onEventSent(LandingContract.Event.StopPolling) }
+    }
 
     LaunchedEffect(scrollState) {
         snapshotFlow {

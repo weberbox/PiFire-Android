@@ -13,6 +13,8 @@ sealed interface DataError : Error {
         AUTHENTICATION,
         NULL_RESPONSE,
         CERTIFICATE,
+        UNKNOWN_HOST,
+        UNREACHABLE_HOST,
         UNKNOWN
     }
 

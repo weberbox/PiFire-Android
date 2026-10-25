@@ -5,6 +5,7 @@ import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parseGetResponse
 import com.weberbox.pifire.common.data.util.networkAvailable
+import com.weberbox.pifire.common.data.util.toNetworkError
 import com.weberbox.pifire.common.presentation.util.getReasonPhrase
 import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.landing.data.api.LandingApi
@@ -59,10 +60,7 @@ class LandingRepoImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
-                e.message?.let { message ->
-                    return Result.Error(DataError.Server(message))
-                }
-                return Result.Error(DataError.Network.SERVER_ERROR)
+                return Result.Error(e.toNetworkError())
             }
         } else {
             return Result.Error(DataError.Network.NO_CONNECTION)

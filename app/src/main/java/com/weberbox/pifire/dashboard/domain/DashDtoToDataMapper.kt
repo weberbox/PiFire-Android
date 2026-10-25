@@ -69,84 +69,43 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             paused = from.recipeStatus?.paused ?: recipeDefaults.paused,
             step = from.recipeStatus?.step ?: recipeDefaults.step
         ),
-        foodProbes = from.foodProbes?.map {
-            Probe(
-                probeType = ProbeType.Food,
-                title = it.title ?: probeDefaults.title,
-                label = it.label ?: probeDefaults.label,
-                eta = it.eta ?: probeDefaults.eta,
-                temp = it.temp?.roundToIntOrNull() ?: probeDefaults.temp,
-                setTemp = it.setTemp ?: probeDefaults.setTemp,
-                maxTemp = it.maxTemp ?: probeDefaults.maxTemp,
-                target = it.target ?: probeDefaults.target,
-                lowLimitTemp = it.lowLimitTemp ?: probeDefaults.lowLimitTemp,
-                highLimitTemp = it.highLimitTemp ?: probeDefaults.highLimitTemp,
-                lowLimitReq = it.lowLimitReq ?: probeDefaults.hasNotifications,
-                highLimitReq = it.highLimitReq ?: probeDefaults.highLimitReq,
-                targetReq = it.targetReq ?: probeDefaults.targetReq,
-                highLimitShutdown = it.highLimitShutdown ?: probeDefaults.highLimitShutdown,
-                highLimitTriggered = it.highLimitTriggered ?: probeDefaults.highLimitTriggered,
-                lowLimitShutdown = it.highLimitShutdown ?: probeDefaults.lowLimitShutdown,
-                lowLimitReignite = it.lowLimitReignite ?: probeDefaults.lowLimitReignite,
-                lowLimitTriggered = it.lowLimitTriggered ?: probeDefaults.lowLimitTriggered,
-                targetShutdown = it.targetShutdown ?: probeDefaults.targetShutdown,
-                targetKeepWarm = it.targetKeepWarm ?: probeDefaults.targetKeepWarm,
-                hasNotifications = it.hasNotifications ?: probeDefaults.hasNotifications,
-                status = Probe.Status(
-                    batteryCharging = it.status?.batteryCharging
-                        ?: probeDefaults.status.batteryCharging,
-                    batteryPercentage = it.status?.batteryPercentage?.roundToIntOrNull()
-                        ?: probeDefaults.status.batteryPercentage,
-                    batteryVoltage = it.status?.batteryVoltage
-                        ?: probeDefaults.status.batteryVoltage,
-                    connected = it.status?.connected ?: probeDefaults.status.connected,
-                    error = it.status?.error ?: probeDefaults.status.error,
-                    wireless = it.status?.connected != null
-                )
+        foodProbes = from.foodProbes?.map { mapProbe(from = it, probeType = ProbeType.Food) }
+            ?: defaults.foodProbes,
+        primaryProbe = mapProbe(from = from.primaryProbe, probeType = ProbeType.Primary),
+    )
 
-            )
-        } ?: defaults.foodProbes,
-        primaryProbe = Probe(
-            probeType = ProbeType.Primary,
-            title = from.primaryProbe?.title ?: probeDefaults.title,
-            label = from.primaryProbe?.label ?: probeDefaults.label,
-            eta = from.primaryProbe?.eta ?: probeDefaults.eta,
-            temp = from.primaryProbe?.temp?.roundToIntOrNull() ?: probeDefaults.temp,
-            setTemp = from.primaryProbe?.setTemp ?: probeDefaults.setTemp,
-            maxTemp = from.primaryProbe?.maxTemp ?: probeDefaults.maxTemp,
-            target = from.primaryProbe?.target ?: probeDefaults.target,
-            lowLimitTemp = from.primaryProbe?.lowLimitTemp ?: probeDefaults.lowLimitTemp,
-            highLimitTemp = from.primaryProbe?.highLimitTemp ?: probeDefaults.highLimitTemp,
-            lowLimitReq = from.primaryProbe?.lowLimitReq ?: probeDefaults.lowLimitReq,
-            highLimitReq = from.primaryProbe?.highLimitReq ?: probeDefaults.highLimitReq,
-            targetReq = from.primaryProbe?.targetReq ?: probeDefaults.targetReq,
-            highLimitShutdown = from.primaryProbe?.highLimitShutdown
-                ?: probeDefaults.highLimitShutdown,
-            highLimitTriggered = from.primaryProbe?.highLimitTriggered
-                ?: probeDefaults.highLimitTriggered,
-            lowLimitShutdown = from.primaryProbe?.lowLimitShutdown
-                ?: probeDefaults.lowLimitShutdown,
-            lowLimitReignite = from.primaryProbe?.lowLimitReignite
-                ?: probeDefaults.lowLimitReignite,
-            lowLimitTriggered = from.primaryProbe?.lowLimitTriggered
-                ?: probeDefaults.lowLimitTriggered,
-            targetShutdown = from.primaryProbe?.targetShutdown ?: probeDefaults.targetShutdown,
-            targetKeepWarm = from.primaryProbe?.targetKeepWarm ?: probeDefaults.targetKeepWarm,
-            hasNotifications = from.primaryProbe?.hasNotifications
-                ?: probeDefaults.hasNotifications,
-            status = Probe.Status(
-                batteryCharging = from.primaryProbe?.status?.batteryCharging
-                    ?: probeDefaults.status.batteryCharging,
-                batteryPercentage = from.primaryProbe?.status?.batteryPercentage
-                    ?.roundToIntOrNull()
-                    ?: probeDefaults.status.batteryPercentage,
-                batteryVoltage = from.primaryProbe?.status?.batteryVoltage
-                    ?: probeDefaults.status.batteryVoltage,
-                connected = from.primaryProbe?.status?.connected ?: probeDefaults.status.connected,
-                error = from.primaryProbe?.status?.error ?: probeDefaults.status.error,
-                wireless = from.primaryProbe?.status?.connected != null
-            )
-        )
+    private fun mapProbe(from: DashDto.Probe?, probeType: ProbeType) = Probe(
+        probeType = probeType,
+        title = from?.title ?: probeDefaults.title,
+        label = from?.label ?: probeDefaults.label,
+        eta = from?.eta ?: probeDefaults.eta,
+        temp = from?.temp?.roundToIntOrNull() ?: probeDefaults.temp,
+        setTemp = from?.setTemp ?: probeDefaults.setTemp,
+        maxTemp = from?.maxTemp ?: probeDefaults.maxTemp,
+        target = from?.target ?: probeDefaults.target,
+        lowLimitTemp = from?.lowLimitTemp ?: probeDefaults.lowLimitTemp,
+        highLimitTemp = from?.highLimitTemp ?: probeDefaults.highLimitTemp,
+        lowLimitReq = from?.lowLimitReq ?: probeDefaults.lowLimitReq,
+        highLimitReq = from?.highLimitReq ?: probeDefaults.highLimitReq,
+        targetReq = from?.targetReq ?: probeDefaults.targetReq,
+        highLimitShutdown = from?.highLimitShutdown ?: probeDefaults.highLimitShutdown,
+        highLimitTriggered = from?.highLimitTriggered ?: probeDefaults.highLimitTriggered,
+        lowLimitShutdown = from?.lowLimitShutdown ?: probeDefaults.lowLimitShutdown,
+        lowLimitReignite = from?.lowLimitReignite ?: probeDefaults.lowLimitReignite,
+        lowLimitTriggered = from?.lowLimitTriggered ?: probeDefaults.lowLimitTriggered,
+        targetShutdown = from?.targetShutdown ?: probeDefaults.targetShutdown,
+        targetKeepWarm = from?.targetKeepWarm ?: probeDefaults.targetKeepWarm,
+        hasNotifications = from?.hasNotifications ?: probeDefaults.hasNotifications,
+        status = Probe.Status(
+            batteryCharging = from?.status?.batteryCharging
+                ?: probeDefaults.status.batteryCharging,
+            batteryPercentage = from?.status?.batteryPercentage?.roundToIntOrNull()
+                ?: probeDefaults.status.batteryPercentage,
+            batteryVoltage = from?.status?.batteryVoltage ?: probeDefaults.status.batteryVoltage,
+            connected = from?.status?.connected ?: probeDefaults.status.connected,
+            error = from?.status?.error ?: probeDefaults.status.error,
+            wireless = from?.status?.connected != null,
+        ),
     )
 
     // NaN (e.g. a disconnected probe) falls back to the default instead of throwing

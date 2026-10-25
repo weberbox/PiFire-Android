@@ -2,6 +2,7 @@ package com.weberbox.pifire.core.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import androidx.activity.ComponentActivity
@@ -50,6 +51,7 @@ class UpdateManager @Inject constructor(
     private var appUpdateManager: AppUpdateManager? = null
     private var updateLauncher: ActivityResultLauncher<IntentSenderRequest>? = null
     private var installStateUpdatedListener: InstallStateUpdatedListener? = null
+    private var launchedUpdateType: Int? = null
 
     private fun getAppUpdateManager(context: Context): AppUpdateManager {
         return appUpdateManager ?: AppUpdateManagerFactory.create(context).also {
@@ -79,7 +81,10 @@ class UpdateManager @Inject constructor(
                                         if (AppConfig.IS_PLAY_BUILD) {
                                             launchUpdate(activity)
                                         } else {
-                                            openGithubLink(activity)
+                                            openGithubLink(
+                                                activity = activity,
+                                                finishActivity = true,
+                                            )
                                         }
                                     }
                                 }
@@ -109,10 +114,16 @@ class UpdateManager @Inject constructor(
                                 positiveAction = DialogAction(
                                     buttonText = UiText(R.string.update),
                                     action = {
-                                        if (AppConfig.IS_PLAY_BUILD) {
-                                            launchUpdate(activity)
-                                        } else {
-                                            openGithubLink(activity)
+                                        // The activity scope outlives the dismissed dialog
+                                        activity.lifecycleScope.launch {
+                                            if (AppConfig.IS_PLAY_BUILD) {
+                                                launchUpdate(activity)
+                                            } else {
+                                                openGithubLink(
+                                                    activity = activity,
+                                                    finishActivity = false,
+                                                )
+                                            }
                                         }
                                     },
                                 ),
@@ -164,10 +175,11 @@ class UpdateManager @Inject constructor(
             ActivityResultContracts.StartIntentSenderForResult()
         ) { result ->
 
-            val update = currentUpdate ?: return@registerForActivityResult
+            val type = launchedUpdateType ?: return@registerForActivityResult
+            launchedUpdateType = null
 
-            when (update.type) {
-                UpdateType.IMMEDIATE -> {
+            when (type) {
+                AppUpdateType.IMMEDIATE -> {
                     if (result.resultCode != Activity.RESULT_OK) {
                         // If an immediate update is canceled or fails,
                         // you should usually exit the app.
@@ -175,7 +187,7 @@ class UpdateManager @Inject constructor(
                     }
                 }
 
-                UpdateType.FLEXIBLE -> {
+                AppUpdateType.FLEXIBLE -> {
                     activity.lifecycleScope.launch {
                         when (result.resultCode) {
                             Activity.RESULT_OK -> {
@@ -225,7 +237,11 @@ class UpdateManager @Inject constructor(
             } else if (appUpdateInfo.updateAvailability() ==
                 UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS
             ) {
-                startUpdateFlow(activity, appUpdateInfo, AppUpdateType.IMMEDIATE)
+                startUpdateFlow(
+                    activity = activity,
+                    appUpdateInfo = appUpdateInfo,
+                    type = AppUpdateType.IMMEDIATE,
+                )
             }
         }
     }
@@ -240,13 +256,28 @@ class UpdateManager @Inject constructor(
         val manager = getAppUpdateManager(activity)
         try {
             val appUpdateInfo = manager.appUpdateInfo.await()
+            // Remote Config can announce an update before Play offers it to this device
+            // (staged rollout, review, cache), so fall back instead of doing nothing.
+            val allowedType = listOf(type, AppUpdateType.FLEXIBLE, AppUpdateType.IMMEDIATE)
+                .firstOrNull { appUpdateInfo.isUpdateTypeAllowed(it) }
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(type)
+                allowedType != null
             ) {
-                startUpdateFlow(activity, appUpdateInfo, type)
+                startUpdateFlow(
+                    activity = activity,
+                    appUpdateInfo = appUpdateInfo,
+                    type = allowedType,
+                )
+            } else {
+                SnackbarController.sendEvent(
+                    SnackbarEvent(message = UiText(R.string.inapp_update_not_available_yet))
+                )
             }
         } catch (e: Exception) {
             Timber.e(e, "Failed to launch update flow")
+            SnackbarController.sendEvent(
+                SnackbarEvent(message = UiText(R.string.inapp_update_failed))
+            )
         }
     }
 
@@ -271,6 +302,7 @@ class UpdateManager @Inject constructor(
                 .setFlags(flagsValues, flagsMask)
                 .build()
 
+            launchedUpdateType = type
             launcher.launch(request)
         }
 
@@ -305,11 +337,18 @@ class UpdateManager @Inject constructor(
         analytics.logEvent(AnalyticsEvent.PostponeUpdate.name)
     }
 
-    private fun openGithubLink(activity: Activity) {
-        Intent(Intent.ACTION_VIEW).apply {
-            data = Constants.GITHUB_RELEASE_LINK.toUri()
-            activity.startActivity(this)
-            activity.finish()
+    // Only a required update closes the app; an optional one leaves it running.
+    private suspend fun openGithubLink(activity: Activity, finishActivity: Boolean) {
+        try {
+            activity.startActivity(
+                Intent(Intent.ACTION_VIEW, Constants.GITHUB_RELEASE_LINK.toUri())
+            )
+            if (finishActivity) activity.finish()
+        } catch (e: ActivityNotFoundException) {
+            Timber.w(e, "No activity to open the GitHub release link")
+            SnackbarController.sendEvent(
+                SnackbarEvent(message = UiText(R.string.inapp_update_no_browser))
+            )
         }
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,

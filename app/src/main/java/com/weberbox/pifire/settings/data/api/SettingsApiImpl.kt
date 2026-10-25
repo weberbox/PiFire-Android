@@ -31,10 +31,10 @@ import com.weberbox.pifire.settings.data.model.remote.Startup.SmartStart
 import com.weberbox.pifire.settings.data.model.remote.Startup.SmartStart.SSProfile
 import com.weberbox.pifire.settings.data.model.remote.Startup.StartToMode
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
-import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 class SettingsApiImpl @Inject constructor(
     private val socketManager: SocketManager,

@@ -50,7 +50,9 @@ class LandingViewModel @Inject constructor(
     private val headersManager: HeadersManager,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<LandingContract.Event, LandingContract.State, LandingContract.Effect>() {
-    private var pollerJobs = mutableListOf<Job>()
+    private val pollerJobs = mutableListOf<Job>()
+    private var servers: Map<String, SettingsData.Server> = emptyMap()
+    private var pollingActive = false
     private var autoSelectServer by mutableStateOf(prefs.get(Pref.landingAutoSelect))
     private var firstLaunch by mutableStateOf(true)
     private var requireServerBiometrics by mutableStateOf(true)
@@ -79,6 +81,16 @@ class LandingViewModel @Inject constructor(
                     name = AnalyticsEvent.VoiceSearch.name
                 )
             }
+
+            is LandingContract.Event.StartPolling -> {
+                pollingActive = true
+                startServerPolling()
+            }
+
+            is LandingContract.Event.StopPolling -> {
+                pollingActive = false
+                stopServerPolling()
+            }
         }
     }
 
@@ -103,7 +115,8 @@ class LandingViewModel @Inject constructor(
     private fun collectSettingsData() {
         viewModelScope.launch {
             settingsRepo.getSettingsFlow().collect {
-                startServerPolling(it.serverMap)
+                servers = it.serverMap
+                if (pollingActive) startServerPolling()
                 setState {
                     copy(
                         isInitialLoading = false,
@@ -124,12 +137,13 @@ class LandingViewModel @Inject constructor(
         }
     }
 
-    private fun startServerPolling(servers: Map<String, SettingsData.Server>) {
-        if (pollerJobs.isNotEmpty()) {
-            pollerJobs.forEach { job ->
-                job.cancel()
-            }
-        }
+    private fun stopServerPolling() {
+        pollerJobs.forEach { job -> job.cancel() }
+        pollerJobs.clear()
+    }
+
+    private fun startServerPolling() {
+        stopServerPolling()
         servers.forEach { server ->
             val job = viewModelScope.launch {
                 while (isActive) {
@@ -153,29 +167,28 @@ class LandingViewModel @Inject constructor(
     private fun updateServerState(result: Result<ServerUuidData, DataError>, uuid: String) {
         when (result) {
             is Result.Success -> {
-                val resultUuid = result.data.uuid
-                setOnlineState(resultUuid, true)
-                if (autoSelectServer && firstLaunch) {
+                // Another PiFire answering at this address is not this server
+                val isSameServer = result.data.uuid == uuid
+                setOnlineState(uuid = uuid, online = isSameServer)
+                if (isSameServer && autoSelectServer && firstLaunch) {
+                    firstLaunch = false
                     if (requireServerBiometrics) {
-                        firstLaunch = false
                         setEffect {
                             LandingContract.Effect.BiometricServerPrompt(
                                 uuid = uuid,
                             )
                         }
                     } else {
-                        if (resultUuid.isNotBlank()) {
-                            viewModelScope.launch {
-                                delay(500.milliseconds)
-                                selectServer(uuid)
-                            }
+                        viewModelScope.launch {
+                            delay(500.milliseconds)
+                            selectServer(uuid)
                         }
                     }
                 }
             }
 
             is Result.Error -> {
-                setOnlineState(uuid, false)
+                setOnlineState(uuid = uuid, online = false)
             }
         }
     }

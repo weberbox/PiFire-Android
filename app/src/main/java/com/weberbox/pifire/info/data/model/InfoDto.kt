@@ -20,7 +20,7 @@ data class InfoDto(
     val upTime: String? = null,
     val outPins: Map<String, Int?>? = null,
     val inPins: Map<String, Int?>? = null,
-    val devPins: Map<String, Map<String, Int>>? = null,
+    val devPins: Map<String, Map<String, Int?>?>? = null,
     val serverVersion: String? = null,
     val serverBuild: String? = null,
     val pipList: List<Module>? = null,

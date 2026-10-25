@@ -1,7 +1,6 @@
 package com.weberbox.pifire.core.singleton
 
 import android.content.Context
-import androidx.datastore.core.IOException
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.settings.data.model.local.Pref
@@ -18,6 +17,7 @@ import io.sentry.android.core.SentryAndroid
 import io.sentry.android.timber.SentryTimberIntegration
 import io.sentry.protocol.User
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,20 +28,21 @@ class SentryIO @Inject constructor(
     private val settingsRepo: SettingsRepo,
     private val prefs: Prefs
 ) {
+    // Read by beforeSend on whichever thread sends the event
+    @Volatile
     private var server: Server? = null
 
     fun init() {
-        getServerData()
+        // Synchronous so crashes during startup are reported too
+        initSentry(appContext)
+        observeCurrentServer()
     }
 
-    private fun getServerData() {
-        try {
-            appScope.launch {
-                server = settingsRepo.getCurrentServer()
-                initSentry(appContext)
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Failed reading server data from DataStore")
+    private fun observeCurrentServer() {
+        appScope.launch {
+            settingsRepo.getCurrentServerFlow()
+                .catch { e -> Timber.e(e, "Failed reading server data from DataStore") }
+                .collect { server = it }
         }
     }
 
@@ -50,6 +51,11 @@ class SentryIO @Inject constructor(
             SentryAndroid.init(appContext) { options ->
                 options.sessionReplay.onErrorSampleRate = 1.0
                 options.sessionReplay.sessionSampleRate = 0.1
+                // Masked explicitly: screens show server addresses, which may hold credentials
+                options.sessionReplay.setMaskAllText(true)
+                options.sessionReplay.setMaskAllImages(true)
+                options.screenshot.setMaskAllText(true)
+                options.screenshot.setMaskAllImages(true)
                 options.isEnableNdk = false
                 options.isAttachScreenshot = true
                 options.isEnableAutoSessionTracking = true

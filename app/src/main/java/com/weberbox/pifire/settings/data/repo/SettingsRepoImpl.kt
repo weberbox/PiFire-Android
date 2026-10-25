@@ -1,7 +1,6 @@
 package com.weberbox.pifire.settings.data.repo
 
 import androidx.datastore.core.DataStore
-import com.google.android.datatransport.runtime.dagger.Lazy
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.model.PostDto.ProbesDto
@@ -12,13 +11,15 @@ import com.weberbox.pifire.settings.data.api.SettingsApi
 import com.weberbox.pifire.settings.data.model.remote.Pwm
 import com.weberbox.pifire.settings.data.model.remote.Startup
 import com.weberbox.pifire.settings.data.util.ServerDataManager
+import dagger.Lazy
 import com.weberbox.pifire.settings.domain.SettingsDtoToDataMapper
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import com.weberbox.pifire.settings.presentation.model.SettingsData
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -164,14 +165,10 @@ class SettingsRepoImpl @Inject constructor(
         serverDataManager.get().deleteServer(uuid)
     }
 
-    override fun getCurrentServerFlow(): Flow<Server> = callbackFlow {
-        val currentUuid = dataStore.data.firstOrNull()?.currentServerUuid
-        getSettingsFlow().collect {
-            it.serverMap[currentUuid]?.let { server ->
-                send(server)
-            }
-        }
-    }
+    // Follows currentServerUuid, so switching servers switches the flow
+    override fun getCurrentServerFlow(): Flow<Server> = dataStore.data
+        .mapNotNull { it.serverMap[it.currentServerUuid] }
+        .distinctUntilChanged()
 
     override suspend fun deleteHistory(): Result<Unit, DataError> {
         return settingsApi.deleteHistory()
@@ -801,13 +798,9 @@ class SettingsRepoImpl @Inject constructor(
         return transformResult(settingsApi.setAutoPowerOffEnabled(enabled))
     }
 
-    override fun getCurrentServerFlow(uuid: String): Flow<Server> = callbackFlow {
-        getSettingsFlow().collect {
-            it.serverMap[uuid]?.let { server ->
-                send(server)
-            }
-        }
-    }
+    override fun getCurrentServerFlow(uuid: String): Flow<Server> = dataStore.data
+        .mapNotNull { it.serverMap[uuid] }
+        .distinctUntilChanged()
 
     private suspend fun transformResult(
         result: Result<String, DataError>

@@ -14,8 +14,8 @@ import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.setup.data.util.ServerDataCache
 import com.weberbox.pifire.setup.presentation.contract.AuthContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(

@@ -3,48 +3,59 @@ package com.weberbox.pifire.core.singleton
 import com.weberbox.pifire.common.data.interfaces.DataError
 import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.common.data.parser.parsePostResponse
-import com.weberbox.pifire.common.data.util.AckWithTimeout
 import com.weberbox.pifire.common.presentation.state.SessionStateHolder
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.settings.data.util.HeadersManager
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
+import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.onFailure
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import java.net.URI
 import java.net.URISyntaxException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
+private const val CONNECT_TIMEOUT_MS = 20_000L
+private const val ACK_TIMEOUT_MS = 10_000L
+private const val LISTEN_BUFFER_SIZE = 64
+private const val SOCKET_IO_PATH = "/socket.io"
+
 class SocketManager @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
-    private val json: Json
+    private val json: Json,
 ) {
-    var socket: Socket? = null
-    private var address: String? = null
+    // A StateFlow so onFlow listeners move to the new socket after initSocket.
+    private val socket = MutableStateFlow<Socket?>(null)
 
-    private suspend fun startSocket(server: Server): Socket? {
-        Timber.i("Creating Socket connection: ${server.address}")
+    private suspend fun createSocket(server: Server): Socket? {
+        Timber.i("Creating Socket connection")
 
         return try {
+            val (address, enginePath) = splitSocketAddress(server.address)
             val options = IO.Options().apply {
+                enginePath?.let { path = it }
                 val headersMap = headersManager.buildServerHeadersList(server)
                 if (headersMap.isNotEmpty()) {
                     extraHeaders = headersMap
                 }
             }
 
-            val socket = IO.socket(server.address, options)
-
-            socket.apply {
+            IO.socket(address, options).apply {
                 on(Socket.EVENT_CONNECT) {
                     sessionStateHolder.tryEmitConnectedState(true)
                 }
@@ -57,70 +68,89 @@ class SocketManager @Inject constructor(
                     Timber.d("Socket connect error: ${args.firstOrNull()}")
                     sessionStateHolder.tryEmitConnectedState(false)
                 }
-
-                connect()
             }
         } catch (e: IllegalArgumentException) {
-            Timber.e(e, "Invalid socket server address: ${server.address}")
-            sessionStateHolder.tryEmitConnectedState(false)
+            Timber.e(e, "Invalid socket server address")
             null
         } catch (e: URISyntaxException) {
-            Timber.e(e, "Malformed socket URI: ${server.address}")
-            sessionStateHolder.tryEmitConnectedState(false)
+            Timber.e(e, "Malformed socket URI")
             null
         } catch (e: Exception) {
             Timber.e(e, "Unexpected error creating socket")
-            sessionStateHolder.tryEmitConnectedState(false)
             null
         }
+    }
+
+    /**
+     * Socket.IO treats a URL path as a namespace, so a server behind a reverse proxy subpath
+     * (`https://host/pifire`) has to connect to the host with the subpath as the engine path.
+     */
+    private fun splitSocketAddress(address: String): Pair<String, String?> {
+        val uri = URI(address)
+        val subPath = uri.rawPath.orEmpty().trimEnd('/')
+        if (uri.scheme == null || uri.rawAuthority == null || subPath.isEmpty()) {
+            return address to null
+        }
+        return "${uri.scheme}://${uri.rawAuthority}" to "$subPath$SOCKET_IO_PATH"
     }
 
     suspend fun initSocket(
         server: Server,
-        disconnectOnCancellation: Boolean = false
+        disconnectOnCancellation: Boolean = false,
     ): Boolean {
         disconnect()
-        socket = startSocket(server)
-        return suspendCancellableCoroutine { continuation ->
-            socket?.once(Socket.EVENT_CONNECT) {
-                if (continuation.isActive) continuation.resume(true)
-            }
-            socket?.once(Socket.EVENT_CONNECT_ERROR) {
-                if (continuation.isActive) continuation.resume(false)
-            }
+        val newSocket = createSocket(server) ?: return false
+        socket.value = newSocket
 
-            socket?.connect()
-
-            if (disconnectOnCancellation) continuation.invokeOnCancellation { disconnect() }
+        val connected = try {
+            awaitConnection(newSocket)
+        } catch (e: Exception) {
+            if (disconnectOnCancellation) disconnect(target = newSocket)
+            throw e
         }
+        // Without this a failed socket keeps reconnecting and later flips the connected state.
+        if (!connected) disconnect(target = newSocket)
+        return connected
     }
 
     fun disconnect() {
-        Timber.i("Socket Disconnect")
-        socket?.off()
-        socket?.disconnect()
-        socket?.close()
-        socket = null
-        address = null
+        disconnect(target = socket.value)
         sessionStateHolder.tryEmitConnectedState(false)
     }
 
-    fun isConnected(): Boolean = socket?.connected() == true
+    private fun disconnect(target: Socket?) {
+        if (target == null || !socket.compareAndSet(target, null)) return
+        Timber.i("Socket Disconnect")
+        target.off()
+        target.disconnect()
+        sessionStateHolder.tryEmitConnectedState(false)
+    }
 
-    suspend fun connected(): Boolean {
-        if (socket?.connected() == true) return true
+    fun isConnected(): Boolean = socket.value?.connected() == true
 
-        return suspendCancellableCoroutine { continuation ->
-            socket?.once(Socket.EVENT_CONNECT) {
-                if (continuation.isActive) continuation.resume(true)
+    private suspend fun connected(target: Socket): Boolean {
+        if (target.connected()) return true
+        return awaitConnection(target)
+    }
+
+    private suspend fun awaitConnection(target: Socket): Boolean {
+        return withTimeoutOrNull(CONNECT_TIMEOUT_MS) {
+            suspendCancellableCoroutine { continuation ->
+                val onConnect = Emitter.Listener {
+                    if (continuation.isActive) continuation.resume(true)
+                }
+                val onError = Emitter.Listener {
+                    if (continuation.isActive) continuation.resume(false)
+                }
+                target.once(Socket.EVENT_CONNECT, onConnect)
+                target.once(Socket.EVENT_CONNECT_ERROR, onError)
+                continuation.invokeOnCancellation {
+                    target.off(Socket.EVENT_CONNECT, onConnect)
+                    target.off(Socket.EVENT_CONNECT_ERROR, onError)
+                }
+                target.connect()
             }
-            socket?.once(Socket.EVENT_CONNECT_ERROR) {
-                if (continuation.isActive) continuation.resume(false)
-            }
-
-            socket?.connect()
-            continuation.invokeOnCancellation { socket?.disconnect() }
-        }
+        } ?: false
     }
 
     suspend fun emit(event: String, vararg args: Any): Result<String, DataError> {
@@ -151,48 +181,58 @@ class SocketManager @Inject constructor(
 
     private suspend fun internalEmit(
         event: String,
-        vararg args: Any
+        vararg args: Any,
     ): Result<String, DataError> {
-        return if (connected()) {
-            suspendCancellableCoroutine { cont ->
-                socket?.emit(
+        val target = socket.value
+        if (target == null || !connected(target)) {
+            return Result.Error(DataError.Network.SOCKET_ERROR)
+        }
+
+        return withTimeoutOrNull(ACK_TIMEOUT_MS) {
+            suspendCancellableCoroutine { continuation ->
+                target.emit(
                     event, *args,
-                    AckWithTimeout(
-                        onSuccess = { result ->
-                            if (result.isNotEmpty() && result[0] != null) {
-                                cont.resume(Result.Success(result[0].toString()))
+                    Ack { result ->
+                        val data = result.firstOrNull()
+                        // A resume after the timeout cancelled the continuation is ignored.
+                        continuation.resume(
+                            if (data != null) {
+                                Result.Success(data.toString())
                             } else {
-                                cont.resume(Result.Error(DataError.Network.SERVER_ERROR))
+                                Result.Error(DataError.Network.SERVER_ERROR)
                             }
-                        },
-                        onTimeout = {
-                            cont.resume(Result.Error(DataError.Network.SOCKET_TIMEOUT))
-                        }
-                    )
+                        )
+                    },
                 )
             }
-        } else {
-            Result.Error(DataError.Network.SOCKET_ERROR)
-        }
+        } ?: Result.Error(DataError.Network.SOCKET_TIMEOUT)
     }
 
-    fun onFlow(event: String): Flow<Result<Array<out Any?>, DataError>> = callbackFlow {
-        val listener = object : Emitter.Listener {
-            override fun call(vararg args: Any?) {
-                trySendBlocking(Result.Success(args)).onFailure {
-                    socket?.off(event, this)
-                }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onFlow(event: String): Flow<Result<Array<out Any?>, DataError>> =
+        socket.flatMapLatest { current ->
+            if (current == null) {
+                flowOf(Result.Error(DataError.Network.SOCKET_ERROR))
+            } else {
+                listen(target = current, event = event)
             }
         }
 
-        if (socket?.connected() == false) {
-            trySendBlocking(Result.Error(DataError.Network.SOCKET_ERROR))
+    private fun listen(
+        target: Socket,
+        event: String,
+    ): Flow<Result<Array<out Any?>, DataError>> = callbackFlow<Result<Array<out Any?>, DataError>> {
+        // trySend never blocks the socket's EventThread; the buffer drops the oldest on overflow.
+        val listener = Emitter.Listener { args -> trySend(Result.Success(args)) }
+
+        if (!target.connected()) {
+            trySend(Result.Error(DataError.Network.SOCKET_ERROR))
         }
 
-        socket?.on(event, listener)
+        target.on(event, listener)
 
         awaitClose {
-            socket?.off(event, listener)
+            target.off(event, listener)
         }
-    }
+    }.buffer(capacity = LISTEN_BUFFER_SIZE, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 }

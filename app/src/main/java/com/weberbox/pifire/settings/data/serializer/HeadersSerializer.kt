@@ -1,11 +1,11 @@
 package com.weberbox.pifire.settings.data.serializer
 
+import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.weberbox.pifire.settings.data.model.local.HeadersData
 import com.weberbox.pifire.settings.data.util.Crypto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.InputStream
@@ -27,14 +27,15 @@ object HeadersSerializer : Serializer<HeadersData> {
         val encryptedBytes = withContext(Dispatchers.IO) {
             input.use { it.readBytes() }
         }
-        val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
-        val decryptedBytes = Crypto.decrypt(encryptedBytesDecoded)
-        val decodedJsonString = decryptedBytes.decodeToString()
+        // Base64, keystore and JSON failures all go to the corruption handler instead of
+        // crashing every reader of this DataStore.
         return try {
-            json.decodeFromString(decodedJsonString)
-        } catch (e: SerializationException) {
+            val encryptedBytesDecoded = Base64.getDecoder().decode(encryptedBytes)
+            val decryptedBytes = Crypto.decrypt(encryptedBytesDecoded)
+            json.decodeFromString(decryptedBytes.decodeToString())
+        } catch (e: Exception) {
             Timber.e(e, "Headers Deserialization Error")
-            defaultValue
+            throw CorruptionException(message = "Unable to read headers data", cause = e)
         }
     }
 

@@ -41,37 +41,6 @@ One step per commit, compile all flavors after each.
 7. Tooling: `.editorconfig` + Spotless/ktlint (copy the reference project's config), unit tests (JUnit, MockK,
    coroutines-test, Konsist `ArchitectureTest` for the layout rules), then add them to CLAUDE.md.
 
-## Bugs: data / network
-- [socket] core/singleton/SocketManager.kt:83-124: `initSocket()`/`connected()` never resume when
-  `socket` is null (bad URL, emit after disconnect), so callers hang. Return early and wrap waits in
-  `withTimeoutOrNull`.
-- [socket] SocketManager.kt:84-92: failed `initSocket` leaves an auto-reconnecting socket that later
-  flips `connectedState` true. `disconnect()` before resuming false.
-- [socket] common/data/util/AckWithTimeout.kt: `called` not atomic (Timer vs EventThread can
-  double-resume and crash); a `Timer` thread per emit. Use `AtomicBoolean` or `withTimeout`.
-- [socket] SocketManager.kt:179-197 `onFlow`: listeners bound to the current socket die after
-  re-init; `trySendBlocking` on the EventThread can stall acks.
-- [socket] SocketManager.kt:45: a URL with a subpath (`https://host/pifire`) becomes a Socket.IO
-  namespace. Split it into `options.path = "<sub>/socket.io"`.
-- [dash] dashboard/domain/DashDtoToDataMapper.kt:84,89: food probe `lowLimitShutdown =
-  it.highLimitShutdown`, `lowLimitReq` falls back to `hasNotifications`. Share one probe mapper.
-- [json] info/data/model/InfoDto.kt:23: `devPins` values not nullable.
-- [errors] DataError.Network.CERTIFICATE never produced; SSL/host/timeout failures in
-  `SetupRepoImpl`/`LandingRepoImpl` show raw `e.message`. Map exception types.
-- [datastore] settings/data/serializer/HeadersSerializer.kt:89-101: only `SerializationException`
-  caught; crypto/Base64 failures crash the Landing poller. Rethrow as `CorruptionException`.
-- [crypto] settings/data/util/Crypto.kt:18: one shared `Cipher` across threads. Create per call.
-- [settings] settings/data/repo/SettingsRepoImpl.kt:167-174,804, setup/data/util/
-  ServerDataCacheImpl.kt:21-51: `getCurrentServerFlow()` captures the server UUID once; `callbackFlow`
-  without `awaitClose`. Use `dataStore.data.mapNotNull { ... }`.
-- [sentry] core/singleton/SentryIO.kt:39-55: try/catch outside `launch` catches nothing; async init
-  misses startup crashes; server extra goes stale; session replay/screenshots may capture URLs.
-- [landing] LandingViewModel.kt:153-170: auto-select doesn't check the returned UUID matches.
-- [update] core/util/UpdateManager.kt:308-313: no `ActivityNotFoundException` guard; finishes the
-  activity on FLEXIBLE; IMMEDIATE does nothing if Play hasn't the update yet (staged rollout).
-- [di] core/di/StateModule.kt:4,40-62 and SettingsRepoImpl.kt:4: shaded
-  `com.google.android.datatransport.runtime.dagger.Lazy`, and a new `ServerDataManager` per `get()`.
-
 ## Bugs: presentation
 - [changelog] ChangelogViewModel.kt:38-45: error path leaves `isInitialLoading` true.
 - [settings] notifications/MqttSettings.kt:236-290: port/update-seconds use a text keyboard and
@@ -82,8 +51,6 @@ One step per commit, compile all flavors after each.
 - [dialog] common/presentation/component/EventAlertDialog.kt:85-139: actions run in a scope that
   dies with the dialog; ConnectViewModel "Continue" can hang with the spinner on.
 - [dialog] DialogController + EventDialogState.kt:50: after rotation restored dialog actions are `{}`.
-- [landing] LandingViewModel.kt:166-172: non-biometric auto-select never sets `firstLaunch = false`
-  -> repeated `selectServer` per poll. Also `pollerJobs` grows forever and polls behind Settings.
 - [pellets] pellets/presentation/component/PelletsBottomSheets.kt:40-42: `profilesList[0]` on empty.
 - [dash] DashboardViewModel.kt:266-268,338-342: ignored `Result`s; Start sent after failed hold-temp
   save; state set from IO.
@@ -132,6 +99,5 @@ One step per commit, compile all flavors after each.
 - Dispatchers in ViewModels (24) with `withContext(Main)` before `setEffect`: move IO into repos.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.
-- Dead code: `DashApiImpl.requestDashUpdate`, `SocketManager.address`, `Secrets.AWS_FCM_*`, public
-  mutable `SocketManager.socket`. `DashApiImpl.kt:206` default `Json`; `SettingsApiImpl`
-  `jakarta.inject`; `common/data/parser/ReponseParser.kt` misspelled.
+- Dead code: `DashApiImpl.requestDashUpdate`, `Secrets.AWS_FCM_*`. `DashApiImpl.kt:206` default `Json`;
+  `common/data/parser/ReponseParser.kt` misspelled.

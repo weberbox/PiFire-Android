@@ -15,13 +15,14 @@ object Crypto {
     private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private const val TRANSFORMATION = "$ALGORITHM/$BLOCK_MODE/$PADDING"
 
-    private val cipher = Cipher.getInstance(TRANSFORMATION)
     private val keyStore = KeyStore
         .getInstance("AndroidKeyStore")
         .apply {
             load(null)
         }
 
+    // Synchronized so two first-time callers can't each create, and overwrite, the key
+    @Synchronized
     private fun getKey(): SecretKey {
         val existingKey = keyStore
             .getEntry(KEY_ALIAS, null) as? KeyStore.SecretKeyEntry
@@ -48,7 +49,9 @@ object Crypto {
             .generateKey()
     }
 
+    // A Cipher isn't thread-safe, so each call gets its own
     fun encrypt(bytes: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         val iv = cipher.iv
         val encrypted = cipher.doFinal(bytes)
@@ -56,6 +59,7 @@ object Crypto {
     }
 
     fun decrypt(bytes: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(TRANSFORMATION)
         val iv = bytes.copyOfRange(0, cipher.blockSize)
         val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
         cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))

@@ -5,7 +5,7 @@ import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -18,40 +18,27 @@ class ServerDataCacheImpl @Inject constructor(
         prefs.set(Pref.serverSetupSession, json.encodeToString(server))
     }
 
-    override suspend fun getServerData(): Flow<Server> = callbackFlow {
-        prefs.collectPrefsFlow(Pref.serverSetupSession).collect {
-            if (it.isNotBlank()) {
-                try {
-                    send(json.decodeFromString<Server>(it))
-                } catch (_: Exception) {
-                    send(Server())
-                }
-            } else {
-                send(Server())
-            }
-        }
-    }
+    override suspend fun getServerData(): Flow<Server> =
+        prefs.collectPrefsFlow(Pref.serverSetupSession).map { decodeOrDefault(it) { Server() } }
 
     override fun saveHeaderData(headers: Headers) {
         prefs.set(Pref.headersSetupSession, json.encodeToString(headers))
     }
 
-    override suspend fun getHeaderData(): Flow<Headers> = callbackFlow {
-        prefs.collectPrefsFlow(Pref.headersSetupSession).collect {
-            if (it.isNotBlank()) {
-                try {
-                    send(json.decodeFromString<Headers>(it))
-                } catch (_: Exception) {
-                    send(Headers())
-                }
-            } else {
-                send(Headers())
-            }
-        }
-    }
+    override suspend fun getHeaderData(): Flow<Headers> =
+        prefs.collectPrefsFlow(Pref.headersSetupSession).map { decodeOrDefault(it) { Headers() } }
 
     override fun clearServerData() {
         prefs.clear(Pref.serverSetupSession)
         prefs.clear(Pref.headersSetupSession)
+    }
+
+    private inline fun <reified T> decodeOrDefault(value: String, default: () -> T): T {
+        if (value.isBlank()) return default()
+        return try {
+            json.decodeFromString<T>(value)
+        } catch (_: Exception) {
+            default()
+        }
     }
 }

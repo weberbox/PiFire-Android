@@ -12,7 +12,6 @@ import com.weberbox.pifire.info.presentation.model.InfoData.Info
 import com.weberbox.pifire.info.presentation.util.formatBytes
 import com.weberbox.pifire.info.presentation.util.formatPercentage
 import java.util.Locale
-import java.util.concurrent.atomic.AtomicInteger
 
 object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
 
@@ -20,7 +19,6 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         val gpioInPins = ArrayList<GPIOInOutData>()
         val gpioOutPins = ArrayList<GPIOInOutData>()
         val gpioDevPins = ArrayList<GPIODeviceData>()
-        val cycle = AtomicInteger()
 
         from.outPins?.forEach { (key: String, value: Int?) ->
             val pin = value?.toString() ?: "-"
@@ -68,31 +66,16 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             }
         }
 
-        from.devPins?.forEach { (key: String, value: Map<String, Int>) ->
-            cycle.getAndSet(1)
-            value.forEach { (function: String, pin: Int) ->
-                if (cycle.toInt() == 1) {
-                    cycle.getAndIncrement()
-                    val devPin = String.format(Locale.US, pin.toString())
-                    val capName = key.replaceFirstChar { firstChar -> firstChar.uppercase() }
-                    gpioDevPins.add(
-                        GPIODeviceData(
-                            name = capName,
-                            function = function.replace("_", " "),
-                            pin = devPin
-                        )
+        from.devPins?.forEach { (device: String, functions: Map<String, Int?>?) ->
+            functions?.entries?.forEachIndexed { index, (function: String, pin: Int?) ->
+                gpioDevPins.add(
+                    GPIODeviceData(
+                        // Only a device's first row shows its name
+                        name = if (index == 0) device.replaceFirstChar { it.uppercase() } else "",
+                        function = function.replace("_", " "),
+                        pin = pin?.toString() ?: "-",
                     )
-                } else {
-                    val devPin = String.format(Locale.US, pin.toString())
-                    gpioDevPins.add(
-                        GPIODeviceData(
-                            name = "",
-                            function = function.replace("_", " "),
-                            pin = devPin
-                        )
-                    )
-                }
-                cycle.getAndSet(0)
+                )
             }
         }
 

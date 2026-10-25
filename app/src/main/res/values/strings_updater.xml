@@ -11,4 +11,6 @@
     <string name="inapp_update_complete">App update completed</string>
     <string name="inapp_update_canceled">App update canceled</string>
     <string name="inapp_update_failed">App update failed!</string>
+    <string name="inapp_update_not_available_yet">Google Play does not have this update for your device yet. Please try again later</string>
+    <string name="inapp_update_no_browser">No app found to open the update link</string>
 </resources>

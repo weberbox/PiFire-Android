@@ -49,6 +49,14 @@ object AsUiText {
                 R.string.data_error_http_certificate_error
             )
 
+            DataError.Network.UNKNOWN_HOST -> UiText(
+                R.string.data_error_unknown_host
+            )
+
+            DataError.Network.UNREACHABLE_HOST -> UiText(
+                R.string.data_error_unreachable_host
+            )
+
             DataError.Network.UNKNOWN -> UiText(
                 R.string.data_error_unknown
             )
