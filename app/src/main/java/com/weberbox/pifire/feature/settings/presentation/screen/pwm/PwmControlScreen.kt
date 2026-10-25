@@ -213,19 +213,19 @@ private fun PwmControlSettingsContent(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val units = state.serverData.settings.tempUnits
                     val temp = when (index) {
-                        0 -> {
-                            "< " + item.temp + " " + state.serverData.settings.tempUnits
-                        }
+                        0 -> stringResource(R.string.settings_pwm_range_below, item.temp, units)
 
-                        state.serverData.settings.pwmControlList.size - 1 -> {
-                            "> " + (item.temp - 1) + " " + state.serverData.settings.tempUnits
-                        }
+                        state.serverData.settings.pwmControlList.size - 1 ->
+                            stringResource(R.string.settings_pwm_range_above, item.temp - 1, units)
 
-                        else -> {
-                            state.serverData.settings.pwmControlList[index - 1].temp.toString() +
-                                "-" + item.temp + " " + state.serverData.settings.tempUnits
-                        }
+                        else -> stringResource(
+                            R.string.settings_pwm_range_between,
+                            state.serverData.settings.pwmControlList[index - 1].temp,
+                            item.temp,
+                            units,
+                        )
                     }
                     Text(
                         text = temp,

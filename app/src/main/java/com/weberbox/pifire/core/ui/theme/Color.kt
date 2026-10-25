@@ -14,6 +14,12 @@ val pelletDanger = Color(0xFFB10000)
 val pelletDangerTrack = Color(0x70B62929)
 val pelletWarning = Color(0xFFCB7F04)
 val pelletWarningTrack = Color(0xA1A87C1B)
+
+// Text on the fixed pellet danger/warning fills, so it's the same in both themes
+val onPelletLevel = Color(0xFFFFFFFF)
+
+// Online marker on the landing server list, same in both themes
+val serverOnline = Color(0x8F00FF00)
 val alerterInfo = Color(0xFF3E3D3D)
 val alerterError = Color(0xFFFF5449)
 

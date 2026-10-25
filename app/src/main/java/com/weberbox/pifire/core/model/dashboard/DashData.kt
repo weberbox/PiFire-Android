@@ -47,11 +47,11 @@ data class DashData(
         val outputs: Outputs = Outputs(),
         val recipeStatus: RecipeStatus = RecipeStatus(),
         val foodProbes: List<Probe> = listOf(
-            Probe(title = "Probe 1", label = "probe1"),
-            Probe(title = "Probe 2", label = "probe2"),
-            Probe(title = "Probe 3", label = "probe3"),
+            Probe(label = "probe1"),
+            Probe(label = "probe2"),
+            Probe(label = "probe3"),
         ),
-        val primaryProbe: Probe = Probe(title = "Grill", label = "grill", maxTemp = 600),
+        val primaryProbe: Probe = Probe(label = "grill", maxTemp = 600),
     ) {
         @Serializable
         data class Timer(
@@ -83,7 +83,8 @@ data class DashData(
         @Serializable
         data class Probe(
             val probeType: ProbeType = ProbeType.Food,
-            val title: String = "Probe",
+            // Blank until the server names it; the dashboard shows a default name
+            val title: String = "",
             val label: String = "probe",
             val enabled: Boolean = true,
             val eta: Int = 0,

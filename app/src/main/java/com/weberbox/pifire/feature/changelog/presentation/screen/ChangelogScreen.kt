@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.ui.base.gradientBackground
 import com.weberbox.pifire.core.ui.components.HazeAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
@@ -123,7 +124,7 @@ private fun ChangelogScreen(
                 .hazeSource(state = hazeState)
                 .fillMaxSize(),
         ) {
-            items(items = state.changelogData.changelog) { item ->
+            items(items = state.changelogData.changelog.withUniqueKeys { it.version }, key = { it.key }) { (_, item) ->
                 Column {
                     LogHeader(
                         current = item.current,

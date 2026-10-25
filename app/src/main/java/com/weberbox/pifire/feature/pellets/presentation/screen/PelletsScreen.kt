@@ -383,8 +383,7 @@ internal fun PelletsScreenPreview(
 internal fun buildPellets(): Pellets = Pellets(
     currentPelletId = "Test",
     hopperLevel = 63,
-    usageImperial = "0.16 oz",
-    usageMetric = "4.51 g",
+    estUsageGrams = 4.51,
     currentBrand = "Generic",
     currentWood = "Alder",
     currentRating = 4,

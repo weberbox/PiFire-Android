@@ -127,8 +127,8 @@ class LandingViewModel @Inject constructor(
                             servers = it.serverMap.entries.mapIndexed { index, server ->
                                 Server(
                                     uuid = server.value.uuid,
-                                    name = server.value.name.takeIf { name -> name.isNotEmpty() }
-                                        ?: "Smoker ${index + 1}",
+                                    name = server.value.name,
+                                    number = index + 1,
                                     address = server.value.address,
                                     online = false,
                                 )

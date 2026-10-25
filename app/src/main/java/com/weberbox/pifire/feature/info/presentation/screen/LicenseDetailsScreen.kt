@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.ui.components.DetailsScreen
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.feature.info.presentation.components.LicenseItem
@@ -40,7 +41,7 @@ private fun LicenseDetailsContent(
         title = stringResource(R.string.info_credits),
         onNavigate = onNavigate,
     ) {
-        items(items = args.licenses.list) { project ->
+        items(items = args.licenses.list.withUniqueKeys { it.project }, key = { it.key }) { (_, project) ->
             LicenseItem(project) {
                 Intent(Intent.ACTION_VIEW).apply {
                     data = it.toUri()

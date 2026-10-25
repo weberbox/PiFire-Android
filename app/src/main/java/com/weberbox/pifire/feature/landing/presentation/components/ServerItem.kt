@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,10 +34,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.elevation
+import com.weberbox.pifire.core.ui.theme.serverOnline
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData.Server
 import com.weberbox.pifire.feature.landing.presentation.screen.buildServerData
+import com.weberbox.pifire.feature.landing.presentation.util.displayName
 
 @Composable
 internal fun ServerItem(
@@ -47,6 +49,7 @@ internal fun ServerItem(
     onEdit: (uuid: String) -> Unit,
     onDelete: (uuid: String, name: String) -> Unit,
 ) {
+    val displayName = server.displayName(LocalContext.current)
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainerHigh,
         1f to MaterialTheme.colorScheme.surfaceContainer,
@@ -70,7 +73,7 @@ internal fun ServerItem(
                     .fillMaxHeight()
                     .background(
                         if (server.online) {
-                            Color.Green.copy(0.56f)
+                            serverOnline
                         } else {
                             MaterialTheme.colorScheme.error
                         },
@@ -84,7 +87,7 @@ internal fun ServerItem(
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Text(
-                    text = server.name,
+                    text = displayName,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = FontWeight.Bold,
@@ -130,7 +133,7 @@ internal fun ServerItem(
                     )
                 }
                 OutlinedIconButton(
-                    onClick = { onDelete(server.uuid, server.name) },
+                    onClick = { onDelete(server.uuid, displayName) },
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.DeleteOutline,

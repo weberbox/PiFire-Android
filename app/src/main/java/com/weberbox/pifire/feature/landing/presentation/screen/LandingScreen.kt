@@ -40,6 +40,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -67,6 +68,7 @@ import com.weberbox.pifire.feature.landing.presentation.components.ServerItem
 import com.weberbox.pifire.feature.landing.presentation.contract.LandingContract
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData.Server
+import com.weberbox.pifire.feature.landing.presentation.util.displayName
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
@@ -207,9 +209,10 @@ private fun LandingScreen(
                 }
 
                 else -> {
-                    val filteredList = remember(searchQuery, state.serverData) {
+                    val context = LocalContext.current
+                    val filteredList = remember(searchQuery, state.serverData, context) {
                         state.serverData.servers.filter { server ->
-                            server.name.contains(searchQuery, ignoreCase = true)
+                            server.displayName(context).contains(searchQuery, ignoreCase = true)
                         }
                     }
                     LazyColumn(

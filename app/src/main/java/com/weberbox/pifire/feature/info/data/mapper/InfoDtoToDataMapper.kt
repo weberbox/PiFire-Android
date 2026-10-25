@@ -9,8 +9,6 @@ import com.weberbox.pifire.core.model.info.GPIOInOutData
 import com.weberbox.pifire.core.model.info.InfoData.Info
 import com.weberbox.pifire.core.ui.util.getFormattedDate
 import com.weberbox.pifire.feature.info.data.model.InfoDto
-import com.weberbox.pifire.feature.info.data.util.formatBytes
-import com.weberbox.pifire.feature.info.data.util.formatPercentage
 import java.util.Locale
 
 object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
@@ -108,31 +106,31 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
         return Info(
             uuid = from.uuid.orEmpty(),
             platformInfo = Info.PlatformInfo(
-                systemModel = from.platformInfo?.systemModel ?: "Unknown",
-                cpuModel = from.platformInfo?.cpuModel ?: "Unknown",
-                cpuHardware = from.platformInfo?.cpuHardware ?: "Unknown",
-                cpuCores = from.platformInfo?.cpuCores?.toString() ?: "Unknown",
-                cpuFrequency = from.platformInfo?.cpuFrequency?.toString() ?: "Unknown",
-                totalRam = formatBytes(from.platformInfo?.totalRam),
-                availableRam = formatBytes(from.platformInfo?.availableRam),
+                systemModel = from.platformInfo?.systemModel.orEmpty(),
+                cpuModel = from.platformInfo?.cpuModel.orEmpty(),
+                cpuHardware = from.platformInfo?.cpuHardware.orEmpty(),
+                cpuCores = from.platformInfo?.cpuCores?.toString().orEmpty(),
+                cpuFrequency = from.platformInfo?.cpuFrequency?.toString().orEmpty(),
+                totalRamBytes = from.platformInfo?.totalRam,
+                availableRamBytes = from.platformInfo?.availableRam,
             ),
             osInfo = Info.OsInfo(
-                prettyName = from.osInfo?.prettyName ?: "Unknown",
-                version = from.osInfo?.version ?: "Unknown",
-                codeName = from.osInfo?.codeName ?: "Unknown",
-                architecture = from.osInfo?.architecture ?: "Unknown",
+                prettyName = from.osInfo?.prettyName.orEmpty(),
+                version = from.osInfo?.version.orEmpty(),
+                codeName = from.osInfo?.codeName.orEmpty(),
+                architecture = from.osInfo?.architecture.orEmpty(),
             ),
             networkMap = from.networkInfo
                 ?.filterKeys { it != "lo" }
                 ?.mapValues { (_, value) ->
                     Info.NetworkInfo(
-                        ipAddress = value.ipAddress ?: "Unknown",
-                        macAddress = value.macAddress ?: "Unknown",
+                        ipAddress = value.ipAddress.orEmpty(),
+                        macAddress = value.macAddress.orEmpty(),
                     )
                 } ?: emptyMap(),
-            wifiQualityValue = from.wifiQualityValue?.toString() ?: "Unknown",
-            wifiQualityMax = from.wifiQualityMax?.toString() ?: "Unknown",
-            wifiQualityPercentage = formatPercentage(from.wifiQualityPercentage),
+            wifiQualityValue = from.wifiQualityValue?.toString().orEmpty(),
+            wifiQualityMax = from.wifiQualityMax?.toString().orEmpty(),
+            wifiQualityPercent = from.wifiQualityPercentage?.takeIf { it.isFinite() },
             cpuThrottled = from.cpuThrottled ?: false,
             cpuUnderVolt = from.cpuUnderVolt ?: false,
             cpuInfo = cpuInfo,

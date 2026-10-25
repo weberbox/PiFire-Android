@@ -10,6 +10,8 @@ data class ServerData(
     data class Server(
         val uuid: String = "",
         val name: String = "",
+        // 1-based position, for the default name when the server has none
+        val number: Int = 0,
         val address: String = "",
         val online: Boolean = false,
     )

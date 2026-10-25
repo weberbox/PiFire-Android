@@ -8,8 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.weberbox.pifire.R
 import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
@@ -17,6 +19,8 @@ internal fun InfoItemRow(
     title: String,
     summary: String,
 ) {
+    // Blank means the server didn't report it
+    val shownSummary = summary.ifEmpty { stringResource(R.string.unknown) }
     Row(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         horizontalArrangement = Arrangement.spacedBy(
@@ -30,7 +34,7 @@ internal fun InfoItemRow(
             fontWeight = FontWeight.Bold,
         )
         Text(
-            text = summary,
+            text = shownSummary,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
@@ -44,6 +48,7 @@ internal fun InfoItemColumn(
     title: String,
     summary: String,
 ) {
+    val shownSummary = summary.ifEmpty { stringResource(R.string.unknown) }
     Column(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         verticalArrangement = Arrangement.spacedBy(
@@ -57,7 +62,7 @@ internal fun InfoItemColumn(
             fontWeight = FontWeight.Bold,
         )
         Text(
-            text = summary,
+            text = shownSummary,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )

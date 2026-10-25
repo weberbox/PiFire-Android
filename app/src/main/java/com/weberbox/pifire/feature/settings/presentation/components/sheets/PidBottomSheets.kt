@@ -43,9 +43,7 @@ internal fun PidBottomSheets(
                     state.serverData.settings.cntrlrPidSpPb.toString()
                 }
 
-                else -> {
-                    "Error"
-                }
+                else -> ""
             },
             title = stringResource(R.string.settings_pid_cntrlr_pb),
             placeholder = stringResource(R.string.settings_pid_cntrlr_pb),
@@ -95,9 +93,7 @@ internal fun PidBottomSheets(
                     state.serverData.settings.cntrlrPidSpTd.toString()
                 }
 
-                else -> {
-                    "Error"
-                }
+                else -> ""
             },
             title = stringResource(R.string.settings_pid_cntrlr_td),
             placeholder = stringResource(R.string.settings_pid_cntrlr_td),
@@ -147,9 +143,7 @@ internal fun PidBottomSheets(
                     state.serverData.settings.cntrlrPidSpTi.toString()
                 }
 
-                else -> {
-                    "Error"
-                }
+                else -> ""
             },
             title = stringResource(R.string.settings_pid_cntrlr_ti),
             placeholder = stringResource(R.string.settings_pid_cntrlr_ti),
@@ -195,9 +189,7 @@ internal fun PidBottomSheets(
                     state.serverData.settings.cntrlrPidSpStable.toString()
                 }
 
-                else -> {
-                    "Error"
-                }
+                else -> ""
             },
             title = stringResource(R.string.settings_pid_cntrlr_sw),
             placeholder = stringResource(R.string.settings_pid_cntrlr_sw),
@@ -241,9 +233,7 @@ internal fun PidBottomSheets(
                     state.serverData.settings.cntrlrPidSpCenter.toString()
                 }
 
-                else -> {
-                    "Error"
-                }
+                else -> ""
             },
             title = stringResource(R.string.settings_pid_cntrlr_center),
             placeholder = stringResource(R.string.settings_pid_cntrlr_center),

@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
@@ -94,7 +95,7 @@ private fun LogsDetailsContent(
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
                     },
                 ) {
-                    items(items = state.pellets.logsList) { log ->
+                    items(items = state.pellets.logsList.withUniqueKeys { it.logDate }, key = { it.key }) { (_, log) ->
                         LogItem(
                             log = log,
                             isConnected = state.isConnected,

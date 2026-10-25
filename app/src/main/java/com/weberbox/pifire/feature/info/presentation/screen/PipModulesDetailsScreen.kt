@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.ui.components.DataError
 import com.weberbox.pifire.core.ui.components.DetailsScreen
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
@@ -64,7 +65,7 @@ private fun PipModulesDetailsContent(
                         onNavigationRequested(ModulesContract.Effect.Navigation.Back)
                     },
                 ) {
-                    items(items = state.pipModules) { module ->
+                    items(items = state.pipModules.withUniqueKeys { it.name }, key = { it.key }) { (_, module) ->
                         PipItem(
                             modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                             module = module,

@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +29,7 @@ import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.onPelletLevel
 import com.weberbox.pifire.core.ui.theme.pelletDanger
 import com.weberbox.pifire.core.ui.theme.pelletDangerTrack
 import com.weberbox.pifire.core.ui.theme.pelletWarning
@@ -55,14 +55,14 @@ internal fun PelletsLevel(
         level <= AppConfig.LOW_PELLET_WARNING && progress > 0 -> {
             color = pelletDanger
             trackColor = pelletDangerTrack
-            textColor = Color.White
+            textColor = onPelletLevel
         }
 
         level > AppConfig.LOW_PELLET_WARNING &&
             level < AppConfig.MEDIUM_PELLET_WARNING -> {
             color = pelletWarning
             trackColor = pelletWarningTrack
-            textColor = Color.White
+            textColor = onPelletLevel
         }
     }
     HeaderCard(

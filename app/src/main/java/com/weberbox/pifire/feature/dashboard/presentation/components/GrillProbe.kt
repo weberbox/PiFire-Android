@@ -96,7 +96,7 @@ internal fun GrillProbe(
 
                     ) {
                         Text(
-                            text = probe.title,
+                            text = probe.title.ifEmpty { stringResource(R.string.dash_grill_default_name) },
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.tertiary,
                             fontWeight = FontWeight.Bold,

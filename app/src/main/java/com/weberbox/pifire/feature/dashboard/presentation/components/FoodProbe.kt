@@ -94,7 +94,7 @@ internal fun FoodProbe(
                         text = if (probe.status.error) {
                             stringResource(R.string.error)
                         } else {
-                            probe.title
+                            probe.title.ifEmpty { stringResource(R.string.dash_probe_default_name) }
                         },
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.tertiary,

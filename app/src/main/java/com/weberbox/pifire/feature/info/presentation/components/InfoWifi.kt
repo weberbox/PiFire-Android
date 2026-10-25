@@ -19,6 +19,7 @@ import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
+import com.weberbox.pifire.feature.info.presentation.util.formatPercent
 
 @Composable
 internal fun InfoWifi(
@@ -35,11 +36,15 @@ internal fun InfoWifi(
         ) {
             InfoItemRow(
                 title = stringResource(R.string.info_wifi_link),
-                summary = "${info.wifiQualityValue}/${info.wifiQualityMax}",
+                summary = if (info.wifiQualityValue.isNotEmpty() && info.wifiQualityMax.isNotEmpty()) {
+                    "${info.wifiQualityValue}/${info.wifiQualityMax}"
+                } else {
+                    ""
+                },
             )
             InfoItemRow(
                 title = stringResource(R.string.info_wifi_percentage),
-                summary = "${info.wifiQualityPercentage}%",
+                summary = formatPercent(info.wifiQualityPercent),
             )
         }
     }

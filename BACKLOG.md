@@ -20,6 +20,9 @@ line once it's done.
   `BuildConfig` (fallbacks in `local.defaults.properties`); one `app/google-services.json`; one
   Sentry project (the former playstore one) with `environment = <flavor>-<buildType>`; a
   committed `app/google-services.placeholder.json` is used when the real file is missing.
+- (2026-10-25) The default pellet profile in `PelletsData` ("Generic", "Alder", "Generic Alder")
+  mirrors PiFire's built-in profile and is replaced by server data, so it stays untranslated. The
+  recipe print HTML `<title>` isn't shown (the print job uses the file name).
 - (2026-10-25) Sentry instruments release builds too. R8 mappings upload only with a Sentry auth
   token (`SENTRY_AUTH_TOKEN` or `sentry.properties`); without one, release crash reports stay
   obfuscated.
@@ -62,12 +65,6 @@ One step per commit, compile all flavors after each.
 
 ## Conventions to fix
 - SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
-- Hardcoded strings: LandingViewModel.kt:115 `"Smoker ${index+1}"`, PidBottomSheets.kt "Error"
-  values, ManualSettings.kt:181, PwmControl.kt:219-227, default names in DashData/PelletsData,
-  WeightUtil suffixes, ExportUtils.kt:299.
-- Hardcoded colors: ServerItem.kt:72, PelletsLevel.kt:58,65.
-- Lists without keys: BrandsDetails, WoodsDetails, ProfilesDetails, LogsDetails, Changelog,
-  PipModulesDetails, LicenseDetails screens.
 - Dispatchers in ViewModels (24) with `withContext(Main)` before `setEffect`: move IO into repos.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.

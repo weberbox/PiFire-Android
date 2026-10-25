@@ -17,9 +17,9 @@ data class InfoData(
         val networkMap: Map<String, NetworkInfo> = emptyMap(),
         val cpuInfo: String = "",
         val networkInfo: String = "",
-        val wifiQualityValue: String = "Unknown",
-        val wifiQualityMax: String = "Unknown",
-        val wifiQualityPercentage: String = "Unknown",
+        val wifiQualityValue: String = "",
+        val wifiQualityMax: String = "",
+        val wifiQualityPercent: Double? = null,
         val uptime: String = "",
         val cpuTemp: String = "",
         val cpuThrottled: Boolean = false,
@@ -45,27 +45,27 @@ data class InfoData(
     ) {
         @Serializable
         data class PlatformInfo(
-            val systemModel: String = "Unknown",
-            val cpuModel: String = "Unknown",
-            val cpuHardware: String = "Unknown",
-            val cpuCores: String = "Unknown",
-            val cpuFrequency: String = "Unknown",
-            val totalRam: String = "Unknown",
-            val availableRam: String = "Unknown",
+            val systemModel: String = "",
+            val cpuModel: String = "",
+            val cpuHardware: String = "",
+            val cpuCores: String = "",
+            val cpuFrequency: String = "",
+            val totalRamBytes: Long? = null,
+            val availableRamBytes: Long? = null,
         )
 
         @Serializable
         data class OsInfo(
-            val prettyName: String = "Unknown",
-            val version: String = "Unknown",
-            val codeName: String = "Unknown",
-            val architecture: String = "Unknown",
+            val prettyName: String = "",
+            val version: String = "",
+            val codeName: String = "",
+            val architecture: String = "",
         )
 
         @Serializable
         data class NetworkInfo(
-            val ipAddress: String = "Unknown",
-            val macAddress: String = "Unknown",
+            val ipAddress: String = "",
+            val macAddress: String = "",
         )
 
         @Serializable

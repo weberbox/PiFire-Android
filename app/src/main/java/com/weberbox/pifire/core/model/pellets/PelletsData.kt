@@ -13,8 +13,7 @@ data class PelletsData(
     data class Pellets(
         val uuid: String = "",
         val dateLoaded: String = "12/21 9:48 PM",
-        val usageImperial: String = "0.0 lbs",
-        val usageMetric: String = "0.0 kg",
+        val estUsageGrams: Double = 0.0,
         val currentPelletId: String = "123124141431241",
         val currentBrand: String = "Generic",
         val currentWood: String = "Alder",

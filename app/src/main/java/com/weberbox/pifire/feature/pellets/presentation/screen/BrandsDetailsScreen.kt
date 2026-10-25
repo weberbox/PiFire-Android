@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.DataError
 import com.weberbox.pifire.core.ui.components.DetailsScreen
@@ -93,7 +94,7 @@ private fun BrandsDetailsContent(
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
                     },
                 ) {
-                    items(items = state.pellets.brandsList) { brand ->
+                    items(items = state.pellets.brandsList.withUniqueKeys { it }, key = { it.key }) { (_, brand) ->
                         WoodBrandItem(
                             item = brand,
                             onItemDelete = {

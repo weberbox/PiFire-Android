@@ -185,7 +185,7 @@ private fun ManualSettingsContent(
                     pwm = it.toInt()
                 },
                 title = { Text(text = stringResource(R.string.settings_manual_pwm)) },
-                summary = { Text(text = "$pwm %") },
+                summary = { Text(text = stringResource(R.string.settings_manual_pwm_value, pwm)) },
             )
         }
         SwitchPreference(

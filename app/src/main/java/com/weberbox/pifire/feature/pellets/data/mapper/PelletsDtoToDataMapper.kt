@@ -7,8 +7,6 @@ import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.util.formatDateString
 import com.weberbox.pifire.core.ui.util.formatDateTimeString
 import com.weberbox.pifire.feature.pellets.data.model.PelletsDto
-import com.weberbox.pifire.feature.pellets.data.util.gramsToImperial
-import com.weberbox.pifire.feature.pellets.data.util.gramsToMetric
 
 object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
     private val defaults = Pellets()
@@ -21,8 +19,7 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
                 inputFormat = "yyyy-MM-dd HH:mm:ss",
             )
         } ?: defaults.dateLoaded,
-        usageImperial = gramsToImperial(from.pellets?.current?.estUsage ?: 0.0),
-        usageMetric = gramsToMetric(from.pellets?.current?.estUsage ?: 0.0),
+        estUsageGrams = from.pellets?.current?.estUsage?.takeIf { it.isFinite() } ?: defaults.estUsageGrams,
         currentPelletId = from.pellets?.current?.pelletId ?: defaults.currentPelletId,
         currentBrand = from.pellets?.profiles?.get(from.pellets.current?.pelletId)?.brand
             ?: defaults.currentBrand,

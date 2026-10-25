@@ -19,6 +19,7 @@ import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
+import com.weberbox.pifire.feature.info.presentation.util.formatBytes
 
 @Composable
 internal fun InfoPlatform(
@@ -57,11 +58,11 @@ internal fun InfoPlatform(
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_total_ram),
-                summary = info.platformInfo.totalRam,
+                summary = formatBytes(info.platformInfo.totalRamBytes),
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_available_ram),
-                summary = info.platformInfo.availableRam,
+                summary = formatBytes(info.platformInfo.availableRamBytes),
             )
         }
     }

@@ -21,6 +21,8 @@ import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
 import com.weberbox.pifire.core.ui.components.HeaderCard
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.feature.pellets.presentation.util.gramsToImperial
+import com.weberbox.pifire.feature.pellets.presentation.util.gramsToMetric
 
 @Composable
 internal fun PelletsUsage(
@@ -42,12 +44,12 @@ internal fun PelletsUsage(
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             Text(
-                text = pellets.usageImperial,
+                text = gramsToImperial(pellets.estUsageGrams),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
             Text(
-                text = pellets.usageMetric,
+                text = gramsToMetric(pellets.estUsageGrams),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
             )
@@ -61,8 +63,7 @@ internal fun PelletsUsage(
 private fun PelletsUsagePreview() {
     val pellets = remember {
         Pellets(
-            usageImperial = "0.16 oz",
-            usageMetric = "4.51 g",
+            estUsageGrams = 4.51,
         )
     }
     PiFireTheme {

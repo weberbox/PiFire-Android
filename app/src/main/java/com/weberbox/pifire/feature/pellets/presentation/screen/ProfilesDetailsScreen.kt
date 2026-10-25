@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.CachedDataError
@@ -97,7 +98,7 @@ private fun ProfilesDetailsContent(
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
                     },
                 ) {
-                    items(items = state.pellets.profilesList) { profile ->
+                    items(items = state.pellets.profilesList.withUniqueKeys { it.id }, key = { it.key }) { (_, profile) ->
                         ProfileItem(
                             profile = profile,
                             isConnected = state.isConnected,

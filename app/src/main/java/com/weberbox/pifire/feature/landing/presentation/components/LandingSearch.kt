@@ -49,6 +49,7 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.keyboardAsState
 import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData.Server
+import com.weberbox.pifire.feature.landing.presentation.util.displayName
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeEffect
@@ -209,9 +210,10 @@ internal fun LandingSearchResults(
     searchQuery: CharSequence,
     onResultClick: (title: String) -> Unit,
 ) {
-    val filteredList = remember(searchQuery, serverList) {
+    val context = LocalContext.current
+    val filteredList = remember(searchQuery, serverList, context) {
         serverList.filter { server ->
-            server.name.contains(searchQuery, ignoreCase = true)
+            server.displayName(context).contains(searchQuery, ignoreCase = true)
         }
     }
     Column(
@@ -219,7 +221,7 @@ internal fun LandingSearchResults(
     ) {
         filteredList.forEach { server ->
             ListItem(
-                headlineContent = { Text(text = server.name) },
+                headlineContent = { Text(text = server.displayName(context)) },
                 supportingContent = {
                     Text(text = server.address)
                 },
@@ -232,7 +234,7 @@ internal fun LandingSearchResults(
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                 modifier =
                     Modifier
-                        .clickable { onResultClick(server.name) }
+                        .clickable { onResultClick(server.displayName(context)) }
                         .fillMaxWidth()
                         .padding(
                             horizontal = MaterialTheme.spacing.smallThree,
