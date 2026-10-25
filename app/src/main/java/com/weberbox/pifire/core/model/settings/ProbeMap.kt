@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProbeMap(
     val probeDevices: List<ProbeDevice> = emptyList(),
-    val probeInfo: List<ProbeInfo> = emptyList()
+    val probeInfo: List<ProbeInfo> = emptyList(),
 ) {
 
     @Serializable
@@ -16,7 +16,7 @@ data class ProbeMap(
         val name: String = "",
         val port: String = "",
         val type: String = "",
-        val profile: ProbeProfile = ProbeProfile()
+        val profile: ProbeProfile = ProbeProfile(),
     )
 
     @Serializable
@@ -24,6 +24,6 @@ data class ProbeMap(
         val device: String = "",
         val module: String = "",
         val moduleFilename: String = "",
-        val ports: List<String> = emptyList()
+        val ports: List<String> = emptyList(),
     )
 }

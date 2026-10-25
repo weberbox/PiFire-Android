@@ -34,7 +34,7 @@ data class Size(
     val cardSideSpace: Dp = 12.dp,
     val fabSizeNormal: Dp = 56.dp,
     val fabLargeWidth: Dp = 96.dp,
-    val maxWidth: Dp = 640.dp
+    val maxWidth: Dp = 640.dp,
 )
 
 val LocalSize = compositionLocalOf { Size() }

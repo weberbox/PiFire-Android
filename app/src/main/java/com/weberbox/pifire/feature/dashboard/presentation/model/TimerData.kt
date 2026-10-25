@@ -14,7 +14,7 @@ data class TimerData(
 
     override fun toString(): String =
         "TotalSeconds: $totalSeconds, progress: $progressPercentage, progressMax $progressMax, " +
-                "timer paused: $timerPaused, remainingTime $remainingTime"
+            "timer paused: $timerPaused, remainingTime $remainingTime"
 
     private fun formatTimeRemaining(secondsRemaining: Long): String {
         val hours = secondsRemaining / 3600

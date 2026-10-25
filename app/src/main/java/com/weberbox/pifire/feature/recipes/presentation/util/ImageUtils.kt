@@ -13,16 +13,12 @@ import coil3.request.crossfade
 @Suppress("unused")
 internal fun ByteArray.toImageBitmap(): ImageBitmap = toAndroidBitmap().asImageBitmap()
 
-internal fun ByteArray.toAndroidBitmap(): Bitmap {
-    return BitmapFactory.decodeByteArray(this, 0, size)
-}
+internal fun ByteArray.toAndroidBitmap(): Bitmap = BitmapFactory.decodeByteArray(this, 0, size)
 
-internal fun decodeBase64Image(encodedString: String): ByteArray? {
-    return try {
-        Base64.decode(encodedString, Base64.DEFAULT)
-    } catch (_: IllegalArgumentException) {
-        null
-    }
+internal fun decodeBase64Image(encodedString: String): ByteArray? = try {
+    Base64.decode(encodedString, Base64.DEFAULT)
+} catch (_: IllegalArgumentException) {
+    null
 }
 
 @Suppress("unused")
@@ -30,21 +26,17 @@ internal fun decodeBase64Image(encodedString: String): ByteArray? {
 internal fun coinImageBuilder(
     data: Any?,
     fallbackImage: Any,
-    crossfade: Boolean = true
-): ImageRequest {
-    return ImageRequest.Builder(LocalContext.current)
-        .data(data ?: fallbackImage)
-        .crossfade(crossfade)
-        .build()
-}
+    crossfade: Boolean = true,
+): ImageRequest = ImageRequest.Builder(LocalContext.current)
+    .data(data ?: fallbackImage)
+    .crossfade(crossfade)
+    .build()
 
 @Composable
 internal fun coinImageBuilder(
     data: Any?,
-    crossfade: Boolean = true
-): ImageRequest {
-    return ImageRequest.Builder(LocalContext.current)
-        .data(data)
-        .crossfade(crossfade)
-        .build()
-}
+    crossfade: Boolean = true,
+): ImageRequest = ImageRequest.Builder(LocalContext.current)
+    .data(data)
+    .crossfade(crossfade)
+    .build()

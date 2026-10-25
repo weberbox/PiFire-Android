@@ -7,10 +7,8 @@ import com.weberbox.pifire.core.network.SocketManager
 import javax.inject.Inject
 
 class InfoApiImpl @Inject constructor(
-    private val socketManager: SocketManager
+    private val socketManager: SocketManager,
 ) : InfoApi {
 
-    override suspend fun getInfo(): Result<String, DataError> {
-        return socketManager.emitGet(ServerConstants.GA_INFO_DATA)
-    }
+    override suspend fun getInfo(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_INFO_DATA)
 }

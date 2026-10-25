@@ -29,7 +29,7 @@ data class PostDto(
     @Serializable
     data class RecipeDto(
         @SerialName("filename")
-        var filename: String = String()
+        var filename: String = String(),
     )
 
     @Serializable
@@ -48,7 +48,7 @@ data class PostDto(
     )
 
     @Serializable
-    data class PelletsDto (
+    data class PelletsDto(
         @SerialName("profile")
         var profile: String? = null,
 
@@ -80,13 +80,13 @@ data class PostDto(
         var newBrand: String? = null,
 
         @SerialName("log_item")
-        var logDate: String? = null
+        var logDate: String? = null,
     )
 
     @Serializable
     data class OneSignalDevice(
         @SerialName("onesignal_player_id")
-        var oneSignalPlayerID: String? = null
+        var oneSignalPlayerID: String? = null,
     )
 
     @Serializable
@@ -119,7 +119,7 @@ data class PostDto(
         var primeAmount: Int? = null,
 
         @SerialName("primary_setpoint")
-        var primarySetPoint: Int? = null
+        var primarySetPoint: Int? = null,
     ) {
 
         @Serializable
@@ -134,7 +134,7 @@ data class PostDto(
             var step: Int? = null,
 
             @SerialName("step_data")
-            var stepData: StepData? = null
+            var stepData: StepData? = null,
         )
 
         @Serializable
@@ -161,7 +161,7 @@ data class PostDto(
             var triggered: Boolean? = null,
 
             @SerialName("trigger_temps")
-            var triggerTemps: Map<String, Double>? = null
+            var triggerTemps: Map<String, Double>? = null,
         )
     }
 
@@ -177,7 +177,7 @@ data class PostDto(
         var profileId: String? = null,
 
         @SerialName("enabled")
-        var enabled: Boolean? = null
+        var enabled: Boolean? = null,
     )
 
     @Serializable
@@ -216,6 +216,6 @@ data class PostDto(
         val targetShutdown: Boolean? = null,
 
         @SerialName("target_keep_warm")
-        val targetKeepWarm: Boolean? = null
+        val targetKeepWarm: Boolean? = null,
     )
 }

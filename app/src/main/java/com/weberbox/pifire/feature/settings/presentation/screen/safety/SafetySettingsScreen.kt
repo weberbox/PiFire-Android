@@ -63,7 +63,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun SafetySettingsScreenDestination(
     navController: NavHostController,
-    viewModel: SafetySettingsViewModel = hiltViewModel()
+    viewModel: SafetySettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -74,6 +74,7 @@ fun SafetySettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is SafetyContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is SafetyContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -83,7 +84,7 @@ fun SafetySettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -94,14 +95,14 @@ private fun SafetySettings(
     state: SafetyContract.State,
     effectFlow: Flow<SafetyContract.Effect>?,
     onEventSent: (event: SafetyContract.Event) -> Unit,
-    onNavigationRequested: (SafetyContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SafetyContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -112,7 +113,7 @@ private fun SafetySettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_safety_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(SafetyContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(SafetyContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -121,10 +122,11 @@ private fun SafetySettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(SafetyContract.Effect.Navigation.Back)
                 }
@@ -133,7 +135,7 @@ private fun SafetySettings(
                     SafetySettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -145,7 +147,7 @@ private fun SafetySettings(
 fun SafetySettingsContent(
     state: SafetyContract.State,
     onEventSent: (event: SafetyContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val overrideTimeSheet = rememberCustomModalBottomSheetState()
     val minStartupTempSheet = rememberCustomModalBottomSheetState()
@@ -153,13 +155,13 @@ fun SafetySettingsContent(
     val maxTempSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_safety_title)) },
@@ -170,9 +172,9 @@ fun SafetySettingsContent(
             title = { Text(text = stringResource(R.string.settings_safety_startup_check)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_safety_startup_check_summary)
+                    text = stringResource(R.string.settings_safety_startup_check_summary),
                 )
-            }
+            },
         )
         SwitchPreference(
             value = state.serverData.settings.safetyAllowManualChanges,
@@ -180,20 +182,20 @@ fun SafetySettingsContent(
             title = { Text(text = stringResource(R.string.settings_safety_manual_outputs)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_safety_manual_outputs_summary)
+                    text = stringResource(R.string.settings_safety_manual_outputs_summary),
                 )
-            }
+            },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_safety_manual_outputs_time)) },
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.safetyOverrideTime.toString()
-                    )
+                        state.serverData.settings.safetyOverrideTime.toString(),
+                    ),
                 )
             },
-            onClick = { overrideTimeSheet.open() }
+            onClick = { overrideTimeSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_safety_manual_outputs_note))
         PreferenceCategory(
@@ -205,11 +207,11 @@ fun SafetySettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.safetyMinStartupTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { minStartupTempSheet.open() }
+            onClick = { minStartupTempSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_safety_max_start)) },
@@ -217,11 +219,11 @@ fun SafetySettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.safetyMaxStartupTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { maxStartupTempSheet.open() }
+            onClick = { maxStartupTempSheet.open() },
         )
         ListPreference(
             value = state.serverData.settings.safetyReigniteRetries,
@@ -231,11 +233,11 @@ fun SafetySettingsContent(
             summary = {
                 Text(
                     text = getSummary(
-                        state.serverData.settings.safetyReigniteRetries.toString()
-                    )
+                        state.serverData.settings.safetyReigniteRetries.toString(),
+                    ),
                 )
             },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_safety_max_temp)) },
@@ -243,17 +245,17 @@ fun SafetySettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.safetyMaxTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { maxTempSheet.open() }
+            onClick = { maxTempSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_safety_note))
         PreferenceWarning(stringResource(R.string.settings_safety_warning))
     }
     BottomSheet(
-        sheetState = overrideTimeSheet.sheetState
+        sheetState = overrideTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.safetyOverrideTime.toString(),
@@ -262,7 +264,7 @@ fun SafetySettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -270,11 +272,11 @@ fun SafetySettingsContent(
                 }
                 overrideTimeSheet.close()
             },
-            onDismiss = { overrideTimeSheet.close() }
+            onDismiss = { overrideTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = minStartupTempSheet.sheetState
+        sheetState = minStartupTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.safetyMinStartupTemp.toString(),
@@ -283,7 +285,7 @@ fun SafetySettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -291,11 +293,11 @@ fun SafetySettingsContent(
                 }
                 minStartupTempSheet.close()
             },
-            onDismiss = { minStartupTempSheet.close() }
+            onDismiss = { minStartupTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = maxStartupTempSheet.sheetState
+        sheetState = maxStartupTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.safetyMaxStartupTemp.toString(),
@@ -304,7 +306,7 @@ fun SafetySettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -312,11 +314,11 @@ fun SafetySettingsContent(
                 }
                 maxStartupTempSheet.close()
             },
-            onDismiss = { maxStartupTempSheet.close() }
+            onDismiss = { maxStartupTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = maxTempSheet.sheetState
+        sheetState = maxTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.safetyMaxTemp.toString(),
@@ -325,7 +327,7 @@ fun SafetySettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -333,7 +335,7 @@ fun SafetySettingsContent(
                 }
                 maxTempSheet.close()
             },
-            onDismiss = { maxTempSheet.close() }
+            onDismiss = { maxTempSheet.close() },
         )
     }
 }
@@ -341,7 +343,7 @@ fun SafetySettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<SafetyContract.Effect>?,
-    onNavigationRequested: (SafetyContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SafetyContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -354,7 +356,7 @@ private fun HandleSideEffects(
                 is SafetyContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -374,11 +376,11 @@ private fun SafetySettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

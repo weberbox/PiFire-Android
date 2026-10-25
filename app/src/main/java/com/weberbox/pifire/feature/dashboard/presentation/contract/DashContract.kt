@@ -10,17 +10,17 @@ import com.weberbox.pifire.feature.dashboard.data.model.ProbeNotify as ProbeNoti
 class DashContract {
 
     sealed class Event : ViewEvent {
-        data object Refresh: Event()
-        data object PWMControl: Event()
-        data object SmokePlus: Event()
-        data object HideHoldTempTip: Event()
+        data object Refresh : Event()
+        data object PWMControl : Event()
+        data object SmokePlus : Event()
+        data object HideHoldTempTip : Event()
         data object ToggleLidDetect : Event()
         data object RestartControl : Event()
         data object CheckHopperLevel : Event()
         data class ProbeNotify(val probeNotify: ProbeNotifyData) : Event()
         data class SetStartupHoldTemp(val temp: String) : Event()
         data class StartUpRequested(val holdDialogSupported: Boolean) : Event()
-        data class SendEvent(val event: DashEvent): Event()
+        data class SendEvent(val event: DashEvent) : Event()
     }
 
     sealed class DashEvent {
@@ -42,7 +42,7 @@ class DashContract {
             val hours: Int,
             val minutes: Int,
             val shutdown: Boolean,
-            val keepWarm: Boolean
+            val keepWarm: Boolean,
         ) : DashEvent()
     }
 
@@ -55,7 +55,7 @@ class DashContract {
         val isDataError: Boolean,
         val isRefreshing: Boolean,
         val isConnected: Boolean,
-        val holdTempToolTip: Boolean
+        val holdTempToolTip: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

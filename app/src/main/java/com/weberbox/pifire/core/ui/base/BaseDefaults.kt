@@ -17,76 +17,60 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 
-fun getPagerAnimationSpec(): FiniteAnimationSpec<Float> {
-    return tween(300)
-}
+fun getPagerAnimationSpec(): FiniteAnimationSpec<Float> = tween(300)
 
 @Composable
-fun outlinedTextFieldColors(): TextFieldColors {
-    return OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = Color.Transparent,
-        unfocusedBorderColor = Color.Transparent,
-        focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-    )
-}
+fun outlinedTextFieldColors(): TextFieldColors = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = Color.Transparent,
+    unfocusedBorderColor = Color.Transparent,
+    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+)
 
 @Composable
-fun cardColorStops(): Array<Pair<Float, Color>> {
-    return arrayOf(
-        0.0f to MaterialTheme.colorScheme.surfaceContainer,
-        1f to MaterialTheme.colorScheme.surfaceContainerLow
-    )
-}
+fun cardColorStops(): Array<Pair<Float, Color>> = arrayOf(
+    0.0f to MaterialTheme.colorScheme.surfaceContainer,
+    1f to MaterialTheme.colorScheme.surfaceContainerLow,
+)
 
 @Composable
-fun gradientBackground(): Brush {
-    return Brush.verticalGradient(
-        0f to MaterialTheme.colorScheme.background,
-        1000f to MaterialTheme.colorScheme.surfaceContainer
-    )
-}
+fun gradientBackground(): Brush = Brush.verticalGradient(
+    0f to MaterialTheme.colorScheme.background,
+    1000f to MaterialTheme.colorScheme.surfaceContainer,
+)
 
 @Composable
-fun radialGradientBackground(): Brush {
-    return Brush.radialGradient(
-        0f to MaterialTheme.colorScheme.surfaceContainer,
-        3000f to MaterialTheme.colorScheme.background,
-        radius = 800f
-    )
-}
+fun radialGradientBackground(): Brush = Brush.radialGradient(
+    0f to MaterialTheme.colorScheme.surfaceContainer,
+    3000f to MaterialTheme.colorScheme.background,
+    radius = 800f,
+)
 
 @Composable
 fun pickerSelectedTextStyle(
-    fontSize: TextUnit = 40.sp
-): PickerWheelTextStyle {
-    return PickerWheelTextStyle(
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = fontSize,
-        fontFamily = MaterialTheme.typography.headlineLarge.fontFamily
-            ?: FontFamily.Default,
-        fontWeight = FontWeight.Bold
-    )
-}
+    fontSize: TextUnit = 40.sp,
+): PickerWheelTextStyle = PickerWheelTextStyle(
+    color = MaterialTheme.colorScheme.onSurface,
+    fontSize = fontSize,
+    fontFamily = MaterialTheme.typography.headlineLarge.fontFamily
+        ?: FontFamily.Default,
+    fontWeight = FontWeight.Bold,
+)
 
 @Composable
 fun pickerUnselectedTextStyle(
-    fontSize: TextUnit = 20.sp
-): PickerWheelTextStyle {
-    return PickerWheelTextStyle(
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        fontSize = fontSize,
-        fontFamily = MaterialTheme.typography.titleSmall.fontFamily
-            ?: FontFamily.Default,
-        fontWeight = FontWeight.Normal
-    )
-}
+    fontSize: TextUnit = 20.sp,
+): PickerWheelTextStyle = PickerWheelTextStyle(
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
+    fontSize = fontSize,
+    fontFamily = MaterialTheme.typography.titleSmall.fontFamily
+        ?: FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+)
 
 @OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 fun hazeAppBarStyle(
     color: Color = MaterialTheme.colorScheme.background,
-    noiseFactor: Float = 0f
-): HazeStyle {
-    return HazeMaterials.ultraThin(color).copy(noiseFactor = noiseFactor)
-}
+    noiseFactor: Float = 0f,
+): HazeStyle = HazeMaterials.ultraThin(color).copy(noiseFactor = noiseFactor)

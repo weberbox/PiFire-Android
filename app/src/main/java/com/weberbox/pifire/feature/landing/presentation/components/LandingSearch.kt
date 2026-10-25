@@ -66,20 +66,23 @@ internal fun LandingInputField(
     hazeState: HazeState,
     searchStyle: HazeStyle,
     onSearch: (String) -> Unit,
-    onSearchClear: () -> Unit
+    onSearchClear: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val isKeyboardOpen by keyboardAsState()
     val inputFieldColor by animateColorAsState(
-        targetValue = if (searchBarState.targetValue == SearchBarValue.Collapsed)
-            Color.Transparent else searchStyle.backgroundColor,
-        animationSpec = tween(durationMillis = 400)
+        targetValue = if (searchBarState.targetValue == SearchBarValue.Collapsed) {
+            Color.Transparent
+        } else {
+            searchStyle.backgroundColor
+        },
+        animationSpec = tween(durationMillis = 400),
     )
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             val data = it.data
@@ -101,9 +104,11 @@ internal fun LandingInputField(
                 if (searchBarState.currentValue == SearchBarValue.Collapsed) {
                     Modifier.hazeEffect(
                         state = hazeState,
-                        style = searchStyle
+                        style = searchStyle,
                     )
-                } else Modifier
+                } else {
+                    Modifier
+                },
             ),
         searchBarState = searchBarState,
         textFieldState = textFieldState,
@@ -124,44 +129,44 @@ internal fun LandingInputField(
                             searchBarState.animateToExpanded()
                         }
                     }
-                }
+                },
             ) {
                 AnimatedContent(
-                    targetState = searchBarState.targetValue
+                    targetState = searchBarState.targetValue,
                 ) { value ->
                     when (value) {
                         SearchBarValue.Collapsed -> {
                             Icon(
                                 imageVector = Icons.Filled.Search,
-                                contentDescription = stringResource(R.string.search)
+                                contentDescription = stringResource(R.string.search),
                             )
                         }
+
                         SearchBarValue.Expanded -> {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = stringResource(R.string.go_back)
+                                contentDescription = stringResource(R.string.go_back),
                             )
                         }
                     }
-
                 }
             }
         },
         trailingIcon = {
             val showClear = textFieldState.text.isNotEmpty()
             AnimatedContent(
-                targetState = showClear
+                targetState = showClear,
             ) { clear ->
                 if (clear) {
                     IconButton(
                         onClick = {
                             textFieldState.clearText()
                             onSearchClear()
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = stringResource(R.string.clear)
+                            contentDescription = stringResource(R.string.clear),
                         )
                     }
                 } else {
@@ -174,16 +179,16 @@ internal fun LandingInputField(
                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                             intent.putExtra(
                                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
                             )
                             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, message)
                             launcher.launch(intent)
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Mic,
-                            contentDescription = stringResource(R.string.voice_input)
+                            contentDescription = stringResource(R.string.voice_input),
                         )
                     }
                 }
@@ -192,8 +197,8 @@ internal fun LandingInputField(
         colors = inputFieldColors(
             focusedContainerColor = inputFieldColor,
             unfocusedContainerColor = inputFieldColor,
-            disabledContainerColor = inputFieldColor
-        )
+            disabledContainerColor = inputFieldColor,
+        ),
     )
 }
 
@@ -202,7 +207,7 @@ internal fun LandingSearchResults(
     modifier: Modifier = Modifier,
     serverList: List<Server>,
     searchQuery: CharSequence,
-    onResultClick: (title: String) -> Unit
+    onResultClick: (title: String) -> Unit,
 ) {
     val filteredList = remember(searchQuery, serverList) {
         serverList.filter { server ->
@@ -210,7 +215,7 @@ internal fun LandingSearchResults(
         }
     }
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
         filteredList.forEach { server ->
             ListItem(
@@ -221,7 +226,7 @@ internal fun LandingSearchResults(
                 leadingContent = {
                     Icon(
                         imageVector = Icons.Filled.Dns,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 },
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -231,8 +236,8 @@ internal fun LandingSearchResults(
                         .fillMaxWidth()
                         .padding(
                             horizontal = MaterialTheme.spacing.smallThree,
-                            vertical = MaterialTheme.spacing.extraSmall
-                        )
+                            vertical = MaterialTheme.spacing.extraSmall,
+                        ),
             )
         }
     }

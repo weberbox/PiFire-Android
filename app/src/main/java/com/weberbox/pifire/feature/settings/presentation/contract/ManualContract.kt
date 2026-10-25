@@ -15,14 +15,13 @@ class ManualContract {
         data class SetAugerEnabled(val enabled: Boolean) : Event()
         data class SetIgniterEnabled(val enabled: Boolean) : Event()
         data class SetPowerEnabled(val enabled: Boolean) : Event()
-
     }
 
     data class State(
         val manualData: ManualData,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

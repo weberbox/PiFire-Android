@@ -32,19 +32,19 @@ internal fun ModeButton(
             .size(MaterialTheme.size.extraExtraLarge)
             .clip(MaterialTheme.shapes.large)
             .clickable(
-                onClick = { onClick(DashEvent.Start) }
+                onClick = { onClick(DashEvent.Start) },
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Icon(
             modifier = Modifier.size(MaterialTheme.size.extraLarge),
             imageVector = icon,
-            contentDescription = mode
+            contentDescription = mode,
         )
         Text(
             text = mode,
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
         )
     }
 }
@@ -58,7 +58,7 @@ private fun SettingsSheetPreview() {
             ModeButton(
                 mode = "Stop",
                 icon = Icons.Outlined.PlayCircle,
-                onClick = {}
+                onClick = {},
             )
         }
     }

@@ -38,12 +38,12 @@ class SetupRepoImpl @Inject constructor(
     private val settingsDataStore: DataStore<SettingsData>,
     private val headersDataStore: DataStore<HeadersData>,
     private val serverDataCache: ServerDataCache,
-    private val json: Json
+    private val json: Json,
 ) : SetupRepo {
 
     override suspend fun getVersions(
         url: String,
-        headerMap: Map<String, String>
+        headerMap: Map<String, String>,
     ): Result<VersionsData, DataError> {
         if (networkAvailable()) {
             try {
@@ -53,13 +53,13 @@ class SetupRepoImpl @Inject constructor(
                             parseGetResponse(
                                 response = r.string(),
                                 json = json,
-                                mapper = VersionsDtoToDataMapper
+                                mapper = VersionsDtoToDataMapper,
                             ).let { data ->
                                 r.close()
                                 checkLegacyResponse(
                                     url = url,
                                     headerMap = headerMap,
-                                    data = data
+                                    data = data,
                                 )
                             }
                         } ?: Result.Error(DataError.Network.NULL_RESPONSE)
@@ -72,9 +72,9 @@ class SetupRepoImpl @Inject constructor(
                                     R.string.data_error_http_unsuccessful,
                                     uiTextArgsOf(
                                         response.code().toString(),
-                                        getReasonPhrase(response.code())
-                                    )
-                                )
+                                        getReasonPhrase(response.code()),
+                                    ),
+                                ),
                             )
                         }
                     }
@@ -91,7 +91,7 @@ class SetupRepoImpl @Inject constructor(
     @Compatibility(versionBelow = "1.10.0", build = "25")
     override suspend fun getVersionsLegacy(
         url: String,
-        headerMap: Map<String, String>
+        headerMap: Map<String, String>,
     ): Result<VersionsData, DataError> {
         if (networkAvailable()) {
             try {
@@ -101,7 +101,7 @@ class SetupRepoImpl @Inject constructor(
                             parseResponse(
                                 response = r.string(),
                                 json = json,
-                                mapper = LegacyVersionsDtoToDataMapper
+                                mapper = LegacyVersionsDtoToDataMapper,
                             ).let { data ->
                                 r.close()
                                 when (data) {
@@ -119,9 +119,9 @@ class SetupRepoImpl @Inject constructor(
                                     R.string.data_error_http_unsuccessful,
                                     uiTextArgsOf(
                                         response.code().toString(),
-                                        getReasonPhrase(response.code())
-                                    )
-                                )
+                                        getReasonPhrase(response.code()),
+                                    ),
+                                ),
                             )
                         }
                     }
@@ -137,27 +137,27 @@ class SetupRepoImpl @Inject constructor(
 
     override suspend fun getSettingsData(
         server: Server,
-    ): Result<Server, DataError> {
-        return socketManager.initSocket(
-            server = server,
-            disconnectOnCancellation = true
-        ).let { connected ->
-            when (connected) {
-                false -> Result.Error(DataError.Network.SOCKET_ERROR)
-                true -> {
-                    socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA).let { result ->
-                        when (result) {
-                            is Result.Error -> Result.Error(result.error)
-                            is Result.Success -> {
-                                parseGetResponse(
-                                    response = result.data,
-                                    json = json,
-                                    mapper = SettingsDtoToDataMapper
-                                ).let { data ->
-                                    when (data) {
-                                        is Result.Error -> Result.Error(data.error)
-                                        is Result.Success -> Result.Success(data.data)
-                                    }
+    ): Result<Server, DataError> = socketManager.initSocket(
+        server = server,
+        disconnectOnCancellation = true,
+    ).let { connected ->
+        when (connected) {
+            false -> Result.Error(DataError.Network.SOCKET_ERROR)
+
+            true -> {
+                socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA).let { result ->
+                    when (result) {
+                        is Result.Error -> Result.Error(result.error)
+
+                        is Result.Success -> {
+                            parseGetResponse(
+                                response = result.data,
+                                json = json,
+                                mapper = SettingsDtoToDataMapper,
+                            ).let { data ->
+                                when (data) {
+                                    is Result.Error -> Result.Error(data.error)
+                                    is Result.Success -> Result.Success(data.data)
                                 }
                             }
                         }
@@ -171,48 +171,45 @@ class SetupRepoImpl @Inject constructor(
     private suspend fun checkLegacyResponse(
         url: String,
         headerMap: Map<String, String>,
-        data: Result<VersionsData, DataError>
-    ): Result<VersionsData, DataError> {
-        return when (data) {
-            is Result.Error -> {
-                when (data.error) {
-                    is DataError.Server -> {
-                        getVersionsLegacy(
-                            url = url.replace(
-                                oldValue = "get/versions",
-                                newValue = "settings"
-                            ),
-                            headerMap = headerMap
-                        )
-                    }
-
-                    else -> Result.Error(data.error)
+        data: Result<VersionsData, DataError>,
+    ): Result<VersionsData, DataError> = when (data) {
+        is Result.Error -> {
+            when (data.error) {
+                is DataError.Server -> {
+                    getVersionsLegacy(
+                        url = url.replace(
+                            oldValue = "get/versions",
+                            newValue = "settings",
+                        ),
+                        headerMap = headerMap,
+                    )
                 }
-            }
 
-            is Result.Success -> Result.Success(data.data)
+                else -> Result.Error(data.error)
+            }
         }
+
+        is Result.Success -> Result.Success(data.data)
     }
 
     override suspend fun completeSetup(
         server: Server,
         headers: Headers,
-    ): Result<Unit, DataError> {
-        return when (val result = settingsApi.setGrillName(server.name)) {
-            is Result.Error -> Result.Error(result.error)
-            is Result.Success -> try {
-                settingsDataStore.updateData { data ->
-                    data.copy(serverMap = data.serverMap.plus(server.uuid to server))
-                }
-                headersDataStore.updateData { data ->
-                    data.copy(headersMap = data.headersMap.plus(server.uuid to headers))
-                }
-                serverDataCache.clearServerData()
-                Result.Success(Unit)
-            } catch (e: IOException) {
-                Timber.e(e, "Failed saving the new server")
-                Result.Error(DataError.Local.UNKNOWN)
+    ): Result<Unit, DataError> = when (val result = settingsApi.setGrillName(server.name)) {
+        is Result.Error -> Result.Error(result.error)
+
+        is Result.Success -> try {
+            settingsDataStore.updateData { data ->
+                data.copy(serverMap = data.serverMap.plus(server.uuid to server))
             }
+            headersDataStore.updateData { data ->
+                data.copy(headersMap = data.headersMap.plus(server.uuid to headers))
+            }
+            serverDataCache.clearServerData()
+            Result.Success(Unit)
+        } catch (e: IOException) {
+            Timber.e(e, "Failed saving the new server")
+            Result.Error(DataError.Local.UNKNOWN)
         }
     }
 }

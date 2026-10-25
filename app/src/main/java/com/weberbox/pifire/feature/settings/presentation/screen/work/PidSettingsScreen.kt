@@ -65,7 +65,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun PidSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: WorkSettingsViewModel = hiltViewModel()
+    viewModel: WorkSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -76,6 +76,7 @@ fun PidSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is WorkContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is WorkContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -85,7 +86,7 @@ fun PidSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -96,14 +97,14 @@ private fun PidSettings(
     state: WorkContract.State,
     effectFlow: Flow<WorkContract.Effect>?,
     onEventSent: (event: WorkContract.Event) -> Unit,
-    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -114,7 +115,7 @@ private fun PidSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_cat_cntrlr_pid),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(WorkContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(WorkContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -123,10 +124,11 @@ private fun PidSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(WorkContract.Effect.Navigation.Back)
                 }
@@ -135,7 +137,7 @@ private fun PidSettings(
                     PidSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -147,7 +149,7 @@ private fun PidSettings(
 private fun PidSettingsContent(
     state: WorkContract.State,
     onEventSent: (event: WorkContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val resources = LocalResources.current
     val pidPbSheet = rememberCustomModalBottomSheetState()
@@ -162,17 +164,17 @@ private fun PidSettingsContent(
     val uMaxSheet = rememberCustomModalBottomSheetState()
     val pidSelections = arrayToHashMap(
         resources.getStringArray(R.array.controller_config_entries),
-        resources.getStringArray(R.array.controller_config_values)
+        resources.getStringArray(R.array.controller_config_values),
     )
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_cntrlr_config)) },
@@ -183,8 +185,8 @@ private fun PidSettingsContent(
             onValueChange = {
                 onEventSent(
                     WorkContract.Event.SetCntrlrSelected(
-                        pidSelections.getOrDefault(it, ServerConstants.CNTRLR_PID)
-                    )
+                        pidSelections.getOrDefault(it, ServerConstants.CNTRLR_PID),
+                    ),
                 )
             },
             title = { Text(text = stringResource(R.string.settings_cntrlr_title)) },
@@ -192,17 +194,17 @@ private fun PidSettingsContent(
                 Text(
                     text = pidSelections.filterValues {
                         it == state.serverData.settings.cntrlrSelected
-                    }.keys.joinToString("")
+                    }.keys.joinToString(""),
                 )
             },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         PidControlSettings(
             state = state,
             pidPbSheet = pidPbSheet,
             pidTdSheet = pidTdSheet,
             pidTiSheet = pidTiSheet,
-            pidCenterSheet = pidCenterSheet
+            pidCenterSheet = pidCenterSheet,
         )
         PidAcControlSettings(
             state = state,
@@ -210,7 +212,7 @@ private fun PidSettingsContent(
             pidTdSheet = pidTdSheet,
             pidTiSheet = pidTiSheet,
             pidCenterSheet = pidCenterSheet,
-            pidStableSheet = pidStableSheet
+            pidStableSheet = pidStableSheet,
         )
         PidSpControlSettings(
             state = state,
@@ -219,13 +221,13 @@ private fun PidSettingsContent(
             pidCenterSheet = pidCenterSheet,
             pidStableSheet = pidStableSheet,
             pidTauSheet = pidTauSheet,
-            pidThetaSheet = pidThetaSheet
+            pidThetaSheet = pidThetaSheet,
         )
 
         AnimatedVisibility(
             visible = state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID &&
-                    state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID_AC &&
-                    state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID_SP
+                state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID_AC &&
+                state.serverData.settings.cntrlrSelected != ServerConstants.CNTRLR_PID_SP,
         ) {
             PreferenceNote(stringResource(R.string.settings_cycle_cntrlr_no_config))
         }
@@ -237,7 +239,7 @@ private fun PidSettingsContent(
             summary = {
                 Text(text = getSummarySeconds(state.serverData.settings.holdCycleTime.toString()))
             },
-            onClick = { holdCycleTimeSheet.open() }
+            onClick = { holdCycleTimeSheet.open() },
         )
         PreferenceInfo(stringResource(R.string.settings_cycle_cntrlr_cycle_note))
         Preference(
@@ -245,7 +247,7 @@ private fun PidSettingsContent(
             summary = {
                 Text(text = getSummaryPercent(state.serverData.settings.uMin.toString()))
             },
-            onClick = {uMinSheet.open() }
+            onClick = { uMinSheet.open() },
         )
         PreferenceInfo(stringResource(R.string.settings_cycle_cntrlr_u_min_note))
         Preference(
@@ -253,7 +255,7 @@ private fun PidSettingsContent(
             summary = {
                 Text(text = getSummaryPercent(state.serverData.settings.uMax.toString()))
             },
-            onClick = { uMaxSheet.open() }
+            onClick = { uMaxSheet.open() },
         )
         PreferenceInfo(stringResource(R.string.settings_cycle_cntrlr_u_max_note))
     }
@@ -269,14 +271,14 @@ private fun PidSettingsContent(
         holdCycleTimeSheet = holdCycleTimeSheet,
         uMinSheet = uMinSheet,
         uMaxSheet = uMaxSheet,
-        onEventSent = onEventSent
+        onEventSent = onEventSent,
     )
 }
 
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<WorkContract.Effect>?,
-    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -289,7 +291,7 @@ private fun HandleSideEffects(
                 is WorkContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -309,11 +311,11 @@ private fun PidSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

@@ -39,51 +39,51 @@ internal fun LogItem(
             .clickable(onClick = {
                 if (isConnected) {
                     onEventSent(
-                        PelletsContract.Event.DeleteLogDialog(log)
+                        PelletsContract.Event.DeleteLogDialog(log),
                     )
                 }
             })
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
                 .height(MaterialTheme.size.largeThree)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = log.pelletDate,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
             )
             Text(
                 text = log.pelletName,
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
             RatingBar(
                 value = log.pelletRating.toFloat(),
                 style = RatingBarStyle.Fill(
                     activeColor = MaterialTheme.colorScheme.primary,
-                    inActiveColor = MaterialTheme.colorScheme.secondaryContainer
+                    inActiveColor = MaterialTheme.colorScheme.secondaryContainer,
                 ),
                 size = MaterialTheme.size.smallOne,
                 spaceBetween = MaterialTheme.spacing.extraSmall,
                 isIndicator = true,
                 onValueChange = {},
-                onRatingChanged = {}
+                onRatingChanged = {},
             )
             Spacer(
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.extraSmall)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
         }
     }
@@ -96,12 +96,12 @@ private fun LogItemPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 LogItem(
                     log = buildPellets().logsList[0],
                     isConnected = true,
-                    onEventSent = { }
+                    onEventSent = { },
                 )
             }
         }

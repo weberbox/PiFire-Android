@@ -22,34 +22,36 @@ import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
 
 @Composable
 internal fun InfoCpu(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_cpu_info),
-        headerIcon = Icon.Filled.Cpu64Bit
+        headerIcon = Icon.Filled.Cpu64Bit,
     ) {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             InfoItemRow(
                 title = stringResource(R.string.info_cpu_temp),
-                summary = "${info.cpuTemp}°c"
+                summary = "${info.cpuTemp}°c",
             )
             InfoItemColumn(
                 title = stringResource(R.string.info_cpu_throttled),
-                summary = if (info.cpuThrottled)
+                summary = if (info.cpuThrottled) {
                     stringResource(R.string.info_cpu_throttled_true)
-                else
+                } else {
                     stringResource(R.string.info_cpu_throttled_false)
+                },
             )
             InfoItemColumn(
                 title = stringResource(R.string.info_cpu_under_volt),
-                summary = if (info.cpuUnderVolt)
+                summary = if (info.cpuUnderVolt) {
                     stringResource(R.string.info_cpu_under_volt_true)
-                else
+                } else {
                     stringResource(R.string.info_cpu_under_volt_false)
+                },
             )
         }
     }
@@ -63,7 +65,7 @@ private fun InfoCpuPreview() {
     PiFireTheme {
         Surface {
             InfoCpu(
-                info = info
+                info = info,
             )
         }
     }

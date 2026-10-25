@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UISettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) : BaseViewModel<UIContract.Event, UIContract.State, UIContract.Effect>() {
 
     init {
@@ -28,7 +28,7 @@ class UISettingsViewModel @Inject constructor(
         etaCalculations = true,
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: UIContract.Event) {
@@ -45,7 +45,7 @@ class UISettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         grillName = server.settings.grillName,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -72,7 +72,7 @@ class UISettingsViewModel @Inject constructor(
                     setEffect {
                         UIContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -85,7 +85,7 @@ class UISettingsViewModel @Inject constructor(
                         copy(
                             grillName = result.data.settings.grillName,
                             etaCalculations = result.data.settings.etaCalculation,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -96,7 +96,7 @@ class UISettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

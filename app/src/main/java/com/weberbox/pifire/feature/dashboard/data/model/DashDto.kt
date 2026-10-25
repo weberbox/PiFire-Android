@@ -40,7 +40,7 @@ data class DashDto(
     val outputs: Outputs? = null,
     val recipeStatus: RecipeStatus? = null,
     val foodProbes: List<Probe>? = null,
-    val primaryProbe: Probe? = null
+    val primaryProbe: Probe? = null,
 ) {
     @Serializable
     data class Timer(
@@ -55,7 +55,7 @@ data class DashDto(
     data class Outputs(
         val fan: Boolean? = null,
         val auger: Boolean? = null,
-        val igniter: Boolean? = null
+        val igniter: Boolean? = null,
     )
 
     @Serializable
@@ -102,7 +102,7 @@ data class DashDto(
             val batteryPercentage: Double? = null,
             val batteryVoltage: Double? = null,
             val connected: Boolean? = null,
-            val error: Boolean? = null
+            val error: Boolean? = null,
         )
     }
 }

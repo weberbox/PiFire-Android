@@ -29,9 +29,7 @@ fun Modifier.doublePulseEffect(
     color: Color = DefaultPulseColor,
     shape: Shape = CircleShape,
     duration: Int = 1200,
-): Modifier = doublePulseEffect(
-    enabled, targetScale, initialScale, SolidColor(color), shape, duration)
-
+): Modifier = doublePulseEffect(enabled, targetScale, initialScale, SolidColor(color), shape, duration)
 
 @Composable
 fun Modifier.doublePulseEffect(
@@ -41,21 +39,27 @@ fun Modifier.doublePulseEffect(
     brush: Brush = SolidColor(DefaultPulseColor),
     shape: Shape = CircleShape,
     duration: Int = 1200,
-): Modifier {
-    return this
-        .pulseEffect(
-            enabled, targetScale, initialScale, brush, shape,
-            animationSpec = tween(duration, easing = FastOutSlowInEasing)
-        )
-        .pulseEffect(
-            enabled, targetScale, initialScale, brush, shape,
-            animationSpec = tween(
-                durationMillis = (duration * 0.7f).toInt(),
-                delayMillis = (duration * 0.3f).toInt(),
-                easing = LinearEasing
-            )
-        )
-}
+): Modifier = this
+    .pulseEffect(
+        enabled,
+        targetScale,
+        initialScale,
+        brush,
+        shape,
+        animationSpec = tween(duration, easing = FastOutSlowInEasing),
+    )
+    .pulseEffect(
+        enabled,
+        targetScale,
+        initialScale,
+        brush,
+        shape,
+        animationSpec = tween(
+            durationMillis = (duration * 0.7f).toInt(),
+            delayMillis = (duration * 0.3f).toInt(),
+            easing = LinearEasing,
+        ),
+    )
 
 @Suppress("unused")
 @Composable
@@ -65,10 +69,8 @@ fun Modifier.pulseEffect(
     initialScale: Float = 1f,
     color: Color = DefaultPulseColor,
     shape: Shape = CircleShape,
-    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200)
-): Modifier = pulseEffect(
-    enabled, targetScale, initialScale, SolidColor(color), shape, animationSpec)
-
+    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200),
+): Modifier = pulseEffect(enabled, targetScale, initialScale, SolidColor(color), shape, animationSpec)
 
 @Composable
 fun Modifier.pulseEffect(
@@ -77,20 +79,20 @@ fun Modifier.pulseEffect(
     initialScale: Float = 1f,
     brush: Brush = SolidColor(DefaultPulseColor),
     shape: Shape = CircleShape,
-    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200)
+    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200),
 ): Modifier {
     val pulseTransition = rememberInfiniteTransition("PulseTransition")
     val pulseScale by pulseTransition.animateFloat(
         initialValue = initialScale,
         targetValue = targetScale,
         animationSpec = infiniteRepeatable(animationSpec),
-        label = "PulseScale"
+        label = "PulseScale",
     )
     val pulseAlpha by pulseTransition.animateFloat(
         initialValue = 1f,
         targetValue = 0f,
         animationSpec = infiniteRepeatable(animationSpec),
-        label = "PulseAlpha"
+        label = "PulseAlpha",
     )
     return this.drawBehind {
         val outline = shape.createOutline(size, layoutDirection, this)

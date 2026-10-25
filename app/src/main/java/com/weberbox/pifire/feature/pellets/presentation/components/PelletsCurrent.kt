@@ -43,100 +43,100 @@ internal fun PelletsCurrent(
             if (isConnected) {
                 onEventSent(PelletsContract.Event.CurrentDialog(pellets.currentPelletId))
             }
-        }
+        },
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     top = MaterialTheme.spacing.extraSmallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
             ) {
                 Text(
                     text = stringResource(R.string.pellets_current_brand),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = pellets.currentBrand,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
             ) {
                 Text(
                     text = stringResource(R.string.pellets_current_wood),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = pellets.currentWood,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
             ) {
                 Text(
                     text = stringResource(R.string.pellets_current_rating),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 RatingBar(
                     value = pellets.currentRating.toFloat(),
                     style = RatingBarStyle.Fill(
                         activeColor = MaterialTheme.colorScheme.primary,
-                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer
+                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
                     size = MaterialTheme.spacing.smallOne,
                     spaceBetween = MaterialTheme.spacing.extraSmall,
                     isIndicator = true,
                     onValueChange = {},
-                    onRatingChanged = {}
+                    onRatingChanged = {},
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
             ) {
                 Text(
                     text = stringResource(R.string.pellets_current_date),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = pellets.dateLoaded,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
             Column(
                 modifier = Modifier
                     .padding(bottom = MaterialTheme.spacing.smallThree)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = stringResource(R.string.pellets_current_comments),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = pellets.currentComments,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                 )
             }
         }
@@ -150,12 +150,12 @@ private fun PelletsCurrentPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 PelletsCurrent(
                     pellets = buildPellets(),
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

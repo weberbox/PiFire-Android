@@ -28,7 +28,7 @@ import com.weberbox.pifire.feature.settings.presentation.model.PMode
 
 @Composable
 internal fun PModeSheet(
-    augerOn: String
+    augerOn: String,
 ) {
     val context = LocalContext.current
     val pmodes = context.resources.getStringArray(R.array.pmode_values).toList()
@@ -38,15 +38,15 @@ internal fun PModeSheet(
     Column(
         modifier = Modifier.padding(
             start = MaterialTheme.spacing.mediumOne,
-            end = MaterialTheme.spacing.mediumOne
+            end = MaterialTheme.spacing.mediumOne,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(MaterialTheme.spacing.extraSmallOne),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
                 text = stringResource(R.string.settings_pmode_mode),
@@ -58,7 +58,7 @@ internal fun PModeSheet(
                 fontSize = 15.sp,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.extraSmallOne)
-                    .weight(1f)
+                    .weight(1f),
             )
             Text(
                 text = stringResource(R.string.settings_pmode_auger_on),
@@ -70,7 +70,7 @@ internal fun PModeSheet(
                 fontSize = 15.sp,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.extraSmallOne)
-                    .weight(1f)
+                    .weight(1f),
             )
             Text(
                 text = stringResource(R.string.settings_pmode_auger_off),
@@ -82,22 +82,22 @@ internal fun PModeSheet(
                 fontSize = 15.sp,
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.extraSmallOne)
-                    .weight(1f)
+                    .weight(1f),
             )
         }
         LazyColumn {
             itemsIndexed(pmodesList) { _, item ->
                 Card(
                     modifier = Modifier.padding(
-                        bottom = MaterialTheme.spacing.extraSmall
+                        bottom = MaterialTheme.spacing.extraSmall,
                     ),
-                    shape = MaterialTheme.shapes.small
+                    shape = MaterialTheme.shapes.small,
                 ) {
                     Row(
                         modifier = Modifier
                             .padding(MaterialTheme.spacing.smallOne)
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
                             text = item.pMode,
@@ -105,7 +105,7 @@ internal fun PModeSheet(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 15.sp
+                            fontSize = 15.sp,
                         )
                         Text(
                             text = item.augerOn,
@@ -113,7 +113,7 @@ internal fun PModeSheet(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 15.sp
+                            fontSize = 15.sp,
                         )
                         Text(
                             text = item.augerOff,
@@ -121,7 +121,7 @@ internal fun PModeSheet(
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            fontSize = 15.sp
+                            fontSize = 15.sp,
                         )
                     }
                 }
@@ -133,13 +133,14 @@ internal fun PModeSheet(
 private fun createPModeList(
     augerOn: String,
     pmodes: List<String>,
-    pmodeTimes: List<String>
+    pmodeTimes: List<String>,
 ): List<PMode> {
     val pModeList: MutableList<PMode> = mutableListOf()
     for (i in pmodes.indices) {
         val mode = PMode(
-            pmodes[i], augerOn,
-            pmodeTimes[i]
+            pmodes[i],
+            augerOn,
+            pmodeTimes[i],
         )
         pModeList.add(mode)
     }

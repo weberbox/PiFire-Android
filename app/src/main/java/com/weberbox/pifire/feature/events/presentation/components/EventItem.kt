@@ -51,7 +51,7 @@ import com.weberbox.pifire.feature.events.presentation.screen.buildEventsList
 @Composable
 internal fun EventItem(
     event: Event,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     var overflowed by remember { mutableStateOf(false) }
     var expanded by remember(overflowed) { mutableStateOf(false) }
@@ -64,7 +64,7 @@ internal fun EventItem(
                 true -> expanded = false
                 false -> if (overflowed) expanded = true
             }
-        }
+        },
     ) {
         Row(
             modifier = Modifier
@@ -72,41 +72,41 @@ internal fun EventItem(
                 .fillMaxWidth()
                 .animateContentSize()
                 .height(IntrinsicSize.Max),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = modifier
                     .fillMaxHeight()
                     .size(MaterialTheme.spacing.large)
-                    .background(event.type.color())
+                    .background(event.type.color()),
             ) {
                 Text(
                     text = stringResource(event.type.badgeRes()),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall)
+                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall),
                 )
             }
             Column(
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = event.time,
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = modifier.padding(1.dp)
+                    modifier = modifier.padding(1.dp),
                 )
                 Text(
                     text = event.date,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = modifier.padding(1.dp)
+                    modifier = modifier.padding(1.dp),
                 )
                 Text(
                     text = event.message,
@@ -119,13 +119,12 @@ internal fun EventItem(
                             overflowed = true
                         }
                     },
-                    modifier = modifier.padding(1.dp)
+                    modifier = modifier.padding(1.dp),
                 )
             }
         }
     }
 }
-
 
 private fun EventType.color(): Color = when (this) {
     EventType.ScriptStarted -> eventsScriptStart
@@ -154,10 +153,10 @@ private fun EventItemPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
             ) {
                 EventItem(
-                    event = buildEventsList()[0]
+                    event = buildEventsList()[0],
                 )
             }
         }

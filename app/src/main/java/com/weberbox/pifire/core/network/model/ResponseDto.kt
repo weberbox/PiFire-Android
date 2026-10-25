@@ -7,5 +7,5 @@ import kotlinx.serialization.json.JsonObject
 data class ResponseDto(
     val result: String? = null,
     val message: String? = null,
-    val data: JsonObject? = null
+    val data: JsonObject? = null,
 )

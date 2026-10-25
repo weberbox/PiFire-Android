@@ -67,7 +67,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun AppriseSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: NotificationSettingsViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -78,6 +78,7 @@ fun AppriseSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -87,7 +88,7 @@ fun AppriseSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -98,14 +99,14 @@ private fun AppriseSettings(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -116,7 +117,7 @@ private fun AppriseSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_apprise_locations),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -125,10 +126,11 @@ private fun AppriseSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
@@ -137,7 +139,7 @@ private fun AppriseSettings(
                     AppriseContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -149,40 +151,40 @@ private fun AppriseSettings(
 private fun AppriseContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val appriseSheet = rememberInputModalBottomSheetState<Location>()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(contentPadding)
-            .padding(top = MaterialTheme.spacing.smallOne)
+            .padding(top = MaterialTheme.spacing.smallOne),
     ) {
-        state.serverData.settings.appriseLocations.forEach{ location ->
+        state.serverData.settings.appriseLocations.forEach { location ->
             Card(
                 modifier = Modifier.padding(
                     start = MaterialTheme.spacing.smallThree,
                     end = MaterialTheme.spacing.smallThree,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 shape = MaterialTheme.shapes.small,
-                onClick = { appriseSheet.open(location) }
+                onClick = { appriseSheet.open(location) },
             ) {
                 Row(
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.smallOne)
                         .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                         imageVector = Icons.Filled.Dns,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                     Column {
                         Text(
@@ -190,7 +192,7 @@ private fun AppriseContent(
                             modifier = Modifier.padding(start = MaterialTheme.spacing.extraSmall),
                             color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
+                            fontSize = 15.sp,
                         )
                     }
                 }
@@ -199,24 +201,24 @@ private fun AppriseContent(
         if (state.serverData.settings.appriseLocations.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    modifier = Modifier.size(MaterialTheme.size.extraLarge)
+                    modifier = Modifier.size(MaterialTheme.size.extraLarge),
                 )
                 Text(
                     text = stringResource(R.string.settings_apprise_no_locations),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                 )
             }
         }
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 modifier = Modifier
@@ -225,17 +227,17 @@ private fun AppriseContent(
                 shape = MaterialTheme.shapes.extraSmall,
                 onClick = {
                     appriseSheet.open("")
-                }
+                },
             ) {
                 Text(
                     text = stringResource(R.string.settings_apprise_add_location),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
     }
     BottomSheet(
-        sheetState = appriseSheet.sheetState
+        sheetState = appriseSheet.sheetState,
     ) {
         InputValidationSheet(
             input = appriseSheet.data,
@@ -248,7 +250,7 @@ private fun AppriseContent(
             onDelete = {
                 onEventSent(NotifContract.Event.DeleteAppriseLocation(it))
                 appriseSheet.close()
-            }
+            },
         )
     }
 }
@@ -256,13 +258,14 @@ private fun AppriseContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {}
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -270,7 +273,7 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -290,11 +293,11 @@ private fun AppriseSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

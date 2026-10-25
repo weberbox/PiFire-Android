@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 class LandingRepoImpl @Inject constructor(
     private val landingApi: LandingApi,
-    private val json: Json
-): LandingRepo {
+    private val json: Json,
+) : LandingRepo {
 
     override suspend fun getServerUuid(
         url: String,
-        headers: Map<String, String>
+        headers: Map<String, String>,
     ): Result<ServerUuidData, DataError> {
         if (networkAvailable()) {
             try {
@@ -34,7 +34,7 @@ class LandingRepoImpl @Inject constructor(
                                 response = r.string(),
                                 json = json,
                                 mapper = ServerUuidDtoToDataMapper,
-                                logException = false
+                                logException = false,
                             ).let { data ->
                                 r.close()
                                 when (data) {
@@ -48,12 +48,13 @@ class LandingRepoImpl @Inject constructor(
                             Result.Error(DataError.Network.AUTHENTICATION)
                         } else {
                             Result.Error(
-                                DataError.UiText(R.string.data_error_http_unsuccessful,
+                                DataError.UiText(
+                                    R.string.data_error_http_unsuccessful,
                                     uiTextArgsOf(
                                         response.code().toString(),
-                                        getReasonPhrase(response.code())
-                                    )
-                                )
+                                        getReasonPhrase(response.code()),
+                                    ),
+                                ),
                             )
                         }
                     }

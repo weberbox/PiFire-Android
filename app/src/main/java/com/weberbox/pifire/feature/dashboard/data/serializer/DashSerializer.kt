@@ -21,24 +21,22 @@ object DashSerializer : Serializer<DashData> {
     override val defaultValue: DashData
         get() = DashData()
 
-    override suspend fun readFrom(input: InputStream): DashData {
-        return try {
-            json.decodeFromString(
-                deserializer = DashData.serializer(),
-                string = input.readBytes().decodeToString()
-            )
-        } catch (e: SerializationException) {
-            Timber.e(e, "Dash Deserialization Error")
-            defaultValue
-        }
+    override suspend fun readFrom(input: InputStream): DashData = try {
+        json.decodeFromString(
+            deserializer = DashData.serializer(),
+            string = input.readBytes().decodeToString(),
+        )
+    } catch (e: SerializationException) {
+        Timber.e(e, "Dash Deserialization Error")
+        defaultValue
     }
 
     override suspend fun writeTo(t: DashData, output: OutputStream) {
         output.write(
             json.encodeToString(
                 serializer = DashData.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 }

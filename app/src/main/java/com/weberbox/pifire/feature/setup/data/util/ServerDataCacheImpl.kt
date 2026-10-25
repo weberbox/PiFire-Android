@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 class ServerDataCacheImpl @Inject constructor(
     private val prefs: Prefs,
-    private val json: Json
-): ServerDataCache {
+    private val json: Json,
+) : ServerDataCache {
 
     override fun saveServerData(server: Server) {
         prefs.set(Pref.serverSetupSession, json.encodeToString(server))

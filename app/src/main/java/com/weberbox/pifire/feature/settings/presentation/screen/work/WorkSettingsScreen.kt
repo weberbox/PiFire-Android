@@ -73,7 +73,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun WorkSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: WorkSettingsViewModel = hiltViewModel()
+    viewModel: WorkSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -84,6 +84,7 @@ fun WorkSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is WorkContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is WorkContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -93,7 +94,7 @@ fun WorkSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -104,7 +105,7 @@ private fun WorkSettings(
     state: WorkContract.State,
     effectFlow: Flow<WorkContract.Effect>?,
     onEventSent: (event: WorkContract.Event) -> Unit,
-    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
@@ -119,7 +120,7 @@ private fun WorkSettings(
                 is WorkContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -134,7 +135,7 @@ private fun WorkSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_work_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(WorkContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(WorkContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -143,10 +144,11 @@ private fun WorkSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(WorkContract.Effect.Navigation.Back)
                 }
@@ -156,7 +158,7 @@ private fun WorkSettings(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -169,7 +171,7 @@ private fun WorkSettingsContent(
     state: WorkContract.State,
     onEventSent: (event: WorkContract.Event) -> Unit,
     onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val context = LocalContext.current
     val onCycleTimeSheet = rememberCustomModalBottomSheetState()
@@ -185,13 +187,13 @@ private fun WorkSettingsContent(
     val keepWarmTempSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_cntrlr_pid)) },
@@ -202,10 +204,10 @@ private fun WorkSettingsContent(
             onClick = {
                 onNavigationRequested(
                     WorkContract.Effect.Navigation.NavRoute(
-                        route = NavGraph.SettingsDest.Pid
-                    )
+                        route = NavGraph.SettingsDest.Pid,
+                    ),
                 )
-            }
+            },
         )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_cycle)) },
@@ -216,22 +218,22 @@ private fun WorkSettingsContent(
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.smokeOnCycleTime.toString()
-                    )
+                        state.serverData.settings.smokeOnCycleTime.toString(),
+                    ),
                 )
             },
-            onClick = { onCycleTimeSheet.open() }
+            onClick = { onCycleTimeSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pmode_auger_off)) },
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.smokeOffCycleTime.toString()
-                    )
+                        state.serverData.settings.smokeOffCycleTime.toString(),
+                    ),
                 )
             },
-            onClick = { offCycleTimeSheet.open() }
+            onClick = { offCycleTimeSheet.open() },
         )
         PreferenceInfo(stringResource(R.string.settings_pmode_info_two))
         ListPreference(
@@ -243,16 +245,16 @@ private fun WorkSettingsContent(
                 Text(
                     text = stringResource(
                         R.string.settings_pmode,
-                        state.serverData.settings.pMode
-                    )
+                        state.serverData.settings.pMode,
+                    ),
                 )
             },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pmode_table)) },
             summary = { Text(text = stringResource(R.string.settings_pmode_summary)) },
-            onClick = { pModeSheet.open() }
+            onClick = { pModeSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_pmode_note)) {
             Intent(Intent.ACTION_VIEW).apply {
@@ -267,7 +269,7 @@ private fun WorkSettingsContent(
             value = state.serverData.settings.sPlusEnabled,
             onValueChange = { onEventSent(WorkContract.Event.SetSPlusEnabled(it)) },
             title = { Text(text = stringResource(R.string.settings_splus_enabled)) },
-            summary = { Text(text = getSummary(state.serverData.settings.sPlusEnabled)) }
+            summary = { Text(text = getSummary(state.serverData.settings.sPlusEnabled)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_splus_min)) },
@@ -275,11 +277,11 @@ private fun WorkSettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.sPlusMinTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { sPlusMinTempSheet.open() }
+            onClick = { sPlusMinTempSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_splus_max)) },
@@ -287,33 +289,33 @@ private fun WorkSettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.sPlusMaxTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { sPlusMaxTempSheet.open() }
+            onClick = { sPlusMaxTempSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_splus_on_time)) },
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.sPlusOnTime.toString()
-                    )
+                        state.serverData.settings.sPlusOnTime.toString(),
+                    ),
                 )
             },
-            onClick = { sPlusOnTimeSheet.open() }
+            onClick = { sPlusOnTimeSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_splus_off_time)) },
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.sPlusOffTime.toString()
-                    )
+                        state.serverData.settings.sPlusOffTime.toString(),
+                    ),
                 )
             },
-            onClick = { sPlusOffTimeSheet.open() }
+            onClick = { sPlusOffTimeSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_splus_note))
         if (state.serverData.settings.dcFan) {
@@ -323,20 +325,20 @@ private fun WorkSettingsContent(
                 title = { Text(text = stringResource(R.string.settings_splus_fan_ramp)) },
                 summary = {
                     Text(
-                        text = getSummary(state.serverData.settings.sPlusFanRamp)
+                        text = getSummary(state.serverData.settings.sPlusFanRamp),
                     )
-                }
+                },
             )
             Preference(
                 title = { Text(text = stringResource(R.string.settings_splus_ramp_dc)) },
                 summary = {
                     Text(
                         text = getSummaryPercent(
-                            state.serverData.settings.sPlusDutyCycle.toString()
-                        )
+                            state.serverData.settings.sPlusDutyCycle.toString(),
+                        ),
                     )
                 },
-                onClick = { sPlusDutyCycleSheet.open() }
+                onClick = { sPlusDutyCycleSheet.open() },
             )
             PreferenceNote(stringResource(R.string.settings_splus_fan_ramp_note))
         }
@@ -349,35 +351,35 @@ private fun WorkSettingsContent(
             title = { Text(text = stringResource(R.string.settings_lid_open_enabled)) },
             summary = {
                 Text(
-                    text = getSummary(state.serverData.settings.lidOpenDetectEnabled)
+                    text = getSummary(state.serverData.settings.lidOpenDetectEnabled),
                 )
-            }
+            },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_lid_open_thresh)) },
             summary = {
                 Text(
                     text = getSummaryPercent(
-                        state.serverData.settings.lidOpenThreshold.toString()
-                    )
+                        state.serverData.settings.lidOpenThreshold.toString(),
+                    ),
                 )
             },
-            onClick = { lidThreshSheet.open() }
+            onClick = { lidThreshSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_lid_open_pause)) },
             summary = {
                 Text(
                     text = getSummarySeconds(
-                        state.serverData.settings.lidOpenPauseTime.toString()
-                    )
+                        state.serverData.settings.lidOpenPauseTime.toString(),
+                    ),
                 )
             },
-            onClick = { lidPauseTimeSheet.open() }
+            onClick = { lidPauseTimeSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_lid_open_note))
         FeatureGate(
-            feature = Feature.FanPidSettings
+            feature = Feature.FanPidSettings,
         ) {
             PreferenceCategory(
                 title = { Text(text = stringResource(R.string.settings_cat_fan_pid)) },
@@ -388,9 +390,9 @@ private fun WorkSettingsContent(
                 title = { Text(text = stringResource(R.string.settings_fan_pid_enabled)) },
                 summary = {
                     Text(
-                        text = getSummary(state.serverData.settings.fanPidEnabled)
+                        text = getSummary(state.serverData.settings.fanPidEnabled),
                     )
-                }
+                },
             )
             PreferenceWarning(stringResource(R.string.settings_fan_pid_warning))
             PreferenceNote(stringResource(R.string.settings_fan_pid_note))
@@ -404,9 +406,9 @@ private fun WorkSettingsContent(
             title = { Text(text = stringResource(R.string.settings_keep_warm_s_plus)) },
             summary = {
                 Text(
-                    text = getSummary(state.serverData.settings.keepWarmSPlus)
+                    text = getSummary(state.serverData.settings.keepWarmSPlus),
                 )
-            }
+            },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_keep_warm_temp)) },
@@ -414,16 +416,16 @@ private fun WorkSettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.keepWarmTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { keepWarmTempSheet.open() }
+            onClick = { keepWarmTempSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_keep_warm_note))
     }
     BottomSheet(
-        sheetState = onCycleTimeSheet.sheetState
+        sheetState = onCycleTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.smokeOnCycleTime.toString(),
@@ -432,7 +434,7 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -440,11 +442,11 @@ private fun WorkSettingsContent(
                 }
                 onCycleTimeSheet.close()
             },
-            onDismiss = { onCycleTimeSheet.close() }
+            onDismiss = { onCycleTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = offCycleTimeSheet.sheetState
+        sheetState = offCycleTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.smokeOffCycleTime.toString(),
@@ -453,7 +455,7 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -461,18 +463,18 @@ private fun WorkSettingsContent(
                 }
                 offCycleTimeSheet.close()
             },
-            onDismiss = { offCycleTimeSheet.close() }
+            onDismiss = { offCycleTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pModeSheet.sheetState
+        sheetState = pModeSheet.sheetState,
     ) {
         PModeSheet(
             augerOn = state.serverData.settings.augerRate.toString(),
         )
     }
     BottomSheet(
-        sheetState = sPlusDutyCycleSheet.sheetState
+        sheetState = sPlusDutyCycleSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.sPlusDutyCycle.toString(),
@@ -482,7 +484,7 @@ private fun WorkSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = state.serverData.settings.pwmMinDutyCycle.toDouble(),
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -490,11 +492,11 @@ private fun WorkSettingsContent(
                 }
                 sPlusDutyCycleSheet.close()
             },
-            onDismiss = { sPlusDutyCycleSheet.close() }
+            onDismiss = { sPlusDutyCycleSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = sPlusOnTimeSheet.sheetState
+        sheetState = sPlusOnTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.sPlusOnTime.toString(),
@@ -503,7 +505,7 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -511,11 +513,11 @@ private fun WorkSettingsContent(
                 }
                 sPlusOnTimeSheet.close()
             },
-            onDismiss = { sPlusOnTimeSheet.close() }
+            onDismiss = { sPlusOnTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = sPlusOffTimeSheet.sheetState
+        sheetState = sPlusOffTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.sPlusOffTime.toString(),
@@ -524,7 +526,7 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -532,11 +534,11 @@ private fun WorkSettingsContent(
                 }
                 sPlusOffTimeSheet.close()
             },
-            onDismiss = { sPlusOffTimeSheet.close() }
+            onDismiss = { sPlusOffTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = sPlusMinTempSheet.sheetState
+        sheetState = sPlusMinTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.sPlusMinTemp.toString(),
@@ -545,17 +547,17 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value -> onEventSent(WorkContract.Event.SetMinTemp(value)) }
                 sPlusMinTempSheet.close()
             },
-            onDismiss = { sPlusMinTempSheet.close() }
+            onDismiss = { sPlusMinTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = sPlusMaxTempSheet.sheetState
+        sheetState = sPlusMaxTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.sPlusMaxTemp.toString(),
@@ -564,17 +566,17 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value -> onEventSent(WorkContract.Event.SetMaxTemp(value)) }
                 sPlusMaxTempSheet.close()
             },
-            onDismiss = { sPlusMaxTempSheet.close() }
+            onDismiss = { sPlusMaxTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = lidThreshSheet.sheetState
+        sheetState = lidThreshSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.lidOpenThreshold.toString(),
@@ -584,7 +586,7 @@ private fun WorkSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 80.0
+                max = 80.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -592,11 +594,11 @@ private fun WorkSettingsContent(
                 }
                 lidThreshSheet.close()
             },
-            onDismiss = { lidThreshSheet.close() }
+            onDismiss = { lidThreshSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = lidPauseTimeSheet.sheetState
+        sheetState = lidPauseTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.lidOpenPauseTime.toString(),
@@ -606,7 +608,7 @@ private fun WorkSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 10.0,
-                max = 1000.0
+                max = 1000.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -614,11 +616,11 @@ private fun WorkSettingsContent(
                 }
                 lidPauseTimeSheet.close()
             },
-            onDismiss = { lidPauseTimeSheet.close() }
+            onDismiss = { lidPauseTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = keepWarmTempSheet.sheetState
+        sheetState = keepWarmTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.keepWarmTemp.toString(),
@@ -627,7 +629,7 @@ private fun WorkSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -635,7 +637,7 @@ private fun WorkSettingsContent(
                 }
                 keepWarmTempSheet.close()
             },
-            onDismiss = { keepWarmTempSheet.close() }
+            onDismiss = { keepWarmTempSheet.close() },
         )
     }
 }
@@ -652,11 +654,11 @@ private fun WorkSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

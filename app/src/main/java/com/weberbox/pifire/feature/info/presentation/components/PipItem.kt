@@ -20,11 +20,11 @@ import com.weberbox.pifire.core.ui.theme.spacing
 internal fun PipItem(
     modifier: Modifier = Modifier,
     module: Module,
-    maxLines: Int = 1
+    maxLines: Int = 1,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier
@@ -34,13 +34,13 @@ internal fun PipItem(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = maxLines,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         Text(
             modifier = Modifier.weight(0.6f),
             text = module.version,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
@@ -54,8 +54,8 @@ private fun PipItemPreview() {
             PipItem(
                 module = Module(
                     name = "apprise",
-                    version = "1.9.3"
-                )
+                    version = "1.9.3",
+                ),
             )
         }
     }

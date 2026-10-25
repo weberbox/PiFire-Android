@@ -74,7 +74,7 @@ fun RecipeImagesScreenDestination(
             when (navigationEffect) {
                 is ImagesContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
             }
-        }
+        },
     )
 }
 
@@ -84,27 +84,26 @@ private fun RecipeImagesScreen(
     state: ImagesContract.State,
     effectFlow: Flow<ImagesContract.Effect>?,
     onEventSent: (event: ImagesContract.Event) -> Unit,
-    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit,
 ) {
-
     val pagerState = rememberPagerState(
         initialPage = state.imageIndex,
-        pageCount = { state.imageList.size }
+        pageCount = { state.imageList.size },
     )
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainer,
-        1f to MaterialTheme.colorScheme.surfaceContainerLow
+        1f to MaterialTheme.colorScheme.surfaceContainerLow,
     )
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         val paletteColor by rememberPaletteColorState()
         // Saved so rotating doesn't jump back to the image the screen was opened on
@@ -125,6 +124,7 @@ private fun RecipeImagesScreen(
 
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> DataError {
                 onNavigationRequested(ImagesContract.Effect.Navigation.Back)
             }
@@ -135,26 +135,26 @@ private fun RecipeImagesScreen(
                         .fillMaxSize()
                         .background(Brush.verticalGradient(colorStops = colorStops))
                         .background(Brush.verticalGradient(colors = paletteColor.brushColor))
-                        .windowInsetsPadding(WindowInsets.safeDrawing)
+                        .windowInsetsPadding(WindowInsets.safeDrawing),
                 ) {
                     FilledIconButton(
                         modifier = Modifier
                             .padding(
                                 start = MaterialTheme.spacing.extraSmall,
-                                top = MaterialTheme.spacing.smallTwo
+                                top = MaterialTheme.spacing.smallTwo,
                             ),
                         onClick = {
                             onNavigationRequested(
-                                ImagesContract.Effect.Navigation.Back
+                                ImagesContract.Effect.Navigation.Back,
                             )
                         },
                         colors = IconButtonDefaults.iconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.inverseOnSurface
-                        )
+                            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                        ),
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.close)
+                            contentDescription = stringResource(R.string.close),
                         )
                     }
                     HorizontalPager(
@@ -164,9 +164,9 @@ private fun RecipeImagesScreen(
                         state = pagerState,
                         pageSpacing = MaterialTheme.spacing.smallOne,
                         contentPadding = PaddingValues(
-                            horizontal = MaterialTheme.spacing.smallOne
+                            horizontal = MaterialTheme.spacing.smallOne,
                         ),
-                        beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT
+                        beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT,
                     ) { index ->
                         state.imageList.getOrNull(index)?.let { image ->
                             RecipeAsyncImage(
@@ -176,8 +176,8 @@ private fun RecipeImagesScreen(
                                     .limitWidthFraction()
                                     .pagerCubeInDepthTransition(
                                         page = index,
-                                        pagerState = pagerState
-                                    )
+                                        pagerState = pagerState,
+                                    ),
                             )
                         }
                     }
@@ -186,7 +186,7 @@ private fun RecipeImagesScreen(
                             .wrapContentHeight()
                             .fillMaxWidth()
                             .padding(bottom = MaterialTheme.spacing.smallOne),
-                        horizontalArrangement = Arrangement.Center
+                        horizontalArrangement = Arrangement.Center,
                     ) {
                         PagerIndicator(
                             numberOfPages = pagerState.pageCount,
@@ -203,7 +203,7 @@ private fun RecipeImagesScreen(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<ImagesContract.Effect>?,
-    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ImagesContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -216,7 +216,7 @@ private fun HandleSideEffects(
                 is ImagesContract.Effect.Notification ->
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
             }
         }?.collect()
@@ -226,23 +226,23 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-//@DeviceSizePreviews
+// @DeviceSizePreviews
 private fun RecipeImagesScreenPreview() {
     PiFireTheme {
         Surface {
             RecipeImagesScreen(
                 state = ImagesContract.State(
                     imageList = listOf(
-                        decodeBase64Image(buildRecipe()[0].assets[0].encodedImage)
+                        decodeBase64Image(buildRecipe()[0].assets[0].encodedImage),
                     ),
                     imageIndex = 0,
                     isInitialLoading = false,
-                    isDataError = false
+                    isDataError = false,
 
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

@@ -43,7 +43,7 @@ class SmartStartSheetViewModel : ViewModel() {
     fun setInitialState(
         server: Server,
         index: Int,
-        smartStartItems: List<SmartStart>
+        smartStartItems: List<SmartStart>,
     ) {
         _server = server
 
@@ -78,7 +78,7 @@ class SmartStartSheetViewModel : ViewModel() {
                 val temp = (setTemp - 1).toString()
                 UiText(
                     R.string.settings_pwm_temp_range_note_max,
-                    uiTextArgsOf(temp, server.settings.tempUnits)
+                    uiTextArgsOf(temp, server.settings.tempUnits),
                 )
             } else if (maxTemp == null) {
                 UiText(R.string.settings_pwm_temp_range_note_last)
@@ -88,25 +88,25 @@ class SmartStartSheetViewModel : ViewModel() {
                     uiTextArgsOf(
                         minTemp.toString(),
                         maxTemp.toString(),
-                        server.settings.tempUnits
-                    )
+                        server.settings.tempUnits,
+                    ),
                 )
             }
 
         val temp by mutableStateOf(
-            (smartStartItem ?: lastItem).temp.toString()
+            (smartStartItem ?: lastItem).temp.toString(),
         )
 
         val startUp by mutableStateOf(
-            (smartStartItem ?: lastItem).startUp.toString()
+            (smartStartItem ?: lastItem).startUp.toString(),
         )
 
         val augerOn by mutableStateOf(
-            (smartStartItem ?: lastItem).augerOn.toString()
+            (smartStartItem ?: lastItem).augerOn.toString(),
         )
 
         val pMode by mutableStateOf(
-            (smartStartItem ?: lastItem).pMode.toString()
+            (smartStartItem ?: lastItem).pMode.toString(),
         )
 
         setState {
@@ -121,28 +121,27 @@ class SmartStartSheetViewModel : ViewModel() {
                 deleteVisible = index >= smartStartItems.lastIndex && smartStartItems.size > 2,
                 tempInput = FieldInput(
                     value = temp,
-                    hasInteracted = temp.isNotBlank()
+                    hasInteracted = temp.isNotBlank(),
                 ),
                 tempError = ErrorStatus(isError = false),
                 startUpInput = FieldInput(
                     value = startUp,
-                    hasInteracted = startUp.isNotBlank()
+                    hasInteracted = startUp.isNotBlank(),
                 ),
                 startUpError = ErrorStatus(isError = false),
                 augerOnInput = FieldInput(
                     value = augerOn,
-                    hasInteracted = augerOn.isNotBlank()
+                    hasInteracted = augerOn.isNotBlank(),
                 ),
-                augerOnError = ErrorStatus(isError = false)
+                augerOnError = ErrorStatus(isError = false),
             )
         }
-
     }
 
     fun setPmode(pMode: String) {
         setState {
             copy(
-                pMode = pMode
+                pMode = pMode,
             )
         }
     }
@@ -153,34 +152,36 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     tempInput = FieldInput(
                         value = temp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
+                        errorMsg = UiText(R.string.error_text_blank),
+                    ),
                 )
             }
             return
         }
         try {
             val number = temp.toInt()
-            if (number < (_smartStartSheetState.value.minTemp
-                    ?: _smartStartSheetState.value.setTemp)
+            if (number < (
+                    _smartStartSheetState.value.minTemp
+                        ?: _smartStartSheetState.value.setTemp
+                    )
             ) {
                 setState {
                     copy(
                         tempInput = FieldInput(
                             value = temp,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         tempError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_min_error,
-                                uiTextArgsOf(DecimalFormat("0.##").format(minTemp ?: setTemp))
-                            )
-                        )
+                                uiTextArgsOf(DecimalFormat("0.##").format(minTemp ?: setTemp)),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -189,17 +190,17 @@ class SmartStartSheetViewModel : ViewModel() {
                     copy(
                         tempInput = FieldInput(
                             value = temp,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         tempError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_max_error,
                                 uiTextArgsOf(
-                                    DecimalFormat("0.##").format(maxTemp ?: getMaxProbeTemp())
-                                )
-                            )
-                        )
+                                    DecimalFormat("0.##").format(maxTemp ?: getMaxProbeTemp()),
+                                ),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -209,12 +210,12 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     tempInput = FieldInput(
                         value = temp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.settings_number_error)
-                    )
+                        errorMsg = UiText(R.string.settings_number_error),
+                    ),
                 )
             }
             return
@@ -223,12 +224,12 @@ class SmartStartSheetViewModel : ViewModel() {
             copy(
                 tempInput = FieldInput(
                     value = temp,
-                    hasInteracted = true
+                    hasInteracted = true,
                 ),
                 tempError = ErrorStatus(
                     isError = false,
-                    errorMsg = null
-                )
+                    errorMsg = null,
+                ),
             )
         }
     }
@@ -239,12 +240,12 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     startUpInput = FieldInput(
                         value = startUp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     startUpError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
+                        errorMsg = UiText(R.string.error_text_blank),
+                    ),
                 )
             }
             return
@@ -256,12 +257,12 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     startUpInput = FieldInput(
                         value = startUp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     startUpError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.settings_number_error)
-                    )
+                        errorMsg = UiText(R.string.settings_number_error),
+                    ),
                 )
             }
             return
@@ -270,12 +271,12 @@ class SmartStartSheetViewModel : ViewModel() {
             copy(
                 startUpInput = FieldInput(
                     value = startUp,
-                    hasInteracted = true
+                    hasInteracted = true,
                 ),
                 startUpError = ErrorStatus(
                     isError = false,
-                    errorMsg = null
-                )
+                    errorMsg = null,
+                ),
             )
         }
     }
@@ -286,12 +287,12 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     augerOnInput = FieldInput(
                         value = augerOn,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     augerOnError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
+                        errorMsg = UiText(R.string.error_text_blank),
+                    ),
                 )
             }
             return
@@ -303,12 +304,12 @@ class SmartStartSheetViewModel : ViewModel() {
                 copy(
                     augerOnInput = FieldInput(
                         value = augerOn,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     augerOnError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.settings_number_error)
-                    )
+                        errorMsg = UiText(R.string.settings_number_error),
+                    ),
                 )
             }
             return
@@ -317,16 +318,15 @@ class SmartStartSheetViewModel : ViewModel() {
             copy(
                 augerOnInput = FieldInput(
                     value = augerOn,
-                    hasInteracted = true
+                    hasInteracted = true,
                 ),
                 augerOnError = ErrorStatus(
                     isError = false,
-                    errorMsg = null
-                )
+                    errorMsg = null,
+                ),
             )
         }
     }
-
 
     private fun getMaxProbeTemp(): Int {
         if (_server.settings.tempUnits.equals("F", ignoreCase = true)) {

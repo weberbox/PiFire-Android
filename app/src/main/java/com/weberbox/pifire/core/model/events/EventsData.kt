@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventsData(
-    val eventsMap: Map<Uuid, Events> = emptyMap()
+    val eventsMap: Map<Uuid, Events> = emptyMap(),
 ) {
     @Immutable
     @Serializable
     data class Events(
         val uuid: String = "",
-        val events: List<Event> = emptyList()
+        val events: List<Event> = emptyList(),
     ) {
         @Serializable
         class Event(

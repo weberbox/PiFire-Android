@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class AnalyticsTracker @Inject constructor(
-    private val firebaseAnalytics: FirebaseAnalytics
+    private val firebaseAnalytics: FirebaseAnalytics,
 ) : Analytics {
 
     override fun logEvent(name: String, params: Map<String, Any>?) {

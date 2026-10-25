@@ -25,6 +25,10 @@ interface DashApi {
     suspend fun sendToggleAuger(enabled: Boolean): Result<Unit, DataError>
     suspend fun sendToggleIgniter(enabled: Boolean): Result<Unit, DataError>
     suspend fun sendTimerAction(action: String): Result<Unit, DataError>
-    suspend fun sendTimerTime(hours: Int, minutes: Int, shutdown: Boolean, keepWarm: Boolean
+    suspend fun sendTimerTime(
+        hours: Int,
+        minutes: Int,
+        shutdown: Boolean,
+        keepWarm: Boolean,
     ): Result<Unit, DataError>
 }

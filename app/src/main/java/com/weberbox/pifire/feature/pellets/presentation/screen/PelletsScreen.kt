@@ -63,24 +63,22 @@ fun PelletsScreenDestination(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: PelletsViewModel? = null
-) {
-    return when {
-        LocalInspectionMode.current -> {
-            PelletsScreenPreview(
-                contentPadding = contentPadding,
-                hazeState = hazeState
-            )
-        }
+    viewModel: PelletsViewModel? = null,
+) = when {
+    LocalInspectionMode.current -> {
+        PelletsScreenPreview(
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+        )
+    }
 
-        else -> {
-            PelletsScreen(
-                navController = navController,
-                contentPadding = contentPadding,
-                hazeState = hazeState,
-                viewModel = viewModel ?: hiltViewModel()
-            )
-        }
+    else -> {
+        PelletsScreen(
+            navController = navController,
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            viewModel = viewModel ?: hiltViewModel(),
+        )
     }
 }
 
@@ -89,7 +87,7 @@ private fun PelletsScreen(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: PelletsViewModel
+    viewModel: PelletsViewModel,
 ) {
     val sourceEntry = rememberSourceEntry()
     PelletsScreenContent(
@@ -112,7 +110,7 @@ private fun PelletsScreen(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -123,7 +121,7 @@ private fun PelletsScreenContent(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val currentSheet = rememberCustomModalBottomSheetState()
@@ -149,17 +147,19 @@ private fun PelletsScreenContent(
             isVisibleOnScreen = it
         },
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(PelletsContract.Event.Refresh) }
+
             else -> {
                 PullToRefresh(
                     isRefreshing = state.isRefreshing,
                     onRefresh = { onEventSent(PelletsContract.Event.Refresh) },
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = contentPadding
+                    contentPadding = contentPadding,
                 ) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
@@ -173,7 +173,7 @@ private fun PelletsScreenContent(
                         PelletsLevel(
                             pellets = state.pellets,
                             isConnected = state.isConnected,
-                            onEventSent = onEventSent
+                            onEventSent = onEventSent,
                         )
                         PelletsUsage(pellets = state.pellets)
                         PelletsCurrent(
@@ -184,7 +184,7 @@ private fun PelletsScreenContent(
                                     is PelletsContract.Event.CurrentDialog -> currentSheet.open()
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                         PelletsBrands(
                             pellets = state.pellets,
@@ -202,14 +202,14 @@ private fun PelletsScreenContent(
                                     is PelletsContract.Event.BrandsViewAll -> {
                                         onNavigationRequested(
                                             PelletsContract.Effect.Navigation.NavRoute(
-                                                route = NavGraph.HomeDest.BrandsDetails
-                                            )
+                                                route = NavGraph.HomeDest.BrandsDetails,
+                                            ),
                                         )
                                     }
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                         PelletsWoods(
                             pellets = state.pellets,
@@ -227,14 +227,14 @@ private fun PelletsScreenContent(
                                     is PelletsContract.Event.WoodsViewAll -> {
                                         onNavigationRequested(
                                             PelletsContract.Effect.Navigation.NavRoute(
-                                                route = NavGraph.HomeDest.WoodsDetails
-                                            )
+                                                route = NavGraph.HomeDest.WoodsDetails,
+                                            ),
                                         )
                                     }
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                         PelletsProfiles(
                             pellets = state.pellets,
@@ -245,8 +245,8 @@ private fun PelletsScreenContent(
                                         profileAddSheet.open(
                                             ProfilesData(
                                                 brands = state.pellets.brandsList,
-                                                woods = state.pellets.woodsList
-                                            )
+                                                woods = state.pellets.woodsList,
+                                            ),
                                         )
                                     }
 
@@ -263,22 +263,22 @@ private fun PelletsScreenContent(
                                                 currentBrand = event.profile.brand,
                                                 currentWood = event.profile.wood,
                                                 rating = event.profile.rating,
-                                                comments = event.profile.comments
-                                            )
+                                                comments = event.profile.comments,
+                                            ),
                                         )
                                     }
 
                                     is PelletsContract.Event.ProfilesViewAll -> {
                                         onNavigationRequested(
                                             PelletsContract.Effect.Navigation.NavRoute(
-                                                route = NavGraph.HomeDest.ProfilesDetails
-                                            )
+                                                route = NavGraph.HomeDest.ProfilesDetails,
+                                            ),
                                         )
                                     }
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                         PelletsLog(
                             pellets = state.pellets,
@@ -292,19 +292,19 @@ private fun PelletsScreenContent(
                                     is PelletsContract.Event.LogsViewAll -> {
                                         onNavigationRequested(
                                             PelletsContract.Effect.Navigation.NavRoute(
-                                                route = NavGraph.HomeDest.LogsDetails
-                                            )
+                                                route = NavGraph.HomeDest.LogsDetails,
+                                            ),
                                         )
                                     }
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                     }
                     LinearLoadingIndicator(
                         isLoading = state.isLoading,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
                 PelletsBottomSheets(
@@ -318,7 +318,7 @@ private fun PelletsScreenContent(
                     profileEditSheet = profileEditSheet,
                     profileDeleteSheet = profileDeleteSheet,
                     logDeleteSheet = logDeleteSheet,
-                    onEventSent = onEventSent
+                    onEventSent = onEventSent,
                 )
             }
         }
@@ -343,7 +343,7 @@ private fun HandleSideEffects(
                     if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
-                            isError = effect.error
+                            isError = effect.error,
                         )
                     }
                 }
@@ -357,7 +357,7 @@ private fun HandleSideEffects(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 internal fun PelletsScreenPreview(
     contentPadding: PaddingValues = PaddingValues(),
-    hazeState: HazeState = rememberHazeState()
+    hazeState: HazeState = rememberHazeState(),
 ) {
     PiFireTheme {
         Surface {
@@ -370,64 +370,62 @@ internal fun PelletsScreenPreview(
                     isDataError = false,
                     isLoading = true,
                     isRefreshing = false,
-                    isConnected = true
+                    isConnected = true,
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }
 }
 
-internal fun buildPellets(): Pellets {
-    return Pellets(
-        currentPelletId = "Test",
-        hopperLevel = 63,
-        usageImperial = "0.16 oz",
-        usageMetric = "4.51 g",
-        currentBrand = "Generic",
-        currentWood = "Alder",
-        currentRating = 4,
-        dateLoaded = "12/21 9:48pm",
-        currentComments = "This is a placeholder profile. Alder is generic and used in " +
-                "almost all pellets, regardless of the wood type indicated on the " +
-                "packaging. It tends to burn consistently and produces mild smoke.",
-        brandsList = listOf(
-            "Generic",
-            "Custom"
+internal fun buildPellets(): Pellets = Pellets(
+    currentPelletId = "Test",
+    hopperLevel = 63,
+    usageImperial = "0.16 oz",
+    usageMetric = "4.51 g",
+    currentBrand = "Generic",
+    currentWood = "Alder",
+    currentRating = 4,
+    dateLoaded = "12/21 9:48pm",
+    currentComments = "This is a placeholder profile. Alder is generic and used in " +
+        "almost all pellets, regardless of the wood type indicated on the " +
+        "packaging. It tends to burn consistently and produces mild smoke.",
+    brandsList = listOf(
+        "Generic",
+        "Custom",
+    ),
+    woodsList = listOf(
+        "Alder",
+        "Almond",
+        "Apple",
+    ),
+    profilesList = listOf(
+        PelletProfile(
+            brand = "Generic",
+            wood = "Alder",
         ),
-        woodsList = listOf(
-            "Alder",
-            "Almond",
-            "Apple"
+        PelletProfile(
+            brand = "Generic",
+            wood = "Plum",
         ),
-        profilesList = listOf(
-            PelletProfile(
-                brand = "Generic",
-                wood = "Alder"
-            ),
-            PelletProfile(
-                brand = "Generic",
-                wood = "Plum"
-            )
+    ),
+    logsList = listOf(
+        PelletLog(
+            pelletID = "12/09",
+            pelletName = "Generic Alder",
+            pelletRating = 4,
         ),
-        logsList = listOf(
-            PelletLog(
-                pelletID = "12/09",
-                pelletName = "Generic Alder",
-                pelletRating = 4
-            ),
-            PelletLog(
-                pelletID = "12/21",
-                pelletName = "Generic Alder",
-                pelletRating = 5
-            ),
-            PelletLog(
-                pelletID = "12/21",
-                pelletName = "Generic Alder",
-                pelletRating = 3
-            )
-        )
-    )
-}
+        PelletLog(
+            pelletID = "12/21",
+            pelletName = "Generic Alder",
+            pelletRating = 5,
+        ),
+        PelletLog(
+            pelletID = "12/21",
+            pelletName = "Generic Alder",
+            pelletRating = 3,
+        ),
+    ),
+)

@@ -39,7 +39,7 @@ internal data class PwmEvent(
     val index: Int,
     val temp: Int,
     val dutyCycle: Int,
-    val controlItems: List<PwmControl>
+    val controlItems: List<PwmControl>,
 )
 
 @Composable
@@ -50,13 +50,13 @@ internal fun PwmSheet(
     controlItems: List<PwmControl>,
     onDelete: (List<PwmControl>) -> Unit,
     onUpdate: (PwmEvent) -> Unit,
-    viewModel: PwmSheetViewModel = viewModel(key = index.toString())
+    viewModel: PwmSheetViewModel = viewModel(key = index.toString()),
 ) {
     LaunchedEffect(Unit) {
         viewModel.setInitialState(
             server = server,
             index = index,
-            controlItems = controlItems
+            controlItems = controlItems,
         )
     }
 
@@ -67,7 +67,7 @@ internal fun PwmSheet(
         onDelete = onDelete,
         onUpdate = onUpdate,
         onTempUpdated = { viewModel.validateTemp(it) },
-        onDutyUpdated = { viewModel.validateDuty(it) }
+        onDutyUpdated = { viewModel.validateDuty(it) },
     )
 }
 
@@ -79,12 +79,12 @@ private fun PwmSheetContent(
     onDelete: (List<PwmControl>) -> Unit,
     onUpdate: (PwmEvent) -> Unit,
     onTempUpdated: (String) -> Unit,
-    onDutyUpdated: (String) -> Unit
+    onDutyUpdated: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.mediumOne)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = title,
@@ -92,7 +92,7 @@ private fun PwmSheetContent(
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Text(
             text = state.note.asString(),
@@ -100,8 +100,8 @@ private fun PwmSheetContent(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(
                 start = MaterialTheme.spacing.smallOne,
-                bottom = MaterialTheme.spacing.smallOne
-            )
+                bottom = MaterialTheme.spacing.smallOne,
+            ),
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -114,7 +114,7 @@ private fun PwmSheetContent(
             leadingIcon = Icons.Filled.Thermostat,
             onValueChange = {
                 onTempUpdated(it)
-            }
+            },
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -127,13 +127,13 @@ private fun PwmSheetContent(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
             onValueChange = {
                 onDutyUpdated(it)
-            }
+            },
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = MaterialTheme.spacing.smallThree),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (state.deleteVisible) {
                 OutlinedButton(
@@ -142,12 +142,12 @@ private fun PwmSheetContent(
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
                         .weight(1f),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
                 ) {
                     Text(
                         text = stringResource(R.string.delete),
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -158,19 +158,19 @@ private fun PwmSheetContent(
                             index = state.index,
                             temp = state.tempInput.value.toInt(),
                             dutyCycle = state.dutyInput.value.toInt(),
-                            controlItems = controlItems
-                        )
+                            controlItems = controlItems,
+                        ),
                     )
                 },
                 enabled = state.tempInput.hasInteracted && state.dutyInput.hasInteracted &&
-                        !state.dutyError.isError && !state.tempError.isError,
+                    !state.dutyError.isError && !state.tempError.isError,
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.save),
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
@@ -189,29 +189,29 @@ private fun PwmSheetPreview() {
                 controlItems = listOf(
                     PwmControl(
                         temp = 3,
-                        dutyCycle = 20
+                        dutyCycle = 20,
                     ),
                     PwmControl(
                         temp = 7,
-                        dutyCycle = 35
+                        dutyCycle = 35,
                     ),
                     PwmControl(
                         temp = 10,
-                        dutyCycle = 50
+                        dutyCycle = 50,
                     ),
                     PwmControl(
                         temp = 15,
-                        dutyCycle = 75
+                        dutyCycle = 75,
                     ),
                     PwmControl(
                         temp = 16,
-                        dutyCycle = 100
-                    )
+                        dutyCycle = 100,
+                    ),
                 ),
                 onDelete = {},
                 onUpdate = {},
                 onTempUpdated = {},
-                onDutyUpdated = {}
+                onDutyUpdated = {},
             )
         }
     }

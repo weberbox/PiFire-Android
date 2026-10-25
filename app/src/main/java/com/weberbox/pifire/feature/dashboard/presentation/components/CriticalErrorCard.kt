@@ -41,12 +41,12 @@ internal fun CriticalErrorCard(
     AnimatedVisibility(
         visible = criticalError,
         enter = slideDownExpandEnterTransition(),
-        exit = slideOutShrinkExitTransition()
+        exit = slideOutShrinkExitTransition(),
     ) {
         Box(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallOne)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Card(
                 modifier = modifier
@@ -54,23 +54,23 @@ internal fun CriticalErrorCard(
                         enabled = criticalError,
                         targetScale = 1.2f,
                         color = MaterialTheme.colorScheme.errorContainer,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.large,
                     )
                     .height(80.dp)
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 elevation = CardDefaults.cardElevation(
-                    defaultElevation = MaterialTheme.elevation.small
+                    defaultElevation = MaterialTheme.elevation.small,
                 ),
                 onClick = {
                     if (onClick != null) onClick()
-                }
+                },
             ) {
                 Column(
                     modifier = Modifier
                         .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                         .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_critical_error_title),
@@ -79,8 +79,8 @@ internal fun CriticalErrorCard(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(
                             top = MaterialTheme.spacing.smallOne,
-                            start = MaterialTheme.spacing.smallTwo
-                        )
+                            start = MaterialTheme.spacing.smallTwo,
+                        ),
                     )
                     Text(
                         text = stringResource(R.string.dash_critical_error_description),
@@ -89,14 +89,13 @@ internal fun CriticalErrorCard(
                         modifier = Modifier.padding(
                             top = 5.dp,
                             start = MaterialTheme.spacing.smallTwo,
-                            end = MaterialTheme.spacing.smallTwo
-                        )
+                            end = MaterialTheme.spacing.smallTwo,
+                        ),
                     )
                 }
             }
         }
     }
-
 }
 
 @Composable
@@ -109,7 +108,7 @@ private fun CriticalErrorCardPreview() {
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 CriticalErrorCard(
-                    criticalError = true
+                    criticalError = true,
                 )
             }
         }

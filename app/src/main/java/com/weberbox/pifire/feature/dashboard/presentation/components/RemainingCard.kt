@@ -49,7 +49,7 @@ internal fun RemainingCard(
     modeStartTime: Int,
     startDuration: Int,
     shutdownDuration: Int,
-    initialTime: Int = 0
+    initialTime: Int = 0,
 ) {
     var remainingTime by rememberSaveable { mutableIntStateOf(initialTime) }
     LaunchedEffect(modeStartTime, currentMode) {
@@ -60,9 +60,11 @@ internal fun RemainingCard(
                 RunningMode.Startup.name -> {
                     endTime = modeStartTime + startDuration
                 }
+
                 RunningMode.Shutdown.name -> {
                     endTime = modeStartTime + shutdownDuration
                 }
+
                 else -> remainingTime = 0
             }
             val totalSeconds = endTime - currentTime
@@ -70,17 +72,19 @@ internal fun RemainingCard(
                 delay(1000.milliseconds)
                 remainingTime = out.toInt()
             }
-        } else remainingTime = 0
+        } else {
+            remainingTime = 0
+        }
     }
     AnimatedVisibility(
         visible = remainingTime > 0,
         enter = slideDownExpandEnterTransition(),
-        exit = slideOutShrinkExitTransition()
+        exit = slideOutShrinkExitTransition(),
     ) {
         Box(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallOne)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Card(
                 modifier = modifier
@@ -88,35 +92,34 @@ internal fun RemainingCard(
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 elevation = CardDefaults.cardElevation(
-                    defaultElevation = MaterialTheme.elevation.small
-                )
+                    defaultElevation = MaterialTheme.elevation.small,
+                ),
             ) {
                 Row(
                     modifier = Modifier
                         .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                         .fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_remaining_time, currentMode),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(
                             start = MaterialTheme.spacing.smallTwo,
-                            end = 5.dp
-                        )
+                            end = 5.dp,
+                        ),
                     )
                     Text(
                         text = formatRemainingTime(remainingTime),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(end = MaterialTheme.spacing.smallTwo)
+                        modifier = Modifier.padding(end = MaterialTheme.spacing.smallTwo),
                     )
                 }
             }
         }
     }
-
 }
 
 @Composable
@@ -126,14 +129,14 @@ private fun RemainingCardPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 RemainingCard(
                     initialTime = 239,
                     currentMode = "Startup",
                     modeStartTime = 1747117549,
                     startDuration = 240,
-                    shutdownDuration = 240
+                    shutdownDuration = 240,
                 )
             }
         }

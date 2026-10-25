@@ -24,10 +24,10 @@ fun InitialLoadingProgress() {
         modifier = Modifier
             .background(radialGradientBackground())
             .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         LoadingIndicator(
-            modifier = Modifier.size(MaterialTheme.spacing.extraLargeTwo)
+            modifier = Modifier.size(MaterialTheme.spacing.extraLargeTwo),
         )
     }
 }

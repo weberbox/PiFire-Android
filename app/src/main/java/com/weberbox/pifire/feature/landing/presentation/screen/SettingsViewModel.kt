@@ -25,7 +25,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
     private val analytics: Analytics,
-    val savedStateHandle: SavedStateHandle
+    val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
 
     init {
@@ -36,7 +36,7 @@ class SettingsViewModel @Inject constructor(
         autSelectEnabled = false,
         biometricsEnabled = false,
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: SettingsContract.Event) {
@@ -61,8 +61,8 @@ class SettingsViewModel @Inject constructor(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
                 AnalyticsEvent.Param.PrefKey.key to "autoSelectServer",
-                AnalyticsEvent.Param.State.key to enabled
-            )
+                AnalyticsEvent.Param.State.key to enabled,
+            ),
         )
     }
 
@@ -72,8 +72,8 @@ class SettingsViewModel @Inject constructor(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
                 AnalyticsEvent.Param.PrefKey.key to "serverBiometrics",
-                AnalyticsEvent.Param.State.key to enabled
-            )
+                AnalyticsEvent.Param.State.key to enabled,
+            ),
         )
     }
 
@@ -91,14 +91,14 @@ class SettingsViewModel @Inject constructor(
                             String.format(Locale.US, BuildConfig.VERSION_CODE.toString()),
                             BuildConfig.BUILD_TYPE,
                             BuildConfig.FLAVOR,
-                            getFormattedDate(BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm")
-                        )
+                            getFormattedDate(BuildConfig.BUILD_TIME, "MM-dd-yy HH:mm"),
+                        ),
                     ),
                     positiveAction = DialogAction(
                         buttonText = UiText(R.string.close),
-                        action = { }
-                    )
-                )
+                        action = { },
+                    ),
+                ),
             )
         }
     }
@@ -107,7 +107,7 @@ class SettingsViewModel @Inject constructor(
         collectAndUpdateState(Pref.landingAutoSelect) {
             copy(
                 autSelectEnabled = it,
-                isInitialLoading = false
+                isInitialLoading = false,
             )
         }
         collectAndUpdateState(Pref.biometricServerPrompt) { copy(biometricsEnabled = it) }
@@ -115,7 +115,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun <T> collectAndUpdateState(
         pref: Pref<T>,
-        update: SettingsContract.State.(T) -> SettingsContract.State
+        update: SettingsContract.State.(T) -> SettingsContract.State,
     ) {
         viewModelScope.launch {
             prefsRepo.prefFlow(pref).collect { value ->

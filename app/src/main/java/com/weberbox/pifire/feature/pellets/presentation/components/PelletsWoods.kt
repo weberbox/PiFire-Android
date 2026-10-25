@@ -32,7 +32,7 @@ import com.weberbox.pifire.feature.pellets.presentation.screen.buildPellets
 internal fun PelletsWoods(
     pellets: Pellets,
     isConnected: Boolean,
-    onEventSent: (event: PelletsContract.Event) -> Unit
+    onEventSent: (event: PelletsContract.Event) -> Unit,
 ) {
     val limit by remember { mutableIntStateOf(AppConfig.LIST_VIEW_LIMIT) }
     HeaderCard(
@@ -47,7 +47,7 @@ internal fun PelletsWoods(
         },
         viewAllClick = {
             onEventSent(PelletsContract.Event.WoodsViewAll)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -60,10 +60,10 @@ internal fun PelletsWoods(
                     onItemDelete = {
                         if (isConnected) {
                             onEventSent(
-                                PelletsContract.Event.DeleteWoodDialog(wood)
+                                PelletsContract.Event.DeleteWoodDialog(wood),
                             )
                         }
-                    }
+                    },
                 )
             }
         }
@@ -77,12 +77,12 @@ private fun PelletsWoodsPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 PelletsWoods(
                     pellets = buildPellets(),
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

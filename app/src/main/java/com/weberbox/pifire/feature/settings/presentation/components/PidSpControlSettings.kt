@@ -33,7 +33,7 @@ internal fun PidSpControlSettings(
     AnimatedVisibility(
         visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_SP,
         enter = slideDownExpandEnterTransition(),
-        exit = slideDownShrinkExitTransition()
+        exit = slideDownShrinkExitTransition(),
     ) {
         Column {
             Preference(
@@ -41,11 +41,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpPb.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpPb.toString(),
+                        ),
                     )
                 },
-                onClick = { pidPbSheet.open() }
+                onClick = { pidPbSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_pb_note))
             Preference(
@@ -53,11 +53,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpTd.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpTd.toString(),
+                        ),
                     )
                 },
-                onClick = { pidTdSheet.open() }
+                onClick = { pidTdSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_td_note))
             Preference(
@@ -65,11 +65,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpStable.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpStable.toString(),
+                        ),
                     )
                 },
-                onClick = { pidStableSheet.open() }
+                onClick = { pidStableSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_sw_note))
             Preference(
@@ -77,11 +77,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpCenter.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpCenter.toString(),
+                        ),
                     )
                 },
-                onClick = { pidCenterSheet.open() }
+                onClick = { pidCenterSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_center_note_standard))
             Preference(
@@ -89,11 +89,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpTau.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpTau.toString(),
+                        ),
                     )
                 },
-                onClick = { pidTauSheet.open() }
+                onClick = { pidTauSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_tau_note))
             Preference(
@@ -101,11 +101,11 @@ internal fun PidSpControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidSpTheta.toString()
-                        )
+                            state.serverData.settings.cntrlrPidSpTheta.toString(),
+                        ),
                     )
                 },
-                onClick = { pidThetaSheet.open() }
+                onClick = { pidThetaSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_theta_note))
         }
@@ -124,7 +124,7 @@ private fun PidSpControlSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     pidPbSheet = rememberCustomModalBottomSheetState(),
                     pidTdSheet = rememberCustomModalBottomSheetState(),

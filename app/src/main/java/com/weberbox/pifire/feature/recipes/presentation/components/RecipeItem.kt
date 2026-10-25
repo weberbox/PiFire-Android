@@ -55,7 +55,7 @@ import kotlinx.coroutines.withContext
 internal fun RecipeItem(
     details: Recipe,
     modifier: Modifier = Modifier,
-    onRecipeClick: (filename: String) -> Unit
+    onRecipeClick: (filename: String) -> Unit,
 ) {
     var recipeImage: ByteArray? by remember { mutableStateOf(null) }
     val paletteColor by rememberPaletteColorState()
@@ -76,7 +76,7 @@ internal fun RecipeItem(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             onRecipeClick(details.recipeFilename)
-        }
+        },
     ) {
         Row(
             modifier = modifier
@@ -84,67 +84,67 @@ internal fun RecipeItem(
                 .background(Brush.horizontalGradient(colors = paletteColor.brushColor))
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large)
-                    .size(MaterialTheme.spacing.extraExtraLarge)
+                    .size(MaterialTheme.spacing.extraExtraLarge),
             ) {
                 RecipeAsyncImage(
-                    image = recipeImage
+                    image = recipeImage,
                 )
             }
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(MaterialTheme.spacing.smallOne)
+                    .padding(MaterialTheme.spacing.smallOne),
             ) {
                 Text(
                     text = details.metadata.title,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.tertiary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Row(
                     modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Schedule,
-                        contentDescription = stringResource(R.string.recipes_cook_time)
+                        contentDescription = stringResource(R.string.recipes_cook_time),
                     )
                     Text(
                         text = formatMinutes(details.metadata.cookTime),
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
                     Spacer(Modifier.size(MaterialTheme.spacing.extraExtraSmall))
                     Icon(
                         imageVector = Icon.Filled.Speedometer,
-                        contentDescription = stringResource(R.string.recipes_difficulty)
+                        contentDescription = stringResource(R.string.recipes_difficulty),
                     )
                     Text(
                         text = details.metadata.difficulty,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
                     )
                 }
                 RatingBar(
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.extraSmall,
-                        start = MaterialTheme.spacing.extraExtraSmall
+                        start = MaterialTheme.spacing.extraExtraSmall,
                     ),
                     value = details.metadata.rating.toFloat(),
                     style = RatingBarStyle.Fill(
                         activeColor = MaterialTheme.colorScheme.primary,
-                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer
+                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
                     size = MaterialTheme.spacing.smallOne,
                     spaceBetween = MaterialTheme.spacing.extraSmall,
                     isIndicator = true,
                     onValueChange = {},
-                    onRatingChanged = {}
+                    onRatingChanged = {},
                 )
             }
         }
@@ -157,13 +157,12 @@ internal fun RecipeItem(
 private fun RecipeItemPreview() {
     PiFireTheme {
         Box(
-            modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
         ) {
             RecipeItem(
                 details = buildRecipe()[0],
-                onRecipeClick = { }
+                onRecipeClick = { },
             )
         }
     }
 }
-

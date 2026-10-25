@@ -34,7 +34,7 @@ class AppSettingsViewModel @Inject constructor(
         sentryDebugEnabled = false,
         userEmail = "",
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: AppContract.Event) {
@@ -45,8 +45,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "appThemeChange",
-                        AnalyticsEvent.Param.State.key to event.theme.name
-                    )
+                        AnalyticsEvent.Param.State.key to event.theme.name,
+                    ),
                 )
             }
 
@@ -56,8 +56,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "dynamicColorChange",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -67,8 +67,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "keepScreenOnChange",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -78,8 +78,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "showBottomBarChange",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -89,8 +89,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "settingsBiometrics",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -100,8 +100,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "eventsAmount",
-                        AnalyticsEvent.Param.State.key to event.amount
-                    )
+                        AnalyticsEvent.Param.State.key to event.amount,
+                    ),
                 )
             }
 
@@ -111,8 +111,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "incrementTemps",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -122,8 +122,8 @@ class AppSettingsViewModel @Inject constructor(
                     name = AnalyticsEvent.PrefsChange.name,
                     params = mapOf(
                         AnalyticsEvent.Param.PrefKey.key to "sentryEnabled",
-                        AnalyticsEvent.Param.State.key to event.enabled
-                    )
+                        AnalyticsEvent.Param.State.key to event.enabled,
+                    ),
                 )
             }
 
@@ -150,7 +150,7 @@ class AppSettingsViewModel @Inject constructor(
 
     private fun <T> collectAndUpdateState(
         pref: Pref<T>,
-        update: AppContract.State.(T) -> AppContract.State
+        update: AppContract.State.(T) -> AppContract.State,
     ) {
         viewModelScope.launch {
             prefsRepo.prefFlow(pref).collect { value ->

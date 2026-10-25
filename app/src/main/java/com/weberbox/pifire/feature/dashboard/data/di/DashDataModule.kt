@@ -39,12 +39,10 @@ abstract class DashDataModule {
     companion object {
         @Singleton
         @Provides
-        fun provideDashDataStore(@ApplicationContext appContext: Context): DataStore<DashData> {
-            return DataStoreFactory.create(
-                serializer = DashSerializer,
-                produceFile = { appContext.dataStoreFile(AppConfig.DASH_DATA_NAME) },
-                corruptionHandler = ReplaceFileCorruptionHandler { DashData() }
-            )
-        }
+        fun provideDashDataStore(@ApplicationContext appContext: Context): DataStore<DashData> = DataStoreFactory.create(
+            serializer = DashSerializer,
+            produceFile = { appContext.dataStoreFile(AppConfig.DASH_DATA_NAME) },
+            corruptionHandler = ReplaceFileCorruptionHandler { DashData() },
+        )
     }
 }

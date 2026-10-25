@@ -97,7 +97,7 @@ data class Setting<T>(
         val pwmMaxDutyCycle = Setting("max_duty_cycle", 100)
         val pwmTempRangeList = Setting("temp_range_list", listOf<Int>())
         val pwmProfiles = Setting("profiles", listOf<PwmProfile>())
-        val pwmControlList =  Setting("pwm_control", listOf<PwmControl>())
+        val pwmControlList = Setting("pwm_control", listOf<PwmControl>())
 
         // Safety
         val safetyStartupCheck = Setting("startup_check", true)
@@ -174,7 +174,7 @@ data class Setting<T>(
         val mqttBroker = Setting("broker", "homeassistant.local")
         val mqttTopic = Setting("homeassistant_autodiscovery_topic", "homeassistant")
         val mqttId = Setting("id", "PiFire")
-        val mqttUser= Setting("username", "")
+        val mqttUser = Setting("username", "")
         val mqttPass = Setting("password", "")
         val mqttPort = Setting("port", 1883)
         val mqttUpdateSec = Setting("update_sec", 30)
@@ -215,4 +215,3 @@ data class Setting<T>(
         val wledProfileTimer = Setting("timer_done", 209)
     }
 }
-

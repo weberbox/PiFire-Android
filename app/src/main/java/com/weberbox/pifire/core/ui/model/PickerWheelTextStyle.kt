@@ -11,14 +11,12 @@ data class PickerWheelTextStyle(
     val color: Color = Color(0xFF404040),
     val fontSize: TextUnit = 24.sp,
     val fontFamily: FontFamily = FontFamily.Default,
-    val fontWeight: FontWeight = FontWeight.Normal
+    val fontWeight: FontWeight = FontWeight.Normal,
 ) {
-    fun toTextStyle(): TextStyle {
-        return TextStyle(
-            color = color,
-            fontSize = fontSize,
-            fontFamily = fontFamily,
-            fontWeight = fontWeight
-        )
-    }
+    fun toTextStyle(): TextStyle = TextStyle(
+        color = color,
+        fontSize = fontSize,
+        fontFamily = fontFamily,
+        fontWeight = fontWeight,
+    )
 }

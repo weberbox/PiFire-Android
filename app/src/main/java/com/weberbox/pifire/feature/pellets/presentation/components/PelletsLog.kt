@@ -38,7 +38,7 @@ internal fun PelletsLog(
         listSize = pellets.logsList.size,
         viewAllClick = {
             onEventSent(PelletsContract.Event.LogsViewAll)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -49,7 +49,7 @@ internal fun PelletsLog(
                 LogItem(
                     log = log,
                     isConnected = isConnected,
-                    onEventSent = onEventSent
+                    onEventSent = onEventSent,
                 )
             }
         }
@@ -63,12 +63,12 @@ private fun PelletsLogPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
             ) {
                 PelletsLog(
                     pellets = buildPellets(),
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

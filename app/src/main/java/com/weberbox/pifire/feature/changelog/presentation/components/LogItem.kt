@@ -27,35 +27,35 @@ import com.weberbox.pifire.feature.changelog.presentation.util.icon
 @Composable
 internal fun LogItem(
     log: Log,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(MaterialTheme.spacing.smallOne)
+            .padding(MaterialTheme.spacing.smallOne),
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) {
             Image(
                 modifier = modifier
                     .size(
                         width = MaterialTheme.size.largeTwo,
-                        height = MaterialTheme.size.mediumOne
+                        height = MaterialTheme.size.mediumOne,
                     )
                     .padding(
                         top = MaterialTheme.spacing.extraExtraSmall,
-                        end = MaterialTheme.spacing.extraSmallOne
+                        end = MaterialTheme.spacing.extraSmallOne,
                     ),
                 painter = painterResource(log.icon),
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 text = log.text,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = modifier.padding(start = MaterialTheme.spacing.extraSmall)
+                modifier = modifier.padding(start = MaterialTheme.spacing.extraSmall),
             )
         }
     }
@@ -69,14 +69,14 @@ private fun LogItemPreview() {
         mutableStateOf(
             Log(
                 type = "new",
-                text = "Added high and low probe notifications for supported PiFire versions"
-            )
+                text = "Added high and low probe notifications for supported PiFire versions",
+            ),
         )
     }
     PiFireTheme {
         Surface {
             LogItem(
-                log = log
+                log = log,
             )
         }
     }

@@ -53,18 +53,18 @@ internal fun OutputsCard(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Row(
             modifier = Modifier
                 .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                 .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             Column(
                 modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     imageVector = Icon.Filled.Fan,
@@ -72,19 +72,19 @@ internal fun OutputsCard(
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier
                         .size(MaterialTheme.spacing.largeTwo)
-                        .rotateEffect(fanOutput)
+                        .rotateEffect(fanOutput),
 
                 )
                 Text(
                     text = stringResource(R.string.fan),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.small)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.small),
                 )
             }
             Column(
                 modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     imageVector = Icon.Filled.DoubleArrowRight,
@@ -93,18 +93,18 @@ internal fun OutputsCard(
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier
                         .size(MaterialTheme.spacing.largeTwo)
-                        .scaleEffect(augerOutput)
+                        .scaleEffect(augerOutput),
                 )
                 Text(
                     text = stringResource(R.string.auger),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.small)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.small),
                 )
             }
             Column(
                 modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     imageVector = Icon.Filled.Flame,
@@ -113,13 +113,13 @@ internal fun OutputsCard(
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier
                         .size(MaterialTheme.spacing.largeTwo)
-                        .scaleEffect(igniterOutput)
+                        .scaleEffect(igniterOutput),
                 )
                 Text(
                     text = stringResource(R.string.igniter),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.small)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.small),
                 )
             }
         }
@@ -136,7 +136,7 @@ private fun OutputsCardPreview() {
                 modifier = Modifier
                     .padding(vertical = 10.dp, horizontal = 5.dp)
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 OutputsCard(
                     fanOutput = false,
@@ -144,7 +144,7 @@ private fun OutputsCardPreview() {
                     igniterOutput = false,
                     modifier = Modifier
                         .padding(end = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 OutputsCard(
                     fanOutput = false,
@@ -152,7 +152,7 @@ private fun OutputsCardPreview() {
                     igniterOutput = false,
                     modifier = Modifier
                         .padding(start = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }

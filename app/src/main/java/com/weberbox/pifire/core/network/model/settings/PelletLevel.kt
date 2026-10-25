@@ -18,5 +18,5 @@ data class PelletLevel(
     val empty: Int? = null,
 
     @SerialName("full")
-    val full: Int? = null
+    val full: Int? = null,
 )

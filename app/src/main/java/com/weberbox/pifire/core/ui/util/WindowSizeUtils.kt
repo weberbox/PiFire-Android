@@ -52,7 +52,7 @@ fun rememberWindowInfo(): WindowInfo {
             else -> WindowInfo.WindowType.Expanded
         },
         screenWidth = width,
-        screenHeight = height
+        screenHeight = height,
     )
 }
 
@@ -60,27 +60,27 @@ data class WindowInfo(
     val screenWidthInfo: WindowType,
     val screenHeightInfo: WindowType,
     val screenWidth: Dp,
-    val screenHeight: Dp
+    val screenHeight: Dp,
 ) {
     sealed class WindowType {
-        data object Compact: WindowType()
-        data object Medium: WindowType()
-        data object Expanded: WindowType()
+        data object Compact : WindowType()
+        data object Medium : WindowType()
+        data object Expanded : WindowType()
     }
 }
 
 enum class WindowSize {
     COMPACT,
     MEDIUM,
-    EXPANDED
+    EXPANDED,
 }
 
 enum class WindowWidthSize(val dp: Int) {
     MEDIUM(600),
-    EXPANDED(840)
+    EXPANDED(840),
 }
 
 enum class WindowHeightSize(val dp: Int) {
     MEDIUM(480),
-    EXPANDED(900)
+    EXPANDED(900),
 }

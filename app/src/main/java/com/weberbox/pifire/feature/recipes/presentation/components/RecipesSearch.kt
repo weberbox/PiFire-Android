@@ -70,19 +70,22 @@ internal fun RecipesInputField(
     searchStyle: HazeStyle,
     onNavigate: () -> Unit,
     onSearch: (String) -> Unit,
-    onSearchClear: () -> Unit
+    onSearchClear: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val isKeyboardOpen by keyboardAsState()
     val inputFieldColor by animateColorAsState(
-        targetValue = if (searchBarState.targetValue == SearchBarValue.Collapsed)
-            Color.Transparent else MaterialTheme.colorScheme.surfaceContainerHigh,
-        animationSpec = tween(durationMillis = 400)
+        targetValue = if (searchBarState.targetValue == SearchBarValue.Collapsed) {
+            Color.Transparent
+        } else {
+            MaterialTheme.colorScheme.surfaceContainerHigh
+        },
+        animationSpec = tween(durationMillis = 400),
     )
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) {
         if (it.resultCode == Activity.RESULT_OK) {
             val data = it.data
@@ -105,9 +108,11 @@ internal fun RecipesInputField(
                 if (searchBarState.currentValue == SearchBarValue.Collapsed) {
                     Modifier.hazeEffect(
                         state = hazeState,
-                        style = searchStyle
+                        style = searchStyle,
                     )
-                } else Modifier
+                } else {
+                    Modifier
+                },
             ),
         searchBarState = searchBarState,
         textFieldState = textFieldState,
@@ -128,29 +133,29 @@ internal fun RecipesInputField(
                     } else {
                         onNavigate()
                     }
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                    contentDescription = stringResource(R.string.back)
+                    contentDescription = stringResource(R.string.back),
                 )
             }
         },
         trailingIcon = {
             val showClear = textFieldState.text.isNotEmpty()
             AnimatedContent(
-                targetState = showClear
+                targetState = showClear,
             ) { clear ->
                 if (clear) {
                     IconButton(
                         onClick = {
                             textFieldState.clearText()
                             onSearchClear()
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = stringResource(R.string.clear)
+                            contentDescription = stringResource(R.string.clear),
                         )
                     }
                 } else {
@@ -163,16 +168,16 @@ internal fun RecipesInputField(
                             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                             intent.putExtra(
                                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
                             )
                             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
                             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, message)
                             launcher.launch(intent)
-                        }
+                        },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Mic,
-                            contentDescription = stringResource(R.string.voice_input)
+                            contentDescription = stringResource(R.string.voice_input),
                         )
                     }
                 }
@@ -181,8 +186,8 @@ internal fun RecipesInputField(
         colors = inputFieldColors(
             focusedContainerColor = inputFieldColor,
             unfocusedContainerColor = inputFieldColor,
-            disabledContainerColor = inputFieldColor
-        )
+            disabledContainerColor = inputFieldColor,
+        ),
     )
 }
 
@@ -191,7 +196,7 @@ internal fun RecipesSearchResults(
     modifier: Modifier = Modifier,
     recipeData: List<Recipe>,
     searchQuery: CharSequence,
-    onResultClick: (title: String) -> Unit
+    onResultClick: (title: String) -> Unit,
 ) {
     val filteredList = remember(searchQuery, recipeData) {
         recipeData.filter { recipe ->
@@ -199,7 +204,7 @@ internal fun RecipesSearchResults(
         }
     }
     Column(
-        modifier = modifier.verticalScroll(rememberScrollState())
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
         filteredList.forEach { recipe ->
             ListItem(
@@ -210,14 +215,14 @@ internal fun RecipesSearchResults(
                             modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.extraSmall
-                            )
+                                MaterialTheme.spacing.extraSmall,
+                            ),
                         ) {
                             Text(
                                 text = recipe.metadata.description,
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
@@ -225,7 +230,7 @@ internal fun RecipesSearchResults(
                 leadingContent = {
                     Icon(
                         imageVector = Icons.Filled.LocalDining,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 },
                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -234,8 +239,8 @@ internal fun RecipesSearchResults(
                     .fillMaxWidth()
                     .padding(
                         horizontal = MaterialTheme.spacing.smallThree,
-                        vertical = MaterialTheme.spacing.extraSmall
-                    )
+                        vertical = MaterialTheme.spacing.extraSmall,
+                    ),
             )
         }
     }

@@ -51,7 +51,7 @@ class WorkContract {
         val serverData: Server,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

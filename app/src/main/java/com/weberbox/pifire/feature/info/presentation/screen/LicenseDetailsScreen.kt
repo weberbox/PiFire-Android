@@ -21,7 +21,7 @@ import com.weberbox.pifire.navigation.rememberSourceEntry
 @Composable
 fun LicenseDetailsScreen(
     navController: NavHostController,
-    args: NavGraph.InfoDest.LicenseDetails
+    args: NavGraph.InfoDest.LicenseDetails,
 ) {
     val sourceEntry = rememberSourceEntry()
     LicenseDetailsContent(
@@ -38,7 +38,7 @@ private fun LicenseDetailsContent(
     val context = LocalContext.current
     DetailsScreen(
         title = stringResource(R.string.info_credits),
-        onNavigate = onNavigate
+        onNavigate = onNavigate,
     ) {
         items(items = args.licenses.list) { project ->
             LicenseItem(project) {

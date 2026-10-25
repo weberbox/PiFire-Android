@@ -15,7 +15,7 @@ class FinishContract {
 
     data class State(
         val grillName: InputState,
-        val isLoading: Boolean
+        val isLoading: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

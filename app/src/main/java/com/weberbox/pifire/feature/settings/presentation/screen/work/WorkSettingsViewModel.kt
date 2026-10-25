@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WorkSettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
-): BaseViewModel<WorkContract.Event, WorkContract.State, WorkContract.Effect>() {
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<WorkContract.Event, WorkContract.State, WorkContract.Effect>() {
 
     init {
         collectServerData()
@@ -27,7 +27,7 @@ class WorkSettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: WorkContract.Event) {
@@ -78,7 +78,7 @@ class WorkSettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -309,7 +309,7 @@ class WorkSettingsViewModel @Inject constructor(
                     setEffect {
                         WorkContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -321,7 +321,7 @@ class WorkSettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -332,7 +332,7 @@ class WorkSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

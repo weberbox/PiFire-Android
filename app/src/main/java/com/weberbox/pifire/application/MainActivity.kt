@@ -97,33 +97,33 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                 }
-            }
+            },
         )
         ObserveSnackbarEvents(
             snackbarHostState = snackbarHostState,
             scope = scope,
             context = context,
-            onEventReceived = { currentSnackbarEvent = it }
+            onEventReceived = { currentSnackbarEvent = it },
         )
         ObserveDialogEvents(eventDialog = eventDialog)
 
         PiFireTheme(
             darkTheme = determineDarkMode(state.appTheme),
             dynamicColor = state.dynamicColor,
-            featureSupport = state.featureSupport
+            featureSupport = state.featureSupport,
         ) {
             Scaffold(
                 snackbarHost = {
                     AppSnackbarHost(
                         snackbarHostState = snackbarHostState,
-                        currentSnackbarEvent = currentSnackbarEvent
+                        currentSnackbarEvent = currentSnackbarEvent,
                     )
-                }
+                },
             ) {
                 EventAlertDialog(eventDialogState = eventDialog)
                 RootNavGraph(
                     navController = navController,
-                    analytics = analytics
+                    analytics = analytics,
                 )
             }
         }
@@ -132,17 +132,19 @@ class MainActivity : AppCompatActivity() {
     @Composable
     private fun HandleSideEffects(
         effectFlow: Flow<MainContract.Effect>,
-        onNavigationRequested: (MainContract.Effect.Navigation) -> Unit
+        onNavigationRequested: (MainContract.Effect.Navigation) -> Unit,
     ) {
         LaunchedEffect(SIDE_EFFECTS_KEY) {
             effectFlow.onEach { effect ->
                 when (effect) {
                     is MainContract.Effect.CheckForAppUpdates -> checkForUpdates()
+
                     is MainContract.Effect.Navigation.NavRoute -> onNavigationRequested(effect)
+
                     is MainContract.Effect.Notification -> {
                         showAlerter(
                             message = effect.text,
-                            isError = effect.error
+                            isError = effect.error,
                         )
                     }
                 }
@@ -155,11 +157,11 @@ class MainActivity : AppCompatActivity() {
         snackbarHostState: SnackbarHostState,
         scope: CoroutineScope,
         context: Context,
-        onEventReceived: (SnackbarEvent) -> Unit
+        onEventReceived: (SnackbarEvent) -> Unit,
     ) {
         ObserveAsEvents(
             flow = SnackbarController.events,
-            key1 = snackbarHostState
+            key1 = snackbarHostState,
         ) { event ->
             onEventReceived(event)
             scope.launch {
@@ -168,7 +170,7 @@ class MainActivity : AppCompatActivity() {
                 val result = snackbarHostState.showSnackbar(
                     message = event.message.asString(context),
                     actionLabel = event.action?.name?.asString(context),
-                    duration = event.duration
+                    duration = event.duration,
                 )
 
                 if (result == SnackbarResult.ActionPerformed) {
@@ -181,7 +183,7 @@ class MainActivity : AppCompatActivity() {
     @Composable
     private fun ObserveDialogEvents(eventDialog: EventDialogState) {
         ObserveAsEvents(
-            flow = DialogController.events
+            flow = DialogController.events,
         ) { event ->
             eventDialog.show(dialogEvent = event)
         }

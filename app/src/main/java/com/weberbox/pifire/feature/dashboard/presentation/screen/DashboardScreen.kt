@@ -103,24 +103,22 @@ fun DashboardScreenDestination(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: DashboardViewModel? = null
-) {
-    return when {
-        LocalInspectionMode.current -> {
-            DashboardScreenPreview(
-                contentPadding = contentPadding,
-                hazeState = hazeState
-            )
-        }
+    viewModel: DashboardViewModel? = null,
+) = when {
+    LocalInspectionMode.current -> {
+        DashboardScreenPreview(
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+        )
+    }
 
-        else -> {
-            DashboardScreen(
-                navController = navController,
-                contentPadding = contentPadding,
-                hazeState = hazeState,
-                viewModel = viewModel ?: hiltViewModel()
-            )
-        }
+    else -> {
+        DashboardScreen(
+            navController = navController,
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            viewModel = viewModel ?: hiltViewModel(),
+        )
     }
 }
 
@@ -129,7 +127,7 @@ private fun DashboardScreen(
     navController: NavHostController,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: DashboardViewModel
+    viewModel: DashboardViewModel,
 ) {
     val sourceEntry = rememberSourceEntry()
     DashboardScreenContent(
@@ -164,7 +162,7 @@ private fun DashboardScreenContent(
     onEventSent: (event: DashContract.Event) -> Unit,
     hazeState: HazeState,
     contentPadding: PaddingValues,
-    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val scrollState = rememberScrollState()
@@ -209,11 +207,13 @@ private fun DashboardScreenContent(
             isVisibleOnScreen = it
         },
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(DashContract.Event.Refresh) }
+
             else -> {
                 PullToRefresh(
                     isRefreshing = state.isRefreshing,
@@ -240,9 +240,10 @@ private fun DashboardScreenContent(
                         ErrorCard(
                             errors = state.dash.errors,
                             onClick = {
-                                if (state.isConnected)
+                                if (state.isConnected) {
                                     onEventSent(DashContract.Event.RestartControl)
-                            }
+                                }
+                            },
                         )
                         WarningCard(
                             warnings = state.dash.warnings,
@@ -251,25 +252,26 @@ private fun DashboardScreenContent(
                             lidOpenDetected = state.dash.lidOpenDetected,
                             lidOpenEndTime = state.dash.lidOpenEndTime,
                             onClick = {
-                                if (state.isConnected)
+                                if (state.isConnected) {
                                     onEventSent(DashContract.Event.ToggleLidDetect)
-                            }
+                                }
+                            },
                         )
                         RemainingCard(
                             currentMode = state.dash.currentMode,
                             modeStartTime = state.dash.modeStartTime,
                             startDuration = state.dash.startDuration,
-                            shutdownDuration = state.dash.shutdownDuration
+                            shutdownDuration = state.dash.shutdownDuration,
                         )
                         RecipeCard(
                             recipeStatus = state.dash.recipeStatus,
                             onClick = { filename, step ->
                                 onNavigationRequested(
                                     DashContract.Effect.Navigation.NavRoute(
-                                        NavGraph.RecipesDest.Details(filename, step)
-                                    )
+                                        NavGraph.RecipesDest.Details(filename, step),
+                                    ),
                                 )
-                            }
+                            },
                         )
                         ToolTipBox(
                             title = stringResource(R.string.dash_hold_temp_tip_title),
@@ -279,7 +281,7 @@ private fun DashboardScreenContent(
                             onClick = {
                                 onEventSent(DashContract.Event.HideHoldTempTip)
                             },
-                            tooltipState = tooltipState
+                            tooltipState = tooltipState,
                         ) {
                             GrillProbe(
                                 probe = state.dash.primaryProbe,
@@ -290,14 +292,14 @@ private fun DashboardScreenContent(
                                     ) {
                                         holdPickerSheet.open()
                                     }
-                                }
+                                },
                             )
                         }
                         HorizontalPager(
                             state = pagerState,
                             pageSpacing = MaterialTheme.spacing.smallOne,
                             contentPadding = PaddingValues(
-                                horizontal = MaterialTheme.spacing.smallOne
+                                horizontal = MaterialTheme.spacing.smallOne,
                             ),
                             beyondViewportPageCount = 1,
                             modifier = Modifier.fillMaxWidth(),
@@ -308,8 +310,8 @@ private fun DashboardScreenContent(
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(
-                                    MaterialTheme.spacing.smallOne
-                                )
+                                    MaterialTheme.spacing.smallOne,
+                                ),
                             ) {
                                 foodProbes.forEach { item ->
                                     FoodProbe(
@@ -318,7 +320,7 @@ private fun DashboardScreenContent(
                                         modifier = Modifier.weight(1f),
                                         onClick = {
                                             if (state.isConnected) foodSheet.open(item)
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -327,7 +329,7 @@ private fun DashboardScreenContent(
                             Modifier
                                 .wrapContentHeight()
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
+                            horizontalArrangement = Arrangement.Center,
                         ) {
                             PagerIndicator(
                                 numberOfPages = pagerState.pageCount,
@@ -341,8 +343,8 @@ private fun DashboardScreenContent(
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.smallOne
-                            )
+                                MaterialTheme.spacing.smallOne,
+                            ),
                         ) {
                             with(state.dash.timer) {
                                 TickingTimerCard(
@@ -353,7 +355,7 @@ private fun DashboardScreenContent(
                                     modifier = Modifier.weight(1f),
                                     onClick = {
                                         if (state.isConnected) timerSheet.open()
-                                    }
+                                    },
                                 )
                             }
                             PelletsCard(
@@ -364,7 +366,7 @@ private fun DashboardScreenContent(
                                     if (state.isConnected) {
                                         onEventSent(DashContract.Event.CheckHopperLevel)
                                     }
-                                }
+                                },
                             )
                         }
                         Row(
@@ -373,12 +375,12 @@ private fun DashboardScreenContent(
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(
-                                MaterialTheme.spacing.smallOne
-                            )
+                                MaterialTheme.spacing.smallOne,
+                            ),
                         ) {
                             TickingElapsedCard(
                                 elapsedData = elapsedData,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             )
                             with(state.dash.outputs) {
                                 OutputsCard(
@@ -393,7 +395,7 @@ private fun DashboardScreenContent(
                                         ) {
                                             outputsToolbar = !outputsToolbar
                                         }
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -402,7 +404,7 @@ private fun DashboardScreenContent(
                                 .padding(horizontal = MaterialTheme.spacing.smallOne)
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
                         ) {
                             OptionCard(
                                 title = stringResource(R.string.dash_smoke_plus),
@@ -410,9 +412,10 @@ private fun DashboardScreenContent(
                                 enabled = state.dash.smokePlus,
                                 modifier = Modifier.weight(1f),
                                 onClick = {
-                                    if (state.isConnected)
+                                    if (state.isConnected) {
                                         onEventSent(DashContract.Event.SmokePlus)
-                                }
+                                    }
+                                },
                             )
                             if (state.dash.hasDcFan) {
                                 OptionCard(
@@ -421,9 +424,10 @@ private fun DashboardScreenContent(
                                     enabled = state.dash.pwmControl,
                                     modifier = Modifier.weight(1f),
                                     onClick = {
-                                        if (state.isConnected)
+                                        if (state.isConnected) {
                                             onEventSent(DashContract.Event.PWMControl)
-                                    }
+                                        }
+                                    },
                                 )
                             }
                             ModeCard(
@@ -432,14 +436,14 @@ private fun DashboardScreenContent(
                                 recipePaused = state.dash.recipeStatus.paused,
                                 onClick = {
                                     if (state.isConnected) modeSheet.open()
-                                }
+                                },
                             )
                         }
                     }
                     AnimatedVisibility(
                         visible = outputsToolbar,
                         enter = slideUpEnterTransition(),
-                        exit = slideDownExitTransition()
+                        exit = slideDownExitTransition(),
                     ) {
                         OutputsToolbar(
                             contentPadding = contentPadding,
@@ -449,27 +453,27 @@ private fun DashboardScreenContent(
                                         DashContract.Event.SendEvent(
                                             when (action) {
                                                 Action.Fan -> DashEvent.ToggleFan(
-                                                    !state.dash.outputs.fan
+                                                    !state.dash.outputs.fan,
                                                 )
 
                                                 Action.Auger -> DashEvent.ToggleAuger(
-                                                    !state.dash.outputs.auger
+                                                    !state.dash.outputs.auger,
                                                 )
 
                                                 Action.Igniter -> DashEvent.ToggleIgniter(
-                                                    !state.dash.outputs.igniter
+                                                    !state.dash.outputs.igniter,
                                                 )
-                                            }
-                                        )
+                                            },
+                                        ),
                                     )
                                 }
                             },
-                            onClose = { outputsToolbar = false }
+                            onClose = { outputsToolbar = false },
                         )
                     }
                     LinearLoadingIndicator(
                         isLoading = state.isLoading,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
                 DashBottomSheets(
@@ -480,7 +484,7 @@ private fun DashboardScreenContent(
                     modeSheet = modeSheet,
                     holdPickerSheet = holdPickerSheet,
                     startToHoldSheet = startToHoldSheet,
-                    onEventSent = onEventSent
+                    onEventSent = onEventSent,
                 )
             }
         }
@@ -495,7 +499,7 @@ private fun HandleSideEffects(
     tooltipState: TooltipState,
     startToHoldSheet: CustomModalBottomSheetState,
     effectFlow: Flow<DashContract.Effect>?,
-    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit,
 ) {
     LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
         effectFlow?.onEach { effect ->
@@ -508,7 +512,7 @@ private fun HandleSideEffects(
                     if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
-                            isError = effect.error
+                            isError = effect.error,
                         )
                     }
                 }
@@ -530,7 +534,7 @@ private fun HandleSideEffects(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 internal fun DashboardScreenPreview(
     contentPadding: PaddingValues = PaddingValues(),
-    hazeState: HazeState = rememberHazeState()
+    hazeState: HazeState = rememberHazeState(),
 ) {
     PiFireTheme {
         Surface {
@@ -544,7 +548,7 @@ internal fun DashboardScreenPreview(
                     isDataError = false,
                     isRefreshing = false,
                     isConnected = true,
-                    holdTempToolTip = false
+                    holdTempToolTip = false,
                 ),
                 timerData = MutableStateFlow(TimerData()),
                 elapsedData = MutableStateFlow(ElapsedData()),
@@ -552,7 +556,7 @@ internal fun DashboardScreenPreview(
                 onEventSent = {},
                 hazeState = hazeState,
                 contentPadding = contentPadding,
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }
@@ -591,12 +595,10 @@ private fun TickingElapsedCard(
     )
 }
 
-private fun buildDash(): Dash {
-    return Dash(
-        hasDcFan = true,
-        currentMode = RunningMode.Startup.name,
-        recipeStatus = RecipeStatus(
-            recipeMode = false
-        )
-    )
-}
+private fun buildDash(): Dash = Dash(
+    hasDcFan = true,
+    currentMode = RunningMode.Startup.name,
+    recipeStatus = RecipeStatus(
+        recipeMode = false,
+    ),
+)

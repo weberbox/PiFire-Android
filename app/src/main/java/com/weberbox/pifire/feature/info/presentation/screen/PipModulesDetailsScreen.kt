@@ -27,7 +27,7 @@ import com.weberbox.pifire.navigation.rememberSourceEntry
 @Composable
 fun PipModulesDetailsScreen(
     navController: NavHostController,
-    viewModel: PipModulesDetailViewModel = hiltViewModel()
+    viewModel: PipModulesDetailViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     PipModulesDetailsContent(
@@ -37,36 +37,38 @@ fun PipModulesDetailsScreen(
                 is ModulesContract.Effect.Navigation.Back ->
                     navController.popBackStackFrom(from = sourceEntry)
             }
-        }
+        },
     )
 }
 
 @Composable
 private fun PipModulesDetailsContent(
     state: ModulesContract.State,
-    onNavigationRequested: (ModulesContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ModulesContract.Effect.Navigation) -> Unit,
 ) {
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> DataError {
                 onNavigationRequested(ModulesContract.Effect.Navigation.Back)
             }
+
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.info_pip_modules),
                     onNavigate = {
                         onNavigationRequested(ModulesContract.Effect.Navigation.Back)
-                    }
+                    },
                 ) {
                     items(items = state.pipModules) { module ->
                         PipItem(
                             modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                             module = module,
-                            maxLines = 2
+                            maxLines = 2,
                         )
                     }
                 }
@@ -86,9 +88,9 @@ private fun PipModulesDetailsScreenPreview() {
                     pipModules = buildModules(),
                     isInitialLoading = false,
                     isRefreshing = false,
-                    isDataError = false
+                    isDataError = false,
                 ),
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

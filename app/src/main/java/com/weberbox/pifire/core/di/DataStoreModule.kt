@@ -23,21 +23,17 @@ object DataStoreModule {
 
     @Singleton
     @Provides
-    fun provideSettingsDataStore(@ApplicationContext appContext: Context): DataStore<SettingsData> {
-        return DataStoreFactory.create(
-            serializer = SettingsSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.SETTINGS_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { SettingsData() }
-        )
-    }
+    fun provideSettingsDataStore(@ApplicationContext appContext: Context): DataStore<SettingsData> = DataStoreFactory.create(
+        serializer = SettingsSerializer,
+        produceFile = { appContext.dataStoreFile(AppConfig.SETTINGS_DATA_NAME) },
+        corruptionHandler = ReplaceFileCorruptionHandler { SettingsData() },
+    )
 
     @Singleton
     @Provides
-    fun provideHeadersDataStore(@ApplicationContext appContext: Context): DataStore<HeadersData> {
-        return DataStoreFactory.create(
-            serializer = HeadersSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.HEADERS_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { HeadersData() }
-        )
-    }
+    fun provideHeadersDataStore(@ApplicationContext appContext: Context): DataStore<HeadersData> = DataStoreFactory.create(
+        serializer = HeadersSerializer,
+        produceFile = { appContext.dataStoreFile(AppConfig.HEADERS_DATA_NAME) },
+        corruptionHandler = ReplaceFileCorruptionHandler { HeadersData() },
+    )
 }

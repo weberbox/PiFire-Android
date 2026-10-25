@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PelletsData(
-    val pelletsMap: Map<Uuid, Pellets> = emptyMap()
+    val pelletsMap: Map<Uuid, Pellets> = emptyMap(),
 ) {
     @Immutable
     @Serializable
@@ -19,18 +19,18 @@ data class PelletsData(
         val currentBrand: String = "Generic",
         val currentWood: String = "Alder",
         val currentComments: String = "This is a placeholder profile. Alder is generic and used in " +
-                "almost all pellets regardless of the wood type indicated on the packaging.  " +
-                "It tends to burn consistently and produces a mild smoke.",
+            "almost all pellets regardless of the wood type indicated on the packaging.  " +
+            "It tends to burn consistently and produces a mild smoke.",
         val currentRating: Int = 4,
         val logsList: List<PelletLog> = emptyList(),
         val brandsList: List<String> = listOf("Generic", "Custom"),
         val woodsList: List<String> = listOf(
             "Alder", "Almond", "Apple", "Apricot", "Blend",
             "Competition", "Cherry", "Chestnut", "Hickory", "Lemon", "Maple", "Mesquite",
-            "Mulberry", "Nectarine", "Oak", "Orange", "Peach", "Pear", "Plum", "Walnut"
+            "Mulberry", "Nectarine", "Oak", "Orange", "Peach", "Pear", "Plum", "Walnut",
         ),
         val profilesList: List<PelletProfile> = listOf(PelletProfile()),
-        val hopperLevel: Int = 0
+        val hopperLevel: Int = 0,
     ) {
         @Serializable
         data class PelletProfile(
@@ -38,7 +38,7 @@ data class PelletsData(
             val wood: String = "Alder",
             val rating: Int = 4,
             val comments: String = "",
-            val id: String = "123124141431241"
+            val id: String = "123124141431241",
         )
 
         @Serializable
@@ -47,7 +47,7 @@ data class PelletsData(
             val pelletName: String = "Generic Alder",
             val pelletRating: Int = 4,
             val pelletDate: String = "12-21",
-            val logDate: String = "2023-12-09 18:24:03"
+            val logDate: String = "2023-12-09 18:24:03",
         )
     }
 }

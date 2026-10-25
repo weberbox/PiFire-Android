@@ -19,9 +19,6 @@ object SocketModule {
     fun provideSocketManager(
         sessionStateHolder: SessionStateHolder,
         headersManager: HeadersManager,
-        json: Json
-    ): SocketManager {
-        return SocketManager(sessionStateHolder, headersManager, json)
-    }
-
+        json: Json,
+    ): SocketManager = SocketManager(sessionStateHolder, headersManager, json)
 }

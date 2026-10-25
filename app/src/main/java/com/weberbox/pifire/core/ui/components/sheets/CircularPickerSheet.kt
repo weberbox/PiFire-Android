@@ -56,12 +56,12 @@ fun <T> CircularPickerSheet(
     negativeButtonColor: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     positiveButtonColor: ButtonColors = ButtonDefaults.buttonColors(),
     onNegative: () -> Unit,
-    onPositive: (T) -> Unit
+    onPositive: (T) -> Unit,
 ) {
     var selectedItem by remember { mutableStateOf(initialItem) }
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
@@ -69,10 +69,10 @@ fun <T> CircularPickerSheet(
                     start = MaterialTheme.spacing.mediumOne,
                     end = MaterialTheme.spacing.mediumOne,
                     bottom = MaterialTheme.spacing.smallThree,
-                    top = MaterialTheme.spacing.extraSmall
+                    top = MaterialTheme.spacing.extraSmall,
                 )
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
                 modifier = Modifier
@@ -80,15 +80,15 @@ fun <T> CircularPickerSheet(
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.large)
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 PickerMark(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = MaterialTheme.colorScheme.primaryContainer,
                 )
                 PickerWheel(
                     modifier = Modifier.padding(
-                        horizontal = MaterialTheme.spacing.mediumOne
+                        horizontal = MaterialTheme.spacing.mediumOne,
                     ),
                     items = items,
                     selectedItem = items.indexOfFirst { it == initialItem }.takeIf { it >= 0 } ?: 0,
@@ -102,11 +102,11 @@ fun <T> CircularPickerSheet(
                     extraRow = extraRows,
                     isLooping = isLooping,
                     itemToString = itemToString,
-                    longestText = findLongestString(items)
+                    longestText = findLongestString(items),
                 )
                 PickerMark(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = MaterialTheme.colorScheme.primaryContainer,
                 )
             }
         }
@@ -116,9 +116,9 @@ fun <T> CircularPickerSheet(
                 .padding(
                     start = MaterialTheme.spacing.mediumOne,
                     end = MaterialTheme.spacing.mediumOne,
-                    bottom = MaterialTheme.spacing.smallThree
+                    bottom = MaterialTheme.spacing.smallThree,
                 ),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 colors = negativeButtonColor,
@@ -126,11 +126,11 @@ fun <T> CircularPickerSheet(
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = negativeButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
@@ -138,11 +138,11 @@ fun <T> CircularPickerSheet(
                 onClick = { onPositive(selectedItem) },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = positiveButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -156,7 +156,7 @@ private fun CircularPickerSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 CircularPickerSheet(
                     items = (0..300).filter { it % 5 == 0 }.toList(),
@@ -170,7 +170,7 @@ private fun CircularPickerSheetPreview() {
                     negativeButtonText = stringResource(R.string.cancel),
                     positiveButtonText = stringResource(R.string.confirm),
                     onNegative = {},
-                    onPositive = {}
+                    onPositive = {},
                 )
             }
         }

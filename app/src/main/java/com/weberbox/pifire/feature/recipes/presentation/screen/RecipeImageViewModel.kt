@@ -27,7 +27,7 @@ class RecipeImageViewModel @Inject constructor(
         imageList = emptyList(),
         imageIndex = 0,
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: ImagesContract.Event) {
@@ -46,7 +46,9 @@ class RecipeImageViewModel @Inject constructor(
                 when {
                     // No recipes data after process death; loading it emits here again
                     lookup == null -> loadRecipes()
+
                     recipe == null -> setDataStateError()
+
                     else -> {
                         val images = decodeRecipeImages(recipe)
                         setState {
@@ -54,7 +56,7 @@ class RecipeImageViewModel @Inject constructor(
                                 imageList = images.toImmutableList(),
                                 imageIndex = index,
                                 isInitialLoading = false,
-                                isDataError = false
+                                isDataError = false,
                             )
                         }
                     }
@@ -72,7 +74,7 @@ class RecipeImageViewModel @Inject constructor(
         setState {
             copy(
                 isInitialLoading = false,
-                isDataError = true
+                isDataError = true,
             )
         }
     }

@@ -28,7 +28,7 @@ class TimerContract {
             val startUp: Int,
             val augerOn: Int,
             val pMode: Int,
-            val smartStartItems: List<SmartStart>
+            val smartStartItems: List<SmartStart>,
         ) : Event()
     }
 
@@ -36,7 +36,7 @@ class TimerContract {
         val serverData: SettingsData.Server,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

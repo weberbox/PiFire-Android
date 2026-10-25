@@ -28,167 +28,211 @@ val Icon.Filled.Smoke: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(21.0f, 5.0f)
                 horizontalLineTo(3.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 2.0f,
-                    y1 = 4.0f
+                    y1 = 4.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 3.0f,
-                    y1 = 3.0f
+                    y1 = 3.0f,
                 )
                 horizontalLineTo(21.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 22.0f,
-                    y1 = 4.0f
+                    y1 = 4.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 21.0f,
-                    y1 = 5.0f
+                    y1 = 5.0f,
                 )
                 moveTo(20.0f, 8.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 19.0f,
-                    y1 = 7.0f
+                    y1 = 7.0f,
                 )
                 horizontalLineTo(5.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 4.0f,
-                    y1 = 8.0f
+                    y1 = 8.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 5.0f,
-                    y1 = 9.0f
+                    y1 = 9.0f,
                 )
                 horizontalLineTo(19.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 20.0f,
-                    y1 = 8.0f
+                    y1 = 8.0f,
                 )
                 moveTo(21.0f, 12.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 20.0f,
-                    y1 = 11.0f
+                    y1 = 11.0f,
                 )
                 horizontalLineTo(10.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 9.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 10.0f,
-                    y1 = 13.0f
+                    y1 = 13.0f,
                 )
                 horizontalLineTo(20.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 21.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 moveTo(16.0f, 16.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 15.0f,
-                    y1 = 15.0f
+                    y1 = 15.0f,
                 )
                 horizontalLineTo(9.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 8.0f,
-                    y1 = 16.0f
+                    y1 = 16.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 9.0f,
-                    y1 = 17.0f
+                    y1 = 17.0f,
                 )
                 horizontalLineTo(15.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 16.0f,
-                    y1 = 16.0f
+                    y1 = 16.0f,
                 )
                 moveTo(13.0f, 20.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 19.0f
+                    y1 = 19.0f,
                 )
                 horizontalLineTo(10.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 9.0f,
-                    y1 = 20.0f
+                    y1 = 20.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 10.0f,
-                    y1 = 21.0f
+                    y1 = 21.0f,
                 )
                 horizontalLineTo(12.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 13.0f,
-                    y1 = 20.0f
+                    y1 = 20.0f,
                 )
                 close()
             }

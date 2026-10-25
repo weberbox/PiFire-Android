@@ -21,8 +21,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @HiltViewModel
 class ManualSettingsViewModel @Inject constructor(
     private val settingsRepo: SettingsRepo,
-    private val manualRepo: ManualRepoImpl
-): BaseViewModel<ManualContract.Event, ManualContract.State, ManualContract.Effect>() {
+    private val manualRepo: ManualRepoImpl,
+) : BaseViewModel<ManualContract.Event, ManualContract.State, ManualContract.Effect>() {
 
     init {
         getManualData()
@@ -32,7 +32,7 @@ class ManualSettingsViewModel @Inject constructor(
         manualData = ManualData(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: ManualContract.Event) {
@@ -58,7 +58,7 @@ class ManualSettingsViewModel @Inject constructor(
                         setEffect {
                             ManualContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -112,7 +112,6 @@ class ManualSettingsViewModel @Inject constructor(
         }
     }
 
-
     private suspend fun handleResult(result: Result<Server, DataError>) {
         when (result) {
             is Result.Error -> {
@@ -121,7 +120,7 @@ class ManualSettingsViewModel @Inject constructor(
                     setEffect {
                         ManualContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -137,7 +136,7 @@ class ManualSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

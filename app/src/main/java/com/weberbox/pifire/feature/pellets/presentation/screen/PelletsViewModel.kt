@@ -36,12 +36,13 @@ class PelletsViewModel @Inject constructor(
         isLoading = false,
         isDataError = false,
         isRefreshing = false,
-        isConnected = false
+        isConnected = false,
     )
 
     override fun handleEvents(event: PelletsContract.Event) {
         when (event) {
             is PelletsContract.Event.Refresh -> getPelletsData(true)
+
             is PelletsContract.Event.SendEvent -> sendPelletsEvent(event.event)
 
             // Should not make it here (events handled in UI for dialogs etc)
@@ -55,20 +56,28 @@ class PelletsViewModel @Inject constructor(
             handleResult(
                 when (event) {
                     is PelletsEvent.HopperCheck -> pelletsRepo.getPelletLevel()
+
                     is PelletsEvent.AddBrand -> pelletsRepo.addPelletBrand(event.brand)
+
                     is PelletsEvent.AddProfile -> pelletsRepo.addPelletProfile(
                         event.profile,
-                        event.load
+                        event.load,
                     )
 
                     is PelletsEvent.AddWood -> pelletsRepo.addPelletWood(event.wood)
+
                     is PelletsEvent.DeleteBrand -> pelletsRepo.deletePelletBrand(event.brand)
+
                     is PelletsEvent.DeleteLog -> pelletsRepo.deletePelletLog(event.logDate)
+
                     is PelletsEvent.DeleteProfile -> pelletsRepo.deletePelletProfile(event.profile)
+
                     is PelletsEvent.DeleteWood -> pelletsRepo.deletePelletWood(event.wood)
+
                     is PelletsEvent.EditProfile -> pelletsRepo.editPelletProfile(event.profile)
+
                     is PelletsEvent.LoadProfile -> pelletsRepo.loadPelletProfile(event.profile)
-                }
+                },
             )
         }
     }
@@ -78,7 +87,7 @@ class PelletsViewModel @Inject constructor(
             sessionStateHolder.isConnectedState.collect { connected ->
                 setState {
                     copy(
-                        isConnected = connected
+                        isConnected = connected,
                     )
                 }
             }
@@ -95,7 +104,7 @@ class PelletsViewModel @Inject constructor(
                                 setEffect {
                                     PelletsContract.Effect.Notification(
                                         text = result.error.asUiText(),
-                                        error = true
+                                        error = true,
                                     )
                                 }
                             }
@@ -129,14 +138,14 @@ class PelletsViewModel @Inject constructor(
                             setEffect {
                                 PelletsContract.Effect.Notification(
                                     text = result.error.asUiText(),
-                                    error = true
+                                    error = true,
                                 )
                             }
                             setState {
                                 copy(
                                     isInitialLoading = false,
                                     isLoading = false,
-                                    isRefreshing = false
+                                    isRefreshing = false,
                                 )
                             }
                         }
@@ -172,7 +181,7 @@ class PelletsViewModel @Inject constructor(
                             pellets = Pellets(),
                             isInitialLoading = false,
                             isRefreshing = false,
-                            isDataError = true
+                            isDataError = true,
                         )
                     }
                 }
@@ -189,7 +198,7 @@ class PelletsViewModel @Inject constructor(
                     setEffect {
                         PelletsContract.Effect.Notification(
                             text = UiText(R.string.alerter_cached_results),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -205,7 +214,7 @@ class PelletsViewModel @Inject constructor(
                         setEffect {
                             PelletsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -222,7 +231,7 @@ class PelletsViewModel @Inject constructor(
     private fun setLoadingStateTrue() {
         setState {
             copy(
-                isLoading = true
+                isLoading = true,
             )
         }
     }

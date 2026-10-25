@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PelletSettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) : BaseViewModel<PelletsContract.Event, PelletsContract.State, PelletsContract.Effect>() {
 
     init {
@@ -27,7 +27,7 @@ class PelletSettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: PelletsContract.Event) {
@@ -49,7 +49,7 @@ class PelletSettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -106,7 +106,7 @@ class PelletSettingsViewModel @Inject constructor(
                     setEffect {
                         PelletsContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -118,7 +118,7 @@ class PelletSettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -129,7 +129,7 @@ class PelletSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

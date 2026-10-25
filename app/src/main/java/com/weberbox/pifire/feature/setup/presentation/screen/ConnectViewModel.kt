@@ -41,7 +41,7 @@ class ConnectViewModel @Inject constructor(
     private val serverSupportManager: ServerSupportManager,
     private val serverDataCache: ServerDataCache,
     private val headersManager: HeadersManager,
-    private val setupRepo: SetupRepo
+    private val setupRepo: SetupRepo,
 ) : BaseViewModel<ConnectContract.Event, ConnectContract.State, ConnectContract.Effect>() {
     private var headersData by mutableStateOf(Headers())
     private var serverData by mutableStateOf(Server())
@@ -53,7 +53,7 @@ class ConnectViewModel @Inject constructor(
 
     override fun setInitialState() = ConnectContract.State(
         serverAddress = InputState(),
-        isLoading = false
+        isLoading = false,
     )
 
     override fun handleEvents(event: ConnectContract.Event) {
@@ -72,9 +72,9 @@ class ConnectViewModel @Inject constructor(
                         serverAddress = InputState(
                             input = FieldInput(
                                 value = data.address,
-                                hasInteracted = data.address.isNotBlank()
-                            )
-                        )
+                                hasInteracted = data.address.isNotBlank(),
+                            ),
+                        ),
                     )
                 }
             }
@@ -100,10 +100,10 @@ class ConnectViewModel @Inject constructor(
                 serverAddress = viewState.value.serverAddress.copy(
                     input = FieldInput(
                         value = address,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
-                    error = errorStatus
-                )
+                    error = errorStatus,
+                ),
             )
         }
     }
@@ -122,29 +122,32 @@ class ConnectViewModel @Inject constructor(
                             buttonText = UiText(R.string.continue_text),
                             action = {
                                 getServerVersions()
-                            }
+                            },
                         ),
                         negativeAction = DialogAction(
                             buttonText = UiText(R.string.cancel),
-                            action = { }
-                        )
-                    )
+                            action = { },
+                        ),
+                    ),
                 )
-            } else getServerVersions()
+            } else {
+                getServerVersions()
+            }
         }
     }
 
     private fun getServerVersions() {
         toggleLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result =
-                setupRepo.getVersions(
-                    url = buildVersionsUrl(),
-                    headerMap = headersManager.buildSetupServerHeaders(
-                        credentials = headersData.credentials,
-                        headers = headersData.extraHeaders
+            when (
+                val result =
+                    setupRepo.getVersions(
+                        url = buildVersionsUrl(),
+                        headerMap = headersManager.buildSetupServerHeaders(
+                            credentials = headersData.credentials,
+                            headers = headersData.extraHeaders,
+                        ),
                     )
-                )
             ) {
                 is Result.Error -> {
                     toggleLoading(false)
@@ -154,16 +157,16 @@ class ConnectViewModel @Inject constructor(
                                 ConnectContract.Effect.Dialog(
                                     dialogEvent = DialogEvent(
                                         title = UiText(
-                                            R.string.setup_server_self_signed_title
+                                            R.string.setup_server_self_signed_title,
                                         ),
                                         message = UiText(
-                                            R.string.setup_server_self_signed_message
+                                            R.string.setup_server_self_signed_message,
                                         ),
                                         positiveAction = DialogAction(
                                             buttonText = UiText(R.string.close),
-                                            action = { }
-                                        )
-                                    )
+                                            action = { },
+                                        ),
+                                    ),
                                 )
                             }
                         }
@@ -173,16 +176,16 @@ class ConnectViewModel @Inject constructor(
                                 ConnectContract.Effect.Dialog(
                                     dialogEvent = DialogEvent(
                                         title = UiText(
-                                            R.string.setup_server_auth_error_title
+                                            R.string.setup_server_auth_error_title,
                                         ),
                                         message = UiText(
-                                            R.string.setup_server_auth_error_message
+                                            R.string.setup_server_auth_error_message,
                                         ),
                                         positiveAction = DialogAction(
                                             buttonText = UiText(R.string.close),
-                                            action = { }
-                                        )
-                                    )
+                                            action = { },
+                                        ),
+                                    ),
                                 )
                             }
                         }
@@ -191,7 +194,7 @@ class ConnectViewModel @Inject constructor(
                             setEffect {
                                 ConnectContract.Effect.Notification(
                                     text = result.error.asUiText(),
-                                    error = true
+                                    error = true,
                                 )
                             }
                     }
@@ -208,8 +211,8 @@ class ConnectViewModel @Inject constructor(
         val supportResult = serverSupportManager.isServerVersionSupported(
             ServerInfo(
                 version = versionsData.version,
-                build = versionsData.build
-            )
+                build = versionsData.build,
+            ),
         )
 
         when (supportResult) {
@@ -228,23 +231,26 @@ class ConnectViewModel @Inject constructor(
                                 supportResult.minVersion,
                                 supportResult.minBuild,
                                 supportResult.currentVersion,
-                                supportResult.currentBuild
-                            )
+                                supportResult.currentBuild,
+                            ),
                         ),
                         dismissible = !supportResult.isMandatory,
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.close),
-                            action = { }
+                            action = { },
                         ),
-                        negativeAction = if (supportResult.isMandatory) null else
+                        negativeAction = if (supportResult.isMandatory) {
+                            null
+                        } else {
                             DialogAction(
                                 buttonText = UiText(R.string.continue_text),
                                 action = {
                                     toggleLoading(true)
                                     getServerSettings()
-                                }
+                                },
                             )
-                    )
+                        },
+                    ),
                 )
             }
 
@@ -253,7 +259,7 @@ class ConnectViewModel @Inject constructor(
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
-                            R.string.dialog_unsupported_server_version_title
+                            R.string.dialog_unsupported_server_version_title,
                         ),
                         message = UiText(
                             R.string.dialog_unsupported_server_max_message,
@@ -261,23 +267,26 @@ class ConnectViewModel @Inject constructor(
                                 supportResult.maxVersion,
                                 supportResult.maxBuild,
                                 supportResult.currentVersion,
-                                supportResult.currentBuild
-                            )
+                                supportResult.currentBuild,
+                            ),
                         ),
                         dismissible = !supportResult.isMandatory,
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.close),
-                            action = { }
+                            action = { },
                         ),
-                        negativeAction = if (supportResult.isMandatory) null else
+                        negativeAction = if (supportResult.isMandatory) {
+                            null
+                        } else {
                             DialogAction(
                                 buttonText = UiText(R.string.continue_text),
                                 action = {
                                     toggleLoading(true)
                                     getServerSettings()
-                                }
+                                },
                             )
-                    )
+                        },
+                    ),
                 )
             }
 
@@ -286,23 +295,23 @@ class ConnectViewModel @Inject constructor(
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
-                            R.string.dialog_untested_app_version_title
+                            R.string.dialog_untested_app_version_title,
                         ),
                         message = UiText(
-                            R.string.dialog_untested_app_version_message
+                            R.string.dialog_untested_app_version_message,
                         ),
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.continue_text),
                             action = {
                                 toggleLoading(true)
                                 getServerSettings()
-                            }
+                            },
                         ),
                         negativeAction = DialogAction(
                             buttonText = UiText(R.string.close),
-                            action = { }
-                        )
-                    )
+                            action = { },
+                        ),
+                    ),
                 )
             }
         }
@@ -315,7 +324,7 @@ class ConnectViewModel @Inject constructor(
                 setEffect {
                     ConnectContract.Effect.Notification(
                         text = result.error.asUiText(),
-                        error = true
+                        error = true,
                     )
                 }
             }
@@ -325,7 +334,7 @@ class ConnectViewModel @Inject constructor(
                 serverData = serverData.copy(
                     uuid = result.data.uuid,
                     name = result.data.settings.grillName,
-                    settings = result.data.settings
+                    settings = result.data.settings,
                 )
                 serverDataCache.saveServerData(serverData)
 
@@ -362,8 +371,8 @@ class ConnectViewModel @Inject constructor(
         val authority = address.substring(authorityStart, authorityEnd)
         val hostStart = authority.lastIndexOf('@') + 1
         return address.substring(0, authorityStart).lowercase() +
-                authority.substring(0, hostStart) +
-                authority.substring(hostStart).lowercase() +
-                address.substring(authorityEnd)
+            authority.substring(0, hostStart) +
+            authority.substring(hostStart).lowercase() +
+            address.substring(authorityEnd)
     }
 }

@@ -21,7 +21,7 @@ import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 @Composable
 internal fun RecipeDescription(
     modifier: Modifier = Modifier,
-    description: String
+    description: String,
 ) {
     HeaderCard(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
@@ -29,7 +29,7 @@ internal fun RecipeDescription(
         headerIcon = Icons.Outlined.Description,
     ) {
         Box(
-            modifier = modifier.padding(horizontal = MaterialTheme.spacing.smallThree)
+            modifier = modifier.padding(horizontal = MaterialTheme.spacing.smallThree),
         ) {
             Text(
                 text = description,
@@ -46,10 +46,10 @@ private fun RecipeDescriptionPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 RecipeDescription(
-                    description = buildRecipe()[0].metadata.description
+                    description = buildRecipe()[0].metadata.description,
                 )
             }
         }

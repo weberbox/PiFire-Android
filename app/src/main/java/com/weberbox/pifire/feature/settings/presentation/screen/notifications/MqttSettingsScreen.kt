@@ -68,6 +68,7 @@ fun MqttSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -77,7 +78,7 @@ fun MqttSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -88,14 +89,14 @@ private fun MqttSettings(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -106,7 +107,7 @@ private fun MqttSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_cat_mqtt),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -115,10 +116,11 @@ private fun MqttSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
@@ -127,7 +129,7 @@ private fun MqttSettings(
                     MqttSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -139,7 +141,7 @@ private fun MqttSettings(
 private fun MqttSettingsContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val idSheet = rememberCustomModalBottomSheetState()
     val brokerSheet = rememberCustomModalBottomSheetState()
@@ -150,61 +152,61 @@ private fun MqttSettingsContent(
     val topicSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_id)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttId)) },
-            onClick = { idSheet.open() }
+            onClick = { idSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_id_note))
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_broker)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttBroker)) },
-            onClick = { brokerSheet.open() }
+            onClick = { brokerSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_port)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttPort.toString())) },
-            onClick = { portSheet.open() }
+            onClick = { portSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_port_note))
         Preference(
             title = { Text(text = stringResource(R.string.username)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttUsername)) },
-            onClick = { usernameSheet.open() }
+            onClick = { usernameSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.password)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttPassword)) },
-            onClick = { passwordSheet.open() }
+            onClick = { passwordSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_user_note))
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_update_sec)) },
             summary = {
                 Text(
-                    text = getSummarySeconds(state.serverData.settings.mqttUpdateSec.toString())
+                    text = getSummarySeconds(state.serverData.settings.mqttUpdateSec.toString()),
                 )
             },
-            onClick = { updateSecSheet.open() }
+            onClick = { updateSecSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_update_sec_note))
         Preference(
             title = { Text(text = stringResource(R.string.settings_mqtt_topic)) },
             summary = { Text(text = getSummary(state.serverData.settings.mqttTopic)) },
-            onClick = { topicSheet.open() }
+            onClick = { topicSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_mqtt_topic_note))
     }
     BottomSheet(
-        sheetState = idSheet.sheetState
+        sheetState = idSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttId,
@@ -217,11 +219,11 @@ private fun MqttSettingsContent(
             onDelete = {
                 onEventSent(NotifContract.Event.SetMqttId(""))
                 idSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = brokerSheet.sheetState
+        sheetState = brokerSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttBroker,
@@ -234,11 +236,11 @@ private fun MqttSettingsContent(
             onDelete = {
                 onEventSent(NotifContract.Event.SetMqttBroker(""))
                 brokerSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = portSheet.sheetState
+        sheetState = portSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttPort.toString(),
@@ -255,11 +257,11 @@ private fun MqttSettingsContent(
                 }
                 portSheet.close()
             },
-            onDismiss = { portSheet.close() }
+            onDismiss = { portSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = usernameSheet.sheetState
+        sheetState = usernameSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttUsername,
@@ -272,11 +274,11 @@ private fun MqttSettingsContent(
             onDelete = {
                 onEventSent(NotifContract.Event.SetMqttUsername(""))
                 usernameSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = passwordSheet.sheetState
+        sheetState = passwordSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttPassword,
@@ -289,11 +291,11 @@ private fun MqttSettingsContent(
             onDelete = {
                 onEventSent(NotifContract.Event.SetMqttPassword(""))
                 passwordSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = updateSecSheet.sheetState
+        sheetState = updateSecSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttUpdateSec.toString(),
@@ -309,11 +311,11 @@ private fun MqttSettingsContent(
                     onEventSent(NotifContract.Event.SetMqttUpdateSec(value))
                 }
             },
-            onDismiss = { updateSecSheet.close() }
+            onDismiss = { updateSecSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = topicSheet.sheetState
+        sheetState = topicSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.mqttTopic,
@@ -326,7 +328,7 @@ private fun MqttSettingsContent(
             onDelete = {
                 onEventSent(NotifContract.Event.SetMqttTopic(""))
                 topicSheet.close()
-            }
+            },
         )
     }
 }
@@ -334,13 +336,14 @@ private fun MqttSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {}
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -348,7 +351,7 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -368,11 +371,11 @@ private fun MqttSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

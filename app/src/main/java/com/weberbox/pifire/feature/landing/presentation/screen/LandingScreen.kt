@@ -79,7 +79,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun LandingScreenDestination(
     navController: NavHostController,
-    viewModel: LandingViewModel = hiltViewModel()
+    viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     val activity = LocalActivity.current
@@ -90,6 +90,7 @@ fun LandingScreenDestination(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is LandingContract.Effect.Navigation.Back -> activity?.finish()
+
                 is LandingContract.Effect.Navigation.NavRoute -> {
                     navController.navigateFrom(
                         from = sourceEntry,
@@ -99,7 +100,7 @@ fun LandingScreenDestination(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -109,7 +110,7 @@ private fun LandingScreen(
     state: LandingContract.State,
     effectFlow: Flow<LandingContract.Effect>?,
     onEventSent: (event: LandingContract.Event) -> Unit,
-    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current as? AppCompatActivity
     val windowInsets = WindowInsets.safeDrawing
@@ -127,7 +128,7 @@ private fun LandingScreen(
         biometricManager = biometricManager,
         effectFlow = effectFlow,
         onEventSent = onEventSent,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     // Only poll servers while Landing is visible, not behind Settings or in the background
@@ -163,7 +164,7 @@ private fun LandingScreen(
                     searchQuery = it
                     onEventSent(LandingContract.Event.VoiceSearch)
                 },
-                onNavigationRequested = onNavigationRequested
+                onNavigationRequested = onNavigationRequested,
             )
         },
         floatingActionButton = {
@@ -171,23 +172,23 @@ private fun LandingScreen(
                 modifier = Modifier
                     .animateFloatingActionButton(
                         visible = fabVisible,
-                        alignment = Alignment.BottomEnd
+                        alignment = Alignment.BottomEnd,
                     ),
                 onClick = {
                     onNavigationRequested(
                         LandingContract.Effect.Navigation.NavRoute(
                             route = NavGraph.ServerSetup,
-                            popUpToRoute = NavGraph.LandingDest.Landing::class
-                        )
+                            popUpToRoute = NavGraph.LandingDest.Landing::class,
+                        ),
                     )
                 },
                 text = { Text(text = stringResource(R.string.landing_add_server)) },
                 icon = {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.landing_add_server)
+                        contentDescription = stringResource(R.string.landing_add_server),
                     )
-                }
+                },
             )
         },
         containerColor = Color.Transparent,
@@ -196,10 +197,11 @@ private fun LandingScreen(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(LandingContract.Effect.Navigation.Back)
                 }
@@ -214,21 +216,21 @@ private fun LandingScreen(
                         state = scrollState,
                         contentPadding = contentPadding,
                         verticalArrangement = Arrangement.spacedBy(
-                            MaterialTheme.spacing.extraSmall
+                            MaterialTheme.spacing.extraSmall,
                         ),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .hazeSource(state = hazeState)
                             .padding(
                                 horizontal = MaterialTheme.spacing.smallOne,
-                                vertical = MaterialTheme.spacing.extraSmall
+                                vertical = MaterialTheme.spacing.extraSmall,
                             )
                             .animateEnterExit()
                             .fillMaxSize(),
                     ) {
                         items(
                             items = filteredList,
-                            key = { it.uuid }
+                            key = { it.uuid },
                         ) { server ->
                             ServerItem(
                                 server = server,
@@ -240,15 +242,15 @@ private fun LandingScreen(
                                             onSuccess = {
                                                 onEventSent(
                                                     LandingContract.Event.SelectServer(
-                                                        uuid = uuid
-                                                    )
+                                                        uuid = uuid,
+                                                    ),
                                                 )
-                                            }
+                                            },
                                         )
                                     } else {
                                         activity?.showAlerter(
                                             message = R.string.alerter_server_offline,
-                                            isError = true
+                                            isError = true,
                                         )
                                     }
                                 },
@@ -260,11 +262,11 @@ private fun LandingScreen(
                                             onNavigationRequested(
                                                 LandingContract.Effect.Navigation.NavRoute(
                                                     route = NavGraph.LandingDest.ServerSettings(
-                                                        uuid = uuid
-                                                    )
-                                                )
+                                                        uuid = uuid,
+                                                    ),
+                                                ),
                                             )
-                                        }
+                                        },
                                     )
                                 },
                                 onDelete = { uuid, name ->
@@ -275,12 +277,12 @@ private fun LandingScreen(
                                             serverDeleteSheet.open(
                                                 data = Pair(
                                                     first = uuid,
-                                                    second = name
-                                                )
+                                                    second = name,
+                                                ),
                                             )
-                                        }
+                                        },
                                     )
-                                }
+                                },
                             )
                         }
                     }
@@ -288,44 +290,44 @@ private fun LandingScreen(
                     AnimatedVisibility(
                         visible = filteredList.isEmpty(),
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         EmptyItems(
                             title = stringResource(R.string.error_no_results_landing_title),
                             summary = stringResource(R.string.error_no_results_landing_summary),
-                            icon = Icons.Filled.OutdoorGrill
+                            icon = Icons.Filled.OutdoorGrill,
                         )
                     }
 
                     BottomSheet(
-                        sheetState = serverDeleteSheet.sheetState
+                        sheetState = serverDeleteSheet.sheetState,
                     ) {
                         ConfirmSheet(
                             title = stringResource(R.string.dialog_confirm_action),
                             message = stringResource(
                                 R.string.dialog_confirm_delete_item,
-                                serverDeleteSheet.data.second
+                                serverDeleteSheet.data.second,
                             ),
                             negativeButtonText = stringResource(R.string.cancel),
                             positiveButtonText = stringResource(R.string.delete),
                             positiveButtonColor = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colorScheme.onError,
-                                containerColor = MaterialTheme.colorScheme.error
+                                containerColor = MaterialTheme.colorScheme.error,
                             ),
                             onPositive = {
                                 onEventSent(
                                     LandingContract.Event.DeleteServer(
-                                        serverDeleteSheet.data.first
-                                    )
+                                        serverDeleteSheet.data.first,
+                                    ),
                                 )
                                 serverDeleteSheet.close()
                             },
-                            onNegative = { serverDeleteSheet.close() }
+                            onNegative = { serverDeleteSheet.close() },
                         )
                     }
 
                     CircularLoadingIndicator(
-                        isLoading = state.isLoading
+                        isLoading = state.isLoading,
                     )
                 }
             }
@@ -340,7 +342,7 @@ private fun checkAuthentication(
 ) {
     if (state.biometricServerPrompt) {
         biometricManager?.authenticate(
-            onAuthenticationSuccess = onSuccess
+            onAuthenticationSuccess = onSuccess,
         )
     } else {
         onSuccess()
@@ -353,7 +355,7 @@ private fun HandleSideEffects(
     biometricManager: BiometricPromptManager?,
     effectFlow: Flow<LandingContract.Effect>?,
     onEventSent: (event: LandingContract.Event) -> Unit,
-    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit,
 ) {
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
@@ -365,7 +367,7 @@ private fun HandleSideEffects(
                 is LandingContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -373,9 +375,9 @@ private fun HandleSideEffects(
                     biometricManager?.authenticate(
                         onAuthenticationSuccess = {
                             onEventSent(
-                                LandingContract.Event.SelectServer(effect.uuid)
+                                LandingContract.Event.SelectServer(effect.uuid),
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -386,7 +388,7 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, apiLevel = 35)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true, apiLevel = 35)
-//@DeviceSizePreviews
+// @DeviceSizePreviews
 private fun LandingScreenPreview() {
     PiFireTheme {
         Surface {
@@ -396,31 +398,29 @@ private fun LandingScreenPreview() {
                     isInitialLoading = false,
                     isLoading = false,
                     isDataError = false,
-                    biometricServerPrompt = false
+                    biometricServerPrompt = false,
                 ),
                 effectFlow = null,
                 onEventSent = { },
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }
 }
 
-internal fun buildServerData(): ServerData {
-    return ServerData(
-        servers = listOf(
-            Server(
-                uuid = "12345",
-                name = "Development",
-                address = "http://pifire.local.com/testing/server",
-                online = true
-            ),
-            Server(
-                uuid = "23456",
-                name = "Development 2",
-                address = "http://pifire.com",
-                online = false
-            )
-        )
-    )
-}
+internal fun buildServerData(): ServerData = ServerData(
+    servers = listOf(
+        Server(
+            uuid = "12345",
+            name = "Development",
+            address = "http://pifire.local.com/testing/server",
+            online = true,
+        ),
+        Server(
+            uuid = "23456",
+            name = "Development 2",
+            address = "http://pifire.com",
+            online = false,
+        ),
+    ),
+)

@@ -59,7 +59,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun WLedProfilesScreenDestination(
     navController: NavHostController,
-    viewModel: NotificationSettingsViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -70,6 +70,7 @@ fun WLedProfilesScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -79,7 +80,7 @@ fun WLedProfilesScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -90,14 +91,14 @@ private fun WLedProfiles(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -108,7 +109,7 @@ private fun WLedProfiles(
             SettingsAppBar(
                 title = stringResource(R.string.settings_cat_wled_profiles),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -117,10 +118,11 @@ private fun WLedProfiles(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
@@ -129,7 +131,7 @@ private fun WLedProfiles(
                     WLedContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -141,19 +143,19 @@ private fun WLedProfiles(
 private fun WLedContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val idleBrightnessSheet = rememberCustomModalBottomSheetState()
     val ledCountSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         ListPreference(
             value = state.serverData.settings.wledCookingColor,
@@ -163,69 +165,69 @@ private fun WLedContent(
             summary = {
                 Text(
                     text = getSummary(
-                        state.serverData.settings.wledCookingColor.replaceFirstChar { it.uppercase() }
-                    )
+                        state.serverData.settings.wledCookingColor.replaceFirstChar { it.uppercase() },
+                    ),
                 )
             },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_wled_idle_brightness)) },
             summary = {
                 Text(
                     text = getSummaryPercent(
-                        state.serverData.settings.wledIdleBrightness.toString()
-                    )
+                        state.serverData.settings.wledIdleBrightness.toString(),
+                    ),
                 )
             },
-            onClick = { idleBrightnessSheet.open() }
+            onClick = { idleBrightnessSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_wled_led_count)) },
             summary = { Text(text = getSummary(state.serverData.settings.wledLedCount.toString())) },
-            onClick = { ledCountSheet.open() }
+            onClick = { ledCountSheet.open() },
         )
         SwitchPreference(
             value = state.serverData.settings.wledNightMode,
             onValueChange = { onEventSent(NotifContract.Event.SetWLEDNightMode(it)) },
             title = { Text(text = stringResource(R.string.settings_wled_night_mode)) },
-            summary = { Text(text = getSummary(state.serverData.settings.wledNightMode)) }
+            summary = { Text(text = getSummary(state.serverData.settings.wledNightMode)) },
         )
     }
     BottomSheet(
-        sheetState = idleBrightnessSheet.sheetState
+        sheetState = idleBrightnessSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.wledIdleBrightness.toString(),
             title = stringResource(R.string.settings_wled_idle_brightness),
             placeholder = stringResource(R.string.settings_wled_idle_brightness),
             validationOptions = ValidationOptions(
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
                     onEventSent(NotifContract.Event.SetWLedIdleBrightness(value))
                 }
                 idleBrightnessSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = ledCountSheet.sheetState
+        sheetState = ledCountSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.wledModeHold.toString(),
             title = stringResource(R.string.settings_wled_led_count),
             placeholder = stringResource(R.string.settings_wled_led_count),
             validationOptions = ValidationOptions(
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
                     onEventSent(NotifContract.Event.SetWLedLedCount(value))
                 }
                 ledCountSheet.close()
-            }
+            },
         )
     }
 }
@@ -233,13 +235,14 @@ private fun WLedContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {}
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -247,7 +250,7 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -267,11 +270,11 @@ private fun WLedProfilePreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

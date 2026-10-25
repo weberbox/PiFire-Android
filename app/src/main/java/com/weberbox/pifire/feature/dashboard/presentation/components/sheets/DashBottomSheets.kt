@@ -36,11 +36,11 @@ internal fun DashBottomSheets(
             onConfirm = {
                 onEventSent(DashContract.Event.ProbeNotify(it))
                 grillSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = foodSheet.sheetState
+        sheetState = foodSheet.sheetState,
     ) {
         ProbePickerSheet(
             probeData = foodSheet.data,
@@ -49,11 +49,11 @@ internal fun DashBottomSheets(
             onConfirm = {
                 onEventSent(DashContract.Event.ProbeNotify(it))
                 foodSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = timerSheet.sheetState
+        sheetState = timerSheet.sheetState,
     ) {
         if (state.dash.timer.timerActive) {
             TimerActiveSheet(
@@ -61,7 +61,7 @@ internal fun DashBottomSheets(
                 onClick = { event ->
                     onEventSent(DashContract.Event.SendEvent(event))
                     timerSheet.close()
-                }
+                },
             )
         } else {
             TimerPickerSheet(
@@ -70,12 +70,12 @@ internal fun DashBottomSheets(
                 onConfirm = { event ->
                     onEventSent(DashContract.Event.SendEvent(event))
                     timerSheet.close()
-                }
+                },
             )
         }
     }
     BottomSheet(
-        sheetState = modeSheet.sheetState
+        sheetState = modeSheet.sheetState,
     ) {
         ModeSheet(
             currentMode = state.dash.currentMode,
@@ -97,14 +97,14 @@ internal fun DashBottomSheets(
                 modeSheet.close()
                 onEventSent(
                     DashContract.Event.StartUpRequested(
-                        holdDialogSupported = featureSupport.isSupported(Feature.StartToHoldPrompt)
-                    )
+                        holdDialogSupported = featureSupport.isSupported(Feature.StartToHoldPrompt),
+                    ),
                 )
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = primePickerSheet.sheetState
+        sheetState = primePickerSheet.sheetState,
     ) {
         PrimePickerSheet(
             itemSpace = MaterialTheme.spacing.mediumOne,
@@ -113,16 +113,16 @@ internal fun DashBottomSheets(
                     DashContract.Event.SendEvent(
                         DashEvent.PrimeGrill(
                             primeAmount = primeAmount,
-                            nextMode = nextMode
-                        )
-                    )
+                            nextMode = nextMode,
+                        ),
+                    ),
                 )
                 primePickerSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = holdPickerSheet.sheetState
+        sheetState = holdPickerSheet.sheetState,
     ) {
         HoldPickerSheet(
             probeData = state.dash.primaryProbe,
@@ -132,11 +132,11 @@ internal fun DashBottomSheets(
                 onEventSent(DashContract.Event.SendEvent(DashEvent.GrillHoldTemp(temp)))
                 holdPickerSheet.close()
             },
-            onCancel = { holdPickerSheet.close() }
+            onCancel = { holdPickerSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = startToHoldSheet.sheetState
+        sheetState = startToHoldSheet.sheetState,
     ) {
         StartToHoldSheet(
             probeData = state.dash.primaryProbe,
@@ -147,7 +147,7 @@ internal fun DashBottomSheets(
                 onEventSent(DashContract.Event.SetStartupHoldTemp(temp))
                 startToHoldSheet.close()
             },
-            onCancel = { startToHoldSheet.close() }
+            onCancel = { startToHoldSheet.close() },
         )
     }
 }

@@ -39,7 +39,7 @@ import com.weberbox.pifire.feature.recipes.presentation.model.FabItem.Action
 internal fun FloatingActionMenu(
     modifier: Modifier = Modifier,
     scrollState: ScrollState,
-    onFabAction: (action: Action) -> Unit
+    onFabAction: (action: Action) -> Unit,
 ) {
     var fabVisible by remember { mutableStateOf(true) }
     var fabMenuExpanded by rememberSaveable { mutableStateOf(false) }
@@ -51,8 +51,8 @@ internal fun FloatingActionMenu(
                 FabItem(Icons.Filled.Delete, R.string.delete, Action.Delete),
                 FabItem(Icons.Filled.Share, R.string.share, Action.Share),
                 FabItem(Icons.Filled.Print, R.string.print, Action.Print),
-                FabItem(Icons.Filled.PlayArrow, R.string.run, Action.Run)
-            )
+                FabItem(Icons.Filled.PlayArrow, R.string.run, Action.Run),
+            ),
         )
     }
 
@@ -73,24 +73,27 @@ internal fun FloatingActionMenu(
                 modifier = modifier
                     .animateFloatingActionButton(
                         visible = fabVisible || fabMenuExpanded,
-                        alignment = Alignment.BottomEnd
+                        alignment = Alignment.BottomEnd,
                     ),
                 checked = fabMenuExpanded,
-                onCheckedChange = { fabMenuExpanded = !fabMenuExpanded }
+                onCheckedChange = { fabMenuExpanded = !fabMenuExpanded },
             ) {
                 val imageVector by remember {
                     derivedStateOf {
-                        if (checkedProgress > 0.5f)
-                            Icons.Filled.Close else Icons.Filled.Menu
+                        if (checkedProgress > 0.5f) {
+                            Icons.Filled.Close
+                        } else {
+                            Icons.Filled.Menu
+                        }
                     }
                 }
                 Icon(
                     painter = rememberVectorPainter(imageVector),
                     contentDescription = null,
-                    modifier = Modifier.animateIcon({ checkedProgress })
+                    modifier = Modifier.animateIcon({ checkedProgress }),
                 )
             }
-        }
+        },
     ) {
         fabItems.forEach { item ->
             FloatingActionButtonMenuItem(

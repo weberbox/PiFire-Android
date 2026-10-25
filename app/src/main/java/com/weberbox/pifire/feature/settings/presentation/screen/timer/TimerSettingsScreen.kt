@@ -72,7 +72,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun TimerSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: TimerSettingsViewModel = hiltViewModel()
+    viewModel: TimerSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -83,6 +83,7 @@ fun TimerSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is TimerContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is TimerContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -92,7 +93,7 @@ fun TimerSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -103,14 +104,14 @@ private fun TimerSettings(
     state: TimerContract.State,
     effectFlow: Flow<TimerContract.Effect>?,
     onEventSent: (event: TimerContract.Event) -> Unit,
-    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -121,7 +122,7 @@ private fun TimerSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_timers_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -130,10 +131,11 @@ private fun TimerSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(TimerContract.Effect.Navigation.Back)
                 }
@@ -143,7 +145,7 @@ private fun TimerSettings(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -156,7 +158,7 @@ private fun TimerSettingsContent(
     state: TimerContract.State,
     onEventSent: (event: TimerContract.Event) -> Unit,
     onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val startupDurationSheet = rememberCustomModalBottomSheetState()
     val startupGotoTempSheet = rememberCustomModalBottomSheetState()
@@ -167,7 +169,7 @@ private fun TimerSettingsContent(
     val shutdownDurationSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
@@ -182,27 +184,27 @@ private fun TimerSettingsContent(
             title = { Text(text = stringResource(R.string.settings_startup_duration)) },
             summary = {
                 Text(
-                    text = getSummarySeconds(state.serverData.settings.startupDuration.toString())
+                    text = getSummarySeconds(state.serverData.settings.startupDuration.toString()),
                 )
             },
-            onClick = { startupDurationSheet.open() }
+            onClick = { startupDurationSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_startup_note))
         ListPreference(
             value = state.serverData.settings.startupGotoMode,
             values = listOf(
                 stringResource(R.string.dash_mode_smoke),
-                stringResource(R.string.dash_mode_hold)
+                stringResource(R.string.dash_mode_hold),
             ),
             onValueChange = { onEventSent(TimerContract.Event.SetStartToMode(it)) },
             title = { Text(text = stringResource(R.string.settings_startup_goto_title)) },
             summary = { Text(text = getSummary(state.serverData.settings.startupGotoMode)) },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         AnimatedVisibility(
             visible = state.serverData.settings.startupGotoMode == RunningMode.Hold.name,
             enter = slideDownExpandEnterTransition(),
-            exit = slideOutShrinkExitTransition()
+            exit = slideOutShrinkExitTransition(),
         ) {
             Column {
                 Preference(
@@ -211,14 +213,14 @@ private fun TimerSettingsContent(
                         Text(
                             text = getSummaryTemp(
                                 state.serverData.settings.startupGotoTemp.toString(),
-                                state.serverData.settings.tempUnits
-                            )
+                                state.serverData.settings.tempUnits,
+                            ),
                         )
                     },
-                    onClick = { startupGotoTempSheet.open() }
+                    onClick = { startupGotoTempSheet.open() },
                 )
                 FeatureGate(
-                    feature = Feature.StartToHoldPrompt
+                    feature = Feature.StartToHoldPrompt,
                 ) {
                     SwitchPreference(
                         value = state.serverData.settings.startToHoldPrompt,
@@ -227,14 +229,14 @@ private fun TimerSettingsContent(
                         },
                         title = {
                             Text(
-                                text = stringResource(R.string.settings_startup_hold_prompt)
+                                text = stringResource(R.string.settings_startup_hold_prompt),
                             )
                         },
                         summary = {
                             Text(
-                                text = getSummary(state.serverData.settings.startToHoldPrompt)
+                                text = getSummary(state.serverData.settings.startToHoldPrompt),
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -248,30 +250,30 @@ private fun TimerSettingsContent(
             title = { Text(text = stringResource(R.string.settings_startup_exit_temp)) },
             summary = {
                 Text(
-                    text = getSummary(state.serverData.settings.startupExitTemp != 0)
+                    text = getSummary(state.serverData.settings.startupExitTemp != 0),
                 )
-            }
+            },
         )
         AnimatedVisibility(
             visible = state.serverData.settings.startupExitTemp != 0,
             enter = slideDownExpandEnterTransition(),
-            exit = slideOutShrinkExitTransition()
+            exit = slideOutShrinkExitTransition(),
         ) {
             Preference(
                 title = {
                     Text(
-                        text = stringResource(R.string.settings_startup_exit_temp_value)
+                        text = stringResource(R.string.settings_startup_exit_temp_value),
                     )
                 },
                 summary = {
                     Text(
                         text = getSummaryTemp(
                             state.serverData.settings.startupExitTemp.toString(),
-                            state.serverData.settings.tempUnits
-                        )
+                            state.serverData.settings.tempUnits,
+                        ),
                     )
                 },
-                onClick = { startupExitTempSheet.open() }
+                onClick = { startupExitTempSheet.open() },
             )
         }
         SwitchPreference(
@@ -280,25 +282,25 @@ private fun TimerSettingsContent(
                 onEventSent(TimerContract.Event.SetPrimeOnStartup(if (it) 10 else 0))
             },
             title = { Text(text = stringResource(R.string.settings_startup_prime)) },
-            summary = { Text(text = getSummary(state.serverData.settings.startupPrime != 0)) }
+            summary = { Text(text = getSummary(state.serverData.settings.startupPrime != 0)) },
         )
         AnimatedVisibility(
             visible = state.serverData.settings.startupPrime != 0,
             enter = slideDownExpandEnterTransition(),
-            exit = slideOutShrinkExitTransition()
+            exit = slideOutShrinkExitTransition(),
         ) {
             Preference(
                 title = {
                     Text(
-                        text = stringResource(R.string.settings_startup_prime_value)
+                        text = stringResource(R.string.settings_startup_prime_value),
                     )
                 },
                 summary = {
                     Text(
-                        text = getSummaryGrams(state.serverData.settings.startupPrime.toString())
+                        text = getSummaryGrams(state.serverData.settings.startupPrime.toString()),
                     )
                 },
-                onClick = { startupPrimeSheet.open() }
+                onClick = { startupPrimeSheet.open() },
             )
         }
         FeatureGate(
@@ -310,10 +312,10 @@ private fun TimerSettingsContent(
                     title = { Text(text = stringResource(R.string.settings_startup_pwm_duty)) },
                     summary = {
                         Text(
-                            text = getSummaryPercent(state.serverData.settings.startupPWMDuty.toString())
+                            text = getSummaryPercent(state.serverData.settings.startupPWMDuty.toString()),
                         )
                     },
-                    onClick = { startupPWMDutySheet.open() }
+                    onClick = { startupPWMDutySheet.open() },
                 )
                 PreferenceNote(note = stringResource(R.string.settings_startup_pwm_duty_note))
             }
@@ -325,27 +327,27 @@ private fun TimerSettingsContent(
             value = state.serverData.settings.smartStartEnabled,
             onValueChange = { onEventSent(TimerContract.Event.SetSmartStartEnabled(it)) },
             title = { Text(text = stringResource(R.string.settings_smart_start)) },
-            summary = { Text(text = getSummary(state.serverData.settings.smartStartEnabled)) }
+            summary = { Text(text = getSummary(state.serverData.settings.smartStartEnabled)) },
         )
         PreferenceNote(stringResource(R.string.settings_smart_start_note))
         Preference(
             title = {
                 Text(
-                    text = stringResource(R.string.settings_smart_start_profiles_title)
+                    text = stringResource(R.string.settings_smart_start_profiles_title),
                 )
             },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_smart_start_profiles_summary)
+                    text = stringResource(R.string.settings_smart_start_profiles_summary),
                 )
             },
             onClick = {
                 onNavigationRequested(
                     TimerContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.SmartStart
-                    )
+                        NavGraph.SettingsDest.SmartStart,
+                    ),
                 )
-            }
+            },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_smart_start_exit_temp)) },
@@ -353,11 +355,11 @@ private fun TimerSettingsContent(
                 Text(
                     text = getSummaryTemp(
                         state.serverData.settings.smartStartExitTemp.toString(),
-                        state.serverData.settings.tempUnits
-                    )
+                        state.serverData.settings.tempUnits,
+                    ),
                 )
             },
-            onClick = { smartStartExitTempSheet.open() }
+            onClick = { smartStartExitTempSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_smart_start_exit_temp_note))
         PreferenceCategory(
@@ -367,10 +369,10 @@ private fun TimerSettingsContent(
             title = { Text(text = stringResource(R.string.settings_shutdown_duration)) },
             summary = {
                 Text(
-                    text = getSummarySeconds(state.serverData.settings.shutdownDuration.toString())
+                    text = getSummarySeconds(state.serverData.settings.shutdownDuration.toString()),
                 )
             },
-            onClick = { shutdownDurationSheet.open() }
+            onClick = { shutdownDurationSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_shutdown_note))
         SwitchPreference(
@@ -379,19 +381,19 @@ private fun TimerSettingsContent(
             title = {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.settings_auto_power_off)
+                    text = stringResource(R.string.settings_auto_power_off),
                 )
             },
             summary = {
                 Text(
-                    text = getSummary(state.serverData.settings.shutdownAutoPowerOff)
+                    text = getSummary(state.serverData.settings.shutdownAutoPowerOff),
                 )
-            }
+            },
         )
         PreferenceNote(stringResource(R.string.settings_auto_power_off_note))
     }
     BottomSheet(
-        sheetState = startupDurationSheet.sheetState
+        sheetState = startupDurationSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.startupDuration.toString(),
@@ -400,7 +402,7 @@ private fun TimerSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -408,11 +410,11 @@ private fun TimerSettingsContent(
                 }
                 startupDurationSheet.close()
             },
-            onDismiss = { startupDurationSheet.close() }
+            onDismiss = { startupDurationSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = startupGotoTempSheet.sheetState
+        sheetState = startupGotoTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.startupGotoTemp.toString(),
@@ -421,7 +423,7 @@ private fun TimerSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -429,11 +431,11 @@ private fun TimerSettingsContent(
                 }
                 startupGotoTempSheet.close()
             },
-            onDismiss = { startupGotoTempSheet.close() }
+            onDismiss = { startupGotoTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = startupExitTempSheet.sheetState
+        sheetState = startupExitTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.startupExitTemp.toString(),
@@ -441,7 +443,7 @@ private fun TimerSettingsContent(
             placeholder = stringResource(R.string.settings_startup_exit_temp_value),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -449,11 +451,11 @@ private fun TimerSettingsContent(
                 }
                 startupExitTempSheet.close()
             },
-            onDismiss = { startupExitTempSheet.close() }
+            onDismiss = { startupExitTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = startupPrimeSheet.sheetState
+        sheetState = startupPrimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.startupPrime.toString(),
@@ -461,7 +463,7 @@ private fun TimerSettingsContent(
             placeholder = stringResource(R.string.settings_startup_prime_value),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -469,11 +471,11 @@ private fun TimerSettingsContent(
                 }
                 startupPrimeSheet.close()
             },
-            onDismiss = { startupPrimeSheet.close() }
+            onDismiss = { startupPrimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = startupPWMDutySheet.sheetState
+        sheetState = startupPWMDutySheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.startupPWMDuty.toString(),
@@ -483,7 +485,7 @@ private fun TimerSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -491,11 +493,11 @@ private fun TimerSettingsContent(
                 }
                 startupPWMDutySheet.close()
             },
-            onDismiss = { startupPWMDutySheet.close() }
+            onDismiss = { startupPWMDutySheet.close() },
         )
     }
     BottomSheet(
-        sheetState = smartStartExitTempSheet.sheetState
+        sheetState = smartStartExitTempSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.smartStartExitTemp.toString(),
@@ -503,7 +505,7 @@ private fun TimerSettingsContent(
             placeholder = stringResource(R.string.settings_smart_start_exit_temp),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -511,11 +513,11 @@ private fun TimerSettingsContent(
                 }
                 smartStartExitTempSheet.close()
             },
-            onDismiss = { smartStartExitTempSheet.close() }
+            onDismiss = { smartStartExitTempSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = shutdownDurationSheet.sheetState
+        sheetState = shutdownDurationSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.shutdownDuration.toString(),
@@ -524,7 +526,7 @@ private fun TimerSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -532,7 +534,7 @@ private fun TimerSettingsContent(
                 }
                 shutdownDurationSheet.close()
             },
-            onDismiss = { shutdownDurationSheet.close() }
+            onDismiss = { shutdownDurationSheet.close() },
         )
     }
 }
@@ -540,7 +542,7 @@ private fun TimerSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<TimerContract.Effect>?,
-    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -553,7 +555,7 @@ private fun HandleSideEffects(
                 is TimerContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -573,11 +575,11 @@ private fun TimerSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

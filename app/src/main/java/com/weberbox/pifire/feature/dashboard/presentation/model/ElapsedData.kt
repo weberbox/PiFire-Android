@@ -4,7 +4,7 @@ import java.util.Locale
 
 data class ElapsedData(
     val startTime: Int = 0,
-    val timeElapsed: Int = 0
+    val timeElapsed: Int = 0,
 ) {
     val elapsedTime = formatDuration(timeElapsed)
 

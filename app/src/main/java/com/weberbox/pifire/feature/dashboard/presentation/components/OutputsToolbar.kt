@@ -32,12 +32,12 @@ internal fun OutputsToolbar(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     onActionClick: (Action) -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .padding(contentPadding)
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         HorizontalFloatingToolbar(
             modifier = modifier
@@ -45,25 +45,25 @@ internal fun OutputsToolbar(
                 .offset(y = -ScreenOffset),
             expanded = false,
             colors = FloatingToolbarDefaults.standardFloatingToolbarColors(
-                toolbarContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+                toolbarContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
             ),
             content = {
                 Action.entries.forEach { option ->
                     IconButton(
-                        onClick = { onActionClick(option) }
+                        onClick = { onActionClick(option) },
                     ) {
                         Icon(
-                            imageVector = option.icon ,
-                            contentDescription = stringResource(option.description)
+                            imageVector = option.icon,
+                            contentDescription = stringResource(option.description),
                         )
                     }
                 }
                 FilledIconButton(
-                    onClick = { onClose() }
+                    onClick = { onClose() },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(R.string.close)
+                        contentDescription = stringResource(R.string.close),
                     )
                 }
             },
@@ -74,5 +74,5 @@ internal fun OutputsToolbar(
 enum class Action(val icon: ImageVector, val description: Int) {
     Fan(icon = Icon.Filled.Fan, description = R.string.fan),
     Auger(icon = Icon.Filled.DoubleArrowRight, description = R.string.auger),
-    Igniter(icon = Icon.Filled.Flame, description = R.string.igniter)
+    Igniter(icon = Icon.Filled.Flame, description = R.string.igniter),
 }

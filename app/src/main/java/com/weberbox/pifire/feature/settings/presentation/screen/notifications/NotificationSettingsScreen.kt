@@ -56,7 +56,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun NotificationSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: NotificationSettingsViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -67,6 +67,7 @@ fun NotificationSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -76,7 +77,7 @@ fun NotificationSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -87,14 +88,14 @@ private fun NotificationSettings(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -105,7 +106,7 @@ private fun NotificationSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_notifications_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -114,10 +115,11 @@ private fun NotificationSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
@@ -127,7 +129,7 @@ private fun NotificationSettings(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -140,17 +142,17 @@ private fun NotificationSettingsContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
             TwoTargetSwitchPreference(
@@ -161,10 +163,10 @@ private fun NotificationSettingsContent(
                 onClick = {
                     onNavigationRequested(
                         NotifContract.Effect.Navigation.NavRoute(
-                            NavGraph.SettingsDest.Push
-                        )
+                            NavGraph.SettingsDest.Push,
+                        ),
                     )
-                }
+                },
             )
         }
         TwoTargetSwitchPreference(
@@ -175,10 +177,10 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Ifttt
-                    )
+                        NavGraph.SettingsDest.Ifttt,
+                    ),
                 )
-            }
+            },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.settings.pushoverEnabled,
@@ -188,10 +190,10 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Pushover
-                    )
+                        NavGraph.SettingsDest.Pushover,
+                    ),
                 )
-            }
+            },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.settings.pushbulletEnabled,
@@ -201,10 +203,10 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Pushbullet
-                    )
+                        NavGraph.SettingsDest.Pushbullet,
+                    ),
                 )
-            }
+            },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.settings.influxDbEnabled,
@@ -214,10 +216,10 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.InfluxDb
-                    )
+                        NavGraph.SettingsDest.InfluxDb,
+                    ),
                 )
-            }
+            },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.settings.mqttEnabled,
@@ -227,10 +229,10 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Mqtt
-                    )
+                        NavGraph.SettingsDest.Mqtt,
+                    ),
                 )
-            }
+            },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.settings.appriseEnabled,
@@ -240,13 +242,13 @@ private fun NotificationSettingsContent(
             onClick = {
                 onNavigationRequested(
                     NotifContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.Apprise
-                    )
+                        NavGraph.SettingsDest.Apprise,
+                    ),
                 )
-            }
+            },
         )
         FeatureGate(
-            feature = Feature.WLEDNotifications
+            feature = Feature.WLEDNotifications,
         ) {
             TwoTargetSwitchPreference(
                 value = state.serverData.settings.wledEnabled,
@@ -256,10 +258,10 @@ private fun NotificationSettingsContent(
                 onClick = {
                     onNavigationRequested(
                         NotifContract.Effect.Navigation.NavRoute(
-                            NavGraph.SettingsDest.WLED
-                        )
+                            NavGraph.SettingsDest.WLED,
+                        ),
                     )
-                }
+                },
             )
         }
     }
@@ -268,11 +270,11 @@ private fun NotificationSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val notificationPermission = rememberPermissionState(
-        permissionDetailsProvider = NotificationsPermissionDetailsProvider()
+        permissionDetailsProvider = NotificationsPermissionDetailsProvider(),
     )
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
@@ -289,7 +291,7 @@ private fun HandleSideEffects(
                     activity?.showAlerter(
                         message = effect.text,
                         isError = effect.error,
-                        duration = 6000
+                        duration = 6000,
                     )
                 }
             }
@@ -309,11 +311,11 @@ private fun NotificationsSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

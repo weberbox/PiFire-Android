@@ -8,10 +8,12 @@ import com.weberbox.pifire.core.ui.util.windowWidthSize
 
 @Composable
 fun Modifier.limitWidthFraction(
-    widthFraction: Float = 0.6f
+    widthFraction: Float = 0.6f,
 ): Modifier {
     val windowWidthSize = windowWidthSize()
     return if (windowWidthSize == WindowSize.EXPANDED) {
         this.fillMaxWidth(fraction = widthFraction)
-    } else this
+    } else {
+        this
+    }
 }

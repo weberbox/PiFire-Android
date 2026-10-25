@@ -9,17 +9,16 @@ object ProbeMapMapper : DualItemMapper<List<ProbeDevice>?, List<ProbeInfo>?, Pro
 
     override fun map(
         inA: List<ProbeDevice>?,
-        inB: List<ProbeInfo>?
+        inB: List<ProbeInfo>?,
     ): ProbeMap {
         inA?.also {
             inB?.also {
-
                 val probeDevices = inA.map { device ->
                     ProbeMap.ProbeDevice(
                         device = device.device.orEmpty(),
                         module = device.module.orEmpty(),
                         moduleFilename = device.moduleFilename.orEmpty(),
-                        ports = device.ports.orEmpty()
+                        ports = device.ports.orEmpty(),
                     )
                 }
 
@@ -31,13 +30,13 @@ object ProbeMapMapper : DualItemMapper<List<ProbeDevice>?, List<ProbeInfo>?, Pro
                         name = info.name.orEmpty(),
                         port = info.port.orEmpty(),
                         type = info.type.orEmpty(),
-                        profile = ProbeProfileMapper.map(info.profile)
+                        profile = ProbeProfileMapper.map(info.profile),
                     )
                 }
 
                 return ProbeMap(
                     probeDevices = probeDevices,
-                    probeInfo = probeInfo
+                    probeInfo = probeInfo,
                 )
             }
         }

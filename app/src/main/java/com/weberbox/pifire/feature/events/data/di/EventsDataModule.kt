@@ -39,12 +39,10 @@ abstract class EventsDataModule {
     companion object {
         @Singleton
         @Provides
-        fun provideEventsDataStore(@ApplicationContext appContext: Context): DataStore<EventsData> {
-            return DataStoreFactory.create(
-                serializer = EventsSerializer,
-                produceFile = { appContext.dataStoreFile(AppConfig.EVENTS_DATA_NAME) },
-                corruptionHandler = ReplaceFileCorruptionHandler { EventsData() }
-            )
-        }
+        fun provideEventsDataStore(@ApplicationContext appContext: Context): DataStore<EventsData> = DataStoreFactory.create(
+            serializer = EventsSerializer,
+            produceFile = { appContext.dataStoreFile(AppConfig.EVENTS_DATA_NAME) },
+            corruptionHandler = ReplaceFileCorruptionHandler { EventsData() },
+        )
     }
 }

@@ -22,24 +22,24 @@ import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
 
 @Composable
 internal fun InfoWifi(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_wifi_quality),
-        headerIcon = Icons.Outlined.Wifi
+        headerIcon = Icons.Outlined.Wifi,
     ) {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             InfoItemRow(
                 title = stringResource(R.string.info_wifi_link),
-                summary = "${info.wifiQualityValue}/${info.wifiQualityMax}"
+                summary = "${info.wifiQualityValue}/${info.wifiQualityMax}",
             )
             InfoItemRow(
                 title = stringResource(R.string.info_wifi_percentage),
-                summary = "${info.wifiQualityPercentage}%"
+                summary = "${info.wifiQualityPercentage}%",
             )
         }
     }
@@ -53,7 +53,7 @@ private fun InfoWifiPreview() {
     PiFireTheme {
         Surface {
             InfoWifi(
-                info = info
+                info = info,
             )
         }
     }

@@ -45,16 +45,16 @@ internal fun ServerItem(
     modifier: Modifier = Modifier,
     onClick: (uuid: String) -> Unit,
     onEdit: (uuid: String) -> Unit,
-    onDelete: (uuid: String, name: String) -> Unit
+    onDelete: (uuid: String, name: String) -> Unit,
 ) {
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainerHigh,
-        1f to MaterialTheme.colorScheme.surfaceContainer
+        1f to MaterialTheme.colorScheme.surfaceContainer,
     )
     Card(
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
-        onClick = { onClick(server.uuid) }
+        onClick = { onClick(server.uuid) },
     ) {
         Row(
             modifier = modifier
@@ -62,52 +62,56 @@ internal fun ServerItem(
                 .fillMaxWidth()
                 .padding(end = MaterialTheme.spacing.medium)
                 .height(IntrinsicSize.Max),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
                     .width(MaterialTheme.size.smallThree)
                     .fillMaxHeight()
                     .background(
-                        if (server.online) Color.Green.copy(0.56f) else
+                        if (server.online) {
+                            Color.Green.copy(0.56f)
+                        } else {
                             MaterialTheme.colorScheme.error
-                    )
+                        },
+                    ),
             )
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(0.6f)
                     .padding(MaterialTheme.spacing.smallTwo),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Text(
                     text = server.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.tertiary,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = server.address,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
                 ) {
                     Text(
                         text = stringResource(R.string.status),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        text = if (server.online)
+                        text = if (server.online) {
                             stringResource(R.string.online)
-                        else
-                            stringResource(R.string.offline),
+                        } else {
+                            stringResource(R.string.offline)
+                        },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -115,22 +119,22 @@ internal fun ServerItem(
             }
             Row(
                 modifier = Modifier.weight(0.25f),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 OutlinedIconButton(
-                    onClick = { onEdit(server.uuid) }
+                    onClick = { onEdit(server.uuid) },
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Settings,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
                 OutlinedIconButton(
-                    onClick = { onDelete(server.uuid, server.name) }
+                    onClick = { onDelete(server.uuid, server.name) },
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.DeleteOutline,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
@@ -145,13 +149,13 @@ private fun ServerItemPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 ServerItem(
                     server = buildServerData().servers[0],
                     onClick = { },
                     onEdit = { },
-                    onDelete = { _, _ -> }
+                    onDelete = { _, _ -> },
                 )
             }
         }

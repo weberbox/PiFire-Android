@@ -13,7 +13,7 @@ class ChangelogContract {
     data class State(
         val changelogData: ChangelogData,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

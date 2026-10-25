@@ -22,22 +22,22 @@ class DashRepoImpl @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dataStore: DataStore<DashData>,
     private val dashApi: DashApi,
-    private val json: Json
-): DashRepo {
+    private val json: Json,
+) : DashRepo {
 
-    override suspend fun getDashData(): Result<Dash, DataError> {
-        return dashApi.getDashData().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, DashDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
-                            is Result.Success -> {
-                                sessionStateHolder.setDashData(data.data)
-                                updateDashData(data.data)
-                                Result.Success(data.data)
-                            }
+    override suspend fun getDashData(): Result<Dash, DataError> = dashApi.getDashData().let { result ->
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
+
+            is Result.Success -> {
+                parseGetResponse(result.data, json, DashDtoToDataMapper).let { data ->
+                    when (data) {
+                        is Result.Error -> Result.Error(data.error)
+
+                        is Result.Success -> {
+                            sessionStateHolder.setDashData(data.data)
+                            updateDashData(data.data)
+                            Result.Success(data.data)
                         }
                     }
                 }
@@ -63,10 +63,12 @@ class DashRepoImpl @Inject constructor(
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
+
                 is Result.Success -> {
                     parseResponse(result.data, json, DashDtoToDataMapper).let { data ->
                         when (data) {
                             is Result.Error -> emit(Result.Error(data.error))
+
                             is Result.Success -> {
                                 sessionStateHolder.setDashData(data.data)
                                 emit(Result.Success(data.data))

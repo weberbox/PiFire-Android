@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PwmProfile(
-    val dutyCycle: Int = 0
+    val dutyCycle: Int = 0,
 )

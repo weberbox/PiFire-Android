@@ -74,16 +74,16 @@ internal fun TimerPickerSheet(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
                 bottom = MaterialTheme.spacing.smallThree,
-                top = MaterialTheme.spacing.extraSmall
+                top = MaterialTheme.spacing.extraSmall,
             )
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = MaterialTheme.spacing.extraSmall),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
                 modifier = Modifier
@@ -91,15 +91,15 @@ internal fun TimerPickerSheet(
                     .fillMaxWidth()
                     .clip(MaterialTheme.shapes.large)
                     .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 PickerMark(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = MaterialTheme.colorScheme.primaryContainer,
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     PickerWheel(
                         items = hours,
@@ -115,14 +115,14 @@ internal fun TimerPickerSheet(
                         itemToString = {
                             String.format(Locale.US, "%02d", it)
                         },
-                        longestText = findLongestString(hours)
+                        longestText = findLongestString(hours),
                     )
                     Text(
                         text = ":",
                         color = selectedTextStyle.color,
                         fontSize = selectedTextStyle.fontSize,
                         fontWeight = selectedTextStyle.fontWeight,
-                        fontFamily = selectedTextStyle.fontFamily
+                        fontFamily = selectedTextStyle.fontFamily,
                     )
 
                     PickerWheel(
@@ -139,36 +139,36 @@ internal fun TimerPickerSheet(
                         itemToString = {
                             String.format(Locale.US, "%02d", it)
                         },
-                        longestText = findLongestString(minutes)
+                        longestText = findLongestString(minutes),
                     )
                 }
 
                 PickerMark(
                     modifier = Modifier.align(Alignment.CenterEnd),
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = MaterialTheme.colorScheme.primaryContainer,
                 )
             }
         }
         AnimatedVisibility(
             visible = optionsVisible,
             enter = slideUpExpandEnterTransition(),
-            exit = slideDownShrinkExitTransition()
+            exit = slideDownShrinkExitTransition(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_shutdown_timer),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.weight(1f))
                     Switch(
@@ -176,17 +176,17 @@ internal fun TimerPickerSheet(
                         checked = timerShutdown,
                         onCheckedChange = {
                             timerShutdown = !timerShutdown
-                        }
+                        },
                     )
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_keep_warm_timer),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.weight(1f))
                     Switch(
@@ -194,7 +194,7 @@ internal fun TimerPickerSheet(
                         checked = timerKeepWarm,
                         onCheckedChange = {
                             timerKeepWarm = !timerKeepWarm
-                        }
+                        },
                     )
                 }
             }
@@ -203,18 +203,18 @@ internal fun TimerPickerSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = { optionsVisible = !optionsVisible },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = negativeButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
@@ -225,17 +225,17 @@ internal fun TimerPickerSheet(
                             hours = selectedHours,
                             minutes = selectedMinutes,
                             shutdown = timerShutdown,
-                            keepWarm = timerKeepWarm
-                        )
+                            keepWarm = timerKeepWarm,
+                        ),
                     )
                 },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = positiveButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -249,14 +249,14 @@ private fun TimerPickerSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 TimerPickerSheet(
                     shutdown = true,
                     keepWarm = false,
                     negativeButtonText = stringResource(R.string.options),
                     positiveButtonText = stringResource(R.string.confirm),
-                    onConfirm = { }
+                    onConfirm = { },
                 )
             }
         }

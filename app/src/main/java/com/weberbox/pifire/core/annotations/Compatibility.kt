@@ -4,13 +4,13 @@ package com.weberbox.pifire.core.annotations
     allowedTargets = [
         AnnotationTarget.CLASS,
         AnnotationTarget.FUNCTION,
-        AnnotationTarget.LOCAL_VARIABLE
-    ]
+        AnnotationTarget.LOCAL_VARIABLE,
+    ],
 )
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Compatibility(
     @Suppress("unused")
     val versionBelow: String,
     val build: String,
-    val message: String = ""
+    val message: String = "",
 )

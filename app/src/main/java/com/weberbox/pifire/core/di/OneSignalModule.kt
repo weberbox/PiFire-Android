@@ -19,11 +19,8 @@ object OneSignalModule {
     fun provideOneSignalManager(
         @ApplicationContext appContext: Context,
         settingsRepo: SettingsRepo,
-    ): OneSignalManager {
-        return OneSignalManager(
-            appContext = appContext,
-            settingsRepo = settingsRepo
-        )
-    }
-
+    ): OneSignalManager = OneSignalManager(
+        appContext = appContext,
+        settingsRepo = settingsRepo,
+    )
 }

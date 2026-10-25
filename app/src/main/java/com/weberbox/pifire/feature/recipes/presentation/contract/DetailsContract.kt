@@ -22,7 +22,7 @@ class DetailsContract {
         val recipeImages: List<ByteArray?>,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

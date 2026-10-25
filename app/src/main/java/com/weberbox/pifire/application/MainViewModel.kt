@@ -36,7 +36,7 @@ class MainViewModel @Inject constructor(
     private val dashRepo: DashRepo,
     private val eventsRepo: EventsRepo,
     private val recipesRepo: RecipesRepo,
-    private val prefsRepo: PrefsRepo
+    private val prefsRepo: PrefsRepo,
 ) : BaseViewModel<MainContract.Event, MainContract.State, MainContract.Effect>() {
 
     init {
@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(
     override fun setInitialState() = MainContract.State(
         appTheme = AppTheme.System,
         dynamicColor = false,
-        featureSupport = FeatureSupport()
+        featureSupport = FeatureSupport(),
     )
 
     override fun handleEvents(event: MainContract.Event) {
@@ -93,7 +93,7 @@ class MainViewModel @Inject constructor(
 
     private fun <T> collectAndUpdateState(
         pref: Pref<T>,
-        update: MainContract.State.(T) -> MainContract.State
+        update: MainContract.State.(T) -> MainContract.State,
     ) {
         viewModelScope.launch {
             prefsRepo.prefFlow(pref).collect { value ->
@@ -118,7 +118,7 @@ class MainViewModel @Inject constructor(
         setEffect {
             MainContract.Effect.Navigation.NavRoute(
                 route = NavGraph.LandingDest.Landing(false),
-                popUpToRoute = NavGraph.HomeDest.DashHome
+                popUpToRoute = NavGraph.HomeDest.DashHome,
             )
         }
     }

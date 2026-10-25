@@ -28,12 +28,16 @@ val Icon.Outlined.CarDefrostRear: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(10.0f, 18.3f)
                 curveTo(10.0f, 20.5f, 7.9f, 22.5f, 7.7f, 22.7f)
@@ -66,19 +70,23 @@ val Icon.Outlined.CarDefrostRear: ImageVector
                 moveTo(20.0f, 3.0f)
                 horizontalLineTo(4.0f)
                 arcTo(
-                    2.0f, 2.0f, 0.0f,
+                    2.0f,
+                    2.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 2.0f,
-                    y1 = 5.0f
+                    y1 = 5.0f,
                 )
                 verticalLineTo(16.0f)
                 arcTo(
-                    2.0f, 2.0f, 0.0f,
+                    2.0f,
+                    2.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 4.0f,
-                    y1 = 18.0f
+                    y1 = 18.0f,
                 )
                 horizontalLineTo(5.0f)
                 verticalLineTo(16.0f)
@@ -90,19 +98,23 @@ val Icon.Outlined.CarDefrostRear: ImageVector
                 verticalLineTo(18.0f)
                 horizontalLineTo(20.0f)
                 arcTo(
-                    2.0f, 2.0f, 0.0f,
+                    2.0f,
+                    2.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 22.0f,
-                    y1 = 16.0f
+                    y1 = 16.0f,
                 )
                 verticalLineTo(5.0f)
                 arcTo(
-                    2.0f, 2.0f, 0.0f,
+                    2.0f,
+                    2.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 20.0f,
-                    y1 = 3.0f
+                    y1 = 3.0f,
                 )
                 moveTo(16.2f, 13.5f)
                 curveTo(16.2f, 12.3f, 16.7f, 11.9f, 16.7f, 11.9f)

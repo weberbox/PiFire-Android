@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun WoodsDetailsScreen(
     navController: NavHostController,
-    viewModel: SharedDetailsViewModel = hiltViewModel()
+    viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     WoodsDetailsContent(
@@ -57,7 +57,7 @@ fun WoodsDetailsScreen(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -66,30 +66,32 @@ private fun WoodsDetailsContent(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val woodDeleteSheet = rememberInputModalBottomSheetState<String>()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(PelletsContract.Event.Refresh) }
+
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.pellets_woods),
                     isLoading = state.isLoading,
                     onNavigate = {
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
-                    }
+                    },
                 ) {
                     items(items = state.pellets.woodsList) { wood ->
                         WoodBrandItem(
@@ -98,34 +100,34 @@ private fun WoodsDetailsContent(
                                 if (state.isConnected) {
                                     woodDeleteSheet.open(wood)
                                 }
-                            }
+                            },
                         )
                     }
                 }
                 BottomSheet(
-                    sheetState = woodDeleteSheet.sheetState
+                    sheetState = woodDeleteSheet.sheetState,
                 ) {
                     ConfirmSheet(
                         title = stringResource(R.string.dialog_confirm_action),
                         message = stringResource(
                             R.string.dialog_confirm_delete_item,
-                            woodDeleteSheet.data
+                            woodDeleteSheet.data,
                         ),
                         negativeButtonText = stringResource(R.string.cancel),
                         positiveButtonText = stringResource(R.string.delete),
                         positiveButtonColor = ButtonDefaults.buttonColors(
                             contentColor = MaterialTheme.colorScheme.onError,
-                            containerColor = MaterialTheme.colorScheme.error
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         onPositive = {
                             onEventSent(
                                 PelletsContract.Event.SendEvent(
-                                    PelletsEvent.DeleteWood(wood = woodDeleteSheet.data)
-                                )
+                                    PelletsEvent.DeleteWood(wood = woodDeleteSheet.data),
+                                ),
                             )
                             woodDeleteSheet.close()
                         },
-                        onNegative = { woodDeleteSheet.close() }
+                        onNegative = { woodDeleteSheet.close() },
                     )
                 }
             }
@@ -136,7 +138,7 @@ private fun WoodsDetailsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PelletsContract.Effect>?,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -145,7 +147,7 @@ private fun HandleSideEffects(
                 is PelletsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -170,11 +172,11 @@ private fun WoodsDetailsScreenPreview() {
                     isDataError = false,
                     isLoading = false,
                     isRefreshing = false,
-                    isConnected = true
+                    isConnected = true,
                 ),
                 effectFlow = null,
                 onEventSent = { },
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }

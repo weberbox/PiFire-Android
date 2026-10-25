@@ -50,12 +50,12 @@ fun InputValidationSheet(
     onUpdate: (String) -> Unit,
     onDelete: ((String) -> Unit)? = null,
     onDismiss: (() -> Unit)? = null,
-    viewModel: InputValidationViewModel = viewModel(key = title)
+    viewModel: InputValidationViewModel = viewModel(key = title),
 ) {
     LaunchedEffect(Unit) {
         viewModel.setInitialState(
             input = input,
-            validationOptions = validationOptions
+            validationOptions = validationOptions,
         )
     }
 
@@ -69,7 +69,7 @@ fun InputValidationSheet(
         onUpdate = onUpdate,
         onDelete = onDelete,
         onDismiss = onDismiss,
-        onValueChange = { viewModel.validateInput(it) }
+        onValueChange = { viewModel.validateInput(it) },
     )
 }
 
@@ -96,16 +96,16 @@ private fun InputValidationContent(
         modifier = Modifier.padding(
             start = MaterialTheme.spacing.mediumOne,
             end = MaterialTheme.spacing.mediumOne,
-            bottom = MaterialTheme.spacing.smallThree
+            bottom = MaterialTheme.spacing.smallThree,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -114,20 +114,20 @@ private fun InputValidationContent(
                 .then(
                     contentType?.let { type ->
                         Modifier.semantics { this.contentType = type }
-                    } ?: Modifier
+                    } ?: Modifier,
                 ),
             placeholder = placeholder,
             fieldInput = state.input,
             errorStatus = state.error,
             keyboardOptions = KeyboardOptions(
-                keyboardType = state.validationOptions.keyboardType
+                keyboardType = state.validationOptions.keyboardType,
             ),
             leadingIcon = leadingIcon,
-            onValueChange = onValueChange
+            onValueChange = onValueChange,
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (onDismiss != null) {
                 OutlinedButton(
@@ -135,11 +135,11 @@ private fun InputValidationContent(
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     Text(
                         text = stringResource(R.string.cancel),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -149,11 +149,11 @@ private fun InputValidationContent(
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     Text(
                         text = stringResource(R.string.delete),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -161,11 +161,11 @@ private fun InputValidationContent(
                 enabled = state.input.hasInteracted && !state.error.isError,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier.weight(1f),
-                onClick = { onUpdate(state.validationOptions.normalize(state.input.value)) }
+                onClick = { onUpdate(state.validationOptions.normalize(state.input.value)) },
             ) {
                 Text(
                     text = stringResource(R.string.save),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -178,13 +178,13 @@ private fun InputValidationContent(
 private fun InputValidationSheetPreview() {
     PiFireTheme {
         Surface(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             InputValidationContent(
                 state = ValidationState(
                     input = FieldInput(),
                     error = ErrorStatus(isError = false),
-                    validationOptions = ValidationOptions()
+                    validationOptions = ValidationOptions(),
                 ),
                 input = "Test",
                 title = stringResource(R.string.settings_server_address),
@@ -192,7 +192,7 @@ private fun InputValidationSheetPreview() {
                 leadingIcon = Icons.Outlined.Edit,
                 onUpdate = {},
                 onDelete = {},
-                onValueChange = {}
+                onValueChange = {},
             )
         }
     }

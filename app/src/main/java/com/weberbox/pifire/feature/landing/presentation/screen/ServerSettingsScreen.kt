@@ -58,7 +58,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceLocals
 @Composable
 fun ServerSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: ServerViewModel = hiltViewModel()
+    viewModel: ServerViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
@@ -69,6 +69,7 @@ fun ServerSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is ServerContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is ServerContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -78,7 +79,7 @@ fun ServerSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -89,14 +90,14 @@ private fun ServerSettings(
     state: ServerContract.State,
     effectFlow: Flow<ServerContract.Effect>?,
     onEventSent: (event: ServerContract.Event) -> Unit,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -107,7 +108,7 @@ private fun ServerSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_server),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(ServerContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(ServerContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -116,10 +117,11 @@ private fun ServerSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(ServerContract.Effect.Navigation.Back)
                 }
@@ -129,7 +131,7 @@ private fun ServerSettings(
                         state = state,
                         contentPadding = contentPadding,
                         onEventSent = onEventSent,
-                        onNavigationRequested = onNavigationRequested
+                        onNavigationRequested = onNavigationRequested,
                     )
                 }
             }
@@ -142,7 +144,7 @@ private fun ServerSettingsContent(
     state: ServerContract.State,
     contentPadding: PaddingValues,
     onEventSent: (event: ServerContract.Event) -> Unit,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit,
 ) {
     val credentialsSheet = rememberCustomModalBottomSheetState()
     val addressSheet = rememberCustomModalBottomSheetState()
@@ -150,27 +152,27 @@ private fun ServerSettingsContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_server_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_server_title)) },
         )
         Preference(
             title = {
                 Text(text = stringResource(R.string.settings_server_address))
             },
             summary = { Text(text = state.serverData.address) },
-            onClick = { addressSheet.open() }
+            onClick = { addressSheet.open() },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_auth_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_auth_title)) },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.credentialsEnabled,
             title = { Text(text = stringResource(R.string.settings_basic_auth_title)) },
             summary = { Text(text = stringResource(R.string.settings_basic_auth_summary)) },
             onClick = { credentialsSheet.open() },
-            onValueChange = { onEventSent(ServerContract.Event.EnableBasicAuth(it)) }
+            onValueChange = { onEventSent(ServerContract.Event.EnableBasicAuth(it)) },
         )
         TwoTargetSwitchPreference(
             value = state.serverData.headersEnabled,
@@ -179,16 +181,16 @@ private fun ServerSettingsContent(
             onClick = {
                 onNavigationRequested(
                     ServerContract.Effect.Navigation.NavRoute(
-                        NavGraph.LandingDest.HeaderSettings(state.serverData.uuid)
-                    )
+                        NavGraph.LandingDest.HeaderSettings(state.serverData.uuid),
+                    ),
                 )
             },
-            onValueChange = { onEventSent(ServerContract.Event.EnableHeaders(it)) }
+            onValueChange = { onEventSent(ServerContract.Event.EnableHeaders(it)) },
         )
         PreferenceWarning(stringResource(R.string.settings_auth_warning))
     }
     BottomSheet(
-        sheetState = addressSheet.sheetState
+        sheetState = addressSheet.sheetState,
     ) {
         InputStateSheet(
             inputState = state.serverAddress,
@@ -199,18 +201,18 @@ private fun ServerSettingsContent(
             onConfirm = {
                 addressSheet.close()
                 onEventSent(ServerContract.Event.UpdateAddress(it))
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = credentialsSheet.sheetState
+        sheetState = credentialsSheet.sheetState,
     ) {
         CredentialsSheet(
             basicAuth = state.basicAuth,
             onAction = {
                 onEventSent(ServerContract.Event.UpdateBasicAuth(it))
                 credentialsSheet.close()
-            }
+            },
         )
     }
 }
@@ -218,7 +220,7 @@ private fun ServerSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<ServerContract.Effect>?,
-    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ServerContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -231,7 +233,7 @@ private fun HandleSideEffects(
                 is ServerContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -249,16 +251,16 @@ private fun ServerSettingsPreview() {
                 ServerSettings(
                     state = ServerContract.State(
                         serverData = Server(
-                            address = "https://pifire.local"
+                            address = "https://pifire.local",
                         ),
                         basicAuth = BasicAuth(),
                         serverAddress = InputState(),
                         isInitialLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TimerSettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) : BaseViewModel<TimerContract.Event, TimerContract.State, TimerContract.Effect>() {
 
     init {
@@ -31,7 +31,7 @@ class TimerSettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: TimerContract.Event) {
@@ -77,7 +77,7 @@ class TimerSettingsViewModel @Inject constructor(
                     startUp = event.startUp,
                     augerOn = event.augerOn,
                     pMode = event.pMode,
-                    smartStartItems = event.smartStartItems
+                    smartStartItems = event.smartStartItems,
                 )
 
             is TimerContract.Event.SetStartupPWMDuty ->
@@ -91,7 +91,7 @@ class TimerSettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -110,7 +110,7 @@ class TimerSettingsViewModel @Inject constructor(
         startUp: Int,
         augerOn: Int,
         pMode: Int,
-        smartStartItems: List<SmartStart>
+        smartStartItems: List<SmartStart>,
     ) {
         val (temps, profiles) = updateRange(
             index = index,
@@ -155,7 +155,7 @@ class TimerSettingsViewModel @Inject constructor(
                     setEffect {
                         TimerContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -167,7 +167,7 @@ class TimerSettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -178,7 +178,7 @@ class TimerSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

@@ -8,7 +8,6 @@ interface LandingRepo {
 
     suspend fun getServerUuid(
         url: String,
-        headers: Map<String, String>
+        headers: Map<String, String>,
     ): Result<ServerUuidData, DataError>
-
 }

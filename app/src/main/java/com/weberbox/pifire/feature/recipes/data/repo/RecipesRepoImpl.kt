@@ -20,17 +20,19 @@ class RecipesRepoImpl @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dataStore: DataStore<RecipesData>,
     private val recipesApi: RecipesApi,
-    private val json: Json
+    private val json: Json,
 ) : RecipesRepo {
 
     override suspend fun getRecipes(): Result<List<Recipe>, DataError> = withContext(Dispatchers.IO) {
         recipesApi.getRecipes().let { result ->
             when (result) {
                 is Result.Error -> Result.Error(result.error)
+
                 is Result.Success -> {
                     parseGetResponse(result.data, json, RecipesDtoToDataMapper).let { data ->
                         when (data) {
                             is Result.Error -> Result.Error(data.error)
+
                             is Result.Success -> {
                                 sessionStateHolder.setRecipesData(data.data)
                                 updateRecipesData(data.data)

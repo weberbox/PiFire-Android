@@ -81,7 +81,7 @@ fun SwitchPreference(
             value = value,
             enabled = enabled,
             role = Role.Switch,
-            onValueChange = onValueChange
+            onValueChange = onValueChange,
         ),
         enabled = enabled,
         icon = icon,
@@ -95,15 +95,18 @@ fun SwitchPreference(
                     Icon(
                         modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
                         imageVector = if (value) Icons.Filled.Check else Icons.Filled.Close,
-                        tint = if (value) MaterialTheme.colorScheme.onSurface else
-                            MaterialTheme.colorScheme.inverseOnSurface,
-                        contentDescription = null
+                        tint = if (value) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.inverseOnSurface
+                        },
+                        contentDescription = null,
                     )
                 },
                 modifier = Modifier.padding(theme.padding.copy(start = theme.horizontalSpacing)),
                 enabled = enabled,
             )
-        }
+        },
     )
 }
 

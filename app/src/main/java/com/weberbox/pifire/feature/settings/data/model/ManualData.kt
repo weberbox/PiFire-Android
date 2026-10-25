@@ -7,5 +7,5 @@ data class ManualData(
     val igniter: Boolean = false,
     val power: Boolean = false,
     val pwm: Int = 100,
-    val dcFan: Boolean = false
+    val dcFan: Boolean = false,
 )

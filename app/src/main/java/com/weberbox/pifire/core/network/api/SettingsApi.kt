@@ -95,8 +95,7 @@ interface SettingsApi {
     suspend fun setWLedProfileTimer(profile: Int): Result<String, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<String, DataError>
-    suspend fun registerOneSignalDevice(devices: Map<String, OneSignalDeviceInfo>):
-            Result<String, DataError>
+    suspend fun registerOneSignalDevice(devices: Map<String, OneSignalDeviceInfo>): Result<String, DataError>
 
     suspend fun setPelletWarningEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setPelletPrimeIgnition(enabled: Boolean): Result<String, DataError>
@@ -150,7 +149,7 @@ interface SettingsApi {
     suspend fun setPWMMaxDutyCycle(dutyCycle: Int): Result<String, DataError>
     suspend fun setPWMControl(
         tempRange: List<Int>,
-        profiles: List<Profile>
+        profiles: List<Profile>,
     ): Result<String, DataError>
 
     suspend fun setSafetyStartupCheck(enabled: Boolean): Result<String, DataError>
@@ -168,8 +167,7 @@ interface SettingsApi {
     suspend fun setStartToHoldPrompt(enabled: Boolean): Result<String, DataError>
     suspend fun setSmartStartEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setSmartStartExitTemp(temp: Int): Result<String, DataError>
-    suspend fun setSmartStartTable(tempRange: List<Int>, profiles: List<SSProfile>)
-            : Result<String, DataError>
+    suspend fun setSmartStartTable(tempRange: List<Int>, profiles: List<SSProfile>): Result<String, DataError>
 
     suspend fun setStartToMode(mode: String): Result<String, DataError>
     suspend fun setStartToModeTemp(temp: Int): Result<String, DataError>

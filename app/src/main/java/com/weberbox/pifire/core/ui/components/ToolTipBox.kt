@@ -38,11 +38,11 @@ fun ToolTipBox(
     spacing: Dp = MaterialTheme.spacing.extraSmall,
     onClick: () -> Unit,
     tooltipState: TooltipState,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val positionProvider = rememberTooltipPositionProvider(
         positioning = TooltipAnchorPosition.Below,
-        spacingBetweenTooltipAndAnchor = spacing
+        spacingBetweenTooltipAndAnchor = spacing,
     )
     TooltipBox(
         enableUserInput = enableUserInput,
@@ -53,21 +53,21 @@ fun ToolTipBox(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
                 action = {
                     TextButton(
-                        onClick = onClick
+                        onClick = onClick,
                     ) {
                         Text(
-                            text = buttonText
+                            text = buttonText,
                         )
                     }
                 },
                 colors = TooltipDefaults.richTooltipColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-                )
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                ),
             ) {
                 Text(details)
             }
@@ -85,12 +85,12 @@ fun ToolTipBox(
 private fun ToolTipBoxPreview() {
     val tooltipState = rememberTooltipState(
         initialIsVisible = true,
-        isPersistent = true
+        isPersistent = true,
     )
     PiFireTheme {
         Surface {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) {
                 ToolTipBox(
                     title = stringResource(R.string.dash_hold_temp_tip_title),
@@ -98,13 +98,13 @@ private fun ToolTipBoxPreview() {
                     buttonText = stringResource(R.string.dismiss),
                     spacing = (-20).dp,
                     onClick = {},
-                    tooltipState = tooltipState
+                    tooltipState = tooltipState,
                 ) {
                     Text(
                         modifier = Modifier
                             .height(200.dp)
                             .fillMaxWidth(),
-                        text = "Testing"
+                        text = "Testing",
                     )
                 }
             }

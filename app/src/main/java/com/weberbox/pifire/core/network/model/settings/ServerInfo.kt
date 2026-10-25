@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ServerInfo(
     @SerialName("uuid")
-    val uuid: String? = null
+    val uuid: String? = null,
 )

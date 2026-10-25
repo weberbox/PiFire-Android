@@ -33,7 +33,7 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = vMajor * 1000000 + vMinor * 10000 + vPatch * 100
-        versionName = "${vMajor}.${vMinor}.${vPatch}"
+        versionName = "$vMajor.$vMinor.$vPatch"
         buildConfigField("String", "SENTRY_DSN", "\"${localProperties.getProperty("SENTRY_DSN", "")}\"")
         buildConfigField("String", "ONESIGNAL_APP_ID", "\"${localProperties.getProperty("ONESIGNAL_APP_ID", "")}\"")
     }
@@ -57,16 +57,17 @@ android {
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
+                    "proguard-rules.pro",
+                ),
             )
             buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
             buildConfigField("String", "GIT_REV", "\"${getGitRevCount()}\"")
-            if (keystoreProperties.isNotEmpty())
+            if (keystoreProperties.isNotEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug"))
@@ -115,7 +116,7 @@ androidComponents {
         val flavor = variant.flavorName
         val buildType = variant.buildType
         variant.outputs.forEach {
-            val apkName = "${appName}-${flavor}-${buildType}-${it.versionName.get()}.apk"
+            val apkName = "$appName-$flavor-$buildType-${it.versionName.get()}.apk"
             (it as VariantOutputImpl).outputFileName = apkName
         }
     }
@@ -213,9 +214,7 @@ fun getLocalProperties(): Properties {
     return properties
 }
 
-fun getCurrentTime(): String {
-    return System.currentTimeMillis().toString()
-}
+fun getCurrentTime(): String = System.currentTimeMillis().toString()
 
 fun getGitRevCount(): String {
     val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")

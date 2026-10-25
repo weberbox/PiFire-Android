@@ -50,7 +50,7 @@ class RemoteConfigRepoImpl @Inject constructor(
         return decodeConfig<List<AppUpdateConfigData>>(key = key, bundled = bundled)
             ?.filter {
                 it.appVersionCode > BuildConfig.VERSION_CODE &&
-                        (BuildConfig.ALPHA_BUILD || !it.isAlpha)
+                    (BuildConfig.ALPHA_BUILD || !it.isAlpha)
             }
             ?.maxByOrNull { it.appVersionCode }
     }
@@ -65,36 +65,32 @@ class RemoteConfigRepoImpl @Inject constructor(
     }
 
     // Returns false when the fetch failed; the last activated or bundled values stay in use.
-    private suspend fun fetchAndActivate(key: String, bundled: String): Boolean {
-        return try {
-            remoteConfig.setConfigSettingsAsync(configSettings).await()
-            remoteConfig.setDefaultsAsync(mapOf(key to bundled)).await()
-            withRetryBackoff {
-                remoteConfig.fetchAndActivate().await().also { activated ->
-                    if (!activated) Timber.d("No new Remote Config values for $key")
-                }
+    private suspend fun fetchAndActivate(key: String, bundled: String): Boolean = try {
+        remoteConfig.setConfigSettingsAsync(configSettings).await()
+        remoteConfig.setDefaultsAsync(mapOf(key to bundled)).await()
+        withRetryBackoff {
+            remoteConfig.fetchAndActivate().await().also { activated ->
+                if (!activated) Timber.d("No new Remote Config values for $key")
             }
-            true
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Timber.e(e, "Firebase fetch exception for $key, using local values")
-            false
         }
+        true
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Timber.e(e, "Firebase fetch exception for $key, using local values")
+        false
     }
 
     // A malformed remote value falls back to the bundled asset instead of crashing the caller.
-    private inline fun <reified T> decodeConfig(key: String, bundled: String): T? {
-        return try {
-            json.decodeFromString<T>(remoteConfig.getString(key))
+    private inline fun <reified T> decodeConfig(key: String, bundled: String): T? = try {
+        json.decodeFromString<T>(remoteConfig.getString(key))
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e, "Remote Config decode failed for $key, using bundled defaults")
+        try {
+            json.decodeFromString<T>(bundled)
         } catch (e: IllegalArgumentException) {
-            Timber.e(e, "Remote Config decode failed for $key, using bundled defaults")
-            try {
-                json.decodeFromString<T>(bundled)
-            } catch (e: IllegalArgumentException) {
-                Timber.e(e, "Bundled config decode failed for $key")
-                null
-            }
+            Timber.e(e, "Bundled config decode failed for $key")
+            null
         }
     }
 
@@ -105,16 +101,16 @@ class RemoteConfigRepoImpl @Inject constructor(
                 message = UiText(R.string.dialog_firebase_failed_message),
                 dismissible = false,
                 positiveAction = DialogAction(
-                    buttonText = UiText(R.string.close)
-                )
-            )
+                    buttonText = UiText(R.string.close),
+                ),
+            ),
         )
     }
 
     private suspend fun <T> withRetryBackoff(
         maxRetries: Int = 3,
         baseDelayMillis: Long = 1000,
-        block: suspend () -> T
+        block: suspend () -> T,
     ): T {
         repeat(maxRetries) { attempt ->
             try {

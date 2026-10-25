@@ -39,12 +39,10 @@ abstract class InfoDataModule {
     companion object {
         @Singleton
         @Provides
-        fun provideInfoDataStore(@ApplicationContext appContext: Context): DataStore<InfoData> {
-            return DataStoreFactory.create(
-                serializer = InfoSerializer,
-                produceFile = { appContext.dataStoreFile(AppConfig.INFO_DATA_NAME) },
-                corruptionHandler = ReplaceFileCorruptionHandler { InfoData() }
-            )
-        }
+        fun provideInfoDataStore(@ApplicationContext appContext: Context): DataStore<InfoData> = DataStoreFactory.create(
+            serializer = InfoSerializer,
+            produceFile = { appContext.dataStoreFile(AppConfig.INFO_DATA_NAME) },
+            corruptionHandler = ReplaceFileCorruptionHandler { InfoData() },
+        )
     }
 }

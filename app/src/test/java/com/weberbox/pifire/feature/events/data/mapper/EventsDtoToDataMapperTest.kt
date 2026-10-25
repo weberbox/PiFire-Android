@@ -13,7 +13,7 @@ class EventsDtoToDataMapperTest {
             EventsDto.Event(date = "2026-10-25", time = "18:18:00", message = "Smoke Mode started"),
             EventsDto.Event(date = "2026-10-25", time = "18:18:00", message = "Smoke Mode started"),
             EventsDto.Event(date = "2026-10-25", time = "18:19:00", message = "[WARNING] Hopper low"),
-        )
+        ),
     )
 
     @Test

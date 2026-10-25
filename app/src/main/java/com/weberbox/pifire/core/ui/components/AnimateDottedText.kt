@@ -25,7 +25,7 @@ fun AnimateDottedText(
     color: Color = MaterialTheme.colorScheme.onSurface,
     textAlign: TextAlign = TextAlign.Start,
     dotsCount: Int = 4,
-    cycleDuration: Int = 1000
+    cycleDuration: Int = 1000,
 ) {
     val transition = rememberInfiniteTransition(label = "Dots Transition")
     val visibleDotsCount = transition.animateValue(
@@ -35,11 +35,11 @@ fun AnimateDottedText(
         animationSpec = infiniteRepeatable(
             animation = tween(
                 durationMillis = cycleDuration,
-                easing = LinearEasing
+                easing = LinearEasing,
             ),
-            repeatMode = RepeatMode.Restart
+            repeatMode = RepeatMode.Restart,
         ),
-        label = "Visible Dots Count"
+        label = "Visible Dots Count",
     )
 
     Text(
@@ -48,6 +48,6 @@ fun AnimateDottedText(
         style = style,
         color = color,
         fontWeight = fontWeight,
-        textAlign = textAlign
+        textAlign = textAlign,
     )
 }

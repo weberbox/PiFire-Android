@@ -16,17 +16,17 @@ fun Modifier.rotateEffect(
     enabled: Boolean = false,
     targetDegrees: Float = 360f,
     initialDegrees: Float = 0f,
-    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200, easing = LinearEasing)
+    animationSpec: DurationBasedAnimationSpec<Float> = tween(1200, easing = LinearEasing),
 ): Modifier {
     val rotateTransition = rememberInfiniteTransition("rotateTransition")
     val rotation by rotateTransition.animateFloat(
         initialValue = initialDegrees,
         targetValue = targetDegrees,
         animationSpec = infiniteRepeatable(animationSpec),
-        label = "Rotation"
+        label = "Rotation",
     )
 
     return this.rotate(
-        degrees = if (enabled) rotation else initialDegrees
+        degrees = if (enabled) rotation else initialDegrees,
     )
 }

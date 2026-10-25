@@ -12,7 +12,7 @@ data class RecipesDto(
     val uuid: String? = null,
 
     @SerialName("recipe_details")
-    val recipeDetails: List<RecipeDetails>? = null
+    val recipeDetails: List<RecipeDetails>? = null,
 ) {
     @Serializable
     data class RecipeDetails(
@@ -20,7 +20,7 @@ data class RecipesDto(
         val details: Details? = null,
 
         @SerialName("filename")
-        val filename: String? = null
+        val filename: String? = null,
     ) {
         @Serializable
         data class Details(
@@ -34,7 +34,7 @@ data class RecipesDto(
             val metadata: MetaData? = null,
 
             @SerialName("recipe")
-            val recipe: Recipe? = null
+            val recipe: Recipe? = null,
         ) {
             @Serializable
             data class Asset(
@@ -51,7 +51,7 @@ data class RecipesDto(
                 val encodedImage: String? = null,
 
                 @SerialName("encoded_thumb")
-                val encodedThumb: String? = null
+                val encodedThumb: String? = null,
             )
 
             @Serializable
@@ -99,7 +99,7 @@ data class RecipesDto(
                 val username: String? = null,
 
                 @SerialName("version")
-                val version: String? = null
+                val version: String? = null,
             )
 
             @Serializable
@@ -122,7 +122,7 @@ data class RecipesDto(
                     val name: String? = null,
 
                     @SerialName("quantity")
-                    val quantity: String? = null
+                    val quantity: String? = null,
                 )
 
                 @Serializable
@@ -137,7 +137,7 @@ data class RecipesDto(
                     val step: Int? = null,
 
                     @SerialName("text")
-                    val text: String? = null
+                    val text: String? = null,
                 )
 
                 @Serializable
@@ -165,7 +165,7 @@ data class RecipesDto(
                     val triggerTemps: TriggerTemps? = null,
 
                     @Transient
-                    var currentStep: Boolean? = null
+                    var currentStep: Boolean? = null,
                 ) {
                     @Serializable
                     data class TriggerTemps(
@@ -175,7 +175,7 @@ data class RecipesDto(
 
                         @SerialName("primary")
                         @Serializable(with = IntOrDoubleSerializer::class)
-                        val primary: Int? = null
+                        val primary: Int? = null,
                     )
                 }
             }

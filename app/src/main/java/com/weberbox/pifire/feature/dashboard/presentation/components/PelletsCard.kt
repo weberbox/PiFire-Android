@@ -45,7 +45,7 @@ internal fun PelletsCard(
                 enabled = level < AppConfig.DANGER_PELLET_WARNING && level > 0,
                 targetScale = 1.2f,
                 color = MaterialTheme.colorScheme.errorContainer,
-                shape = MaterialTheme.shapes.large
+                shape = MaterialTheme.shapes.large,
             )
             .height(150.dp)
             .fillMaxWidth(),
@@ -53,19 +53,19 @@ internal fun PelletsCard(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Row(
             modifier = Modifier
                 .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                 .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier
                     .padding(
                         start = MaterialTheme.spacing.smallTwo,
-                        end = MaterialTheme.spacing.smallOne
+                        end = MaterialTheme.spacing.smallOne,
                     )
                     .weight(1f),
             ) {
@@ -74,26 +74,26 @@ internal fun PelletsCard(
                         .padding(top = MaterialTheme.spacing.smallOne)
                         .fillMaxWidth(),
 
-                    ) {
+                ) {
                     Text(
                         text = stringResource(R.string.dash_pellets_title),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.tertiary,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
                 Row(
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(bottom = MaterialTheme.spacing.smallOne)
+                            .padding(bottom = MaterialTheme.spacing.smallOne),
                     ) {
                         AnimatedCounter(
                             count = if (hasDistanceSensor) "$level%" else "--",
-                            style = MaterialTheme.typography.displayMedium
+                            style = MaterialTheme.typography.displayMedium,
                         )
                         Text(
                             text = stringResource(R.string.dash_remaining_title),
@@ -104,8 +104,8 @@ internal fun PelletsCard(
                     Box(
                         modifier = Modifier.padding(
                             bottom = MaterialTheme.spacing.smallOne,
-                            top = MaterialTheme.spacing.smallOne
-                        )
+                            top = MaterialTheme.spacing.smallOne,
+                        ),
                     ) {
                         val progress = when {
                             hasDistanceSensor -> level.toFloat() / 100f
@@ -114,16 +114,18 @@ internal fun PelletsCard(
                         val color = when {
                             level <= AppConfig.LOW_PELLET_WARNING && progress > 0 ->
                                 MaterialTheme.colorScheme.errorContainer
+
                             level > AppConfig.LOW_PELLET_WARNING &&
-                                    level < AppConfig.MEDIUM_PELLET_WARNING ->
+                                level < AppConfig.MEDIUM_PELLET_WARNING ->
                                 MaterialTheme.colorScheme.tertiaryContainer
+
                             else -> MaterialTheme.colorScheme.primaryContainer
                         }
                         VerticalProgress(
                             color = color,
                             progress = {
                                 if (progress > 0f) progress else 0f
-                            }
+                            },
                         )
                     }
                 }
@@ -143,19 +145,19 @@ private fun HopperCardPreview() {
                     .padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 PelletsCard(
                     level = 50,
                     modifier = Modifier
                         .padding(end = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 PelletsCard(
                     level = 30,
                     modifier = Modifier
                         .padding(start = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }

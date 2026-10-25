@@ -28,12 +28,16 @@ val Icon.Filled.DoubleArrowRight: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 512.0f,
-            viewportHeight = 512.0f
+            viewportHeight = 512.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(470.6f, 278.6f)
                 curveToRelative(12.5f, -12.5f, 12.5f, -32.8f, 0.0f, -45.3f)

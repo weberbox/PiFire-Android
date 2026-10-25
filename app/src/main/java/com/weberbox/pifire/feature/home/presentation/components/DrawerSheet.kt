@@ -46,7 +46,7 @@ internal fun DrawerSheet(
     grillName: String = "",
     navigationItems: List<NavigationItem>,
     staticNavigationItems: List<StaticNavigationItem>,
-    onNavigationRequested: (NavRequest) -> Unit
+    onNavigationRequested: (NavRequest) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -55,7 +55,7 @@ internal fun DrawerSheet(
             .fillMaxSize()
             .verticalScroll(scrollState)
             .padding(horizontal = MaterialTheme.spacing.smallTwo),
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
     ) {
         if (!isPermDrawerNavigation()) {
             Box(
@@ -67,7 +67,7 @@ internal fun DrawerSheet(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.MenuOpen,
                         contentDescription = stringResource(R.string.nav_drawer_close),
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -75,17 +75,17 @@ internal fun DrawerSheet(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumTwo))
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             PiFireLogo(
-                textStyle = MaterialTheme.typography.headlineLarge
+                textStyle = MaterialTheme.typography.headlineLarge,
             )
             if (grillName.isNotBlank()) {
                 Text(
                     text = grillName,
                     fontWeight = FontWeight.Bold,
                     fontFamily = navFontFamily,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -95,26 +95,32 @@ internal fun DrawerSheet(
                 label = {
                     Text(
                         text = item.title,
-                        fontWeight = if (currentPage == index)
-                            FontWeight.Bold else FontWeight.Normal
+                        fontWeight = if (currentPage == index) {
+                            FontWeight.Bold
+                        } else {
+                            FontWeight.Normal
+                        },
                     )
                 },
                 selected = currentPage == index,
                 onClick = { onNavigationRequested(NavRequest.PagerIndex(index)) },
                 icon = {
                     Icon(
-                        imageVector = if (currentPage == index)
-                            item.selectedIcon else item.unselectedIcon,
-                        contentDescription = item.title
+                        imageVector = if (currentPage == index) {
+                            item.selectedIcon
+                        } else {
+                            item.unselectedIcon
+                        },
+                        contentDescription = item.title,
                     )
                 },
                 badge = {
                     item.badgeCount?.let {
                         Text(
-                            text = item.badgeCount.toString()
+                            text = item.badgeCount.toString(),
                         )
                     }
-                }
+                },
             )
         }
         HorizontalDivider(
@@ -122,16 +128,16 @@ internal fun DrawerSheet(
             modifier = Modifier
                 .padding(
                     vertical = MaterialTheme.spacing.small,
-                    horizontal = MaterialTheme.spacing.smallTwo
+                    horizontal = MaterialTheme.spacing.smallTwo,
                 ),
-            thickness = 1.dp
+            thickness = 1.dp,
         )
         staticNavigationItems.forEach { item ->
             NavigationDrawerItem(
                 label = {
                     Text(
                         text = item.title,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
                 selected = false,
@@ -139,9 +145,9 @@ internal fun DrawerSheet(
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.title
+                        contentDescription = item.title,
                     )
-                }
+                },
             )
         }
     }
@@ -161,7 +167,7 @@ private fun DrawerContentPreview() {
     val staticNavigationItems = buildStaticNavigationItems()
     PiFireTheme {
         Box(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             DrawerSheet(
                 currentPage = 1,
@@ -169,7 +175,7 @@ private fun DrawerContentPreview() {
                 staticNavigationItems = staticNavigationItems,
                 modifier = Modifier.safeDrawingPadding(),
                 grillName = "Development",
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

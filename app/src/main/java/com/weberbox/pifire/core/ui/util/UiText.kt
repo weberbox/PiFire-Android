@@ -82,7 +82,6 @@ private data class DynamicString(val value: String) : UiText {
 
     override fun describeContents() = 0
 
-
     companion object CREATOR : Parcelable.Creator<DynamicString> {
         override fun createFromParcel(parcel: Parcel) = DynamicString(parcel)
         override fun newArray(size: Int): Array<DynamicString?> = arrayOfNulls(size)
@@ -113,7 +112,6 @@ private data class StringResource(
     }
 
     override fun describeContents() = 0
-
 
     companion object CREATOR : Parcelable.Creator<StringResource> {
         override fun createFromParcel(parcel: Parcel) = StringResource(parcel)
@@ -149,7 +147,6 @@ private data class PluralsResource(
     }
 
     override fun describeContents() = 0
-
 
     companion object CREATOR : Parcelable.Creator<PluralsResource> {
         override fun createFromParcel(parcel: Parcel) = PluralsResource(parcel)
@@ -190,7 +187,6 @@ private class UiTextArgListImpl(
 
     override fun describeContents() = 0
 
-
     companion object CREATOR : Parcelable.Creator<UiTextArgListImpl> {
         override fun createFromParcel(parcel: Parcel) = UiTextArgListImpl(parcel)
         override fun newArray(size: Int): Array<UiTextArgListImpl?> = arrayOfNulls(size)
@@ -205,18 +201,17 @@ private val UiTextArgList.rawList: List<UiTextArg?>
 
 private val EmptyUiArgs: UiTextArgList = UiTextArgListImpl(emptyList())
 
-
 private data class SerializableArg(val value: Serializable) : UiTextArg {
 
     constructor(parcel: Parcel) : this(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             parcel.readSerializable(
                 Serializable::class.java.classLoader,
-                Serializable::class.java
+                Serializable::class.java,
             ) as Serializable
         } else {
             parcel.readSerializable() as Serializable
-        }
+        },
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -227,13 +222,11 @@ private data class SerializableArg(val value: Serializable) : UiTextArg {
 
     override fun toString() = value.toString()
 
-
     companion object CREATOR : Parcelable.Creator<SerializableArg> {
         override fun createFromParcel(parcel: Parcel) = SerializableArg(parcel)
         override fun newArray(size: Int): Array<SerializableArg?> = arrayOfNulls(size)
     }
 }
-
 
 private data class ParcelableArg(val value: Parcelable) : UiTextArg {
 
@@ -244,8 +237,8 @@ private data class ParcelableArg(val value: Parcelable) : UiTextArg {
             } else {
                 @Suppress("DEPRECATION")
                 parcel.readParcelable<Parcelable>(Parcelable::class.java.classLoader)
-            }
-        ) { "UiText Parcelable argument was not written" }
+            },
+        ) { "UiText Parcelable argument was not written" },
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -255,7 +248,6 @@ private data class ParcelableArg(val value: Parcelable) : UiTextArg {
     override fun describeContents() = 0
 
     override fun toString() = value.toString()
-
 
     companion object CREATOR : Parcelable.Creator<ParcelableArg> {
         override fun createFromParcel(parcel: Parcel) = ParcelableArg(parcel)
@@ -280,7 +272,6 @@ private data class BooleanResourceArg(val resId: Int) : UiTextArg {
 
     override fun toString() = "booleanRes(id=$resId)"
 
-
     companion object CREATOR : Parcelable.Creator<BooleanResourceArg> {
         override fun createFromParcel(parcel: Parcel) = BooleanResourceArg(parcel)
         override fun newArray(size: Int): Array<BooleanResourceArg?> = arrayOfNulls(size)
@@ -298,7 +289,6 @@ private data class IntegerResourceArg(val resId: Int) : UiTextArg {
     override fun describeContents() = 0
 
     override fun toString() = "integerRes(id=$resId)"
-
 
     companion object CREATOR : Parcelable.Creator<IntegerResourceArg> {
         override fun createFromParcel(parcel: Parcel) = IntegerResourceArg(parcel)
@@ -325,7 +315,6 @@ private data class StringResourceArg(
     override fun describeContents() = 0
 
     override fun toString() = "stringRes(id=$resId, args=$args)"
-
 
     companion object CREATOR : Parcelable.Creator<StringResourceArg> {
         override fun createFromParcel(parcel: Parcel) = StringResourceArg(parcel)
@@ -356,7 +345,6 @@ private data class PluralsResourceArg(
 
     override fun toString() = "pluralsRes(id=$resId, quantity=$quantity, args=$args)"
 
-
     companion object CREATOR : Parcelable.Creator<PluralsResourceArg> {
         override fun createFromParcel(parcel: Parcel) = PluralsResourceArg(parcel)
 
@@ -369,9 +357,13 @@ private fun UiTextArg.getValue(context: Context): Any {
 
     return when (this) {
         is SerializableArg -> value
+
         is ParcelableArg -> value
+
         is BooleanResourceArg -> resources.getBoolean(resId)
+
         is IntegerResourceArg -> resources.getInteger(resId)
+
         is StringResourceArg -> {
             val arguments = args.map { arg -> arg?.getValue(context) }.toTypedArray()
             resources.getString(resId, *arguments)
@@ -384,16 +376,17 @@ private fun UiTextArg.getValue(context: Context): Any {
     }
 }
 
-
 private fun Any.asUiArg(): UiTextArg = when (this) {
     is UiTextArg -> this
+
     is Parcelable -> ParcelableArg(this)
+
     is Serializable -> SerializableArg(this)
+
     else -> throw IllegalArgumentException(
-        "Unsupported type: ${this::class}. Only Serializable and Parcelable types are supported."
+        "Unsupported type: ${this::class}. Only Serializable and Parcelable types are supported.",
     )
 }
-
 
 private inline fun <reified T> Parcel.readList(): List<T> {
     val outList = mutableListOf<T>()

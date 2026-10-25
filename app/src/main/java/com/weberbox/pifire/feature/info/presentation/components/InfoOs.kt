@@ -22,32 +22,32 @@ import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
 
 @Composable
 internal fun InfoOs(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_os_info),
-        headerIcon = Icons.Outlined.KeyboardCommandKey
+        headerIcon = Icons.Outlined.KeyboardCommandKey,
     ) {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             InfoItemRow(
                 title = stringResource(R.string.info_os_name),
-                summary = info.osInfo.prettyName
+                summary = info.osInfo.prettyName,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_os_version),
-                summary = info.osInfo.version
+                summary = info.osInfo.version,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_os_codename),
-                summary = info.osInfo.codeName
+                summary = info.osInfo.codeName,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_os_arch),
-                summary = info.osInfo.architecture
+                summary = info.osInfo.architecture,
             )
         }
     }
@@ -61,7 +61,7 @@ private fun InfoOsPreview() {
     PiFireTheme {
         Surface {
             InfoOs(
-                info = info
+                info = info,
             )
         }
     }

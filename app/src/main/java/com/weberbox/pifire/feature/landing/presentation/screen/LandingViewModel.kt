@@ -48,7 +48,7 @@ class LandingViewModel @Inject constructor(
     private val analytics: Analytics,
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingContract.Event, LandingContract.State, LandingContract.Effect>() {
     private val pollerJobs = mutableListOf<Job>()
     private var servers: Map<String, SettingsData.Server> = emptyMap()
@@ -68,17 +68,20 @@ class LandingViewModel @Inject constructor(
         isInitialLoading = true,
         isLoading = false,
         isDataError = false,
-        biometricServerPrompt = false
+        biometricServerPrompt = false,
     )
 
     override fun handleEvents(event: LandingContract.Event) {
         when (event) {
             is LandingContract.Event.Back -> setEffect { LandingContract.Effect.Navigation.Back }
+
             is LandingContract.Event.DeleteServer -> deleteServer(event.uuid)
+
             is LandingContract.Event.SelectServer -> selectServer(event.uuid)
+
             is LandingContract.Event.VoiceSearch -> {
                 analytics.logEvent(
-                    name = AnalyticsEvent.VoiceSearch.name
+                    name = AnalyticsEvent.VoiceSearch.name,
                 )
             }
 
@@ -105,7 +108,7 @@ class LandingViewModel @Inject constructor(
                 requireServerBiometrics = it
                 setState {
                     copy(
-                        biometricServerPrompt = it
+                        biometricServerPrompt = it,
                     )
                 }
             }
@@ -127,10 +130,10 @@ class LandingViewModel @Inject constructor(
                                     name = server.value.name.takeIf { name -> name.isNotEmpty() }
                                         ?: "Smoker ${index + 1}",
                                     address = server.value.address,
-                                    online = false
+                                    online = false,
                                 )
-                            }
-                        )
+                            },
+                        ),
                     )
                 }
             }
@@ -152,9 +155,9 @@ class LandingViewModel @Inject constructor(
                         fetchData = {
                             landingRepo.getServerUuid(
                                 url = buildUuidUrl(server.value.address),
-                                headers = headersManager.buildServerHeaders(server.value)
+                                headers = headersManager.buildServerHeaders(server.value),
                             )
-                        }
+                        },
                     ).poll(2000).collect { result ->
                         updateServerState(result, server.key)
                     }
@@ -198,14 +201,16 @@ class LandingViewModel @Inject constructor(
         val updatedServers = serverData.servers.map { server ->
             if (server.uuid == uuid && server.online != online) {
                 server.copy(online = online)
-            } else server
+            } else {
+                server
+            }
         }
         if (updatedServers != serverData.servers) {
             setState {
                 copy(
                     serverData = serverData.copy(
-                        servers = updatedServers
-                    )
+                        servers = updatedServers,
+                    ),
                 )
             }
         }
@@ -221,7 +226,7 @@ class LandingViewModel @Inject constructor(
                         setEffect {
                             LandingContract.Effect.Notification(
                                 text = UiText(R.string.alerter_socket_connection_failed),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -232,7 +237,7 @@ class LandingViewModel @Inject constructor(
                         setEffect {
                             LandingContract.Effect.Navigation.NavRoute(
                                 route = NavGraph.HomeDest,
-                                popUpToRoute = NavGraph.LandingDest.Landing::class
+                                popUpToRoute = NavGraph.LandingDest.Landing::class,
                             )
                         }
                     }
@@ -245,8 +250,8 @@ class LandingViewModel @Inject constructor(
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "deleteServer"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "deleteServer",
+            ),
         )
         viewModelScope.launch {
             settingsRepo.deleteServer(uuid)

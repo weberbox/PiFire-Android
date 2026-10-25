@@ -11,7 +11,7 @@ import com.weberbox.pifire.core.ui.util.UiText
 class ServerContract {
 
     sealed class Event : ViewEvent {
-        data object Back: Event()
+        data object Back : Event()
         data class EnableBasicAuth(val enabled: Boolean) : Event()
         data class UpdateBasicAuth(val basicAuth: BasicAuth) : Event()
         data class EnableHeaders(val enabled: Boolean) : Event()
@@ -24,7 +24,7 @@ class ServerContract {
         val basicAuth: BasicAuth,
         val serverAddress: InputState,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

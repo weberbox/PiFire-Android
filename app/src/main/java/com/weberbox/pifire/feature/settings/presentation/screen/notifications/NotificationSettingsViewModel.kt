@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationSettingsViewModel @Inject constructor(
     private val oneSignalManager: OneSignalManager,
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) : BaseViewModel<NotifContract.Event, NotifContract.State, NotifContract.Effect>() {
 
     init {
@@ -34,7 +34,7 @@ class NotificationSettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: NotifContract.Event) {
@@ -109,7 +109,7 @@ class NotificationSettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
                 if (server.settings.onesignalEnabled) {
@@ -497,7 +497,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -508,7 +508,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -521,12 +521,14 @@ class NotificationSettingsViewModel @Inject constructor(
         withContext(Dispatchers.Main) {
             when (result) {
                 OneSignalStatus.ONESIGNAL_REGISTERED -> {}
+
                 OneSignalStatus.ONESIGNAL_APP_UPDATED -> {}
+
                 OneSignalStatus.ONESIGNAL_NO_ID -> {
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_id_error_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -535,7 +537,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_alert_consent_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -544,7 +546,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_register_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -553,7 +555,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_error_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -562,7 +564,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_token_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -571,7 +573,7 @@ class NotificationSettingsViewModel @Inject constructor(
                     setEffect {
                         NotifContract.Effect.Notification(
                             text = UiText(R.string.settings_onesignal_subscribe_message),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -588,7 +590,7 @@ class NotificationSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

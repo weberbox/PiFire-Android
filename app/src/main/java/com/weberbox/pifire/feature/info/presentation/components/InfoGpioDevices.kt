@@ -26,46 +26,46 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoGpioDevices(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_gpio_device),
-        headerIcon = Icons.Outlined.DeviceHub
+        headerIcon = Icons.Outlined.DeviceHub,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = MaterialTheme.spacing.smallOne),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Text(
                     text = stringResource(R.string.info_gpio_device_name),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.info_gpio_device_function),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.info_gpio_device_pin),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
             info.devPins.forEach { pin ->
@@ -75,19 +75,19 @@ internal fun InfoGpioDevices(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(1f),
                     )
                     Text(
                         text = pin.function,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                     Text(
                         text = pin.pin,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
@@ -105,20 +105,20 @@ private fun InfoGpioDevicesPreview() {
                 GPIODeviceData(
                     name = "Input",
                     function = "enter_sw",
-                    pin = "21"
+                    pin = "21",
                 ),
                 GPIODeviceData(
                     name = "",
                     function = "up_clk",
-                    pin = "16"
-                )
-            )
+                    pin = "16",
+                ),
+            ),
         )
     }
     PiFireTheme {
         Surface {
             InfoGpioDevices(
-                info = info
+                info = info,
             )
         }
     }

@@ -5,12 +5,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 internal data class FabItem(
     val icon: ImageVector,
     val title: Int,
-    val action: Action
+    val action: Action,
 ) {
     enum class Action {
         Delete,
         Share,
         Print,
-        Run
+        Run,
     }
 }

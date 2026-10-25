@@ -8,6 +8,6 @@ object ServerUuidDtoToDataMapper : Mapper<ServerUuidDto, ServerUuidData> {
     private val defaults = ServerUuidData()
 
     override fun map(from: ServerUuidDto) = ServerUuidData(
-        uuid = from.uuid ?: defaults.uuid
+        uuid = from.uuid ?: defaults.uuid,
     )
 }

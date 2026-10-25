@@ -92,7 +92,7 @@ import timber.log.Timber
 fun HomeScreenDestination(
     navController: NavHostController,
     backStackEntry: NavBackStackEntry,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     val showDashboard by backStackEntry.savedStateHandle
@@ -110,6 +110,7 @@ fun HomeScreenDestination(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is HomeContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                 is HomeContract.Effect.Navigation.Changelog -> {
                     navController.navigateFrom(from = sourceEntry, route = NavGraph.Changelog)
                 }
@@ -123,7 +124,7 @@ fun HomeScreenDestination(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -137,7 +138,7 @@ private fun HomeScreen(
     state: HomeContract.State,
     effectFlow: Flow<HomeContract.Effect>?,
     onEventSent: (event: HomeContract.Event) -> Unit,
-    onNavigationRequested: (HomeContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (HomeContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val window = activity?.window
@@ -152,7 +153,7 @@ private fun HomeScreen(
 
     val pagerState = rememberPagerState(
         initialPage = initialPage,
-        pageCount = { navigationItems.size }
+        pageCount = { navigationItems.size },
     )
     val drawerState = rememberOffsetDrawerState()
     val scope = rememberCoroutineScope()
@@ -161,7 +162,7 @@ private fun HomeScreen(
     HandleSideEffects(
         activity = activity,
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     BackHandler(drawerState.isOpen || pagerState.currentPage != initialPage) {
@@ -173,7 +174,7 @@ private fun HomeScreen(
             scope.launch {
                 pagerState.animateScrollToPage(
                     page = initialPage,
-                    animationSpec = getPagerAnimationSpec()
+                    animationSpec = getPagerAnimationSpec(),
                 )
             }
         }
@@ -219,6 +220,7 @@ private fun HomeScreen(
                     scope.launch {
                         when (navRequest) {
                             is NavRequest.Close -> drawerState.close()
+
                             is NavRequest.NavRoute -> {
                                 drawerState.close()
                                 when (navRequest.destination) {
@@ -232,17 +234,17 @@ private fun HomeScreen(
                                             onSuccess = {
                                                 onNavigationRequested(
                                                     HomeContract.Effect.Navigation.NavRoute(
-                                                        navRequest.destination
-                                                    )
+                                                        navRequest.destination,
+                                                    ),
                                                 )
-                                            }
+                                            },
                                         )
 
                                     else ->
                                         onNavigationRequested(
                                             HomeContract.Effect.Navigation.NavRoute(
-                                                navRequest.destination
-                                            )
+                                                navRequest.destination,
+                                            ),
                                         )
                                 }
                             }
@@ -251,14 +253,14 @@ private fun HomeScreen(
                                 drawerState.close()
                                 pagerState.animateScrollToPage(
                                     page = navRequest.index,
-                                    animationSpec = getPagerAnimationSpec()
+                                    animationSpec = getPagerAnimationSpec(),
                                 )
                             }
                         }
                     }
-                }
+                },
             )
-        }
+        },
     ) {
         Row {
             if (isPermDrawerNavigation) {
@@ -270,6 +272,7 @@ private fun HomeScreen(
                         scope.launch {
                             when (navRequest) {
                                 is NavRequest.Close -> {}
+
                                 is NavRequest.NavRoute -> {
                                     when (navRequest.destination) {
                                         is NavGraph.LandingDest.Landing ->
@@ -282,17 +285,17 @@ private fun HomeScreen(
                                                 onSuccess = {
                                                     onNavigationRequested(
                                                         HomeContract.Effect.Navigation.NavRoute(
-                                                            navRequest.destination
-                                                        )
+                                                            navRequest.destination,
+                                                        ),
                                                     )
-                                                }
+                                                },
                                             )
 
                                         else ->
                                             onNavigationRequested(
                                                 HomeContract.Effect.Navigation.NavRoute(
-                                                    navRequest.destination
-                                                )
+                                                    navRequest.destination,
+                                                ),
                                             )
                                     }
                                 }
@@ -300,12 +303,12 @@ private fun HomeScreen(
                                 is NavRequest.PagerIndex -> {
                                     pagerState.animateScrollToPage(
                                         page = navRequest.index,
-                                        animationSpec = getPagerAnimationSpec()
+                                        animationSpec = getPagerAnimationSpec(),
                                     )
                                 }
                             }
                         }
-                    }
+                    },
                 )
             }
             if (isRailNavigation) {
@@ -318,14 +321,14 @@ private fun HomeScreen(
                                 is NavRequest.PagerIndex -> {
                                     pagerState.animateScrollToPage(
                                         page = navRequest.index,
-                                        animationSpec = getPagerAnimationSpec()
+                                        animationSpec = getPagerAnimationSpec(),
                                     )
                                 }
 
                                 else -> {}
                             }
                         }
-                    }
+                    },
                 )
             }
             Scaffold(
@@ -342,7 +345,7 @@ private fun HomeScreen(
                             )
                         },
                         windowInsets = windowInsets.only(
-                            WindowInsetsSides.End + WindowInsetsSides.Top
+                            WindowInsetsSides.End + WindowInsetsSides.Top,
                         ),
                         scrollBehavior = scrollBehavior,
                         hazeState = hazeState,
@@ -355,14 +358,14 @@ private fun HomeScreen(
                                 isHoldMode = state.isHoldMode,
                                 onTriggerLidEvent = {
                                     onEventSent(HomeContract.Event.TriggerLidOpen)
-                                }
+                                },
                             )
                         },
                         onNavigate = {
                             scope.launch {
                                 drawerState.open()
                             }
-                        }
+                        },
                     )
                 },
                 bottomBar = {
@@ -374,16 +377,16 @@ private fun HomeScreen(
                                 scope.launch {
                                     pagerState.animateScrollToPage(
                                         page = index,
-                                        animationSpec = getPagerAnimationSpec()
+                                        animationSpec = getPagerAnimationSpec(),
                                     )
                                 }
-                            }
+                            },
                         )
                     }
                 },
                 containerColor = MaterialTheme.colorScheme.background,
                 contentColor = contentColorFor(MaterialTheme.colorScheme.background),
-                contentWindowInsets = windowInsets
+                contentWindowInsets = windowInsets,
             ) { innerPadding ->
                 val contentPadding = navContentPadding(innerPadding)
                 var scrollEnabled by remember { mutableStateOf(true) }
@@ -401,8 +404,8 @@ private fun HomeScreen(
                                     onMove = { changeList ->
                                         changeList.firstOrNull()?.let {
                                             if (scrollEnabled &&
-                                                (it.position.x - it.previousPosition.x) > 0f
-                                                && pagerState.currentPage == 0
+                                                (it.position.x - it.previousPosition.x) > 0f &&
+                                                pagerState.currentPage == 0
                                             ) {
                                                 scrollEnabled = false
                                             }
@@ -411,27 +414,29 @@ private fun HomeScreen(
 
                                     onUp = {
                                         scrollEnabled = true
-                                    }
+                                    },
                                 )
-                            } else Modifier
-                        )
+                            } else {
+                                Modifier
+                            },
+                        ),
                 ) { page ->
                     when (page) {
                         Pellets.page -> PelletsScreenDestination(
                             navController = navController,
                             contentPadding = contentPadding,
-                            hazeState = hazeState
+                            hazeState = hazeState,
                         )
 
                         Dashboard.page -> DashboardScreenDestination(
                             navController = navController,
                             contentPadding = contentPadding,
-                            hazeState = hazeState
+                            hazeState = hazeState,
                         )
 
                         Events.page -> EventsScreenDestination(
                             contentPadding = contentPadding,
-                            hazeState = hazeState
+                            hazeState = hazeState,
                         )
                     }
                 }
@@ -447,7 +452,7 @@ private fun checkAuthentication(
 ) {
     if (state.biometricSettingsPrompt) {
         biometricManager?.authenticate(
-            onAuthenticationSuccess = onSuccess
+            onAuthenticationSuccess = onSuccess,
         )
     } else {
         onSuccess()
@@ -459,7 +464,7 @@ private fun HomeDrawerSheet(
     pagerState: PagerState,
     navigationItems: List<NavigationItem>,
     grillName: String,
-    onNavigationRequested: (NavRequest) -> Unit
+    onNavigationRequested: (NavRequest) -> Unit,
 ) {
     val staticNavigationItems = buildStaticNavigationItems()
     DrawerSheet(
@@ -468,14 +473,14 @@ private fun HomeDrawerSheet(
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .windowInsetsPadding(
                 WindowInsets.safeDrawing.only(
-                    WindowInsetsSides.Start + WindowInsetsSides.Vertical
-                )
+                    WindowInsetsSides.Start + WindowInsetsSides.Vertical,
+                ),
             ),
         currentPage = pagerState.currentPage,
         grillName = grillName,
         navigationItems = navigationItems,
         staticNavigationItems = staticNavigationItems,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 }
 
@@ -483,7 +488,7 @@ private fun HomeDrawerSheet(
 private fun HandleSideEffects(
     activity: Activity?,
     effectFlow: Flow<HomeContract.Effect>?,
-    onNavigationRequested: (HomeContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (HomeContract.Effect.Navigation) -> Unit,
 ) {
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
@@ -495,7 +500,7 @@ private fun HandleSideEffects(
                 is HomeContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -534,7 +539,7 @@ private fun HomeScreenPreview() {
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

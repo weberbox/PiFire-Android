@@ -21,24 +21,22 @@ object RecipesSerializer : Serializer<RecipesData> {
     override val defaultValue: RecipesData
         get() = RecipesData()
 
-    override suspend fun readFrom(input: InputStream): RecipesData {
-        return try {
-            json.decodeFromString(
-                deserializer = RecipesData.serializer(),
-                string = input.readBytes().decodeToString()
-            )
-        } catch (e: SerializationException) {
-            Timber.e(e, "Recipes Deserialization Error")
-            defaultValue
-        }
+    override suspend fun readFrom(input: InputStream): RecipesData = try {
+        json.decodeFromString(
+            deserializer = RecipesData.serializer(),
+            string = input.readBytes().decodeToString(),
+        )
+    } catch (e: SerializationException) {
+        Timber.e(e, "Recipes Deserialization Error")
+        defaultValue
     }
 
     override suspend fun writeTo(t: RecipesData, output: OutputStream) {
         output.write(
             json.encodeToString(
                 serializer = RecipesData.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 }

@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun LogsDetailsScreen(
     navController: NavHostController,
-    viewModel: SharedDetailsViewModel = hiltViewModel()
+    viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     LogsDetailsContent(
@@ -58,7 +58,7 @@ fun LogsDetailsScreen(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -67,30 +67,32 @@ private fun LogsDetailsContent(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val logDeleteSheet = rememberInputModalBottomSheetState<PelletLog>()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(PelletsContract.Event.Refresh) }
+
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.pellets_log),
                     isLoading = state.isLoading,
                     onNavigate = {
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
-                    }
+                    },
                 ) {
                     items(items = state.pellets.logsList) { log ->
                         LogItem(
@@ -104,34 +106,34 @@ private fun LogsDetailsContent(
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                     }
                 }
                 BottomSheet(
-                    sheetState = logDeleteSheet.sheetState
+                    sheetState = logDeleteSheet.sheetState,
                 ) {
                     ConfirmSheet(
                         title = stringResource(R.string.dialog_confirm_action),
                         message = stringResource(
                             R.string.dialog_confirm_delete_item,
-                            logDeleteSheet.data.pelletName
+                            logDeleteSheet.data.pelletName,
                         ),
                         negativeButtonText = stringResource(R.string.cancel),
                         positiveButtonText = stringResource(R.string.delete),
                         positiveButtonColor = ButtonDefaults.buttonColors(
                             contentColor = MaterialTheme.colorScheme.onError,
-                            containerColor = MaterialTheme.colorScheme.error
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         onPositive = {
                             onEventSent(
                                 PelletsContract.Event.SendEvent(
-                                    PelletsEvent.DeleteLog(logDate = logDeleteSheet.data.logDate)
-                                )
+                                    PelletsEvent.DeleteLog(logDate = logDeleteSheet.data.logDate),
+                                ),
                             )
                             logDeleteSheet.close()
                         },
-                        onNegative = { logDeleteSheet.close() }
+                        onNegative = { logDeleteSheet.close() },
                     )
                 }
             }
@@ -142,7 +144,7 @@ private fun LogsDetailsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PelletsContract.Effect>?,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -151,7 +153,7 @@ private fun HandleSideEffects(
                 is PelletsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -176,11 +178,11 @@ private fun LogsDetailsScreenPreview() {
                     isDataError = false,
                     isLoading = false,
                     isRefreshing = false,
-                    isConnected = true
+                    isConnected = true,
                 ),
                 effectFlow = null,
                 onEventSent = { },
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }

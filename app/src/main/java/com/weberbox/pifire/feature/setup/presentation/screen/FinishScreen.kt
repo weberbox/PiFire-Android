@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun FinishScreenDestination(
     viewModel: FinishViewModel = hiltViewModel(),
-    onNavigateLanding: () -> Unit
+    onNavigateLanding: () -> Unit,
 ) {
     val onBackDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     FinishScreen(
@@ -61,7 +61,7 @@ fun FinishScreenDestination(
                 is FinishContract.Effect.Navigation.Forward -> onNavigateLanding()
                 is FinishContract.Effect.Navigation.Back -> onBackDispatcher?.onBackPressed()
             }
-        }
+        },
     )
 }
 
@@ -70,11 +70,11 @@ private fun FinishScreen(
     state: FinishContract.State,
     effectFlow: Flow<FinishContract.Effect>?,
     onEventSent: (event: FinishContract.Event) -> Unit,
-    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit,
 ) {
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Box {
@@ -92,22 +92,22 @@ private fun FinishScreen(
                     .padding(top = MaterialTheme.spacing.largeTwo)
                     .padding(MaterialTheme.spacing.smallThree),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                     imageVector = Icons.Outlined.CheckCircle,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(
                     text = stringResource(R.string.setup_finish_title),
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = stringResource(R.string.setup_finish_text),
                     style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 OutlineFieldWithState(
                     modifier = Modifier
@@ -120,7 +120,7 @@ private fun FinishScreen(
                     errorStatus = state.grillName.error,
                     onValueChange = {
                         onEventSent(FinishContract.Event.ValidateName(it))
-                    }
+                    },
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -129,11 +129,11 @@ private fun FinishScreen(
                 onBackClick = { onNavigationRequested(FinishContract.Effect.Navigation.Back) },
                 onNextClick = {
                     onEventSent(FinishContract.Event.SaveGrillName(state.grillName.input.value))
-                }
+                },
             )
         }
         CircularLoadingIndicator(
-            isLoading = state.isLoading
+            isLoading = state.isLoading,
         )
     }
 }
@@ -141,7 +141,7 @@ private fun FinishScreen(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<FinishContract.Effect>?,
-    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -152,7 +152,7 @@ private fun HandleSideEffects(
                 is FinishContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -169,11 +169,11 @@ internal fun FinishScreenPreview() {
             FinishScreen(
                 state = FinishContract.State(
                     grillName = InputState(),
-                    isLoading = false
+                    isLoading = false,
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

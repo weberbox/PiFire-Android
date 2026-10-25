@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun BrandsDetailsScreen(
     navController: NavHostController,
-    viewModel: SharedDetailsViewModel = hiltViewModel()
+    viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     BrandsDetailsContent(
@@ -57,7 +57,7 @@ fun BrandsDetailsScreen(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -66,30 +66,32 @@ private fun BrandsDetailsContent(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val brandDeleteSheet = rememberInputModalBottomSheetState<String>()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> DataError { onEventSent(PelletsContract.Event.Refresh) }
+
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.pellets_brands),
                     isLoading = state.isLoading,
                     onNavigate = {
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
-                    }
+                    },
                 ) {
                     items(items = state.pellets.brandsList) { brand ->
                         WoodBrandItem(
@@ -98,34 +100,34 @@ private fun BrandsDetailsContent(
                                 if (state.isConnected) {
                                     brandDeleteSheet.open(brand)
                                 }
-                            }
+                            },
                         )
                     }
                 }
                 BottomSheet(
-                    sheetState = brandDeleteSheet.sheetState
+                    sheetState = brandDeleteSheet.sheetState,
                 ) {
                     ConfirmSheet(
                         title = stringResource(R.string.dialog_confirm_action),
                         message = stringResource(
                             R.string.dialog_confirm_delete_item,
-                            brandDeleteSheet.data
+                            brandDeleteSheet.data,
                         ),
                         negativeButtonText = stringResource(R.string.cancel),
                         positiveButtonText = stringResource(R.string.delete),
                         positiveButtonColor = ButtonDefaults.buttonColors(
                             contentColor = MaterialTheme.colorScheme.onError,
-                            containerColor = MaterialTheme.colorScheme.error
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         onPositive = {
                             onEventSent(
                                 PelletsContract.Event.SendEvent(
-                                    PelletsEvent.DeleteBrand(brand = brandDeleteSheet.data)
-                                )
+                                    PelletsEvent.DeleteBrand(brand = brandDeleteSheet.data),
+                                ),
                             )
                             brandDeleteSheet.close()
                         },
-                        onNegative = { brandDeleteSheet.close() }
+                        onNegative = { brandDeleteSheet.close() },
                     )
                 }
             }
@@ -136,7 +138,7 @@ private fun BrandsDetailsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PelletsContract.Effect>?,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -145,7 +147,7 @@ private fun HandleSideEffects(
                 is PelletsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -170,11 +172,11 @@ private fun BrandsDetailsScreenPreview() {
                     isDataError = false,
                     isLoading = false,
                     isRefreshing = false,
-                    isConnected = true
+                    isConnected = true,
                 ),
                 effectFlow = null,
                 onEventSent = { },
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }

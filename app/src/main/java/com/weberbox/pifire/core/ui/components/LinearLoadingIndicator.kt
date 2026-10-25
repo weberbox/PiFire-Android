@@ -16,17 +16,17 @@ import com.weberbox.pifire.core.ui.util.fadeExitTransition
 fun LinearLoadingIndicator(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     AnimatedVisibility(
         visible = isLoading,
         enter = fadeEnterTransition(),
-        exit = fadeExitTransition()
+        exit = fadeExitTransition(),
     ) {
         LinearWavyProgressIndicator(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(contentPadding)
+                .padding(contentPadding),
         )
     }
 }

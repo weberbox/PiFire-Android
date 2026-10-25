@@ -14,7 +14,7 @@ import com.composables.core.SheetDetent
 import com.composables.core.rememberModalBottomSheetState
 
 class CustomModalBottomSheetState(
-    val sheetState: ModalBottomSheetState
+    val sheetState: ModalBottomSheetState,
 ) {
     fun open() {
         sheetState.targetDetent = SheetDetent.FullyExpanded
@@ -34,7 +34,7 @@ fun rememberCustomModalBottomSheetState(
     velocityThreshold: () -> Dp = { 125.dp },
     positionalThreshold: (totalDistance: Dp) -> Dp = { 56.dp },
     confirmDetentChange: (SheetDetent) -> Boolean = { true },
-    decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay()
+    decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
 ): CustomModalBottomSheetState {
     val sheetState = rememberModalBottomSheetState(
         initialDetent = initialDetent,
@@ -43,7 +43,7 @@ fun rememberCustomModalBottomSheetState(
         velocityThreshold = velocityThreshold,
         positionalThreshold = positionalThreshold,
         confirmDetentChange = confirmDetentChange,
-        decayAnimationSpec = decayAnimationSpec
+        decayAnimationSpec = decayAnimationSpec,
     )
     return remember {
         CustomModalBottomSheetState(sheetState)

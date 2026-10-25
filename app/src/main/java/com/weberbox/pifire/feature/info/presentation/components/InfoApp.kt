@@ -23,108 +23,108 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoApp(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_app_info),
-        headerIcon = Icons.Outlined.Smartphone
+        headerIcon = Icons.Outlined.Smartphone,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     bottom = MaterialTheme.spacing.smallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(R.string.info_app_version),
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.appVersion,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_app_version_code),
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.smallOne,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.appVersionCode,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_app_build_type),
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.smallOne,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.appBuildType,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_app_flavor),
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.smallOne,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.appFlavor,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_app_build_date),
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.smallOne,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.appBuildDate,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             if (info.alphaBuild) {
                 Text(
                     text = stringResource(R.string.info_app_alpha_build),
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.smallOne,
-                        bottom = MaterialTheme.spacing.smallOne
+                        bottom = MaterialTheme.spacing.smallOne,
                     ),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = stringResource(R.string.true_text),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
             if (info.debugBuild) {
@@ -132,31 +132,31 @@ internal fun InfoApp(
                     text = stringResource(R.string.info_app_build_git_branch),
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.smallOne,
-                        bottom = MaterialTheme.spacing.smallOne
+                        bottom = MaterialTheme.spacing.smallOne,
                     ),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = info.appGitBranch,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = stringResource(R.string.info_app_build_git_rev),
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.smallOne,
-                        bottom = MaterialTheme.spacing.smallOne
+                        bottom = MaterialTheme.spacing.smallOne,
                     ),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = info.appGitRev,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -177,13 +177,13 @@ private fun InfoAppPreview() {
             appGitRev = "147",
             appGitBranch = "development",
             alphaBuild = true,
-            debugBuild = true
+            debugBuild = true,
         )
     }
     PiFireTheme {
         Surface {
             InfoApp(
-                info = info
+                info = info,
             )
         }
     }

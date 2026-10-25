@@ -33,7 +33,7 @@ class AppContract {
         val sentryDebugEnabled: Boolean,
         val userEmail: String,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

@@ -9,7 +9,7 @@ data class Safety(
     @SerialName("minstartuptemp")
     @Serializable(with = IntOrDoubleSerializer::class)
     val minStartupTemp: Int? = null,
-    
+
     @SerialName("maxstartuptemp")
     @Serializable(with = IntOrDoubleSerializer::class)
     val maxStartupTemp: Int? = null,
@@ -28,5 +28,5 @@ data class Safety(
     val allowManualChanges: Boolean? = null,
 
     @SerialName("manual_override_time")
-    val manualOverrideTime: Int? = null
+    val manualOverrideTime: Int? = null,
 )

@@ -9,7 +9,7 @@ import com.weberbox.pifire.core.ui.util.UiText
 class HomeContract {
 
     sealed class Event : ViewEvent {
-        data object SignOut: Event()
+        data object SignOut : Event()
         data object TriggerLidOpen : Event()
     }
 
@@ -21,7 +21,7 @@ class HomeContract {
         val biometricSettingsPrompt: Boolean,
         val grillName: String,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

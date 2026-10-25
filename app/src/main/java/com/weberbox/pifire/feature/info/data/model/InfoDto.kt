@@ -27,7 +27,7 @@ data class InfoDto(
     val platform: String? = null,
     val display: String? = null,
     val distance: String? = null,
-    val dcFan: Boolean? = null
+    val dcFan: Boolean? = null,
 ) {
     @Serializable
     data class PlatformInfo(
@@ -37,7 +37,7 @@ data class InfoDto(
         val cpuCores: Int? = null,
         val cpuFrequency: Double? = null,
         val totalRam: Long? = null,
-        val availableRam: Long? = null
+        val availableRam: Long? = null,
     )
 
     @Serializable
@@ -45,7 +45,7 @@ data class InfoDto(
         val prettyName: String? = null,
         val version: String? = null,
         val codeName: String? = null,
-        val architecture: String? = null
+        val architecture: String? = null,
     )
 
     @Serializable
@@ -54,12 +54,12 @@ data class InfoDto(
         val ipAddress: String? = null,
 
         @SerialName("mac_address")
-        val macAddress: String? = null
+        val macAddress: String? = null,
     )
 
     @Serializable
     data class Module(
         val name: String? = null,
-        val version: String? = null
+        val version: String? = null,
     )
 }

@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PushViewModel @Inject constructor(
-    private val oneSignalManager: OneSignalManager
-): BaseViewModel<PushContract.Event, PushContract.State, PushContract.Effect>() {
+    private val oneSignalManager: OneSignalManager,
+) : BaseViewModel<PushContract.Event, PushContract.State, PushContract.Effect>() {
     private var skipConsent by mutableStateOf(false)
 
     init {
@@ -24,7 +24,7 @@ class PushViewModel @Inject constructor(
     }
 
     override fun setInitialState() = PushContract.State(
-        consent = false
+        consent = false,
     )
 
     override fun handleEvents(event: PushContract.Event) {
@@ -38,7 +38,7 @@ class PushViewModel @Inject constructor(
         if (oneSignalManager.getUserConsent()) {
             setState {
                 copy(
-                    consent = true
+                    consent = true,
                 )
             }
             skipConsent = true
@@ -54,7 +54,7 @@ class PushViewModel @Inject constructor(
         }
         setState {
             copy(
-                consent = consent
+                consent = consent,
             )
         }
         skipConsent = consent
@@ -75,9 +75,9 @@ class PushViewModel @Inject constructor(
                             buttonText = UiText(R.string.close),
                             action = {
                                 skipConsent = true
-                            }
-                        )
-                    )
+                            },
+                        ),
+                    ),
                 )
             }
         }

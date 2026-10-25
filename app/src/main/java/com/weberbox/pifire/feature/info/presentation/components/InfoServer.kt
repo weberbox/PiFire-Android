@@ -23,11 +23,11 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoServer(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_server_info),
-        headerIcon = Icons.Outlined.Dns
+        headerIcon = Icons.Outlined.Dns,
     ) {
         Column(
             modifier = Modifier
@@ -35,35 +35,35 @@ internal fun InfoServer(
                 .padding(
                     bottom = MaterialTheme.spacing.smallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
-                )
+                    end = MaterialTheme.spacing.smallTwo,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.info_server_version),
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.serverVersion,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_server_build),
                 modifier = Modifier.padding(
                     top = MaterialTheme.spacing.smallOne,
-                    bottom = MaterialTheme.spacing.smallOne
+                    bottom = MaterialTheme.spacing.smallOne,
                 ),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.serverBuild,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -76,13 +76,13 @@ private fun InfoServerPreview() {
     val info = remember {
         Info(
             serverVersion = "1.9.0",
-            serverBuild = "23"
+            serverBuild = "23",
         )
     }
     PiFireTheme {
         Surface {
             InfoServer(
-                info = info
+                info = info,
             )
         }
     }

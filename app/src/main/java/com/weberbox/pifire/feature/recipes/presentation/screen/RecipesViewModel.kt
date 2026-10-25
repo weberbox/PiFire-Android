@@ -31,15 +31,16 @@ class RecipesViewModel @Inject constructor(
         recipesList = emptyList(),
         isInitialLoading = true,
         isRefreshing = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: RecipesContract.Event) {
         when (event) {
             is RecipesContract.Event.Refresh -> getRecipesData(forced = true)
+
             is RecipesContract.Event.VoiceSearch -> {
                 analytics.logEvent(
-                    name = AnalyticsEvent.VoiceSearch.name
+                    name = AnalyticsEvent.VoiceSearch.name,
                 )
             }
         }
@@ -55,7 +56,7 @@ class RecipesViewModel @Inject constructor(
                         setEffect {
                             RecipesContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     } else {
@@ -85,7 +86,7 @@ class RecipesViewModel @Inject constructor(
                         recipesList = emptyList(),
                         isInitialLoading = false,
                         isRefreshing = false,
-                        isDataError = true
+                        isDataError = true,
                     )
                 }
             }
@@ -102,7 +103,7 @@ class RecipesViewModel @Inject constructor(
                 setEffect {
                     RecipesContract.Effect.Notification(
                         text = UiText(R.string.alerter_cached_results),
-                        error = true
+                        error = true,
                     )
                 }
             }

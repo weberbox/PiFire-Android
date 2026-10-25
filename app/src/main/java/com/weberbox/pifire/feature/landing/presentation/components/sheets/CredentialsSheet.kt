@@ -49,26 +49,26 @@ internal fun CredentialsSheet(
         mutableStateOf(
             FieldInput(
                 value = basicAuth.user,
-                hasInteracted = basicAuth.user.isNotBlank()
-            )
+                hasInteracted = basicAuth.user.isNotBlank(),
+            ),
         )
     }
     var password by rememberSaveable(saver = FieldInputSaver) {
         mutableStateOf(
             FieldInput(
                 value = basicAuth.pass,
-                hasInteracted = basicAuth.pass.isNotBlank()
-            )
+                hasInteracted = basicAuth.pass.isNotBlank(),
+            ),
         )
     }
     var usernameError by rememberSaveable(saver = ErrorStatusSaver) {
         mutableStateOf(
-            ErrorStatus(isError = false)
+            ErrorStatus(isError = false),
         )
     }
     var passwordError by rememberSaveable(saver = ErrorStatusSaver) {
         mutableStateOf(
-            ErrorStatus(isError = false)
+            ErrorStatus(isError = false),
         )
     }
 
@@ -76,16 +76,16 @@ internal fun CredentialsSheet(
         modifier = Modifier.padding(
             start = MaterialTheme.spacing.mediumOne,
             end = MaterialTheme.spacing.mediumOne,
-            bottom = MaterialTheme.spacing.smallThree
+            bottom = MaterialTheme.spacing.smallThree,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = stringResource(R.string.settings_credentials_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -99,9 +99,9 @@ internal fun CredentialsSheet(
                 username = FieldInput(value = it, hasInteracted = true)
                 usernameError = ErrorStatus(
                     isError = username.value.isBlank(),
-                    errorMsg = UiText(R.string.error_text_blank)
+                    errorMsg = UiText(R.string.error_text_blank),
                 )
-            }
+            },
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -116,13 +116,13 @@ internal fun CredentialsSheet(
                 password = FieldInput(value = it, hasInteracted = true)
                 passwordError = ErrorStatus(
                     isError = password.value.isBlank(),
-                    errorMsg = UiText(R.string.error_text_blank)
+                    errorMsg = UiText(R.string.error_text_blank),
                 )
-            }
+            },
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (basicAuth.user.isNotBlank() || basicAuth.pass.isNotBlank()) {
                 OutlinedButton(
@@ -133,31 +133,31 @@ internal fun CredentialsSheet(
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
                         .weight(1f),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
                 ) {
                     Text(
                         text = stringResource(R.string.delete),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
             Button(
                 enabled = username.hasInteracted && !usernameError.isError &&
-                        password.hasInteracted && !passwordError.isError,
+                    password.hasInteracted && !passwordError.isError,
                 onClick = {
                     onAction(
                         basicAuth.copy(
                             user = username.value,
-                            pass = password.value
-                        )
+                            pass = password.value,
+                        ),
                     )
                 },
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.save),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -173,7 +173,7 @@ private fun CredentialsSheetPreview() {
         Surface {
             CredentialsSheet(
                 basicAuth = basicAuth,
-                onAction = {}
+                onAction = {},
             )
         }
     }

@@ -32,29 +32,29 @@ import com.weberbox.pifire.core.ui.theme.spacing
 @Composable
 internal fun WoodBrandItem(
     item: String,
-    onItemDelete: (String) -> Unit
+    onItemDelete: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
             .clip(MaterialTheme.shapes.small)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
                 .height(MaterialTheme.size.largeThree)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = item,
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
             IconButton(
                 modifier = Modifier
@@ -62,12 +62,12 @@ internal fun WoodBrandItem(
                     .size(MaterialTheme.size.largeTwo),
                 onClick = {
                     onItemDelete(item)
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = stringResource(R.string.delete),
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         }
@@ -81,11 +81,11 @@ private fun WoodBrandItemPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 WoodBrandItem(
                     item = "Alder",
-                    onItemDelete = {}
+                    onItemDelete = {},
                 )
             }
         }

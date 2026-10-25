@@ -6,12 +6,10 @@ import com.weberbox.pifire.feature.info.data.model.InfoDto
 
 object PipListMapper : Mapper<List<InfoDto.Module>?, List<Module>> {
 
-    override fun map(from: List<InfoDto.Module>?): List<Module> {
-        return from?.map { item ->
-            Module(
-                name = item.name.orEmpty(),
-                version = item.version.orEmpty()
-            )
-        } ?: emptyList()
-    }
+    override fun map(from: List<InfoDto.Module>?): List<Module> = from?.map { item ->
+        Module(
+            name = item.name.orEmpty(),
+            version = item.version.orEmpty(),
+        )
+    } ?: emptyList()
 }

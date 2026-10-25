@@ -53,7 +53,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun InfluxDbSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: NotificationSettingsViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -64,6 +64,7 @@ fun InfluxDbSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -73,7 +74,7 @@ fun InfluxDbSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -84,14 +85,14 @@ private fun InfluxDbSettings(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -102,7 +103,7 @@ private fun InfluxDbSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_cat_influxdb),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -111,10 +112,11 @@ private fun InfluxDbSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(NotifContract.Effect.Navigation.Back)
                 }
@@ -123,7 +125,7 @@ private fun InfluxDbSettings(
                     InfluxDbContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -135,7 +137,7 @@ private fun InfluxDbSettings(
 private fun InfluxDbContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val urlSheet = rememberCustomModalBottomSheetState()
     val tokenSheet = rememberCustomModalBottomSheetState()
@@ -143,37 +145,37 @@ private fun InfluxDbContent(
     val bucketSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         Preference(
             title = { Text(text = stringResource(R.string.settings_influxdb_url)) },
             summary = { Text(text = getSummary(state.serverData.settings.influxDbUrl)) },
-            onClick = { urlSheet.open() }
+            onClick = { urlSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_influxdb_token)) },
             summary = { Text(text = getSummary(state.serverData.settings.influxDbToken)) },
-            onClick = { tokenSheet.open() }
+            onClick = { tokenSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_influxdb_org)) },
             summary = { Text(text = getSummary(state.serverData.settings.influxDbOrg)) },
-            onClick = { orgSheet.open() }
+            onClick = { orgSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_influxdb_bucket)) },
             summary = { Text(text = getSummary(state.serverData.settings.influxDbBucket)) },
-            onClick = { bucketSheet.open() }
+            onClick = { bucketSheet.open() },
         )
     }
     BottomSheet(
-        sheetState = urlSheet.sheetState
+        sheetState = urlSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.influxDbUrl,
@@ -186,11 +188,11 @@ private fun InfluxDbContent(
             onDelete = {
                 urlSheet.close()
                 onEventSent(NotifContract.Event.SetInfluxDbUrl(""))
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = tokenSheet.sheetState
+        sheetState = tokenSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.influxDbToken,
@@ -203,11 +205,11 @@ private fun InfluxDbContent(
             onDelete = {
                 tokenSheet.close()
                 onEventSent(NotifContract.Event.SetInfluxDbToken(""))
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = orgSheet.sheetState
+        sheetState = orgSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.influxDbOrg,
@@ -220,11 +222,11 @@ private fun InfluxDbContent(
             onDelete = {
                 orgSheet.close()
                 onEventSent(NotifContract.Event.SetInfluxDbOrg(""))
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = bucketSheet.sheetState
+        sheetState = bucketSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.influxDbBucket,
@@ -237,7 +239,7 @@ private fun InfluxDbContent(
             onDelete = {
                 bucketSheet.close()
                 onEventSent(NotifContract.Event.SetInfluxDbBucket(""))
-            }
+            },
         )
     }
 }
@@ -245,13 +247,14 @@ private fun InfluxDbContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {}
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -259,7 +262,7 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -279,11 +282,11 @@ private fun InfluxDbSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

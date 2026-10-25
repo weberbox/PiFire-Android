@@ -35,7 +35,7 @@ fun DropdownTextField(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        modifier = modifier,
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -51,13 +51,13 @@ fun DropdownTextField(
             colors = outlinedTextFieldColors(),
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.exposedDropdownSize()
+            modifier = Modifier.exposedDropdownSize(),
         ) {
             options.forEach { option: String ->
                 DropdownMenuItem(
@@ -66,7 +66,7 @@ fun DropdownTextField(
                         expanded = false
                         value = option
                         onValueChangedEvent(option)
-                    }
+                    },
                 )
             }
         }
@@ -91,7 +91,7 @@ fun <T> DropdownTextField(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = modifier
+        modifier = modifier,
     ) {
         OutlinedTextField(
             readOnly = true,
@@ -107,13 +107,13 @@ fun <T> DropdownTextField(
             colors = outlinedTextFieldColors(),
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
 
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.exposedDropdownSize()
+            modifier = Modifier.exposedDropdownSize(),
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -122,7 +122,7 @@ fun <T> DropdownTextField(
                         expanded = false
                         value = option
                         onValueChangedEvent(option)
-                    }
+                    },
                 )
             }
         }

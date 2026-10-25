@@ -18,7 +18,7 @@ enum class Feature {
 class FeatureSupport(
     private val currentVersion: String = "0.0.0",
     private val currentBuild: String = "0",
-    private val featureMap: FeatureFlagsConfig = emptyMap()
+    private val featureMap: FeatureFlagsConfig = emptyMap(),
 ) {
     fun isSupported(feature: Feature): Boolean {
         val config = featureMap[feature.name]
@@ -38,8 +38,8 @@ class FeatureSupport(
         val maxBuild = (config.maxBuild).toIntOrNull() ?: Int.MAX_VALUE
 
         return version >= minVersion &&
-                (maxVersion == null || version <= maxVersion) &&
-                build in minBuild..maxBuild
+            (maxVersion == null || version <= maxVersion) &&
+            build in minBuild..maxBuild
     }
 }
 
@@ -48,12 +48,12 @@ fun FeatureGate(
     feature: Feature,
     enabled: Boolean = true,
     fallback: @Composable () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val isPreview = LocalView.current.isInEditMode
     val featureSupport = LocalFeatureSupport.current
 
-    if (isPreview || featureSupport.isSupported(feature) && enabled) {
+    if (isPreview || (featureSupport.isSupported(feature) && enabled)) {
         content()
     } else {
         fallback()
@@ -70,7 +70,7 @@ data class RemoteFeatureConfigData(
     val minVersion: String = "",
     val minBuild: String = "",
     val maxVersion: String = "",
-    val maxBuild: String = ""
+    val maxBuild: String = "",
 )
 
 typealias FeatureFlagsConfig = Map<String, RemoteFeatureConfigData>

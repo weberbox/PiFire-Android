@@ -8,6 +8,4 @@ fun <T> List<T>.toImmutableList(): List<T> = when (size) {
     else -> Collections.unmodifiableList(toList())
 }
 
-fun <K, V> Map<K, V>.toImmutableMap(): Map<K, V> {
-    return Collections.unmodifiableMap(this.toMap())
-}
+fun <K, V> Map<K, V>.toImmutableMap(): Map<K, V> = Collections.unmodifiableMap(this.toMap())

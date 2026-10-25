@@ -20,13 +20,12 @@ fun Modifier.customTouch(
             onDown(down)
             do {
                 val event: PointerEvent = awaitPointerEvent(
-                    pass = pass
+                    pass = pass,
                 )
 
                 onMove(event.changes)
-
             } while (event.changes.any { it.pressed })
             onUp()
         }
-    }
+    },
 )

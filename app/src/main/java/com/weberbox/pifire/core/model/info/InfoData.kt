@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class InfoData(
-    val infoMap: Map<Uuid, Info> = emptyMap()
+    val infoMap: Map<Uuid, Info> = emptyMap(),
 ) {
     @Immutable
     @Serializable
-    data class Info (
+    data class Info(
         val uuid: String = "",
         val platformInfo: PlatformInfo = PlatformInfo(),
         val osInfo: OsInfo = OsInfo(),
@@ -41,7 +41,7 @@ data class InfoData(
         val appGitBranch: String = "",
         val appGitRev: String = "",
         val alphaBuild: Boolean = false,
-        val debugBuild: Boolean = false
+        val debugBuild: Boolean = false,
     ) {
         @Serializable
         data class PlatformInfo(
@@ -51,7 +51,7 @@ data class InfoData(
             val cpuCores: String = "Unknown",
             val cpuFrequency: String = "Unknown",
             val totalRam: String = "Unknown",
-            val availableRam: String = "Unknown"
+            val availableRam: String = "Unknown",
         )
 
         @Serializable
@@ -59,19 +59,19 @@ data class InfoData(
             val prettyName: String = "Unknown",
             val version: String = "Unknown",
             val codeName: String = "Unknown",
-            val architecture: String = "Unknown"
+            val architecture: String = "Unknown",
         )
 
         @Serializable
         data class NetworkInfo(
             val ipAddress: String = "Unknown",
-            val macAddress: String = "Unknown"
+            val macAddress: String = "Unknown",
         )
 
         @Serializable
         data class Module(
             val name: String = "",
-            val version: String = ""
+            val version: String = "",
         )
     }
 }

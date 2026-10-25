@@ -3,5 +3,5 @@ package com.weberbox.pifire.feature.home.presentation.model
 enum class HomePages(val page: Int) {
     Pellets(0),
     Dashboard(1),
-    Events(2)
+    Events(2),
 }

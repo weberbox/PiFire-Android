@@ -8,13 +8,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RecipesData(
-    val recipesMap: Map<Uuid, Recipes> = emptyMap()
+    val recipesMap: Map<Uuid, Recipes> = emptyMap(),
 ) {
     @Immutable
     @Serializable
     data class Recipes(
         val uuid: String = "",
-        val recipes: List<Recipe> = emptyList()
+        val recipes: List<Recipe> = emptyList(),
     ) {
         @Serializable
         data class Recipe(
@@ -23,7 +23,7 @@ data class RecipesData(
             val metadata: MetaData = MetaData(),
             val ingredients: List<Ingredient> = emptyList(),
             val instructions: List<Instruction> = emptyList(),
-            val steps: List<Step> = emptyList()
+            val steps: List<Step> = emptyList(),
         ) {
             @Parcelize
             @Serializable
@@ -31,7 +31,7 @@ data class RecipesData(
                 val filename: String = "",
                 val id: String = "",
                 val encodedImage: String = "",
-                val encodedThumb: String = ""
+                val encodedThumb: String = "",
             ) : Parcelable
 
             @Serializable
@@ -49,20 +49,20 @@ data class RecipesData(
                 val thumbnail: String = "",
                 val title: String = "",
                 val units: String = "F",
-                val version: String = ""
+                val version: String = "",
             )
 
             @Serializable
             data class Ingredient(
                 val name: String = "",
-                val quantity: String = ""
+                val quantity: String = "",
             )
 
             @Serializable
             data class Instruction(
                 val ingredients: List<String> = emptyList(),
                 val step: Int = 0,
-                val text: String = ""
+                val text: String = "",
             )
 
             @Serializable
@@ -78,7 +78,7 @@ data class RecipesData(
                 @Serializable
                 data class TriggerTemps(
                     val food: List<Int> = emptyList(),
-                    val primary: Int = 0
+                    val primary: Int = 0,
                 )
             }
         }

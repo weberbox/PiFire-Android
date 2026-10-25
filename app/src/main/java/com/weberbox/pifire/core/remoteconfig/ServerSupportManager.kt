@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
 class ServerSupportManager @Inject constructor(
-    private val remoteConfigRepo: RemoteConfigRepo
+    private val remoteConfigRepo: RemoteConfigRepo,
 ) {
 
     suspend fun isServerVersionSupported(current: ServerInfo): ServerSupportResult {
@@ -17,8 +17,11 @@ class ServerSupportManager @Inject constructor(
 
         val currentVersion = SemanticVersion.fromString(current.version)
         val minVersion = SemanticVersion.fromString(min.version)
-        val maxVersion = if (max.version.isNotBlank())
-            SemanticVersion.fromString(max.version) else null
+        val maxVersion = if (max.version.isNotBlank()) {
+            SemanticVersion.fromString(max.version)
+        } else {
+            null
+        }
 
         val currentBuild = current.build.toIntOrNull() ?: 0
         val minBuild = min.build.toIntOrNull() ?: 0
@@ -31,7 +34,7 @@ class ServerSupportManager @Inject constructor(
                 minBuild = min.build,
                 currentVersion = current.version,
                 currentBuild = current.build,
-                isMandatory = config.isMandatory
+                isMandatory = config.isMandatory,
             )
         }
 
@@ -41,7 +44,7 @@ class ServerSupportManager @Inject constructor(
                 maxBuild = max.build,
                 currentVersion = current.version,
                 currentBuild = current.build,
-                isMandatory = config.isMandatory
+                isMandatory = config.isMandatory,
             )
         }
 
@@ -52,7 +55,7 @@ class ServerSupportManager @Inject constructor(
                 minBuild = min.build,
                 currentVersion = current.version,
                 currentBuild = current.build,
-                isMandatory = config.isMandatory
+                isMandatory = config.isMandatory,
             )
         }
 
@@ -62,7 +65,7 @@ class ServerSupportManager @Inject constructor(
                 maxBuild = max.build,
                 currentVersion = current.version,
                 currentBuild = current.build,
-                isMandatory = config.isMandatory
+                isMandatory = config.isMandatory,
             )
         }
 
@@ -78,7 +81,7 @@ sealed class ServerSupportResult {
         val minBuild: String,
         val currentVersion: String,
         val currentBuild: String,
-        val isMandatory: Boolean
+        val isMandatory: Boolean,
     ) : ServerSupportResult()
 
     data class UnsupportedMax(
@@ -86,14 +89,14 @@ sealed class ServerSupportResult {
         val maxBuild: String,
         val currentVersion: String,
         val currentBuild: String,
-        val isMandatory: Boolean
+        val isMandatory: Boolean,
     ) : ServerSupportResult()
 }
 
 @Serializable
 data class ServerInfo(
     val version: String,
-    val build: String
+    val build: String,
 )
 
 @Serializable
@@ -101,5 +104,5 @@ data class ServerSupportConfigData(
     val appVersionCode: Int,
     val isMandatory: Boolean,
     val minServerInfo: ServerInfo,
-    val maxServerInfo: ServerInfo
+    val maxServerInfo: ServerInfo,
 )

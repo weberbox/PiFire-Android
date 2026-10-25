@@ -29,20 +29,18 @@ fun navigationType(): NavigationType {
 }
 
 @Composable
-fun Modifier.offsetDrawerWidth(): Modifier {
-    return when (navigationType()) {
-        NavigationType.NavBottomBar -> this.fillMaxWidth(fraction = 0.6f)
-        else -> this.fillMaxWidth(fraction = 0.3f)
-    }
+fun Modifier.offsetDrawerWidth(): Modifier = when (navigationType()) {
+    NavigationType.NavBottomBar -> this.fillMaxWidth(fraction = 0.6f)
+    else -> this.fillMaxWidth(fraction = 0.3f)
 }
 
 @Composable
-fun Modifier.permDrawerAdjustments(): Modifier {
-    return if (navigationType() == NavigationType.NavPermDrawer) {
-        this
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .clip(RoundedCornerShape(topStart = 24.dp))
-    } else this
+fun Modifier.permDrawerAdjustments(): Modifier = if (navigationType() == NavigationType.NavPermDrawer) {
+    this
+        .windowInsetsPadding(WindowInsets.statusBars)
+        .clip(RoundedCornerShape(topStart = 24.dp))
+} else {
+    this
 }
 
 @Composable
@@ -50,37 +48,34 @@ fun navContentPadding(contentPadding: PaddingValues): PaddingValues {
     val navigationType = navigationType()
     return if (navigationType == NavigationType.NavPermDrawer ||
         navigationType == NavigationType.NavRail
-    )
+    ) {
         PaddingValues(
             start = 0.dp,
             top = contentPadding.calculateTopPadding(),
             bottom = contentPadding.calculateBottomPadding(),
-            end = contentPadding.calculateRightPadding(LocalLayoutDirection.current)
-        ) else contentPadding
-}
-
-@Composable
-fun isBottomBarNavigation(): Boolean {
-    return when (navigationType()) {
-        NavigationType.NavBottomBar -> true
-        else -> false
+            end = contentPadding.calculateRightPadding(LocalLayoutDirection.current),
+        )
+    } else {
+        contentPadding
     }
 }
 
 @Composable
-fun isRailNavigation(): Boolean {
-    return when (navigationType()) {
-        NavigationType.NavRail -> true
-        else -> false
-    }
+fun isBottomBarNavigation(): Boolean = when (navigationType()) {
+    NavigationType.NavBottomBar -> true
+    else -> false
 }
 
 @Composable
-fun isPermDrawerNavigation(): Boolean {
-    return when (navigationType()) {
-        NavigationType.NavPermDrawer -> true
-        else -> false
-    }
+fun isRailNavigation(): Boolean = when (navigationType()) {
+    NavigationType.NavRail -> true
+    else -> false
+}
+
+@Composable
+fun isPermDrawerNavigation(): Boolean = when (navigationType()) {
+    NavigationType.NavPermDrawer -> true
+    else -> false
 }
 
 sealed interface NavigationType {

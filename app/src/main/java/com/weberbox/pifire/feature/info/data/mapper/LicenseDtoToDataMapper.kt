@@ -24,7 +24,7 @@ object LicenseDtoToDataMapper : Mapper<List<LicenseDto>, Licenses> {
         eventsError,
         eventsWarning,
         eventsDebug,
-        eventsInfo
+        eventsInfo,
     )
 
     override fun map(from: List<LicenseDto>) = Licenses(
@@ -33,8 +33,8 @@ object LicenseDtoToDataMapper : Mapper<List<LicenseDto>, Licenses> {
                 project = it.project ?: "",
                 license = it.license ?: "",
                 title = it.project?.substring(0, 1)?.uppercase() ?: "",
-                color = String.format("#%08X", colors[Random.nextInt(colors.size)].toArgb())
+                color = String.format("#%08X", colors[Random.nextInt(colors.size)].toArgb()),
             )
-        }
+        },
     )
 }

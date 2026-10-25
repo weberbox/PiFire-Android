@@ -61,7 +61,7 @@ internal fun PrimePickerSheet(
         mutableStateOf(
             (AppConfig.PRIME_MIN_GRAMS..AppConfig.PRIME_MAX_GRAMS).filter {
                 it % 5 == 0
-            }.reversed().toList()
+            }.reversed().toList(),
         )
     }
     var primeAmount by remember { mutableIntStateOf(AppConfig.PRIME_MIN_GRAMS) }
@@ -73,11 +73,11 @@ internal fun PrimePickerSheet(
             .padding(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
-                bottom = MaterialTheme.spacing.smallThree
+                bottom = MaterialTheme.spacing.smallThree,
             )
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
@@ -86,18 +86,18 @@ internal fun PrimePickerSheet(
                 .clip(MaterialTheme.shapes.large)
                 .padding(bottom = MaterialTheme.spacing.extraSmall)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterStart),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
             PickerWheel(
                 items = items,
                 selectedItem = items.indexOfFirst {
                     it == findClosestTemp(
                         list = items,
-                        target = primeAmount
+                        target = primeAmount,
                     )
                 }.takeIf { it >= 0 } ?: 0,
                 unitsString = "G",
@@ -110,40 +110,40 @@ internal fun PrimePickerSheet(
                 extraRow = extraRows,
                 isLooping = isLooping,
                 itemToString = { it.toString() },
-                longestText = findLongestString(items)
+                longestText = findLongestString(items),
             )
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
         }
         AnimatedVisibility(
             visible = optionsVisible,
             enter = slideUpExpandEnterTransition(),
-            exit = slideDownShrinkExitTransition()
+            exit = slideDownShrinkExitTransition(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_prime_and_startup),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                     Spacer(Modifier.weight(1f))
                     Switch(
                         checked = startup,
                         onCheckedChange = {
                             startup = !startup
-                        }
+                        },
                     )
                 }
             }
@@ -152,7 +152,7 @@ internal fun PrimePickerSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = {
@@ -161,26 +161,26 @@ internal fun PrimePickerSheet(
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.options),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
                 onClick = {
                     onConfirm(
                         primeAmount,
-                        if (startup) RunningMode.Startup.name else RunningMode.Stop.name
+                        if (startup) RunningMode.Startup.name else RunningMode.Stop.name,
                     )
                 },
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.confirm),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -194,10 +194,10 @@ private fun PrimePickerSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 PrimePickerSheet(
-                    onConfirm = { _, _ -> }
+                    onConfirm = { _, _ -> },
                 )
             }
         }

@@ -14,7 +14,7 @@ class PushContract {
     }
 
     data class State(
-        val consent: Boolean
+        val consent: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

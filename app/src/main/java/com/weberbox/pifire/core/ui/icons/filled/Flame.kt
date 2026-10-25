@@ -28,12 +28,16 @@ val Icon.Filled.Flame: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 27.0.dp,
             viewportWidth = 448.0f,
-            viewportHeight = 512.0f
+            viewportHeight = 512.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(159.3f, 5.4f)
                 curveToRelative(7.8f, -7.3f, 19.9f, -7.2f, 27.7f, 0.1f)

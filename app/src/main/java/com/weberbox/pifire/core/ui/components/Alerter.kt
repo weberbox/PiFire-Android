@@ -25,7 +25,8 @@ import com.weberbox.pifire.R
 
 @Composable
 fun Alerter(
-    isShown: Boolean, onChanged: (isShown: Boolean) -> Unit,
+    isShown: Boolean,
+    onChanged: (isShown: Boolean) -> Unit,
     backgroundColor: Color = Color.Transparent,
     duration: Long = 3000,
     enableVibration: Boolean = true,
@@ -38,7 +39,6 @@ fun Alerter(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = isShown) {
-
         if (isShown) {
             Alerter.create(context as Activity, R.layout.compose_view)
                 .enableVibration(enableVibration)
@@ -53,7 +53,7 @@ fun Alerter(
                         alerter.getLayoutContainer()?.findViewById(R.id.composeView)
                     customView?.apply {
                         setViewCompositionStrategy(
-                            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+                            ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed,
                         )
                         setContent {
                             MaterialTheme {
@@ -74,12 +74,9 @@ fun Alerter(
             if (Alerter.isShowing) Alerter.hide()
         }
     }
-
-
 }
 
 fun Modifier.iconPulse() = composed {
-
     val transition = rememberInfiniteTransition(label = "")
 
     val animateScale by transition.animateFloat(
@@ -87,11 +84,11 @@ fun Modifier.iconPulse() = composed {
         targetValue = 1.2f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 820, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ), label = ""
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "",
     )
 
     Modifier
         .scale(animateScale)
-
 }

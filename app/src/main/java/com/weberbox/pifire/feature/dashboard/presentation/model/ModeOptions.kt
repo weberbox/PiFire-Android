@@ -23,7 +23,8 @@ internal enum class ModeOptions(val title: Int, val icon: ImageVector, val event
     Prime(R.string.dash_mode_prime, Icon.Outlined.ArrowRightCircle, DashEvent.PrimeDialog),
     Monitor(R.string.dash_mode_monitor, Icon.Outlined.VisibilityCircle, DashEvent.Monitor),
     Continue(R.string.dash_mode_continue, Icons.Outlined.PlayCircle, DashEvent.RecipeUnPause),
-    Next(R.string.dash_mode_next, Icon.Outlined.NextCircle, DashEvent.RecipeUnPause);
+    Next(R.string.dash_mode_next, Icon.Outlined.NextCircle, DashEvent.RecipeUnPause),
+    ;
 
     companion object {
         infix fun from(mode: String): ModeOptions = entries.firstOrNull {

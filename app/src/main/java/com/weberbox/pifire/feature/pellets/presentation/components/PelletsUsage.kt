@@ -28,7 +28,7 @@ internal fun PelletsUsage(
 ) {
     HeaderCard(
         title = stringResource(R.string.pellets_usage),
-        headerIcon = Icons.Filled.KeyboardDoubleArrowRight
+        headerIcon = Icons.Filled.KeyboardDoubleArrowRight,
     ) {
         Row(
             modifier = Modifier
@@ -36,20 +36,20 @@ internal fun PelletsUsage(
                     bottom = MaterialTheme.spacing.smallThree,
                     top = MaterialTheme.spacing.extraSmall,
                     start = MaterialTheme.spacing.mediumOne,
-                    end = MaterialTheme.spacing.mediumOne
+                    end = MaterialTheme.spacing.mediumOne,
                 )
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
         ) {
             Text(
                 text = pellets.usageImperial,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = pellets.usageMetric,
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }
@@ -68,7 +68,7 @@ private fun PelletsUsagePreview() {
     PiFireTheme {
         Surface {
             PelletsUsage(
-                pellets = pellets
+                pellets = pellets,
             )
         }
     }

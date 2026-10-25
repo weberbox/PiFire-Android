@@ -63,7 +63,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun PwmControlScreenDestination(
     navController: NavHostController,
-    viewModel: PwmSettingsViewModel = hiltViewModel()
+    viewModel: PwmSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -74,6 +74,7 @@ fun PwmControlScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is PwmContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is PwmContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -83,7 +84,7 @@ fun PwmControlScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -94,14 +95,14 @@ private fun PwmControl(
     state: PwmContract.State,
     effectFlow: Flow<PwmContract.Effect>?,
     onEventSent: (event: PwmContract.Event) -> Unit,
-    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -112,7 +113,7 @@ private fun PwmControl(
             SettingsAppBar(
                 title = stringResource(R.string.settings_pwm_control_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -121,10 +122,11 @@ private fun PwmControl(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(PwmContract.Effect.Navigation.Back)
                 }
@@ -133,7 +135,7 @@ private fun PwmControl(
                     PwmControlSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -145,23 +147,23 @@ private fun PwmControl(
 private fun PwmControlSettingsContent(
     state: PwmContract.State,
     onEventSent: (event: PwmContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val pwmControlSheet = rememberInputModalBottomSheetState<Int>()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
                 modifier = Modifier
@@ -169,9 +171,9 @@ private fun PwmControlSettingsContent(
                     .padding(
                         start = MaterialTheme.spacing.mediumOne,
                         end = MaterialTheme.spacing.mediumOne,
-                        bottom = MaterialTheme.spacing.extraSmall
+                        bottom = MaterialTheme.spacing.extraSmall,
                     ),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = stringResource(R.string.settings_pwm_control_range),
@@ -181,7 +183,7 @@ private fun PwmControlSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.settings_pwm_control_duty),
@@ -191,7 +193,7 @@ private fun PwmControlSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }
@@ -200,16 +202,16 @@ private fun PwmControlSettingsContent(
                 modifier = Modifier.padding(
                     start = MaterialTheme.spacing.smallThree,
                     end = MaterialTheme.spacing.smallThree,
-                    bottom = MaterialTheme.spacing.extraSmall
+                    bottom = MaterialTheme.spacing.extraSmall,
                 ),
                 shape = MaterialTheme.shapes.small,
-                onClick = { pwmControlSheet.open(index) }
+                onClick = { pwmControlSheet.open(index) },
             ) {
                 Row(
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.smallOne)
                         .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val temp = when (index) {
                         0 -> {
@@ -222,7 +224,7 @@ private fun PwmControlSettingsContent(
 
                         else -> {
                             state.serverData.settings.pwmControlList[index - 1].temp.toString() +
-                                    "-" + item.temp + " " + state.serverData.settings.tempUnits
+                                "-" + item.temp + " " + state.serverData.settings.tempUnits
                         }
                     }
                     Text(
@@ -231,7 +233,7 @@ private fun PwmControlSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                     Text(
                         text = item.dutyCycle.toString() + "%",
@@ -239,7 +241,7 @@ private fun PwmControlSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                 }
             }
@@ -247,27 +249,27 @@ private fun PwmControlSettingsContent(
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 modifier = Modifier
                     .padding(15.dp)
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.small,
-                onClick = { pwmControlSheet.open(-1) }
+                onClick = { pwmControlSheet.open(-1) },
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.settings_smart_start_add_profile),
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
         PreferenceNote(note = stringResource(R.string.settings_pwm_fan_table_note))
     }
     BottomSheet(
-        sheetState = pwmControlSheet.sheetState
+        sheetState = pwmControlSheet.sheetState,
     ) {
         PwmSheet(
             title = stringResource(R.string.settings_pwm_editor_title),
@@ -284,11 +286,11 @@ private fun PwmControlSettingsContent(
                         index = event.index,
                         temp = event.temp,
                         dutyCycle = event.dutyCycle,
-                        controlItems = event.controlItems
-                    )
+                        controlItems = event.controlItems,
+                    ),
                 )
                 pwmControlSheet.close()
-            }
+            },
         )
     }
 }
@@ -296,7 +298,7 @@ private fun PwmControlSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PwmContract.Effect>?,
-    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -309,7 +311,7 @@ private fun HandleSideEffects(
                 is PwmContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -330,11 +332,11 @@ fun PwmControlPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

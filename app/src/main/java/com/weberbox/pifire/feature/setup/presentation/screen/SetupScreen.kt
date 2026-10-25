@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 fun SetupScreenDestination(
     navController: NavHostController,
     isInEditMode: Boolean = false,
-    viewModel: SetupViewModel = hiltViewModel()
+    viewModel: SetupViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     SetupScreen(
@@ -62,7 +62,7 @@ fun SetupScreenDestination(
                 route = NavGraph.LandingDest.Landing(false),
                 popUpToRoute = NavGraph.ServerSetup,
             )
-        }
+        },
     )
 }
 
@@ -70,7 +70,7 @@ fun SetupScreenDestination(
 @Composable
 private fun SetupScreen(
     isInEditMode: Boolean,
-    onNavigateLanding: () -> Unit
+    onNavigateLanding: () -> Unit,
 ) {
     val onBackDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val initialPage by remember { mutableIntStateOf(SetupStep.Terms.ordinal) }
@@ -79,7 +79,7 @@ private fun SetupScreen(
 
     val pagerState = rememberPagerState(
         initialPage = initialPage,
-        pageCount = { SetupStep.entries.size }
+        pageCount = { SetupStep.entries.size },
     )
 
     LaunchedEffect(pagerState.currentPage) {
@@ -91,10 +91,12 @@ private fun SetupScreen(
         if (currentPage != initialPage) {
             scope.launch {
                 currentPage.also { page ->
-                    if (page != 0) pagerState.animateScrollToPage(
-                        page = currentPage - 1,
-                        animationSpec = getPagerAnimationSpec()
-                    )
+                    if (page != 0) {
+                        pagerState.animateScrollToPage(
+                            page = currentPage - 1,
+                            animationSpec = getPagerAnimationSpec(),
+                        )
+                    }
                 }
             }
         } else {
@@ -109,20 +111,20 @@ private fun SetupScreen(
                     AnimatedContent(currentTitle) {
                         Text(
                             text = stringResource(it),
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
                 },
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                onNavigate = { onBackDispatcher?.onBackPressed() }
+                onNavigate = { onBackDispatcher?.onBackPressed() },
             )
-        }
+        },
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(gradientBackground())
-                .padding(contentPadding)
+                .padding(contentPadding),
         ) {
             Box(
                 modifier = Modifier
@@ -132,7 +134,7 @@ private fun SetupScreen(
             ) {
                 HorizontalDashedStepper(
                     totalSteps = SetupStep.entries.size,
-                    currentStep = pagerState.currentPage
+                    currentStep = pagerState.currentPage,
                 )
             }
             HorizontalPager(
@@ -140,18 +142,22 @@ private fun SetupScreen(
                 state = pagerState,
                 beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT,
                 pageSpacing = MaterialTheme.spacing.smallOne,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             ) { page ->
                 if (isInEditMode) {
                     when (page) {
                         SetupStep.Terms.ordinal ->
                             TermsScreenPreview()
+
                         SetupStep.Auth.ordinal ->
                             AuthScreenPreview()
+
                         SetupStep.Connect.ordinal ->
                             ConnectScreenPreview()
+
                         SetupStep.Push.ordinal ->
                             PushScreenPreview()
+
                         SetupStep.Finish.ordinal ->
                             FinishScreenPreview()
                     }
@@ -159,23 +165,27 @@ private fun SetupScreen(
                     when (page) {
                         SetupStep.Terms.ordinal ->
                             TermsScreenDestination(
-                                pagerState = pagerState
+                                pagerState = pagerState,
                             )
+
                         SetupStep.Auth.ordinal ->
                             AuthScreenDestination(
-                                pagerState = pagerState
+                                pagerState = pagerState,
                             )
+
                         SetupStep.Connect.ordinal ->
                             ConnectScreenDestination(
-                                pagerState = pagerState
+                                pagerState = pagerState,
                             )
+
                         SetupStep.Push.ordinal ->
                             PushScreenDestination(
-                                pagerState = pagerState
+                                pagerState = pagerState,
                             )
+
                         SetupStep.Finish.ordinal ->
                             FinishScreenDestination(
-                                onNavigateLanding = onNavigateLanding
+                                onNavigateLanding = onNavigateLanding,
                             )
                     }
                 }
@@ -192,7 +202,7 @@ private fun SetupScreenPreview() {
         Surface {
             SetupScreen(
                 isInEditMode = true,
-                onNavigateLanding = {}
+                onNavigateLanding = {},
             )
         }
     }

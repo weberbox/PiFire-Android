@@ -16,7 +16,7 @@ class ConnectContract {
 
     data class State(
         val serverAddress: InputState,
-        val isLoading: Boolean
+        val isLoading: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

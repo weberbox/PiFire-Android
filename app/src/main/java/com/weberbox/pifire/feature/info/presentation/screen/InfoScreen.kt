@@ -65,7 +65,7 @@ fun InfoScreenDestination(
                     navController.navigateFrom(
                         from = sourceEntry,
                         route = LicenseDetails(
-                            licenses = viewModel.viewState.value.licenseData
+                            licenses = viewModel.viewState.value.licenseData,
                         ),
                     )
 
@@ -77,7 +77,7 @@ fun InfoScreenDestination(
                         inclusive = navigationEffect.inclusive,
                     )
             }
-        }
+        },
     )
 }
 
@@ -87,7 +87,7 @@ private fun InfoScreen(
     state: InfoContract.State,
     effectFlow: Flow<InfoContract.Effect>?,
     onEventSent: (event: InfoContract.Event) -> Unit,
-    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -95,7 +95,7 @@ private fun InfoScreen(
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -107,12 +107,12 @@ private fun InfoScreen(
                 title = {
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = stringResource(R.string.nav_info)
+                        text = stringResource(R.string.nav_info),
                     )
                 },
                 scrollBehavior = scrollBehavior,
                 hazeState = hazeState,
-                onNavigate = { onNavigationRequested(InfoContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(InfoContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -121,18 +121,20 @@ private fun InfoScreen(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInfoLoading or it.isDataError or it.isLicencesLoading }
+            contentKey = { it.isInfoLoading or it.isDataError or it.isLicencesLoading },
         ) { state ->
             when {
                 state.isInfoLoading || state.isLicencesLoading -> InitialLoadingProgress()
+
                 state.isDataError -> CachedDataError { onEventSent(InfoContract.Event.Refresh) }
+
                 else -> {
                     InfoList(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
                         hazeState = hazeState,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -143,7 +145,7 @@ private fun InfoScreen(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<InfoContract.Effect>?,
-    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -156,7 +158,7 @@ private fun HandleSideEffects(
                 is InfoContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -177,123 +179,119 @@ private fun InfoScreenPreview() {
                     isInfoLoading = false,
                     isLicencesLoading = false,
                     isRefreshing = false,
-                    isDataError = false
+                    isDataError = false,
 
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }
 }
 
-internal fun buildInfo(): Info {
-    return Info(
-        platformInfo = Info.PlatformInfo(
-            systemModel = "Raspberry Pi 4",
-            cpuModel = "ARM Cortex-A72",
-            cpuHardware = "BCM2711",
-            cpuCores = "4",
-            cpuFrequency = "1.5GHz",
-            totalRam = "4GB",
-            availableRam = "2GB"
+internal fun buildInfo(): Info = Info(
+    platformInfo = Info.PlatformInfo(
+        systemModel = "Raspberry Pi 4",
+        cpuModel = "ARM Cortex-A72",
+        cpuHardware = "BCM2711",
+        cpuCores = "4",
+        cpuFrequency = "1.5GHz",
+        totalRam = "4GB",
+        availableRam = "2GB",
+    ),
+    osInfo = Info.OsInfo(
+        prettyName = "Ubuntu 20.04.3 LTS",
+        version = "20.04",
+        codeName = "Focal Fossa",
+        architecture = "x86_64",
+    ),
+    networkMap = mapOf(
+        "eth0" to Info.NetworkInfo(
+            ipAddress = "192.168.1.2",
+            macAddress = "00:00:00:00:00",
         ),
-        osInfo = Info.OsInfo(
-            prettyName = "Ubuntu 20.04.3 LTS",
-            version = "20.04",
-            codeName = "Focal Fossa",
-            architecture = "x86_64"
+    ),
+    wifiQualityValue = "60",
+    wifiQualityMax = "70",
+    wifiQualityPercentage = "80",
+    cpuInfo = "Intel(R) Xeon(R) CPU-D-1520 @ 2.20GHz",
+    cpuTemp = "40",
+    networkInfo = "Ethernet",
+    outPins = listOf(
+        GPIOInOutData(
+            name = "fan",
+            pin = "15",
         ),
-        networkMap = mapOf(
-            "eth0" to Info.NetworkInfo(
-                ipAddress = "192.168.1.2",
-                macAddress = "00:00:00:00:00"
-            )
+        GPIOInOutData(
+            name = "dc_fan",
+            pin = "26",
         ),
-        wifiQualityValue = "60",
-        wifiQualityMax = "70",
-        wifiQualityPercentage = "80",
-        cpuInfo = "Intel(R) Xeon(R) CPU-D-1520 @ 2.20GHz",
-        cpuTemp = "40",
-        networkInfo = "Ethernet",
-        outPins = listOf(
-            GPIOInOutData(
-                name = "fan",
-                pin = "15"
-            ),
-            GPIOInOutData(
-                name = "dc_fan",
-                pin = "26"
-            ),
-            GPIOInOutData(
-                name = "pwm",
-                pin = "13"
-            ),
-            GPIOInOutData(
-                name = "igniter",
-                pin = "18"
-            )
+        GPIOInOutData(
+            name = "pwm",
+            pin = "13",
         ),
-        inPins = listOf(
-            GPIOInOutData(
-                name = "selector",
-                pin = "17"
-            ),
-            GPIOInOutData(
-                name = "shutdown",
-                pin = ""
-            )
+        GPIOInOutData(
+            name = "igniter",
+            pin = "18",
         ),
-        devPins = listOf(
-            GPIODeviceData(
-                name = "Input",
-                function = "enter_sw",
-                pin = "21"
-            ),
-            GPIODeviceData(
-                name = "",
-                function = "up_clk",
-                pin = "16"
-            )
+    ),
+    inPins = listOf(
+        GPIOInOutData(
+            name = "selector",
+            pin = "17",
         ),
-        platform = "Prototype",
-        display = "Prototype",
-        distance = "Prototype",
-        uptime = "3 Days 24 Hours",
-        serverVersion = "1.9.0",
-        serverBuild = "23",
-        appVersion = "3.0.0",
-        appVersionCode = "300000",
-        appFlavor = "Playstore",
-        appBuildType = "Debug",
-        appBuildDate = "04/21/2025",
-        appGitRev = "147",
-        appGitBranch = "development"
-    )
-}
+        GPIOInOutData(
+            name = "shutdown",
+            pin = "",
+        ),
+    ),
+    devPins = listOf(
+        GPIODeviceData(
+            name = "Input",
+            function = "enter_sw",
+            pin = "21",
+        ),
+        GPIODeviceData(
+            name = "",
+            function = "up_clk",
+            pin = "16",
+        ),
+    ),
+    platform = "Prototype",
+    display = "Prototype",
+    distance = "Prototype",
+    uptime = "3 Days 24 Hours",
+    serverVersion = "1.9.0",
+    serverBuild = "23",
+    appVersion = "3.0.0",
+    appVersionCode = "300000",
+    appFlavor = "Playstore",
+    appBuildType = "Debug",
+    appBuildDate = "04/21/2025",
+    appGitRev = "147",
+    appGitBranch = "development",
+)
 
-fun buildLicenseData(): Licenses {
-    return Licenses(
-        listOf(
-            License(
-                project = "PiFire Android",
-                license = "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE",
-                title = "P",
-                color = "#32FF4731"
-            ),
-            License(
-                project = "Sentry",
-                license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
-                title = "S",
-                color = "#32004CFA"
-            ),
-            License(
-                project = "Sentry",
-                license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
-                title = "T",
-                color = "#64666666"
-            )
-        )
-    )
-}
+fun buildLicenseData(): Licenses = Licenses(
+    listOf(
+        License(
+            project = "PiFire Android",
+            license = "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE",
+            title = "P",
+            color = "#32FF4731",
+        ),
+        License(
+            project = "Sentry",
+            license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
+            title = "S",
+            color = "#32004CFA",
+        ),
+        License(
+            project = "Sentry",
+            license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
+            title = "T",
+            color = "#64666666",
+        ),
+    ),
+)

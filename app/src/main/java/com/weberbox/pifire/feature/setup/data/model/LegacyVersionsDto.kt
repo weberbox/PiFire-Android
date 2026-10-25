@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Compatibility(versionBelow = "1.10.0", build = "25")
 @Serializable
 data class LegacyVersionsDto(
-    val settings: Settings? = null
+    val settings: Settings? = null,
 ) {
     @Serializable
     data class Settings(
@@ -15,7 +15,7 @@ data class LegacyVersionsDto(
         @Serializable
         data class Versions(
             val server: String? = null,
-            val build: String? = null
+            val build: String? = null,
         )
     }
 }

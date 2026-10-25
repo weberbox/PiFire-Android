@@ -48,7 +48,7 @@ import javax.inject.Inject
 class UpdateManager @Inject constructor(
     private val remoteConfigRepo: RemoteConfigRepo,
     private val analytics: Analytics,
-    private val prefs: Prefs
+    private val prefs: Prefs,
 ) {
     private var currentUpdate: AppUpdateConfigData? = null
     private var appUpdateManager: AppUpdateManager? = null
@@ -71,10 +71,8 @@ class UpdateManager @Inject constructor(
         activity.lifecycleScope.launch { block(activity) }
     }
 
-    private fun getAppUpdateManager(context: Context): AppUpdateManager {
-        return appUpdateManager ?: AppUpdateManagerFactory.create(context.applicationContext).also {
-            appUpdateManager = it
-        }
+    private fun getAppUpdateManager(context: Context): AppUpdateManager = appUpdateManager ?: AppUpdateManagerFactory.create(context.applicationContext).also {
+        appUpdateManager = it
     }
 
     suspend fun checkForUpdate() {
@@ -85,12 +83,15 @@ class UpdateManager @Inject constructor(
                     DialogController.sendEvent(
                         event = DialogEvent(
                             title = UiText(
-                                R.string.inapp_update_available_title
+                                R.string.inapp_update_available_title,
                             ),
-                            message = if (config.message.isNotBlank())
-                                UiText(config.message) else UiText(
-                                R.string.inapp_update_available_message_immediate
-                            ),
+                            message = if (config.message.isNotBlank()) {
+                                UiText(config.message)
+                            } else {
+                                UiText(
+                                    R.string.inapp_update_available_message_immediate,
+                                )
+                            },
                             dismissible = false,
                             positiveAction = DialogAction(
                                 buttonText = UiText(R.string.update),
@@ -105,15 +106,15 @@ class UpdateManager @Inject constructor(
                                             )
                                         }
                                     }
-                                }
-                            )
-                        )
+                                },
+                            ),
+                        ),
                     )
                     analytics.logEvent(
                         name = AnalyticsEvent.UpdateAvailable.name,
                         params = mapOf(
-                            AnalyticsEvent.Param.UpdateType.key to UpdateType.IMMEDIATE.name
-                        )
+                            AnalyticsEvent.Param.UpdateType.key to UpdateType.IMMEDIATE.name,
+                        ),
                     )
                 }
 
@@ -122,12 +123,15 @@ class UpdateManager @Inject constructor(
                         DialogController.sendEvent(
                             event = DialogEvent(
                                 title = UiText(
-                                    R.string.inapp_update_available_title
+                                    R.string.inapp_update_available_title,
                                 ),
-                                message = if (config.message.isNotBlank())
-                                    UiText(config.message) else UiText(
-                                    R.string.inapp_update_available_message_flexible
-                                ),
+                                message = if (config.message.isNotBlank()) {
+                                    UiText(config.message)
+                                } else {
+                                    UiText(
+                                        R.string.inapp_update_available_message_flexible,
+                                    )
+                                },
                                 dismissible = false,
                                 positiveAction = DialogAction(
                                     buttonText = UiText(R.string.update),
@@ -149,15 +153,15 @@ class UpdateManager @Inject constructor(
                                     buttonText = UiText(R.string.postpone),
                                     action = {
                                         postponeUpdate()
-                                    }
-                                )
-                            )
+                                    },
+                                ),
+                            ),
                         )
                         analytics.logEvent(
                             name = AnalyticsEvent.UpdateAvailable.name,
                             params = mapOf(
-                                AnalyticsEvent.Param.UpdateType.key to UpdateType.FLEXIBLE.name
-                            )
+                                AnalyticsEvent.Param.UpdateType.key to UpdateType.FLEXIBLE.name,
+                            ),
                         )
                     }
                 }
@@ -190,7 +194,7 @@ class UpdateManager @Inject constructor(
         }
 
         updateLauncher = activity.registerForActivityResult(
-            ActivityResultContracts.StartIntentSenderForResult()
+            ActivityResultContracts.StartIntentSenderForResult(),
         ) { result ->
 
             val type = launchedUpdateType ?: return@registerForActivityResult
@@ -213,24 +217,24 @@ class UpdateManager @Inject constructor(
                                     SnackbarEvent(
                                         message = UiText(R.string.inapp_update_downloading),
                                         duration = SnackbarDuration.Indefinite,
-                                        showProgress = true
-                                    )
+                                        showProgress = true,
+                                    ),
                                 )
                             }
 
                             Activity.RESULT_CANCELED -> {
                                 SnackbarController.sendEvent(
                                     SnackbarEvent(
-                                        message = UiText(R.string.inapp_update_canceled)
-                                    )
+                                        message = UiText(R.string.inapp_update_canceled),
+                                    ),
                                 )
                             }
 
                             else -> {
                                 SnackbarController.sendEvent(
                                     SnackbarEvent(
-                                        message = UiText(R.string.inapp_update_failed)
-                                    )
+                                        message = UiText(R.string.inapp_update_failed),
+                                    ),
                                 )
                             }
                         }
@@ -288,13 +292,13 @@ class UpdateManager @Inject constructor(
                 )
             } else {
                 SnackbarController.sendEvent(
-                    SnackbarEvent(message = UiText(R.string.inapp_update_not_available_yet))
+                    SnackbarEvent(message = UiText(R.string.inapp_update_not_available_yet)),
                 )
             }
         } catch (e: Exception) {
             Timber.e(e, "Failed to launch update flow")
             SnackbarController.sendEvent(
-                SnackbarEvent(message = UiText(R.string.inapp_update_failed))
+                SnackbarEvent(message = UiText(R.string.inapp_update_failed)),
             )
         }
     }
@@ -302,18 +306,20 @@ class UpdateManager @Inject constructor(
     private fun startUpdateFlow(
         activity: ComponentActivity,
         appUpdateInfo: AppUpdateInfo,
-        type: Int
+        type: Int,
     ) {
         val launcher = updateLauncher ?: return
         val manager = getAppUpdateManager(activity)
 
-        val starter = IntentSenderForResultStarter { intent,
-                                                     _,
-                                                     fillInIntent,
-                                                     flagsMask,
-                                                     flagsValues,
-                                                     _,
-                                                     _ ->
+        val starter = IntentSenderForResultStarter {
+                intent,
+                _,
+                fillInIntent,
+                flagsMask,
+                flagsValues,
+                _,
+                _,
+            ->
 
             val request = IntentSenderRequest.Builder(intent)
                 .setFillInIntent(fillInIntent)
@@ -341,9 +347,9 @@ class UpdateManager @Inject constructor(
                         name = UiText(R.string.install),
                         action = {
                             appUpdateManager?.completeUpdate()
-                        }
-                    )
-                )
+                        },
+                    ),
+                ),
             )
         }
     }
@@ -359,20 +365,20 @@ class UpdateManager @Inject constructor(
     private suspend fun openGithubLink(activity: Activity, finishActivity: Boolean) {
         try {
             activity.startActivity(
-                Intent(Intent.ACTION_VIEW, Constants.GITHUB_RELEASE_LINK.toUri())
+                Intent(Intent.ACTION_VIEW, Constants.GITHUB_RELEASE_LINK.toUri()),
             )
             if (finishActivity) activity.finish()
         } catch (e: ActivityNotFoundException) {
             Timber.w(e, "No activity to open the GitHub release link")
             SnackbarController.sendEvent(
-                SnackbarEvent(message = UiText(R.string.inapp_update_no_browser))
+                SnackbarEvent(message = UiText(R.string.inapp_update_no_browser)),
             )
         }
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "githubUpdateLink"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "githubUpdateLink",
+            ),
         )
     }
 }
@@ -382,10 +388,11 @@ data class AppUpdateConfigData(
     val appVersionCode: Int,
     val type: UpdateType,
     val message: String = "",
-    val isAlpha: Boolean = false
+    val isAlpha: Boolean = false,
 )
 
 @Serializable
 enum class UpdateType {
-    IMMEDIATE, FLEXIBLE
+    IMMEDIATE,
+    FLEXIBLE,
 }

@@ -33,12 +33,13 @@ class SharedDetailsViewModel @Inject constructor(
         isConnected = true,
         isLoading = false,
         isDataError = false,
-        isRefreshing = false
+        isRefreshing = false,
     )
 
     override fun handleEvents(event: PelletsContract.Event) {
         when (event) {
             is PelletsContract.Event.Refresh -> getPelletsData()
+
             is PelletsContract.Event.SendEvent -> sendPelletsEvent(event.event)
 
             // Shouldn't make it here (events handled in UI for dialogs etc)
@@ -52,15 +53,20 @@ class SharedDetailsViewModel @Inject constructor(
             handleResult(
                 when (event) {
                     is PelletsEvent.DeleteBrand -> pelletsRepo.deletePelletBrand(event.brand)
+
                     is PelletsEvent.DeleteWood -> pelletsRepo.deletePelletWood(event.wood)
+
                     is PelletsEvent.DeleteProfile -> pelletsRepo.deletePelletProfile(event.profile)
+
                     is PelletsEvent.EditProfile -> pelletsRepo.editPelletProfile(event.profile)
+
                     is PelletsEvent.LoadProfile -> pelletsRepo.loadPelletProfile(event.profile)
+
                     is PelletsEvent.DeleteLog -> pelletsRepo.deletePelletLog(event.logDate)
 
                     // Only above events supported shouldn't make it here
                     else -> Result.Success(Unit)
-                }
+                },
             )
         }
     }
@@ -70,7 +76,7 @@ class SharedDetailsViewModel @Inject constructor(
             sessionStateHolder.isConnectedState.collect { connected ->
                 setState {
                     copy(
-                        isConnected = connected
+                        isConnected = connected,
                     )
                 }
             }
@@ -87,7 +93,7 @@ class SharedDetailsViewModel @Inject constructor(
                             isInitialLoading = false,
                             isRefreshing = false,
                             isDataError = false,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 } else {
@@ -97,7 +103,7 @@ class SharedDetailsViewModel @Inject constructor(
                             isInitialLoading = false,
                             isRefreshing = false,
                             isLoading = false,
-                            isDataError = true
+                            isDataError = true,
                         )
                     }
                 }
@@ -115,7 +121,7 @@ class SharedDetailsViewModel @Inject constructor(
                         setEffect {
                             PelletsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                         setState {
@@ -123,7 +129,7 @@ class SharedDetailsViewModel @Inject constructor(
                                 isInitialLoading = false,
                                 isLoading = false,
                                 isRefreshing = false,
-                                isDataError = false
+                                isDataError = false,
                             )
                         }
                     }
@@ -135,7 +141,7 @@ class SharedDetailsViewModel @Inject constructor(
                                 isInitialLoading = false,
                                 isLoading = false,
                                 isRefreshing = false,
-                                isDataError = false
+                                isDataError = false,
                             )
                         }
                     }
@@ -152,7 +158,7 @@ class SharedDetailsViewModel @Inject constructor(
                         setEffect {
                             PelletsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }

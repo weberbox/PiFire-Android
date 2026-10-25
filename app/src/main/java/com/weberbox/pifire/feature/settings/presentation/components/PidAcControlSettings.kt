@@ -32,7 +32,7 @@ internal fun PidAcControlSettings(
     AnimatedVisibility(
         visible = state.serverData.settings.cntrlrSelected == ServerConstants.CNTRLR_PID_AC,
         enter = slideDownExpandEnterTransition(),
-        exit = slideDownShrinkExitTransition()
+        exit = slideDownShrinkExitTransition(),
     ) {
         Column {
             Preference(
@@ -40,11 +40,11 @@ internal fun PidAcControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidAcPb.toString()
-                        )
+                            state.serverData.settings.cntrlrPidAcPb.toString(),
+                        ),
                     )
                 },
-                onClick = { pidPbSheet.open() }
+                onClick = { pidPbSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_pb_note))
             Preference(
@@ -52,11 +52,11 @@ internal fun PidAcControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidAcTd.toString()
-                        )
+                            state.serverData.settings.cntrlrPidAcTd.toString(),
+                        ),
                     )
                 },
-                onClick = { pidTdSheet.open() }
+                onClick = { pidTdSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_td_note))
             Preference(
@@ -64,11 +64,11 @@ internal fun PidAcControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidAcTi.toString()
-                        )
+                            state.serverData.settings.cntrlrPidAcTi.toString(),
+                        ),
                     )
                 },
-                onClick = { pidTiSheet.open() }
+                onClick = { pidTiSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_ti_note))
             Preference(
@@ -76,11 +76,11 @@ internal fun PidAcControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidAcStable.toString()
-                        )
+                            state.serverData.settings.cntrlrPidAcStable.toString(),
+                        ),
                     )
                 },
-                onClick = { pidStableSheet.open() }
+                onClick = { pidStableSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_sw_note))
             Preference(
@@ -88,11 +88,11 @@ internal fun PidAcControlSettings(
                 summary = {
                     Text(
                         text = getSummary(
-                            state.serverData.settings.cntrlrPidAcCenter.toString()
-                        )
+                            state.serverData.settings.cntrlrPidAcCenter.toString(),
+                        ),
                     )
                 },
-                onClick = { pidCenterSheet.open() }
+                onClick = { pidCenterSheet.open() },
             )
             PreferenceInfo(stringResource(R.string.settings_pid_cntrlr_center_note_auto))
         }
@@ -111,13 +111,13 @@ private fun PidAcControlSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     pidPbSheet = rememberCustomModalBottomSheetState(),
                     pidTdSheet = rememberCustomModalBottomSheetState(),
                     pidTiSheet = rememberCustomModalBottomSheetState(),
                     pidCenterSheet = rememberCustomModalBottomSheetState(),
-                    pidStableSheet = rememberCustomModalBottomSheetState()
+                    pidStableSheet = rememberCustomModalBottomSheetState(),
                 )
             }
         }

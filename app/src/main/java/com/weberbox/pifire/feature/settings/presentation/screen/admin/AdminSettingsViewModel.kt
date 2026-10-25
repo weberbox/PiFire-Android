@@ -18,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdminSettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
-): BaseViewModel<AdminContract.Event, AdminContract.State, AdminContract.Effect>() {
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<AdminContract.Event, AdminContract.State, AdminContract.Effect>() {
 
     init {
         collectServerData()
@@ -30,7 +30,7 @@ class AdminSettingsViewModel @Inject constructor(
         bootToMonitor = false,
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: AdminContract.Event) {
@@ -58,7 +58,7 @@ class AdminSettingsViewModel @Inject constructor(
                     copy(
                         adminDebug = server.settings.adminDebug,
                         bootToMonitor = server.settings.bootToMonitor,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -145,7 +145,7 @@ class AdminSettingsViewModel @Inject constructor(
                     setEffect {
                         AdminContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -154,7 +154,7 @@ class AdminSettingsViewModel @Inject constructor(
                     setEffect {
                         AdminContract.Effect.Notification(
                             text = UiText(R.string.alerter_admin_action_completed),
-                            error = false
+                            error = false,
                         )
                     }
                 }
@@ -170,7 +170,7 @@ class AdminSettingsViewModel @Inject constructor(
                     setEffect {
                         AdminContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -183,7 +183,7 @@ class AdminSettingsViewModel @Inject constructor(
                         copy(
                             adminDebug = result.data.settings.adminDebug,
                             bootToMonitor = result.data.settings.bootToMonitor,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -194,7 +194,7 @@ class AdminSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

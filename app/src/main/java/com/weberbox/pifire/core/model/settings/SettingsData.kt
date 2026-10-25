@@ -187,7 +187,7 @@ data class SettingsData(
             val mqttTopic: String = Setting.mqttTopic.value,
             val mqttId: String = Setting.mqttId.value,
             val mqttPassword: String = Setting.mqttPass.value,
-            val mqttUsername: String =  Setting.mqttUser.value,
+            val mqttUsername: String = Setting.mqttUser.value,
             val mqttPort: Int = Setting.mqttPort.value,
             val mqttUpdateSec: Int = Setting.mqttUpdateSec.value,
 
@@ -233,4 +233,3 @@ data class SettingsData(
         )
     }
 }
-

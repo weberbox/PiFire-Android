@@ -42,7 +42,7 @@ class PwmSheetViewModel : ViewModel() {
     fun setInitialState(
         server: Server,
         index: Int,
-        controlItems: List<PwmControl>
+        controlItems: List<PwmControl>,
     ) {
         _server = server
 
@@ -77,7 +77,7 @@ class PwmSheetViewModel : ViewModel() {
                 val temp = (setTemp - 1).toString()
                 UiText(
                     R.string.settings_pwm_temp_range_note_max,
-                    uiTextArgsOf(temp, server.settings.tempUnits)
+                    uiTextArgsOf(temp, server.settings.tempUnits),
                 )
             } else if (maxTemp == null) {
                 UiText(R.string.settings_pwm_temp_range_note_last)
@@ -87,17 +87,17 @@ class PwmSheetViewModel : ViewModel() {
                     uiTextArgsOf(
                         minTemp.toString(),
                         maxTemp.toString(),
-                        server.settings.tempUnits
-                    )
+                        server.settings.tempUnits,
+                    ),
                 )
             }
 
         val temp by mutableStateOf(
-            (controlItem ?: lastItem).temp.toString()
+            (controlItem ?: lastItem).temp.toString(),
         )
 
         val dutyCycle by mutableStateOf(
-            (controlItem ?: lastItem).dutyCycle.toString()
+            (controlItem ?: lastItem).dutyCycle.toString(),
         )
 
         setState {
@@ -111,14 +111,14 @@ class PwmSheetViewModel : ViewModel() {
                 deleteVisible = index >= controlItems.lastIndex && controlItems.size > 2,
                 tempInput = FieldInput(
                     value = temp,
-                    hasInteracted = temp.isNotBlank()
+                    hasInteracted = temp.isNotBlank(),
                 ),
                 tempError = ErrorStatus(isError = false),
                 dutyInput = FieldInput(
                     value = dutyCycle,
-                    hasInteracted = dutyCycle.isNotBlank()
+                    hasInteracted = dutyCycle.isNotBlank(),
                 ),
-                dutyError = ErrorStatus(isError = false)
+                dutyError = ErrorStatus(isError = false),
             )
         }
     }
@@ -129,12 +129,12 @@ class PwmSheetViewModel : ViewModel() {
                 copy(
                     tempInput = FieldInput(
                         value = temp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
+                        errorMsg = UiText(R.string.error_text_blank),
+                    ),
                 )
             }
             return
@@ -146,15 +146,15 @@ class PwmSheetViewModel : ViewModel() {
                     copy(
                         tempInput = FieldInput(
                             value = temp,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         tempError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_min_error,
-                                uiTextArgsOf(DecimalFormat("0.##").format(minTemp ?: setTemp))
-                            )
-                        )
+                                uiTextArgsOf(DecimalFormat("0.##").format(minTemp ?: setTemp)),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -163,17 +163,17 @@ class PwmSheetViewModel : ViewModel() {
                     copy(
                         tempInput = FieldInput(
                             value = temp,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         tempError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_max_error,
                                 uiTextArgsOf(
-                                    DecimalFormat("0.##").format(maxTemp ?: getMaxProbeTemp())
-                                )
-                            )
-                        )
+                                    DecimalFormat("0.##").format(maxTemp ?: getMaxProbeTemp()),
+                                ),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -183,12 +183,12 @@ class PwmSheetViewModel : ViewModel() {
                 copy(
                     tempInput = FieldInput(
                         value = temp,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     tempError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.settings_number_error)
-                    )
+                        errorMsg = UiText(R.string.settings_number_error),
+                    ),
                 )
             }
             return
@@ -197,12 +197,12 @@ class PwmSheetViewModel : ViewModel() {
             copy(
                 tempInput = FieldInput(
                     value = temp,
-                    hasInteracted = true
+                    hasInteracted = true,
                 ),
                 tempError = ErrorStatus(
                     isError = false,
-                    errorMsg = null
-                )
+                    errorMsg = null,
+                ),
             )
         }
     }
@@ -213,12 +213,12 @@ class PwmSheetViewModel : ViewModel() {
                 copy(
                     dutyInput = FieldInput(
                         value = dutyCycle,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     dutyError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.error_text_blank)
-                    )
+                        errorMsg = UiText(R.string.error_text_blank),
+                    ),
                 )
             }
             return
@@ -231,15 +231,15 @@ class PwmSheetViewModel : ViewModel() {
                     copy(
                         dutyInput = FieldInput(
                             value = dutyCycle,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         dutyError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_min_error,
-                                uiTextArgsOf(DecimalFormat("0.##").format(minDutyCycle))
-                            )
-                        )
+                                uiTextArgsOf(DecimalFormat("0.##").format(minDutyCycle)),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -248,15 +248,15 @@ class PwmSheetViewModel : ViewModel() {
                     copy(
                         dutyInput = FieldInput(
                             value = dutyCycle,
-                            hasInteracted = true
+                            hasInteracted = true,
                         ),
                         dutyError = ErrorStatus(
                             isError = true,
                             errorMsg = UiText(
                                 R.string.settings_max_error,
-                                uiTextArgsOf(DecimalFormat("0.##").format(100))
-                            )
-                        )
+                                uiTextArgsOf(DecimalFormat("0.##").format(100)),
+                            ),
+                        ),
                     )
                 }
                 return
@@ -266,12 +266,12 @@ class PwmSheetViewModel : ViewModel() {
                 copy(
                     dutyInput = FieldInput(
                         value = dutyCycle,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
                     dutyError = ErrorStatus(
                         isError = true,
-                        errorMsg = UiText(R.string.settings_number_error)
-                    )
+                        errorMsg = UiText(R.string.settings_number_error),
+                    ),
                 )
             }
             return
@@ -280,12 +280,12 @@ class PwmSheetViewModel : ViewModel() {
             copy(
                 dutyInput = FieldInput(
                     value = dutyCycle,
-                    hasInteracted = true
+                    hasInteracted = true,
                 ),
                 dutyError = ErrorStatus(
                     isError = false,
-                    errorMsg = null
-                )
+                    errorMsg = null,
+                ),
             )
         }
     }

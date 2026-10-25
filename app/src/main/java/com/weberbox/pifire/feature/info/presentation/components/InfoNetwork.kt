@@ -26,60 +26,60 @@ import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
 
 @Composable
 internal fun InfoNetwork(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_network),
-        headerIcon = Icons.Outlined.Cable
+        headerIcon = Icons.Outlined.Cable,
     ) {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
                 .padding(bottom = MaterialTheme.spacing.smallOne)
                 .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
         ) {
             info.networkMap.forEach { (iface, ifaceData) ->
                 Text(
                     text = "$iface:",
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Row(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallOne),
                     horizontalArrangement = Arrangement.spacedBy(
-                        MaterialTheme.spacing.smallOne
-                    )
+                        MaterialTheme.spacing.smallOne,
+                    ),
                 ) {
                     Text(
                         text = stringResource(R.string.info_network_ip),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = ifaceData.ipAddress,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 Row(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallOne),
                     horizontalArrangement = Arrangement.spacedBy(
-                        MaterialTheme.spacing.smallOne
-                    )
+                        MaterialTheme.spacing.smallOne,
+                    ),
                 ) {
                     Text(
                         text = stringResource(R.string.info_network_mac),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = ifaceData.macAddress,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -87,7 +87,7 @@ internal fun InfoNetwork(
                 Text(
                     text = stringResource(R.string.info_network_unavailable),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -102,7 +102,7 @@ private fun InfoNetworkPreview() {
     PiFireTheme {
         Surface {
             InfoNetwork(
-                info = info
+                info = info,
             )
         }
     }

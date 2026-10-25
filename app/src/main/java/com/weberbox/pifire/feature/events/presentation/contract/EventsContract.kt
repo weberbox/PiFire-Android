@@ -11,14 +11,14 @@ internal typealias GrillEvent = Event
 class EventsContract {
 
     sealed class Event : ViewEvent {
-        data object Refresh: Event()
+        data object Refresh : Event()
     }
 
     data class State(
         val eventsList: List<GrillEvent>,
         val isInitialLoading: Boolean,
         val isDataError: Boolean,
-        val isRefreshing: Boolean
+        val isRefreshing: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

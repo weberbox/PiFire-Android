@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Shutdown(
     @SerialName("shutdown_duration")
     val duration: Int? = null,
-    
+
     @SerialName("auto_power_off")
-    val autoPowerOff: Boolean? = null
+    val autoPowerOff: Boolean? = null,
 )

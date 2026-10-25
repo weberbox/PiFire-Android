@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
 
     init {
@@ -26,7 +26,7 @@ class SettingsViewModel @Inject constructor(
         isInitialLoading = true,
         isRefreshing = false,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: SettingsContract.Event) {
@@ -44,19 +44,20 @@ class SettingsViewModel @Inject constructor(
                         setEffect {
                             SettingsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     } else {
                         getCachedData()
                     }
                 }
+
                 is Result.Success -> {
                     setState {
                         copy(
                             supportsDcFan = result.data.settings.dcFan,
                             isInitialLoading = false,
-                            isRefreshing = false
+                            isRefreshing = false,
                         )
                     }
                 }
@@ -71,7 +72,7 @@ class SettingsViewModel @Inject constructor(
                     copy(
                         supportsDcFan = false,
                         isInitialLoading = false,
-                        isDataError = true
+                        isDataError = true,
                     )
                 }
             }
@@ -81,13 +82,13 @@ class SettingsViewModel @Inject constructor(
                     copy(
                         supportsDcFan = result.data.settings.dcFan,
                         isInitialLoading = false,
-                        isRefreshing = false
+                        isRefreshing = false,
                     )
                 }
                 setEffect {
                     SettingsContract.Effect.Notification(
                         text = UiText(R.string.alerter_cached_results),
-                        error = true
+                        error = true,
                     )
                 }
             }

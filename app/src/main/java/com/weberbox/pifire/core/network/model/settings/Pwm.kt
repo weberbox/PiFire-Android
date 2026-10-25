@@ -26,12 +26,12 @@ data class Pwm(
     val tempRangeList: List<Int>? = null,
 
     @SerialName("profiles")
-    val profiles: List<Profile>? = null
+    val profiles: List<Profile>? = null,
 ) {
 
     @Serializable
     data class Profile(
         @SerialName("duty_cycle")
-        val dutyCycle: Int? = null
+        val dutyCycle: Int? = null,
     )
 }

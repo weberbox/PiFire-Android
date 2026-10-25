@@ -32,7 +32,7 @@ import com.weberbox.pifire.core.ui.theme.PiFireTheme
 internal fun HorizontalDashedStepper(
     modifier: Modifier = Modifier,
     totalSteps: Int,
-    currentStep: Number
+    currentStep: Number,
 ) {
     var size by remember { mutableStateOf(IntSize.Zero) }
 
@@ -41,9 +41,8 @@ internal fun HorizontalDashedStepper(
             .fillMaxWidth()
             .onSizeChanged { size = it }
             .then(modifier),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         for (index in 0 until totalSteps) {
             val stepState =
                 when {
@@ -66,9 +65,8 @@ internal fun HorizontalDashedStep(
     modifier: Modifier = Modifier,
     stepState: StepState,
     totalSteps: Int,
-    size: IntSize
+    size: IntSize,
 ) {
-
     val transition = updateTransition(targetState = stepState, label = "")
 
     val containerColor: Color by transition.animateColor(label = "itemColor") {
@@ -113,7 +111,7 @@ internal fun HorizontalDashedStep(
                             .fillMaxWidth()
                             .padding(2.dp)
                     }
-                }
+                },
             )
             .then(modifier),
         color = containerColor,
@@ -125,7 +123,7 @@ internal fun HorizontalDashedStep(
 enum class StepState {
     TODO,
     CURRENT,
-    DONE
+    DONE,
 }
 
 @Composable
@@ -136,7 +134,7 @@ private fun HorizontalDashedStepperPreview() {
         Surface {
             HorizontalDashedStepper(
                 totalSteps = 5,
-                currentStep = 3
+                currentStep = 3,
             )
         }
     }

@@ -24,7 +24,7 @@ data class Startup(
     val smartStart: SmartStart? = null,
 
     @SerialName("pwm_duty_cycle")
-    val pwmStartupDuty: Int? = null
+    val pwmStartupDuty: Int? = null,
 ) {
 
     @Serializable
@@ -37,7 +37,7 @@ data class Startup(
         val primarySetPoint: Int? = null,
 
         @SerialName("start_to_hold_prompt")
-        val startToHoldPrompt: Boolean? = null
+        val startToHoldPrompt: Boolean? = null,
     )
 
     @Serializable
@@ -54,7 +54,7 @@ data class Startup(
 
         @SerialName("temp_range_list")
         @Serializable(with = IntOrDoubleListSerializer::class)
-        val tempRangeList: List<Int>? = null
+        val tempRangeList: List<Int>? = null,
     ) {
 
         @Serializable

@@ -13,7 +13,5 @@ object StateModule {
 
     @Provides
     @Singleton
-    fun provideSessionStateHolder(): SessionStateHolder {
-        return SessionStateHolder()
-    }
+    fun provideSessionStateHolder(): SessionStateHolder = SessionStateHolder()
 }

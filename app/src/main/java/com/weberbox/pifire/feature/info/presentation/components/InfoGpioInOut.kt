@@ -26,39 +26,39 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoGpioInOut(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_gpio_in_out),
-        headerIcon = Icons.Outlined.DeveloperBoard
+        headerIcon = Icons.Outlined.DeveloperBoard,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = MaterialTheme.spacing.smallOne),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Text(
                     text = stringResource(R.string.info_gpio_output_name),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.info_gpio_output_pin),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
             info.outPins.forEach { pin ->
@@ -67,13 +67,13 @@ internal fun InfoGpioInOut(
                         text = pin.name,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                     Text(
                         text = pin.pin,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
@@ -81,21 +81,21 @@ internal fun InfoGpioInOut(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = MaterialTheme.spacing.smallOne),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Text(
                     text = stringResource(R.string.info_gpio_input_name),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.info_gpio_input_pin),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
             }
             info.inPins.forEach { pin ->
@@ -104,20 +104,19 @@ internal fun InfoGpioInOut(
                         text = pin.name,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                     Text(
                         text = pin.pin,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
         }
     }
 }
-
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -128,37 +127,37 @@ private fun InfoGpioInOutPreview() {
             outPins = listOf(
                 GPIOInOutData(
                     name = "fan",
-                    pin = "15"
+                    pin = "15",
                 ),
                 GPIOInOutData(
                     name = "dc_fan",
-                    pin = "26"
+                    pin = "26",
                 ),
                 GPIOInOutData(
                     name = "pwm",
-                    pin = "13"
+                    pin = "13",
                 ),
                 GPIOInOutData(
                     name = "igniter",
-                    pin = "18"
-                )
+                    pin = "18",
+                ),
             ),
             inPins = listOf(
                 GPIOInOutData(
                     name = "selector",
-                    pin = "17"
+                    pin = "17",
                 ),
                 GPIOInOutData(
                     name = "shutdown",
-                    pin = ""
-                )
+                    pin = "",
+                ),
             ),
         )
     }
     PiFireTheme {
         Surface {
             InfoGpioInOut(
-                info = info
+                info = info,
             )
         }
     }

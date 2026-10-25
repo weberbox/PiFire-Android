@@ -27,5 +27,5 @@ data class SmokePlus(
     val dutyCycle: Int? = null,
 
     @SerialName("fan_ramp")
-    val fanRamp: Boolean? = null
+    val fanRamp: Boolean? = null,
 )

@@ -70,7 +70,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConnectScreenDestination(
     pagerState: PagerState,
-    viewModel: ConnectViewModel = hiltViewModel()
+    viewModel: ConnectViewModel = hiltViewModel(),
 ) {
     val onBackDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scope = rememberCoroutineScope()
@@ -84,14 +84,14 @@ fun ConnectScreenDestination(
                     scope.launch {
                         pagerState.animateScrollToPage(
                             page = SetupStep.Push.ordinal,
-                            animationSpec = getPagerAnimationSpec()
+                            animationSpec = getPagerAnimationSpec(),
                         )
                     }
                 }
 
                 is ConnectContract.Effect.Navigation.Back -> onBackDispatcher?.onBackPressed()
             }
-        }
+        },
     )
 }
 
@@ -100,7 +100,7 @@ private fun ConnectScreen(
     state: ConnectContract.State,
     effectFlow: Flow<ConnectContract.Effect>?,
     onEventSent: (event: ConnectContract.Event) -> Unit,
-    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit,
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -109,7 +109,7 @@ private fun ConnectScreen(
     HandleSideEffects(
         activity = activity,
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Box {
@@ -127,22 +127,22 @@ private fun ConnectScreen(
                     .padding(top = MaterialTheme.spacing.largeTwo)
                     .padding(MaterialTheme.spacing.smallThree),
                 verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                     imageVector = Icons.Filled.OutdoorGrill,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(
                     text = stringResource(R.string.setup_connect_title),
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     text = stringResource(R.string.setup_connect_text),
                     style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 OutlineFieldWithState(
                     modifier = Modifier.fillMaxWidth(),
@@ -154,7 +154,7 @@ private fun ConnectScreen(
                     keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None),
                     onValueChange = {
                         onEventSent(ConnectContract.Event.ValidateAddress(it))
-                    }
+                    },
                 )
                 if (cameraAvailable) {
                     val googlePlayAvailable by remember {
@@ -168,16 +168,16 @@ private fun ConnectScreen(
                                     openQRCodeScanner(activity, onEventSent)
                                 } else {
                                     activity?.showAlerter(
-                                        message = UiText(R.string.setup_error_play_services)
+                                        message = UiText(R.string.setup_error_play_services),
                                     )
                                 }
                             }
-                        }
+                        },
                     ) {
                         Icon(
                             modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                             imageVector = Icons.Outlined.QrCodeScanner,
-                            contentDescription = stringResource(R.string.setup_scan_qr)
+                            contentDescription = stringResource(R.string.setup_scan_qr),
                         )
                     }
                 }
@@ -185,16 +185,16 @@ private fun ConnectScreen(
             Spacer(Modifier.weight(1f))
             SetupBottomNavRow(
                 enabled = !state.serverAddress.error.isError &&
-                        state.serverAddress.input.hasInteracted &&
-                        !state.isLoading,
+                    state.serverAddress.input.hasInteracted &&
+                    !state.isLoading,
                 onBackClick = { onNavigationRequested(ConnectContract.Effect.Navigation.Back) },
                 onNextClick = {
                     onEventSent(ConnectContract.Event.GetServerVersions)
-                }
+                },
             )
         }
         CircularLoadingIndicator(
-            isLoading = state.isLoading
+            isLoading = state.isLoading,
         )
     }
 }
@@ -203,17 +203,18 @@ private fun ConnectScreen(
 private fun HandleSideEffects(
     activity: Activity?,
     effectFlow: Flow<ConnectContract.Effect>?,
-    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is ConnectContract.Effect.Navigation -> onNavigationRequested(effect)
+
                 is ConnectContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -227,9 +228,9 @@ private fun HandleSideEffects(
                                     buttonText = effect.dialogEvent.positiveAction.buttonText,
                                     action = {
                                         effect.dialogEvent.positiveAction.action.invoke()
-                                    }
-                                )
-                            )
+                                    },
+                                ),
+                            ),
                         )
                     }
                 }
@@ -250,11 +251,11 @@ internal fun ConnectScreenPreview() {
                 ConnectScreen(
                     state = ConnectContract.State(
                         serverAddress = InputState(),
-                        isLoading = false
+                        isLoading = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

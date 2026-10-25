@@ -41,7 +41,7 @@ fun EmptyItems(
                 .padding(bottom = MaterialTheme.spacing.smallThree)
                 .size(MaterialTheme.spacing.largeIcon),
             imageVector = icon,
-            contentDescription = null
+            contentDescription = null,
         )
         Text(
             modifier = Modifier.limitWidthFraction(),

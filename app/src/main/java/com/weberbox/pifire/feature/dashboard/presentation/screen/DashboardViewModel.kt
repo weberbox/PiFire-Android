@@ -69,7 +69,7 @@ class DashboardViewModel @Inject constructor(
         isDataError = false,
         isRefreshing = false,
         isConnected = false,
-        holdTempToolTip = false
+        holdTempToolTip = false,
     )
 
     override fun handleEvents(event: DashContract.Event) {
@@ -94,31 +94,41 @@ class DashboardViewModel @Inject constructor(
             handleResult(
                 when (event) {
                     is DashEvent.Monitor -> dashRepo.sendMonitorMode()
+
                     is DashEvent.RecipeUnPause -> dashRepo.sendRecipeUnPause()
+
                     is DashEvent.Shutdown -> dashRepo.sendShutdownMode()
+
                     is DashEvent.Smoke -> dashRepo.sendSmokeMode()
+
                     is DashEvent.Start -> dashRepo.sendStartGrill()
+
                     is DashEvent.Stop -> dashRepo.sendStopMode()
+
                     is DashEvent.GrillHoldTemp -> dashRepo.setGrillHoldTemp(event.temp)
+
                     is DashEvent.PrimeGrill -> dashRepo.sendPrimeGrill(
                         primeAmount = event.primeAmount,
-                        nextMode = event.nextMode
+                        nextMode = event.nextMode,
                     )
 
                     is DashEvent.TimerAction -> dashRepo.sendTimerAction(action = event.action)
+
                     is DashEvent.TimerTime -> dashRepo.sendTimerTime(
                         hours = event.hours,
                         minutes = event.minutes,
                         shutdown = event.shutdown,
-                        keepWarm = event.keepWarm
+                        keepWarm = event.keepWarm,
                     )
 
                     is DashEvent.ToggleFan -> dashRepo.sendToggleFan(enabled = event.enabled)
+
                     is DashEvent.ToggleAuger -> dashRepo.sendToggleAuger(enabled = event.enabled)
+
                     is DashEvent.ToggleIgniter -> dashRepo.sendToggleIgniter(enabled = event.enabled)
 
                     else -> Result.Success(data = Unit)
-                }
+                },
             )
         }
     }
@@ -128,7 +138,7 @@ class DashboardViewModel @Inject constructor(
             prefsRepo.prefFlow(Pref.incrementTemps).collect {
                 setState {
                     copy(
-                        incrementTemps = it
+                        incrementTemps = it,
                     )
                 }
             }
@@ -137,7 +147,7 @@ class DashboardViewModel @Inject constructor(
             prefsRepo.prefFlow(Pref.keepScreenOn).collect {
                 setState {
                     copy(
-                        keepScreenOn = it
+                        keepScreenOn = it,
                     )
                 }
             }
@@ -158,7 +168,7 @@ class DashboardViewModel @Inject constructor(
                 if (!connected) {
                     setState {
                         copy(
-                            dash = buildOfflineDash(null)
+                            dash = buildOfflineDash(null),
                         )
                     }
                     toggleTimer(Timer())
@@ -178,7 +188,7 @@ class DashboardViewModel @Inject constructor(
                                 setEffect {
                                     DashContract.Effect.Notification(
                                         text = result.error.asUiText(),
-                                        error = true
+                                        error = true,
                                     )
                                 }
                             }
@@ -192,7 +202,7 @@ class DashboardViewModel @Inject constructor(
                                     dash = result.data,
                                     isInitialLoading = false,
                                     isLoading = false,
-                                    isRefreshing = false
+                                    isRefreshing = false,
                                 )
                             }
                             toggleElapsed(result.data.startupTimestamp.toDouble())
@@ -208,7 +218,7 @@ class DashboardViewModel @Inject constructor(
         if (dash.currentMode == RunningMode.Hold.name && showHoldTempTip) {
             setState {
                 copy(
-                    holdTempToolTip = true
+                    holdTempToolTip = true,
                 )
             }
         }
@@ -218,7 +228,7 @@ class DashboardViewModel @Inject constructor(
         prefsRepo.set(Pref.holdTempToolTip, false)
         setState {
             copy(
-                holdTempToolTip = false
+                holdTempToolTip = false,
             )
         }
         setEffect {
@@ -234,21 +244,21 @@ class DashboardViewModel @Inject constructor(
                         R.string.dialog_cancel_lid_detect_title,
                     ),
                     message = UiText(
-                        R.string.dialog_cancel_lid_detect_message
+                        R.string.dialog_cancel_lid_detect_message,
                     ),
                     positiveAction = DialogAction(
                         buttonText = UiText(R.string.yes),
                         action = {
                             setLoadingState(true)
                             handleResult(dashRepo.sendToggleLidOpen(false))
-                        }
+                        },
                     ),
                     negativeAction =
                         DialogAction(
                             buttonText = UiText(R.string.no),
-                            action = { }
-                        )
-                )
+                            action = { },
+                        ),
+                ),
             )
         }
     }
@@ -268,7 +278,7 @@ class DashboardViewModel @Inject constructor(
                 if (viewState.value.dash.startToHoldPrompt &&
                     viewState.value.dash.startupGotoMode.equals(
                         other = RunningMode.Hold.name,
-                        ignoreCase = true
+                        ignoreCase = true,
                     )
                 ) {
                     setEffect {
@@ -291,21 +301,21 @@ class DashboardViewModel @Inject constructor(
                         R.string.dialog_restart_control_title,
                     ),
                     message = UiText(
-                        R.string.dialog_restart_control_message
+                        R.string.dialog_restart_control_message,
                     ),
                     positiveAction = DialogAction(
                         buttonText = UiText(R.string.yes),
                         action = {
                             setLoadingState(true)
                             restartControl()
-                        }
+                        },
                     ),
                     negativeAction =
                         DialogAction(
                             buttonText = UiText(R.string.no),
-                            action = { }
-                        )
-                )
+                            action = { },
+                        ),
+                ),
             )
         }
     }
@@ -332,10 +342,9 @@ class DashboardViewModel @Inject constructor(
                         setEffect {
                             DashContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
-
                     }
 
                     is Result.Success -> {
@@ -390,7 +399,7 @@ class DashboardViewModel @Inject constructor(
                 else -> setEffect {
                     DashContract.Effect.Notification(
                         text = UiText(R.string.alerter_smoke_plus_disabled),
-                        error = false
+                        error = false,
                     )
                 }
             }
@@ -407,7 +416,7 @@ class DashboardViewModel @Inject constructor(
                 else -> setEffect {
                     DashContract.Effect.Notification(
                         text = UiText(R.string.alerter_pwm_control_disabled),
-                        error = false
+                        error = false,
                     )
                 }
             }
@@ -439,14 +448,14 @@ class DashboardViewModel @Inject constructor(
                             setEffect {
                                 DashContract.Effect.Notification(
                                     text = result.error.asUiText(),
-                                    error = true
+                                    error = true,
                                 )
                             }
                         }
                         setState {
                             copy(
                                 isRefreshing = false,
-                                isLoading = false
+                                isLoading = false,
                             )
                         }
                     }
@@ -467,7 +476,7 @@ class DashboardViewModel @Inject constructor(
                         setEffect {
                             DashContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -490,7 +499,7 @@ class DashboardViewModel @Inject constructor(
                         setEffect {
                             DashContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                         setState { copy(isRefreshing = false) }
@@ -505,7 +514,7 @@ class DashboardViewModel @Inject constructor(
                             dash = result.data,
                             isInitialLoading = false,
                             isLoading = false,
-                            isRefreshing = false
+                            isRefreshing = false,
                         )
                     }
                 }
@@ -524,7 +533,7 @@ class DashboardViewModel @Inject constructor(
                                 dash = Dash(),
                                 isInitialLoading = false,
                                 isRefreshing = false,
-                                isDataError = true
+                                isDataError = true,
                             )
                         }
                     }
@@ -534,13 +543,13 @@ class DashboardViewModel @Inject constructor(
                             copy(
                                 dash = buildOfflineDash(result.data),
                                 isInitialLoading = false,
-                                isRefreshing = false
+                                isRefreshing = false,
                             )
                         }
                         setEffect {
                             DashContract.Effect.Notification(
                                 text = UiText(R.string.alerter_cached_results),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -552,7 +561,7 @@ class DashboardViewModel @Inject constructor(
     private fun setLoadingState(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }
@@ -567,7 +576,7 @@ class DashboardViewModel @Inject constructor(
                 title = dash.primaryProbe.title,
                 label = dash.primaryProbe.label,
                 maxTemp = dash.primaryProbe.maxTemp,
-                status = dash.primaryProbe.status
+                status = dash.primaryProbe.status,
             ),
             foodProbes = dash.foodProbes.map {
                 Probe(
@@ -575,12 +584,12 @@ class DashboardViewModel @Inject constructor(
                     title = it.title,
                     label = it.label,
                     maxTemp = it.maxTemp,
-                    status = it.status
+                    status = it.status,
                 )
             },
             smokePlus = false,
             pwmControl = false,
-            outputs = Outputs()
+            outputs = Outputs(),
         )
     }
 }

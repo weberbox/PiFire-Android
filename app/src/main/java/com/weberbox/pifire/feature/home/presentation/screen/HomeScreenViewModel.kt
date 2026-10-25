@@ -46,7 +46,7 @@ class HomeScreenViewModel @Inject constructor(
     private val connectionRepo: ConnectionRepo,
     private val settingsRepo: SettingsRepo,
     private val analytics: Analytics,
-    private val prefsRepo: PrefsRepo
+    private val prefsRepo: PrefsRepo,
 ) : BaseViewModel<HomeContract.Event, HomeContract.State, HomeContract.Effect>() {
 
     init {
@@ -66,7 +66,7 @@ class HomeScreenViewModel @Inject constructor(
         biometricSettingsPrompt = false,
         grillName = "",
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: HomeContract.Event) {
@@ -83,7 +83,7 @@ class HomeScreenViewModel @Inject constructor(
                     setEffect {
                         HomeContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -99,7 +99,7 @@ class HomeScreenViewModel @Inject constructor(
         setEffect {
             HomeContract.Effect.Navigation.NavRoute(
                 route = NavGraph.LandingDest.Landing(false),
-                popUpToRoute = NavGraph.HomeDest.DashHome
+                popUpToRoute = NavGraph.HomeDest.DashHome,
             )
         }
         analytics.logEvent(AnalyticsEvent.SignOut.name)
@@ -115,7 +115,7 @@ class HomeScreenViewModel @Inject constructor(
             sessionStateHolder.isConnectedState.collect { connected ->
                 setState {
                     copy(
-                        isConnected = connected
+                        isConnected = connected,
                     )
                 }
             }
@@ -130,7 +130,7 @@ class HomeScreenViewModel @Inject constructor(
                         copy(
                             grillName = dashData.grillName,
                             lidOpenDetectEnabled = dashData.lidOpenDetectEnabled,
-                            isHoldMode = dashData.currentMode == RunningMode.Hold.name
+                            isHoldMode = dashData.currentMode == RunningMode.Hold.name,
                         )
                     }
                 }
@@ -152,8 +152,8 @@ class HomeScreenViewModel @Inject constructor(
                         val supportResult = serverSupportManager.isServerVersionSupported(
                             ServerInfo(
                                 version = settings.serverVersion,
-                                build = settings.serverBuild
-                            )
+                                build = settings.serverBuild,
+                            ),
                         )
                         checkSupportResult(supportResult)
                     }
@@ -163,8 +163,8 @@ class HomeScreenViewModel @Inject constructor(
                     val supportResult = serverSupportManager.isServerVersionSupported(
                         ServerInfo(
                             version = result.data.settings.serverVersion,
-                            build = result.data.settings.serverBuild
-                        )
+                            build = result.data.settings.serverBuild,
+                        ),
                     )
                     checkSupportResult(supportResult)
                 }
@@ -173,7 +173,7 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private suspend fun checkSupportResult(
-        supportResult: ServerSupportResult
+        supportResult: ServerSupportResult,
     ) {
         when (supportResult) {
             is ServerSupportResult.Supported -> {}
@@ -184,8 +184,8 @@ class HomeScreenViewModel @Inject constructor(
                     params = mapOf(
                         AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
                         AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
-                    )
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
+                    ),
                 )
                 DialogController.sendEvent(
                     DialogEvent(
@@ -198,20 +198,23 @@ class HomeScreenViewModel @Inject constructor(
                                 supportResult.minVersion,
                                 supportResult.minBuild,
                                 supportResult.currentVersion,
-                                supportResult.currentBuild
-                            )
+                                supportResult.currentBuild,
+                            ),
                         ),
                         dismissible = !supportResult.isMandatory,
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.exit),
-                            action = { signOut() }
+                            action = { signOut() },
                         ),
-                        negativeAction = if (supportResult.isMandatory) null else
+                        negativeAction = if (supportResult.isMandatory) {
+                            null
+                        } else {
                             DialogAction(
                                 buttonText = UiText(R.string.close),
-                                action = { }
+                                action = { },
                             )
-                    )
+                        },
+                    ),
                 )
             }
 
@@ -221,13 +224,13 @@ class HomeScreenViewModel @Inject constructor(
                     params = mapOf(
                         AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
                         AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
-                    )
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
+                    ),
                 )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
-                            R.string.dialog_unsupported_server_version_title
+                            R.string.dialog_unsupported_server_version_title,
                         ),
                         message = UiText(
                             R.string.dialog_unsupported_server_max_message,
@@ -235,8 +238,8 @@ class HomeScreenViewModel @Inject constructor(
                                 supportResult.maxVersion,
                                 supportResult.maxBuild,
                                 supportResult.currentVersion,
-                                supportResult.currentBuild
-                            )
+                                supportResult.currentBuild,
+                            ),
                         ),
                         dismissible = !supportResult.isMandatory,
                         positiveAction = DialogAction(
@@ -247,22 +250,26 @@ class HomeScreenViewModel @Inject constructor(
                                 setEffect {
                                     HomeContract.Effect.OpenUpdateIntent(
                                         Intent(Intent.ACTION_VIEW).apply {
-                                            data = if (AppConfig.IS_PLAY_BUILD)
+                                            data = if (AppConfig.IS_PLAY_BUILD) {
                                                 Constants.PLAY_RELEASE_LINK.toUri()
-                                            else
+                                            } else {
                                                 Constants.GITHUB_RELEASE_LINK.toUri()
-                                        }
+                                            }
+                                        },
                                     )
                                 }
                                 signOut()
-                            }
+                            },
                         ),
-                        negativeAction = if (supportResult.isMandatory) null else
+                        negativeAction = if (supportResult.isMandatory) {
+                            null
+                        } else {
                             DialogAction(
                                 buttonText = UiText(R.string.close),
-                                action = { }
+                                action = { },
                             )
-                    )
+                        },
+                    ),
                 )
             }
 
@@ -270,26 +277,26 @@ class HomeScreenViewModel @Inject constructor(
                 analytics.logEvent(
                     name = AnalyticsEvent.UntestedServer.name,
                     params = mapOf(
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE
-                    )
+                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
+                    ),
                 )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
-                            R.string.dialog_untested_app_version_title
+                            R.string.dialog_untested_app_version_title,
                         ),
                         message = UiText(
-                            R.string.dialog_untested_app_version_message
+                            R.string.dialog_untested_app_version_message,
                         ),
                         positiveAction = DialogAction(
                             buttonText = UiText(R.string.close),
-                            action = { }
+                            action = { },
                         ),
                         negativeAction = DialogAction(
                             buttonText = UiText(R.string.exit),
-                            action = { signOut() }
-                        )
-                    )
+                            action = { signOut() },
+                        ),
+                    ),
                 )
             }
         }
@@ -311,7 +318,7 @@ class HomeScreenViewModel @Inject constructor(
 
     private fun <T> collectAndUpdateState(
         pref: Pref<T>,
-        update: HomeContract.State.(T) -> HomeContract.State
+        update: HomeContract.State.(T) -> HomeContract.State,
     ) {
         viewModelScope.launch {
             prefsRepo.prefFlow(pref).collect { value ->

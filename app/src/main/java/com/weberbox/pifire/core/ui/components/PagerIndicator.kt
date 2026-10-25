@@ -69,7 +69,7 @@ private fun PageIndicatorView(
         },
         animationSpec = tween(
             durationMillis = animationDurationInMillis,
-        )
+        ),
     )
     val width: Dp by animateDpAsState(
         targetValue = if (isSelected) {
@@ -79,7 +79,7 @@ private fun PageIndicatorView(
         },
         animationSpec = tween(
             durationMillis = animationDurationInMillis,
-        )
+        ),
     )
 
     Canvas(

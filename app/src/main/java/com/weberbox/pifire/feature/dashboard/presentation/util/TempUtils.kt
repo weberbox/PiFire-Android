@@ -4,40 +4,54 @@ import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.model.dashboard.ProbeType
 import kotlin.math.abs
 
-internal fun getDefaultProbeTemp(probeType: ProbeType, units: String): Int {
-    return when (probeType) {
-        ProbeType.Primary -> {
-            if (isFahrenheit(units)) AppConfig.DEFAULT_GRILL_TEMP_SET_F else
-                AppConfig.DEFAULT_GRILL_TEMP_SET_C
+internal fun getDefaultProbeTemp(probeType: ProbeType, units: String): Int = when (probeType) {
+    ProbeType.Primary -> {
+        if (isFahrenheit(units)) {
+            AppConfig.DEFAULT_GRILL_TEMP_SET_F
+        } else {
+            AppConfig.DEFAULT_GRILL_TEMP_SET_C
         }
+    }
 
-        ProbeType.Food -> {
-            if (isFahrenheit(units)) AppConfig.DEFAULT_PROBE_TEMP_SET_F else
-                AppConfig.DEFAULT_PROBE_TEMP_SET_C
+    ProbeType.Food -> {
+        if (isFahrenheit(units)) {
+            AppConfig.DEFAULT_PROBE_TEMP_SET_F
+        } else {
+            AppConfig.DEFAULT_PROBE_TEMP_SET_C
         }
+    }
 
-        ProbeType.Aux -> {
-            if (isFahrenheit(units)) AppConfig.DEFAULT_PROBE_TEMP_SET_F else
-                AppConfig.DEFAULT_PROBE_TEMP_SET_C
+    ProbeType.Aux -> {
+        if (isFahrenheit(units)) {
+            AppConfig.DEFAULT_PROBE_TEMP_SET_F
+        } else {
+            AppConfig.DEFAULT_PROBE_TEMP_SET_C
         }
     }
 }
 
-internal fun getProbeMinTemp(probeType: ProbeType, units: String): Int {
-    return when (probeType) {
-        ProbeType.Primary -> {
-            if (isFahrenheit(units)) AppConfig.MIN_GRILL_TEMP_SET_F else
-                AppConfig.MIN_GRILL_TEMP_SET_C
+internal fun getProbeMinTemp(probeType: ProbeType, units: String): Int = when (probeType) {
+    ProbeType.Primary -> {
+        if (isFahrenheit(units)) {
+            AppConfig.MIN_GRILL_TEMP_SET_F
+        } else {
+            AppConfig.MIN_GRILL_TEMP_SET_C
         }
+    }
 
-        ProbeType.Food -> {
-            if (isFahrenheit(units)) AppConfig.MIN_PROBE_TEMP_SET_F else
-                AppConfig.MIN_PROBE_TEMP_SET_C
+    ProbeType.Food -> {
+        if (isFahrenheit(units)) {
+            AppConfig.MIN_PROBE_TEMP_SET_F
+        } else {
+            AppConfig.MIN_PROBE_TEMP_SET_C
         }
+    }
 
-        ProbeType.Aux -> {
-            if (isFahrenheit(units)) AppConfig.MIN_PROBE_TEMP_SET_F else
-                AppConfig.MIN_PROBE_TEMP_SET_C
+    ProbeType.Aux -> {
+        if (isFahrenheit(units)) {
+            AppConfig.MIN_PROBE_TEMP_SET_F
+        } else {
+            AppConfig.MIN_PROBE_TEMP_SET_C
         }
     }
 }
@@ -46,7 +60,7 @@ internal fun getProbeTempRange(
     probeType: ProbeType,
     units: String,
     maxTemp: Int,
-    increment: Boolean
+    increment: Boolean,
 ): List<Int> {
     val minTemp = getProbeMinTemp(probeType, units)
     return (minTemp..maxTemp).filter {
@@ -54,9 +68,7 @@ internal fun getProbeTempRange(
     }.reversed().toList()
 }
 
-internal fun isFahrenheit(units: String): Boolean {
-    return units.equals("F", ignoreCase = true)
-}
+internal fun isFahrenheit(units: String): Boolean = units.equals("F", ignoreCase = true)
 
 internal fun findClosestTemp(list: List<Int>, target: Int): Int {
     if (list.isEmpty()) {

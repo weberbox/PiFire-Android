@@ -62,26 +62,26 @@ internal fun GrillProbe(
     Box(
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.smallTwo)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Card(
             modifier = modifier
                 .combinedClickable(
                     onClick = { if (onClick != null) onClick() },
-                    onLongClick = { if (onLongClick != null) onLongClick() }
+                    onLongClick = { if (onLongClick != null) onLongClick() },
                 )
                 .height(MaterialTheme.size.extraLargeIcon)
                 .fillMaxWidth(),
             shape = MaterialTheme.shapes.large,
             elevation = CardDefaults.cardElevation(
-                defaultElevation = MaterialTheme.elevation.small
-            )
+                defaultElevation = MaterialTheme.elevation.small,
+            ),
         ) {
             Row(
                 modifier = Modifier
                     .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                     .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(
                     modifier = Modifier.weight(1f),
@@ -90,11 +90,11 @@ internal fun GrillProbe(
                         modifier = Modifier
                             .padding(
                                 top = MaterialTheme.spacing.smallOne,
-                                start = MaterialTheme.spacing.smallTwo
+                                start = MaterialTheme.spacing.smallTwo,
                             )
                             .fillMaxWidth(),
 
-                        ) {
+                    ) {
                         Text(
                             text = probe.title,
                             style = MaterialTheme.typography.titleLarge,
@@ -102,12 +102,12 @@ internal fun GrillProbe(
                             fontWeight = FontWeight.Bold,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
                         )
                         this@Card.AnimatedVisibility(
                             visible = probe.hasNotifications,
                             enter = fadeEnterTransition(),
-                            exit = fadeExitTransition()
+                            exit = fadeExitTransition(),
                         ) {
                             Icon(
                                 imageVector = Icons.Outlined.Notifications,
@@ -115,14 +115,14 @@ internal fun GrillProbe(
                                 tint = MaterialTheme.colorScheme.errorContainer,
                                 modifier = Modifier.padding(
                                     top = MaterialTheme.spacing.extraExtraSmall,
-                                    end = MaterialTheme.spacing.extraSmall
-                                )
+                                    end = MaterialTheme.spacing.extraSmall,
+                                ),
                             )
                         }
                         this@Card.AnimatedVisibility(
                             visible = probe.targetKeepWarm,
                             enter = fadeEnterTransition(),
-                            exit = fadeExitTransition()
+                            exit = fadeExitTransition(),
                         ) {
                             Icon(
                                 imageVector = Icon.Outlined.CarDefrostRear,
@@ -130,22 +130,22 @@ internal fun GrillProbe(
                                 tint = MaterialTheme.colorScheme.errorContainer,
                                 modifier = Modifier.padding(
                                     top = MaterialTheme.spacing.extraExtraSmall,
-                                    end = MaterialTheme.spacing.extraSmall
-                                )
+                                    end = MaterialTheme.spacing.extraSmall,
+                                ),
                             )
                         }
                         this@Card.AnimatedVisibility(
                             visible = probe.targetShutdown,
                             enter = fadeEnterTransition(),
-                            exit = fadeExitTransition()
+                            exit = fadeExitTransition(),
                         ) {
                             Icon(
                                 imageVector = Icon.Outlined.FlagCheckered,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.errorContainer,
                                 modifier = Modifier.padding(
-                                    top = MaterialTheme.spacing.extraExtraSmall
-                                )
+                                    top = MaterialTheme.spacing.extraExtraSmall,
+                                ),
                             )
                         }
                     }
@@ -162,8 +162,8 @@ internal fun GrillProbe(
                                 .weight(1f)
                                 .padding(
                                     top = MaterialTheme.spacing.extraSmallOne,
-                                    start = MaterialTheme.spacing.smallTwo
-                                )
+                                    start = MaterialTheme.spacing.smallTwo,
+                                ),
                         )
                         if (probe.status.batteryCharging) {
                             Icon(
@@ -171,8 +171,8 @@ internal fun GrillProbe(
                                 contentDescription = null,
                                 modifier = Modifier.padding(
                                     top = MaterialTheme.spacing.extraSmallOne,
-                                    end = MaterialTheme.spacing.extraSmall
-                                )
+                                    end = MaterialTheme.spacing.extraSmall,
+                                ),
                             )
                         } else {
                             if (probe.status.batteryPercentage > 0) {
@@ -181,35 +181,37 @@ internal fun GrillProbe(
                                     contentDescription = null,
                                     modifier = Modifier.padding(
                                         top = MaterialTheme.spacing.extraSmallOne,
-                                        end = MaterialTheme.spacing.extraSmall
-                                    )
+                                        end = MaterialTheme.spacing.extraSmall,
+                                    ),
                                 )
                             }
                         }
                         if (probe.status.wireless) {
                             Icon(
-                                imageVector = if (probe.status.connected)
-                                    Icons.Outlined.Bluetooth else
-                                    Icons.Outlined.BluetoothDisabled,
+                                imageVector = if (probe.status.connected) {
+                                    Icons.Outlined.Bluetooth
+                                } else {
+                                    Icons.Outlined.BluetoothDisabled
+                                },
                                 contentDescription = null,
                                 modifier = Modifier.padding(
-                                    top = MaterialTheme.spacing.extraSmallOne
-                                )
+                                    top = MaterialTheme.spacing.extraSmallOne,
+                                ),
                             )
                         }
                     }
                     Spacer(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
-                    Column (
+                    Column(
                         modifier = Modifier
                             .padding(
                                 bottom = MaterialTheme.spacing.smallOne,
-                                start = MaterialTheme.spacing.smallTwo
+                                start = MaterialTheme.spacing.smallTwo,
                             ),
                     ) {
                         Row(
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.Bottom,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_state_set_to),
@@ -217,7 +219,7 @@ internal fun GrillProbe(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(bottom = 1.dp)
+                                modifier = Modifier.padding(bottom = 1.dp),
                             )
                             Text(
                                 text = formatSetTemp(probe.setTemp),
@@ -227,15 +229,15 @@ internal fun GrillProbe(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmallOne
-                                )
+                                    start = MaterialTheme.spacing.extraSmallOne,
+                                ),
                             )
                         }
                         Row(
                             modifier = Modifier.padding(
-                                top = MaterialTheme.spacing.extraSmallOne
+                                top = MaterialTheme.spacing.extraSmallOne,
                             ),
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.Bottom,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_state_target),
@@ -243,7 +245,7 @@ internal fun GrillProbe(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(bottom = 1.dp)
+                                modifier = Modifier.padding(bottom = 1.dp),
 
                             )
                             Text(
@@ -254,8 +256,8 @@ internal fun GrillProbe(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmallOne
-                                )
+                                    start = MaterialTheme.spacing.extraSmallOne,
+                                ),
                             )
                         }
                     }
@@ -264,11 +266,11 @@ internal fun GrillProbe(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(1f),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     AnimatedCounter(
                         count = formatTemp(probe.temp),
-                        style = MaterialTheme.typography.displaySmall
+                        style = MaterialTheme.typography.displaySmall,
                     )
                     val temp = (probe.temp ?: 0).toFloat()
                     val progress = if (probe.setTemp > 0f) {
@@ -281,7 +283,7 @@ internal fun GrillProbe(
                         gapSize = (-10).dp,
                         progress = {
                             if (progress > 0f) progress else 0f
-                        }
+                        },
                     )
                 }
             }
@@ -299,29 +301,27 @@ private fun GrillProbePreview() {
                 probe = buildGrillProbe(),
                 modifier = Modifier.padding(
                     top = 5.dp,
-                    bottom = 5.dp
-                )
+                    bottom = 5.dp,
+                ),
             )
         }
     }
 }
 
-private fun buildGrillProbe(): Probe {
-    return Probe(
-        title = "Grill",
-        eta = 1530,
-        temp = 135,
-        target = 125,
-        setTemp = 225,
-        maxTemp = 600,
-        hasNotifications = true,
-        targetKeepWarm = false,
-        targetShutdown = true,
-        status = Probe.Status(
-            batteryCharging = false,
-            batteryPercentage = 80,
-            connected = true,
-            wireless = true
-        )
-    )
-}
+private fun buildGrillProbe(): Probe = Probe(
+    title = "Grill",
+    eta = 1530,
+    temp = 135,
+    target = 125,
+    setTemp = 225,
+    maxTemp = 600,
+    hasNotifications = true,
+    targetKeepWarm = false,
+    targetShutdown = true,
+    status = Probe.Status(
+        batteryCharging = false,
+        batteryPercentage = 80,
+        connected = true,
+        wireless = true,
+    ),
+)

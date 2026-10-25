@@ -48,7 +48,7 @@ internal fun ProbeSheet(
     probeInfo: ProbeInfo,
     profiles: List<ProbeProfile>,
     onEvent: (UpdateProbe) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val probeLabel by remember { mutableStateOf(probeInfo.label) }
     var selectedProfile by remember { mutableStateOf(probeInfo.profile) }
@@ -57,13 +57,13 @@ internal fun ProbeSheet(
         mutableStateOf(
             FieldInput(
                 value = probeInfo.name,
-                hasInteracted = probeInfo.name.isNotBlank()
-            )
+                hasInteracted = probeInfo.name.isNotBlank(),
+            ),
         )
     }
     var probeNameError by rememberSaveable(saver = ErrorStatusSaver) {
         mutableStateOf(
-            ErrorStatus(isError = false)
+            ErrorStatus(isError = false),
         )
     }
 
@@ -71,14 +71,14 @@ internal fun ProbeSheet(
         modifier = Modifier.padding(
             horizontal = MaterialTheme.spacing.mediumOne,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = stringResource(R.string.dialog_probe_edit),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         )
         OutlineFieldWithState(
             modifier = Modifier.fillMaxWidth(),
@@ -89,7 +89,7 @@ internal fun ProbeSheet(
             onValueChange = {
                 probeNameError = ErrorStatus(isError = it.isBlank())
                 probeName = probeName.copy(value = it)
-            }
+            },
         )
         if (probeInfo.port.contains("ADC", ignoreCase = true)) {
             DropdownTextField(
@@ -102,10 +102,10 @@ internal fun ProbeSheet(
                 leadingIcon = {
                     Icon(
                         imageVector = Icon.Filled.ThermometerProbe,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 },
-                onValueChangedEvent = { selectedProfile = it }
+                onValueChangedEvent = { selectedProfile = it },
             )
         }
         if (probeInfo.type != ProbeType.Primary.name) {
@@ -116,34 +116,37 @@ internal fun ProbeSheet(
                 selectedValue = enabled,
                 options = listOf(true, false),
                 itemToString = { enabled ->
-                    if (enabled) stringResource(R.string.dialog_probe_edit_enabled)
-                    else stringResource(R.string.dialog_probe_edit_disabled)
+                    if (enabled) {
+                        stringResource(R.string.dialog_probe_edit_enabled)
+                    } else {
+                        stringResource(R.string.dialog_probe_edit_disabled)
+                    }
                 },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Visibility,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 },
-                onValueChangedEvent = { enabled = it }
+                onValueChangedEvent = { enabled = it },
             )
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = MaterialTheme.spacing.smallThree),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = { onDismiss() },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.cancel),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
@@ -154,18 +157,18 @@ internal fun ProbeSheet(
                                 name = probeName.value,
                                 label = probeLabel,
                                 profileId = selectedProfile.id,
-                                enabled = enabled
-                            )
-                        )
+                                enabled = enabled,
+                            ),
+                        ),
                     )
                 },
                 enabled = probeName.hasInteracted && !probeNameError.isError,
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.save),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -179,7 +182,7 @@ private fun ProbeSheetPreview() {
     val probeInfo = ProbeInfo(
         name = "Test",
         port = "ADC",
-        profile = ProbeProfile(name = "Test Profile")
+        profile = ProbeProfile(name = "Test Profile"),
     )
     val profile = ProbeProfile(name = "Test Profile")
     PiFireTheme {
@@ -188,7 +191,7 @@ private fun ProbeSheetPreview() {
                 probeInfo = probeInfo,
                 profiles = listOf(profile),
                 onEvent = {},
-                onDismiss = {}
+                onDismiss = {},
             )
         }
     }

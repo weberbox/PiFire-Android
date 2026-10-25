@@ -30,27 +30,27 @@ import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.
 internal fun TimerActiveSheet(
     modifier: Modifier = Modifier,
     paused: Boolean,
-    onClick: (DashEvent) -> Unit
+    onClick: (DashEvent) -> Unit,
 ) {
     Box(
         modifier = modifier
             .height(110.dp)
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             modifier = Modifier
                 .padding(bottom = MaterialTheme.spacing.smallOne)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
         ) {
             ModeButton(
                 mode = stringResource(R.string.stop),
                 icon = Icons.Outlined.StopCircle,
                 onClick = {
                     onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_STOP))
-                }
+                },
             )
             if (paused) {
                 ModeButton(
@@ -58,7 +58,7 @@ internal fun TimerActiveSheet(
                     icon = Icons.Outlined.PlayCircle,
                     onClick = {
                         onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_START))
-                    }
+                    },
                 )
             } else {
                 ModeButton(
@@ -66,13 +66,12 @@ internal fun TimerActiveSheet(
                     icon = Icons.Outlined.PauseCircle,
                     onClick = {
                         onClick(DashEvent.TimerAction(ServerConstants.PT_TIMER_PAUSE))
-                    }
+                    },
                 )
             }
         }
     }
 }
-
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -82,7 +81,7 @@ private fun TimerActiveSheetPreview() {
         Surface {
             TimerActiveSheet(
                 paused = false,
-                onClick = {}
+                onClick = {},
             )
         }
     }

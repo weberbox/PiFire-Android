@@ -9,18 +9,17 @@ import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class EventsApiImpl @Inject constructor(
-    private val socketManager: SocketManager
+    private val socketManager: SocketManager,
 ) : EventsApi {
 
-    override suspend fun getEvents(): Result<String, DataError> {
-        return socketManager.emitGet(ServerConstants.GA_EVENTS_DATA)
-    }
+    override suspend fun getEvents(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_EVENTS_DATA)
 
     override suspend fun listenEventsData(): Flow<Result<String, DataError>> {
         val flow = socketManager.onFlow(ServerConstants.LISTEN_EVENTS_DATA)
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
+
                 is Result.Success -> {
                     if (result.data.isNotEmpty() && result.data[0] != null) {
                         emit(Result.Success(result.data[0].toString()))

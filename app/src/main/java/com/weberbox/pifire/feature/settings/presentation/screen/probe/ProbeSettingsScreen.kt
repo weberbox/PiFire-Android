@@ -88,6 +88,7 @@ fun ProbeSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is ProbeContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is ProbeContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -97,7 +98,7 @@ fun ProbeSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -108,14 +109,14 @@ private fun ProbeSettings(
     state: ProbeContract.State,
     effectFlow: Flow<ProbeContract.Effect>?,
     onEventSent: (event: ProbeContract.Event) -> Unit,
-    onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -126,7 +127,7 @@ private fun ProbeSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_probe_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(ProbeContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(ProbeContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -135,10 +136,11 @@ private fun ProbeSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(ProbeContract.Effect.Navigation.Back)
                 }
@@ -147,7 +149,7 @@ private fun ProbeSettings(
                     ProbeSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -159,24 +161,24 @@ private fun ProbeSettings(
 private fun ProbeSettingsContent(
     state: ProbeContract.State,
     onEventSent: (event: ProbeContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val resources = LocalResources.current
     val probeSheet = rememberInputModalBottomSheetState<ProbeInfo>()
     val tempSelections = arrayToHashMap(
         resources.getStringArray(R.array.grill_temp_unit_entries),
-        resources.getStringArray(R.array.grill_temp_unit_values)
+        resources.getStringArray(R.array.grill_temp_unit_values),
     )
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_probe_edit)) },
@@ -187,32 +189,32 @@ private fun ProbeSettingsContent(
                     .padding(
                         start = MaterialTheme.spacing.smallThree,
                         end = MaterialTheme.spacing.smallThree,
-                        bottom = MaterialTheme.spacing.extraSmall
+                        bottom = MaterialTheme.spacing.extraSmall,
                     ),
                 shape = MaterialTheme.shapes.large,
-                onClick = { probeSheet.open(item) }
+                onClick = { probeSheet.open(item) },
             ) {
                 Row(
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.smallOne)
                         .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     if (item.type.equals("Primary", ignoreCase = true)) {
                         Icon(
                             modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                             imageVector = Icons.Filled.Thermostat,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     } else {
                         Icon(
                             modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                             imageVector = Icon.Filled.ThermometerProbe,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                     Column(
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Text(
                             text = item.name,
@@ -225,19 +227,19 @@ private fun ProbeSettingsContent(
                             Text(
                                 text = item.profile.name,
                                 modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmall
+                                    start = MaterialTheme.spacing.extraSmall,
                                 ),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 12.sp
+                                fontSize = 12.sp,
                             )
                         } else {
                             Text(
                                 text = stringResource(R.string.settings_probes_no_profile),
                                 modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmall
+                                    start = MaterialTheme.spacing.extraSmall,
                                 ),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 12.sp
+                                fontSize = 12.sp,
                             )
                         }
                     }
@@ -249,17 +251,17 @@ private fun ProbeSettingsContent(
                 modifier = Modifier
                     .padding(top = MaterialTheme.spacing.smallOne)
                     .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    modifier = Modifier.size(MaterialTheme.size.extraLarge)
+                    modifier = Modifier.size(MaterialTheme.size.extraLarge),
                 )
                 Text(
                     text = stringResource(R.string.settings_probes_not_found),
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                 )
             }
         }
@@ -272,18 +274,18 @@ private fun ProbeSettingsContent(
             onValueChange = {
                 onEventSent(
                     ProbeContract.Event.SetTempUnits(
-                        tempSelections.getOrDefault(it, "f_units")
-                    )
+                        tempSelections.getOrDefault(it, "f_units"),
+                    ),
                 )
             },
             title = { Text(text = stringResource(R.string.settings_grill_temp_units)) },
             summary = { Text(text = getTempSummary(state.serverData.settings.tempUnits)) },
-            type = ListPreferenceType.DROPDOWN_MENU
+            type = ListPreferenceType.DROPDOWN_MENU,
         )
         PreferenceNote(stringResource(R.string.settings_units_note))
     }
     BottomSheet(
-        sheetState = probeSheet.sheetState
+        sheetState = probeSheet.sheetState,
     ) {
         ProbeSheet(
             probeInfo = probeSheet.data,
@@ -292,7 +294,7 @@ private fun ProbeSettingsContent(
                 onEventSent(ProbeContract.Event.UpdateProbe(it.probeInfo))
                 probeSheet.close()
             },
-            onDismiss = { probeSheet.close() }
+            onDismiss = { probeSheet.close() },
         )
     }
 }
@@ -300,7 +302,7 @@ private fun ProbeSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<ProbeContract.Effect>?,
-    onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ProbeContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -313,7 +315,7 @@ private fun HandleSideEffects(
                 is ProbeContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -333,28 +335,26 @@ private fun ProbeSettingsPreview() {
                     state = ProbeContract.State(
                         serverData = Server(
                             settings = Server.Settings(
-                                probeMap = buildProbeData()
-                            )
+                                probeMap = buildProbeData(),
+                            ),
                         ),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }
     }
 }
 
-private fun buildProbeData(): ProbeMap {
-    return ProbeMap(
-        probeInfo = List(4) {
-            ProbeInfo(
-                name = "Grill"
-            )
-        }
-    )
-}
+private fun buildProbeData(): ProbeMap = ProbeMap(
+    probeInfo = List(4) {
+        ProbeInfo(
+            name = "Grill",
+        )
+    },
+)

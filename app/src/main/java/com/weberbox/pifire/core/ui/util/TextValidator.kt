@@ -4,31 +4,27 @@ import android.util.Patterns
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.ui.model.ErrorStatus
 
-fun validateUrl(url: String): ErrorStatus {
-    return when {
-        url.trim().isEmpty() -> {
-            ErrorStatus(true, UiText(R.string.error_text_blank))
-        }
+fun validateUrl(url: String): ErrorStatus = when {
+    url.trim().isEmpty() -> {
+        ErrorStatus(true, UiText(R.string.error_text_blank))
+    }
 
-        !Patterns.WEB_URL.matcher(url).matches() -> {
-            ErrorStatus(true, UiText(R.string.error_invalid_url))
-        }
+    !Patterns.WEB_URL.matcher(url).matches() -> {
+        ErrorStatus(true, UiText(R.string.error_invalid_url))
+    }
 
-        else -> {
-            ErrorStatus(false, null)
-        }
+    else -> {
+        ErrorStatus(false, null)
     }
 }
 
-fun validateName(name: String): ErrorStatus {
-    return when {
-        name.trim().isEmpty() -> {
-            ErrorStatus(true, UiText(R.string.error_text_blank))
-        }
+fun validateName(name: String): ErrorStatus = when {
+    name.trim().isEmpty() -> {
+        ErrorStatus(true, UiText(R.string.error_text_blank))
+    }
 
-        else -> {
-            ErrorStatus(false)
-        }
+    else -> {
+        ErrorStatus(false)
     }
 }
 

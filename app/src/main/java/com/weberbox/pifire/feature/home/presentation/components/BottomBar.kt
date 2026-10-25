@@ -28,15 +28,15 @@ private typealias index = Int
 internal fun BottomBar(
     navigationItems: List<NavigationItem>,
     pagerState: PagerState,
-    onClick: (index) -> Unit
+    onClick: (index) -> Unit,
 ) {
     NavigationBar(
         modifier = Modifier.clip(
-                RoundedCornerShape(
-                    topStart = MaterialTheme.spacing.mediumTwo,
-                    topEnd = MaterialTheme.spacing.mediumTwo
-                )
-            )
+            RoundedCornerShape(
+                topStart = MaterialTheme.spacing.mediumTwo,
+                topEnd = MaterialTheme.spacing.mediumTwo,
+            ),
+        ),
     ) {
         navigationItems.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -50,14 +50,14 @@ internal fun BottomBar(
                         selectedIcon = item.selectedIcon,
                         unselectedIcon = item.unselectedIcon,
                         title = item.title,
-                        badgeCount = item.badgeCount
+                        badgeCount = item.badgeCount,
                     )
                 },
                 label = {
                     Text(
-                        text = item.title
+                        text = item.title,
                     )
-                }
+                },
             )
         }
     }
@@ -69,12 +69,12 @@ private fun BottomBarIconView(
     selectedIcon: ImageVector,
     unselectedIcon: ImageVector,
     title: String,
-    badgeCount: Int? = null
+    badgeCount: Int? = null,
 ) {
     BadgedBox(
         badge = {
             BottomBarBadgeView(badgeCount)
-        }
+        },
     ) {
         Icon(
             imageVector = if (isSelected) {
@@ -82,7 +82,7 @@ private fun BottomBarIconView(
             } else {
                 unselectedIcon
             },
-            contentDescription = title
+            contentDescription = title,
         )
     }
 }
@@ -92,7 +92,7 @@ private fun BottomBarBadgeView(count: Int? = null) {
     if (count != null) {
         Badge {
             Text(
-                text = count.toString()
+                text = count.toString(),
             )
         }
     }
@@ -109,9 +109,9 @@ private fun BottomBarPreview() {
                 navigationItems = navigationItems,
                 pagerState = rememberPagerState(
                     initialPage = 1,
-                    pageCount = { navigationItems.size }
+                    pageCount = { navigationItems.size },
                 ),
-                onClick = { }
+                onClick = { },
             )
         }
     }

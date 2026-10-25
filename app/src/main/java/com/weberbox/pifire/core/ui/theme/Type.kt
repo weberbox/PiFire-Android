@@ -10,25 +10,25 @@ import com.weberbox.pifire.R
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
     providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
+    certificates = R.array.com_google_android_gms_fonts_certs,
 )
 
 val bodyFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Questrial"),
         fontProvider = provider,
-    )
+    ),
 )
 
 val displayFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Questrial"),
         fontProvider = provider,
-    )
+    ),
 )
 
 val navFontFamily = FontFamily(
-    Font(R.font.days_one_regular)
+    Font(R.font.days_one_regular),
 )
 
 // Default Material 3 typography values

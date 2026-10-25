@@ -5,7 +5,7 @@ import com.weberbox.pifire.core.ui.model.AppTheme
 data class Pref<T>(
     val key: String,
     val defaultValue: T,
-    val isEncrypted: Boolean = false
+    val isEncrypted: Boolean = false,
 ) {
     companion object {
         val storedAppVersion = Pref("pref_stored_app_version", 0)

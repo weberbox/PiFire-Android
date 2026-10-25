@@ -21,24 +21,22 @@ object EventsSerializer : Serializer<EventsData> {
     override val defaultValue: EventsData
         get() = EventsData()
 
-    override suspend fun readFrom(input: InputStream): EventsData {
-        return try {
-            json.decodeFromString(
-                deserializer = EventsData.serializer(),
-                string = input.readBytes().decodeToString()
-            )
-        } catch (e: SerializationException) {
-            Timber.e(e, "Events Deserialization Error")
-            defaultValue
-        }
+    override suspend fun readFrom(input: InputStream): EventsData = try {
+        json.decodeFromString(
+            deserializer = EventsData.serializer(),
+            string = input.readBytes().decodeToString(),
+        )
+    } catch (e: SerializationException) {
+        Timber.e(e, "Events Deserialization Error")
+        defaultValue
     }
 
     override suspend fun writeTo(t: EventsData, output: OutputStream) {
         output.write(
             json.encodeToString(
                 serializer = EventsData.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 }

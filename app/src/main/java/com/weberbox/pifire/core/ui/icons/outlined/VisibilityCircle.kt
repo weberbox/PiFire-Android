@@ -28,99 +28,127 @@ val Icon.Outlined.VisibilityCircle: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(12.0f, 22.0f)
                 arcTo(
-                    10.0f, 10.0f, 0.0f,
+                    10.0f,
+                    10.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 2.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    10.0f, 10.0f, 0.0f,
+                    10.0f,
+                    10.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 12.0f,
-                    y1 = 2.0f
+                    y1 = 2.0f,
                 )
                 arcTo(
-                    10.0f, 10.0f, 0.0f,
+                    10.0f,
+                    10.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 22.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    10.0f, 10.0f, 0.0f,
+                    10.0f,
+                    10.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 12.0f,
-                    y1 = 22.0f
+                    y1 = 22.0f,
                 )
                 moveTo(12.0f, 20.0f)
                 arcTo(
-                    8.0f, 8.0f, 0.0f,
+                    8.0f,
+                    8.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 20.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    8.0f, 8.0f, 0.0f,
+                    8.0f,
+                    8.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 4.0f
+                    y1 = 4.0f,
                 )
                 arcTo(
-                    8.0f, 8.0f, 0.0f,
+                    8.0f,
+                    8.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 4.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    8.0f, 8.0f, 0.0f,
+                    8.0f,
+                    8.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 20.0f
+                    y1 = 20.0f,
                 )
                 moveTo(12.0f, 11.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 13.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 12.0f,
-                    y1 = 13.0f
+                    y1 = 13.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 11.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 12.0f,
-                    y1 = 11.0f
+                    y1 = 11.0f,
                 )
                 moveTo(12.0f, 8.0f)
                 curveTo(14.63f, 8.0f, 17.0f, 9.57f, 18.0f, 12.0f)
@@ -129,32 +157,40 @@ val Icon.Outlined.VisibilityCircle: ImageVector
                 curveTo(7.0f, 9.57f, 9.37f, 8.0f, 12.0f, 8.0f)
                 moveTo(12.0f, 9.5f)
                 arcTo(
-                    2.5f, 2.5f, 0.0f,
+                    2.5f,
+                    2.5f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 9.5f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    2.5f, 2.5f, 0.0f,
+                    2.5f,
+                    2.5f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 14.5f
+                    y1 = 14.5f,
                 )
                 arcTo(
-                    2.5f, 2.5f, 0.0f,
+                    2.5f,
+                    2.5f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 14.5f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    2.5f, 2.5f, 0.0f,
+                    2.5f,
+                    2.5f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 9.5f
+                    y1 = 9.5f,
                 )
             }
         }

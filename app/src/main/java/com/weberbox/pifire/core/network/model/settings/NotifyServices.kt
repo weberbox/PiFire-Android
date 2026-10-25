@@ -27,7 +27,7 @@ data class NotifyServices(
     val mqtt: Mqtt? = null,
 
     @SerialName("wled")
-    val wled: WLed? = null
+    val wled: WLed? = null,
 ) {
 
     @Serializable
@@ -36,7 +36,7 @@ data class NotifyServices(
         val enabled: Boolean? = null,
 
         @SerialName("locations")
-        val locations: List<String>? = null
+        val locations: List<String>? = null,
     )
 
     @Serializable
@@ -45,7 +45,7 @@ data class NotifyServices(
         val enabled: Boolean? = null,
 
         @SerialName("APIKey")
-        val apiKey: String? = null
+        val apiKey: String? = null,
     )
 
     @Serializable
@@ -57,7 +57,7 @@ data class NotifyServices(
         val apiKey: String? = null,
 
         @SerialName("PublicURL")
-        val publicURL: String? = null
+        val publicURL: String? = null,
     )
 
     @Serializable
@@ -72,7 +72,7 @@ data class NotifyServices(
         val userKeys: String? = null,
 
         @SerialName("PublicURL")
-        val publicURL: String? = null
+        val publicURL: String? = null,
     )
 
     @Serializable
@@ -87,7 +87,7 @@ data class NotifyServices(
         val appID: String? = null,
 
         @SerialName("devices")
-        val devices: Map<String, OneSignalDeviceInfo>? = null
+        val devices: Map<String, OneSignalDeviceInfo>? = null,
     ) {
 
         @Serializable
@@ -99,7 +99,7 @@ data class NotifyServices(
             val friendlyName: String? = null,
 
             @SerialName("app_version")
-            val appVersion: String? = null
+            val appVersion: String? = null,
         )
     }
 
@@ -118,7 +118,7 @@ data class NotifyServices(
         val org: String? = null,
 
         @SerialName("bucket")
-        val bucket: String? = null
+        val bucket: String? = null,
     )
 
     @Serializable
@@ -145,7 +145,7 @@ data class NotifyServices(
         val updateSec: Int? = null,
 
         @SerialName("username")
-        val username: String? = null
+        val username: String? = null,
     )
 
     @Serializable
@@ -175,7 +175,7 @@ data class NotifyServices(
         val suggestedConfig: SuggestedConfig? = null,
 
         @SerialName("profile_numbers")
-        val profileNumbers: ProfileNumbers? = null
+        val profileNumbers: ProfileNumbers? = null,
     ) {
 
         @Serializable
@@ -199,7 +199,7 @@ data class NotifyServices(
             val shutdown: Int? = null,
 
             @SerialName("Prime")
-            val prime: Int? = null
+            val prime: Int? = null,
         )
 
         @Serializable
@@ -217,7 +217,7 @@ data class NotifyServices(
             val pelletLevel: Int? = null,
 
             @SerialName("Timer_Expired")
-            val timerExpired: Int? = null
+            val timerExpired: Int? = null,
         )
 
         @Serializable
@@ -271,7 +271,7 @@ data class NotifyServices(
             val targetReached: Int? = null,
 
             @SerialName("timer_done")
-            val timerDone: Int? = null
+            val timerDone: Int? = null,
         )
     }
 }

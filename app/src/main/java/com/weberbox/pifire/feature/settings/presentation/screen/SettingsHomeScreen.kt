@@ -79,7 +79,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun SettingsHomeScreenDestination(
     navController: NavHostController,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -90,6 +90,7 @@ fun SettingsHomeScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is SettingsContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is SettingsContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -99,7 +100,7 @@ fun SettingsHomeScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -110,7 +111,7 @@ private fun SettingsHome(
     state: SettingsContract.State,
     effectFlow: Flow<SettingsContract.Effect>?,
     onEventSent: (event: SettingsContract.Event) -> Unit,
-    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -130,12 +131,12 @@ private fun SettingsHome(
                 title = {
                     Text(
                         text = stringResource(R.string.nav_settings),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 },
                 scrollBehavior = scrollBehavior,
                 hazeState = hazeState,
-                onNavigate = { onNavigationRequested(SettingsContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(SettingsContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -144,10 +145,11 @@ private fun SettingsHome(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> CachedDataError {
                     onEventSent(SettingsContract.Event.Refresh)
                 }
@@ -158,12 +160,11 @@ private fun SettingsHome(
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
                         contentPadding = contentPadding,
-                        hazeState = hazeState
+                        hazeState = hazeState,
                     )
                 }
             }
         }
-
     }
 }
 
@@ -173,12 +174,12 @@ fun SettingsContent(
     onEventSent: (event: SettingsContract.Event) -> Unit,
     onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
     contentPadding: PaddingValues,
-    hazeState: HazeState
+    hazeState: HazeState,
 ) {
     PullToRefresh(
         isRefreshing = state.isRefreshing,
         onRefresh = { onEventSent(SettingsContract.Event.Refresh) },
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     ) {
         Column(
             modifier = Modifier
@@ -187,16 +188,16 @@ fun SettingsContent(
                 .hazeSource(hazeState)
                 .padding(
                     horizontal = MaterialTheme.spacing.smallThree,
-                    vertical = MaterialTheme.spacing.small
+                    vertical = MaterialTheme.spacing.small,
                 )
                 .padding(contentPadding),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.large),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter,
             ) {
                 HomePreference(
                     title = stringResource(R.string.settings_app_title),
@@ -206,10 +207,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.App
-                            )
+                                NavGraph.SettingsDest.App,
+                            ),
                         )
-                    }
+                    },
                 )
             }
             Column(
@@ -224,10 +225,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Admin
-                            )
+                                NavGraph.SettingsDest.Admin,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_probe_title),
@@ -236,10 +237,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Probe
-                            )
+                                NavGraph.SettingsDest.Probe,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_ui_title),
@@ -248,10 +249,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.UI
-                            )
+                                NavGraph.SettingsDest.UI,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_work_title),
@@ -260,10 +261,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Work
-                            )
+                                NavGraph.SettingsDest.Work,
+                            ),
                         )
-                    }
+                    },
                 )
                 if (state.supportsDcFan) {
                     HomePreference(
@@ -273,10 +274,10 @@ fun SettingsContent(
                         onClick = {
                             onNavigationRequested(
                                 SettingsContract.Effect.Navigation.NavRoute(
-                                    NavGraph.SettingsDest.Pwm
-                                )
+                                    NavGraph.SettingsDest.Pwm,
+                                ),
                             )
-                        }
+                        },
                     )
                 }
                 HomePreference(
@@ -286,10 +287,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Pellets
-                            )
+                                NavGraph.SettingsDest.Pellets,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_timers_title),
@@ -298,10 +299,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Timer
-                            )
+                                NavGraph.SettingsDest.Timer,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_safety_title),
@@ -310,10 +311,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Safety
-                            )
+                                NavGraph.SettingsDest.Safety,
+                            ),
                         )
-                    }
+                    },
                 )
                 HomePreference(
                     title = stringResource(R.string.settings_notifications_title),
@@ -322,10 +323,10 @@ fun SettingsContent(
                     onClick = {
                         onNavigationRequested(
                             SettingsContract.Effect.Navigation.NavRoute(
-                                NavGraph.SettingsDest.Notifications
-                            )
+                                NavGraph.SettingsDest.Notifications,
+                            ),
                         )
-                    }
+                    },
                 )
             }
         }
@@ -339,14 +340,14 @@ private fun HomePreference(
     summary: String,
     icon: ImageVector,
     firstItem: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     if (!firstItem) {
         Spacer(
             modifier = modifier
                 .height(4.dp)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.background),
         )
     }
     Preference(
@@ -358,23 +359,23 @@ private fun HomePreference(
             Text(
                 text = summary,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         icon = {
             Icon(
                 imageVector = icon,
-                contentDescription = title
+                contentDescription = title,
             )
         },
-        onClick = onClick
+        onClick = onClick,
     )
 }
 
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<SettingsContract.Effect>?,
-    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -387,7 +388,7 @@ private fun HandleSideEffects(
                 is SettingsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -409,11 +410,11 @@ fun SettingsHomePreview() {
                         isInitialLoading = false,
                         isRefreshing = true,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = { },
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

@@ -15,12 +15,12 @@ import java.util.Base64
 import javax.inject.Inject
 
 class Prefs @Inject constructor(
-    @ApplicationContext appContext: Context
+    @ApplicationContext appContext: Context,
 ) {
 
     private var sharedPrefs: SharedPreferences = appContext.getSharedPreferences(
         appContext.packageName + DEFAULT_SUFFIX,
-        Context.MODE_PRIVATE
+        Context.MODE_PRIVATE,
     )
 
     init {
@@ -31,18 +31,19 @@ class Prefs @Inject constructor(
         }
     }
 
-    fun <T> collectPrefsFlow(pref: Pref<T>): Flow<T> {
-        return sharedPrefs.prefsFlow(pref)
-    }
+    fun <T> collectPrefsFlow(pref: Pref<T>): Flow<T> = sharedPrefs.prefsFlow(pref)
 
     fun <T> get(pref: Pref<T>): T {
         @Suppress("UNCHECKED_CAST")
         return when (val defValue = pref.defaultValue) {
             is Boolean -> sharedPrefs.getBoolean(pref.key, defValue) as T
+
             is Int -> sharedPrefs.getInt(pref.key, defValue) as T
+
             is Long -> sharedPrefs.getLong(pref.key, defValue) as T
+
             is Double -> stringToDouble(
-                sharedPrefs.getString(pref.key, doubleToString(defValue)) ?: "0.0"
+                sharedPrefs.getString(pref.key, doubleToString(defValue)) ?: "0.0",
             ) as T
 
             is String -> {
@@ -66,9 +67,13 @@ class Prefs @Inject constructor(
         sharedPrefs.edit {
             when (value) {
                 is Boolean -> putBoolean(pref.key, value)
+
                 is Int -> putInt(pref.key, value)
+
                 is Long -> putLong(pref.key, value)
+
                 is Double -> putString(pref.key, doubleToString(value))
+
                 is String -> {
                     if (pref.isEncrypted) {
                         putString(pref.key, encrypt(value))
@@ -113,16 +118,12 @@ class Prefs @Inject constructor(
         return String()
     }
 
-    private fun doubleToString(double: Double): String {
-        return double.toString()
-    }
+    private fun doubleToString(double: Double): String = double.toString()
 
-    private fun stringToDouble(string: String): Double {
-        return try {
-            string.toDouble()
-        } catch (_: NumberFormatException) {
-            0.0
-        }
+    private fun stringToDouble(string: String): Double = try {
+        string.toDouble()
+    } catch (_: NumberFormatException) {
+        0.0
     }
 
     private fun <T> SharedPreferences.prefsFlow(pref: Pref<T>): Flow<T> =

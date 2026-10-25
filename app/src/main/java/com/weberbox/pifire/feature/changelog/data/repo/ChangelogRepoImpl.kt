@@ -13,7 +13,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ChangelogRepoImpl @Inject constructor(
-    private val json: Json
+    private val json: Json,
 ) : ChangelogRepo {
 
     override suspend fun getChangelogData(): Result<ChangelogData, DataError> {
@@ -23,12 +23,10 @@ class ChangelogRepoImpl @Inject constructor(
             val changelogData = ChangelogDtoToDataMapper.map(changelogDto)
 
             return Result.Success(changelogData)
-
         } catch (e: Exception) {
             currentCoroutineContext().ensureActive()
             Timber.e(e, "Changelog JSON Error")
         }
         return Result.Error(DataError.Local.JSON_ERROR)
     }
-
 }

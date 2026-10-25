@@ -47,7 +47,7 @@ internal fun PelletsBrands(
         },
         viewAllClick = {
             onEventSent(PelletsContract.Event.BrandsViewAll)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -60,10 +60,10 @@ internal fun PelletsBrands(
                     onItemDelete = {
                         if (isConnected) {
                             onEventSent(
-                                PelletsContract.Event.DeleteBrandDialog(brand)
+                                PelletsContract.Event.DeleteBrandDialog(brand),
                             )
                         }
-                    }
+                    },
                 )
             }
         }
@@ -77,12 +77,12 @@ private fun PelletsBrandPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 PelletsBrands(
                     pellets = buildPellets(),
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

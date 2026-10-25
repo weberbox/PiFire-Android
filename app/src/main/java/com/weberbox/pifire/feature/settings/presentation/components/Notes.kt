@@ -28,15 +28,15 @@ internal fun PreferenceNote(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick?.invoke() })
+            .clickable(onClick = { onClick?.invoke() }),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = MaterialTheme.spacing.smallThree,
-                    vertical = MaterialTheme.spacing.smallOne
-                )
+                    vertical = MaterialTheme.spacing.smallOne,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.settings_note),
@@ -46,12 +46,12 @@ internal fun PreferenceNote(
                     .clip(MaterialTheme.shapes.extraSmall)
                     .background(MaterialTheme.colorScheme.tertiary)
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
 
             )
             Text(
                 text = note,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
@@ -65,15 +65,15 @@ internal fun PreferenceWarning(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick?.invoke() })
+            .clickable(onClick = { onClick?.invoke() }),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = MaterialTheme.spacing.smallThree,
-                    vertical = MaterialTheme.spacing.smallOne
-                )
+                    vertical = MaterialTheme.spacing.smallOne,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.settings_warning),
@@ -83,11 +83,11 @@ internal fun PreferenceWarning(
                     .clip(MaterialTheme.shapes.extraSmall)
                     .background(MaterialTheme.colorScheme.errorContainer)
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = warning,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
@@ -101,15 +101,15 @@ internal fun PreferenceDanger(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick?.invoke() })
+            .clickable(onClick = { onClick?.invoke() }),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = MaterialTheme.spacing.smallThree,
-                    vertical = MaterialTheme.spacing.smallOne
-                )
+                    vertical = MaterialTheme.spacing.smallOne,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.settings_danger),
@@ -119,11 +119,11 @@ internal fun PreferenceDanger(
                     .clip(MaterialTheme.shapes.extraSmall)
                     .background(MaterialTheme.colorScheme.errorContainer)
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = warning,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
@@ -137,15 +137,15 @@ internal fun PreferenceInfo(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick?.invoke() })
+            .clickable(onClick = { onClick?.invoke() }),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = MaterialTheme.spacing.smallThree,
-                    vertical = MaterialTheme.spacing.smallOne
-                )
+                    vertical = MaterialTheme.spacing.smallOne,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.settings_info),
@@ -155,11 +155,11 @@ internal fun PreferenceInfo(
                     .clip(MaterialTheme.shapes.extraSmall)
                     .background(MaterialTheme.colorScheme.primary)
                     .padding(horizontal = MaterialTheme.spacing.extraSmall),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }

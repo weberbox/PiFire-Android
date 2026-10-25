@@ -55,19 +55,19 @@ object DashDtoToDataMapper : Mapper<DashDto, Dash> {
             keepWarm = from.timer?.keepWarm ?: timerDefaults.keepWarm,
             shutdown = from.timer?.shutdown ?: timerDefaults.shutdown,
             timerActive = (from.timer?.start ?: 0) > 0,
-            timerPaused = (from.timer?.paused ?: 0) > 0
+            timerPaused = (from.timer?.paused ?: 0) > 0,
         ),
         outputs = Outputs(
             fan = from.outputs?.fan ?: outputDefaults.fan,
             auger = from.outputs?.auger ?: outputDefaults.auger,
-            igniter = from.outputs?.igniter ?: outputDefaults.igniter
+            igniter = from.outputs?.igniter ?: outputDefaults.igniter,
         ),
         recipeStatus = RecipeStatus(
             recipeMode = from.recipeStatus?.recipeMode ?: recipeDefaults.recipeMode,
             filename = from.recipeStatus?.filename ?: recipeDefaults.filename,
             mode = from.recipeStatus?.mode ?: recipeDefaults.mode,
             paused = from.recipeStatus?.paused ?: recipeDefaults.paused,
-            step = from.recipeStatus?.step ?: recipeDefaults.step
+            step = from.recipeStatus?.step ?: recipeDefaults.step,
         ),
         foodProbes = from.foodProbes?.map { mapProbe(from = it, probeType = ProbeType.Food) }
             ?: defaults.foodProbes,

@@ -75,13 +75,13 @@ enum class DrawerValue {
 
 @Suppress("unused")
 class OffsetDrawerState(
-    initialValue: DrawerValue
+    initialValue: DrawerValue,
 ) {
     internal var anchoredDraggableMotionSpec: FiniteAnimationSpec<Float> =
         TweenSpec(durationMillis = 256)
     internal val anchoredDraggableState =
         AnchoredDraggableState(
-            initialValue = initialValue
+            initialValue = initialValue,
         )
 
     val isOpen: Boolean
@@ -154,10 +154,8 @@ class OffsetDrawerState(
 @Composable
 fun rememberOffsetDrawerState(
     initialValue: DrawerValue = DrawerValue.Closed,
-): OffsetDrawerState {
-    return rememberSaveable(saver = OffsetDrawerState.Saver()) {
-        OffsetDrawerState(initialValue)
-    }
+): OffsetDrawerState = rememberSaveable(saver = OffsetDrawerState.Saver()) {
+    OffsetDrawerState(initialValue)
 }
 
 @Composable
@@ -178,15 +176,15 @@ fun OffsetNavigationDrawer(
     val minValue = 0f
     val anchoredDraggableMotion: FiniteAnimationSpec<Float> = spring(
         dampingRatio = 0.8f,
-        stiffness = 380.0f
+        stiffness = 380.0f,
     )
     val openMotion: FiniteAnimationSpec<Float> = spring(
         dampingRatio = 0.9f,
-        stiffness = 700.0f
+        stiffness = 700.0f,
     )
     val closeMotion: FiniteAnimationSpec<Float> = spring(
         dampingRatio = 1.0f,
-        stiffness = 3800.0f
+        stiffness = 3800.0f,
     )
     val animatedScale by remember {
         derivedStateOf { calculateScale(0.85f, 1f, offsetDrawerState.progress) }
@@ -210,8 +208,8 @@ fun OffsetNavigationDrawer(
                 state = offsetDrawerState.anchoredDraggableState,
                 orientation = Orientation.Horizontal,
                 enabled = gesturesEnabled,
-                overscrollEffect = overscrollEffect
-            )
+                overscrollEffect = overscrollEffect,
+            ),
 
     ) {
         Layout(
@@ -235,7 +233,7 @@ fun OffsetNavigationDrawer(
                         DraggableAnchors {
                             DrawerValue.Closed at minValue
                             DrawerValue.Open at maxValue
-                        }
+                        },
                     )
                 }
                 placeables.fastForEach { it.place(0, 0) }
@@ -249,6 +247,7 @@ fun OffsetNavigationDrawer(
                         val offsetX =
                             when {
                                 !offset.isNaN() -> offset.roundToInt()
+
                                 offsetDrawerState.isOpen ->
                                     offsetDrawerState.defaultDrawerWidth.roundToPx()
 
@@ -266,8 +265,8 @@ fun OffsetNavigationDrawer(
                         }
                     } else {
                         Modifier
-                    }
-                )
+                    },
+                ),
         ) {
             content()
             Scrim(
@@ -280,7 +279,7 @@ fun OffsetNavigationDrawer(
                 fraction = {
                     calculateAlpha(minValue, maxValue, offsetDrawerState.requireOffset())
                 },
-                color = scrimColor
+                color = scrimColor,
             )
         }
     }
@@ -303,7 +302,7 @@ private fun Scrim(
     open: Boolean,
     onClose: () -> Unit,
     fraction: () -> Float,
-    color: Color
+    color: Color,
 ) {
     val dismissDrawer =
         if (open) {
@@ -314,11 +313,11 @@ private fun Scrim(
     Canvas(
         Modifier
             .fillMaxSize()
-            .then(dismissDrawer)
+            .then(dismissDrawer),
     ) {
         drawRect(
             color = color,
-            alpha = fraction()
+            alpha = fraction(),
         )
     }
 }

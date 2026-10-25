@@ -44,20 +44,20 @@ import com.weberbox.pifire.core.ui.util.scaleEnterTransition
 @Composable
 fun EventAlertDialog(
     modifier: Modifier = Modifier,
-    eventDialogState: EventDialogState
+    eventDialogState: EventDialogState,
 ) {
     val event = eventDialogState.event ?: return
     UnstyledDialog(
         state = eventDialogState.state,
         properties = DialogProperties(
             dismissOnBackPress = event.dismissible,
-            dismissOnClickOutside = event.dismissible
+            dismissOnClickOutside = event.dismissible,
         ),
         onDismiss = { eventDialogState.dismiss() },
     ) {
         UnstyledScrim(
             enter = fadeEnterTransition(200),
-            exit = fadeExitTransition(200)
+            exit = fadeExitTransition(200),
         )
         UnstyledDialogPanel(
             modifier = modifier
@@ -68,7 +68,7 @@ fun EventAlertDialog(
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.surfaceContainer),
             enter = scaleEnterTransition(),
-            exit = fadeExitTransition(200)
+            exit = fadeExitTransition(200),
         ) {
             DialogContent(
                 event = event,
@@ -84,23 +84,23 @@ private fun DialogContent(
     onAction: (DialogAction) -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
             Modifier.padding(
                 start = MaterialTheme.spacing.mediumTwo,
                 top = MaterialTheme.spacing.mediumTwo,
-                end = MaterialTheme.spacing.mediumTwo
-            )
+                end = MaterialTheme.spacing.mediumTwo,
+            ),
         ) {
             Text(
                 text = event.title.asString(),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
             Spacer(Modifier.height(MaterialTheme.spacing.small))
             Text(
                 text = event.message.asString(),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
         Row(
@@ -108,16 +108,16 @@ private fun DialogContent(
                 .padding(MaterialTheme.spacing.smallTwo)
                 .padding(end = MaterialTheme.spacing.smallOne)
                 .align(Alignment.End),
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
         ) {
             event.negativeAction?.let { action ->
                 OutlinedButton(
                     contentPadding = PaddingValues(horizontal = MaterialTheme.spacing.smallThree),
-                    onClick = { onAction(action) }
+                    onClick = { onAction(action) },
                 ) {
                     Text(
                         text = action.buttonText.asString(),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -131,7 +131,7 @@ private fun DialogContent(
                 ) {
                     Text(
                         text = action.buttonText.asString(),
-                        color = MaterialTheme.colorScheme.inverseOnSurface
+                        color = MaterialTheme.colorScheme.inverseOnSurface,
                     )
                 }
             }
@@ -151,12 +151,12 @@ private fun EventAlertDialogPreview() {
                     message = UiText(R.string.dialog_auth_with_unsecure_protocol_message),
                     positiveAction = DialogAction(
                         buttonText = UiText(R.string.continue_text),
-                        action = {}
+                        action = {},
                     ),
                     negativeAction = DialogAction(
                         buttonText = UiText(R.string.cancel),
-                        action = {}
-                    )
+                        action = {},
+                    ),
                 ),
                 onAction = {},
             )

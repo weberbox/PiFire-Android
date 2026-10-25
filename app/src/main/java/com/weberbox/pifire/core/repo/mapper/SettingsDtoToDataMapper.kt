@@ -30,7 +30,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 probeProfiles = ProbeProfilesMapper.map(from.probeSettings?.probeProfiles),
                 probeMap = ProbeMapMapper.map(
                     from.probeSettings?.probeMap?.probeDevices,
-                    from.probeSettings?.probeMap?.probeInfo
+                    from.probeSettings?.probeMap?.probeInfo,
                 ),
                 grillName = from.globals?.grillName ?: Setting.grillName.value,
                 etaCalculation = from.globals?.etaCalculations ?: Setting.etaCalculation.value,
@@ -104,7 +104,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 pwmTempRangeList = from.pwm?.tempRangeList ?: Setting.pwmTempRangeList.value,
                 pwmProfiles = from.pwm?.profiles?.map { profile ->
                     PwmProfile(
-                        dutyCycle = profile.dutyCycle ?: 0
+                        dutyCycle = profile.dutyCycle ?: 0,
                     )
                 } ?: emptyList(),
                 pwmControlList = PwmControlMapper.map(from.pwm?.tempRangeList, from.pwm?.profiles),
@@ -142,7 +142,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 smartStartProfiles = Setting.smartStartProfiles.value,
                 smartStartList = SmartStartMapper.map(
                     from.startup?.smartStart?.tempRangeList,
-                    from.startup?.smartStart?.profiles
+                    from.startup?.smartStart?.profiles,
                 ),
                 pelletsEmpty = pellets?.empty ?: Setting.pelletsEmpty.value,
                 pelletsFull = pellets?.full ?: Setting.pelletsFull.value,
@@ -237,8 +237,8 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 wledProfileTarget = notify?.wled?.profileNumbers?.targetReached
                     ?: Setting.wledProfileTarget.value,
                 wledProfileTimer = notify?.wled?.profileNumbers?.timerDone
-                    ?: Setting.wledProfileTimer.value
-            )
+                    ?: Setting.wledProfileTimer.value,
+            ),
         )
     }
 }

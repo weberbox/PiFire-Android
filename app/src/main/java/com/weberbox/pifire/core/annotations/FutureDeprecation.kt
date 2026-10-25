@@ -4,11 +4,11 @@ package com.weberbox.pifire.core.annotations
     allowedTargets = [
         AnnotationTarget.CLASS,
         AnnotationTarget.FUNCTION,
-        AnnotationTarget.LOCAL_VARIABLE
-    ]
+        AnnotationTarget.LOCAL_VARIABLE,
+    ],
 )
 @Retention(AnnotationRetention.RUNTIME)
 annotation class FutureDeprecation(
     val comments: String,
-    val action: String
+    val action: String,
 )

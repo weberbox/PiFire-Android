@@ -56,7 +56,7 @@ internal fun FoodProbe(
     probe: Probe,
     tempUnits: String,
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     Card(
         modifier = modifier
@@ -66,43 +66,46 @@ internal fun FoodProbe(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Row(
             modifier = Modifier
                 .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                 .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 modifier = Modifier
                     .padding(
                         start = MaterialTheme.spacing.smallTwo,
-                        end = MaterialTheme.spacing.smallOne
+                        end = MaterialTheme.spacing.smallOne,
                     )
                     .weight(1f),
             ) {
                 Row(
                     modifier = Modifier
                         .padding(top = MaterialTheme.spacing.smallOne)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(end = MaterialTheme.spacing.extraSmallOne)
                             .weight(1f),
-                        text = if (probe.status.error)
-                            stringResource(R.string.error) else probe.title,
+                        text = if (probe.status.error) {
+                            stringResource(R.string.error)
+                        } else {
+                            probe.title
+                        },
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.tertiary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     this@Card.AnimatedVisibility(
                         visible = probe.hasNotifications,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Notifications,
@@ -110,14 +113,14 @@ internal fun FoodProbe(
                             tint = MaterialTheme.colorScheme.errorContainer,
                             modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.extraExtraSmall,
-                                end = MaterialTheme.spacing.extraSmall
-                            )
+                                end = MaterialTheme.spacing.extraSmall,
+                            ),
                         )
                     }
                     this@Card.AnimatedVisibility(
                         visible = probe.targetKeepWarm,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             imageVector = Icon.Outlined.CarDefrostRear,
@@ -125,33 +128,33 @@ internal fun FoodProbe(
                             tint = MaterialTheme.colorScheme.errorContainer,
                             modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.extraExtraSmall,
-                                end = MaterialTheme.spacing.extraSmall
-                            )
+                                end = MaterialTheme.spacing.extraSmall,
+                            ),
                         )
                     }
                     this@Card.AnimatedVisibility(
                         visible = probe.targetShutdown,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             imageVector = Icon.Outlined.FlagCheckered,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.errorContainer,
                             modifier = Modifier.padding(
-                                top = MaterialTheme.spacing.extraExtraSmall
-                            )
+                                top = MaterialTheme.spacing.extraExtraSmall,
+                            ),
                         )
                     }
                 }
                 Row(
-                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+                    modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                 ) {
                     Column(
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     ) {
                         Row(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
                                 text = formatEta(probe.eta),
@@ -161,7 +164,7 @@ internal fun FoodProbe(
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier
                                     .weight(1f)
-                                    .padding(top = MaterialTheme.spacing.extraSmallOne)
+                                    .padding(top = MaterialTheme.spacing.extraSmallOne),
                             )
                             if (probe.status.batteryCharging) {
                                 Icon(
@@ -169,8 +172,8 @@ internal fun FoodProbe(
                                     contentDescription = null,
                                     modifier = Modifier.padding(
                                         top = MaterialTheme.spacing.extraSmallOne,
-                                        end = MaterialTheme.spacing.extraSmall
-                                    )
+                                        end = MaterialTheme.spacing.extraSmall,
+                                    ),
                                 )
                             } else {
                                 if (probe.status.batteryPercentage > 0) {
@@ -179,34 +182,36 @@ internal fun FoodProbe(
                                         contentDescription = null,
                                         modifier = Modifier.padding(
                                             top = MaterialTheme.spacing.extraSmallOne,
-                                            end = MaterialTheme.spacing.extraSmall
-                                        )
+                                            end = MaterialTheme.spacing.extraSmall,
+                                        ),
                                     )
                                 }
                             }
                             if (probe.status.wireless) {
                                 Icon(
-                                    imageVector = if (probe.status.connected)
-                                        Icons.Outlined.Bluetooth else
-                                        Icons.Outlined.BluetoothDisabled,
+                                    imageVector = if (probe.status.connected) {
+                                        Icons.Outlined.Bluetooth
+                                    } else {
+                                        Icons.Outlined.BluetoothDisabled
+                                    },
                                     contentDescription = null,
                                     modifier = Modifier.padding(
                                         top = MaterialTheme.spacing.extraSmallOne,
-                                        end = MaterialTheme.spacing.smallOne
-                                    )
+                                        end = MaterialTheme.spacing.smallOne,
+                                    ),
                                 )
                             }
                         }
                         Row(
                             modifier = Modifier.fillMaxHeight(),
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.Bottom,
                         ) {
                             AnimatedCounter(
                                 count = formatTemp(probe.temp),
-                                style = MaterialTheme.typography.displaySmall
+                                style = MaterialTheme.typography.displaySmall,
                             )
                             Spacer(
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
                             )
                             Column(
                                 modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
@@ -217,7 +222,7 @@ internal fun FoodProbe(
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                                 Text(
                                     text = formatTempWithUnits(probe.target, tempUnits),
@@ -225,7 +230,7 @@ internal fun FoodProbe(
                                     color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -242,7 +247,7 @@ internal fun FoodProbe(
                         VerticalProgress(
                             progress = {
                                 if (progress > 0f) progress else 0.0001f
-                            }
+                            },
                         )
                     }
                 }
@@ -260,43 +265,41 @@ private fun FoodProbePreview() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 FoodProbe(
                     probe = buildFoodProbe(),
                     tempUnits = "F",
                     modifier = Modifier
                         .padding(start = 10.dp, end = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 FoodProbe(
                     probe = buildFoodProbe(),
                     tempUnits = "F",
                     modifier = Modifier
                         .padding(end = 10.dp, start = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }
     }
 }
 
-private fun buildFoodProbe(): Probe {
-    return Probe(
-        title = "Probe 1",
-        eta = 225,
-        temp = 135,
-        target = 200,
-        maxTemp = 300,
-        hasNotifications = true,
-        targetKeepWarm = false,
-        targetShutdown = true,
-        status = Probe.Status(
-            batteryCharging = false,
-            batteryPercentage = 80,
-            connected = true,
-            wireless = true,
-            error = false
-        )
-    )
-}
+private fun buildFoodProbe(): Probe = Probe(
+    title = "Probe 1",
+    eta = 225,
+    temp = 135,
+    target = 200,
+    maxTemp = 300,
+    hasNotifications = true,
+    targetKeepWarm = false,
+    targetShutdown = true,
+    status = Probe.Status(
+        batteryCharging = false,
+        batteryPercentage = 80,
+        connected = true,
+        wireless = true,
+        error = false,
+    ),
+)

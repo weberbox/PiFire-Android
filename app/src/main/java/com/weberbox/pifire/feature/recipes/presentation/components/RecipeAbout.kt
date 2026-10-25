@@ -29,7 +29,7 @@ import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 @Composable
 internal fun RecipeAbout(
     modifier: Modifier = Modifier,
-    recipe: Recipe
+    recipe: Recipe,
 ) {
     HeaderCard(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
@@ -38,52 +38,52 @@ internal fun RecipeAbout(
     ) {
         Column(
             modifier = modifier.padding(horizontal = MaterialTheme.spacing.smallThree),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
         ) {
             TextRowItem(
                 title = stringResource(R.string.recipes_author),
-                text = recipe.metadata.author
+                text = recipe.metadata.author,
             )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
             ) {
                 Text(
                     text = stringResource(R.string.recipes_rating),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 RatingBar(
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.extraSmall,
-                        start = MaterialTheme.spacing.extraExtraSmall
+                        start = MaterialTheme.spacing.extraExtraSmall,
                     ),
                     value = recipe.metadata.rating.toFloat(),
                     style = RatingBarStyle.Fill(
                         activeColor = MaterialTheme.colorScheme.primary,
-                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer
+                        inActiveColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
                     size = MaterialTheme.spacing.smallOne,
                     spaceBetween = MaterialTheme.spacing.extraSmall,
                     isIndicator = true,
                     onValueChange = {},
-                    onRatingChanged = {}
+                    onRatingChanged = {},
                 )
             }
             TextRowItem(
                 title = stringResource(R.string.recipes_prep_time),
-                text = formatMinutes(recipe.metadata.prepTime)
+                text = formatMinutes(recipe.metadata.prepTime),
             )
             TextRowItem(
                 title = stringResource(R.string.recipes_cook_time),
-                text = formatMinutes(recipe.metadata.cookTime)
+                text = formatMinutes(recipe.metadata.cookTime),
             )
             TextRowItem(
                 title = stringResource(R.string.recipes_difficulty),
-                text = recipe.metadata.difficulty
+                text = recipe.metadata.difficulty,
             )
             TextRowItem(
                 title = stringResource(R.string.recipes_probes),
-                text = recipe.metadata.foodProbes.toString()
+                text = recipe.metadata.foodProbes.toString(),
             )
         }
     }
@@ -93,20 +93,20 @@ internal fun RecipeAbout(
 private fun TextRowItem(
     title: String,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
@@ -118,10 +118,10 @@ private fun RecipeAboutPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 RecipeAbout(
-                    recipe = buildRecipe()[0]
+                    recipe = buildRecipe()[0],
                 )
             }
         }

@@ -11,7 +11,6 @@ interface SetupApi {
     @GET
     suspend fun getVersions(
         @Url url: String,
-        @HeaderMap headerMap: Map<String, String>
+        @HeaderMap headerMap: Map<String, String>,
     ): Response<ResponseBody>
-
 }

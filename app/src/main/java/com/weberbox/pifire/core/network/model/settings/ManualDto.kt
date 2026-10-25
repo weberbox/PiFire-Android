@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class ManualDto(
     val manual: Manual? = null,
     val active: Boolean? = null,
-    val dcFan: Boolean? = null
+    val dcFan: Boolean? = null,
 ) {
     @Serializable
     data class Manual(
@@ -19,6 +19,6 @@ data class ManualDto(
         val power: Boolean? = null,
 
         @Serializable(with = IntOrDoubleSerializer::class)
-        val pwm: Int? = null
+        val pwm: Int? = null,
     )
 }

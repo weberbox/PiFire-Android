@@ -27,32 +27,35 @@ internal fun LogHeader(
     version: String,
     date: String,
     isAlpha: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(MaterialTheme.spacing.smallOne)
+            .padding(MaterialTheme.spacing.smallOne),
     ) {
         Column {
             Row(
                 modifier = modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = "v$version",
                     style = MaterialTheme.typography.titleLarge,
-                    color = if (current) MaterialTheme.colorScheme.tertiaryContainer else
-                        MaterialTheme.colorScheme.onSurface,
+                    color = if (current) {
+                        MaterialTheme.colorScheme.tertiaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    },
                     modifier = modifier.padding(start = MaterialTheme.spacing.extraSmallOne),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
 
                 )
                 if (date.isNotBlank()) {
                     Text(
                         text = " - $date",
                         modifier = modifier.padding(end = MaterialTheme.spacing.extraSmallOne),
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 }
                 if (isAlpha) {
@@ -60,15 +63,18 @@ internal fun LogHeader(
                         text = stringResource(R.string.changelog_alpha_release),
                         modifier = modifier.padding(end = MaterialTheme.spacing.extraSmallOne),
                         style = MaterialTheme.typography.titleSmall,
-                        color = if (current) MaterialTheme.colorScheme.tertiaryContainer else
-                            MaterialTheme.colorScheme.onSurface,
+                        color = if (current) {
+                            MaterialTheme.colorScheme.tertiaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurface
+                        },
                     )
                 }
             }
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.inverseOnSurface,
                 modifier = modifier.padding(top = MaterialTheme.spacing.extraExtraSmall),
-                thickness = 1.dp
+                thickness = 1.dp,
             )
         }
     }
@@ -84,7 +90,7 @@ private fun LogHeaderPreview() {
                 current = true,
                 version = "3.0.0",
                 date = "",
-                isAlpha = true
+                isAlpha = true,
             )
         }
     }

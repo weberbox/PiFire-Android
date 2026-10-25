@@ -140,7 +140,7 @@ fun RecipeDetailsScreenDestination(
                         arg = true,
                     )
             }
-        }
+        },
     )
 }
 
@@ -150,7 +150,7 @@ private fun RecipeDetailsScreen(
     state: DetailsContract.State,
     effectFlow: Flow<DetailsContract.Effect>?,
     onEventSent: (event: DetailsContract.Event) -> Unit,
-    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -161,7 +161,7 @@ private fun RecipeDetailsScreen(
     HandleSideEffects(
         deleteSheet = deleteSheet,
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -173,12 +173,12 @@ private fun RecipeDetailsScreen(
                 title = {
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = state.recipeData.metadata.title
+                        text = state.recipeData.metadata.title,
                     )
                 },
                 scrollBehavior = scrollBehavior,
                 hazeState = hazeState,
-                onNavigate = { onNavigationRequested(DetailsContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(DetailsContract.Effect.Navigation.Back) },
             )
         },
         floatingActionButton = {
@@ -192,7 +192,7 @@ private fun RecipeDetailsScreen(
                             Action.Print -> onEventSent(DetailsContract.Event.PrintRecipe)
                             Action.Run -> onEventSent(DetailsContract.Event.RunRecipe)
                         }
-                    }
+                    },
                 )
             }
         },
@@ -202,10 +202,11 @@ private fun RecipeDetailsScreen(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(DetailsContract.Effect.Navigation.Back)
                 }
@@ -216,7 +217,7 @@ private fun RecipeDetailsScreen(
                         scrollState = scrollState,
                         contentPadding = contentPadding,
                         hazeState = hazeState,
-                        onNavigationRequested = onNavigationRequested
+                        onNavigationRequested = onNavigationRequested,
                     )
                     BottomSheet(
                         sheetState = deleteSheet.sheetState,
@@ -225,19 +226,19 @@ private fun RecipeDetailsScreen(
                             title = stringResource(R.string.dialog_confirm_action),
                             message = stringResource(
                                 R.string.dialog_confirm_delete_item,
-                                state.recipeData.metadata.title
+                                state.recipeData.metadata.title,
                             ),
                             negativeButtonText = stringResource(R.string.cancel),
                             positiveButtonText = stringResource(R.string.delete),
                             positiveButtonColor = ButtonDefaults.buttonColors(
                                 contentColor = MaterialTheme.colorScheme.onError,
-                                containerColor = MaterialTheme.colorScheme.error
+                                containerColor = MaterialTheme.colorScheme.error,
                             ),
                             onPositive = {
                                 onEventSent(DetailsContract.Event.DeleteRecipe)
                                 deleteSheet.close()
                             },
-                            onNegative = { deleteSheet.close() }
+                            onNegative = { deleteSheet.close() },
                         )
                     }
                 }
@@ -254,13 +255,13 @@ private fun RecipeDetailsContent(
     scrollState: ScrollState,
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit,
 ) {
     val density = LocalDensity.current
     var scrollToPosition by remember { mutableIntStateOf(0) }
     var hasScrolled by rememberSaveable { mutableStateOf(false) }
     val carouselState = rememberCarouselState(
-        itemCount = { state.recipeData.assets.size }
+        itemCount = { state.recipeData.assets.size },
     )
 
     LaunchedEffect(Unit) {
@@ -271,14 +272,14 @@ private fun RecipeDetailsContent(
                 contentPadding.calculateTopPadding().toPx()
             }
             scrollState.animateScrollTo(
-                (scrollToPosition - paddingAdjustment).toInt().coerceAtLeast(0)
+                (scrollToPosition - paddingAdjustment).toInt().coerceAtLeast(0),
             )
         }
     }
 
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = modifier
@@ -287,7 +288,7 @@ private fun RecipeDetailsContent(
             .hazeSource(hazeState)
             .padding(MaterialTheme.spacing.smallOne),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
     ) {
         if (state.recipeData.assets.isNotEmpty()) {
             HorizontalMultiBrowseCarousel(
@@ -296,7 +297,7 @@ private fun RecipeDetailsContent(
                     .height(300.dp)
                     .clip(MaterialTheme.shapes.large),
                 preferredItemWidth = 600.dp,
-                itemSpacing = MaterialTheme.spacing.small
+                itemSpacing = MaterialTheme.spacing.small,
             ) { index ->
                 val image = state.recipeImages.getOrNull(index)
                 RecipeAsyncImage(
@@ -309,58 +310,58 @@ private fun RecipeDetailsContent(
                                     DetailsContract.Effect.Navigation.NavRoute(
                                         NavGraph.RecipesDest.Images(
                                             filename = state.recipeData.recipeFilename,
-                                            index = index
-                                        )
-                                    )
+                                            index = index,
+                                        ),
+                                    ),
                                 )
-                            }
+                            },
                         )
                         .maskClip(MaterialTheme.shapes.large),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
                 )
             }
         }
         RecipeAbout(
-            recipe = state.recipeData
+            recipe = state.recipeData,
         )
         AnimatedVisibility(
             visible = state.recipeData.metadata.description.isNotBlank(),
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
+            exit = fadeExitTransition(),
         ) {
             RecipeDescription(
-                description = state.recipeData.metadata.description
+                description = state.recipeData.metadata.description,
             )
         }
         AnimatedVisibility(
             visible = state.recipeData.ingredients.isNotEmpty(),
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
+            exit = fadeExitTransition(),
         ) {
             RecipeIngredients(
-                ingredients = state.recipeData.ingredients
+                ingredients = state.recipeData.ingredients,
             )
         }
         AnimatedVisibility(
             visible = state.recipeData.instructions.isNotEmpty(),
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
+            exit = fadeExitTransition(),
         ) {
             RecipeInstructions(
                 modifier = Modifier.animateContentSize(),
-                instructions = state.recipeData.instructions
+                instructions = state.recipeData.instructions,
             )
         }
         AnimatedVisibility(
             visible = state.recipeData.steps.isNotEmpty(),
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
+            exit = fadeExitTransition(),
         ) {
             RecipeSteps(
                 steps = state.recipeData.steps,
                 units = state.recipeData.metadata.units,
                 currentStep = state.recipeStep,
-                onStepPosition = { position -> scrollToPosition = position }
+                onStepPosition = { position -> scrollToPosition = position },
             )
         }
     }
@@ -370,7 +371,7 @@ private fun RecipeDetailsContent(
 private fun HandleSideEffects(
     deleteSheet: CustomModalBottomSheetState,
     effectFlow: Flow<DetailsContract.Effect>?,
-    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (DetailsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val context = LocalContext.current
@@ -384,12 +385,14 @@ private fun HandleSideEffects(
                 is DetailsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
                 is DetailsContract.Effect.DeleteDialog -> deleteSheet.open()
+
                 is DetailsContract.Effect.PrintRecipe -> printRecipe(effect.recipeData, context)
+
                 is DetailsContract.Effect.ShareRecipe -> shareRecipe(effect.recipeData, context)
             }
         }?.collect()
@@ -399,7 +402,7 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-//@DeviceSizePreviews
+// @DeviceSizePreviews
 private fun RecipeDetailsScreenPreview() {
     PiFireTheme {
         Surface {
@@ -410,12 +413,12 @@ private fun RecipeDetailsScreenPreview() {
                     recipeImages = emptyList(),
                     isInitialLoading = false,
                     isLoading = true,
-                    isDataError = false
+                    isDataError = false,
 
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

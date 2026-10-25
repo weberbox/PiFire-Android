@@ -12,7 +12,7 @@ import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
 class PelletsContract {
 
     sealed class Event : ViewEvent {
-        data object Refresh: Event()
+        data object Refresh : Event()
         data object AddProfileDialog : Event()
         data object AddWoodDialog : Event()
         data object AddBrandDialog : Event()
@@ -20,7 +20,7 @@ class PelletsContract {
         data object WoodsViewAll : Event()
         data object ProfilesViewAll : Event()
         data object LogsViewAll : Event()
-        data class SendEvent(val event: PelletsEvent): Event()
+        data class SendEvent(val event: PelletsEvent) : Event()
         data class CurrentDialog(val currentPelletId: String) : Event()
         data class DeleteBrandDialog(val brand: String) : Event()
         data class DeleteWoodDialog(val wood: String) : Event()

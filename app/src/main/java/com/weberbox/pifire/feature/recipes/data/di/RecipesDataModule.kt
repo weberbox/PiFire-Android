@@ -39,12 +39,10 @@ abstract class RecipesDataModule {
     companion object {
         @Singleton
         @Provides
-        fun provideRecipesDataStore(@ApplicationContext appContext: Context): DataStore<RecipesData> {
-            return DataStoreFactory.create(
-                serializer = RecipesSerializer,
-                produceFile = { appContext.dataStoreFile(AppConfig.RECIPES_DATA_NAME) },
-                corruptionHandler = ReplaceFileCorruptionHandler { RecipesData() }
-            )
-        }
+        fun provideRecipesDataStore(@ApplicationContext appContext: Context): DataStore<RecipesData> = DataStoreFactory.create(
+            serializer = RecipesSerializer,
+            produceFile = { appContext.dataStoreFile(AppConfig.RECIPES_DATA_NAME) },
+            corruptionHandler = ReplaceFileCorruptionHandler { RecipesData() },
+        )
     }
 }

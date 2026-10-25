@@ -57,7 +57,7 @@ import me.zhanghai.compose.preference.SliderPreference
 @Composable
 fun ManualSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: ManualSettingsViewModel = hiltViewModel()
+    viewModel: ManualSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -68,6 +68,7 @@ fun ManualSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is ManualContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is ManualContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -77,7 +78,7 @@ fun ManualSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -88,14 +89,14 @@ private fun ManualSettings(
     state: ManualContract.State,
     effectFlow: Flow<ManualContract.Effect>?,
     onEventSent: (event: ManualContract.Event) -> Unit,
-    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -106,7 +107,7 @@ private fun ManualSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_manual),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(ManualContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(ManualContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -115,10 +116,11 @@ private fun ManualSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(ManualContract.Effect.Navigation.Back)
                 }
@@ -127,7 +129,7 @@ private fun ManualSettings(
                     ManualSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -139,18 +141,18 @@ private fun ManualSettings(
 private fun ManualSettingsContent(
     state: ManualContract.State,
     onEventSent: (event: ManualContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     var pwm by remember(state.manualData.pwm) { mutableIntStateOf(state.manualData.pwm) }
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_manual)) },
@@ -159,7 +161,7 @@ private fun ManualSettingsContent(
             value = state.manualData.active,
             onValueChange = { onEventSent(ManualContract.Event.SetManualMode(it)) },
             title = { Text(text = stringResource(R.string.settings_manual)) },
-            summary = { Text(text = getSummary(state.manualData.active)) }
+            summary = { Text(text = getSummary(state.manualData.active)) },
         )
         PreferenceNote(stringResource(R.string.settings_admin_manual_note))
         PreferenceCategory(
@@ -170,7 +172,7 @@ private fun ManualSettingsContent(
             onValueChange = { onEventSent(ManualContract.Event.SetFanEnabled(it)) },
             enabled = state.manualData.active,
             title = { Text(text = stringResource(R.string.settings_manual_fan)) },
-            summary = { Text(text = getSummary(state.manualData.fan)) }
+            summary = { Text(text = getSummary(state.manualData.fan)) },
         )
         if (state.manualData.dcFan) {
             SliderPreference(
@@ -183,7 +185,7 @@ private fun ManualSettingsContent(
                     pwm = it.toInt()
                 },
                 title = { Text(text = stringResource(R.string.settings_manual_pwm)) },
-                summary = { Text(text = "$pwm %") }
+                summary = { Text(text = "$pwm %") },
             )
         }
         SwitchPreference(
@@ -191,21 +193,21 @@ private fun ManualSettingsContent(
             onValueChange = { onEventSent(ManualContract.Event.SetAugerEnabled(it)) },
             enabled = state.manualData.active,
             title = { Text(text = stringResource(R.string.settings_manual_auger)) },
-            summary = { Text(text = getSummary(state.manualData.auger)) }
+            summary = { Text(text = getSummary(state.manualData.auger)) },
         )
         SwitchPreference(
             value = state.manualData.igniter,
             onValueChange = { onEventSent(ManualContract.Event.SetIgniterEnabled(it)) },
             enabled = state.manualData.active,
             title = { Text(text = stringResource(R.string.settings_manual_igniter)) },
-            summary = { Text(text = getSummary(state.manualData.igniter)) }
+            summary = { Text(text = getSummary(state.manualData.igniter)) },
         )
         SwitchPreference(
             value = state.manualData.power,
             onValueChange = { onEventSent(ManualContract.Event.SetPowerEnabled(it)) },
             enabled = state.manualData.active,
             title = { Text(text = stringResource(R.string.settings_manual_power)) },
-            summary = { Text(text = getSummary(state.manualData.power)) }
+            summary = { Text(text = getSummary(state.manualData.power)) },
         )
     }
 }
@@ -213,7 +215,7 @@ private fun ManualSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<ManualContract.Effect>?,
-    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -226,7 +228,7 @@ private fun HandleSideEffects(
                 is ManualContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -246,15 +248,15 @@ private fun ManualSettingsPreview() {
                         manualData = ManualData(
                             active = true,
                             fan = true,
-                            dcFan = true
+                            dcFan = true,
                         ),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

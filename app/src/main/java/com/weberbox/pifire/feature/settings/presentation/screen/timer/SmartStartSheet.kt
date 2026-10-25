@@ -45,7 +45,7 @@ internal data class SmartStartEvent(
     val startUp: Int,
     val augerOn: Int,
     val pMode: Int,
-    val smartStartItems: List<SmartStart>
+    val smartStartItems: List<SmartStart>,
 )
 
 @Composable
@@ -56,13 +56,13 @@ internal fun SmartStartSheet(
     smartStartItems: List<SmartStart>,
     onDelete: (List<SmartStart>) -> Unit,
     onUpdate: (SmartStartEvent) -> Unit,
-    viewModel: SmartStartSheetViewModel = viewModel(key = index.toString())
+    viewModel: SmartStartSheetViewModel = viewModel(key = index.toString()),
 ) {
     LaunchedEffect(Unit) {
         viewModel.setInitialState(
             server = server,
             index = index,
-            smartStartItems = smartStartItems
+            smartStartItems = smartStartItems,
         )
     }
 
@@ -89,12 +89,12 @@ private fun SmartStartSheetContent(
     onTempUpdated: (String) -> Unit,
     onStartupUpdated: (String) -> Unit,
     onAugerOnUpdated: (String) -> Unit,
-    onPModeUpdated: (String) -> Unit
+    onPModeUpdated: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.mediumOne)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = title,
@@ -102,7 +102,7 @@ private fun SmartStartSheetContent(
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Text(
             text = state.note.asString(),
@@ -110,8 +110,8 @@ private fun SmartStartSheetContent(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(
                 start = MaterialTheme.spacing.smallOne,
-                bottom = MaterialTheme.spacing.smallOne
-            )
+                bottom = MaterialTheme.spacing.smallOne,
+            ),
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -125,7 +125,7 @@ private fun SmartStartSheetContent(
             leadingIcon = Icons.Filled.Thermostat,
             onValueChange = {
                 onTempUpdated(it)
-            }
+            },
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -138,7 +138,7 @@ private fun SmartStartSheetContent(
             leadingIcon = Icons.Outlined.Schedule,
             onValueChange = {
                 onStartupUpdated(it)
-            }
+            },
         )
         OutlineFieldWithState(
             modifier = Modifier.fillMaxWidth(),
@@ -149,7 +149,7 @@ private fun SmartStartSheetContent(
             leadingIcon = Icons.Filled.DoubleArrow,
             onValueChange = {
                 onAugerOnUpdated(it)
-            }
+            },
         )
         DropdownTextField(
             modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallThree),
@@ -158,18 +158,18 @@ private fun SmartStartSheetContent(
             leadingIcon = {
                 Icon(
                     imageVector = Icon.Outlined.Target,
-                    contentDescription = null
+                    contentDescription = null,
                 )
             },
             onValueChangedEvent = {
                 onPModeUpdated(it)
-            }
+            },
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = MaterialTheme.spacing.smallThree),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (state.deleteVisible) {
                 OutlinedButton(
@@ -180,12 +180,12 @@ private fun SmartStartSheetContent(
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
                         .weight(1f),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
                 ) {
                     Text(
                         text = stringResource(R.string.delete),
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -198,20 +198,20 @@ private fun SmartStartSheetContent(
                             startUp = state.startUpInput.value.toInt(),
                             augerOn = state.augerOnInput.value.toInt(),
                             pMode = state.pMode.toInt(),
-                            smartStartItems = smartStartItems
-                        )
+                            smartStartItems = smartStartItems,
+                        ),
                     )
                 },
                 enabled = state.tempInput.hasInteracted && state.startUpInput.hasInteracted &&
-                        state.augerOnInput.hasInteracted && !state.tempError.isError &&
-                        !state.startUpError.isError && !state.augerOnError.isError,
+                    state.augerOnInput.hasInteracted && !state.tempError.isError &&
+                    !state.startUpError.isError && !state.augerOnError.isError,
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.save),
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
@@ -226,7 +226,7 @@ private fun SmartStartSheetPreview() {
         Surface {
             SmartStartSheetContent(
                 state = SmartStartSheetState(
-                    deleteVisible = true
+                    deleteVisible = true,
                 ),
                 title = stringResource(R.string.settings_smart_start_editor_title),
                 smartStartItems = listOf(
@@ -234,25 +234,25 @@ private fun SmartStartSheetPreview() {
                         temp = 60,
                         startUp = 360,
                         augerOn = 15,
-                        pMode = 0
+                        pMode = 0,
                     ),
                     SmartStart(
                         temp = 80,
                         startUp = 360,
                         augerOn = 15,
-                        pMode = 1
+                        pMode = 1,
                     ),
                     SmartStart(
                         temp = 90,
                         startUp = 240,
                         augerOn = 15,
-                        pMode = 3
+                        pMode = 3,
                     ),
                     SmartStart(
                         temp = 91,
                         startUp = 240,
                         augerOn = 15,
-                        pMode = 5
+                        pMode = 5,
                     ),
                 ),
                 onDelete = {},
@@ -260,7 +260,7 @@ private fun SmartStartSheetPreview() {
                 onTempUpdated = {},
                 onStartupUpdated = {},
                 onPModeUpdated = {},
-                onAugerOnUpdated = {}
+                onAugerOnUpdated = {},
             )
         }
     }

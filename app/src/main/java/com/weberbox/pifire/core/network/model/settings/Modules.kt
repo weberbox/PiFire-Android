@@ -12,5 +12,5 @@ data class Modules(
     val display: String? = null,
 
     @SerialName("dist")
-    val dist: String? = null
+    val dist: String? = null,
 )

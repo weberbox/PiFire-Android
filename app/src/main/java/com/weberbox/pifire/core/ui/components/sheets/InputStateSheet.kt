@@ -53,16 +53,16 @@ fun InputStateSheet(
         modifier = Modifier.padding(
             start = MaterialTheme.spacing.mediumOne,
             end = MaterialTheme.spacing.mediumOne,
-            bottom = MaterialTheme.spacing.smallThree
+            bottom = MaterialTheme.spacing.smallThree,
         ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         )
         OutlineFieldWithState(
             modifier = Modifier
@@ -73,33 +73,33 @@ fun InputStateSheet(
             fieldInput = inputState.input,
             errorStatus = inputState.error,
             leadingIcon = leadingIcon,
-            onValueChange = { onValueChange(it) }
+            onValueChange = { onValueChange(it) },
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = { onDismiss() },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.cancel),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
                 enabled = inputState.input.hasInteracted && !inputState.error.isError,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier.weight(1f),
-                onClick = { onConfirm(inputState.input.value) }
+                onClick = { onConfirm(inputState.input.value) },
             ) {
                 Text(
                     text = stringResource(R.string.save),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -112,7 +112,7 @@ fun InputStateSheet(
 private fun AddressSheetPreview() {
     PiFireTheme {
         Surface(
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             InputStateSheet(
                 inputState = InputState(),
@@ -120,7 +120,7 @@ private fun AddressSheetPreview() {
                 placeholder = stringResource(R.string.settings_server_address),
                 onConfirm = {},
                 onDismiss = {},
-                onValueChange = {}
+                onValueChange = {},
             )
         }
     }

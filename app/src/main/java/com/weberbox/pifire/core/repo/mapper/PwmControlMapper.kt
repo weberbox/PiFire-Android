@@ -8,7 +8,7 @@ object PwmControlMapper : DualItemMapper<List<Int>, List<Profile>, List<PwmContr
 
     override fun map(
         inA: List<Int>?,
-        inB: List<Profile>?
+        inB: List<Profile>?,
     ): List<PwmControl> {
         inA?.also {
             inB?.also {
@@ -18,16 +18,16 @@ object PwmControlMapper : DualItemMapper<List<Int>, List<Profile>, List<PwmContr
                     pwmControlList = pwmControlList.plus(
                         PwmControl(
                             temp = inA[i],
-                            dutyCycle = inB.getOrNull(i)?.dutyCycle ?: 100
-                        )
+                            dutyCycle = inB.getOrNull(i)?.dutyCycle ?: 100,
+                        ),
                     )
 
                     if (i == inA.lastIndex && inB.size > i + 1) {
                         pwmControlList = pwmControlList.plus(
                             PwmControl(
                                 temp = inA[i] + 1,
-                                dutyCycle = inB[i + 1].dutyCycle ?: 100
-                            )
+                                dutyCycle = inB[i + 1].dutyCycle ?: 100,
+                            ),
                         )
                     }
                 }

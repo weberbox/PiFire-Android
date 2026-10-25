@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class CoroutinePoller<T>(
     private val dispatcher: CoroutineDispatcher,
-    private val fetchData: suspend () -> T
+    private val fetchData: suspend () -> T,
 ) {
     var job: Job? = null
 

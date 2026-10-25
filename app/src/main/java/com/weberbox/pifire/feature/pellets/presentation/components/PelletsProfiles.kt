@@ -45,7 +45,7 @@ internal fun PelletsProfiles(
         },
         viewAllClick = {
             onEventSent(PelletsContract.Event.ProfilesViewAll)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -56,7 +56,7 @@ internal fun PelletsProfiles(
                 ProfileItem(
                     profile = profile,
                     isConnected = isConnected,
-                    onEventSent = onEventSent
+                    onEventSent = onEventSent,
                 )
             }
         }
@@ -70,12 +70,12 @@ private fun PelletsProfilesPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
             ) {
                 PelletsProfiles(
                     pellets = buildPellets(),
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

@@ -24,22 +24,22 @@ class EventsRepoImpl @Inject constructor(
     private val dataStore: DataStore<EventsData>,
     private val eventsApi: EventsApi,
     private val prefs: Prefs,
-    private val json: Json
+    private val json: Json,
 ) : EventsRepo {
 
-    override suspend fun getEvents(): Result<List<Event>, DataError> {
-        return eventsApi.getEvents().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, EventsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
-                            is Result.Success -> {
-                                sessionStateHolder.setEventsData(data.data)
-                                updateEventsData(data.data)
-                                Result.Success(getLimitedEvents(data.data))
-                            }
+    override suspend fun getEvents(): Result<List<Event>, DataError> = eventsApi.getEvents().let { result ->
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
+
+            is Result.Success -> {
+                parseGetResponse(result.data, json, EventsDtoToDataMapper).let { data ->
+                    when (data) {
+                        is Result.Error -> Result.Error(data.error)
+
+                        is Result.Success -> {
+                            sessionStateHolder.setEventsData(data.data)
+                            updateEventsData(data.data)
+                            Result.Success(getLimitedEvents(data.data))
                         }
                     }
                 }
@@ -65,10 +65,12 @@ class EventsRepoImpl @Inject constructor(
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
+
                 is Result.Success -> {
                     parseResponse(result.data, json, EventsDtoToDataMapper).let { data ->
                         when (data) {
                             is Result.Error -> emit(Result.Error(data.error))
+
                             is Result.Success -> {
                                 sessionStateHolder.setEventsData(data.data)
                                 emit(Result.Success(getLimitedEvents(data.data)))
@@ -92,7 +94,5 @@ class EventsRepoImpl @Inject constructor(
         }
     }
 
-    private fun getLimitedEvents(data: Events): List<Event> {
-        return data.events.take(prefs.get(Pref.eventsAmount))
-    }
+    private fun getLimitedEvents(data: Events): List<Event> = data.events.take(prefs.get(Pref.eventsAmount))
 }

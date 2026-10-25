@@ -56,7 +56,7 @@ import kotlinx.coroutines.flow.Flow
 fun ChangelogScreenDestination(
     navController: NavHostController,
     showAnimation: Boolean = true,
-    viewModel: ChangelogViewModel = hiltViewModel()
+    viewModel: ChangelogViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ChangelogScreen(
@@ -67,6 +67,7 @@ fun ChangelogScreenDestination(
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is ChangelogContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                 is ChangelogContract.Effect.Navigation.NavRoute -> {
                     navController.navigateFrom(
                         from = sourceEntry,
@@ -76,7 +77,7 @@ fun ChangelogScreenDestination(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -88,7 +89,7 @@ private fun ChangelogScreen(
     state: ChangelogContract.State,
     effectFlow: Flow<ChangelogContract.Effect>?,
     onEventSent: (event: ChangelogContract.Event) -> Unit,
-    onNavigationRequested: (ChangelogContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (ChangelogContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -104,12 +105,12 @@ private fun ChangelogScreen(
                 title = {
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = stringResource(R.string.changelog_title)
+                        text = stringResource(R.string.changelog_title),
                     )
                 },
                 scrollBehavior = scrollBehavior,
                 hazeState = hazeState,
-                onNavigate = { onNavigationRequested(ChangelogContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(ChangelogContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -142,17 +143,17 @@ private fun ChangelogScreen(
                             .padding(top = MaterialTheme.spacing.largeTwo)
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Info,
                             contentDescription = null,
-                            modifier = Modifier.size(MaterialTheme.size.extraLarge)
+                            modifier = Modifier.size(MaterialTheme.size.extraLarge),
                         )
                         Text(
                             text = stringResource(R.string.changelog_error),
                             style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
+                            modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                         )
                     }
                 }
@@ -180,44 +181,42 @@ private fun ChangelogScreenPreview() {
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }
 }
 
-private fun buildChangelogItems(): List<Changelog> {
-    return listOf(
-        Changelog(
-            version = "3.0.0",
-            date = "",
-            current = true,
-            isAlpha = true,
-            logs = listOf(
-                Log(
-                    type = "new",
-                    text = "Added high and low probe notifications for supported PiFire versions"
-                ),
-                Log(
-                    type = "imp",
-                    text = "Added elapsed time for supported PiFire versions"
-                )
-            )
+private fun buildChangelogItems(): List<Changelog> = listOf(
+    Changelog(
+        version = "3.0.0",
+        date = "",
+        current = true,
+        isAlpha = true,
+        logs = listOf(
+            Log(
+                type = "new",
+                text = "Added high and low probe notifications for supported PiFire versions",
+            ),
+            Log(
+                type = "imp",
+                text = "Added elapsed time for supported PiFire versions",
+            ),
         ),
-        Changelog(
-            version = "2.4.0",
-            date = "",
-            current = false,
-            logs = listOf(
-                Log(
-                    type = "new",
-                    text = "Added high and low probe notifications for supported PiFire versions"
-                ),
-                Log(
-                    type = "imp",
-                    text = "Added elapsed time for supported PiFire versions"
-                )
-            )
-        )
-    )
-}
+    ),
+    Changelog(
+        version = "2.4.0",
+        date = "",
+        current = false,
+        logs = listOf(
+            Log(
+                type = "new",
+                text = "Added high and low probe notifications for supported PiFire versions",
+            ),
+            Log(
+                type = "imp",
+                text = "Added elapsed time for supported PiFire versions",
+            ),
+        ),
+    ),
+)

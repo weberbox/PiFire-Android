@@ -24,7 +24,7 @@ val Icon.Filled.Cpu64Bit: ImageVector
             defaultWidth = 24.dp,
             defaultHeight = 24.dp,
             viewportWidth = 24f,
-            viewportHeight = 24f
+            viewportHeight = 24f,
         ).apply {
             path(fill = SolidColor(Color.Black)) {
                 moveTo(9f, 3f)

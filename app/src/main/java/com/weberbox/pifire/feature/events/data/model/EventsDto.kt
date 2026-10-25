@@ -11,6 +11,6 @@ data class EventsDto(
     class Event(
         val date: String? = null,
         val time: String? = null,
-        val message: String? = null
+        val message: String? = null,
     )
 }

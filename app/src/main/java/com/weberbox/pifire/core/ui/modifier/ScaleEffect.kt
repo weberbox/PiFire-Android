@@ -15,16 +15,16 @@ fun Modifier.scaleEffect(
     enabled: Boolean = false,
     targetScale: Float = 0.8f,
     initialScale: Float = 1f,
-    animationSpec: DurationBasedAnimationSpec<Float> = tween(800)
+    animationSpec: DurationBasedAnimationSpec<Float> = tween(800),
 ): Modifier {
     val scaleTransition = rememberInfiniteTransition("ScaleTransition")
     val pulseScale by scaleTransition.animateFloat(
         initialValue = initialScale,
         targetValue = targetScale,
         animationSpec = infiniteRepeatable(animationSpec),
-        label = "PulseScale"
+        label = "PulseScale",
     )
     return this.scale(
-        scale = if (enabled) pulseScale else initialScale
+        scale = if (enabled) pulseScale else initialScale,
     )
 }

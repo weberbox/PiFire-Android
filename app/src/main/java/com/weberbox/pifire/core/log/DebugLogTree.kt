@@ -17,12 +17,10 @@ class DebugLogTree(private val prefix: String) : Timber.DebugTree() {
         super.log(updatedPriority, "$prefix.$tag", message, t)
     }
 
-    override fun createStackElementTag(element: StackTraceElement): String {
-        return String.format(
-            "(%s:%s) - %s",
-            element.fileName,
-            element.lineNumber,
-            element.methodName
-        )
-    }
+    override fun createStackElementTag(element: StackTraceElement): String = String.format(
+        "(%s:%s) - %s",
+        element.fileName,
+        element.lineNumber,
+        element.methodName,
+    )
 }

@@ -25,70 +25,70 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoModules(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_modules),
-        headerIcon = Icons.Outlined.Memory
+        headerIcon = Icons.Outlined.Memory,
     ) {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Row {
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .padding(bottom = MaterialTheme.spacing.smallOne),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
                 ) {
                     Text(
                         text = stringResource(R.string.info_modules_head),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = stringResource(R.string.info_modules_platform),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = stringResource(R.string.info_modules_display),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = stringResource(R.string.info_modules_dist),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 Column(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
                 ) {
                     Text(
                         text = stringResource(R.string.info_modules_config),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(
                         text = info.platform,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = info.display,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = info.distance,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -110,7 +110,7 @@ private fun InfoModulesPreview() {
     PiFireTheme {
         Surface {
             InfoModules(
-                info = info
+                info = info,
             )
         }
     }

@@ -39,7 +39,7 @@ import com.weberbox.pifire.feature.recipes.presentation.util.toBulletedList
 @Composable
 internal fun RecipeInstructions(
     modifier: Modifier = Modifier,
-    instructions: List<Instruction>
+    instructions: List<Instruction>,
 ) {
     var limit by rememberSaveable { mutableIntStateOf(AppConfig.LIST_VIEW_LIMIT) }
     HeaderCard(
@@ -50,11 +50,11 @@ internal fun RecipeInstructions(
         listLimit = limit,
         viewAllClick = {
             limit = instructions.size + 1
-        }
+        },
     ) {
         Column(
             modifier = modifier.padding(horizontal = MaterialTheme.spacing.extraSmallOne),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
         ) {
             InstructionsItem(
                 checked = true,
@@ -62,13 +62,13 @@ internal fun RecipeInstructions(
                 fontWeight = FontWeight.Bold,
                 direction = stringResource(R.string.recipes_item_direction),
                 ingredients = stringResource(R.string.recipes_ingredients),
-                step = stringResource(R.string.recipes_item_step)
+                step = stringResource(R.string.recipes_item_step),
             )
             instructions.take(limit).forEach { item ->
                 InstructionsItem(
                     direction = item.text,
                     ingredients = item.ingredients.toBulletedList(),
-                    step = item.step.toString()
+                    step = item.step.toString(),
                 )
             }
         }
@@ -92,35 +92,35 @@ private fun InstructionsItem(
             .clip(MaterialTheme.shapes.large)
             .clickable(
                 enabled = checkEnabled,
-                onClick = { itemChecked = !itemChecked }
+                onClick = { itemChecked = !itemChecked },
             ),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             modifier = Modifier.weight(0.12f),
             enabled = checkEnabled,
             checked = itemChecked,
-            onCheckedChange = { itemChecked = it }
+            onCheckedChange = { itemChecked = it },
         )
         Text(
             modifier = Modifier.weight(0.5f),
             text = direction,
             style = MaterialTheme.typography.titleSmall,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
         Text(
             modifier = Modifier.weight(0.3f),
             text = ingredients,
             style = MaterialTheme.typography.titleSmall,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
         Text(
             modifier = Modifier.weight(0.2f),
             text = step,
             style = MaterialTheme.typography.titleSmall,
             textAlign = TextAlign.Center,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
     }
 }
@@ -132,10 +132,10 @@ private fun RecipeInstructionsPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 RecipeInstructions(
-                    instructions = buildRecipe()[0].instructions
+                    instructions = buildRecipe()[0].instructions,
                 )
             }
         }

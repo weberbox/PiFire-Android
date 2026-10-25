@@ -24,7 +24,7 @@ fun PickerMark(
     Surface(
         modifier = modifier.padding(vertical = MaterialTheme.spacing.smallThree),
         color = color,
-        shape = shape
+        shape = shape,
     ) {
         Box(Modifier.size(width = width, height = height))
     }

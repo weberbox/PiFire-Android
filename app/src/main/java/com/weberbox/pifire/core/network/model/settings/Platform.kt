@@ -48,7 +48,7 @@ data class Platform(
         val distance: Distance? = null,
 
         @SerialName("input")
-        val input: Input? = null
+        val input: Input? = null,
     ) {
 
         @Serializable
@@ -60,7 +60,7 @@ data class Platform(
             val led: Int? = null,
 
             @SerialName("rst")
-            val rst: Int? = null
+            val rst: Int? = null,
         )
 
         @Serializable
@@ -69,7 +69,7 @@ data class Platform(
             val echo: Int? = null,
 
             @SerialName("trig")
-            val trig: Int? = null
+            val trig: Int? = null,
         )
 
         @Serializable
@@ -81,7 +81,7 @@ data class Platform(
             val enterSw: Int? = null,
 
             @SerialName("up_clk")
-            val upClk: Int? = null
+            val upClk: Int? = null,
         )
     }
 
@@ -91,7 +91,7 @@ data class Platform(
         val selector: Int? = null,
 
         @SerialName("shutdown")
-        val shutdown: Int? = null
+        val shutdown: Int? = null,
     )
 
     @Serializable
@@ -112,7 +112,7 @@ data class Platform(
         val power: Int? = null,
 
         @SerialName("pwm")
-        val pwm: Int? = null
+        val pwm: Int? = null,
     )
 
     @Serializable
@@ -127,7 +127,7 @@ data class Platform(
             val ce0: Int? = null,
 
             @SerialName("CE1")
-            val ce1: Int? = null
+            val ce1: Int? = null,
         )
     }
 }

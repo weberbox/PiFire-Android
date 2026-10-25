@@ -62,7 +62,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun SmartStartSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: TimerSettingsViewModel = hiltViewModel()
+    viewModel: TimerSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -73,6 +73,7 @@ fun SmartStartSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is TimerContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is TimerContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -82,7 +83,7 @@ fun SmartStartSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -93,14 +94,14 @@ private fun SmartStartSettings(
     state: TimerContract.State,
     effectFlow: Flow<TimerContract.Effect>?,
     onEventSent: (event: TimerContract.Event) -> Unit,
-    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -111,7 +112,7 @@ private fun SmartStartSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_smart_start_profiles_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(TimerContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -120,10 +121,11 @@ private fun SmartStartSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(TimerContract.Effect.Navigation.Back)
                 }
@@ -132,7 +134,7 @@ private fun SmartStartSettings(
                     SmartStartSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -144,27 +146,27 @@ private fun SmartStartSettings(
 private fun SmartStartSettingsContent(
     state: TimerContract.State,
     onEventSent: (event: TimerContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val smartStartSheet = rememberInputModalBottomSheetState<Int>()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = MaterialTheme.spacing.extraSmall),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = stringResource(R.string.settings_smart_start_temp),
@@ -174,7 +176,7 @@ private fun SmartStartSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.settings_smart_start_startup),
@@ -184,7 +186,7 @@ private fun SmartStartSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.settings_smart_start_auger_on),
@@ -194,7 +196,7 @@ private fun SmartStartSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 Text(
                     text = stringResource(R.string.settings_smart_start_p_mode),
@@ -204,7 +206,7 @@ private fun SmartStartSettingsContent(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.extraSmallOne)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }
@@ -212,13 +214,13 @@ private fun SmartStartSettingsContent(
             Card(
                 modifier = Modifier.padding(start = 15.dp, end = 15.dp, bottom = 5.dp),
                 shape = MaterialTheme.shapes.small,
-                onClick = { smartStartSheet.open(index) }
+                onClick = { smartStartSheet.open(index) },
             ) {
                 Row(
                     modifier = Modifier
                         .padding(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 10.dp)
                         .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val temp = when (index) {
                         0 -> {
@@ -231,7 +233,7 @@ private fun SmartStartSettingsContent(
 
                         else -> {
                             state.serverData.settings.smartStartList[index - 1].temp.toString() +
-                                    "-" + item.temp + " " + state.serverData.settings.tempUnits
+                                "-" + item.temp + " " + state.serverData.settings.tempUnits
                         }
                     }
                     Text(
@@ -240,7 +242,7 @@ private fun SmartStartSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                     Text(
                         text = item.startUp.toString() + "s",
@@ -248,7 +250,7 @@ private fun SmartStartSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                     Text(
                         text = item.augerOn.toString() + "s",
@@ -256,7 +258,7 @@ private fun SmartStartSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                     Text(
                         text = item.pMode.toString(),
@@ -264,7 +266,7 @@ private fun SmartStartSettingsContent(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                 }
             }
@@ -272,26 +274,26 @@ private fun SmartStartSettingsContent(
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 modifier = Modifier
                     .padding(15.dp)
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(5.dp),
-                onClick = { smartStartSheet.open(-1) }
+                onClick = { smartStartSheet.open(-1) },
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.settings_smart_start_add_profile),
                     fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
     }
     BottomSheet(
-        sheetState = smartStartSheet.sheetState
+        sheetState = smartStartSheet.sheetState,
     ) {
         SmartStartSheet(
             title = stringResource(R.string.settings_smart_start_editor_title),
@@ -310,8 +312,8 @@ private fun SmartStartSettingsContent(
                         startUp = event.startUp,
                         augerOn = event.augerOn,
                         pMode = event.pMode,
-                        smartStartItems = event.smartStartItems
-                    )
+                        smartStartItems = event.smartStartItems,
+                    ),
                 )
                 smartStartSheet.close()
             },
@@ -322,7 +324,7 @@ private fun SmartStartSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<TimerContract.Effect>?,
-    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -335,7 +337,7 @@ private fun HandleSideEffects(
                 is TimerContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -355,11 +357,11 @@ private fun SmartStartSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

@@ -17,9 +17,9 @@ class DashDtoToDataMapperTest {
                         lowLimitReq = true,
                         lowLimitShutdown = true,
                         highLimitShutdown = false,
-                    )
-                )
-            )
+                    ),
+                ),
+            ),
         )
         val probe = dash.foodProbes.single()
         assertEquals(true, probe.lowLimitReq)
@@ -33,7 +33,7 @@ class DashDtoToDataMapperTest {
             DashDto(
                 foodProbes = listOf(DashDto.Probe(label = "probe1", temp = Double.NaN)),
                 primaryProbe = DashDto.Probe(label = "grill", temp = 0.0),
-            )
+            ),
         )
         assertNull(dash.foodProbes.single().temp)
         assertEquals(0, dash.primaryProbe.temp)

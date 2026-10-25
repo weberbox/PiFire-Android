@@ -64,8 +64,8 @@ fun <T> PickerWheel(
         rememberLazyListState(
             nearestIndexTarget(
                 localSelectedItem - extraRow,
-                items.size
-            )
+                items.size,
+            ),
         )
     } else {
         rememberLazyListState(initialFirstVisibleItemIndex = localSelectedItem)
@@ -85,7 +85,7 @@ fun <T> PickerWheel(
 
     val wheelHeight =
         (unselectedTextLineHeightDp * (extraRow * 2)) + (space * (extraRow * 2 + 2)) +
-                selectedTextLineHeightDp
+            selectedTextLineHeightDp
 
     val maxOffset = with(density) { unselectedTextLineHeightPx + space.toPx() }
 
@@ -102,13 +102,13 @@ fun <T> PickerWheel(
             firstIndex -> transition(
                 selectedTextStyle.fontSize.value,
                 unselectedTextStyle.fontSize.value,
-                progress
+                progress,
             )
 
             firstIndex + 1 -> transition(
                 unselectedTextStyle.fontSize.value,
                 selectedTextStyle.fontSize.value,
-                progress
+                progress,
             )
 
             else -> unselectedTextStyle.fontSize.value
@@ -118,10 +118,11 @@ fun <T> PickerWheel(
     val heightInterpolator = { index: Int ->
         when (index) {
             firstIndex -> transition(selectedTextLineHeightPx, unselectedTextLineHeightPx, progress)
+
             firstIndex + 1 -> transition(
                 unselectedTextLineHeightPx,
                 selectedTextLineHeightPx,
-                progress
+                progress,
             )
 
             else -> unselectedTextLineHeightPx
@@ -131,10 +132,11 @@ fun <T> PickerWheel(
     val colorInterpolator = { index: Int ->
         when (index) {
             firstIndex -> transition(selectedTextStyle.color, unselectedTextStyle.color, progress)
+
             firstIndex + 1 -> transition(
                 unselectedTextStyle.color,
                 selectedTextStyle.color,
-                progress
+                progress,
             )
 
             else -> unselectedTextStyle.color
@@ -143,8 +145,14 @@ fun <T> PickerWheel(
 
     LaunchedEffect(firstVisibleOffset) {
         val selected = if (isLooping) {
-            (firstIndex + if (firstVisibleOffset > maxOffset / 2) extraRow +
-                    1 else extraRow) % items.size
+            (
+                firstIndex + if (firstVisibleOffset > maxOffset / 2) {
+                    extraRow +
+                        1
+                } else {
+                    extraRow
+                }
+                ) % items.size
         } else {
             (firstIndex + if (firstVisibleOffset > maxOffset / 2) 1 else 0) % items.size
         }
@@ -157,7 +165,7 @@ fun <T> PickerWheel(
             coroutineScope.launch {
                 listState.animateScrollToItem(
                     firstIndex +
-                            if (firstVisibleOffset > maxOffset / 2) 1 else 0
+                        if (firstVisibleOffset > maxOffset / 2) 1 else 0,
                 )
             }
         }
@@ -172,12 +180,12 @@ fun <T> PickerWheel(
                     Modifier.offset {
                         IntOffset(
                             x = unitsWidthInDp.roundToPx(),
-                            y = 0
+                            y = 0,
                         )
                     }
-                } ?: Modifier
+                } ?: Modifier,
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         LazyColumn(
             modifier = Modifier.width(selectedTextLineWidthDp),
@@ -186,9 +194,13 @@ fun <T> PickerWheel(
             verticalArrangement = Arrangement.spacedBy(space),
             contentPadding = PaddingValues(
                 top = space,
-                bottom = if (isLooping) space else (space * (extraRow + 1)) +
+                bottom = if (isLooping) {
+                    space
+                } else {
+                    (space * (extraRow + 1)) +
                         (unselectedTextLineHeightDp * extraRow)
-            )
+                },
+            ),
         ) {
             if (!isLooping) {
                 @Suppress("unused")
@@ -202,7 +214,7 @@ fun <T> PickerWheel(
                             color = Color.Transparent,
                             fontSize = unselectedTextStyle.fontSize,
                             fontWeight = FontWeight.Normal,
-                            fontFamily = unselectedTextStyle.fontFamily
+                            fontFamily = unselectedTextStyle.fontFamily,
                         )
                     }
                 }
@@ -216,38 +228,46 @@ fun <T> PickerWheel(
                 val adjustedIndex = if (isLooping) countIndex - extraRow else itemIndex
                 val unitsAlpha = animateFloatAsState(
                     targetValue = if (isItemSelected) 1f else 0f,
-                    animationSpec = tween(durationMillis = 400)
+                    animationSpec = tween(durationMillis = 400),
                 )
 
                 Row(
-                    modifier = Modifier.height(with(density) {
-                        heightInterpolator(adjustedIndex).toDp()
-                    }),
+                    modifier = Modifier.height(
+                        with(density) {
+                            heightInterpolator(adjustedIndex).toDp()
+                        },
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = itemToString(item),
                         color = colorInterpolator(adjustedIndex),
                         fontSize = sizeInterpolator(adjustedIndex).sp,
-                        fontWeight = if (isItemSelected)
-                            selectedTextStyle.fontWeight else unselectedTextStyle.fontWeight,
-                        fontFamily = if (isItemSelected)
-                            selectedTextStyle.fontFamily else unselectedTextStyle.fontFamily,
+                        fontWeight = if (isItemSelected) {
+                            selectedTextStyle.fontWeight
+                        } else {
+                            unselectedTextStyle.fontWeight
+                        },
+                        fontFamily = if (isItemSelected) {
+                            selectedTextStyle.fontFamily
+                        } else {
+                            unselectedTextStyle.fontFamily
+                        },
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                     unitsString?.let {
                         Text(
                             modifier = Modifier
                                 .padding(
                                     bottom = MaterialTheme.spacing.large,
-                                    start = MaterialTheme.spacing.extraSmall
+                                    start = MaterialTheme.spacing.extraSmall,
                                 )
                                 .alpha(unitsAlpha.value),
                             text = unitsString,
                             style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
                 }
@@ -256,19 +276,14 @@ fun <T> PickerWheel(
     }
 }
 
+private fun transition(start: Float, end: Float, fraction: Float): Float = start + (end - start) * fraction
 
-private fun transition(start: Float, end: Float, fraction: Float): Float {
-    return start + (end - start) * fraction
-}
-
-private fun transition(start: Color, end: Color, fraction: Float): Color {
-    return Color(
-        start.red + (end.red - start.red) * fraction,
-        start.green + (end.green - start.green) * fraction,
-        start.blue + (end.blue - start.blue) * fraction,
-        start.alpha + (end.alpha - start.alpha) * fraction
-    )
-}
+private fun transition(start: Color, end: Color, fraction: Float): Color = Color(
+    start.red + (end.red - start.red) * fraction,
+    start.green + (end.green - start.green) * fraction,
+    start.blue + (end.blue - start.blue) * fraction,
+    start.alpha + (end.alpha - start.alpha) * fraction,
+)
 
 private fun nearestIndexTarget(target: Int, size: Int): Int {
     val initialIndex = Int.MAX_VALUE / 2
@@ -289,7 +304,7 @@ internal fun measureTextHeight(
 
     val layoutResult = textMeasurer.measure(
         text = " \n ",
-        style = textStyle.toTextStyle()
+        style = textStyle.toTextStyle(),
     )
 
     return (layoutResult.size.height * 0.6).toFloat()
@@ -304,7 +319,7 @@ internal fun measureTextWidth(
 
     val layoutResult = textMeasurer.measure(
         text = "$text ",
-        style = textStyle.toTextStyle()
+        style = textStyle.toTextStyle(),
     )
     return layoutResult.size.width.toFloat()
 }

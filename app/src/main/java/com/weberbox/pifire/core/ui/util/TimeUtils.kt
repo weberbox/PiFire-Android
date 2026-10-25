@@ -8,16 +8,13 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
 
-fun getFormattedDate(dateInMilliseconds: String, dateFormat: String): String {
-    return DateFormat.format(dateFormat, dateInMilliseconds.toLong()).toString()
-}
+fun getFormattedDate(dateInMilliseconds: String, dateFormat: String): String = DateFormat.format(dateFormat, dateInMilliseconds.toLong()).toString()
 
 fun formatDateTimeString(
     input: String,
     inputFormat: String,
     outputFormat: String? = null,
 ): String {
-
     val inputFormatter = DateTimeFormatter.ofPattern(inputFormat)
     val outputFormatter =
         if (outputFormat == null) {
@@ -38,9 +35,8 @@ fun formatDateTimeString(
 fun formatDateString(
     input: String,
     inputFormat: String,
-    outputFormat: String? = null
+    outputFormat: String? = null,
 ): String {
-
     val inputFormatter = DateTimeFormatter.ofPattern(inputFormat)
     val outputFormatter =
         if (outputFormat == null) {
@@ -61,9 +57,8 @@ fun formatDateString(
 fun formatTimeString(
     input: String,
     inputFormat: String,
-    outputFormat: String? = null
+    outputFormat: String? = null,
 ): String {
-
     val inputFormatter = DateTimeFormatter.ofPattern(inputFormat)
     val outputFormatter =
         if (outputFormat == null) {

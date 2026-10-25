@@ -46,34 +46,34 @@ internal fun ProfileItem(
             .clickable(onClick = {
                 if (isConnected) {
                     onEventSent(
-                        PelletsContract.Event.EditProfileDialog(profile)
+                        PelletsContract.Event.EditProfileDialog(profile),
                     )
                 }
             })
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallTwo)
                 .height(MaterialTheme.size.largeThree)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = Icons.Filled.ExpandLess,
                 contentDescription = stringResource(R.string.edit),
                 tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(end = MaterialTheme.spacing.smallThree)
+                modifier = Modifier.padding(end = MaterialTheme.spacing.smallThree),
             )
             Text(
                 text = profile.brand + " " + profile.wood,
                 style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
             )
             IconButton(
                 modifier = Modifier
@@ -82,15 +82,15 @@ internal fun ProfileItem(
                 onClick = {
                     if (isConnected) {
                         onEventSent(
-                            PelletsContract.Event.DeleteProfileDialog(profile)
+                            PelletsContract.Event.DeleteProfileDialog(profile),
                         )
                     }
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = stringResource(R.string.delete),
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         }
@@ -104,12 +104,12 @@ private fun ProfileItemPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 ProfileItem(
                     profile = buildPellets().profilesList[0],
                     isConnected = true,
-                    onEventSent = {}
+                    onEventSent = {},
                 )
             }
         }

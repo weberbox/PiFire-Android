@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SafetySettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
-): BaseViewModel<SafetyContract.Event, SafetyContract.State, SafetyContract.Effect>() {
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<SafetyContract.Event, SafetyContract.State, SafetyContract.Effect>() {
 
     init {
         collectServerData()
@@ -27,7 +27,7 @@ class SafetySettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: SafetyContract.Event) {
@@ -49,7 +49,7 @@ class SafetySettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -106,7 +106,7 @@ class SafetySettingsViewModel @Inject constructor(
                     setEffect {
                         SafetyContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -118,7 +118,7 @@ class SafetySettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -129,7 +129,7 @@ class SafetySettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

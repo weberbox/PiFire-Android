@@ -40,13 +40,13 @@ internal fun SetupBottomNavRow(
     icon: ImageVector = Icons.AutoMirrored.Default.ArrowForward,
     description: String? = null,
     onBackClick: (() -> Unit)? = null,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
 ) {
     Box(
         modifier.padding(
             bottom = MaterialTheme.spacing.smallThree,
-            end = MaterialTheme.spacing.smallThree
-        )
+            end = MaterialTheme.spacing.smallThree,
+        ),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -55,12 +55,12 @@ internal fun SetupBottomNavRow(
             if (onBackClick != null) {
                 TextButton(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallThree),
-                    onClick = onBackClick
+                    onClick = onBackClick,
                 ) {
                     Text(
                         text = stringResource(R.string.back),
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -75,21 +75,20 @@ internal fun SetupBottomNavRow(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
-                enabled = enabled
+                enabled = enabled,
             ) {
                 Row {
                     Text(
                         text = stringResource(R.string.next),
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Spacer(Modifier.width(MaterialTheme.spacing.extraSmallOne))
                     Icon(
                         imageVector = icon,
-                        contentDescription = description
+                        contentDescription = description,
                     )
                 }
-
             }
         }
     }
@@ -104,7 +103,7 @@ private fun FloatingNavButtonPreview() {
             Column {
                 SetupBottomNavRow(
                     onBackClick = {},
-                    onNextClick = {}
+                    onNextClick = {},
                 )
             }
         }

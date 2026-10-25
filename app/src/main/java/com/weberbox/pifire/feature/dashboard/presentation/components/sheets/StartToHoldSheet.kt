@@ -55,7 +55,7 @@ internal fun StartToHoldSheet(
     extraRows: Int = 1,
     itemSpace: Dp = MaterialTheme.spacing.mediumOne,
     onConfirm: (temp: String) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
 ) {
     val temps by remember {
         mutableStateOf(
@@ -63,8 +63,8 @@ internal fun StartToHoldSheet(
                 probeType = probeData.probeType,
                 units = units,
                 maxTemp = probeData.maxTemp,
-                increment = increment
-            )
+                increment = increment,
+            ),
         )
     }
     var selectedTemp by remember { mutableIntStateOf(value = startupTemp) }
@@ -74,17 +74,17 @@ internal fun StartToHoldSheet(
             .padding(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
-                bottom = MaterialTheme.spacing.smallThree
+                bottom = MaterialTheme.spacing.smallThree,
             )
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             modifier = Modifier.padding(vertical = MaterialTheme.spacing.small),
             text = stringResource(R.string.dialog_start_to_hold_temp_title),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Box(
             modifier = Modifier
@@ -93,18 +93,18 @@ internal fun StartToHoldSheet(
                 .clip(MaterialTheme.shapes.large)
                 .padding(bottom = MaterialTheme.spacing.extraSmall)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterStart),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
             PickerWheel(
                 items = temps,
                 selectedItem = temps.indexOfFirst {
                     it == findClosestTemp(
                         list = temps,
-                        target = selectedTemp
+                        target = selectedTemp,
                     )
                 }.takeIf { it >= 0 } ?: 0,
                 unitsString = units,
@@ -117,39 +117,39 @@ internal fun StartToHoldSheet(
                 extraRow = extraRows,
                 isLooping = isLooping,
                 itemToString = { it.toString() },
-                longestText = findLongestString(temps)
+                longestText = findLongestString(temps),
             )
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = onCancel,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.cancel),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
                 onClick = { onConfirm(selectedTemp.toString()) },
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.startup),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -164,7 +164,7 @@ private fun StartToHoldSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 StartToHoldSheet(
                     probeData = probeData,
@@ -172,7 +172,7 @@ private fun StartToHoldSheetPreview() {
                     units = "F",
                     increment = true,
                     onConfirm = { },
-                    onCancel = { }
+                    onCancel = { },
                 )
             }
         }

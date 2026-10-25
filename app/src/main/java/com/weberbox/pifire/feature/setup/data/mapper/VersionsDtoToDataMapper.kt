@@ -9,6 +9,6 @@ object VersionsDtoToDataMapper : Mapper<VersionsDto, VersionsData> {
 
     override fun map(from: VersionsDto) = VersionsData(
         version = from.version ?: defaults.version,
-        build = from.build ?: defaults.build
+        build = from.build ?: defaults.build,
     )
 }

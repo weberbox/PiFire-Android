@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val serverDataCache: ServerDataCache
+    private val serverDataCache: ServerDataCache,
 ) : BaseViewModel<AuthContract.Event, AuthContract.State, AuthContract.Effect>() {
     private var serverData by mutableStateOf(Server())
     private var headersData by mutableStateOf(Headers())
@@ -31,7 +31,7 @@ class AuthViewModel @Inject constructor(
 
     override fun setInitialState() = AuthContract.State(
         credentials = Credentials(),
-        extraHeaders = emptyList()
+        extraHeaders = emptyList(),
     )
 
     override fun handleEvents(event: AuthContract.Event) {
@@ -62,17 +62,17 @@ class AuthViewModel @Inject constructor(
                             username = InputState(
                                 input = FieldInput(
                                     value = data.credentials.user,
-                                    hasInteracted = data.credentials.user.isNotBlank()
-                                )
+                                    hasInteracted = data.credentials.user.isNotBlank(),
+                                ),
                             ),
                             password = InputState(
                                 input = FieldInput(
                                     value = data.credentials.pass,
-                                    hasInteracted = data.credentials.user.isNotBlank()
-                                )
-                            )
+                                    hasInteracted = data.credentials.user.isNotBlank(),
+                                ),
+                            ),
                         ),
-                        extraHeaders = data.extraHeaders
+                        extraHeaders = data.extraHeaders,
                     )
                 }
             }
@@ -82,20 +82,20 @@ class AuthViewModel @Inject constructor(
     private fun updateUsername(username: String) {
         headersData = headersData.copy(
             credentials = headersData.credentials.copy(
-                user = username
-            )
+                user = username,
+            ),
         )
         serverData = serverData.copy(
             credentialsEnabled = headersData.credentials.user.isNotBlank() or
-                    headersData.credentials.pass.isNotBlank()
+                headersData.credentials.pass.isNotBlank(),
         )
         setState {
             copy(
                 credentials = viewState.value.credentials.copy(
                     username = InputState(
                         input = FieldInput(value = headersData.credentials.user),
-                    )
-                )
+                    ),
+                ),
             )
         }
     }
@@ -103,12 +103,12 @@ class AuthViewModel @Inject constructor(
     private fun updatePassword(password: String) {
         headersData = headersData.copy(
             credentials = headersData.credentials.copy(
-                pass = password
-            )
+                pass = password,
+            ),
         )
         serverData = serverData.copy(
             credentialsEnabled = headersData.credentials.user.isNotBlank() or
-                    headersData.credentials.pass.isNotBlank()
+                headersData.credentials.pass.isNotBlank(),
         )
 
         setState {
@@ -116,23 +116,23 @@ class AuthViewModel @Inject constructor(
                 credentials = viewState.value.credentials.copy(
                     password = InputState(
                         input = FieldInput(value = headersData.credentials.pass),
-                    )
-                )
+                    ),
+                ),
             )
         }
     }
 
     private fun updateExtraHeader(header: ExtraHeader) {
         headersData = headersData.copy(
-            extraHeaders = headersData.extraHeaders.addOrUpdateByKey(header)
+            extraHeaders = headersData.extraHeaders.addOrUpdateByKey(header),
         )
         serverData = serverData.copy(
-            headersEnabled = headersData.extraHeaders.isNotEmpty()
+            headersEnabled = headersData.extraHeaders.isNotEmpty(),
         )
 
         setState {
             copy(
-                extraHeaders = headersData.extraHeaders
+                extraHeaders = headersData.extraHeaders,
             )
         }
     }
@@ -141,15 +141,15 @@ class AuthViewModel @Inject constructor(
         headersData = headersData.copy(
             extraHeaders = headersData.extraHeaders.filterNot {
                 it.key == header.key
-            }
+            },
         )
         serverData = serverData.copy(
-            headersEnabled = headersData.extraHeaders.isNotEmpty()
+            headersEnabled = headersData.extraHeaders.isNotEmpty(),
         )
 
         setState {
             copy(
-                extraHeaders = headersData.extraHeaders
+                extraHeaders = headersData.extraHeaders,
             )
         }
     }

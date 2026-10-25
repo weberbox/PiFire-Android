@@ -43,32 +43,32 @@ import com.weberbox.pifire.core.ui.util.UiText
 fun HeadersSheet(
     extraHeader: ExtraHeader,
     onUpdate: (header: ExtraHeader) -> Unit,
-    onDelete: (header: ExtraHeader) -> Unit
+    onDelete: (header: ExtraHeader) -> Unit,
 ) {
     var key by rememberSaveable(saver = FieldInputSaver) {
         mutableStateOf(
             FieldInput(
                 value = extraHeader.key,
-                hasInteracted = extraHeader.key.isNotBlank()
-            )
+                hasInteracted = extraHeader.key.isNotBlank(),
+            ),
         )
     }
     var value by rememberSaveable(saver = FieldInputSaver) {
         mutableStateOf(
             FieldInput(
                 value = extraHeader.value,
-                hasInteracted = extraHeader.value.isNotBlank()
-            )
+                hasInteracted = extraHeader.value.isNotBlank(),
+            ),
         )
     }
     var keyError by rememberSaveable(saver = ErrorStatusSaver) {
         mutableStateOf(
-            ErrorStatus(isError = false)
+            ErrorStatus(isError = false),
         )
     }
     var valueError by rememberSaveable(saver = ErrorStatusSaver) {
         mutableStateOf(
-            ErrorStatus(isError = false)
+            ErrorStatus(isError = false),
         )
     }
 
@@ -76,17 +76,17 @@ fun HeadersSheet(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.mediumOne),
-        contentAlignment = Alignment.TopCenter
+        contentAlignment = Alignment.TopCenter,
     ) {
         Text(
             text = stringResource(R.string.settings_extra_headers_editor),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Column(
             modifier = Modifier.padding(top = MaterialTheme.spacing.mediumThree),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             DropdownTextField(
                 modifier = Modifier
@@ -98,9 +98,9 @@ fun HeadersSheet(
                     val text = HeaderType.from(it).text
                     key = FieldInput(
                         value = text,
-                        hasInteracted = text.isNotBlank()
+                        hasInteracted = text.isNotBlank(),
                     )
-                }
+                },
             )
             OutlineFieldWithState(
                 modifier = Modifier.fillMaxWidth(),
@@ -112,9 +112,9 @@ fun HeadersSheet(
                     key = FieldInput(value = it, hasInteracted = true)
                     keyError = ErrorStatus(
                         isError = it.isBlank(),
-                        errorMsg = UiText(R.string.error_text_blank)
+                        errorMsg = UiText(R.string.error_text_blank),
                     )
-                }
+                },
             )
             OutlineFieldWithState(
                 modifier = Modifier.fillMaxWidth(),
@@ -126,15 +126,15 @@ fun HeadersSheet(
                     value = FieldInput(value = it, hasInteracted = true)
                     valueError = ErrorStatus(
                         isError = it.isBlank(),
-                        errorMsg = UiText(R.string.error_text_blank)
+                        errorMsg = UiText(R.string.error_text_blank),
                     )
-                }
+                },
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = MaterialTheme.spacing.smallThree),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 if (extraHeader.key.isNotBlank() || extraHeader.value.isNotBlank()) {
                     OutlinedButton(
@@ -143,26 +143,26 @@ fun HeadersSheet(
                         modifier = Modifier
                             .padding(end = MaterialTheme.spacing.smallOne)
                             .weight(1f),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
                     ) {
                         Text(
                             text = stringResource(R.string.delete),
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
                 }
                 Button(
                     enabled = key.hasInteracted && !keyError.isError &&
-                            value.hasInteracted && !valueError.isError,
+                        value.hasInteracted && !valueError.isError,
                     onClick = {
                         onUpdate(ExtraHeader(key.value, value.value))
                     },
                     shape = MaterialTheme.shapes.small,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) {
                     Text(
                         text = stringResource(R.string.save),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -173,7 +173,8 @@ fun HeadersSheet(
 enum class HeaderType(val title: String, val text: String) {
     Custom("Custom", ""),
     ClientId("Cloudflare: Client ID", "CF-Access-Client-Id"),
-    Secret("Cloudflare: Secret", "CF-Access-Client-Secret");
+    Secret("Cloudflare: Secret", "CF-Access-Client-Secret"),
+    ;
 
     companion object {
         infix fun from(title: String): HeaderType = entries.firstOrNull {
@@ -192,7 +193,7 @@ private fun HeadersSheetPreview() {
             HeadersSheet(
                 extraHeader = extraHeader,
                 onUpdate = {},
-                onDelete = {}
+                onDelete = {},
             )
         }
     }

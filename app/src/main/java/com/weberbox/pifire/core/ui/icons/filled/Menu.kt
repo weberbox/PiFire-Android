@@ -29,13 +29,19 @@ val Icon.Filled.Menu: ImageVector
             defaultWidth = 18.0.dp,
             defaultHeight = 18.0.dp,
             viewportWidth = 124.0f,
-            viewportHeight = 124.0f
+            viewportHeight = 124.0f,
         ).apply {
             group {
                 path(
-                    fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth =
-                        0.0f, strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter =
-                        4.0f, pathFillType = NonZero
+                    fill = SolidColor(Color(0xFF000000)),
+                    stroke = null,
+                    strokeLineWidth =
+                    0.0f,
+                    strokeLineCap = Butt,
+                    strokeLineJoin = Miter,
+                    strokeLineMiter =
+                    4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(112.0f, 0.0f)
                     horizontalLineTo(12.0f)
@@ -47,9 +53,15 @@ val Icon.Filled.Menu: ImageVector
                     close()
                 }
                 path(
-                    fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth =
-                        0.0f, strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter =
-                        4.0f, pathFillType = NonZero
+                    fill = SolidColor(Color(0xFF000000)),
+                    stroke = null,
+                    strokeLineWidth =
+                    0.0f,
+                    strokeLineCap = Butt,
+                    strokeLineJoin = Miter,
+                    strokeLineMiter =
+                    4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(70.903f, 46.918f)
                     horizontalLineTo(7.597f)
@@ -61,9 +73,15 @@ val Icon.Filled.Menu: ImageVector
                     close()
                 }
                 path(
-                    fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth =
-                        0.0f, strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter =
-                        4.0f, pathFillType = NonZero
+                    fill = SolidColor(Color(0xFF000000)),
+                    stroke = null,
+                    strokeLineWidth =
+                    0.0f,
+                    strokeLineCap = Butt,
+                    strokeLineJoin = Miter,
+                    strokeLineMiter =
+                    4.0f,
+                    pathFillType = NonZero,
                 ) {
                     moveTo(112.0f, 92.729f)
                     horizontalLineTo(12.0f)

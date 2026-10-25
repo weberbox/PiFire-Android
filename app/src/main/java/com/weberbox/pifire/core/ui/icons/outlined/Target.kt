@@ -28,12 +28,16 @@ val Icon.Outlined.Target: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(11.0f, 2.0f)
                 verticalLineTo(4.07f)
@@ -70,32 +74,40 @@ val Icon.Outlined.Target: ImageVector
                 curveTo(6.5f, 8.5f, 8.5f, 6.5f, 11.0f, 6.08f)
                 moveTo(12.0f, 11.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 11.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 13.0f
+                    y1 = 13.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 13.0f,
-                    y1 = 12.0f
+                    y1 = 12.0f,
                 )
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 12.0f,
-                    y1 = 11.0f
+                    y1 = 11.0f,
                 )
                 close()
             }

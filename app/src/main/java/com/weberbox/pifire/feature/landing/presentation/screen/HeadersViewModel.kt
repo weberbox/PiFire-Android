@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HeadersViewModel @Inject constructor(
     private val headersManager: HeadersManager,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<HeadersContract.Event, HeadersContract.State, HeadersContract.Effect>() {
     private var currentUuid by mutableStateOf("")
 
@@ -30,7 +30,7 @@ class HeadersViewModel @Inject constructor(
     override fun setInitialState() = HeadersContract.State(
         extraHeaders = emptyList(),
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: HeadersContract.Event) {
@@ -46,7 +46,7 @@ class HeadersViewModel @Inject constructor(
                 setState {
                     copy(
                         extraHeaders = headers,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -58,7 +58,7 @@ class HeadersViewModel @Inject constructor(
             if (currentUuid.isNotBlank()) {
                 headersManager.deleteExtraHeader(
                     uuid = currentUuid,
-                    header = extraHeader
+                    header = extraHeader,
                 )
             }
         }
@@ -69,7 +69,7 @@ class HeadersViewModel @Inject constructor(
             if (currentUuid.isNotBlank()) {
                 headersManager.updateExtraHeader(
                     uuid = currentUuid,
-                    header = extraHeader
+                    header = extraHeader,
                 )
             }
         }

@@ -11,5 +11,5 @@ data class KeepWarm(
     val temp: Int? = null,
 
     @SerialName("s_plus")
-    val enabled: Boolean? = null
+    val enabled: Boolean? = null,
 )

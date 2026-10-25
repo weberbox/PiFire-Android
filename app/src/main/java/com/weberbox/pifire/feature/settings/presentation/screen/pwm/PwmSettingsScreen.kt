@@ -62,7 +62,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun PwmSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: PwmSettingsViewModel = hiltViewModel()
+    viewModel: PwmSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -73,6 +73,7 @@ fun PwmSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is PwmContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is PwmContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -82,7 +83,7 @@ fun PwmSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -93,14 +94,14 @@ private fun PwmSettings(
     state: PwmContract.State,
     effectFlow: Flow<PwmContract.Effect>?,
     onEventSent: (event: PwmContract.Event) -> Unit,
-    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -111,7 +112,7 @@ private fun PwmSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_pwm_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(PwmContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -120,10 +121,11 @@ private fun PwmSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(PwmContract.Effect.Navigation.Back)
                 }
@@ -133,7 +135,7 @@ private fun PwmSettings(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -146,7 +148,7 @@ private fun PwmSettingsContent(
     state: PwmContract.State,
     onEventSent: (event: PwmContract.Event) -> Unit,
     onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val updateTimeSheet = rememberCustomModalBottomSheetState()
     val frequencySheet = rememberCustomModalBottomSheetState()
@@ -154,13 +156,13 @@ private fun PwmSettingsContent(
     val maxDutyCycleSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_pwm_fan_control)) },
@@ -169,16 +171,16 @@ private fun PwmSettingsContent(
             value = state.serverData.settings.pwmControl,
             onValueChange = { onEventSent(PwmContract.Event.SetPWMControlDefault(it)) },
             title = { Text(text = stringResource(R.string.settings_pwm_fan_control_enabled)) },
-            summary = { Text(text = getSummary(state.serverData.settings.pwmControl)) }
+            summary = { Text(text = getSummary(state.serverData.settings.pwmControl)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pwm_fan_update_time)) },
             summary = {
                 Text(
-                    text = getSummarySeconds(state.serverData.settings.pwmUpdateTime.toString())
+                    text = getSummarySeconds(state.serverData.settings.pwmUpdateTime.toString()),
                 )
             },
-            onClick = { updateTimeSheet.open() }
+            onClick = { updateTimeSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pwm_control_title)) },
@@ -186,10 +188,10 @@ private fun PwmSettingsContent(
             onClick = {
                 onNavigationRequested(
                     PwmContract.Effect.Navigation.NavRoute(
-                        NavGraph.SettingsDest.PwmControl
-                    )
+                        NavGraph.SettingsDest.PwmControl,
+                    ),
                 )
-            }
+            },
         )
         PreferenceNote(stringResource(R.string.settings_pwm_fan_control_note))
         PreferenceCategory(
@@ -199,32 +201,32 @@ private fun PwmSettingsContent(
             title = { Text(text = stringResource(R.string.settings_pwm_frequency)) },
             summary = {
                 Text(
-                    text = getSummaryHz(state.serverData.settings.pwmFrequency.toString())
+                    text = getSummaryHz(state.serverData.settings.pwmFrequency.toString()),
                 )
             },
-            onClick = { frequencySheet.open() }
+            onClick = { frequencySheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pwm_min_duty_cycle)) },
             summary = {
                 Text(
-                    text = getSummaryPercent(state.serverData.settings.pwmMinDutyCycle.toString())
+                    text = getSummaryPercent(state.serverData.settings.pwmMinDutyCycle.toString()),
                 )
             },
-            onClick = { minDutyCycleSheet.open() }
+            onClick = { minDutyCycleSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pwm_max_duty_cycle)) },
             summary = {
                 Text(
-                    text = getSummaryPercent(state.serverData.settings.pwmMaxDutyCycle.toString())
+                    text = getSummaryPercent(state.serverData.settings.pwmMaxDutyCycle.toString()),
                 )
             },
-            onClick = { maxDutyCycleSheet.open() }
+            onClick = { maxDutyCycleSheet.open() },
         )
     }
     BottomSheet(
-        sheetState = updateTimeSheet.sheetState
+        sheetState = updateTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pwmUpdateTime.toString(),
@@ -233,7 +235,7 @@ private fun PwmSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -241,11 +243,11 @@ private fun PwmSettingsContent(
                 }
                 updateTimeSheet.close()
             },
-            onDismiss = { updateTimeSheet.close() }
+            onDismiss = { updateTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = frequencySheet.sheetState
+        sheetState = frequencySheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pwmFrequency.toString(),
@@ -254,7 +256,7 @@ private fun PwmSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -262,11 +264,11 @@ private fun PwmSettingsContent(
                 }
                 frequencySheet.close()
             },
-            onDismiss = { frequencySheet.close() }
+            onDismiss = { frequencySheet.close() },
         )
     }
     BottomSheet(
-        sheetState = minDutyCycleSheet.sheetState
+        sheetState = minDutyCycleSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pwmMinDutyCycle.toString(),
@@ -276,7 +278,7 @@ private fun PwmSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -284,11 +286,11 @@ private fun PwmSettingsContent(
                 }
                 minDutyCycleSheet.close()
             },
-            onDismiss = { minDutyCycleSheet.close() }
+            onDismiss = { minDutyCycleSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = maxDutyCycleSheet.sheetState
+        sheetState = maxDutyCycleSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pwmMaxDutyCycle.toString(),
@@ -298,7 +300,7 @@ private fun PwmSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -306,7 +308,7 @@ private fun PwmSettingsContent(
                 }
                 maxDutyCycleSheet.close()
             },
-            onDismiss = { maxDutyCycleSheet.close() }
+            onDismiss = { maxDutyCycleSheet.close() },
         )
     }
 }
@@ -314,7 +316,7 @@ private fun PwmSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PwmContract.Effect>?,
-    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -327,7 +329,7 @@ private fun HandleSideEffects(
                 is PwmContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -347,11 +349,11 @@ private fun PwmSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

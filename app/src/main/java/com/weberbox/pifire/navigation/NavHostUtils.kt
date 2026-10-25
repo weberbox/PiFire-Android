@@ -80,7 +80,7 @@ fun <T> NavController.navBackWithResultFrom(from: NavBackStackEntry, key: String
 
 @Composable
 inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
-    navController: NavController
+    navController: NavController,
 ): T {
     val navGraphRoute = destination.parent?.route ?: return hiltViewModel()
     val parentEntry = remember(this) {

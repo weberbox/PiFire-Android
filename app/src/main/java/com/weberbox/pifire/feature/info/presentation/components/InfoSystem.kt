@@ -23,56 +23,56 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoSystem(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_system_info),
-        headerIcon = Icons.Outlined.Storage
+        headerIcon = Icons.Outlined.Storage,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     bottom = MaterialTheme.spacing.smallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(R.string.info_cpu),
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.cpuInfo,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_cpu_temp),
                 modifier = Modifier.padding(vertical = MaterialTheme.spacing.smallOne),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.cpuTemp,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = stringResource(R.string.info_network),
                 modifier = Modifier.padding(vertical = MaterialTheme.spacing.smallOne),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = info.networkInfo,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -86,13 +86,13 @@ private fun InfoSystemPreview() {
         Info(
             cpuInfo = "Intel x5240",
             networkInfo = "Ethernet 100",
-            cpuTemp = "86c"
+            cpuTemp = "86c",
         )
     }
     PiFireTheme {
         Surface {
             InfoSystem(
-                info = info
+                info = info,
             )
         }
     }

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DashData(
-    val dashMap: Map<Uuid, Dash> = emptyMap()
+    val dashMap: Map<Uuid, Dash> = emptyMap(),
 ) {
     @Immutable
     @Serializable
@@ -49,9 +49,9 @@ data class DashData(
         val foodProbes: List<Probe> = listOf(
             Probe(title = "Probe 1", label = "probe1"),
             Probe(title = "Probe 2", label = "probe2"),
-            Probe(title = "Probe 3", label = "probe3")
+            Probe(title = "Probe 3", label = "probe3"),
         ),
-        val primaryProbe: Probe = Probe(title = "Grill", label = "grill", maxTemp = 600)
+        val primaryProbe: Probe = Probe(title = "Grill", label = "grill", maxTemp = 600),
     ) {
         @Serializable
         data class Timer(
@@ -61,14 +61,14 @@ data class DashData(
             val keepWarm: Boolean = false,
             val shutdown: Boolean = false,
             val timerActive: Boolean = false,
-            val timerPaused: Boolean = false
+            val timerPaused: Boolean = false,
         )
 
         @Serializable
         data class Outputs(
             val fan: Boolean = false,
             val auger: Boolean = false,
-            val igniter: Boolean = false
+            val igniter: Boolean = false,
         )
 
         @Serializable
@@ -105,7 +105,7 @@ data class DashData(
             val hasNotifications: Boolean = false,
             val targetShutdown: Boolean = false,
             val targetKeepWarm: Boolean = false,
-            val status: Status = Status()
+            val status: Status = Status(),
         ) {
             @Serializable
             data class Status(
@@ -114,9 +114,8 @@ data class DashData(
                 val batteryVoltage: Double = 0.0,
                 val connected: Boolean = false,
                 val error: Boolean = false,
-                val wireless: Boolean = false
+                val wireless: Boolean = false,
             )
         }
     }
 }
-

@@ -33,21 +33,21 @@ fun ConfirmSheet(
     negativeButtonColor: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     positiveButtonColor: ButtonColors = ButtonDefaults.buttonColors(),
     onNegative: () -> Unit,
-    onPositive: () -> Unit
+    onPositive: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     start = MaterialTheme.spacing.mediumOne,
                     end = MaterialTheme.spacing.mediumOne,
-                    bottom = MaterialTheme.spacing.smallThree
+                    bottom = MaterialTheme.spacing.smallThree,
                 )
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallThree),
@@ -55,13 +55,13 @@ fun ConfirmSheet(
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium,
                 text = title,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
-                text = message
+                text = message,
             )
         }
         Row(
@@ -70,9 +70,9 @@ fun ConfirmSheet(
                 .padding(
                     start = MaterialTheme.spacing.mediumOne,
                     end = MaterialTheme.spacing.mediumOne,
-                    bottom = MaterialTheme.spacing.smallThree
+                    bottom = MaterialTheme.spacing.smallThree,
                 ),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 colors = negativeButtonColor,
@@ -80,11 +80,11 @@ fun ConfirmSheet(
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = negativeButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
@@ -92,11 +92,11 @@ fun ConfirmSheet(
                 onClick = { onPositive() },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = positiveButtonText,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -116,10 +116,10 @@ private fun ButtonSheetPreview() {
                 positiveButtonText = stringResource(R.string.delete),
                 positiveButtonColor = ButtonDefaults.buttonColors(
                     contentColor = MaterialTheme.colorScheme.onError,
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = MaterialTheme.colorScheme.error,
                 ),
                 onNegative = {},
-                onPositive = {}
+                onPositive = {},
             )
         }
     }

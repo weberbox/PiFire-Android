@@ -7,5 +7,5 @@ enum class SetupStep(val step: Int, val title: Int) {
     Auth(step = 1, title = R.string.setup_auth),
     Connect(step = 2, title = R.string.setup_connect),
     Push(step = 3, title = R.string.setup_push),
-    Finish(step = 4, title = R.string.setup_finish)
+    Finish(step = 4, title = R.string.setup_finish),
 }

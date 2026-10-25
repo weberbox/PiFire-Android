@@ -30,7 +30,7 @@ fun CircularLoadingIndicator(
     AnimatedVisibility(
         visible = isLoading,
         enter = fadeEnterTransition(),
-        exit = fadeExitTransition()
+        exit = fadeExitTransition(),
     ) {
         Box(
             modifier = Modifier
@@ -39,10 +39,10 @@ fun CircularLoadingIndicator(
                     detectTapGestures {}
                 }
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.72f)),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             LoadingIndicator(
-                modifier = modifier.size(MaterialTheme.spacing.extraLargeTwo)
+                modifier = modifier.size(MaterialTheme.spacing.extraLargeTwo),
             )
         }
     }
@@ -55,7 +55,7 @@ private fun CircularLoadingIndicatorPreview() {
     PiFireTheme {
         Surface {
             CircularLoadingIndicator(
-                isLoading = true
+                isLoading = true,
             )
         }
     }

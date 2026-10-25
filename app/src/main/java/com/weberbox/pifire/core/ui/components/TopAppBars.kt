@@ -60,12 +60,12 @@ fun SettingsAppBar(
     val collapsedFraction = scrollBehavior.state.collapsedFraction
     val animatedScale by animateFloatAsState(
         targetValue = lerp(1.0f, 0.70f, collapsedFraction),
-        label = "ScaleTextAnimation"
+        label = "ScaleTextAnimation",
     )
     val targetXOffset = lerp(
         start = MaterialTheme.spacing.default,
         stop = -MaterialTheme.spacing.smallThree,
-        fraction = collapsedFraction
+        fraction = collapsedFraction,
     )
 
     LargeTopAppBar(
@@ -79,33 +79,33 @@ fun SettingsAppBar(
                         translationX = targetXOffset.toPx()
                     },
                 style = MaterialTheme.typography.headlineLarge.copy(
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 ),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         },
         modifier = Modifier.fillMaxWidth(),
         windowInsets = windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background,
         ),
         navigationIcon = {
             if (onNavigate != null) {
                 FilledIconButton(
                     onClick = onNavigate,
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.inverseOnSurface
-                    )
+                        containerColor = MaterialTheme.colorScheme.inverseOnSurface,
+                    ),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -125,18 +125,18 @@ fun StandardAppBar(
         modifier = Modifier.fillMaxWidth(),
         windowInsets = windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Transparent,
         ),
         navigationIcon = {
             if (onNavigate != null && showNavigationIcon) {
                 IconButton(onClick = onNavigate) {
                     Icon(
                         imageVector = navigationIcon,
-                        contentDescription = navigationIconDescription
+                        contentDescription = navigationIconDescription,
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -157,26 +157,26 @@ fun TransparentAppBar(
                 brush = Brush.verticalGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.background,
-                        Color.Transparent
-                    )
-                )
+                        Color.Transparent,
+                    ),
+                ),
             ),
         windowInsets = windowInsets.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top),
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent
+            scrolledContainerColor = Color.Transparent,
         ),
         navigationIcon = {
             if (onNavigate != null && showNavigationIcon) {
                 IconButton(onClick = onNavigate) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -205,7 +205,7 @@ fun HazeAppBar(
         modifier = Modifier
             .hazeEffect(
                 state = hazeState,
-                style = style
+                style = style,
             )
             .fillMaxWidth(),
         actions = actions,
@@ -214,11 +214,11 @@ fun HazeAppBar(
                 IconButton(onClick = onNavigate) {
                     Icon(
                         imageVector = navigationIcon,
-                        contentDescription = navigationIconDescription
+                        contentDescription = navigationIconDescription,
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -235,9 +235,9 @@ fun HazeSearchAppBar(
     Box(
         modifier = Modifier.hazeEffect(
             state = hazeState,
-            style = style
+            style = style,
         ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         SearchBar(
             state = searchBarState,
@@ -246,9 +246,9 @@ fun HazeSearchAppBar(
                 .windowInsetsPadding(windowInsets)
                 .padding(
                     horizontal = MaterialTheme.spacing.small,
-                    vertical = MaterialTheme.spacing.smallTwo
+                    vertical = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
         ExpandedFullScreenSearchBar(
             state = searchBarState,
@@ -271,15 +271,15 @@ fun HazeLargeSearchAppBar(
     inputField: @Composable () -> Unit,
     searchResults: @Composable ColumnScope.() -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
-    onNavigate: () -> Unit
+    onNavigate: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .hazeEffect(
                 state = hazeState,
-                style = style
+                style = style,
             ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CenterAlignedTopAppBar(
             title = title,
@@ -291,18 +291,18 @@ fun HazeLargeSearchAppBar(
             modifier = Modifier
                 .hazeEffect(
                     state = hazeState,
-                    style = style
+                    style = style,
                 )
                 .fillMaxWidth(),
             navigationIcon = {
                 IconButton(onClick = onNavigate) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             },
-            actions = actions
+            actions = actions,
         )
         SearchBar(
             state = searchBarState,
@@ -311,9 +311,9 @@ fun HazeLargeSearchAppBar(
                 .windowInsetsPadding(windowInsets.only(WindowInsetsSides.Horizontal))
                 .padding(
                     horizontal = MaterialTheme.spacing.small,
-                    vertical = MaterialTheme.spacing.smallTwo
+                    vertical = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
         ExpandedFullScreenSearchBar(
             state = searchBarState,

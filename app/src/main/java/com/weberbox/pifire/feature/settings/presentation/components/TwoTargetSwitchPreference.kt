@@ -70,7 +70,7 @@ fun TwoTargetSwitchPreference(
     icon: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
     switchEnabled: Boolean = enabled,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     TwoTargetPreference(
         title = title,
@@ -83,16 +83,19 @@ fun TwoTargetSwitchPreference(
                     Icon(
                         modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
                         imageVector = if (value) Icons.Filled.Check else Icons.Filled.Close,
-                        tint = if (value) MaterialTheme.colorScheme.onSurface else
-                            MaterialTheme.colorScheme.inverseOnSurface,
-                        contentDescription = null
+                        tint = if (value) {
+                            MaterialTheme.colorScheme.onSurface
+                        } else {
+                            MaterialTheme.colorScheme.inverseOnSurface
+                        },
+                        contentDescription = null,
                     )
                 },
                 modifier =
                     Modifier.padding(
                         theme.padding
                             .copy(start = theme.horizontalSpacing)
-                            .offset(vertical = (-8).dp)
+                            .offset(vertical = (-8).dp),
                     ),
                 enabled = switchEnabled,
             )
@@ -101,7 +104,7 @@ fun TwoTargetSwitchPreference(
         enabled = enabled,
         icon = icon,
         summary = summary,
-        onClick = onClick
+        onClick = onClick,
     )
 }
 
@@ -113,7 +116,7 @@ private fun TwoTargetPreference(
     enabled: Boolean = true,
     icon: @Composable (() -> Unit)? = null,
     summary: @Composable (() -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     Preference(
         title = title,
@@ -133,7 +136,7 @@ private fun TwoTargetPreference(
                     contentDescription = null,
                     tint = DividerDefaults.color.let {
                         if (enabled) it else it.copy(alpha = theme.disabledOpacity)
-                    }
+                    },
                 )
                 Box(
                     modifier =
@@ -142,8 +145,8 @@ private fun TwoTargetPreference(
                             .background(
                                 DividerDefaults.color.let {
                                     if (enabled) it else it.copy(alpha = theme.disabledOpacity)
-                                }
-                            )
+                                },
+                            ),
                 )
                 secondTarget()
             }

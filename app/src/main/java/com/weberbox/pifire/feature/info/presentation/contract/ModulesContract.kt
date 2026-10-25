@@ -14,7 +14,7 @@ class ModulesContract {
         val pipModules: List<Module>,
         val isInitialLoading: Boolean,
         val isRefreshing: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

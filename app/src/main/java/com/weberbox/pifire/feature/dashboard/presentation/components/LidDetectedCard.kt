@@ -48,7 +48,7 @@ internal fun LidDetectedCard(
     lidOpenDetected: Boolean,
     lidOpenEndTime: Int,
     initialTime: Int = 0,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     val visible by rememberSaveable(lidOpenDetected) { mutableStateOf(lidOpenDetected) }
     var remainingTime by rememberSaveable { mutableIntStateOf(initialTime) }
@@ -60,18 +60,20 @@ internal fun LidDetectedCard(
                 delay(1000.milliseconds)
                 remainingTime = out.toInt()
             }
-        } else remainingTime = 0
+        } else {
+            remainingTime = 0
+        }
     }
 
     AnimatedVisibility(
         visible = visible,
         enter = slideDownExpandEnterTransition(),
-        exit = slideOutShrinkExitTransition()
+        exit = slideOutShrinkExitTransition(),
     ) {
         Box(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallOne)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Card(
                 modifier = modifier
@@ -79,48 +81,47 @@ internal fun LidDetectedCard(
                         enabled = visible,
                         targetScale = 1.1f,
                         color = MaterialTheme.colorScheme.tertiaryContainer,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.large,
                     )
                     .height(MaterialTheme.size.largeTwo)
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 elevation = CardDefaults.cardElevation(
-                    defaultElevation = MaterialTheme.elevation.small
+                    defaultElevation = MaterialTheme.elevation.small,
                 ),
                 onClick = {
                     if (onClick != null) onClick()
-                }
+                },
             ) {
                 Row(
                     modifier = Modifier
                         .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                         .fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = stringResource(R.string.dash_lid_open_detected),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.tertiaryContainer,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo)
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo),
                     )
                     Text(
                         modifier = Modifier.padding(end = MaterialTheme.spacing.extraSmall),
                         style = MaterialTheme.typography.titleSmall,
-                        text = stringResource(R.string.dash_lid_open_paused)
+                        text = stringResource(R.string.dash_lid_open_paused),
                     )
                     Text(
                         text = formatRemainingTime(remainingTime),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(end = MaterialTheme.spacing.smallTwo)
+                        modifier = Modifier.padding(end = MaterialTheme.spacing.smallTwo),
                     )
                 }
             }
         }
     }
-
 }
 
 @Composable
@@ -130,11 +131,11 @@ private fun LidDetectedPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 LidDetectedCard(
                     lidOpenDetected = true,
-                    lidOpenEndTime = 0
+                    lidOpenEndTime = 0,
                 )
             }
         }

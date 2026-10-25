@@ -93,7 +93,7 @@ private fun ErrorScreen(
                 .padding(bottom = MaterialTheme.spacing.smallThree)
                 .size(MaterialTheme.spacing.extraLargeIcon),
             imageVector = icon,
-            contentDescription = null
+            contentDescription = null,
         )
         Text(
             text = title,
@@ -110,7 +110,7 @@ private fun ErrorScreen(
 
         Button(onClick = onButtonClick) {
             Text(
-                text = buttonText
+                text = buttonText,
             )
         }
     }
@@ -127,7 +127,7 @@ private fun ErrorScreenPreview() {
                 title = stringResource(R.string.error_no_cached_data_title),
                 summary = stringResource(R.string.error_no_cached_data_description),
                 buttonText = stringResource(R.string.try_again),
-                onButtonClick = {}
+                onButtonClick = {},
             )
         }
     }

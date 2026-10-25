@@ -9,7 +9,7 @@ data class Controller(
     val config: Config? = null,
 
     @SerialName("selected")
-    val selected: String? = null
+    val selected: String? = null,
 ) {
 
     @Serializable
@@ -21,7 +21,7 @@ data class Controller(
         val pidAc: PidAc? = null,
 
         @SerialName("pid_sp")
-        val pidSp: PidSp? = null
+        val pidSp: PidSp? = null,
     ) {
 
         @Serializable
@@ -36,7 +36,7 @@ data class Controller(
             val ti: Double? = null,
 
             @SerialName("center")
-            val center: Double? = null
+            val center: Double? = null,
         )
 
         @Serializable
@@ -78,9 +78,7 @@ data class Controller(
             val tau: Int? = null,
 
             @SerialName("theta")
-            val theta: Int? = null
+            val theta: Int? = null,
         )
-
     }
-
 }

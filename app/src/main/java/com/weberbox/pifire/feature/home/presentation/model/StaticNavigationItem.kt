@@ -6,5 +6,5 @@ data class StaticNavigationItem(
     val title: String,
     val route: Any,
     val icon: ImageVector,
-    val badgeCount: Int? = null
+    val badgeCount: Int? = null,
 )

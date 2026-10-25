@@ -16,7 +16,6 @@ fun Modifier.pagerCubeInDepthTransition(page: Int, pagerState: PagerState) = gra
         alpha = 1f
         transformOrigin = TransformOrigin(0f, 0.5f)
         rotationY = -90f * pageOffset.absoluteValue
-
     } else if (pageOffset <= 1) {
         alpha = 1f
         transformOrigin = TransformOrigin(1f, 0.5f)

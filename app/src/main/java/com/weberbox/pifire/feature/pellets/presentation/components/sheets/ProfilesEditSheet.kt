@@ -61,17 +61,17 @@ internal fun ProfilesEditSheet(
             .padding(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
-                bottom = MaterialTheme.spacing.smallThree
+                bottom = MaterialTheme.spacing.smallThree,
             )
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne)
+            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         )
         DropdownTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -80,10 +80,10 @@ internal fun ProfilesEditSheet(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.LocalOffer,
-                    contentDescription = stringResource(R.string.pellets_brand)
+                    contentDescription = stringResource(R.string.pellets_brand),
                 )
             },
-            onValueChangedEvent = { currentBrand = it }
+            onValueChangedEvent = { currentBrand = it },
         )
         DropdownTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -92,10 +92,10 @@ internal fun ProfilesEditSheet(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.Park,
-                    contentDescription = stringResource(R.string.pellets_wood)
+                    contentDescription = stringResource(R.string.pellets_wood),
                 )
             },
-            onValueChangedEvent = { currentWood = it }
+            onValueChangedEvent = { currentWood = it },
         )
         DropdownTextField(
             modifier = Modifier
@@ -106,10 +106,10 @@ internal fun ProfilesEditSheet(
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Outlined.StarRate,
-                    contentDescription = stringResource(R.string.pellets_rating)
+                    contentDescription = stringResource(R.string.pellets_rating),
                 )
             },
-            onValueChangedEvent = { rating = ProfileRatings.get(it).rating }
+            onValueChangedEvent = { rating = ProfileRatings.get(it).rating },
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -120,25 +120,25 @@ internal fun ProfilesEditSheet(
             onValueChange = { comments = it },
             placeholder = { Text(text = stringResource(R.string.pellets_comments)) },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text
-            )
+                keyboardType = KeyboardType.Text,
+            ),
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = MaterialTheme.spacing.mediumTwo),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = { onDismiss() },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.cancel),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             if (profilesData.id.isBlank()) {
@@ -149,7 +149,7 @@ internal fun ProfilesEditSheet(
                             wood = currentWood,
                             rating = rating,
                             comments = comments,
-                            id = profilesData.id
+                            id = profilesData.id,
                         )
                         onConfirm(pelletProfile, true)
                     },
@@ -157,11 +157,11 @@ internal fun ProfilesEditSheet(
                     shape = MaterialTheme.shapes.small,
                     modifier = Modifier
                         .padding(end = MaterialTheme.spacing.smallOne)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     Text(
                         text = stringResource(R.string.load),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }
@@ -172,17 +172,17 @@ internal fun ProfilesEditSheet(
                         wood = currentWood,
                         rating = rating,
                         comments = comments,
-                        id = profilesData.id
+                        id = profilesData.id,
                     )
                     onConfirm(pelletProfile, false)
                 },
                 enabled = currentBrand.isNotBlank() && currentWood.isNotBlank(),
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.save),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -197,20 +197,20 @@ private fun ProfilesEditSheetPreview() {
         mutableStateOf(
             ProfilesData(
                 brands = buildPellets().brandsList,
-                woods = buildPellets().woodsList
-            )
+                woods = buildPellets().woodsList,
+            ),
         )
     }
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 ProfilesEditSheet(
                     title = stringResource(R.string.pellets_add_profile),
                     profilesData = profilesData,
-                    onConfirm = { _,_ -> },
-                    onDismiss = {}
+                    onConfirm = { _, _ -> },
+                    onDismiss = {},
                 )
             }
         }

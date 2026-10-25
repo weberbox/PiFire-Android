@@ -19,7 +19,7 @@ import kotlinx.serialization.json.Json
 @RequiresSerialization
 class InputModalBottomSheetState<T : Any>(
     val sheetState: ModalBottomSheetState,
-    data: T? = null
+    data: T? = null,
 ) {
     val dataState = mutableStateOf(data)
 
@@ -46,19 +46,16 @@ class InputModalBottomSheetState<T : Any>(
             ignoreUnknownKeys = true
             isLenient = true
         }
-        inline fun <reified T : Any> Saver(sheetState: ModalBottomSheetState):
-                Saver<InputModalBottomSheetState<T>, String> {
-            return Saver(
-                save = { json.encodeToString(it.dataState.value) },
-                restore = {
-                    try {
-                        InputModalBottomSheetState(sheetState, json.decodeFromString<T>(it))
-                    } catch (_: Exception) {
-                        InputModalBottomSheetState(sheetState, null)
-                    }
+        inline fun <reified T : Any> Saver(sheetState: ModalBottomSheetState): Saver<InputModalBottomSheetState<T>, String> = Saver(
+            save = { json.encodeToString(it.dataState.value) },
+            restore = {
+                try {
+                    InputModalBottomSheetState(sheetState, json.decodeFromString<T>(it))
+                } catch (_: Exception) {
+                    InputModalBottomSheetState(sheetState, null)
                 }
-            )
-        }
+            },
+        )
     }
 }
 
@@ -71,7 +68,7 @@ inline fun <reified T : Any> rememberInputModalBottomSheetState(
     noinline velocityThreshold: () -> Dp = { 125.dp },
     noinline positionalThreshold: (totalDistance: Dp) -> Dp = { 56.dp },
     noinline confirmDetentChange: (SheetDetent) -> Boolean = { true },
-    decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay()
+    decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay(),
 ): InputModalBottomSheetState<T> {
     val sheetState = rememberModalBottomSheetState(
         initialDetent = initialDetent,
@@ -80,7 +77,7 @@ inline fun <reified T : Any> rememberInputModalBottomSheetState(
         velocityThreshold = velocityThreshold,
         positionalThreshold = positionalThreshold,
         confirmDetentChange = confirmDetentChange,
-        decayAnimationSpec = decayAnimationSpec
+        decayAnimationSpec = decayAnimationSpec,
     )
     return rememberSaveable(saver = InputModalBottomSheetState.Saver(sheetState)) {
         InputModalBottomSheetState(sheetState)

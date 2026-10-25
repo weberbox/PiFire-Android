@@ -24,7 +24,7 @@ fun AnimatedCounter(
     modifier: Modifier = Modifier,
     reverse: Boolean = false,
     style: TextStyle = MaterialTheme.typography.bodyLarge,
-    fontWeight: FontWeight = FontWeight.Bold
+    fontWeight: FontWeight = FontWeight.Bold,
 ) {
     var oldCount by remember {
         mutableStateOf(count)
@@ -45,9 +45,12 @@ fun AnimatedCounter(
             AnimatedContent(
                 targetState = char,
                 transitionSpec = {
-                    if (reverse) slideInVertically { it } togetherWith slideOutVertically { -it }
-                    else slideInVertically { -it } togetherWith slideOutVertically { it }
-                }
+                    if (reverse) {
+                        slideInVertically { it } togetherWith slideOutVertically { -it }
+                    } else {
+                        slideInVertically { -it } togetherWith slideOutVertically { it }
+                    }
+                },
             ) {
                 Text(
                     text = it.toString(),
@@ -55,7 +58,7 @@ fun AnimatedCounter(
                     fontWeight = fontWeight,
                     softWrap = false,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }

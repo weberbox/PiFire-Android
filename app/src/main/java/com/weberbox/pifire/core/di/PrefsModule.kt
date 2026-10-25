@@ -15,8 +15,5 @@ object PrefsModule {
 
     @Provides
     @Singleton
-    fun providePrefs(@ApplicationContext appContext: Context): Prefs {
-        return Prefs(appContext)
-    }
-
+    fun providePrefs(@ApplicationContext appContext: Context): Prefs = Prefs(appContext)
 }

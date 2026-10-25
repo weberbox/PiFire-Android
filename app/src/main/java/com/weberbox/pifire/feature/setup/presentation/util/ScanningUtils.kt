@@ -14,16 +14,12 @@ import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.feature.setup.presentation.contract.ConnectContract
 
-internal fun isCameraAvailable(context: Context): Boolean {
-    return context.packageManager.hasSystemFeature(
-        PackageManager.FEATURE_CAMERA_ANY
-    )
-}
+internal fun isCameraAvailable(context: Context): Boolean = context.packageManager.hasSystemFeature(
+    PackageManager.FEATURE_CAMERA_ANY,
+)
 
-internal fun isGooglePlayServicesAvailable(context: Context): Boolean {
-    return GoogleApiAvailability.getInstance()
-        .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
-}
+internal fun isGooglePlayServicesAvailable(context: Context): Boolean = GoogleApiAvailability.getInstance()
+    .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
 
 internal fun openQRCodeScanner(
     activity: Activity?,
@@ -42,11 +38,11 @@ internal fun openQRCodeScanner(
                         onEventSent(ConnectContract.Event.ValidateAddress(it))
                     } ?: activity.showAlerter(
                         message = UiText(R.string.setup_scan_qr_failed),
-                        isError = true
+                        isError = true,
                     )
                 } else {
                     activity.showAlerter(
-                        message = UiText(R.string.setup_qr_invalid_url)
+                        message = UiText(R.string.setup_qr_invalid_url),
                     )
                 }
             }

@@ -132,47 +132,38 @@ class SocketManager @Inject constructor(
         return awaitConnection(target)
     }
 
-    private suspend fun awaitConnection(target: Socket): Boolean {
-        return withTimeoutOrNull(CONNECT_TIMEOUT_MS) {
-            suspendCancellableCoroutine { continuation ->
-                val onConnect = Emitter.Listener {
-                    if (continuation.isActive) continuation.resume(true)
-                }
-                val onError = Emitter.Listener {
-                    if (continuation.isActive) continuation.resume(false)
-                }
-                target.once(Socket.EVENT_CONNECT, onConnect)
-                target.once(Socket.EVENT_CONNECT_ERROR, onError)
-                continuation.invokeOnCancellation {
-                    target.off(Socket.EVENT_CONNECT, onConnect)
-                    target.off(Socket.EVENT_CONNECT_ERROR, onError)
-                }
-                target.connect()
+    private suspend fun awaitConnection(target: Socket): Boolean = withTimeoutOrNull(CONNECT_TIMEOUT_MS) {
+        suspendCancellableCoroutine { continuation ->
+            val onConnect = Emitter.Listener {
+                if (continuation.isActive) continuation.resume(true)
             }
-        } ?: false
-    }
+            val onError = Emitter.Listener {
+                if (continuation.isActive) continuation.resume(false)
+            }
+            target.once(Socket.EVENT_CONNECT, onConnect)
+            target.once(Socket.EVENT_CONNECT_ERROR, onError)
+            continuation.invokeOnCancellation {
+                target.off(Socket.EVENT_CONNECT, onConnect)
+                target.off(Socket.EVENT_CONNECT_ERROR, onError)
+            }
+            target.connect()
+        }
+    } ?: false
 
-    suspend fun emit(event: String, vararg args: Any): Result<String, DataError> {
-        return internalEmit(event, *args)
-    }
+    suspend fun emit(event: String, vararg args: Any): Result<String, DataError> = internalEmit(event, *args)
 
-    suspend fun emitGet(vararg args: Any): Result<String, DataError> {
-        return internalEmit(ServerConstants.GF_GET_APP_DATA, *args)
-    }
+    suspend fun emitGet(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.GF_GET_APP_DATA, *args)
 
-    suspend fun emitPostResult(vararg args: Any): Result<String, DataError> {
-        return internalEmit(ServerConstants.PF_POST_APP_DATA, *args)
-    }
+    suspend fun emitPostResult(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args)
 
-    suspend fun emitPost(vararg args: Any): Result<Unit, DataError> {
-        return internalEmit(ServerConstants.PF_POST_APP_DATA, *args).let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
-                is Result.Success -> {
-                    when (val data = parsePostResponse(result.data, json)) {
-                        is Result.Error -> Result.Error(data.error)
-                        is Result.Success -> Result.Success(Unit)
-                    }
+    suspend fun emitPost(vararg args: Any): Result<Unit, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args).let { result ->
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
+
+            is Result.Success -> {
+                when (val data = parsePostResponse(result.data, json)) {
+                    is Result.Error -> Result.Error(data.error)
+                    is Result.Success -> Result.Success(Unit)
                 }
             }
         }
@@ -190,7 +181,8 @@ class SocketManager @Inject constructor(
         return withTimeoutOrNull(ACK_TIMEOUT_MS) {
             suspendCancellableCoroutine { continuation ->
                 target.emit(
-                    event, *args,
+                    event,
+                    *args,
                     Ack { result ->
                         val data = result.firstOrNull()
                         // A resume after the timeout cancelled the continuation is ignored.
@@ -199,7 +191,7 @@ class SocketManager @Inject constructor(
                                 Result.Success(data.toString())
                             } else {
                                 Result.Error(DataError.Network.SERVER_ERROR)
-                            }
+                            },
                         )
                     },
                 )

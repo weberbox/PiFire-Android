@@ -12,10 +12,8 @@ internal fun gramsToImperial(grams: Double): String {
     }
 }
 
-internal fun gramsToMetric(grams: Double): String {
-    return if (grams < 1000) {
-        String.format(Locale.US, "%.2f g", grams)
-    } else {
-        String.format(Locale.US, "%.2f kg", grams / 1000)
-    }
+internal fun gramsToMetric(grams: Double): String = if (grams < 1000) {
+    String.format(Locale.US, "%.2f g", grams)
+} else {
+    String.format(Locale.US, "%.2f kg", grams / 1000)
 }

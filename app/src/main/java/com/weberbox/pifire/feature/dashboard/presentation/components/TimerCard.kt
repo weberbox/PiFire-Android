@@ -57,7 +57,7 @@ internal fun TimerCard(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -68,7 +68,7 @@ internal fun TimerCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = MaterialTheme.spacing.smallOne)
+                    .padding(top = MaterialTheme.spacing.smallOne),
             ) {
                 Text(
                     text = stringResource(R.string.dash_timer_title),
@@ -77,15 +77,15 @@ internal fun TimerCard(
                     fontWeight = FontWeight.Bold,
                 )
                 Spacer(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Row(
-                    modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne)
+                    modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                 ) {
                     this@Card.AnimatedVisibility(
                         visible = keepWarm,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             imageVector = Icon.Outlined.CarDefrostRear,
@@ -93,14 +93,14 @@ internal fun TimerCard(
                             tint = MaterialTheme.colorScheme.errorContainer,
                             modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.extraExtraSmall,
-                                end = MaterialTheme.spacing.extraSmall
-                            )
+                                end = MaterialTheme.spacing.extraSmall,
+                            ),
                         )
                     }
                     this@Card.AnimatedVisibility(
                         visible = shutdown,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             imageVector = Icon.Outlined.FlagCheckered,
@@ -108,22 +108,22 @@ internal fun TimerCard(
                             tint = MaterialTheme.colorScheme.errorContainer,
                             modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.extraExtraSmall,
-                                end = MaterialTheme.spacing.extraSmall
-                            )
+                                end = MaterialTheme.spacing.extraSmall,
+                            ),
                         )
                     }
                     this@Card.AnimatedVisibility(
                         visible = paused,
                         enter = fadeEnterTransition(),
-                        exit = fadeExitTransition()
+                        exit = fadeExitTransition(),
                     ) {
                         Icon(
                             tint = MaterialTheme.colorScheme.errorContainer,
                             imageVector = Icons.Filled.Pause,
                             contentDescription = stringResource(R.string.dash_recipe_paused),
                             modifier = Modifier.padding(
-                                top = MaterialTheme.spacing.extraExtraSmall
-                            )
+                                top = MaterialTheme.spacing.extraExtraSmall,
+                            ),
                         )
                     }
                 }
@@ -132,12 +132,12 @@ internal fun TimerCard(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(bottom = MaterialTheme.spacing.smallOne),
-                verticalArrangement = Arrangement.Bottom
+                verticalArrangement = Arrangement.Bottom,
             ) {
                 AnimatedCounter(
                     count = time,
                     style = MaterialTheme.typography.displayMedium,
-                    modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmallOne)
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.extraSmallOne),
                 )
                 Text(
                     text = stringResource(R.string.dash_remaining_title),
@@ -160,7 +160,7 @@ private fun TimerCardPreview() {
                     .padding(top = 5.dp, bottom = 5.dp, start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 TimerCard(
                     time = "00:00",
@@ -169,7 +169,7 @@ private fun TimerCardPreview() {
                     paused = true,
                     modifier = Modifier
                         .padding(end = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
                 TimerCard(
                     time = "00:00",
@@ -178,7 +178,7 @@ private fun TimerCardPreview() {
                     paused = false,
                     modifier = Modifier
                         .padding(start = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 )
             }
         }

@@ -38,55 +38,55 @@ internal fun LicenseItem(
 ) {
     val colorStops = arrayOf(
         0.0f to MaterialTheme.colorScheme.surfaceContainerHigh,
-        1f to MaterialTheme.colorScheme.surfaceContainer
+        1f to MaterialTheme.colorScheme.surfaceContainer,
     )
 
     Card(
         modifier = Modifier.padding(
             top = MaterialTheme.spacing.extraExtraSmall,
-            bottom = MaterialTheme.spacing.extraExtraSmall
+            bottom = MaterialTheme.spacing.extraExtraSmall,
         ),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.inverseOnSurface
+            containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         ),
         shape = MaterialTheme.shapes.small,
         onClick = {
             if (onClick != null) onClick(license.license)
-        }
+        },
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Brush.horizontalGradient(colorStops = colorStops))
                 .height(IntrinsicSize.Max),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = modifier
                     .fillMaxHeight()
                     .width(MaterialTheme.spacing.large)
-                    .background(Color(license.color.toColorInt()))
+                    .background(Color(license.color.toColorInt())),
             ) {
                 Text(
                     text = license.title,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall)
+                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall),
                 )
             }
             Column(
                 modifier = Modifier
                     .padding(MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = license.project,
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
-                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall)
+                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall),
                 )
                 Text(
                     text = license.license,
@@ -94,7 +94,7 @@ internal fun LicenseItem(
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall)
+                    modifier = modifier.padding(MaterialTheme.spacing.extraExtraSmall),
                 )
             }
         }
@@ -108,13 +108,13 @@ private fun LicenseItemPreview() {
     val license = remember {
         License(
             project = "PiFire Android",
-            license = "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE"
+            license = "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE",
         )
     }
     PiFireTheme {
         Surface {
             LicenseItem(
-                license = license
+                license = license,
             )
         }
     }

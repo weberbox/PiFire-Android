@@ -33,7 +33,7 @@ fun DetailsScreen(
     title: String,
     isLoading: Boolean = false,
     onNavigate: () -> Unit,
-    content: LazyListScope.() -> Unit
+    content: LazyListScope.() -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -47,11 +47,11 @@ fun DetailsScreen(
                 title = {
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = title
+                        text = title,
                     )
                 },
                 scrollBehavior = scrollBehavior,
-                onNavigate = onNavigate
+                onNavigate = onNavigate,
             )
         },
         containerColor = Color.Transparent,
@@ -64,14 +64,14 @@ fun DetailsScreen(
                 .fillMaxSize()
                 .padding(
                     horizontal = MaterialTheme.spacing.smallOne,
-                    vertical = MaterialTheme.spacing.extraSmall
-                )
+                    vertical = MaterialTheme.spacing.extraSmall,
+                ),
         ) {
             content()
         }
         LinearLoadingIndicator(
             isLoading = isLoading,
-            contentPadding = contentPadding
+            contentPadding = contentPadding,
         )
     }
 }
@@ -84,7 +84,7 @@ private fun DetailsScreenPreview() {
         Surface {
             DetailsScreen(
                 title = stringResource(R.string.info_credits),
-                onNavigate = { }
+                onNavigate = { },
             ) {
                 items(count = 5) { index ->
                     Text(text = "Item ${index + 1}")

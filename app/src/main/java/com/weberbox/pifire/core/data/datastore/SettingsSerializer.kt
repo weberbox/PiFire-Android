@@ -47,8 +47,8 @@ object SettingsSerializer : Serializer<SettingsData> {
         output.write(
             json.encodeToString(
                 serializer = SettingsData.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 
@@ -78,11 +78,9 @@ object SettingsSerializer : Serializer<SettingsData> {
         return decodeOrNull { json.decodeFromJsonElement(Server.serializer(), withoutSettings) }
     }
 
-    private inline fun <T> decodeOrNull(block: () -> T): T? {
-        return try {
-            block()
-        } catch (_: IllegalArgumentException) {
-            null
-        }
+    private inline fun <T> decodeOrNull(block: () -> T): T? = try {
+        block()
+    } catch (_: IllegalArgumentException) {
+        null
     }
 }

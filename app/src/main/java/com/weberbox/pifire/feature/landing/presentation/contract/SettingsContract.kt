@@ -18,7 +18,7 @@ class SettingsContract {
         val autSelectEnabled: Boolean,
         val biometricsEnabled: Boolean,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

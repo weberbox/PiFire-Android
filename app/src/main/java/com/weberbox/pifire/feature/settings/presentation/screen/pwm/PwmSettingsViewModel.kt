@@ -20,8 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PwmSettingsViewModel @Inject constructor(
-    private val settingsRepo: SettingsRepo
-): BaseViewModel<PwmContract.Event, PwmContract.State, PwmContract.Effect>() {
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<PwmContract.Event, PwmContract.State, PwmContract.Effect>() {
 
     init {
         collectServerData()
@@ -31,23 +31,29 @@ class PwmSettingsViewModel @Inject constructor(
         serverData = Server(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: PwmContract.Event) {
         toggleLoading(true)
         when (event) {
             is PwmContract.Event.DeletePWMControlItem -> deletePWMControlItem(event.controlItems)
+
             is PwmContract.Event.SetPWMControlDefault -> setPWMControlDefault(event.enabled)
+
             is PwmContract.Event.SetPWMFanFrequency -> setPWMFanFrequency(event.frequency)
+
             is PwmContract.Event.SetPWMMaxDutyCycle -> setPWMMaxDutyCycle(event.dutyCycle)
+
             is PwmContract.Event.SetPWMMinDutyCycle -> setPWMMinDutyCycle(event.dutyCycle)
+
             is PwmContract.Event.SetPWMTempUpdateTime -> setPWMTempUpdateTime(event.time)
+
             is PwmContract.Event.SetPWMControlItem -> setPWMControlItem(
                 event.index,
                 event.temp,
                 event.dutyCycle,
-                event.controlItems
+                event.controlItems,
             )
         }
     }
@@ -58,7 +64,7 @@ class PwmSettingsViewModel @Inject constructor(
                 setState {
                     copy(
                         serverData = server,
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -104,7 +110,7 @@ class PwmSettingsViewModel @Inject constructor(
         index: Int,
         temp: Int,
         dutyCycle: Int,
-        controlItems: List<PwmControl>
+        controlItems: List<PwmControl>,
     ) {
         val (temps, profiles) = updateRange(
             index = index,
@@ -139,7 +145,7 @@ class PwmSettingsViewModel @Inject constructor(
                     setEffect {
                         PwmContract.Effect.Notification(
                             text = result.error.asUiText(),
-                            error = true
+                            error = true,
                         )
                     }
                 }
@@ -151,7 +157,7 @@ class PwmSettingsViewModel @Inject constructor(
                     setState {
                         copy(
                             serverData = result.data,
-                            isLoading = false
+                            isLoading = false,
                         )
                     }
                 }
@@ -162,7 +168,7 @@ class PwmSettingsViewModel @Inject constructor(
     private fun toggleLoading(loading: Boolean) {
         setState {
             copy(
-                isLoading = loading
+                isLoading = loading,
             )
         }
     }

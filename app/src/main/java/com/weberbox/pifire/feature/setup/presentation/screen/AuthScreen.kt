@@ -89,10 +89,11 @@ fun AuthScreenDestination(
                     scope.launch {
                         pagerState.animateScrollToPage(
                             page = SetupStep.Connect.ordinal,
-                            animationSpec = getPagerAnimationSpec()
+                            animationSpec = getPagerAnimationSpec(),
                         )
                     }
                 }
+
                 is AuthContract.Effect.Navigation.Back -> onBackDispatcher?.onBackPressed()
             }
         },
@@ -104,20 +105,20 @@ private fun AuthScreen(
     state: AuthContract.State,
     effectFlow: Flow<AuthContract.Effect>?,
     onEventSent: (event: AuthContract.Event) -> Unit,
-    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit,
 ) {
     val headersSheet = rememberInputModalBottomSheetState<ExtraHeader>()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
@@ -127,30 +128,30 @@ private fun AuthScreen(
                 .padding(top = MaterialTheme.spacing.largeTwo)
                 .padding(MaterialTheme.spacing.smallThree),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
                 modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                 imageVector = Icons.Filled.LockOpen,
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 text = stringResource(R.string.setup_auth_title),
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = stringResource(R.string.setup_auth_text),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = stringResource(R.string.settings_basic_auth_title),
                     style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 HorizontalDivider(Modifier.width(MaterialTheme.size.extraLargeTwo))
                 Spacer(Modifier.height(MaterialTheme.spacing.smallThree))
@@ -164,7 +165,7 @@ private fun AuthScreen(
                     errorStatus = state.credentials.username.error,
                     onValueChange = {
                         onEventSent(AuthContract.Event.UpdateUsername(it))
-                    }
+                    },
                 )
                 OutlineFieldWithState(
                     modifier = Modifier
@@ -177,61 +178,61 @@ private fun AuthScreen(
                     errorStatus = state.credentials.password.error,
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
-                        capitalization = KeyboardCapitalization.None
+                        capitalization = KeyboardCapitalization.None,
                     ),
                     onValueChange = {
                         onEventSent(AuthContract.Event.UpdatePassword(it))
-                    }
+                    },
                 )
                 Text(
                     text = stringResource(R.string.settings_extra_headers_title),
                     style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 HorizontalDivider(Modifier.width(MaterialTheme.size.extraLargeTwo))
                 Spacer(Modifier.height(MaterialTheme.spacing.smallThree))
-                state.extraHeaders.forEach{ header ->
+                state.extraHeaders.forEach { header ->
                     Card(
                         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallTwo),
                         shape = MaterialTheme.shapes.small,
                         onClick = {
                             headersSheet.open(header)
-                        }
+                        },
                     ) {
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = MaterialTheme.spacing.smallOne)
                                 .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Icon(
                                 imageVector = Icon.Outlined.CloudKeyOutline,
                                 modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                             Column {
                                 Text(
                                     text = header.key,
                                     modifier = Modifier.padding(
                                         start = MaterialTheme.spacing.extraSmall,
-                                        top = MaterialTheme.spacing.extraSmall
+                                        top = MaterialTheme.spacing.extraSmall,
                                     ),
                                     color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    fontSize = 15.sp
+                                    fontSize = 15.sp,
                                 )
                                 Text(
                                     text = header.value,
                                     modifier = Modifier.padding(
                                         start = MaterialTheme.spacing.extraSmall,
-                                        bottom = MaterialTheme.spacing.extraSmall
+                                        bottom = MaterialTheme.spacing.extraSmall,
                                     ),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    fontSize = 12.sp
+                                    fontSize = 12.sp,
                                 )
                             }
                         }
@@ -242,13 +243,13 @@ private fun AuthScreen(
                     shape = MaterialTheme.shapes.small,
                     onClick = {
                         headersSheet.open(ExtraHeader())
-                    }
+                    },
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.settings_extra_headers_add),
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -256,11 +257,11 @@ private fun AuthScreen(
         Spacer(Modifier.weight(1f))
         SetupBottomNavRow(
             onBackClick = { onNavigationRequested(AuthContract.Effect.Navigation.Back) },
-            onNextClick = { onEventSent(AuthContract.Event.NavigateToConnect) }
+            onNextClick = { onEventSent(AuthContract.Event.NavigateToConnect) },
         )
 
         BottomSheet(
-            sheetState = headersSheet.sheetState
+            sheetState = headersSheet.sheetState,
         ) {
             HeadersSheet(
                 extraHeader = headersSheet.data,
@@ -271,7 +272,7 @@ private fun AuthScreen(
                 onDelete = { header ->
                     headersSheet.close()
                     onEventSent(AuthContract.Event.DeleteHeader(header))
-                }
+                },
             )
         }
     }
@@ -280,17 +281,18 @@ private fun AuthScreen(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<AuthContract.Effect>?,
-    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is AuthContract.Effect.Navigation -> onNavigationRequested(effect)
+
                 is AuthContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -310,20 +312,20 @@ internal fun AuthScreenPreview() {
                         username = InputState(
                             input = FieldInput(
                                 value = "Test",
-                                hasInteracted = true
-                            )
-                        )
+                                hasInteracted = true,
+                            ),
+                        ),
                     ),
                     extraHeaders = listOf(
                         ExtraHeader(
                             key = "Test",
-                            value = "Test"
-                        )
-                    )
+                            value = "Test",
+                        ),
+                    ),
                 ),
                 effectFlow = null,
                 onEventSent = {},
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

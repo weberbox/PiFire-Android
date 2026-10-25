@@ -12,7 +12,8 @@ enum class RunningMode {
     Monitor,
     Recipe,
     Manual,
-    Unknown;
+    Unknown,
+    ;
 
     companion object {
         infix fun from(mode: String): RunningMode = entries.firstOrNull {

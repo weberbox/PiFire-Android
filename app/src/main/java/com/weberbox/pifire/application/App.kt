@@ -22,8 +22,10 @@ import javax.inject.Inject
 class App : Application() {
     @Inject
     lateinit var prefs: Prefs
+
     @Inject
     lateinit var sentryIO: SentryIO
+
     @Inject
     lateinit var analytics: Analytics
 
@@ -44,34 +46,28 @@ class App : Application() {
 
         analytics.setUserProperty(
             name = AnalyticsEvent.Language.name,
-            value = getAppLanguage(this)
+            value = getAppLanguage(this),
         )
 
         analytics.setUserProperty(
             name = AnalyticsEvent.AppFlavor.name,
-            value = BuildConfig.FLAVOR
+            value = BuildConfig.FLAVOR,
         )
-
     }
 
     companion object {
         private lateinit var app: App
 
-        fun getApp(): App {
-            return app
-        }
+        fun getApp(): App = app
 
-        fun getAppContext(): Context {
-            return app.applicationContext
-        }
-
+        fun getAppContext(): Context = app.applicationContext
     }
 
     @Suppress("unused")
     private fun strictMode() {
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(
-                ThreadPolicy.Builder().detectAll().penaltyLog().build()
+                ThreadPolicy.Builder().detectAll().penaltyLog().build(),
             )
             StrictMode.setVmPolicy(VmPolicy.Builder().detectAll().penaltyLog().build())
         }

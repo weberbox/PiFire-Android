@@ -28,20 +28,26 @@ val Icon.Filled.Speedometer: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(12.0f, 16.0f)
                 arcTo(
-                    3.0f, 3.0f, 0.0f,
+                    3.0f,
+                    3.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 9.0f,
-                    y1 = 13.0f
+                    y1 = 13.0f,
                 )
                 curveTo(9.0f, 11.88f, 9.61f, 10.9f, 10.5f, 10.39f)
                 lineTo(20.21f, 4.77f)
@@ -52,11 +58,13 @@ val Icon.Filled.Speedometer: ImageVector
                 lineTo(14.87f, 5.53f)
                 curveTo(14.0f, 5.19f, 13.0f, 5.0f, 12.0f, 5.0f)
                 arcTo(
-                    8.0f, 8.0f, 0.0f,
+                    8.0f,
+                    8.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = false,
                     x1 = 4.0f,
-                    y1 = 13.0f
+                    y1 = 13.0f,
                 )
                 curveTo(4.0f, 15.21f, 4.89f, 17.21f, 6.34f, 18.65f)
                 horizontalLineTo(6.35f)
@@ -65,11 +73,13 @@ val Icon.Filled.Speedometer: ImageVector
                 verticalLineTo(20.07f)
                 curveTo(3.12f, 18.26f, 2.0f, 15.76f, 2.0f, 13.0f)
                 arcTo(
-                    10.0f, 10.0f, 0.0f,
+                    10.0f,
+                    10.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 12.0f,
-                    y1 = 3.0f
+                    y1 = 3.0f,
                 )
                 moveTo(22.0f, 13.0f)
                 curveTo(22.0f, 15.76f, 20.88f, 18.26f, 19.07f, 20.07f)

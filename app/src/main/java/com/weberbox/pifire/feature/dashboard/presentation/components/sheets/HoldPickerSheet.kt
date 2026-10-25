@@ -55,11 +55,11 @@ internal fun HoldPickerSheet(
     extraRows: Int = 1,
     itemSpace: Dp = MaterialTheme.spacing.mediumOne,
     onConfirm: (temp: String) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
 ) {
     val temps by remember {
         mutableStateOf(
-            getProbeTempRange(probeData.probeType, units, probeData.maxTemp, increment)
+            getProbeTempRange(probeData.probeType, units, probeData.maxTemp, increment),
         )
     }
     var setTemp by remember {
@@ -68,7 +68,7 @@ internal fun HoldPickerSheet(
                 getDefaultProbeTemp(probeData.probeType, units)
             } else {
                 probeData.setTemp
-            }
+            },
         )
     }
 
@@ -77,11 +77,11 @@ internal fun HoldPickerSheet(
             .padding(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
-                bottom = MaterialTheme.spacing.smallThree
+                bottom = MaterialTheme.spacing.smallThree,
             )
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
@@ -90,18 +90,18 @@ internal fun HoldPickerSheet(
                 .clip(MaterialTheme.shapes.large)
                 .padding(bottom = MaterialTheme.spacing.extraSmall)
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterStart),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
             PickerWheel(
                 items = temps,
                 selectedItem = temps.indexOfFirst {
                     it == findClosestTemp(
                         list = temps,
-                        target = setTemp
+                        target = setTemp,
                     )
                 }.takeIf { it >= 0 } ?: 0,
                 unitsString = units,
@@ -114,39 +114,39 @@ internal fun HoldPickerSheet(
                 extraRow = extraRows,
                 isLooping = isLooping,
                 itemToString = { it.toString() },
-                longestText = findLongestString(temps)
+                longestText = findLongestString(temps),
             )
             PickerMark(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.primaryContainer,
             )
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 onClick = onCancel,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.cancel),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
                 onClick = { onConfirm(setTemp.toString()) },
                 shape = MaterialTheme.shapes.small,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.confirm),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -161,13 +161,13 @@ private fun HoldPickerSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 HoldPickerSheet(
                     probeData = probeData,
                     units = "F",
                     onConfirm = { },
-                    onCancel = { }
+                    onCancel = { },
                 )
             }
         }

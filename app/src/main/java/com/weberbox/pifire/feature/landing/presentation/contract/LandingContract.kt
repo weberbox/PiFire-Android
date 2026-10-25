@@ -9,12 +9,12 @@ import com.weberbox.pifire.feature.landing.presentation.model.ServerData
 class LandingContract {
 
     sealed class Event : ViewEvent {
-        data class SelectServer(val uuid: String): Event()
-        data class DeleteServer(val uuid: String): Event()
+        data class SelectServer(val uuid: String) : Event()
+        data class DeleteServer(val uuid: String) : Event()
         data object VoiceSearch : Event()
         data object StartPolling : Event()
         data object StopPolling : Event()
-        data object Back: Event()
+        data object Back : Event()
     }
 
     data class State(
@@ -22,7 +22,7 @@ class LandingContract {
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
         val isDataError: Boolean,
-        val biometricServerPrompt: Boolean
+        val biometricServerPrompt: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

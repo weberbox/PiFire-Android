@@ -49,7 +49,7 @@ internal fun ErrorCard(
     modifier: Modifier = Modifier,
     errors: List<String>,
     initialState: Boolean = false,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     errors.forEach { error ->
         // Keyed so each card keeps its own visibility when the list changes
@@ -64,15 +64,15 @@ internal fun ErrorCard(
             AnimatedVisibility(
                 visibleState = visibleState,
                 enter = slideDownExpandEnterTransition(),
-                exit = slideOutShrinkExitTransition()
+                exit = slideOutShrinkExitTransition(),
             ) {
                 Box(
                     modifier = Modifier
                         .padding(
                             start = MaterialTheme.spacing.smallOne,
-                            end = MaterialTheme.spacing.smallOne
+                            end = MaterialTheme.spacing.smallOne,
                         )
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Card(
                         modifier = modifier
@@ -80,16 +80,16 @@ internal fun ErrorCard(
                                 enabled = visibleState.targetState,
                                 targetScale = 1.1f,
                                 color = MaterialTheme.colorScheme.errorContainer,
-                                shape = MaterialTheme.shapes.large
+                                shape = MaterialTheme.shapes.large,
                             )
                             .fillMaxWidth(),
                         shape = MaterialTheme.shapes.large,
                         elevation = CardDefaults.cardElevation(
-                            defaultElevation = MaterialTheme.elevation.small
+                            defaultElevation = MaterialTheme.elevation.small,
                         ),
                         onClick = {
                             if (onClick != null) onClick()
-                        }
+                        },
                     ) {
                         Column(
                             modifier = Modifier
@@ -97,7 +97,7 @@ internal fun ErrorCard(
                                 .padding(bottom = MaterialTheme.spacing.smallOne)
                                 .fillMaxWidth()
                                 .wrapContentHeight(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_errors_title),
@@ -106,8 +106,8 @@ internal fun ErrorCard(
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(
                                     top = MaterialTheme.spacing.smallOne,
-                                    start = MaterialTheme.spacing.smallTwo
-                                )
+                                    start = MaterialTheme.spacing.smallTwo,
+                                ),
                             )
                             Text(
                                 text = error,
@@ -117,8 +117,8 @@ internal fun ErrorCard(
                                     top = MaterialTheme.spacing.extraSmall,
                                     bottom = MaterialTheme.spacing.extraSmall,
                                     start = MaterialTheme.spacing.smallTwo,
-                                    end = MaterialTheme.spacing.smallTwo
-                                )
+                                    end = MaterialTheme.spacing.smallTwo,
+                                ),
                             )
                         }
                     }
@@ -126,11 +126,11 @@ internal fun ErrorCard(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .offset(y = (-3).dp),
-                        onClick = { visible = false }
+                        onClick = { visible = false },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = stringResource(R.string.close)
+                            contentDescription = stringResource(R.string.close),
                         )
                     }
                 }
@@ -150,21 +150,19 @@ private fun ErrorCardPreview() {
             ) {
                 ErrorCard(
                     errors = buildErrorData(),
-                    initialState = true
+                    initialState = true,
                 )
             }
         }
     }
 }
 
-private fun buildErrorData(): List<String> {
-    return listOf(
-        "An error occurred loading the [bt_meater] probe " +
-                "module for [BluetoothMeater]. PiFire will not display probe" +
-                " data " + "for this device (BluetoothMeater). This sometimes " +
-                "means that the " + "hardware is not connected properly, or " +
-                "the module is not configured." + " Please run the " +
-                "configuration wizard again from the admin panel to " +
-                "fix this issue."
-    )
-}
+private fun buildErrorData(): List<String> = listOf(
+    "An error occurred loading the [bt_meater] probe " +
+        "module for [BluetoothMeater]. PiFire will not display probe" +
+        " data " + "for this device (BluetoothMeater). This sometimes " +
+        "means that the " + "hardware is not connected properly, or " +
+        "the module is not configured." + " Please run the " +
+        "configuration wizard again from the admin panel to " +
+        "fix this issue.",
+)

@@ -13,7 +13,7 @@ import timber.log.Timber
 suspend inline fun <reified I, O> parseResponse(
     response: String,
     json: Json,
-    mapper: Mapper<I, O>
+    mapper: Mapper<I, O>,
 ): Result<O, DataError> {
     try {
         val inputDto = json.decodeFromString<I>(response)
@@ -51,7 +51,7 @@ suspend inline fun <reified I, O> parseGetResponse(
     response: String,
     json: Json,
     mapper: Mapper<I, O>,
-    logException: Boolean = true
+    logException: Boolean = true,
 ): Result<O, DataError> {
     try {
         val responseDto = json.decodeFromString<ResponseDto>(response)
@@ -67,10 +67,11 @@ suspend inline fun <reified I, O> parseGetResponse(
         }
     } catch (e: Exception) {
         currentCoroutineContext().ensureActive()
-        if (logException)
+        if (logException) {
             Timber.e(e, "Parsing Exception")
-        else
+        } else {
             Timber.d(e, "Parsing Exception")
+        }
     }
     return Result.Error(DataError.Local.JSON_ERROR)
 }

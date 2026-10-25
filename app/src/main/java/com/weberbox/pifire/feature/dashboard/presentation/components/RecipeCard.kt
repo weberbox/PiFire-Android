@@ -51,12 +51,12 @@ internal fun RecipeCard(
     AnimatedVisibility(
         visible = visible,
         enter = slideDownExpandEnterTransition(),
-        exit = slideOutShrinkExitTransition()
+        exit = slideOutShrinkExitTransition(),
     ) {
         Box(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.smallOne)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Card(
                 modifier = modifier
@@ -64,19 +64,19 @@ internal fun RecipeCard(
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 elevation = CardDefaults.cardElevation(
-                    defaultElevation = MaterialTheme.elevation.small
+                    defaultElevation = MaterialTheme.elevation.small,
                 ),
                 onClick = {
                     onClick(recipeStatus.filename, recipeStatus.step)
-                }
+                },
             ) {
                 Column(
                     modifier = Modifier
                         .background(Brush.horizontalGradient(colorStops = cardColorStops()))
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     Box(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(
                             text = stringResource(R.string.dash_recipe_info),
@@ -85,47 +85,47 @@ internal fun RecipeCard(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(
                                 top = MaterialTheme.spacing.smallOne,
-                                start = MaterialTheme.spacing.smallTwo
-                            )
+                                start = MaterialTheme.spacing.smallTwo,
+                            ),
                         )
                     }
                     Row(
                         modifier = Modifier
                             .padding(
                                 start = MaterialTheme.spacing.smallOne,
-                                end = 15.dp
+                                end = 15.dp,
                             )
                             .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Row(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = Arrangement.Start,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_recipe_mode),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne)
+                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                             )
                             Text(
                                 text = recipeStatus.mode,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = MaterialTheme.typography.bodyMedium,
                             )
                         }
                         Row(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center
+                            horizontalArrangement = Arrangement.Center,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_recipe_step),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne)
+                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                             )
                             Text(
                                 text = recipeStatus.step.toString(),
@@ -136,18 +136,20 @@ internal fun RecipeCard(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
+                            horizontalArrangement = Arrangement.End,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_recipe_status),
                                 style = MaterialTheme.typography.titleSmall,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne)
+                                modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
                             )
                             Text(
-                                text = if (recipeStatus.paused)
-                                    stringResource(R.string.dash_recipe_paused) else
-                                    stringResource(R.string.dash_recipe_running),
+                                text = if (recipeStatus.paused) {
+                                    stringResource(R.string.dash_recipe_paused)
+                                } else {
+                                    stringResource(R.string.dash_recipe_running)
+                                },
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                         }
@@ -156,7 +158,6 @@ internal fun RecipeCard(
             }
         }
     }
-
 }
 
 @Composable
@@ -168,15 +169,15 @@ private fun RecipeCardPreview() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 RecipeCard(
                     recipeStatus = RecipeStatus(
                         mode = "Shutdown",
                         paused = false,
-                        recipeMode = true
+                        recipeMode = true,
                     ),
-                    onClick = {_,_ ->}
+                    onClick = { _, _ -> },
                 )
             }
         }

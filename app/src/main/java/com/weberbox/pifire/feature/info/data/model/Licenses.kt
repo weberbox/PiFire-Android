@@ -16,6 +16,6 @@ data class Licenses(
         val project: String = "",
         val license: String = "",
         val color: String = "#64666666",
-        val title: String = "I"
+        val title: String = "I",
     ) : Parcelable
 }

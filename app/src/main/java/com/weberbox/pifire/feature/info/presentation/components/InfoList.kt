@@ -32,7 +32,7 @@ internal fun InfoList(
     onEventSent: (event: InfoContract.Event) -> Unit,
     onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
     hazeState: HazeState,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     PullToRefresh(
         isRefreshing = state.isRefreshing,
@@ -47,7 +47,7 @@ internal fun InfoList(
                 .padding(contentPadding)
                 .padding(
                     horizontal = MaterialTheme.spacing.smallOne,
-                    vertical = MaterialTheme.spacing.extraSmall
+                    vertical = MaterialTheme.spacing.extraSmall,
                 )
                 .fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.size.smallOne),
@@ -57,8 +57,8 @@ internal fun InfoList(
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(
-                            MaterialTheme.size.smallOne
-                        )
+                            MaterialTheme.size.smallOne,
+                        ),
                     ) {
                         InfoPlatform(info = state.info)
                         InfoCpu(info = state.info)
@@ -69,21 +69,21 @@ internal fun InfoList(
                 },
                 fallback = {
                     InfoSystem(info = state.info)
-                }
+                },
             )
             InfoGpioInOut(info = state.info)
             InfoGpioDevices(info = state.info)
             InfoModules(info = state.info)
             InfoPipModules(
                 info = state.info,
-                onEventSent = onEventSent
+                onEventSent = onEventSent,
             )
             InfoUptime(info = state.info)
             InfoServer(state.info)
             InfoApp(info = state.info)
             InfoCredits(
                 licenseData = state.licenseData,
-                onNavigationRequested = onNavigationRequested
+                onNavigationRequested = onNavigationRequested,
             )
         }
     }
@@ -102,13 +102,13 @@ private fun InfoListPreview() {
                     isInfoLoading = false,
                     isLicencesLoading = false,
                     isRefreshing = false,
-                    isDataError = false
+                    isDataError = false,
 
                 ),
                 onEventSent = {},
                 onNavigationRequested = {},
                 hazeState = rememberHazeState(),
-                contentPadding = PaddingValues()
+                contentPadding = PaddingValues(),
             )
         }
     }

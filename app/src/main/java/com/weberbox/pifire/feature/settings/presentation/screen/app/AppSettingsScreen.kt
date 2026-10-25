@@ -63,7 +63,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun AppSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: AppSettingsViewModel = hiltViewModel()
+    viewModel: AppSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
@@ -74,6 +74,7 @@ fun AppSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is AppContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is AppContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -83,7 +84,7 @@ fun AppSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -94,14 +95,14 @@ private fun AppSettings(
     state: AppContract.State,
     effectFlow: Flow<AppContract.Effect>?,
     onEventSent: (event: AppContract.Event) -> Unit,
-    onNavigationRequested: (AppContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AppContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -112,7 +113,7 @@ private fun AppSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_app_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(AppContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(AppContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -121,10 +122,11 @@ private fun AppSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(AppContract.Effect.Navigation.Back)
                 }
@@ -133,7 +135,7 @@ private fun AppSettings(
                     AppContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -153,7 +155,7 @@ private fun AppContent(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(title = { Text(text = stringResource(R.string.settings_cat_app_ui)) })
         ListPreference(
@@ -170,10 +172,11 @@ private fun AppContent(
             title = { Text(text = stringResource(R.string.settings_app_dynamic_color_title)) },
             summary = {
                 Text(
-                    text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         stringResource(R.string.settings_app_dynamic_color_summary)
-                    else
+                    } else {
                         stringResource(R.string.settings_app_dynamic_color_disabled)
+                    },
                 )
             },
             onValueChange = { onEventSent(AppContract.Event.DynamicColorEnabled(it)) },
@@ -184,7 +187,7 @@ private fun AppContent(
             summary = { Text(text = stringResource(R.string.settings_app_screen_on_summary)) },
             onValueChange = {
                 onEventSent(AppContract.Event.KeepScreenOn(it))
-            }
+            },
         )
         SwitchPreference(
             value = state.showBottomBar,
@@ -192,35 +195,35 @@ private fun AppContent(
             summary = { Text(text = stringResource(R.string.settings_app_bottom_bar_summary)) },
             onValueChange = {
                 onEventSent(AppContract.Event.ShowBottomBar(it))
-            }
+            },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_biometrics_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_biometrics_title)) },
         )
         SwitchPreference(
             value = state.biometricsEnabled,
             title = {
                 Text(
                     text = stringResource(
-                        R.string.settings_biometrics_title
-                    )
+                        R.string.settings_biometrics_title,
+                    ),
                 )
             },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_biometrics_summary)
+                    text = stringResource(R.string.settings_biometrics_summary),
                 )
             },
             onValueChange = { enabled ->
                 biometricManager?.authenticate(
                     onAuthenticationSuccess = {
                         onEventSent(AppContract.Event.BiometricsEnabled(enabled))
-                    }
+                    },
                 )
-            }
+            },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_events_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_events_title)) },
         )
         ListPreference(
             value = state.eventsAmount,
@@ -231,40 +234,40 @@ private fun AppContent(
             type = ListPreferenceType.DROPDOWN_MENU,
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_app_temps)) }
+            title = { Text(text = stringResource(R.string.settings_cat_app_temps)) },
         )
         SwitchPreference(
             value = state.incrementTemps,
             title = { Text(text = stringResource(R.string.settings_app_increment_temps)) },
             summary = { Text(text = stringResource(R.string.settings_app_increment_temps_summary)) },
-            onValueChange = { onEventSent(AppContract.Event.IncrementTemps(it)) }
+            onValueChange = { onEventSent(AppContract.Event.IncrementTemps(it)) },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_analytics)) }
+            title = { Text(text = stringResource(R.string.settings_cat_analytics)) },
         )
         SwitchPreference(
             value = state.sentryEnabled,
             title = { Text(text = stringResource(R.string.settings_enable_crash)) },
             summary = { Text(text = stringResource(R.string.settings_crash_summary)) },
-            onValueChange = { onEventSent(AppContract.Event.SentryEnabled(it)) }
+            onValueChange = { onEventSent(AppContract.Event.SentryEnabled(it)) },
         )
         if (AppConfig.DEBUG) {
             SwitchPreference(
                 value = state.sentryDebugEnabled,
                 title = { Text(text = stringResource(R.string.settings_dev_crash_title)) },
                 summary = { Text(text = stringResource(R.string.settings_dev_crash_summary)) },
-                onValueChange = { onEventSent(AppContract.Event.SentryDebugEnabled(it)) }
+                onValueChange = { onEventSent(AppContract.Event.SentryDebugEnabled(it)) },
             )
         }
         Preference(
             title = { Text(text = stringResource(R.string.settings_crash_email)) },
-            summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) }
+            summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) },
         ) {
             emailSheet.open()
         }
     }
     BottomSheet(
-        sheetState = emailSheet.sheetState
+        sheetState = emailSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.userEmail,
@@ -273,12 +276,12 @@ private fun AppContent(
             leadingIcon = Icons.Outlined.Email,
             contentType = ContentType.EmailAddress,
             validationOptions = ValidationOptions(
-                allowBlank = true
+                allowBlank = true,
             ),
             onUpdate = {
                 onEventSent(AppContract.Event.UpdateUserEmail(it))
                 emailSheet.close()
-            }
+            },
         )
     }
 }
@@ -286,7 +289,7 @@ private fun AppContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<AppContract.Effect>?,
-    onNavigationRequested: (AppContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AppContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -299,7 +302,7 @@ private fun HandleSideEffects(
                 is AppContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -327,11 +330,11 @@ private fun AppSettingsPreview() {
                         sentryDebugEnabled = false,
                         userEmail = "",
                         isInitialLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

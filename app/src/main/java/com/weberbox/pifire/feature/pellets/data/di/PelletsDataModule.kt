@@ -39,12 +39,10 @@ abstract class PelletsDataModule {
     companion object {
         @Singleton
         @Provides
-        fun providePelletsDataStore(@ApplicationContext appContext: Context): DataStore<PelletsData> {
-            return DataStoreFactory.create(
-                serializer = PelletsSerializer,
-                produceFile = { appContext.dataStoreFile(AppConfig.PELLETS_DATA_NAME) },
-                corruptionHandler = ReplaceFileCorruptionHandler { PelletsData() }
-            )
-        }
+        fun providePelletsDataStore(@ApplicationContext appContext: Context): DataStore<PelletsData> = DataStoreFactory.create(
+            serializer = PelletsSerializer,
+            produceFile = { appContext.dataStoreFile(AppConfig.PELLETS_DATA_NAME) },
+            corruptionHandler = ReplaceFileCorruptionHandler { PelletsData() },
+        )
     }
 }

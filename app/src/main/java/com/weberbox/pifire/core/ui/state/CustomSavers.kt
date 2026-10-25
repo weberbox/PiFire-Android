@@ -17,27 +17,21 @@ inline fun <reified T> serializationSaver(defaultValue: T): Saver<T, String> {
         coerceInputValues = true
     }
     return object : Saver<T, String> {
-        override fun SaverScope.save(value: T): String {
-            return json.encodeToString(value)
-        }
+        override fun SaverScope.save(value: T): String = json.encodeToString(value)
 
-        override fun restore(value: String): T? {
-            return try {
-                json.decodeFromString<T>(value)
-            } catch (_: Exception) {
-                defaultValue
-            }
+        override fun restore(value: String): T? = try {
+            json.decodeFromString<T>(value)
+        } catch (_: Exception) {
+            defaultValue
         }
     }
 }
 
 object ErrorStatusSaver : Saver<MutableState<ErrorStatus>, Map<String, Any?>> {
-    override fun SaverScope.save(value: MutableState<ErrorStatus>): Map<String, Any?> {
-        return mapOf(
-            "isError" to value.value.isError,
-            "errorMsg" to value.value.errorMsg
-        )
-    }
+    override fun SaverScope.save(value: MutableState<ErrorStatus>): Map<String, Any?> = mapOf(
+        "isError" to value.value.isError,
+        "errorMsg" to value.value.errorMsg,
+    )
 
     override fun restore(value: Map<String, Any?>): MutableState<ErrorStatus> {
         val isError = value["isError"] as Boolean
@@ -47,12 +41,10 @@ object ErrorStatusSaver : Saver<MutableState<ErrorStatus>, Map<String, Any?>> {
 }
 
 object FieldInputSaver : Saver<MutableState<FieldInput>, Map<String, Any?>> {
-    override fun SaverScope.save(value: MutableState<FieldInput>): Map<String, Any?> {
-        return mapOf(
-            "value" to value.value.value,
-            "hasInteracted" to value.value.hasInteracted
-        )
-    }
+    override fun SaverScope.save(value: MutableState<FieldInput>): Map<String, Any?> = mapOf(
+        "value" to value.value.value,
+        "hasInteracted" to value.value.hasInteracted,
+    )
 
     override fun restore(value: Map<String, Any?>): MutableState<FieldInput> {
         val input = value["value"] as String
@@ -60,4 +52,3 @@ object FieldInputSaver : Saver<MutableState<FieldInput>, Map<String, Any?>> {
         return mutableStateOf(FieldInput(value = input, hasInteracted = interacted))
     }
 }
-

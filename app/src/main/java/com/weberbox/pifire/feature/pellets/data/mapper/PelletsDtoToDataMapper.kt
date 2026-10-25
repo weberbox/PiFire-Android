@@ -18,7 +18,7 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
         dateLoaded = from.pellets?.current?.dateLoaded?.let {
             formatDateTimeString(
                 input = it,
-                inputFormat = "yyyy-MM-dd HH:mm:ss"
+                inputFormat = "yyyy-MM-dd HH:mm:ss",
             )
         } ?: defaults.dateLoaded,
         usageImperial = gramsToImperial(from.pellets?.current?.estUsage ?: 0.0),
@@ -36,14 +36,14 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
             PelletLog(
                 pelletID = id,
                 pelletName = from.pellets.profiles?.get(id)?.brand + " " + from.pellets.profiles?.get(
-                    id
+                    id,
                 )?.wood,
                 pelletRating = from.pellets.profiles?.get(id)?.rating ?: defaults.currentRating,
                 pelletDate = formatDateString(
                     input = date,
-                    inputFormat = "yyyy-MM-dd HH:mm:ss"
+                    inputFormat = "yyyy-MM-dd HH:mm:ss",
                 ),
-                logDate = date
+                logDate = date,
             )
         } ?: listOf(PelletLog()),
         brandsList = from.pellets?.brands ?: defaults.brandsList,
@@ -54,9 +54,9 @@ object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
                 wood = profile.wood ?: defaults.currentWood,
                 rating = profile.rating ?: defaults.currentRating,
                 comments = profile.comments ?: defaults.currentComments,
-                id = id
+                id = id,
             )
         } ?: listOf(PelletProfile()),
-        hopperLevel = from.pellets?.current?.hopperLevel ?: defaults.hopperLevel
+        hopperLevel = from.pellets?.current?.hopperLevel ?: defaults.hopperLevel,
     )
 }

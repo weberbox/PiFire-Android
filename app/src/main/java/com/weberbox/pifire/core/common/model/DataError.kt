@@ -15,13 +15,13 @@ sealed interface DataError : Error {
         CERTIFICATE,
         UNKNOWN_HOST,
         UNREACHABLE_HOST,
-        UNKNOWN
+        UNKNOWN,
     }
 
     enum class Local : DataError {
         JSON_ERROR,
         NO_CACHED_DATA,
-        UNKNOWN
+        UNKNOWN,
     }
 
     data class Server(val data: String) : DataError

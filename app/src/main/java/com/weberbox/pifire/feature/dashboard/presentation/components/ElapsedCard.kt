@@ -45,7 +45,7 @@ internal fun ElapsedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -53,7 +53,7 @@ internal fun ElapsedCard(
                 .fillMaxSize(),
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = stringResource(R.string.dash_elapsed),
@@ -62,21 +62,21 @@ internal fun ElapsedCard(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(
                         top = MaterialTheme.spacing.smallOne,
-                        start = MaterialTheme.spacing.smallTwo
-                    )
+                        start = MaterialTheme.spacing.smallTwo,
+                    ),
                 )
             }
             Box(
                 modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart
+                contentAlignment = Alignment.CenterStart,
             ) {
                 AnimatedCounter(
                     count = time,
                     style = MaterialTheme.typography.displayMedium,
                     modifier = Modifier.padding(
                         top = 5.dp,
-                        start = MaterialTheme.spacing.smallTwo
-                    )
+                        start = MaterialTheme.spacing.smallTwo,
+                    ),
                 )
             }
         }
@@ -92,19 +92,19 @@ private fun ElapsedCardPreview() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 Box(
                     modifier = Modifier
                         .padding(start = 10.dp, end = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     ElapsedCard(time = "00:00")
                 }
                 Box(
                     modifier = Modifier
                         .padding(end = 10.dp, start = 5.dp)
-                        .weight(1f)
+                        .weight(1f),
                 ) {
                     ElapsedCard(time = "00:00")
                 }

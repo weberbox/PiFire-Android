@@ -21,24 +21,22 @@ object PelletsSerializer : Serializer<PelletsData> {
     override val defaultValue: PelletsData
         get() = PelletsData()
 
-    override suspend fun readFrom(input: InputStream): PelletsData {
-        return try {
-            json.decodeFromString(
-                deserializer = PelletsData.serializer(),
-                string = input.readBytes().decodeToString()
-            )
-        } catch (e: SerializationException) {
-            Timber.e(e, "Pellets Deserialization Error")
-            defaultValue
-        }
+    override suspend fun readFrom(input: InputStream): PelletsData = try {
+        json.decodeFromString(
+            deserializer = PelletsData.serializer(),
+            string = input.readBytes().decodeToString(),
+        )
+    } catch (e: SerializationException) {
+        Timber.e(e, "Pellets Deserialization Error")
+        defaultValue
     }
 
     override suspend fun writeTo(t: PelletsData, output: OutputStream) {
         output.write(
             json.encodeToString(
                 serializer = PelletsData.serializer(),
-                value = t
-            ).encodeToByteArray()
+                value = t,
+            ).encodeToByteArray(),
         )
     }
 }

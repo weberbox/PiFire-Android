@@ -28,29 +28,37 @@ val Icon.Filled.ServerOff: ImageVector
             defaultWidth = 24.0.dp,
             defaultHeight = 24.0.dp,
             viewportWidth = 24.0f,
-            viewportHeight = 24.0f
+            viewportHeight = 24.0f,
         ).apply {
             path(
-                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                pathFillType = NonZero
+                fill = SolidColor(Color(0xFF000000)),
+                stroke = null,
+                strokeLineWidth = 0.0f,
+                strokeLineCap = Butt,
+                strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f,
+                pathFillType = NonZero,
             ) {
                 moveTo(4.0f, 1.0f)
                 horizontalLineTo(20.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 21.0f,
-                    y1 = 2.0f
+                    y1 = 2.0f,
                 )
                 verticalLineTo(6.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 20.0f,
-                    y1 = 7.0f
+                    y1 = 7.0f,
                 )
                 horizontalLineTo(8.82f)
                 lineTo(6.82f, 5.0f)
@@ -65,37 +73,45 @@ val Icon.Filled.ServerOff: ImageVector
                 lineTo(19.73f, 23.0f)
                 horizontalLineTo(4.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 3.0f,
-                    y1 = 22.0f
+                    y1 = 22.0f,
                 )
                 verticalLineTo(18.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 4.0f,
-                    y1 = 17.0f
+                    y1 = 17.0f,
                 )
                 horizontalLineTo(13.73f)
                 lineTo(11.73f, 15.0f)
                 horizontalLineTo(4.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 3.0f,
-                    y1 = 14.0f
+                    y1 = 14.0f,
                 )
                 verticalLineTo(10.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 4.0f,
-                    y1 = 9.0f
+                    y1 = 9.0f,
                 )
                 horizontalLineTo(5.73f)
                 lineTo(3.68f, 6.95f)
@@ -105,30 +121,36 @@ val Icon.Filled.ServerOff: ImageVector
                 lineTo(22.0f, 22.72f)
                 moveTo(20.0f, 9.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 21.0f,
-                    y1 = 10.0f
+                    y1 = 10.0f,
                 )
                 verticalLineTo(14.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 20.0f,
-                    y1 = 15.0f
+                    y1 = 15.0f,
                 )
                 horizontalLineTo(16.82f)
                 lineTo(10.82f, 9.0f)
                 horizontalLineTo(20.0f)
                 moveTo(20.0f, 17.0f)
                 arcTo(
-                    1.0f, 1.0f, 0.0f,
+                    1.0f,
+                    1.0f,
+                    0.0f,
                     isMoreThanHalf = false,
                     isPositiveArc = true,
                     x1 = 21.0f,
-                    y1 = 18.0f
+                    y1 = 18.0f,
                 )
                 verticalLineTo(19.18f)
                 lineTo(18.82f, 17.0f)

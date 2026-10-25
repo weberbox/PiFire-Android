@@ -31,13 +31,13 @@ fun rememberBiometricPromptManager(): BiometricPromptManager? {
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
             managerRef.value?.retryLastAuth()
-        }
+        },
     )
 
     val biometricManager = remember(activity) {
         BiometricPromptManager(
             context = activity,
-            launchEnroll = { intent -> launchEnroll.launch(intent) }
+            launchEnroll = { intent -> launchEnroll.launch(intent) },
         )
     }
 
@@ -53,7 +53,7 @@ fun rememberBiometricPromptManager(): BiometricPromptManager? {
 
 class BiometricPromptManager(
     private val context: Context,
-    private val launchEnroll: (Intent) -> Unit
+    private val launchEnroll: (Intent) -> Unit,
 ) {
     private val manager = BiometricManager.from(context)
     private val authenticators = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -63,14 +63,12 @@ class BiometricPromptManager(
     }
     private var lastAuthRequest: (() -> Unit)? = null
 
-    private fun getActivity(): AppCompatActivity? {
-        return context as? AppCompatActivity
-    }
+    private fun getActivity(): AppCompatActivity? = context as? AppCompatActivity
 
     fun authenticate(
         title: String = context.getString(R.string.dialog_biometric_title),
         description: String = context.getString(R.string.dialog_biometric_description),
-        onAuthenticationSuccess: () -> Unit
+        onAuthenticationSuccess: () -> Unit,
     ) {
         val activity = getActivity() ?: return
 
@@ -92,7 +90,7 @@ class BiometricPromptManager(
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                 activity.showAlerter(
                     message = UiText(R.string.alerter_biometric_not_available),
-                    isError = true
+                    isError = true,
                 )
                 return
             }
@@ -100,7 +98,7 @@ class BiometricPromptManager(
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
                 activity.showAlerter(
                     message = UiText(R.string.alerter_biometric_not_supported),
-                    isError = true
+                    isError = true,
                 )
                 return
             }
@@ -110,14 +108,14 @@ class BiometricPromptManager(
                     val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
                         putExtra(
                             Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
-                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                            BIOMETRIC_STRONG or DEVICE_CREDENTIAL,
                         )
                     }
                     launchEnroll.invoke(enrollIntent)
                 } else {
                     activity.showAlerter(
                         message = UiText(R.string.alerter_biometric_not_enrolled),
-                        isError = true
+                        isError = true,
                     )
                 }
                 return
@@ -128,25 +126,26 @@ class BiometricPromptManager(
 
         val executor = ContextCompat.getMainExecutor(context)
         val prompt = BiometricPrompt(
-            activity, executor,
+            activity,
+            executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
                         activity.showAlerter(
                             message = UiText(errString.toString()),
-                            isError = true
+                            isError = true,
                         )
                     }
                 }
 
                 override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
+                    result: BiometricPrompt.AuthenticationResult,
                 ) {
                     super.onAuthenticationSucceeded(result)
                     onAuthenticationSuccess()
                 }
-            }
+            },
         )
         prompt.authenticate(promptInfo.build())
     }
@@ -158,7 +157,7 @@ class BiometricPromptManager(
         } else {
             activity.showAlerter(
                 message = UiText(R.string.alerter_biometric_still_not_enrolled),
-                isError = true
+                isError = true,
             )
         }
     }

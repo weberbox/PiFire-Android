@@ -60,7 +60,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun PushScreenDestination(
     pagerState: PagerState,
-    viewModel: PushViewModel = hiltViewModel()
+    viewModel: PushViewModel = hiltViewModel(),
 ) {
     val onBackDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val scope = rememberCoroutineScope()
@@ -74,14 +74,14 @@ fun PushScreenDestination(
                     scope.launch {
                         pagerState.animateScrollToPage(
                             page = SetupStep.Finish.ordinal,
-                            animationSpec = getPagerAnimationSpec()
+                            animationSpec = getPagerAnimationSpec(),
                         )
                     }
                 }
 
                 is PushContract.Effect.Navigation.Back -> onBackDispatcher?.onBackPressed()
             }
-        }
+        },
     )
 }
 
@@ -90,11 +90,11 @@ private fun PushScreen(
     state: PushContract.State,
     effectFlow: Flow<PushContract.Effect>?,
     onEventSent: (event: PushContract.Event) -> Unit,
-    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit,
 ) {
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Column(
@@ -111,32 +111,32 @@ private fun PushScreen(
                 .padding(top = MaterialTheme.spacing.largeTwo)
                 .padding(MaterialTheme.spacing.smallThree),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
                 modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                 imageVector = Icons.Outlined.NotificationsActive,
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 text = stringResource(R.string.setup_push_consent_title),
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = stringResource(R.string.settings_onesignal_consent_1),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.settings_onesignal_consent_2),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = stringResource(R.string.settings_onesignal_consent_3),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Row(
                 modifier = Modifier
@@ -144,12 +144,14 @@ private fun PushScreen(
                     .fillMaxWidth()
                     .padding(top = MaterialTheme.spacing.medium),
                 horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = if (state.consent)
-                        stringResource(R.string.settings_onesignal_accepted) else
+                    text = if (state.consent) {
+                        stringResource(R.string.settings_onesignal_accepted)
+                    } else {
                         stringResource(R.string.settings_onesignal_declined)
+                    },
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Switch(
@@ -157,16 +159,22 @@ private fun PushScreen(
                     thumbContent = {
                         Icon(
                             modifier = Modifier.padding(MaterialTheme.spacing.extraSmall),
-                            imageVector = if (state.consent) Icons.Filled.Check else
-                                Icons.Filled.Close,
-                            tint = if (state.consent) MaterialTheme.colorScheme.onSurface else
-                                MaterialTheme.colorScheme.inverseOnSurface,
-                            contentDescription = null
+                            imageVector = if (state.consent) {
+                                Icons.Filled.Check
+                            } else {
+                                Icons.Filled.Close
+                            },
+                            tint = if (state.consent) {
+                                MaterialTheme.colorScheme.onSurface
+                            } else {
+                                MaterialTheme.colorScheme.inverseOnSurface
+                            },
+                            contentDescription = null,
                         )
                     },
                     onCheckedChange = {
                         onEventSent(PushContract.Event.ToggleConsent(it))
-                    }
+                    },
                 )
             }
         }
@@ -174,7 +182,7 @@ private fun PushScreen(
 
         SetupBottomNavRow(
             onBackClick = { onNavigationRequested(PushContract.Effect.Navigation.Back) },
-            onNextClick = { onEventSent(PushContract.Event.NavigateToFinish) }
+            onNextClick = { onEventSent(PushContract.Event.NavigateToFinish) },
         )
     }
 }
@@ -182,12 +190,12 @@ private fun PushScreen(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PushContract.Effect>?,
-    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     val scope = rememberCoroutineScope()
     val notificationPermission = rememberPermissionState(
-        permissionDetailsProvider = NotificationsPermissionDetailsProvider()
+        permissionDetailsProvider = NotificationsPermissionDetailsProvider(),
     )
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
@@ -196,10 +204,11 @@ private fun HandleSideEffects(
                     notificationPermission.launchPermissionRequest()
 
                 is PushContract.Effect.Navigation -> onNavigationRequested(effect)
+
                 is PushContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -213,9 +222,9 @@ private fun HandleSideEffects(
                                     buttonText = effect.dialogEvent.positiveAction.buttonText,
                                     action = {
                                         effect.dialogEvent.positiveAction.action.invoke()
-                                    }
-                                )
-                            )
+                                    },
+                                ),
+                            ),
                         )
                     }
                 }
@@ -233,11 +242,11 @@ internal fun PushScreenPreview() {
             Surface {
                 PushScreen(
                     state = PushContract.State(
-                        consent = true
+                        consent = true,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

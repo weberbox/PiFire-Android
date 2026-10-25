@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EventsViewModel @Inject constructor(
-    private val eventsRepo: EventsRepo
+    private val eventsRepo: EventsRepo,
 ) : BaseViewModel<EventsContract.Event, EventsContract.State, EventsContract.Effect>() {
 
     init {
@@ -29,7 +29,7 @@ class EventsViewModel @Inject constructor(
         eventsList = emptyList(),
         isInitialLoading = true,
         isDataError = false,
-        isRefreshing = false
+        isRefreshing = false,
     )
 
     override fun handleEvents(event: EventsContract.Event) {
@@ -48,7 +48,7 @@ class EventsViewModel @Inject constructor(
                                 setEffect {
                                     EventsContract.Effect.Notification(
                                         text = result.error.asUiText(),
-                                        error = true
+                                        error = true,
                                     )
                                 }
                             }
@@ -60,7 +60,7 @@ class EventsViewModel @Inject constructor(
                                 copy(
                                     eventsList = result.data,
                                     isInitialLoading = false,
-                                    isRefreshing = false
+                                    isRefreshing = false,
                                 )
                             }
                         }
@@ -80,7 +80,7 @@ class EventsViewModel @Inject constructor(
                             setEffect {
                                 EventsContract.Effect.Notification(
                                     text = result.error.asUiText(),
-                                    error = true
+                                    error = true,
                                 )
                             }
                             setState { copy(isRefreshing = false) }
@@ -96,7 +96,7 @@ class EventsViewModel @Inject constructor(
                             copy(
                                 eventsList = result.data,
                                 isInitialLoading = false,
-                                isRefreshing = false
+                                isRefreshing = false,
                             )
                         }
                     }
@@ -115,7 +115,7 @@ class EventsViewModel @Inject constructor(
                             eventsList = emptyList(),
                             isInitialLoading = false,
                             isRefreshing = false,
-                            isDataError = true
+                            isDataError = true,
                         )
                     }
                 }
@@ -125,13 +125,13 @@ class EventsViewModel @Inject constructor(
                         copy(
                             eventsList = result.data,
                             isInitialLoading = false,
-                            isRefreshing = false
+                            isRefreshing = false,
                         )
                     }
                     setEffect {
                         EventsContract.Effect.Notification(
                             text = UiText(R.string.alerter_cached_results),
-                            error = true
+                            error = true,
                         )
                     }
                 }

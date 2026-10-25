@@ -27,7 +27,7 @@ internal fun VerticalProgress(
     color: Color = MaterialTheme.colorScheme.primary,
     trackColor: Color = MaterialTheme.colorScheme.surface,
     trackShape: CornerBasedShape = MaterialTheme.shapes.large,
-    trackWidth: Dp = MaterialTheme.spacing.smallTwo
+    trackWidth: Dp = MaterialTheme.spacing.smallTwo,
 ) {
     val coercedProgress = { progress().coerceIn(0f, 1f) }
     val iProgress by animateFloatAsState(targetValue = coercedProgress())
@@ -35,19 +35,19 @@ internal fun VerticalProgress(
         modifier = modifier
             .clip(trackShape)
             .background(trackColor)
-            .width(trackWidth)
+            .width(trackWidth),
     ) {
         Box(
             modifier = Modifier
                 .weight(if ((1f - iProgress) == 0f) 0.0001f else 1 - iProgress)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
         Box(
             modifier = Modifier
                 .clip(trackShape)
                 .weight(if (iProgress == 0f) 0.0001f else iProgress)
                 .fillMaxWidth()
-                .background(color)
+                .background(color),
         )
     }
 }
@@ -59,7 +59,7 @@ private fun VerticalProgressPreview() {
     PiFireTheme {
         Surface {
             VerticalProgress(
-                progress = { 0.1f }
+                progress = { 0.1f },
             )
         }
     }

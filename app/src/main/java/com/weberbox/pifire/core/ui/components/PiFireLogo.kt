@@ -22,34 +22,36 @@ import com.weberbox.pifire.core.ui.theme.spacing
 @Composable
 fun PiFireLogo(
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MaterialTheme.typography.headlineMedium
+    textStyle: TextStyle = MaterialTheme.typography.headlineMedium,
 ) {
     Image(
         modifier = modifier.size(MaterialTheme.spacing.extraExtraLarge),
         painter = painterResource(id = R.drawable.ic_pifire_logo),
-        contentDescription = stringResource(R.string.app_name)
+        contentDescription = stringResource(R.string.app_name),
     )
-    Text(buildAnnotatedString {
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.Bold,
-                fontFamily = navFontFamily,
-                fontSize = textStyle.fontSize
-            )
-        ) {
-            append(stringResource(R.string.app_name).substring(0, 2))
-        }
-        withStyle(
-            style = SpanStyle(
-                color = pelletDanger,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                fontFamily = navFontFamily,
-                fontSize = textStyle.fontSize
-            )
-        ) {
-            append(stringResource(R.string.app_name).substring(2, 6))
-        }
-    })
+    Text(
+        buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = navFontFamily,
+                    fontSize = textStyle.fontSize,
+                ),
+            ) {
+                append(stringResource(R.string.app_name).substring(0, 2))
+            }
+            withStyle(
+                style = SpanStyle(
+                    color = pelletDanger,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
+                    fontFamily = navFontFamily,
+                    fontSize = textStyle.fontSize,
+                ),
+            ) {
+                append(stringResource(R.string.app_name).substring(2, 6))
+            }
+        },
+    )
 }

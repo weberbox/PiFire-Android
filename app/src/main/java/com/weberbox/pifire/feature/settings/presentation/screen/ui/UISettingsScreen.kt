@@ -56,7 +56,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun UISettingsScreenDestination(
     navController: NavHostController,
-    viewModel: UISettingsViewModel = hiltViewModel()
+    viewModel: UISettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -67,6 +67,7 @@ fun UISettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is UIContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is UIContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -76,7 +77,7 @@ fun UISettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -87,14 +88,14 @@ private fun UISettings(
     state: UIContract.State,
     effectFlow: Flow<UIContract.Effect>?,
     onEventSent: (event: UIContract.Event) -> Unit,
-    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -105,7 +106,7 @@ private fun UISettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_ui_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(UIContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(UIContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -114,10 +115,11 @@ private fun UISettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(UIContract.Effect.Navigation.Back)
                 }
@@ -126,7 +128,7 @@ private fun UISettings(
                     UIContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -138,18 +140,18 @@ private fun UISettings(
 private fun UIContent(
     state: UIContract.State,
     onEventSent: (event: UIContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val nameSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_grill_name)) },
@@ -157,10 +159,10 @@ private fun UIContent(
         Preference(
             title = { Text(text = stringResource(R.string.settings_naming_title)) },
             summary = { Text(text = getSummary(state.grillName)) },
-            onClick = { nameSheet.open() }
+            onClick = { nameSheet.open() },
         )
         FeatureGate(
-            feature = Feature.ETACalculations
+            feature = Feature.ETACalculations,
         ) {
             PreferenceCategory(
                 title = { Text(text = stringResource(R.string.settings_cat_dashboard)) },
@@ -170,7 +172,7 @@ private fun UIContent(
                 title = { Text(text = stringResource(R.string.settings_eta_title)) },
                 summary = {
                     Text(
-                        text = stringResource(R.string.settings_eta_summary)
+                        text = stringResource(R.string.settings_eta_summary),
                     )
                 },
                 onValueChange = { onEventSent(UIContract.Event.SetETACalculations(it)) },
@@ -178,7 +180,7 @@ private fun UIContent(
         }
     }
     BottomSheet(
-        sheetState = nameSheet.sheetState
+        sheetState = nameSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.grillName,
@@ -187,7 +189,7 @@ private fun UIContent(
             onUpdate = {
                 onEventSent(UIContract.Event.SetGrillName(it))
                 nameSheet.close()
-            }
+            },
         )
     }
 }
@@ -195,7 +197,7 @@ private fun UIContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<UIContract.Effect>?,
-    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (UIContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -208,7 +210,7 @@ private fun HandleSideEffects(
                 is UIContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -229,11 +231,11 @@ private fun UISettingsPreview() {
                         etaCalculations = true,
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

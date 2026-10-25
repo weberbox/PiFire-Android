@@ -42,7 +42,7 @@ import com.weberbox.pifire.core.ui.util.SnackbarEvent
 @Composable
 fun AppSnackbarHost(
     snackbarHostState: SnackbarHostState,
-    currentSnackbarEvent: SnackbarEvent?
+    currentSnackbarEvent: SnackbarEvent?,
 ) {
     SnackbarHost(snackbarHostState) { data ->
         val showProgress = currentSnackbarEvent?.showProgress == true
@@ -51,7 +51,7 @@ fun AppSnackbarHost(
         AppSnackbar(
             data = data,
             showProgress = showProgress,
-            progress = progress
+            progress = progress,
         )
     }
 }
@@ -61,19 +61,19 @@ fun ProgressSnackbar(
     data: SnackbarData,
     modifier: Modifier = Modifier,
     showProgress: Boolean = false,
-    progress: Float = 0f
+    progress: Float = 0f,
 ) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .padding(
                 horizontal = MaterialTheme.spacing.smallThree,
-                vertical = MaterialTheme.spacing.small
+                vertical = MaterialTheme.spacing.small,
             ),
         shape = RoundedCornerShape(MaterialTheme.spacing.mediumOne),
         tonalElevation = MaterialTheme.spacing.extraSmallOne,
         shadowElevation = MaterialTheme.spacing.small,
-        color = MaterialTheme.colorScheme.inverseSurface
+        color = MaterialTheme.colorScheme.inverseSurface,
     ) {
         val actionLabel = data.visuals.actionLabel
 
@@ -85,18 +85,16 @@ fun ProgressSnackbar(
             }
 
         Column(
-            modifier = Modifier.padding(MaterialTheme.spacing.smallThree)
+            modifier = Modifier.padding(MaterialTheme.spacing.smallThree),
         ) {
-
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Text(
                     text = data.visuals.message,
                     modifier = Modifier.weight(1f),
                     color = MaterialTheme.colorScheme.inverseOnSurface,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
 
                 buttonText?.let { text ->
@@ -109,11 +107,11 @@ fun ProgressSnackbar(
                             } else {
                                 data.dismiss()
                             }
-                        }
+                        },
                     ) {
                         Text(
                             text = text,
-                            color = MaterialTheme.colorScheme.inversePrimary
+                            color = MaterialTheme.colorScheme.inversePrimary,
                         )
                     }
                 }
@@ -122,9 +120,8 @@ fun ProgressSnackbar(
             AnimatedVisibility(
                 visible = showProgress,
                 enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+                exit = fadeOut() + shrinkVertically(),
             ) {
-
                 Column {
                     Spacer(Modifier.height(MaterialTheme.spacing.smallTwo))
 
@@ -133,7 +130,7 @@ fun ProgressSnackbar(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(MaterialTheme.spacing.extraSmallOne),
-                        strokeCap = StrokeCap.Round
+                        strokeCap = StrokeCap.Round,
                     )
                 }
             }
@@ -146,7 +143,7 @@ fun AppSnackbar(
     data: SnackbarData,
     modifier: Modifier = Modifier,
     showProgress: Boolean = false,
-    progress: Float = 0f
+    progress: Float = 0f,
 ) {
     Snackbar(
         modifier = modifier.padding(MaterialTheme.spacing.smallTwo),
@@ -156,7 +153,7 @@ fun AppSnackbar(
                 TextButton(onClick = { data.performAction() }) {
                     Text(
                         text = actionLabel,
-                        color = MaterialTheme.colorScheme.inversePrimary
+                        color = MaterialTheme.colorScheme.inversePrimary,
                     )
                 }
             }
@@ -166,11 +163,13 @@ fun AppSnackbar(
                 TextButton(onClick = { data.dismiss() }) {
                     Text(
                         text = stringResource(R.string.dismiss),
-                        color = MaterialTheme.colorScheme.inversePrimary
+                        color = MaterialTheme.colorScheme.inversePrimary,
                     )
                 }
             }
-        } else null
+        } else {
+            null
+        },
     ) {
         Column {
             Text(data.visuals.message)
@@ -206,7 +205,7 @@ private fun AppSnackbarProgressPreview() {
             AppSnackbar(
                 data = mockData,
                 showProgress = true,
-                progress = 0.45f
+                progress = 0.45f,
             )
         }
     }
@@ -233,7 +232,7 @@ private fun AppSnackbarProgressPreview2() {
             ProgressSnackbar(
                 data = mockData,
                 showProgress = false,
-                progress = 0.45f
+                progress = 0.45f,
             )
         }
     }
@@ -259,7 +258,7 @@ private fun AppSnackbarPreview() {
         Surface {
             AppSnackbar(
                 data = mockData,
-                showProgress = false
+                showProgress = false,
             )
         }
     }

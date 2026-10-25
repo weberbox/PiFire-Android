@@ -7,21 +7,24 @@ import com.weberbox.pifire.R
 import java.util.Locale
 
 @Composable
-internal fun formatTemp(temp: Int?): String {
-    return if (temp == null) "--" else
-        String.format(Locale.US, "%s%s", temp, "°")
+internal fun formatTemp(temp: Int?): String = if (temp == null) {
+    "--"
+} else {
+    String.format(Locale.US, "%s%s", temp, "°")
 }
 
 @Composable
-internal fun formatTempWithUnits(temp: Int, units: String): String {
-    return if (temp == 0) "--" else
-        String.format(Locale.US, "%s%s%s", temp, "°", units)
+internal fun formatTempWithUnits(temp: Int, units: String): String = if (temp == 0) {
+    "--"
+} else {
+    String.format(Locale.US, "%s%s%s", temp, "°", units)
 }
 
 @Composable
-internal fun formatSetTemp(temp: Int): String {
-    return if (temp == 0) "--" else
-        String.format(Locale.US, "%s%s", temp, "°")
+internal fun formatSetTemp(temp: Int): String = if (temp == 0) {
+    "--"
+} else {
+    String.format(Locale.US, "%s%s", temp, "°")
 }
 
 @Composable
@@ -35,12 +38,19 @@ internal fun formatEta(eta: Int): String {
             String.format(
                 locale = LocalLocale.current.platformLocale,
                 format = "%s %02d:%02d:%02d",
-                stringResource(R.string.dash_state_eta), hours, minutes, seconds)
+                stringResource(R.string.dash_state_eta),
+                hours,
+                minutes,
+                seconds,
+            )
         } else {
             String.format(
                 locale = LocalLocale.current.platformLocale,
                 format = "%s %02d:%02d",
-                stringResource(R.string.dash_state_eta), minutes, seconds)
+                stringResource(R.string.dash_state_eta),
+                minutes,
+                seconds,
+            )
         }
     }
     return ""
@@ -56,19 +66,22 @@ internal fun formatRemainingTime(remainingTime: Int): String {
         String.format(
             locale = LocalLocale.current.platformLocale,
             format = "%1d:%02d:%02d",
-            hours, minutes, seconds
+            hours,
+            minutes,
+            seconds,
         )
     } else if (minutes > 0) {
         String.format(
             locale = LocalLocale.current.platformLocale,
             format = "%1d:%02d",
-            minutes, seconds
+            minutes,
+            seconds,
         )
     } else {
         String.format(
             locale = LocalLocale.current.platformLocale,
             format = "%1ds",
-            seconds
+            seconds,
         )
     }
 }

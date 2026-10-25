@@ -14,35 +14,30 @@ import javax.inject.Inject
 
 class PelletsApiImpl @Inject constructor(
     private val socketManager: SocketManager,
-    private val json: Json
+    private val json: Json,
 ) : PelletsApi {
 
-    override suspend fun getPellets(): Result<String, DataError> {
-        return socketManager.emitGet(ServerConstants.GA_PELLETS_DATA)
-    }
+    override suspend fun getPellets(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_PELLETS_DATA)
 
-    override suspend fun getPelletLevel(): Result<Unit, DataError> {
-        return socketManager.emitPost(
-            ServerConstants.PA_PELLETS_ACTION,
-            ServerConstants.PT_HOPPER_CHECK
-        )
-    }
+    override suspend fun getPelletLevel(): Result<Unit, DataError> = socketManager.emitPost(
+        ServerConstants.PA_PELLETS_ACTION,
+        ServerConstants.PT_HOPPER_CHECK,
+    )
 
-    override suspend fun listenPelletsData(): Flow<Result<String, DataError>> {
-        return socketManager.onFlow(ServerConstants.LISTEN_PELLET_DATA)
-            .transform { result ->
-                when (result) {
-                    is Result.Error -> emit(Result.Error(result.error))
-                    is Result.Success -> {
-                        if (result.data.isNotEmpty() && result.data[0] != null) {
-                            emit(Result.Success(result.data[0].toString()))
-                        } else {
-                            emit(Result.Error(DataError.Network.SERVER_ERROR))
-                        }
+    override suspend fun listenPelletsData(): Flow<Result<String, DataError>> = socketManager.onFlow(ServerConstants.LISTEN_PELLET_DATA)
+        .transform { result ->
+            when (result) {
+                is Result.Error -> emit(Result.Error(result.error))
+
+                is Result.Success -> {
+                    if (result.data.isNotEmpty() && result.data[0] != null) {
+                        emit(Result.Success(result.data[0].toString()))
+                    } else {
+                        emit(Result.Error(DataError.Network.SERVER_ERROR))
                     }
                 }
             }
-    }
+        }
 
     override suspend fun addPelletWood(wood: String): Result<Unit, DataError> {
         val json = json.encodeToString(PostDto(pelletsDto = PelletsDto(newWood = wood)))
@@ -76,7 +71,7 @@ class PelletsApiImpl @Inject constructor(
 
     override suspend fun addPelletProfile(
         profile: PelletProfile,
-        load: Boolean
+        load: Boolean,
     ): Result<Unit, DataError> {
         val json = json.encodeToString(
             PostDto(
@@ -86,9 +81,9 @@ class PelletsApiImpl @Inject constructor(
                     woodType = profile.wood,
                     rating = profile.rating,
                     comments = profile.comments,
-                    addAndLoad = load
-                )
-            )
+                    addAndLoad = load,
+                ),
+            ),
         )
         return sendEmitPost(ServerConstants.PT_ADD_PROFILE, json)
     }
@@ -101,9 +96,9 @@ class PelletsApiImpl @Inject constructor(
                     brandName = profile.brand,
                     woodType = profile.wood,
                     rating = profile.rating,
-                    comments = profile.comments
-                )
-            )
+                    comments = profile.comments,
+                ),
+            ),
         )
         return sendEmitPost(ServerConstants.PT_EDIT_PROFILE, json)
     }
@@ -113,7 +108,5 @@ class PelletsApiImpl @Inject constructor(
         return sendEmitPost(ServerConstants.PT_DELETE_PROFILE, json)
     }
 
-    private suspend fun sendEmitPost(type: String, json: String): Result<Unit, DataError> {
-        return socketManager.emitPost(ServerConstants.PA_PELLETS_ACTION, type, json)
-    }
+    private suspend fun sendEmitPost(type: String, json: String): Result<Unit, DataError> = socketManager.emitPost(ServerConstants.PA_PELLETS_ACTION, type, json)
 }

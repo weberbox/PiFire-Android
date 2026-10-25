@@ -3,16 +3,16 @@ package com.weberbox.pifire.core.model
 data class SemanticVersion(
     val major: Int,
     val minor: Int,
-    val patch: Int
+    val patch: Int,
 ) : Comparable<SemanticVersion> {
 
-    override fun compareTo(other: SemanticVersion): Int {
-        return compareValuesBy(this, other,
-            { it.major },
-            { it.minor },
-            { it.patch }
-        )
-    }
+    override fun compareTo(other: SemanticVersion): Int = compareValuesBy(
+        this,
+        other,
+        { it.major },
+        { it.minor },
+        { it.patch },
+    )
 
     companion object {
         // Parses by position so an unreadable part becomes 0 instead of shifting the others

@@ -60,12 +60,12 @@ fun HeaderCard(
 ) {
     Card(
         shape = MaterialTheme.shapes.large,
-        elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small)
+        elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
     ) {
         Column(
             modifier = Modifier
                 .background(Brush.horizontalGradient(colorStops = cardColorStops()))
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Row(
                 modifier = Modifier
@@ -75,59 +75,59 @@ fun HeaderCard(
                         enabled = onButtonClick != null,
                         onClick = {
                             onButtonClick?.invoke()
-                        }
+                        },
                     ),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallTwo),
                     imageVector = headerIcon,
                     contentDescription = null,
-                    tint = color
+                    tint = color,
                 )
                 Text(
                     text = title,
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallOne),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = color
+                    color = color,
                 )
                 if (onButtonClick != null) {
                     Spacer(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxHeight()
+                            .fillMaxHeight(),
                     )
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.small)
-                            .size(MaterialTheme.size.largeTwo)
+                            .size(MaterialTheme.size.largeTwo),
                     ) {
                         Icon(
-                            imageVector =  buttonIcon,
+                            imageVector = buttonIcon,
                             contentDescription = null,
-                            tint = color
+                            tint = color,
                         )
                     }
                     Spacer(
                         modifier = Modifier
                             .padding(end = MaterialTheme.spacing.small)
-                            .fillMaxHeight()
+                            .fillMaxHeight(),
                     )
                 }
             }
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.inverseOnSurface,
                 modifier = Modifier.padding(bottom = headerBottomPadding),
-                thickness = 1.dp
+                thickness = 1.dp,
             )
             Box(
                 contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Box(
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier.fillMaxWidth(),
                 ) {
                     content()
                 }
@@ -141,10 +141,10 @@ fun HeaderCard(
                                 brush = Brush.verticalGradient(
                                     colors = listOf(
                                         Color.Transparent,
-                                        MaterialTheme.colorScheme.background
-                                    )
-                                )
-                            )
+                                        MaterialTheme.colorScheme.background,
+                                    ),
+                                ),
+                            ),
                     ) {
                         Box(
                             modifier = Modifier
@@ -156,7 +156,7 @@ fun HeaderCard(
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = modifier.fillMaxWidth(1f)
+                                modifier = modifier.fillMaxWidth(1f),
                             ) {
                                 Text(
                                     text = stringResource(R.string.view_all),
@@ -169,7 +169,7 @@ fun HeaderCard(
                                     tint = color,
                                     modifier = Modifier
                                         .size(MaterialTheme.size.mediumTwo)
-                                        .padding(start = MaterialTheme.spacing.small)
+                                        .padding(start = MaterialTheme.spacing.small),
                                 )
                             }
                         }
@@ -179,7 +179,6 @@ fun HeaderCard(
         }
     }
 }
-
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -192,24 +191,24 @@ private fun HeaderCardPreview() {
                     start = MaterialTheme.spacing.smallOne,
                     end = MaterialTheme.spacing.smallOne,
                     top = MaterialTheme.spacing.extraSmall,
-                    bottom = MaterialTheme.spacing.extraSmall
-                )
+                    bottom = MaterialTheme.spacing.extraSmall,
+                ),
             ) {
                 HeaderCard(
                     title = "Test Title",
                     headerIcon = Icons.Outlined.Description,
                     buttonIcon = Icons.Filled.Add,
                     onButtonClick = { },
-                    viewAllClick = { }
+                    viewAllClick = { },
                 ) {
                     Column(
                         modifier = Modifier
                             .padding(
                                 start = MaterialTheme.spacing.smallTwo,
                                 end = MaterialTheme.spacing.smallTwo,
-                                bottom = MaterialTheme.spacing.smallOne
+                                bottom = MaterialTheme.spacing.smallOne,
                             )
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
                     ) {
                         repeat(times = 3) { index ->
                             Text(text = "Item ${index + 1}")

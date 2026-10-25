@@ -49,7 +49,7 @@ internal fun ModeSheet(
     onEvent: (DashEvent) -> Unit,
     onPrime: () -> Unit,
     onHold: () -> Unit,
-    onStart: () -> Unit
+    onStart: () -> Unit,
 ) {
     var sliderPosition by remember { mutableFloatStateOf(0f) }
     var swipeVisible by remember { mutableStateOf(false) }
@@ -69,14 +69,14 @@ internal fun ModeSheet(
         modifier = modifier
             .height(110.dp)
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             modifier = Modifier
                 .padding(bottom = 10.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
         ) {
             getModeButtons(currentMode, recipePaused).forEach { mode ->
                 ModeButton(
@@ -85,27 +85,30 @@ internal fun ModeSheet(
                     onClick = {
                         when (mode.event) {
                             is DashEvent.HoldDialog -> onHold()
+
                             is DashEvent.PrimeDialog -> onPrime()
+
                             is DashEvent.Start -> {
                                 if (startupCheck) swipeVisible = true else onStart()
                             }
+
                             else -> onEvent(mode.event)
                         }
-                    }
+                    },
                 )
             }
         }
         AnimatedVisibility(
             visible = swipeVisible,
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition()
+            exit = fadeExitTransition(),
         ) {
             Box(
                 modifier = Modifier
                     .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(start = 40.dp, end = 40.dp, top = 22.dp)
                     .fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.TopCenter,
             ) {
                 SlideToStart(
                     btnText = stringResource(R.string.swipe_to_start),
@@ -114,13 +117,12 @@ internal fun ModeSheet(
                     sliderBtnBackgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
                     sliderBtnIcon = Icons.Outlined.Lock,
                     onSliderChange = { sliderPosition = it },
-                    onBtnSwipe = { onStart() }
+                    onBtnSwipe = { onStart() },
                 )
             }
         }
     }
 }
-
 
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -135,7 +137,7 @@ private fun ModeSheetPreview() {
                 onEvent = {},
                 onHold = {},
                 onPrime = {},
-                onStart = {}
+                onStart = {},
             )
         }
     }

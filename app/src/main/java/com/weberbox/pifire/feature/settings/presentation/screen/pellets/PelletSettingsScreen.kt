@@ -63,7 +63,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun PelletSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: PelletSettingsViewModel = hiltViewModel()
+    viewModel: PelletSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -74,6 +74,7 @@ fun PelletSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is PelletsContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is PelletsContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -83,7 +84,7 @@ fun PelletSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -94,14 +95,14 @@ private fun PelletSettings(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -112,7 +113,7 @@ private fun PelletSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_pellets_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(PelletsContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(PelletsContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -121,10 +122,11 @@ private fun PelletSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(PelletsContract.Effect.Navigation.Back)
                 }
@@ -133,7 +135,7 @@ private fun PelletSettings(
                     PelletsSettingsContent(
                         state = state,
                         onEventSent = onEventSent,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -145,7 +147,7 @@ private fun PelletSettings(
 private fun PelletsSettingsContent(
     state: PelletsContract.State,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val warningTimeSheet = rememberCustomModalBottomSheetState()
     val warningLevelSheet = rememberCustomModalBottomSheetState()
@@ -154,13 +156,13 @@ private fun PelletsSettingsContent(
     val augerRateSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_pellet_warning)) },
@@ -171,31 +173,31 @@ private fun PelletsSettingsContent(
             title = { Text(text = stringResource(R.string.settings_pellet_warning)) },
             summary = {
                 Text(
-                    text = getSummary(state.serverData.settings.pelletsWarningEnabled)
+                    text = getSummary(state.serverData.settings.pelletsWarningEnabled),
                 )
-            }
+            },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pellet_warning_time)) },
             summary = {
                 Text(
                     text = getSummaryMinutes(
-                        state.serverData.settings.pelletsWarningTime.toString()
-                    )
+                        state.serverData.settings.pelletsWarningTime.toString(),
+                    ),
                 )
             },
-            onClick = { warningTimeSheet.open() }
+            onClick = { warningTimeSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pellet_warning_level)) },
             summary = {
                 Text(
                     text = getSummaryPercent(
-                        state.serverData.settings.pelletsWarningLevel.toString()
-                    )
+                        state.serverData.settings.pelletsWarningLevel.toString(),
+                    ),
                 )
             },
-            onClick = { warningLevelSheet.open() }
+            onClick = { warningLevelSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_pellet_warning_note))
         PreferenceCategory(
@@ -206,22 +208,22 @@ private fun PelletsSettingsContent(
             summary = {
                 Text(
                     text = getSummaryCm(
-                        state.serverData.settings.pelletsEmpty.toString()
-                    )
+                        state.serverData.settings.pelletsEmpty.toString(),
+                    ),
                 )
             },
-            onClick = { emptyLevelSheet.open() }
+            onClick = { emptyLevelSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_pellet_sensor_full)) },
             summary = {
                 Text(
                     text = getSummaryCm(
-                        state.serverData.settings.pelletsFull.toString()
-                    )
+                        state.serverData.settings.pelletsFull.toString(),
+                    ),
                 )
             },
-            onClick = { fullLevelSheet.open() }
+            onClick = { fullLevelSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_pellet_sensor_note))
         PreferenceCategory(
@@ -232,11 +234,11 @@ private fun PelletsSettingsContent(
             summary = {
                 Text(
                     text = getSummaryGs(
-                        state.serverData.settings.augerRate.toString()
-                    )
+                        state.serverData.settings.augerRate.toString(),
+                    ),
                 )
             },
-            onClick = { augerRateSheet.open() }
+            onClick = { augerRateSheet.open() },
         )
         PreferenceNote(stringResource(R.string.settings_pellet_auger_rate_note))
         PreferenceCategory(
@@ -246,13 +248,12 @@ private fun PelletsSettingsContent(
             value = state.serverData.settings.primeIgnition,
             onValueChange = { onEventSent(PelletsContract.Event.SetPrimeIgnition(it)) },
             title = { Text(text = stringResource(R.string.settings_pellet_prime_igniter)) },
-            summary = { Text(text = getSummary(state.serverData.settings.primeIgnition)) }
+            summary = { Text(text = getSummary(state.serverData.settings.primeIgnition)) },
         )
         PreferenceDanger(stringResource(R.string.settings_pellet_prime_igniter_note))
-
     }
     BottomSheet(
-        sheetState = warningTimeSheet.sheetState
+        sheetState = warningTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pelletsWarningTime.toString(),
@@ -261,7 +262,7 @@ private fun PelletsSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -269,11 +270,11 @@ private fun PelletsSettingsContent(
                 }
                 warningTimeSheet.close()
             },
-            onDismiss = { warningTimeSheet.close() }
+            onDismiss = { warningTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = warningLevelSheet.sheetState
+        sheetState = warningLevelSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pelletsWarningLevel.toString(),
@@ -283,7 +284,7 @@ private fun PelletsSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -291,11 +292,11 @@ private fun PelletsSettingsContent(
                 }
                 warningLevelSheet.close()
             },
-            onDismiss = { warningLevelSheet.close() }
+            onDismiss = { warningLevelSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = fullLevelSheet.sheetState
+        sheetState = fullLevelSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pelletsFull.toString(),
@@ -304,7 +305,7 @@ private fun PelletsSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                max = (state.serverData.settings.pelletsEmpty - 1).toDouble()
+                max = (state.serverData.settings.pelletsEmpty - 1).toDouble(),
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -312,11 +313,11 @@ private fun PelletsSettingsContent(
                 }
                 fullLevelSheet.close()
             },
-            onDismiss = { fullLevelSheet.close() }
+            onDismiss = { fullLevelSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = emptyLevelSheet.sheetState
+        sheetState = emptyLevelSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.pelletsEmpty.toString(),
@@ -326,7 +327,7 @@ private fun PelletsSettingsContent(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
                 min = 1.0,
-                max = 100.0
+                max = 100.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -334,11 +335,11 @@ private fun PelletsSettingsContent(
                 }
                 emptyLevelSheet.close()
             },
-            onDismiss = { emptyLevelSheet.close() }
+            onDismiss = { emptyLevelSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = augerRateSheet.sheetState
+        sheetState = augerRateSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.augerRate.toString(),
@@ -347,7 +348,7 @@ private fun PelletsSettingsContent(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.Decimal,
-                min = 0.0
+                min = 0.0,
             ),
             onUpdate = {
                 it.toDoubleOrNull()?.let { value ->
@@ -355,7 +356,7 @@ private fun PelletsSettingsContent(
                 }
                 augerRateSheet.close()
             },
-            onDismiss = { augerRateSheet.close() }
+            onDismiss = { augerRateSheet.close() },
         )
     }
 }
@@ -363,7 +364,7 @@ private fun PelletsSettingsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PelletsContract.Effect>?,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -376,7 +377,7 @@ private fun HandleSideEffects(
                 is PelletsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -396,11 +397,11 @@ private fun PelletSettingsPreview() {
                         serverData = Server(),
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

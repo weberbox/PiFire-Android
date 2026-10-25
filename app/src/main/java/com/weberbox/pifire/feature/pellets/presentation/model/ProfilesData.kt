@@ -12,5 +12,5 @@ internal data class ProfilesData(
     val currentBrand: String = "",
     val currentWood: String = "",
     val rating: Int = 5,
-    val comments: String = ""
+    val comments: String = "",
 )

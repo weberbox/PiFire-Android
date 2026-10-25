@@ -7,9 +7,7 @@ import com.weberbox.pifire.core.network.model.settings.ProbeSettings
 object ProbeProfilesMapper :
     Mapper<Map<String, ProbeSettings.ProbeProfile>?, Map<String, ProbeProfile>> {
 
-    override fun map(from: Map<String, ProbeSettings.ProbeProfile>?): Map<String, ProbeProfile> {
-        return from?.mapValues { (_, value) ->
-            ProbeProfileMapper.map(value)
-        } ?: emptyMap()
-    }
+    override fun map(from: Map<String, ProbeSettings.ProbeProfile>?): Map<String, ProbeProfile> = from?.mapValues { (_, value) ->
+        ProbeProfileMapper.map(value)
+    } ?: emptyMap()
 }

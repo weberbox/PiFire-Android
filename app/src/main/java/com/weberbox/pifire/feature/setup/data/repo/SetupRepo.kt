@@ -11,13 +11,13 @@ interface SetupRepo {
 
     suspend fun getVersions(
         url: String,
-        headerMap: Map<String, String>
+        headerMap: Map<String, String>,
     ): Result<VersionsData, DataError>
 
     @Compatibility(versionBelow = "1.10.0", build = "25")
     suspend fun getVersionsLegacy(
         url: String,
-        headerMap: Map<String, String>
+        headerMap: Map<String, String>,
     ): Result<VersionsData, DataError>
 
     suspend fun getSettingsData(

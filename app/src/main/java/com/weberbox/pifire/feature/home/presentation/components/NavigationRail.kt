@@ -33,42 +33,49 @@ internal fun NavSideRail(
     currentPage: Int,
     itemAlignment: Alignment.Vertical = Alignment.CenterVertically,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
-    onNavigationRequested: (NavRequest) -> Unit
+    onNavigationRequested: (NavRequest) -> Unit,
 ) {
     NavigationRail(
         containerColor = containerColor,
         windowInsets = WindowInsets.safeDrawing.only(
             WindowInsetsSides.Start +
-                    WindowInsetsSides.Vertical
-        )
+                WindowInsetsSides.Vertical,
+        ),
     ) {
         Column(
             modifier = modifier
                 .fillMaxHeight()
                 .padding(MaterialTheme.spacing.smallOne),
             verticalArrangement = Arrangement.spacedBy(
-                MaterialTheme.spacing.smallTwo, itemAlignment
+                MaterialTheme.spacing.smallTwo,
+                itemAlignment,
             ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             navigationItems.forEachIndexed { index, item ->
                 NavigationRailItem(
                     label = {
                         Text(
                             text = item.title,
-                            fontWeight = if (currentPage == index)
-                                FontWeight.Bold else FontWeight.Normal
+                            fontWeight = if (currentPage == index) {
+                                FontWeight.Bold
+                            } else {
+                                FontWeight.Normal
+                            },
                         )
                     },
                     selected = currentPage == index,
                     onClick = { onNavigationRequested(NavRequest.PagerIndex(index)) },
                     icon = {
                         Icon(
-                            imageVector = if (currentPage == index)
-                                item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.title
+                            imageVector = if (currentPage == index) {
+                                item.selectedIcon
+                            } else {
+                                item.unselectedIcon
+                            },
+                            contentDescription = item.title,
                         )
-                    }
+                    },
                 )
             }
         }
@@ -84,7 +91,7 @@ private fun NavigationRailPreview() {
             NavSideRail(
                 navigationItems = buildNavigationItems(),
                 currentPage = 1,
-                onNavigationRequested = {}
+                onNavigationRequested = {},
 
             )
         }

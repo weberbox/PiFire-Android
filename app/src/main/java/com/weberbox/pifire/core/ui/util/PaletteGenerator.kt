@@ -14,99 +14,99 @@ import androidx.core.graphics.red
 import androidx.palette.graphics.Palette
 
 private fun convertByteArrayToBitmap(
-    imageData: ByteArray?
-): Bitmap? {
-    return BitmapFactory.decodeByteArray(imageData, 0, imageData?.size ?: 0)
-}
+    imageData: ByteArray?,
+): Bitmap? = BitmapFactory.decodeByteArray(imageData, 0, imageData?.size ?: 0)
 
 private fun extractColorsFromBitmap(
     bitmap: Bitmap,
-    defaultColor: Color
+    defaultColor: Color,
 ): ColorSwatches {
     val maximumColorCount = 10
     return ColorSwatches(
         vibrant = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().vibrantSwatch, defaultColor
+                .generate().vibrantSwatch,
+            defaultColor,
         ),
         darkVibrant = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().darkVibrantSwatch, defaultColor
+                .generate().darkVibrantSwatch,
+            defaultColor,
         ),
         onDarkVibrant = parseBodyColor(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().darkVibrantSwatch?.bodyTextColor, defaultColor
+                .generate().darkVibrantSwatch?.bodyTextColor,
+            defaultColor,
         ),
         lightVibrant = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().lightVibrantSwatch, defaultColor
+                .generate().lightVibrantSwatch,
+            defaultColor,
         ),
         domainSwatch = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().dominantSwatch, defaultColor
+                .generate().dominantSwatch,
+            defaultColor,
         ),
         mutedSwatch = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().mutedSwatch, defaultColor
+                .generate().mutedSwatch,
+            defaultColor,
         ),
         lightMuted = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().lightMutedSwatch, defaultColor
+                .generate().lightMutedSwatch,
+            defaultColor,
         ),
         darkMuted = parseColorSwatch(
             color = Palette.from(bitmap).maximumColorCount(maximumColorCount)
-                .generate().darkMutedSwatch, defaultColor
-        )
+                .generate().darkMutedSwatch,
+            defaultColor,
+        ),
     )
 }
 
 private fun parseColorSwatch(
     color: Palette.Swatch?,
-    defaultColor: Color
-): Color {
-    return if (color != null) {
-        val rgbColor = color.rgb
-        Color(
-            red = rgbColor.red,
-            green = rgbColor.green,
-            blue = rgbColor.blue,
-            alpha = rgbColor.alpha
-        )
-    } else {
-        defaultColor
-    }
+    defaultColor: Color,
+): Color = if (color != null) {
+    val rgbColor = color.rgb
+    Color(
+        red = rgbColor.red,
+        green = rgbColor.green,
+        blue = rgbColor.blue,
+        alpha = rgbColor.alpha,
+    )
+} else {
+    defaultColor
 }
 
 private fun parseBodyColor(
     color: Int?,
-    defaultColor: Color
-): Color {
-    return if (color != null) {
-        Color(
-            red = color.red,
-            green = color.green,
-            blue = color.blue,
-            alpha = color.alpha
-        )
-    } else {
-        defaultColor
-    }
+    defaultColor: Color,
+): Color = if (color != null) {
+    Color(
+        red = color.red,
+        green = color.green,
+        blue = color.blue,
+        alpha = color.alpha,
+    )
+} else {
+    defaultColor
 }
 
 private fun getSwatchColor(
     swatchType: SwatchType,
-    colors: ColorSwatches
-): Color {
-    return when (swatchType) {
-        SwatchType.Vibrant -> colors.vibrant
-        SwatchType.DarkVibrant -> colors.darkVibrant
-        SwatchType.OnDarkVibrant -> colors.onDarkVibrant
-        SwatchType.LightVibrant -> colors.lightVibrant
-        SwatchType.DomainSwatch -> colors.domainSwatch
-        SwatchType.MutedSwatch -> colors.mutedSwatch
-        SwatchType.LightMuted -> colors.lightMuted
-        SwatchType.DarkMuted -> colors.darkMuted
-    }
+    colors: ColorSwatches,
+): Color = when (swatchType) {
+    SwatchType.Vibrant -> colors.vibrant
+    SwatchType.DarkVibrant -> colors.darkVibrant
+    SwatchType.OnDarkVibrant -> colors.onDarkVibrant
+    SwatchType.LightVibrant -> colors.lightVibrant
+    SwatchType.DomainSwatch -> colors.domainSwatch
+    SwatchType.MutedSwatch -> colors.mutedSwatch
+    SwatchType.LightMuted -> colors.lightMuted
+    SwatchType.DarkMuted -> colors.darkMuted
 }
 
 private data class ColorSwatches(
@@ -117,7 +117,7 @@ private data class ColorSwatches(
     val domainSwatch: Color,
     val mutedSwatch: Color,
     val lightMuted: Color,
-    val darkMuted: Color
+    val darkMuted: Color,
 )
 
 enum class SwatchType {
@@ -128,22 +128,20 @@ enum class SwatchType {
     DomainSwatch,
     MutedSwatch,
     LightMuted,
-    DarkMuted
+    DarkMuted,
 }
 
 @Composable
 fun rememberPaletteColorState(
     startingColor: Color = Color.Transparent,
     endingColor: Color = Color.Transparent,
-    swatchType: SwatchType = SwatchType.DarkVibrant
-): MutableState<PaletteState> {
-    return remember { mutableStateOf(PaletteState(startingColor, endingColor, swatchType)) }
-}
+    swatchType: SwatchType = SwatchType.DarkVibrant,
+): MutableState<PaletteState> = remember { mutableStateOf(PaletteState(startingColor, endingColor, swatchType)) }
 
 class PaletteState internal constructor(
     private val starting: Color,
     private val ending: Color,
-    private val swatchType: SwatchType
+    private val swatchType: SwatchType,
 ) {
     val startingColorState: MutableState<Color> = mutableStateOf(starting)
     val endingColorState: MutableState<Color> = mutableStateOf(ending)
@@ -175,8 +173,9 @@ class PaletteState internal constructor(
         get() = endingColorState.value
 
     val brushColor: List<Color>
-        get() = if (leftToRight.value)
+        get() = if (leftToRight.value) {
             listOf(startingColor.copy(alpha = 0.5f), endingColor)
-        else
+        } else {
             listOf(startingColor, endingColor.copy(alpha = 0.5f))
+        }
 }

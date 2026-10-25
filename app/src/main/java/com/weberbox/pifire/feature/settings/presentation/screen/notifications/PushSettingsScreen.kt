@@ -50,7 +50,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceLocals
 @Composable
 fun PushSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: NotificationSettingsViewModel = hiltViewModel()
+    viewModel: NotificationSettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
@@ -61,6 +61,7 @@ fun PushSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is NotifContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is NotifContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -70,7 +71,7 @@ fun PushSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -81,14 +82,14 @@ private fun PushSettings(
     consentAccepted: MutableState<Boolean>,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -99,7 +100,7 @@ private fun PushSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_onesignal_consent_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(NotifContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -111,25 +112,25 @@ private fun PushSettings(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 Text(
                     text = stringResource(R.string.settings_onesignal_consent_1),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.smallThree)
-                        .padding(bottom = MaterialTheme.spacing.extraSmall)
+                        .padding(bottom = MaterialTheme.spacing.extraSmall),
                 )
                 Text(
                     text = stringResource(R.string.settings_onesignal_consent_2),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.smallThree)
-                        .padding(bottom = MaterialTheme.spacing.extraSmall)
+                        .padding(bottom = MaterialTheme.spacing.extraSmall),
                 )
                 PreferenceNote(stringResource(R.string.settings_onesignal_consent_3))
             }
@@ -141,11 +142,13 @@ private fun PushSettings(
                 title = { Text(text = stringResource(R.string.enabled)) },
                 summary = {
                     Text(
-                        text = if (consentAccepted.value)
-                            stringResource(R.string.settings_onesignal_accepted) else
+                        text = if (consentAccepted.value) {
+                            stringResource(R.string.settings_onesignal_accepted)
+                        } else {
                             stringResource(R.string.settings_onesignal_declined)
+                        },
                     )
-                }
+                },
             )
         }
     }
@@ -154,13 +157,14 @@ private fun PushSettings(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<NotifContract.Effect>?,
-    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {}
+
                 is NotifContract.Effect.Navigation -> {
                     onNavigationRequested(effect)
                 }
@@ -168,7 +172,7 @@ private fun HandleSideEffects(
                 is NotifContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -188,7 +192,7 @@ private fun PushSettingsPreview() {
                     consentAccepted = consentAccepted,
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

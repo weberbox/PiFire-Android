@@ -65,7 +65,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceTheme
 @Composable
 fun HeaderSettingsScreenDestination(
     navController: NavHostController,
-    viewModel: HeadersViewModel = hiltViewModel()
+    viewModel: HeadersViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
@@ -76,6 +76,7 @@ fun HeaderSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is HeadersContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is HeadersContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -85,7 +86,7 @@ fun HeaderSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -96,7 +97,7 @@ private fun HeaderSettings(
     state: HeadersContract.State,
     effectFlow: Flow<HeadersContract.Effect>?,
     onEventSent: (event: HeadersContract.Event) -> Unit,
-    onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -104,7 +105,7 @@ private fun HeaderSettings(
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -115,7 +116,7 @@ private fun HeaderSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_extra_headers),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(HeadersContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(HeadersContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -126,58 +127,58 @@ private fun HeaderSettings(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(contentPadding)
+                .padding(contentPadding),
         ) {
             Text(
                 text = stringResource(R.string.settings_extra_headers_note),
                 modifier = Modifier.padding(MaterialTheme.spacing.smallThree),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             state.extraHeaders.forEach { header ->
                 Card(
                     modifier = Modifier.padding(
                         start = MaterialTheme.spacing.smallThree,
                         end = MaterialTheme.spacing.smallThree,
-                        bottom = MaterialTheme.spacing.smallOne
+                        bottom = MaterialTheme.spacing.smallOne,
                     ),
                     shape = MaterialTheme.shapes.small,
-                    onClick = { headersSheet.open(header) }
+                    onClick = { headersSheet.open(header) },
                 ) {
                     Row(
                         modifier = Modifier
                             .padding(horizontal = MaterialTheme.spacing.smallOne)
                             .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             imageVector = Icon.Outlined.CloudKeyOutline,
                             modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
-                            contentDescription = null
+                            contentDescription = null,
                         )
                         Column {
                             Text(
                                 text = header.key,
                                 modifier = Modifier.padding(
                                     start = MaterialTheme.spacing.extraSmall,
-                                    top = MaterialTheme.spacing.extraSmall
+                                    top = MaterialTheme.spacing.extraSmall,
                                 ),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                fontSize = 15.sp
+                                fontSize = 15.sp,
                             )
                             Text(
                                 text = header.value,
                                 modifier = Modifier.padding(
                                     start = MaterialTheme.spacing.extraSmall,
-                                    bottom = MaterialTheme.spacing.extraSmall
+                                    bottom = MaterialTheme.spacing.extraSmall,
                                 ),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                fontSize = 12.sp
+                                fontSize = 12.sp,
                             )
                         }
                     }
@@ -186,43 +187,43 @@ private fun HeaderSettings(
             if (state.extraHeaders.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Info,
                         contentDescription = null,
-                        modifier = Modifier.size(MaterialTheme.size.extraLarge)
+                        modifier = Modifier.size(MaterialTheme.size.extraLarge),
                     )
                     Text(
                         text = stringResource(R.string.settings_extra_headers_not_defined),
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne)
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
                     )
                 }
             }
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Button(
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.smallThree)
                         .fillMaxWidth(),
                     shape = MaterialTheme.shapes.small,
-                    onClick = { headersSheet.open(ExtraHeader()) }
+                    onClick = { headersSheet.open(ExtraHeader()) },
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.settings_extra_headers_add),
                         fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
         }
         BottomSheet(
-            sheetState = headersSheet.sheetState
+            sheetState = headersSheet.sheetState,
         ) {
             HeadersSheet(
                 extraHeader = headersSheet.data,
@@ -233,7 +234,7 @@ private fun HeaderSettings(
                 onDelete = { header ->
                     headersSheet.close()
                     onEventSent(HeadersContract.Event.DeleteHeader(header))
-                }
+                },
             )
         }
     }
@@ -242,7 +243,7 @@ private fun HeaderSettings(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<HeadersContract.Effect>?,
-    onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (HeadersContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -255,7 +256,7 @@ private fun HandleSideEffects(
                 is HeadersContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -275,11 +276,11 @@ private fun HeaderSettingsPreview() {
                     state = HeadersContract.State(
                         extraHeaders = extraHeaders,
                         isInitialLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

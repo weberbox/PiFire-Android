@@ -19,10 +19,12 @@ fun networkAvailable(): Boolean {
         getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val nw = connectivityManager.activeNetwork ?: return false
     val actNw = connectivityManager.getNetworkCapabilities(nw)
-    return actNw != null && (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+    return actNw != null && (
+        actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
-            actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN))
+            actNw.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+        )
 }
 
 /**
@@ -35,12 +37,16 @@ fun Throwable.toNetworkError(): DataError.Network {
         causes().any {
             it is SSLPeerUnverifiedException || it is CertificateException
         } -> DataError.Network.CERTIFICATE
+
         this is UnknownHostException -> DataError.Network.UNKNOWN_HOST
+
         this is ConnectException ||
             this is NoRouteToHostException ||
             this is PortUnreachableException -> DataError.Network.UNREACHABLE_HOST
+
         // SocketTimeoutException and OkHttp call timeouts are both InterruptedIOException
         this is InterruptedIOException -> DataError.Network.SOCKET_TIMEOUT
+
         else -> DataError.Network.SERVER_ERROR
     }
 }

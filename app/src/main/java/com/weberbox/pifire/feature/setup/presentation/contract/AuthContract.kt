@@ -19,7 +19,7 @@ class AuthContract {
 
     data class State(
         val credentials: Credentials,
-        val extraHeaders: List<ExtraHeader>
+        val extraHeaders: List<ExtraHeader>,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

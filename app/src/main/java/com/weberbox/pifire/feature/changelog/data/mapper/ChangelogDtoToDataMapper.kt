@@ -17,10 +17,10 @@ object ChangelogDtoToDataMapper : Mapper<ChangelogDto, ChangelogData> {
                 logs = data.logs.map { log ->
                     Log(
                         type = log.type ?: "new",
-                        text = log.text.orEmpty()
+                        text = log.text.orEmpty(),
                     )
-                }
+                },
             )
-        }
+        },
     )
 }

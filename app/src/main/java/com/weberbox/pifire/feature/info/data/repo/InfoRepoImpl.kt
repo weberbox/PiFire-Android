@@ -21,22 +21,22 @@ class InfoRepoImpl @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dataStore: DataStore<InfoData>,
     private val infoApi: InfoApi,
-    private val json: Json
+    private val json: Json,
 ) : InfoRepo {
 
-    override suspend fun getInfo(): Result<Info, DataError> {
-        return infoApi.getInfo().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, InfoDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
-                            is Result.Success -> {
-                                sessionStateHolder.setInfoData(data.data)
-                                updateInfoData(data.data)
-                                Result.Success(data.data)
-                            }
+    override suspend fun getInfo(): Result<Info, DataError> = infoApi.getInfo().let { result ->
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
+
+            is Result.Success -> {
+                parseGetResponse(result.data, json, InfoDtoToDataMapper).let { data ->
+                    when (data) {
+                        is Result.Error -> Result.Error(data.error)
+
+                        is Result.Success -> {
+                            sessionStateHolder.setInfoData(data.data)
+                            updateInfoData(data.data)
+                            Result.Success(data.data)
                         }
                     }
                 }

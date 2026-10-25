@@ -21,22 +21,22 @@ class PelletsRepoImpl @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val dataStore: DataStore<PelletsData>,
     private val pelletsApi: PelletsApi,
-    private val json: Json
+    private val json: Json,
 ) : PelletsRepo {
 
-    override suspend fun getPellets(): Result<Pellets, DataError> {
-        return pelletsApi.getPellets().let { result ->
-            when (result) {
-                is Result.Error -> Result.Error(result.error)
-                is Result.Success -> {
-                    parseGetResponse(result.data, json, PelletsDtoToDataMapper).let { data ->
-                        when (data) {
-                            is Result.Error -> Result.Error(data.error)
-                            is Result.Success -> {
-                                sessionStateHolder.setPelletsData(data.data)
-                                updatePelletsData(data.data)
-                                Result.Success(data.data)
-                            }
+    override suspend fun getPellets(): Result<Pellets, DataError> = pelletsApi.getPellets().let { result ->
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
+
+            is Result.Success -> {
+                parseGetResponse(result.data, json, PelletsDtoToDataMapper).let { data ->
+                    when (data) {
+                        is Result.Error -> Result.Error(data.error)
+
+                        is Result.Success -> {
+                            sessionStateHolder.setPelletsData(data.data)
+                            updatePelletsData(data.data)
+                            Result.Success(data.data)
                         }
                     }
                 }
@@ -62,10 +62,12 @@ class PelletsRepoImpl @Inject constructor(
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
+
                 is Result.Success -> {
                     parseResponse(result.data, json, PelletsDtoToDataMapper).let { data ->
                         when (data) {
                             is Result.Error -> emit(Result.Error(data.error))
+
                             is Result.Success -> {
                                 sessionStateHolder.setPelletsData(data.data)
                                 emit(Result.Success(data.data))
@@ -77,9 +79,7 @@ class PelletsRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPelletsDataState(): Flow<Pellets?> {
-        return sessionStateHolder.pelletsDataState
-    }
+    override suspend fun getPelletsDataState(): Flow<Pellets?> = sessionStateHolder.pelletsDataState
 
     override suspend fun updatePelletsData(pellets: Pellets) {
         dataStore.updateData { data ->

@@ -33,12 +33,12 @@ fun AppBarConnectingTitle(
 ) {
     Box(
         modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.CenterStart
+        contentAlignment = Alignment.CenterStart,
     ) {
         AnimatedVisibility(
             visible = isConnecting,
             enter = slideDownFadeEnterTransition(),
-            exit = slideUpFadeExitTransition()
+            exit = slideUpFadeExitTransition(),
         ) {
             AnimateDottedText(
                 modifier = Modifier.fillMaxWidth(),
@@ -49,12 +49,12 @@ fun AppBarConnectingTitle(
         AnimatedVisibility(
             visible = !isConnecting,
             enter = fadeEnterTransition(),
-            exit = fadeExitTransition(animationTime = 200)
+            exit = fadeExitTransition(animationTime = 200),
         ) {
             AnimatedContent(title) {
                 Text(
                     fontWeight = FontWeight.Bold,
-                    text = it
+                    text = it,
                 )
             }
         }
@@ -72,12 +72,12 @@ fun AppBarConnectingTitlePreview() {
                 title = {
                     AppBarConnectingTitle(
                         title = stringResource(R.string.nav_dashboard),
-                        isConnecting = true
+                        isConnecting = true,
                     )
                 },
                 navigationIcon = Icon.Filled.Menu,
                 scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                hazeState = rememberHazeState()
+                hazeState = rememberHazeState(),
             )
         }
     }

@@ -23,14 +23,11 @@ object SentryModule {
     fun provideSentry(
         @ApplicationContext appContext: Context,
         settingsRepo: SettingsRepo,
-        prefs: Prefs
-    ): SentryIO {
-        return SentryIO(
-            appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
-            appContext = appContext,
-            settingsRepo = settingsRepo,
-            prefs = prefs,
-        )
-    }
-
+        prefs: Prefs,
+    ): SentryIO = SentryIO(
+        appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
+        appContext = appContext,
+        settingsRepo = settingsRepo,
+        prefs = prefs,
+    )
 }

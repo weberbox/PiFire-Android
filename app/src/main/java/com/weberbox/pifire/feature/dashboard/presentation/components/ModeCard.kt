@@ -61,7 +61,7 @@ internal fun ModeCard(
                 enabled = recipePaused,
                 targetScale = 1.2f,
                 color = MaterialTheme.colorScheme.tertiary,
-                shape = MaterialTheme.shapes.large
+                shape = MaterialTheme.shapes.large,
             )
             .height(100.dp)
             .fillMaxWidth(),
@@ -69,10 +69,10 @@ internal fun ModeCard(
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Box(
-            contentAlignment = Alignment.TopEnd
+            contentAlignment = Alignment.TopEnd,
         ) {
             Column(
                 modifier = Modifier
@@ -80,35 +80,35 @@ internal fun ModeCard(
                     .padding(10.dp)
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Image(
                     imageVector = icon,
                     contentDescription = null,
                     contentScale = ContentScale.FillHeight,
                     colorFilter = ColorFilter.tint(
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 Text(
                     text = stringResource(title),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             this@Card.AnimatedVisibility(
                 visible = recipePaused,
                 enter = fadeEnterTransition(),
-                exit = fadeExitTransition()
+                exit = fadeExitTransition(),
             ) {
                 Icon(
                     modifier = Modifier.padding(top = 5.dp, end = 8.dp),
                     tint = MaterialTheme.colorScheme.tertiary,
                     imageVector = Icons.Filled.Pause,
-                    contentDescription = stringResource(R.string.dash_recipe_paused)
+                    contentDescription = stringResource(R.string.dash_recipe_paused),
                 )
             }
         }
@@ -126,23 +126,23 @@ private fun ModeCardPreview() {
                     top = 10.dp,
                     bottom = 10.dp,
                     start = 10.dp,
-                    end = 10.dp
+                    end = 10.dp,
                 ),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 val modes = RunningMode.entries.chunked(3)
                 modes.forEach { chunk ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         chunk.forEach { mode ->
                             ModeCard(
                                 mode = mode.name,
                                 modifier = Modifier.weight(1f),
                                 recipePaused = mode.name == "Recipe",
-                                onClick = { }
+                                onClick = { },
                             )
                         }
                     }

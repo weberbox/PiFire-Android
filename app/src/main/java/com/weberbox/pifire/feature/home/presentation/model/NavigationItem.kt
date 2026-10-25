@@ -7,5 +7,5 @@ data class NavigationItem(
     val route: Any,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val badgeCount: Int? = null
+    val badgeCount: Int? = null,
 )

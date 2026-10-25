@@ -29,41 +29,41 @@ internal fun HomeAppBarActions(
     lidOpenDetectEnabled: Boolean,
     isConnected: Boolean,
     isHoldMode: Boolean,
-    onTriggerLidEvent: () -> Unit
+    onTriggerLidEvent: () -> Unit,
 ) {
     var showLidDetectMenu by rememberSaveable { mutableStateOf(false) }
     AnimatedVisibility(
         visible = lidOpenDetectEnabled && isHoldMode,
         enter = fadeEnterTransition(),
-        exit = fadeExitTransition()
+        exit = fadeExitTransition(),
     ) {
         Row {
             IconButton(
                 onClick = {
                     if (isConnected) showLidDetectMenu = true
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icon.Filled.TrayArrowUp,
-                    contentDescription = stringResource(R.string.settings_cat_lid_detection)
+                    contentDescription = stringResource(R.string.settings_cat_lid_detection),
                 )
             }
         }
         DropdownMenu(
             expanded = showLidDetectMenu,
             onDismissRequest = { showLidDetectMenu = false },
-            shape = MaterialTheme.shapes.large
+            shape = MaterialTheme.shapes.large,
         ) {
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = stringResource(R.string.menu_trigger_lid_open)
+                        text = stringResource(R.string.menu_trigger_lid_open),
                     )
                 },
                 onClick = {
                     onTriggerLidEvent()
                     showLidDetectMenu = false
-                }
+                },
             )
         }
     }
@@ -79,7 +79,7 @@ private fun HomeAppBarActionsPreview() {
                 lidOpenDetectEnabled = true,
                 isConnected = true,
                 isHoldMode = true,
-                onTriggerLidEvent = {}
+                onTriggerLidEvent = {},
             )
         }
     }

@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun ProfilesDetailsScreen(
     navController: NavHostController,
-    viewModel: SharedDetailsViewModel = hiltViewModel()
+    viewModel: SharedDetailsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProfilesDetailsContent(
@@ -60,7 +60,7 @@ fun ProfilesDetailsScreen(
                     )
                 }
             }
-        }
+        },
     )
 }
 
@@ -69,31 +69,33 @@ private fun ProfilesDetailsContent(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val profileEditSheet = rememberInputModalBottomSheetState<ProfilesData>()
     val profileDeleteSheet = rememberInputModalBottomSheetState<PelletProfile>()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(PelletsContract.Event.Refresh) }
+
             else -> {
                 DetailsScreen(
                     title = stringResource(R.string.pellets_editor),
                     isLoading = state.isLoading,
                     onNavigate = {
                         onNavigationRequested(PelletsContract.Effect.Navigation.Back)
-                    }
+                    },
                 ) {
                     items(items = state.pellets.profilesList) { profile ->
                         ProfileItem(
@@ -114,19 +116,19 @@ private fun ProfilesDetailsContent(
                                                 currentBrand = event.profile.brand,
                                                 currentWood = event.profile.wood,
                                                 rating = event.profile.rating,
-                                                comments = event.profile.comments
-                                            )
+                                                comments = event.profile.comments,
+                                            ),
                                         )
                                     }
 
                                     else -> onEventSent(event)
                                 }
-                            }
+                            },
                         )
                     }
                 }
                 BottomSheet(
-                    sheetState = profileEditSheet.sheetState
+                    sheetState = profileEditSheet.sheetState,
                 ) {
                     ProfilesEditSheet(
                         title = stringResource(R.string.pellets_editor),
@@ -135,39 +137,39 @@ private fun ProfilesDetailsContent(
                             onEventSent(
                                 PelletsContract.Event.SendEvent(
                                     PelletsEvent.EditProfile(
-                                        profile = profile
-                                    )
-                                )
+                                        profile = profile,
+                                    ),
+                                ),
                             )
                             profileEditSheet.close()
                         },
-                        onDismiss = { profileEditSheet.close() }
+                        onDismiss = { profileEditSheet.close() },
                     )
                 }
                 BottomSheet(
-                    sheetState = profileDeleteSheet.sheetState
+                    sheetState = profileDeleteSheet.sheetState,
                 ) {
                     ConfirmSheet(
                         title = stringResource(R.string.dialog_confirm_action),
                         message = stringResource(
                             R.string.dialog_confirm_delete_item,
-                            profileDeleteSheet.data.brand + " " + profileDeleteSheet.data.wood
+                            profileDeleteSheet.data.brand + " " + profileDeleteSheet.data.wood,
                         ),
                         negativeButtonText = stringResource(R.string.cancel),
                         positiveButtonText = stringResource(R.string.delete),
                         positiveButtonColor = ButtonDefaults.buttonColors(
                             contentColor = MaterialTheme.colorScheme.onError,
-                            containerColor = MaterialTheme.colorScheme.error
+                            containerColor = MaterialTheme.colorScheme.error,
                         ),
                         onPositive = {
                             onEventSent(
                                 PelletsContract.Event.SendEvent(
-                                    PelletsEvent.DeleteProfile(profile = profileDeleteSheet.data.id)
-                                )
+                                    PelletsEvent.DeleteProfile(profile = profileDeleteSheet.data.id),
+                                ),
                             )
                             profileDeleteSheet.close()
                         },
-                        onNegative = { profileDeleteSheet.close() }
+                        onNegative = { profileDeleteSheet.close() },
                     )
                 }
             }
@@ -178,7 +180,7 @@ private fun ProfilesDetailsContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<PelletsContract.Effect>?,
-    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (PelletsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -187,7 +189,7 @@ private fun HandleSideEffects(
                 is PelletsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
 
@@ -212,11 +214,11 @@ private fun ProfilesDetailsScreenPreview() {
                     isDataError = false,
                     isLoading = false,
                     isRefreshing = false,
-                    isConnected = true
+                    isConnected = true,
                 ),
                 effectFlow = null,
                 onEventSent = { },
-                onNavigationRequested = { }
+                onNavigationRequested = { },
             )
         }
     }

@@ -48,7 +48,7 @@ import com.weberbox.pifire.core.ui.util.slideOutShrinkExitTransition
 internal fun WarningCard(
     warnings: List<String>,
     modifier: Modifier = Modifier,
-    initialState: Boolean = false
+    initialState: Boolean = false,
 ) {
     warnings.forEach { warning ->
         // Keyed so each card keeps its own visibility when the list changes
@@ -62,15 +62,15 @@ internal fun WarningCard(
             AnimatedVisibility(
                 visibleState = visibleState,
                 enter = slideDownExpandEnterTransition(),
-                exit = slideOutShrinkExitTransition()
+                exit = slideOutShrinkExitTransition(),
             ) {
                 Box(
                     modifier = Modifier
                         .padding(
                             start = MaterialTheme.spacing.smallOne,
-                            end = MaterialTheme.spacing.smallOne
+                            end = MaterialTheme.spacing.smallOne,
                         )
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Card(
                         modifier = modifier
@@ -78,20 +78,20 @@ internal fun WarningCard(
                                 enabled = visibleState.targetState,
                                 targetScale = 1.1f,
                                 color = MaterialTheme.colorScheme.errorContainer,
-                                shape = MaterialTheme.shapes.large
+                                shape = MaterialTheme.shapes.large,
                             )
                             .fillMaxWidth(),
                         shape = MaterialTheme.shapes.large,
                         elevation = CardDefaults.cardElevation(
-                            defaultElevation = MaterialTheme.elevation.small
-                        )
+                            defaultElevation = MaterialTheme.elevation.small,
+                        ),
                     ) {
                         Column(
                             modifier = Modifier
                                 .background(Brush.horizontalGradient(colorStops = cardColorStops()))
                                 .padding(bottom = MaterialTheme.spacing.smallOne)
                                 .wrapContentHeight(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             Text(
                                 text = stringResource(R.string.dash_warnings_title),
@@ -100,8 +100,8 @@ internal fun WarningCard(
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.padding(
                                     top = MaterialTheme.spacing.smallOne,
-                                    start = MaterialTheme.spacing.smallTwo
-                                )
+                                    start = MaterialTheme.spacing.smallTwo,
+                                ),
                             )
                             Text(
                                 text = warning,
@@ -111,8 +111,8 @@ internal fun WarningCard(
                                     top = MaterialTheme.spacing.extraSmall,
                                     bottom = MaterialTheme.spacing.extraSmall,
                                     start = MaterialTheme.spacing.smallTwo,
-                                    end = MaterialTheme.spacing.smallTwo
-                                )
+                                    end = MaterialTheme.spacing.smallTwo,
+                                ),
                             )
                         }
                     }
@@ -120,11 +120,11 @@ internal fun WarningCard(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .offset(y = (-3).dp),
-                        onClick = { visible = false }
+                        onClick = { visible = false },
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,
-                            contentDescription = stringResource(R.string.close)
+                            contentDescription = stringResource(R.string.close),
                         )
                     }
                 }
@@ -144,16 +144,14 @@ private fun WarningCardPreview() {
             ) {
                 WarningCard(
                     warnings = buildWarningData(),
-                    initialState = true
+                    initialState = true,
                 )
             }
         }
     }
 }
 
-private fun buildWarningData(): List<String> {
-    return listOf(
-        "PiFire is set to OFF. This doesn\'t prevent startup, but this means the " +
-                "switch won\'t behave as normal."
-    )
-}
+private fun buildWarningData(): List<String> = listOf(
+    "PiFire is set to OFF. This doesn\'t prevent startup, but this means the " +
+        "switch won\'t behave as normal.",
+)

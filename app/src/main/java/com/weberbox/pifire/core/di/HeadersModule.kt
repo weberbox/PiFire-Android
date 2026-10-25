@@ -15,8 +15,5 @@ object HeadersModule {
 
     @Provides
     @Singleton
-    fun provideHeadersManager(dataStore: DataStore<HeadersData>): HeadersManager {
-        return HeadersManager(dataStore)
-    }
-
+    fun provideHeadersManager(dataStore: DataStore<HeadersData>): HeadersManager = HeadersManager(dataStore)
 }

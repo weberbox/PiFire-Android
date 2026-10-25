@@ -61,10 +61,10 @@ private class CopiedPaddingValues(
             return false
         }
         return start == other.start &&
-                top == other.top &&
-                end == other.end &&
-                bottom == other.bottom &&
-                paddingValues == other.paddingValues
+            top == other.top &&
+            end == other.end &&
+            bottom == other.bottom &&
+            paddingValues == other.paddingValues
     }
 
     override fun hashCode(): Int {
@@ -76,9 +76,7 @@ private class CopiedPaddingValues(
         return result
     }
 
-    override fun toString(): String {
-        return "Copied($start, $top, $end, $bottom, $paddingValues)"
-    }
+    override fun toString(): String = "Copied($start, $top, $end, $bottom, $paddingValues)"
 }
 
 @Composable
@@ -106,13 +104,13 @@ private class OffsetPaddingValues(
 ) : PaddingValues {
     override fun calculateLeftPadding(layoutDirection: LayoutDirection): Dp =
         paddingValues.calculateLeftPadding(layoutDirection) +
-                (if (layoutDirection == LayoutDirection.Ltr) start else end)
+            (if (layoutDirection == LayoutDirection.Ltr) start else end)
 
     override fun calculateTopPadding(): Dp = paddingValues.calculateTopPadding() + top
 
     override fun calculateRightPadding(layoutDirection: LayoutDirection): Dp =
         paddingValues.calculateRightPadding(layoutDirection) +
-                (if (layoutDirection == LayoutDirection.Ltr) end else start)
+            (if (layoutDirection == LayoutDirection.Ltr) end else start)
 
     override fun calculateBottomPadding(): Dp = paddingValues.calculateBottomPadding() + bottom
 
@@ -124,10 +122,10 @@ private class OffsetPaddingValues(
             return false
         }
         return start == other.start &&
-                top == other.top &&
-                end == other.end &&
-                bottom == other.bottom &&
-                paddingValues == other.paddingValues
+            top == other.top &&
+            end == other.end &&
+            bottom == other.bottom &&
+            paddingValues == other.paddingValues
     }
 
     override fun hashCode(): Int {
@@ -139,7 +137,5 @@ private class OffsetPaddingValues(
         return result
     }
 
-    override fun toString(): String {
-        return "Offset($start, $top, $end, $bottom, $paddingValues)"
-    }
+    override fun toString(): String = "Offset($start, $top, $end, $bottom, $paddingValues)"
 }

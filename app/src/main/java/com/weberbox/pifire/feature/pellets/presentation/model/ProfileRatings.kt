@@ -5,7 +5,8 @@ internal enum class ProfileRatings(val rating: Int, val string: String) {
     Two(rating = 2, string = "★ ★"),
     Three(rating = 3, string = "★ ★ ★"),
     Four(rating = 4, string = "★ ★ ★ ★"),
-    Five(rating = 5, string = "★ ★ ★ ★ ★");
+    Five(rating = 5, string = "★ ★ ★ ★ ★"),
+    ;
 
     companion object {
         infix fun from(rating: Int): ProfileRatings = ProfileRatings.entries.firstOrNull {

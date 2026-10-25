@@ -27,7 +27,7 @@ class SentryIO @Inject constructor(
     private val appContext: Context,
     private val appScope: CoroutineScope,
     private val settingsRepo: SettingsRepo,
-    private val prefs: Prefs
+    private val prefs: Prefs,
 ) {
     // Read by beforeSend on whichever thread sends the event
     @Volatile
@@ -68,50 +68,50 @@ class SentryIO @Inject constructor(
                 options.addIntegration(
                     SentryTimberIntegration(
                         minEventLevel = SentryLevel.ERROR,
-                        minBreadcrumbLevel = SentryLevel.INFO
-                    )
+                        minBreadcrumbLevel = SentryLevel.INFO,
+                    ),
                 )
                 options.beforeSend =
                     SentryOptions.BeforeSendCallback { event: SentryEvent, _: Hint? ->
                         event.setExtra(
                             "PiFire Version",
-                            server?.settings?.serverVersion
+                            server?.settings?.serverVersion,
                         )
                         event.setExtra(
                             "PiFire Build",
-                            server?.settings?.serverBuild
+                            server?.settings?.serverBuild,
                         )
                         event.setExtra(
                             "Recipes Version",
-                            server?.settings?.recipesVersion
+                            server?.settings?.recipesVersion,
                         )
                         event.setExtra(
                             "Temp Units",
-                            server?.settings?.tempUnits
+                            server?.settings?.tempUnits,
                         )
                         event.setExtra(
                             "RealHW",
-                            server?.settings?.realHw
+                            server?.settings?.realHw,
                         )
                         event.setExtra(
                             "PWM",
-                            server?.settings?.dcFan
+                            server?.settings?.dcFan,
                         )
                         event.setExtra(
                             "Modules",
-                            getServerModules()
+                            getServerModules(),
                         )
                         event.setExtra(
                             "Platform Type",
-                            server?.settings?.platformType
+                            server?.settings?.platformType,
                         )
                         event.setExtra(
                             "Platform Current",
-                            server?.settings?.platformCurrent
+                            server?.settings?.platformCurrent,
                         )
                         event.setExtra(
                             "Controller Selected",
-                            server?.settings?.cntrlrSelected
+                            server?.settings?.cntrlrSelected,
                         )
 
                         event
@@ -139,19 +139,13 @@ class SentryIO @Inject constructor(
         }
     }
 
-    private fun getServerModules(): Modules {
-        return Modules(
-            grillplat = server?.settings?.modulesPlatform,
-            display = server?.settings?.modulesDisplay,
-            dist = server?.settings?.modulesDistance
-        )
-    }
+    private fun getServerModules(): Modules = Modules(
+        grillplat = server?.settings?.modulesPlatform,
+        display = server?.settings?.modulesDisplay,
+        dist = server?.settings?.modulesDistance,
+    )
 
-    private fun sentryDSNSet(): Boolean {
-        return BuildConfig.SENTRY_DSN.isNotEmpty()
-    }
+    private fun sentryDSNSet(): Boolean = BuildConfig.SENTRY_DSN.isNotEmpty()
 
-    private fun sentryEnabled(): Boolean {
-        return prefs.get(Pref.sentryEnabled)
-    }
+    private fun sentryEnabled(): Boolean = prefs.get(Pref.sentryEnabled)
 }

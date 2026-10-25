@@ -37,11 +37,11 @@ internal fun RecipeAsyncImage(
     image: Any?,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.FillWidth,
-    zoomState: ZoomState? = null
+    zoomState: ZoomState? = null,
 ) {
     val colorStops = arrayOf(
         0.5f to MaterialTheme.colorScheme.surfaceContainerHighest,
-        1f to MaterialTheme.colorScheme.surfaceContainer
+        1f to MaterialTheme.colorScheme.surfaceContainer,
     )
 
     Box(
@@ -53,9 +53,9 @@ internal fun RecipeAsyncImage(
                     Modifier.zoomable(
                         zoomState = zoomState,
                         scrollGesturePropagation =
-                            ScrollGesturePropagation.NotZoomed
+                            ScrollGesturePropagation.NotZoomed,
                     )
-                } ?: Modifier
+                } ?: Modifier,
             ),
         contentAlignment = Alignment.Center,
     ) {
@@ -71,11 +71,11 @@ internal fun RecipeAsyncImage(
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
                         .background(Brush.radialGradient(colorStops = colorStops)),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularLoadingIndicator(
                         isLoading = true,
-                        modifier = Modifier.size(150.dp)
+                        modifier = Modifier.size(150.dp),
                     )
                 }
             },
@@ -86,12 +86,12 @@ internal fun RecipeAsyncImage(
                         .fillMaxWidth()
                         .clip(MaterialTheme.shapes.large)
                         .background(Brush.radialGradient(colorStops = colorStops)),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         modifier = Modifier.fillMaxSize(0.7f),
                         imageVector = Icons.Outlined.NoPhotography,
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
             },
@@ -99,7 +99,7 @@ internal fun RecipeAsyncImage(
                 zoomState?.setContentSize(state.painter.intrinsicSize)
             },
             contentDescription = null,
-            contentScale = contentScale
+            contentScale = contentScale,
         )
     }
 }
@@ -112,7 +112,7 @@ private fun RecipeAsyncImagePreview() {
     PiFireTheme {
         Surface {
             RecipeAsyncImage(
-                image = image
+                image = image,
             )
         }
     }

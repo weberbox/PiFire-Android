@@ -10,7 +10,7 @@ data class Dashboard(
     val current: String? = null,
 
     @SerialName("dashboards")
-    val dashboards: Dashboards? = null
+    val dashboards: Dashboards? = null,
 ) {
 
     @Serializable
@@ -19,7 +19,7 @@ data class Dashboard(
         var basic: Basic? = null,
 
         @SerialName("Default")
-        var default: Default? = null
+        var default: Default? = null,
     ) {
 
         @Serializable
@@ -37,7 +37,7 @@ data class Dashboard(
             var metadata: String? = null,
 
             @SerialName("name")
-            var name: String? = null
+            var name: String? = null,
         ) {
 
             @Serializable
@@ -56,7 +56,7 @@ data class Dashboard(
 
                 @SerialName("max_primary_temp_F")
                 @Serializable(with = IntOrDoubleSerializer::class)
-                var maxPrimaryTempF: Int? = null
+                var maxPrimaryTempF: Int? = null,
 
             )
         }
@@ -76,7 +76,7 @@ data class Dashboard(
             var metadata: String? = null,
 
             @SerialName("name")
-            var name: String? = null
+            var name: String? = null,
         ) {
 
             @Serializable
@@ -95,7 +95,7 @@ data class Dashboard(
 
                 @SerialName("max_primary_temp_F")
                 @Serializable(with = IntOrDoubleSerializer::class)
-                var maxPrimaryTempF: Int? = null
+                var maxPrimaryTempF: Int? = null,
 
             )
         }

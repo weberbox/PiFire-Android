@@ -51,22 +51,20 @@ import kotlinx.coroutines.launch
 fun rememberPermissionState(
     permissionDetailsProvider: PermissionDetailsProvider,
     onPermissionResult: (Boolean) -> Unit = {},
-    previewPermissionStatus: PermissionStatus = PermissionStatus.Granted
-): PermissionState {
-    return when {
-        LocalInspectionMode.current -> PreviewPermissionState(
-            permissionDetailsProvider = permissionDetailsProvider,
-            status = previewPermissionStatus
-        )
+    previewPermissionStatus: PermissionStatus = PermissionStatus.Granted,
+): PermissionState = when {
+    LocalInspectionMode.current -> PreviewPermissionState(
+        permissionDetailsProvider = permissionDetailsProvider,
+        status = previewPermissionStatus,
+    )
 
-        else -> rememberPermissionState(permissionDetailsProvider, onPermissionResult)
-    }
+    else -> rememberPermissionState(permissionDetailsProvider, onPermissionResult)
 }
 
 @Composable
 private fun rememberPermissionState(
     permissionDetailsProvider: PermissionDetailsProvider,
-    onPermissionResult: (Boolean) -> Unit = {}
+    onPermissionResult: (Boolean) -> Unit = {},
 ): PermissionState {
     val context = LocalContext.current
     val activity = context.findActivity()
@@ -91,14 +89,14 @@ private fun rememberPermissionState(
                     },
                     onGoToAppSettingsClick = {
                         activity.openAppSettings(
-                            permissionDetailsProvider.getSettingsLocation()
+                            permissionDetailsProvider.getSettingsLocation(),
                         )
-                    }
+                    },
                 )
             } else {
                 onPermissionResult(true)
             }
-        }
+        },
     )
 
     DisposableEffect(permissionState, launcher) {
@@ -114,7 +112,7 @@ private fun rememberPermissionState(
 @Immutable
 internal class PreviewPermissionState(
     override val permissionDetailsProvider: PermissionDetailsProvider,
-    override val status: PermissionStatus
+    override val status: PermissionStatus,
 ) : PermissionState {
     override fun launchPermissionRequest() {}
 }
@@ -122,7 +120,7 @@ internal class PreviewPermissionState(
 internal class MutablePermissionState(
     override val permissionDetailsProvider: PermissionDetailsProvider,
     private val context: Context,
-    private val activity: Activity
+    private val activity: Activity,
 ) : PermissionState {
     private val permission = permissionDetailsProvider.getPermission()
     override var status: PermissionStatus by mutableStateOf(getPermissionStatus())
@@ -130,7 +128,7 @@ internal class MutablePermissionState(
     override fun launchPermissionRequest() {
         if (Build.VERSION.SDK_INT >= permissionDetailsProvider.getRequiredApi()) {
             launcher?.launch(
-                permission
+                permission,
             ) ?: throw IllegalStateException("ActivityResultLauncher cannot be null")
         }
     }
@@ -156,7 +154,7 @@ private fun CoroutineScope.showPermissionDialog(
     shouldShowRationale: Boolean,
     onDismiss: () -> Unit,
     onOkClick: () -> Unit,
-    onGoToAppSettingsClick: () -> Unit
+    onGoToAppSettingsClick: () -> Unit,
 ) {
     launch {
         DialogController.sendEvent(
@@ -165,47 +163,42 @@ private fun CoroutineScope.showPermissionDialog(
                 message = permissionDetailsProvider.getDescription(shouldShowRationale),
                 dismissible = false,
                 positiveAction = DialogAction(
-                    buttonText = if (shouldShowRationale) UiText(R.string.grant) else
-                        UiText(R.string.settings),
+                    buttonText = if (shouldShowRationale) {
+                        UiText(R.string.grant)
+                    } else {
+                        UiText(R.string.settings)
+                    },
                     action = {
                         if (shouldShowRationale) onOkClick() else onGoToAppSettingsClick()
-                    }
+                    },
                 ),
                 negativeAction = DialogAction(
                     buttonText = UiText(R.string.cancel),
                     action = {
                         onDismiss()
-                    }
-                )
-            )
+                    },
+                ),
+            ),
         )
     }
 }
 
 class NotificationsPermissionDetailsProvider : PermissionDetailsProvider {
-    override fun getDescription(shouldShowRationale: Boolean): UiText {
-        return UiText(
-            if (shouldShowRationale) {
-                R.string.dialog_notification_permission_rational
-            } else {
-                R.string.dialog_notification_permission_declined
-            }
-        )
-    }
+    override fun getDescription(shouldShowRationale: Boolean): UiText = UiText(
+        if (shouldShowRationale) {
+            R.string.dialog_notification_permission_rational
+        } else {
+            R.string.dialog_notification_permission_declined
+        },
+    )
 
     @SuppressLint("InlinedApi")
-    override fun getPermission(): String {
-        return Manifest.permission.POST_NOTIFICATIONS
-    }
+    override fun getPermission(): String = Manifest.permission.POST_NOTIFICATIONS
 
-    override fun getRequiredApi(): Int {
-        return Build.VERSION_CODES.TIRAMISU
-    }
+    override fun getRequiredApi(): Int = Build.VERSION_CODES.TIRAMISU
 
     @SuppressLint("InlinedApi")
-    override fun getSettingsLocation(): String {
-        return Settings.ACTION_APP_NOTIFICATION_SETTINGS
-    }
+    override fun getSettingsLocation(): String = Settings.ACTION_APP_NOTIFICATION_SETTINGS
 }
 
 @Stable
@@ -227,7 +220,7 @@ interface PermissionState {
 sealed interface PermissionStatus {
     object Granted : PermissionStatus
     data class Denied(
-        val shouldShowRationale: Boolean
+        val shouldShowRationale: Boolean,
     ) : PermissionStatus
 }
 
@@ -246,9 +239,7 @@ private fun Context.findActivity(): Activity {
     throw IllegalStateException("Permissions should be called in the context of an Activity")
 }
 
-private fun Activity.shouldShowRationale(permission: String): Boolean {
-    return ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
-}
+private fun Activity.shouldShowRationale(permission: String): Boolean = ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
 
 private fun Activity.openAppSettings(location: String?) {
     Intent().apply {
@@ -263,7 +254,5 @@ private fun Activity.openAppSettings(location: String?) {
     }.also(::startActivity)
 }
 
-fun Context.checkPermission(permission: String): Boolean {
-    return ContextCompat.checkSelfPermission(this, permission) ==
-            PackageManager.PERMISSION_GRANTED
-}
+fun Context.checkPermission(permission: String): Boolean = ContextCompat.checkSelfPermission(this, permission) ==
+    PackageManager.PERMISSION_GRANTED

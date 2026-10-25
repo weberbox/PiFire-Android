@@ -10,8 +10,8 @@ import com.weberbox.pifire.feature.info.data.model.Licenses
 class InfoContract {
 
     sealed class Event : ViewEvent {
-        data object Refresh: Event()
-        data object PipModulesViewAll: Event()
+        data object Refresh : Event()
+        data object PipModulesViewAll : Event()
         data object BackButtonClicked : Event()
     }
 
@@ -21,7 +21,7 @@ class InfoContract {
         val isInfoLoading: Boolean,
         val isLicencesLoading: Boolean,
         val isRefreshing: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

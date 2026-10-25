@@ -57,13 +57,15 @@ fun OutlineFieldWithState(
     LaunchedEffect(fieldInput) {
         if (textFieldValueState.text != fieldInput.value) {
             textFieldValueState = textFieldValueState.copy(
-                text = fieldInput.value, selection = when {
+                text = fieldInput.value,
+                selection = when {
                     fieldInput.value.isEmpty() -> TextRange.Zero
+
                     else -> TextRange(
                         start = fieldInput.value.length,
-                        end = fieldInput.value.length
+                        end = fieldInput.value.length,
                     )
-                }
+                },
             )
         }
     }
@@ -79,7 +81,7 @@ fun OutlineFieldWithState(
         placeholder = {
             Text(
                 text = placeholder,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         },
         colors = colors,
@@ -100,32 +102,41 @@ fun OutlineFieldWithState(
                         text = it.asString(),
                         modifier = Modifier.fillMaxWidth(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
-            } else Text(text = "")
+            } else {
+                Text(text = "")
+            }
         },
         trailingIcon = {
             if (isPasswordField) {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
-                        imageVector = if (passwordVisible)
-                            Icons.Outlined.Visibility else
-                            Icons.Outlined.VisibilityOff,
-                        contentDescription = if (passwordVisible)
-                            stringResource(R.string.hide_password) else
+                        imageVector = if (passwordVisible) {
+                            Icons.Outlined.Visibility
+                        } else {
+                            Icons.Outlined.VisibilityOff
+                        },
+                        contentDescription = if (passwordVisible) {
+                            stringResource(R.string.hide_password)
+                        } else {
                             stringResource(R.string.show_password)
+                        },
                     )
                 }
             } else if (fieldInput.hasInteracted && errorStatus.isError) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
         },
-        visualTransformation = if (isPasswordField && !passwordVisible)
-            PasswordVisualTransformation() else VisualTransformation.None
+        visualTransformation = if (isPasswordField && !passwordVisible) {
+            PasswordVisualTransformation()
+        } else {
+            VisualTransformation.None
+        },
     )
 }

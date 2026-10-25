@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ServerUuidDto(
-    val uuid: String? = null
+    val uuid: String? = null,
 )

@@ -26,7 +26,7 @@ fun PiFireTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     featureSupport: FeatureSupport = FeatureSupport(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
     val colorScheme = when {
@@ -35,6 +35,7 @@ fun PiFireTheme(
         }
 
         darkTheme -> mediumContrastDarkColorScheme
+
         else -> mediumContrastLightColorScheme
     }
 
@@ -63,12 +64,12 @@ fun PiFireTheme(
         LocalSpacing provides Spacing(),
         LocalElevation provides Elevation(),
         LocalSize provides Size(),
-        LocalFeatureSupport provides featureSupport
+        LocalFeatureSupport provides featureSupport,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = AppTypography,
-            content = content
+            content = content,
         )
     }
 }
@@ -78,12 +79,15 @@ data class ColorFamily(
     val color: Color,
     val onColor: Color,
     val colorContainer: Color,
-    val onColorContainer: Color
+    val onColorContainer: Color,
 )
 
 @Suppress("unused")
 val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
+    Color.Unspecified,
+    Color.Unspecified,
+    Color.Unspecified,
+    Color.Unspecified,
 )
 
 @Suppress("unused")

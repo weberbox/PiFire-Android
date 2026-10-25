@@ -26,7 +26,7 @@ import com.weberbox.pifire.core.ui.base.gradientBackground
 @Composable
 internal fun LogAnimation(
     modifier: Modifier = Modifier,
-    showAnimation: Boolean = true
+    showAnimation: Boolean = true,
 ) {
     var isAnimationVisible by rememberSaveable { mutableStateOf(showAnimation) }
 
@@ -36,20 +36,20 @@ internal fun LogAnimation(
             targetScale = 4.0f,
             animationSpec = tween(
                 durationMillis = 100,
-                easing = LinearEasing
-            )
+                easing = LinearEasing,
+            ),
         ) + fadeOut(
             animationSpec = tween(
                 durationMillis = 100,
-                easing = LinearEasing
-            )
-        )
+                easing = LinearEasing,
+            ),
+        ),
     ) {
         Animation(
             modifier = modifier
                 .fillMaxSize()
                 .size(370.dp)
-                .background(gradientBackground())
+                .background(gradientBackground()),
         ) {
             @Suppress("AssignedValueIsNeverRead")
             isAnimationVisible = false
@@ -60,17 +60,17 @@ internal fun LogAnimation(
 @Composable
 private fun Animation(
     modifier: Modifier = Modifier,
-    onAnimationFinished: () -> Unit
+    onAnimationFinished: () -> Unit,
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            R.raw.changelog_anim
-        )
+            R.raw.changelog_anim,
+        ),
     )
 
     val progress = animateLottieCompositionAsState(
         composition = composition,
-        iterations = 1
+        iterations = 1,
     )
 
     LaunchedEffect(progress.progress) {
@@ -82,6 +82,6 @@ private fun Animation(
     LottieAnimation(
         composition = composition,
         progress = { progress.value },
-        modifier = modifier
+        modifier = modifier,
     )
 }

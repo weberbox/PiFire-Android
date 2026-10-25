@@ -27,7 +27,7 @@ import com.weberbox.pifire.feature.recipes.presentation.screen.buildRecipe
 @Composable
 fun RecipeIngredients(
     modifier: Modifier = Modifier,
-    ingredients: List<Ingredient>
+    ingredients: List<Ingredient>,
 ) {
     HeaderCard(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
@@ -36,19 +36,19 @@ fun RecipeIngredients(
     ) {
         Column(
             modifier = modifier.padding(horizontal = MaterialTheme.spacing.smallThree),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo)
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallTwo),
         ) {
             IngredientItem(
                 number = stringResource(R.string.recipes_item_number),
                 quantity = stringResource(R.string.recipes_item_qty),
                 ingredient = stringResource(R.string.recipes_item_ingredient),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             ingredients.forEachIndexed { index, ingredient ->
                 IngredientItem(
                     number = (index + 1).toString(),
                     quantity = ingredient.quantity,
-                    ingredient = ingredient.name
+                    ingredient = ingredient.name,
                 )
             }
         }
@@ -66,25 +66,25 @@ private fun IngredientItem(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             modifier = Modifier.weight(0.1f),
             text = number,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
         Text(
             modifier = Modifier.weight(0.5f),
             text = quantity,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
         Text(
             modifier = Modifier.weight(0.8f),
             text = ingredient,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = fontWeight
+            fontWeight = fontWeight,
         )
     }
 }
@@ -96,10 +96,10 @@ fun RecipeIngredientsPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 RecipeIngredients(
-                    ingredients = buildRecipe()[0].ingredients
+                    ingredients = buildRecipe()[0].ingredients,
                 )
             }
         }

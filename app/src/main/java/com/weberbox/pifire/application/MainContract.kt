@@ -16,7 +16,7 @@ class MainContract {
     data class State(
         val appTheme: AppTheme,
         val dynamicColor: Boolean,
-        val featureSupport: FeatureSupport
+        val featureSupport: FeatureSupport,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {
@@ -30,6 +30,5 @@ class MainContract {
                 val inclusive: Boolean = true,
             ) : Navigation()
         }
-
     }
 }

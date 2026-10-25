@@ -32,7 +32,7 @@ internal fun LandingTopBar(
     state: LandingContract.State,
     hazeState: HazeState,
     onSearchUpdated: (text: String) -> Unit,
-    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val textFieldState = rememberTextFieldState()
@@ -43,7 +43,7 @@ internal fun LandingTopBar(
             Text(
                 text = stringResource(R.string.landing_my_smokers),
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         },
         searchBarState = searchBarState,
@@ -55,7 +55,7 @@ internal fun LandingTopBar(
                 onResultClick = { result ->
                     textFieldState.setTextAndPlaceCursorAtEnd(result)
                     onSearchUpdated(result)
-                }
+                },
             )
         },
         inputField = {
@@ -64,7 +64,7 @@ internal fun LandingTopBar(
                 textFieldState = textFieldState,
                 hazeState = hazeState,
                 searchStyle = hazeAppBarStyle(
-                    MaterialTheme.colorScheme.surfaceContainerHigh
+                    MaterialTheme.colorScheme.surfaceContainerHigh,
                 ),
                 onSearch = { result ->
                     scope.launch {
@@ -75,7 +75,7 @@ internal fun LandingTopBar(
                 onSearchClear = {
                     textFieldState.clearText()
                     onSearchUpdated("")
-                }
+                },
             )
         },
         actions = {
@@ -84,18 +84,18 @@ internal fun LandingTopBar(
                     onClick = {
                         onNavigationRequested(
                             LandingContract.Effect.Navigation.NavRoute(
-                                route = NavGraph.LandingDest.Settings
-                            )
+                                route = NavGraph.LandingDest.Settings,
+                            ),
                         )
-                    }
+                    },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
-                        contentDescription = stringResource(R.string.settings)
+                        contentDescription = stringResource(R.string.settings),
                     )
                 }
             }
         },
-        onNavigate = { onNavigationRequested(LandingContract.Effect.Navigation.Back) }
+        onNavigate = { onNavigationRequested(LandingContract.Effect.Navigation.Back) },
     )
 }

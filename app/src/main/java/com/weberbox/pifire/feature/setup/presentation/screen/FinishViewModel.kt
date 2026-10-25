@@ -27,7 +27,7 @@ import javax.inject.Inject
 class FinishViewModel @Inject constructor(
     private val serverDataCache: ServerDataCache,
     private val setupRepo: SetupRepo,
-    private val analytics: Analytics
+    private val analytics: Analytics,
 ) : BaseViewModel<FinishContract.Event, FinishContract.State, FinishContract.Effect>() {
     private var headersData by mutableStateOf(Headers())
     private var serverData by mutableStateOf(Server())
@@ -39,7 +39,7 @@ class FinishViewModel @Inject constructor(
 
     override fun setInitialState() = FinishContract.State(
         grillName = InputState(),
-        isLoading = false
+        isLoading = false,
     )
 
     override fun handleEvents(event: FinishContract.Event) {
@@ -58,9 +58,9 @@ class FinishViewModel @Inject constructor(
                         grillName = InputState(
                             input = FieldInput(
                                 value = data.name,
-                                hasInteracted = data.name.isNotBlank()
-                            )
-                        )
+                                hasInteracted = data.name.isNotBlank(),
+                            ),
+                        ),
                     )
                 }
             }
@@ -82,10 +82,10 @@ class FinishViewModel @Inject constructor(
                 grillName = viewState.value.grillName.copy(
                     input = FieldInput(
                         value = name,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
-                    error = errorStatus
-                )
+                    error = errorStatus,
+                ),
             )
         }
     }
@@ -107,7 +107,7 @@ class FinishViewModel @Inject constructor(
                         setEffect {
                             FinishContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -116,8 +116,8 @@ class FinishViewModel @Inject constructor(
                         analytics.logEvent(
                             name = AnalyticsEvent.ButtonClick.name,
                             params = mapOf(
-                                AnalyticsEvent.Param.ButtonAction.key to "setupComplete"
-                            )
+                                AnalyticsEvent.Param.ButtonAction.key to "setupComplete",
+                            ),
                         )
 
                         setEffect {

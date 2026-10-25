@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PelletsDto(
     val uuid: String? = null,
-    val pellets: Pellets? = null
+    val pellets: Pellets? = null,
 ) {
     @Serializable
     data class Pellets(
@@ -43,7 +43,7 @@ data class PelletsDto(
             val comments: String? = null,
 
             @SerialName("id")
-            val id: String? = null
+            val id: String? = null,
 
         )
 
@@ -65,7 +65,7 @@ data class PelletsDto(
             val hopperLevel: Int? = null,
 
             @SerialName("pelletid")
-            val pelletId: String? = null
+            val pelletId: String? = null,
         )
     }
 }

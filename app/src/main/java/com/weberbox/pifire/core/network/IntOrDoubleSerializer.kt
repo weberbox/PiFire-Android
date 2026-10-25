@@ -23,9 +23,7 @@ object IntOrDoubleSerializer : KSerializer<Int?> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("IntOrDouble", PrimitiveKind.INT)
 
-    override fun deserialize(decoder: Decoder): Int? {
-        return decoder.asJsonDecoder().decodeJsonElement().toIntOrNull()
-    }
+    override fun deserialize(decoder: Decoder): Int? = decoder.asJsonDecoder().decodeJsonElement().toIntOrNull()
 
     @OptIn(ExperimentalSerializationApi::class)
     override fun serialize(encoder: Encoder, value: Int?) {
@@ -59,11 +57,9 @@ object IntOrDoubleListSerializer : KSerializer<List<Int>?> {
     }
 }
 
-private fun Decoder.asJsonDecoder(): JsonDecoder {
-    return this as? JsonDecoder ?: throw SerializationException(
-        "This serializer only works with JSON"
-    )
-}
+private fun Decoder.asJsonDecoder(): JsonDecoder = this as? JsonDecoder ?: throw SerializationException(
+    "This serializer only works with JSON",
+)
 
 private fun JsonElement.toIntOrNull(): Int? {
     val primitive = this as? JsonPrimitive ?: return null

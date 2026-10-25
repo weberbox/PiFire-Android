@@ -65,7 +65,7 @@ import kotlin.reflect.typeOf
 @Composable
 fun RootNavGraph(
     navController: NavHostController = rememberNavController(),
-    analytics: Analytics
+    analytics: Analytics,
 ) {
     NavHost(
         navController = navController,
@@ -73,7 +73,7 @@ fun RootNavGraph(
         exitTransition = { fadeExitTransition() },
         popEnterTransition = { slidePopEnterTransition() },
         popExitTransition = { fadeExitTransition() },
-        startDestination = NavGraph.LandingDest
+        startDestination = NavGraph.LandingDest,
     ) {
         composable<NavGraph.Changelog> {
             ChangelogScreenDestination(navController)
@@ -97,8 +97,8 @@ fun RootNavGraph(
                 analytics.logEvent(
                     name = AnalyticsEvent.ScreenView.name,
                     params = mapOf(
-                        AnalyticsEvent.Param.ScreenName.key to screenName
-                    )
+                        AnalyticsEvent.Param.ScreenName.key to screenName,
+                    ),
                 )
             }
         }
@@ -126,7 +126,7 @@ fun NavGraphBuilder.landingNavGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
     navigation<NavGraph.HomeDest>(
-        startDestination = NavGraph.HomeDest.DashHome
+        startDestination = NavGraph.HomeDest.DashHome,
     ) {
         composable<NavGraph.HomeDest.DashHome> { backStackEntry ->
             HomeScreenDestination(
@@ -135,22 +135,22 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
             )
         }
         composable<NavGraph.HomeDest.BrandsDetails>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             BrandsDetailsScreen(navController)
         }
         composable<NavGraph.HomeDest.WoodsDetails>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             WoodsDetailsScreen(navController)
         }
         composable<NavGraph.HomeDest.ProfilesDetails>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             ProfilesDetailsScreen(navController)
         }
         composable<NavGraph.HomeDest.LogsDetails>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             LogsDetailsScreen(navController)
         }
@@ -168,7 +168,7 @@ fun NavGraphBuilder.recipesNavGraph(navController: NavHostController) {
             RecipeDetailsScreenDestination(navController)
         }
         composable<NavGraph.RecipesDest.Images>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             RecipeImagesScreenDestination(navController)
         }
@@ -184,13 +184,13 @@ fun NavGraphBuilder.infoNavGraph(navController: NavHostController) {
             InfoScreenDestination(navController)
         }
         composable<NavGraph.InfoDest.PipModulesDetails>(
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             PipModulesDetailsScreen(navController)
         }
         composable<NavGraph.InfoDest.LicenseDetails>(
             typeMap = mapOf(typeOf<Licenses>() to parcelableType<Licenses>()),
-            enterTransition = { scaleEnterTransition() }
+            enterTransition = { scaleEnterTransition() },
         ) {
             val args = it.toRoute<NavGraph.InfoDest.LicenseDetails>()
             LicenseDetailsScreen(navController, args)
@@ -199,11 +199,10 @@ fun NavGraphBuilder.infoNavGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.settingsNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
-
     navigation<NavGraph.SettingsDest>(
-        startDestination = NavGraph.SettingsDest.SettingsHome
+        startDestination = NavGraph.SettingsDest.SettingsHome,
     ) {
         composable<NavGraph.SettingsDest.SettingsHome> {
             SettingsHomeScreenDestination(navController)

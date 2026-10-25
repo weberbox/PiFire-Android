@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InfoViewModel @Inject constructor(
-    private val infoRepo: InfoRepo
+    private val infoRepo: InfoRepo,
 ) : BaseViewModel<InfoContract.Event, InfoContract.State, InfoContract.Effect>() {
 
     init {
@@ -32,7 +32,7 @@ class InfoViewModel @Inject constructor(
         isInfoLoading = true,
         isLicencesLoading = true,
         isRefreshing = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: InfoContract.Event) {
@@ -41,10 +41,11 @@ class InfoViewModel @Inject constructor(
                 setEffect { InfoContract.Effect.Navigation.Back }
 
             is InfoContract.Event.Refresh -> getInfoData(true)
+
             is InfoContract.Event.PipModulesViewAll ->
                 setEffect {
                     InfoContract.Effect.Navigation.NavRoute(
-                        route = NavGraph.InfoDest.PipModulesDetails
+                        route = NavGraph.InfoDest.PipModulesDetails,
                     )
                 }
         }
@@ -68,7 +69,7 @@ class InfoViewModel @Inject constructor(
                             setEffect {
                                 InfoContract.Effect.Notification(
                                     text = result.error.asUiText(),
-                                    error = true
+                                    error = true,
                                 )
                             }
                             setState { copy(isInfoLoading = false, isRefreshing = false) }
@@ -82,7 +83,7 @@ class InfoViewModel @Inject constructor(
                             copy(
                                 info = result.data,
                                 isInfoLoading = false,
-                                isRefreshing = false
+                                isRefreshing = false,
                             )
                         }
                     }
@@ -102,7 +103,7 @@ class InfoViewModel @Inject constructor(
                             isInfoLoading = false,
                             isLicencesLoading = false,
                             isRefreshing = false,
-                            isDataError = true
+                            isDataError = true,
                         )
                     }
                 }
@@ -112,7 +113,7 @@ class InfoViewModel @Inject constructor(
                     setEffect {
                         InfoContract.Effect.Notification(
                             text = UiText(R.string.alerter_cached_results),
-                            error = true
+                            error = true,
                         )
                     }
                 }

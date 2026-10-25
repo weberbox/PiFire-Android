@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangelogViewModel @Inject constructor(
-    private val changelogRepo: ChangelogRepo
+    private val changelogRepo: ChangelogRepo,
 ) : BaseViewModel<ChangelogContract.Event, ChangelogContract.State, ChangelogContract.Effect>() {
 
     init {
@@ -25,7 +25,7 @@ class ChangelogViewModel @Inject constructor(
     override fun setInitialState() = ChangelogContract.State(
         changelogData = ChangelogData(),
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: ChangelogContract.Event) {}
@@ -40,7 +40,7 @@ class ChangelogViewModel @Inject constructor(
                         setEffect {
                             ChangelogContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }

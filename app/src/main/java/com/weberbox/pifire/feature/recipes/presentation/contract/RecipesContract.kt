@@ -9,7 +9,7 @@ import com.weberbox.pifire.core.ui.util.UiText
 class RecipesContract {
 
     sealed class Event : ViewEvent {
-        data object Refresh: Event()
+        data object Refresh : Event()
         data object VoiceSearch : Event()
     }
 
@@ -17,7 +17,7 @@ class RecipesContract {
         val recipesList: List<Recipe>,
         val isInitialLoading: Boolean,
         val isRefreshing: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

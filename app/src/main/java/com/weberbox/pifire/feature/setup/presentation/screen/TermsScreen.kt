@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TermsScreenDestination(
-    pagerState: PagerState
+    pagerState: PagerState,
 ) {
     val scope = rememberCoroutineScope()
     TermsScreen(
@@ -46,16 +46,16 @@ fun TermsScreenDestination(
             scope.launch {
                 pagerState.animateScrollToPage(
                     page = SetupStep.Auth.ordinal,
-                    animationSpec = getPagerAnimationSpec()
+                    animationSpec = getPagerAnimationSpec(),
                 )
             }
-        }
+        },
     )
 }
 
 @Composable
 private fun TermsScreen(
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -71,27 +71,27 @@ private fun TermsScreen(
                 .padding(top = MaterialTheme.spacing.largeTwo)
                 .padding(MaterialTheme.spacing.smallThree),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallThree),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
                 modifier = Modifier.size(MaterialTheme.spacing.extraLarge),
                 imageVector = Icons.Filled.AssignmentTurnedIn,
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 text = stringResource(R.string.setup_begin_terms_title),
                 style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Text(
                 text = stringResource(R.string.setup_begin_terms),
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Spacer(Modifier.weight(1f))
         SetupBottomNavRow(
-            onNextClick = onNextClick
+            onNextClick = onNextClick,
         )
     }
 }
@@ -103,7 +103,7 @@ internal fun TermsScreenPreview() {
     PiFireTheme {
         Surface {
             TermsScreen(
-                onNextClick = {}
+                onNextClick = {},
             )
         }
     }

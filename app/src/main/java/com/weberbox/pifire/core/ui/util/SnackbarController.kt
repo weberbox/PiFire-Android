@@ -10,12 +10,12 @@ data class SnackbarEvent(
     val message: UiText,
     val duration: SnackbarDuration = SnackbarDuration.Long,
     val action: SnackbarAction? = null,
-    val showProgress: Boolean = false
+    val showProgress: Boolean = false,
 )
 
 data class SnackbarAction(
     val name: UiText,
-    val action: suspend () -> Unit
+    val action: suspend () -> Unit,
 )
 
 object SnackbarController {

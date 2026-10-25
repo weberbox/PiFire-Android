@@ -15,26 +15,26 @@ import com.weberbox.pifire.core.ui.theme.spacing
 @Composable
 internal fun InfoItemRow(
     title: String,
-    summary: String
+    summary: String,
 ) {
     Row(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         horizontalArrangement = Arrangement.spacedBy(
-            MaterialTheme.spacing.smallOne
-        )
+            MaterialTheme.spacing.smallOne,
+        ),
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Text(
             text = summary,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -42,24 +42,24 @@ internal fun InfoItemRow(
 @Composable
 internal fun InfoItemColumn(
     title: String,
-    summary: String
+    summary: String,
 ) {
     Column(
         modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
         verticalArrangement = Arrangement.spacedBy(
-            MaterialTheme.spacing.smallOne
-        )
+            MaterialTheme.spacing.smallOne,
+        ),
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         Text(
             text = summary,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }

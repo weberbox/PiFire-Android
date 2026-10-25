@@ -49,12 +49,12 @@ internal fun PelletsBottomSheets(
                 onPositive = {
                     onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.LoadProfile(it.id)))
                     currentSheet.close()
-                }
+                },
             )
         }
     }
     BottomSheet(
-        sheetState = brandAddSheet.sheetState
+        sheetState = brandAddSheet.sheetState,
     ) {
         InputValidationSheet(
             input = "",
@@ -63,37 +63,37 @@ internal fun PelletsBottomSheets(
             onUpdate = {
                 onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.AddBrand(it)))
                 brandAddSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = brandDeleteSheet.sheetState
+        sheetState = brandDeleteSheet.sheetState,
     ) {
         ConfirmSheet(
             title = stringResource(R.string.dialog_confirm_action),
             message = stringResource(
                 R.string.dialog_confirm_delete_item,
-                brandDeleteSheet.data
+                brandDeleteSheet.data,
             ),
             negativeButtonText = stringResource(R.string.cancel),
             positiveButtonText = stringResource(R.string.delete),
             positiveButtonColor = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onError,
-                containerColor = MaterialTheme.colorScheme.error
+                containerColor = MaterialTheme.colorScheme.error,
             ),
             onPositive = {
                 onEventSent(
                     PelletsContract.Event.SendEvent(
-                        PelletsEvent.DeleteBrand(brand = brandDeleteSheet.data)
-                    )
+                        PelletsEvent.DeleteBrand(brand = brandDeleteSheet.data),
+                    ),
                 )
                 brandDeleteSheet.close()
             },
-            onNegative = { brandDeleteSheet.close() }
+            onNegative = { brandDeleteSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = woodAddSheet.sheetState
+        sheetState = woodAddSheet.sheetState,
     ) {
         InputValidationSheet(
             input = "",
@@ -102,37 +102,37 @@ internal fun PelletsBottomSheets(
             onUpdate = {
                 onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.AddWood(it)))
                 woodAddSheet.close()
-            }
+            },
         )
     }
     BottomSheet(
-        sheetState = woodDeleteSheet.sheetState
+        sheetState = woodDeleteSheet.sheetState,
     ) {
         ConfirmSheet(
             title = stringResource(R.string.dialog_confirm_action),
             message = stringResource(
                 R.string.dialog_confirm_delete_item,
-                woodDeleteSheet.data
+                woodDeleteSheet.data,
             ),
             negativeButtonText = stringResource(R.string.cancel),
             positiveButtonText = stringResource(R.string.delete),
             positiveButtonColor = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onError,
-                containerColor = MaterialTheme.colorScheme.error
+                containerColor = MaterialTheme.colorScheme.error,
             ),
             onPositive = {
                 onEventSent(
                     PelletsContract.Event.SendEvent(
-                        PelletsEvent.DeleteWood(wood = woodDeleteSheet.data)
-                    )
+                        PelletsEvent.DeleteWood(wood = woodDeleteSheet.data),
+                    ),
                 )
                 woodDeleteSheet.close()
             },
-            onNegative = { woodDeleteSheet.close() }
+            onNegative = { woodDeleteSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = profileAddSheet.sheetState
+        sheetState = profileAddSheet.sheetState,
     ) {
         ProfilesEditSheet(
             title = stringResource(R.string.pellets_add_profile),
@@ -142,17 +142,17 @@ internal fun PelletsBottomSheets(
                     PelletsContract.Event.SendEvent(
                         PelletsEvent.AddProfile(
                             profile = profile,
-                            load = load
-                        )
-                    )
+                            load = load,
+                        ),
+                    ),
                 )
                 profileAddSheet.close()
             },
-            onDismiss = { profileAddSheet.close() }
+            onDismiss = { profileAddSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = profileEditSheet.sheetState
+        sheetState = profileEditSheet.sheetState,
     ) {
         ProfilesEditSheet(
             title = stringResource(R.string.pellets_editor),
@@ -161,65 +161,65 @@ internal fun PelletsBottomSheets(
                 onEventSent(
                     PelletsContract.Event.SendEvent(
                         PelletsEvent.EditProfile(
-                            profile = profile
-                        )
-                    )
+                            profile = profile,
+                        ),
+                    ),
                 )
                 profileEditSheet.close()
             },
-            onDismiss = { profileEditSheet.close() }
+            onDismiss = { profileEditSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = profileDeleteSheet.sheetState
+        sheetState = profileDeleteSheet.sheetState,
     ) {
         ConfirmSheet(
             title = stringResource(R.string.dialog_confirm_action),
             message = stringResource(
                 R.string.dialog_confirm_delete_item,
-                profileDeleteSheet.data.brand + " " + profileDeleteSheet.data.wood
+                profileDeleteSheet.data.brand + " " + profileDeleteSheet.data.wood,
             ),
             negativeButtonText = stringResource(R.string.cancel),
             positiveButtonText = stringResource(R.string.delete),
             positiveButtonColor = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onError,
-                containerColor = MaterialTheme.colorScheme.error
+                containerColor = MaterialTheme.colorScheme.error,
             ),
             onPositive = {
                 onEventSent(
                     PelletsContract.Event.SendEvent(
-                        PelletsEvent.DeleteProfile(profile = profileDeleteSheet.data.id)
-                    )
+                        PelletsEvent.DeleteProfile(profile = profileDeleteSheet.data.id),
+                    ),
                 )
                 profileDeleteSheet.close()
             },
-            onNegative = { profileDeleteSheet.close() }
+            onNegative = { profileDeleteSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = logDeleteSheet.sheetState
+        sheetState = logDeleteSheet.sheetState,
     ) {
         ConfirmSheet(
             title = stringResource(R.string.dialog_confirm_action),
             message = stringResource(
                 R.string.dialog_confirm_delete_item,
-                logDeleteSheet.data.pelletName
+                logDeleteSheet.data.pelletName,
             ),
             negativeButtonText = stringResource(R.string.cancel),
             positiveButtonText = stringResource(R.string.delete),
             positiveButtonColor = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onError,
-                containerColor = MaterialTheme.colorScheme.error
+                containerColor = MaterialTheme.colorScheme.error,
             ),
             onPositive = {
                 onEventSent(
                     PelletsContract.Event.SendEvent(
-                        PelletsEvent.DeleteLog(logDate = logDeleteSheet.data.logDate)
-                    )
+                        PelletsEvent.DeleteLog(logDate = logDeleteSheet.data.logDate),
+                    ),
                 )
                 logDeleteSheet.close()
             },
-            onNegative = { logDeleteSheet.close() }
+            onNegative = { logDeleteSheet.close() },
         )
     }
 }

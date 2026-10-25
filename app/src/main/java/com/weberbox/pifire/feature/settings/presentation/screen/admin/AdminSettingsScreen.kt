@@ -67,6 +67,7 @@ fun AdminSettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is AdminContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is AdminContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -76,7 +77,7 @@ fun AdminSettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -87,14 +88,14 @@ private fun AdminSettings(
     state: AdminContract.State,
     effectFlow: Flow<AdminContract.Effect>?,
     onEventSent: (event: AdminContract.Event) -> Unit,
-    onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -105,7 +106,7 @@ private fun AdminSettings(
             SettingsAppBar(
                 title = stringResource(R.string.settings_admin_title),
                 scrollBehavior = scrollBehavior,
-                onNavigate = { onNavigationRequested(AdminContract.Effect.Navigation.Back) }
+                onNavigate = { onNavigationRequested(AdminContract.Effect.Navigation.Back) },
             )
         },
         containerColor = Color.Transparent,
@@ -114,10 +115,11 @@ private fun AdminSettings(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(AdminContract.Effect.Navigation.Back)
                 }
@@ -127,7 +129,7 @@ private fun AdminSettings(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
-                        contentPadding = contentPadding
+                        contentPadding = contentPadding,
                     )
                 }
             }
@@ -140,7 +142,7 @@ private fun AdminSettingsContent(
     state: AdminContract.State,
     onEventSent: (event: AdminContract.Event) -> Unit,
     onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
 ) {
     val deleteHistorySheet = rememberCustomModalBottomSheetState()
     val deleteEventsSheet = rememberCustomModalBottomSheetState()
@@ -154,13 +156,13 @@ private fun AdminSettingsContent(
     val shutdownSheet = rememberCustomModalBottomSheetState()
     LinearLoadingIndicator(
         isLoading = state.isLoading,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     )
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_manual_functions)) },
@@ -169,12 +171,12 @@ private fun AdminSettingsContent(
             title = { Text(text = stringResource(R.string.settings_manual)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_manual_summary)
+                    text = stringResource(R.string.settings_admin_manual_summary),
                 )
-            }
+            },
         ) {
             onNavigationRequested(
-                AdminContract.Effect.Navigation.NavRoute(NavGraph.SettingsDest.Manual)
+                AdminContract.Effect.Navigation.NavRoute(NavGraph.SettingsDest.Manual),
             )
         }
         PreferenceCategory(
@@ -186,9 +188,9 @@ private fun AdminSettingsContent(
             title = { Text(text = stringResource(R.string.settings_admin_debug)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_debug_summary)
+                    text = stringResource(R.string.settings_admin_debug_summary),
                 )
-            }
+            },
         )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_data_manage)) },
@@ -197,72 +199,72 @@ private fun AdminSettingsContent(
             title = { Text(text = stringResource(R.string.settings_admin_delete_history)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_delete_history_note)
+                    text = stringResource(R.string.settings_admin_delete_history_note),
                 )
             },
-            onClick = { deleteHistorySheet.open() }
+            onClick = { deleteHistorySheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_delete_events)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_delete_events_note)
+                    text = stringResource(R.string.settings_admin_delete_events_note),
                 )
             },
-            onClick = { deleteEventsSheet.open() }
+            onClick = { deleteEventsSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_delete_pellets_log)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_delete_pellets_log_note)
+                    text = stringResource(R.string.settings_admin_delete_pellets_log_note),
                 )
             },
-            onClick = { deletePelletLogSheet.open() }
+            onClick = { deletePelletLogSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_delete_pellets)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_delete_pellets_note)
+                    text = stringResource(R.string.settings_admin_delete_pellets_note),
                 )
             },
-            onClick = { deletePelletSheet.open() }
+            onClick = { deletePelletSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_factory_reset)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_factory_reset_note)
+                    text = stringResource(R.string.settings_admin_factory_reset_note),
                 )
             },
-            onClick = { factoryResetSheet.open() }
+            onClick = { factoryResetSheet.open() },
         )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_scripts)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_restart_control)) },
-            onClick = { restartControlSheet.open() }
+            onClick = { restartControlSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_restart_webapp)) },
-            onClick = { restartWebAppSheet.open() }
+            onClick = { restartWebAppSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_restart_supervisor)) },
-            onClick = { restartSupervisorSheet.open() }
+            onClick = { restartSupervisorSheet.open() },
         )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_power)) },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_reboot)) },
-            onClick = { rebootSheet.open() }
+            onClick = { rebootSheet.open() },
         )
         Preference(
             title = { Text(text = stringResource(R.string.settings_admin_shutdown)) },
-            onClick = { shutdownSheet.open() }
+            onClick = { shutdownSheet.open() },
         )
         PreferenceCategory(
             title = { Text(text = stringResource(R.string.settings_cat_boot)) },
@@ -273,9 +275,9 @@ private fun AdminSettingsContent(
             title = { Text(text = stringResource(R.string.settings_admin_boot_to_monitor)) },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_admin_boot_to_monitor_summary)
+                    text = stringResource(R.string.settings_admin_boot_to_monitor_summary),
                 )
-            }
+            },
         )
     }
     AdminActionSheet(
@@ -283,63 +285,63 @@ private fun AdminSettingsContent(
         message = stringResource(R.string.settings_admin_delete_history_text),
         positiveButtonText = stringResource(R.string.delete),
         onDismiss = { deleteHistorySheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.DeleteHistory) }
+        onPositive = { onEventSent(AdminContract.Event.DeleteHistory) },
     )
     AdminActionSheet(
         sheetState = deleteEventsSheet.sheetState,
         message = stringResource(R.string.settings_admin_delete_events_text),
         positiveButtonText = stringResource(R.string.delete),
-        onDismiss = { deleteEventsSheet.close()},
-        onPositive = { onEventSent(AdminContract.Event.DeleteEvents) }
+        onDismiss = { deleteEventsSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.DeleteEvents) },
     )
     AdminActionSheet(
         sheetState = deletePelletLogSheet.sheetState,
         message = stringResource(R.string.settings_admin_delete_pellets_log_text),
         positiveButtonText = stringResource(R.string.delete),
         onDismiss = { deletePelletLogSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.DeletePelletsLog) }
+        onPositive = { onEventSent(AdminContract.Event.DeletePelletsLog) },
     )
     AdminActionSheet(
         sheetState = deletePelletSheet.sheetState,
         message = stringResource(R.string.settings_admin_delete_pellets_text),
         positiveButtonText = stringResource(R.string.delete),
         onDismiss = { deletePelletSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.DeletePellets) }
+        onPositive = { onEventSent(AdminContract.Event.DeletePellets) },
     )
     AdminActionSheet(
         sheetState = factoryResetSheet.sheetState,
         message = stringResource(R.string.settings_admin_factory_reset_text),
         positiveButtonText = stringResource(R.string.reset),
-        onDismiss = { factoryResetSheet.close()},
-        onPositive = { onEventSent(AdminContract.Event.FactoryReset) }
+        onDismiss = { factoryResetSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.FactoryReset) },
     )
     AdminActionSheet(
         sheetState = restartControlSheet.sheetState,
         message = stringResource(R.string.settings_admin_restart_control_text),
         positiveButtonText = stringResource(R.string.restart),
         onDismiss = { restartControlSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.RestartControl) }
+        onPositive = { onEventSent(AdminContract.Event.RestartControl) },
     )
     AdminActionSheet(
         sheetState = restartWebAppSheet.sheetState,
         message = stringResource(R.string.settings_admin_restart_webapp_text),
         positiveButtonText = stringResource(R.string.restart),
         onDismiss = { restartWebAppSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.RestartWebApp) }
+        onPositive = { onEventSent(AdminContract.Event.RestartWebApp) },
     )
     AdminActionSheet(
         sheetState = restartSupervisorSheet.sheetState,
         message = stringResource(R.string.settings_admin_restart_supervisor_text),
         positiveButtonText = stringResource(R.string.restart),
         onDismiss = { restartSupervisorSheet.close() },
-        onPositive = { onEventSent(AdminContract.Event.RestartSupervisor) }
+        onPositive = { onEventSent(AdminContract.Event.RestartSupervisor) },
     )
     AdminActionSheet(
         sheetState = rebootSheet.sheetState,
         message = stringResource(R.string.settings_admin_reboot_text),
         positiveButtonText = stringResource(R.string.reboot),
-        onDismiss = { rebootSheet.close()},
-        onPositive = { onEventSent(AdminContract.Event.RebootSystem) }
+        onDismiss = { rebootSheet.close() },
+        onPositive = { onEventSent(AdminContract.Event.RebootSystem) },
     )
     AdminActionSheet(
         sheetState = shutdownSheet.sheetState,
@@ -359,7 +361,7 @@ private fun AdminActionSheet(
     onDismiss: () -> Unit,
 ) {
     BottomSheet(
-        sheetState = sheetState
+        sheetState = sheetState,
     ) {
         ConfirmSheet(
             title = stringResource(R.string.dialog_confirm_action),
@@ -367,10 +369,13 @@ private fun AdminActionSheet(
             positiveButtonText = positiveButtonText,
             positiveButtonColor = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onError,
-                containerColor = MaterialTheme.colorScheme.error
+                containerColor = MaterialTheme.colorScheme.error,
             ),
             onNegative = { onDismiss() },
-            onPositive = { onPositive(); onDismiss() }
+            onPositive = {
+                onPositive()
+                onDismiss()
+            },
         )
     }
 }
@@ -378,7 +383,7 @@ private fun AdminActionSheet(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<AdminContract.Effect>?,
-    onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -391,7 +396,7 @@ private fun HandleSideEffects(
                 is AdminContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -412,11 +417,11 @@ fun AdminSettingsPreview() {
                         bootToMonitor = true,
                         isInitialLoading = false,
                         isLoading = true,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

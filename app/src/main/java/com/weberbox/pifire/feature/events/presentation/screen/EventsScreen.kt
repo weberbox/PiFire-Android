@@ -44,23 +44,21 @@ import kotlinx.coroutines.flow.onEach
 fun EventsScreenDestination(
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: EventsViewModel? = null
-) {
-    return when {
-        LocalInspectionMode.current -> {
-            EventsScreenPreview(
-                contentPadding = contentPadding,
-                hazeState = hazeState
-            )
-        }
+    viewModel: EventsViewModel? = null,
+) = when {
+    LocalInspectionMode.current -> {
+        EventsScreenPreview(
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+        )
+    }
 
-        else -> {
-            EventsScreen(
-                contentPadding = contentPadding,
-                hazeState = hazeState,
-                viewModel = viewModel ?: hiltViewModel()
-            )
-        }
+    else -> {
+        EventsScreen(
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            viewModel = viewModel ?: hiltViewModel(),
+        )
     }
 }
 
@@ -68,7 +66,7 @@ fun EventsScreenDestination(
 private fun EventsScreen(
     contentPadding: PaddingValues,
     hazeState: HazeState,
-    viewModel: EventsViewModel
+    viewModel: EventsViewModel,
 ) {
     EventsScreenContent(
         state = viewModel.viewState.value,
@@ -91,7 +89,7 @@ private fun EventsScreenContent(
 
     HandleSideEffects(
         isVisibleOnScreen = isVisibleOnScreen,
-        effectFlow = effectFlow
+        effectFlow = effectFlow,
     )
 
     @Suppress("NAME_SHADOWING")
@@ -100,11 +98,13 @@ private fun EventsScreenContent(
             isVisibleOnScreen = it
         },
         targetState = state,
-        contentKey = { it.isInitialLoading or it.isDataError }
+        contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
         when {
             state.isInitialLoading -> InitialLoadingProgress()
+
             state.isDataError -> CachedDataError { onEventSent(EventsContract.Event.Refresh) }
+
             else -> {
                 PullToRefresh(
                     isRefreshing = state.isRefreshing,
@@ -112,7 +112,7 @@ private fun EventsScreenContent(
                         onEventSent(EventsContract.Event.Refresh)
                     },
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = contentPadding
+                    contentPadding = contentPadding,
                 ) {
                     LazyColumn(
                         contentPadding = contentPadding,
@@ -121,13 +121,13 @@ private fun EventsScreenContent(
                             .fillMaxSize()
                             .padding(
                                 vertical = MaterialTheme.spacing.smallOne,
-                                horizontal = MaterialTheme.spacing.smallOne
+                                horizontal = MaterialTheme.spacing.smallOne,
                             ),
-                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall)
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
                     ) {
                         items(
                             items = state.eventsList,
-                            key = { it.id }
+                            key = { it.id },
                         ) { item ->
                             EventItem(item)
                         }
@@ -141,7 +141,7 @@ private fun EventsScreenContent(
 @Composable
 private fun HandleSideEffects(
     isVisibleOnScreen: Boolean,
-    effectFlow: Flow<EventsContract.Effect>?
+    effectFlow: Flow<EventsContract.Effect>?,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
@@ -151,7 +151,7 @@ private fun HandleSideEffects(
                     if (isVisibleOnScreen) {
                         activity?.showAlerter(
                             message = effect.text,
-                            isError = effect.error
+                            isError = effect.error,
                         )
                     }
             }
@@ -164,7 +164,7 @@ private fun HandleSideEffects(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 internal fun EventsScreenPreview(
     contentPadding: PaddingValues = PaddingValues(),
-    hazeState: HazeState = rememberHazeState()
+    hazeState: HazeState = rememberHazeState(),
 ) {
     PiFireTheme {
         Surface {
@@ -173,7 +173,7 @@ internal fun EventsScreenPreview(
                     eventsList = buildEventsList(),
                     isInitialLoading = false,
                     isDataError = false,
-                    isRefreshing = false
+                    isRefreshing = false,
                 ),
                 effectFlow = null,
                 onEventSent = {},
@@ -190,41 +190,41 @@ internal fun buildEventsList() = listOf(
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Stop Mode Started",
-        type = EventType.Info
+        type = EventType.Info,
     ),
     Event(
         id = "preview-2",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Hopper Level Checked @ 72%",
-        type = EventType.Info
+        type = EventType.Info,
     ),
     Event(
         id = "preview-3",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[WARNING] Warning Text",
-        type = EventType.Warning
+        type = EventType.Warning,
     ),
     Event(
         id = "preview-4",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Ended",
-        type = EventType.Info
+        type = EventType.Info,
     ),
     Event(
         id = "preview-5",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[INFO] Script Starting",
-        type = EventType.Info
+        type = EventType.Info,
     ),
     Event(
         id = "preview-6",
         date = "04-25-2025",
         time = "6:18 PM",
         message = "[DEBUG] * Debug Testing",
-        type = EventType.Debug
-    )
+        type = EventType.Debug,
+    ),
 )

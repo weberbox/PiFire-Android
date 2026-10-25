@@ -23,6 +23,6 @@ object RemoteConfigModule {
     @Provides
     @Singleton
     fun provideRemoteConfigRepo(
-        impl: RemoteConfigRepoImpl
+        impl: RemoteConfigRepoImpl,
     ): RemoteConfigRepo = impl
 }

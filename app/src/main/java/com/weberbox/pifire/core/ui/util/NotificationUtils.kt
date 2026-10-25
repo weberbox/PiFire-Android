@@ -39,14 +39,14 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 fun Activity.showToast(
     @StringRes message: Int,
-    duration: Int = Toast.LENGTH_LONG
+    duration: Int = Toast.LENGTH_LONG,
 ) {
     Toast.makeText(this, this.getString(message), duration).show()
 }
 
 fun Context.showToast(
     @StringRes message: Int,
-    duration: Int = Toast.LENGTH_LONG
+    duration: Int = Toast.LENGTH_LONG,
 ) {
     Toast.makeText(this, this.getString(message), duration).show()
 }
@@ -62,7 +62,7 @@ fun Activity.showAlerter(
     disableOutsideTouch: Boolean = false,
     enableInfiniteDuration: Boolean = false,
     gravity: Int = Gravity.TOP,
-    isError: Boolean = false
+    isError: Boolean = false,
 ) {
     this.showAlerter(
         title = title?.let { UiText(it) },
@@ -75,7 +75,7 @@ fun Activity.showAlerter(
         disableOutsideTouch = disableOutsideTouch,
         enableInfiniteDuration = enableInfiniteDuration,
         gravity = gravity,
-        isError = isError
+        isError = isError,
     )
 }
 
@@ -90,14 +90,17 @@ fun Activity.showAlerter(
     disableOutsideTouch: Boolean = false,
     enableInfiniteDuration: Boolean = false,
     gravity: Int = Gravity.TOP,
-    isError: Boolean = false
+    isError: Boolean = false,
 ) {
     Alerter.create(this)
         .setText(message.asString(this))
         .setIcon(icon)
         .setBackgroundColorInt(
-            if (isError)
-                alerterError.toArgb() else backgroundColor.toArgb()
+            if (isError) {
+                alerterError.toArgb()
+            } else {
+                backgroundColor.toArgb()
+            },
         )
         .enableClickAnimation(false)
         .enableSwipeToDismiss()
@@ -148,42 +151,42 @@ fun ErrorAlerter(
     modifier: Modifier = Modifier,
     title: String,
     message: String,
-    showAlert: Boolean, onChanged: (showAlert: Boolean) -> Unit,
+    showAlert: Boolean,
+    onChanged: (showAlert: Boolean) -> Unit,
 ) {
     Alerter(
         isShown = showAlert,
         onChanged = onChanged,
-        backgroundColor = MaterialTheme.colorScheme.errorContainer
+        backgroundColor = MaterialTheme.colorScheme.errorContainer,
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Icon(
                 imageVector = Icons.Rounded.Notifications,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier
                     .padding(start = MaterialTheme.spacing.smallTwo)
-                    .iconPulse()
+                    .iconPulse(),
             )
 
             Column(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo)
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo),
             ) {
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
                 Text(
                     text = message,
                     color = MaterialTheme.colorScheme.onErrorContainer,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
             }
         }
@@ -204,37 +207,36 @@ fun InfoAlerter(
         onChanged = {
             show = it
         },
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest
+        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest,
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-
             Icon(
                 imageVector = Icons.Rounded.Notifications,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .padding(start = MaterialTheme.spacing.smallTwo)
-                    .iconPulse()
+                    .iconPulse(),
             )
 
             Column(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo)
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo),
             ) {
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
                 Text(
                     text = message,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
             }
         }

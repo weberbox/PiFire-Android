@@ -9,7 +9,7 @@ data class ProbeSettings(
     val probeMap: ProbeMap? = null,
 
     @SerialName("probe_profiles")
-    val probeProfiles: Map<String, ProbeProfile>? = null
+    val probeProfiles: Map<String, ProbeProfile>? = null,
 ) {
 
     @Serializable
@@ -27,7 +27,7 @@ data class ProbeSettings(
         val id: String? = null,
 
         @SerialName("name")
-        val name: String? = null
+        val name: String? = null,
     )
 
     @Serializable
@@ -36,7 +36,7 @@ data class ProbeSettings(
         val probeDevices: List<ProbeDevice>? = null,
 
         @SerialName("probe_info")
-        val probeInfo: List<ProbeInfo>? = null
+        val probeInfo: List<ProbeInfo>? = null,
     ) {
 
         @Serializable
@@ -60,7 +60,7 @@ data class ProbeSettings(
             val type: String? = null,
 
             @SerialName("profile")
-            val profile: ProbeProfile? = null
+            val profile: ProbeProfile? = null,
         )
 
         @Serializable
@@ -78,7 +78,7 @@ data class ProbeSettings(
             val moduleFilename: String? = null,
 
             @SerialName("ports")
-            val ports: List<String>? = null
+            val ports: List<String>? = null,
         ) {
 
             @Serializable
@@ -122,4 +122,3 @@ data class ProbeSettings(
         }
     }
 }
-

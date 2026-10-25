@@ -25,12 +25,12 @@ import javax.inject.Inject
 
 @FutureDeprecation(
     comments = "OneSignal v4 is being deprecated for v5 which will cause current implementation to be unusable without API Auth. " +
-            "This is not possible due to the requests being sent from individual PiFire servers and the API key cannot be publicly shared.",
-    action = "Will need to find another provider or switch to a custom implementation using Firebase or ???"
+        "This is not possible due to the requests being sent from individual PiFire servers and the API key cannot be publicly shared.",
+    action = "Will need to find another provider or switch to a custom implementation using Firebase or ???",
 )
 class OneSignalManager @Inject constructor(
     @param:ApplicationContext private val appContext: Context,
-    private val settingsRepo: SettingsRepo
+    private val settingsRepo: SettingsRepo,
 ) {
 
     init {
@@ -45,9 +45,7 @@ class OneSignalManager @Inject constructor(
         OneSignal.provideUserConsent(accepted)
     }
 
-    fun getUserConsent(): Boolean {
-        return OneSignal.userProvidedPrivacyConsent()
-    }
+    fun getUserConsent(): Boolean = OneSignal.userProvidedPrivacyConsent()
 
     private suspend fun registerDevice(registrationResult: OneSignalStatus) {
         if (OneSignal.userProvidedPrivacyConsent()) {
@@ -59,7 +57,7 @@ class OneSignalManager @Inject constructor(
                         }
                         registerOneSignalDevice(
                             playerID = playerID,
-                            deviceInfo = getDevice(playerID)
+                            deviceInfo = getDevice(playerID),
                         )
                     }
                 }
@@ -69,7 +67,7 @@ class OneSignalManager @Inject constructor(
 
     private suspend fun registerOneSignalDevice(
         playerID: String,
-        deviceInfo: OneSignalDeviceInfo
+        deviceInfo: OneSignalDeviceInfo,
     ) {
         val device = mapOf(playerID to deviceInfo)
         when (val result = settingsRepo.registerOneSignalDevice(device)) {
@@ -160,12 +158,10 @@ class OneSignalManager @Inject constructor(
         return validatePlayerRegistration(playerID)
     }
 
-    private fun validateDeviceState(deviceState: OSDeviceState): OneSignalStatus {
-        return when {
-            deviceState.pushToken == null -> OneSignalStatus.ONESIGNAL_NULL_TOKEN
-            !deviceState.isSubscribed -> OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED
-            else -> OneSignalStatus.ONESIGNAL_REGISTERED
-        }
+    private fun validateDeviceState(deviceState: OSDeviceState): OneSignalStatus = when {
+        deviceState.pushToken == null -> OneSignalStatus.ONESIGNAL_NULL_TOKEN
+        !deviceState.isSubscribed -> OneSignalStatus.ONESIGNAL_NOT_SUBSCRIBED
+        else -> OneSignalStatus.ONESIGNAL_REGISTERED
     }
 
     private suspend fun validatePlayerRegistration(playerID: String): OneSignalStatus {
@@ -186,13 +182,11 @@ class OneSignalManager @Inject constructor(
         return OneSignalDeviceInfo(
             deviceName = Build.MODEL,
             friendlyName = existingDevice?.friendlyName ?: "",
-            appVersion = BuildConfig.VERSION_NAME
+            appVersion = BuildConfig.VERSION_NAME,
         )
     }
 
-    private suspend fun getDevicesHash(): Map<String, OneSignalDeviceInfo> {
-        return settingsRepo.getCurrentServer()?.settings?.onesignalDevices ?: emptyMap()
-    }
+    private suspend fun getDevicesHash(): Map<String, OneSignalDeviceInfo> = settingsRepo.getCurrentServer()?.settings?.onesignalDevices ?: emptyMap()
 
     private fun initNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -203,41 +197,41 @@ class OneSignalManager @Inject constructor(
                 NotificationChannelConfig(
                     channelId = context.getString(R.string.notification_channel_base),
                     name = context.getString(R.string.notification_channel_base_name),
-                    description = context.getString(R.string.notification_desc_base)
+                    description = context.getString(R.string.notification_desc_base),
                 ),
                 NotificationChannelConfig(
                     channelId = context.getString(R.string.notification_channel_temp),
                     name = context.getString(R.string.notification_channel_temp_name),
                     description = context.getString(R.string.notification_desc_temp),
-                    soundResourceId = R.raw.temp_achieved
+                    soundResourceId = R.raw.temp_achieved,
                 ),
                 NotificationChannelConfig(
                     channelId = context.getString(R.string.notification_channel_timer),
                     name = context.getString(R.string.notification_channel_timer_name),
                     description = context.getString(R.string.notification_desc_timer),
                     soundResourceId = R.raw.timer_alarm,
-                    useVibrationPattern = true
+                    useVibrationPattern = true,
                 ),
                 NotificationChannelConfig(
                     channelId = context.getString(R.string.notification_channel_error),
                     name = context.getString(R.string.notification_channel_error_name),
                     description = context.getString(R.string.notification_desc_error),
                     soundResourceId = R.raw.grill_error,
-                    useVibrationPattern = true
+                    useVibrationPattern = true,
                 ),
                 NotificationChannelConfig(
                     channelId = context.getString(R.string.notification_channel_pellets),
                     name = context.getString(R.string.notification_channel_pellets_name),
                     description = context.getString(R.string.notification_desc_pellets),
                     soundResourceId = R.raw.pellet_alarm,
-                    useVibrationPattern = true
-                )
+                    useVibrationPattern = true,
+                ),
             )
 
             channels.forEach { config ->
                 createNotificationChannel(
                     notificationManager = notificationManager,
-                    config = config
+                    config = config,
                 )
             }
         }
@@ -248,18 +242,18 @@ class OneSignalManager @Inject constructor(
         val name: String,
         val description: String,
         val soundResourceId: Int? = null,
-        val useVibrationPattern: Boolean = false
+        val useVibrationPattern: Boolean = false,
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(
         notificationManager: NotificationManager,
-        config: NotificationChannelConfig
+        config: NotificationChannelConfig,
     ) {
         val channel = NotificationChannel(
             config.channelId,
             config.name,
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_HIGH,
         ).apply {
             description = config.description
             enableLights(true)
@@ -281,8 +275,10 @@ class OneSignalManager @Inject constructor(
     }
 
     private fun buildNotificationUri(resourceId: Int) =
-        (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                BuildConfig.APPLICATION_ID + "/" + resourceId).toUri()
+        (
+            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                BuildConfig.APPLICATION_ID + "/" + resourceId
+            ).toUri()
 
     private fun createAudioAttributes() = AudioAttributes.Builder()
         .setUsage(AudioAttributes.USAGE_NOTIFICATION)

@@ -41,7 +41,7 @@ internal fun InfoPipModules(
         listLimit = limit,
         viewAllClick = {
             onEventSent(InfoContract.Event.PipModulesViewAll)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
@@ -53,7 +53,7 @@ internal fun InfoPipModules(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     modifier = Modifier
@@ -62,19 +62,19 @@ internal fun InfoPipModules(
                     text = stringResource(R.string.info_pip_name),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
                     modifier = Modifier.weight(0.6f),
                     text = stringResource(R.string.info_pip_version),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             info.pipList.take(limit).forEach { module ->
                 PipItem(
-                    module = module
+                    module = module,
                 )
             }
         }
@@ -87,48 +87,46 @@ internal fun InfoPipModules(
 private fun InfoPipModulesPreview() {
     val info = remember {
         Info(
-            pipList = buildModules()
+            pipList = buildModules(),
         )
     }
     PiFireTheme {
         Surface {
             InfoPipModules(
                 info = info,
-                onEventSent = { }
+                onEventSent = { },
             )
         }
     }
 }
 
-internal fun buildModules(): List<Info.Module> {
-    return listOf(
-        Info.Module(
-            name = "apprise",
-            version = "1.9.3"
-        ),
-        Info.Module(
-            name = "async-timeout",
-            version = "5.0.1"
-        ),
-        Info.Module(
-            name = "bidict",
-            version = "0.23.1"
-        ),
-        Info.Module(
-            name = "blinker",
-            version = "1.9.0"
-        ),
-        Info.Module(
-            name = "bluepy",
-            version = "1.3.0"
-        ),
-        Info.Module(
-            name = "certifi",
-            version = "2025.6.15"
-        ),
-        Info.Module(
-            name = "charset-normalizer",
-            version = "3.4.2"
-        )
-    )
-}
+internal fun buildModules(): List<Info.Module> = listOf(
+    Info.Module(
+        name = "apprise",
+        version = "1.9.3",
+    ),
+    Info.Module(
+        name = "async-timeout",
+        version = "5.0.1",
+    ),
+    Info.Module(
+        name = "bidict",
+        version = "0.23.1",
+    ),
+    Info.Module(
+        name = "blinker",
+        version = "1.9.0",
+    ),
+    Info.Module(
+        name = "bluepy",
+        version = "1.3.0",
+    ),
+    Info.Module(
+        name = "certifi",
+        version = "2025.6.15",
+    ),
+    Info.Module(
+        name = "charset-normalizer",
+        version = "3.4.2",
+    ),
+)

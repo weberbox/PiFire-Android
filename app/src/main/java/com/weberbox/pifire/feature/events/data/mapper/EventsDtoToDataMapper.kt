@@ -23,7 +23,7 @@ object EventsDtoToDataMapper : Mapper<EventsDto, Events> {
                     from = it,
                     id = if (count == 0) baseId else "$baseId#$count",
                 )
-            } ?: emptyList()
+            } ?: emptyList(),
         )
     }
 
@@ -31,11 +31,11 @@ object EventsDtoToDataMapper : Mapper<EventsDto, Events> {
         id = id,
         date = formatDateString(
             input = from.date.orEmpty(),
-            inputFormat = "yyyy-MM-dd"
+            inputFormat = "yyyy-MM-dd",
         ),
         time = formatTimeString(
             input = from.time.orEmpty(),
-            inputFormat = "HH:mm:ss"
+            inputFormat = "HH:mm:ss",
         ),
         message = from.message.orEmpty(),
         type = parseEventType(from.message.orEmpty()),

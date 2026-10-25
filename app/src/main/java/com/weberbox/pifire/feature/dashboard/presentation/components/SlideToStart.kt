@@ -50,7 +50,7 @@ internal fun SlideToStart(
     sliderBtnBackgroundColor: Color,
     sliderBtnIcon: ImageVector,
     onSliderChange: ((Float) -> Unit)? = null,
-    onBtnSwipe: () -> Unit
+    onBtnSwipe: () -> Unit,
 ) {
     val sliderButtonWidthDp = 70.dp
     val density = LocalDensity.current
@@ -70,19 +70,19 @@ internal fun SlideToStart(
     var sliderComplete by remember { mutableStateOf(false) }
     val animatedOffset by animateFloatAsState(
         targetValue = if (sliderComplete) maxPositionSlide else sliderPositionPx,
-        label = "Animated Offset"
+        label = "Animated Offset",
     )
 
     val textAlpha = 1f - dragProgress
     val trackScale by animateFloatAsState(
         targetValue = if (sliderComplete) 0f else 1f,
         animationSpec = tween(durationMillis = 300),
-        label = "Track Scale"
+        label = "Track Scale",
     )
     val sliderAlpha by animateFloatAsState(
         targetValue = if (sliderComplete) 0f else 1f,
         animationSpec = tween(durationMillis = 300),
-        label = "Slider Alpha"
+        label = "Slider Alpha",
     )
 
     LaunchedEffect(dragProgress) {
@@ -113,7 +113,7 @@ internal fun SlideToStart(
             .height(55.dp)
             .onSizeChanged { size ->
                 boxWidthPx = size.width
-            }
+            },
     ) {
         Box(
             modifier = Modifier
@@ -121,15 +121,15 @@ internal fun SlideToStart(
                 .graphicsLayer(scaleX = trackScale, scaleY = 1f)
                 .background(
                     color = outerBtnBackgroundColor,
-                    shape = MaterialTheme.shapes.large
-                )
+                    shape = MaterialTheme.shapes.large,
+                ),
         ) {
             Text(
                 text = btnText,
                 style = btnTextStyle,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .alpha(textAlpha)
+                    .alpha(textAlpha),
             )
         }
 
@@ -140,7 +140,7 @@ internal fun SlideToStart(
                 .offset {
                     IntOffset(
                         x = animatedOffset.toInt(),
-                        y = 0
+                        y = 0,
                     )
                 }
                 .draggable(
@@ -157,37 +157,36 @@ internal fun SlideToStart(
                             sliderPositionPx = 0f
                         }
                         onSliderChange?.invoke(sliderPositionPx)
-                    }
+                    },
                 ),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
                     .alpha(sliderAlpha)
-                    .graphicsLayer { alpha = sliderAlpha }
+                    .graphicsLayer { alpha = sliderAlpha },
             ) {
                 SliderButton(
                     sliderBtnWidth = sliderButtonWidthDp,
                     sliderBtnBackgroundColor = sliderBtnBackgroundColor,
-                    sliderBtnIcon = sliderBtnIcon
+                    sliderBtnIcon = sliderBtnIcon,
                 )
             }
         }
 
         if (showLoadingIndicator) {
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center),
             )
         }
     }
 }
 
-
 @Composable
 private fun SliderButton(
     sliderBtnWidth: Dp,
     sliderBtnBackgroundColor: Color,
-    sliderBtnIcon: ImageVector
+    sliderBtnIcon: ImageVector,
 ) {
     Box(
         modifier = Modifier
@@ -196,20 +195,20 @@ private fun SliderButton(
             .height(54.dp)
             .background(
                 color = sliderBtnBackgroundColor,
-                shape = MaterialTheme.shapes.large
+                shape = MaterialTheme.shapes.large,
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Row(
             modifier = Modifier
                 .padding(start = 10.dp, end = 10.dp)
                 .align(Alignment.Center),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = sliderBtnIcon,
                 contentDescription = null,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp),
             )
         }
     }

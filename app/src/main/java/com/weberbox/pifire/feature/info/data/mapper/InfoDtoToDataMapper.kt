@@ -28,8 +28,8 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                         gpioOutPins.add(
                             GPIOInOutData(
                                 name = key.replace("_", " "),
-                                pin = pin
-                            )
+                                pin = pin,
+                            ),
                         )
                     }
                 }
@@ -37,8 +37,8 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                 gpioOutPins.add(
                     GPIOInOutData(
                         name = key.replace("_", " "),
-                        pin = pin
-                    )
+                        pin = pin,
+                    ),
                 )
             }
         }
@@ -51,8 +51,8 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                         gpioInPins.add(
                             GPIOInOutData(
                                 name = key.replace("_", " "),
-                                pin = pin
-                            )
+                                pin = pin,
+                            ),
                         )
                     }
                 }
@@ -60,8 +60,8 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                 gpioInPins.add(
                     GPIOInOutData(
                         name = key.replace("_", " "),
-                        pin = pin
-                    )
+                        pin = pin,
+                    ),
                 )
             }
         }
@@ -74,7 +74,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                         name = if (index == 0) device.replaceFirstChar { it.uppercase() } else "",
                         function = function.replace("_", " "),
                         pin = pin?.toString() ?: "-",
-                    )
+                    ),
                 )
             }
         }
@@ -114,20 +114,20 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
                 cpuCores = from.platformInfo?.cpuCores?.toString() ?: "Unknown",
                 cpuFrequency = from.platformInfo?.cpuFrequency?.toString() ?: "Unknown",
                 totalRam = formatBytes(from.platformInfo?.totalRam),
-                availableRam = formatBytes(from.platformInfo?.availableRam)
+                availableRam = formatBytes(from.platformInfo?.availableRam),
             ),
             osInfo = Info.OsInfo(
                 prettyName = from.osInfo?.prettyName ?: "Unknown",
                 version = from.osInfo?.version ?: "Unknown",
                 codeName = from.osInfo?.codeName ?: "Unknown",
-                architecture = from.osInfo?.architecture ?: "Unknown"
+                architecture = from.osInfo?.architecture ?: "Unknown",
             ),
             networkMap = from.networkInfo
                 ?.filterKeys { it != "lo" }
                 ?.mapValues { (_, value) ->
                     Info.NetworkInfo(
                         ipAddress = value.ipAddress ?: "Unknown",
-                        macAddress = value.macAddress ?: "Unknown"
+                        macAddress = value.macAddress ?: "Unknown",
                     )
                 } ?: emptyMap(),
             wifiQualityValue = from.wifiQualityValue?.toString() ?: "Unknown",
@@ -156,8 +156,7 @@ object InfoDtoToDataMapper : Mapper<InfoDto, Info> {
             appGitBranch = BuildConfig.GIT_BRANCH,
             appGitRev = BuildConfig.GIT_REV,
             alphaBuild = BuildConfig.ALPHA_BUILD,
-            debugBuild = AppConfig.DEBUG
+            debugBuild = AppConfig.DEBUG,
         )
     }
 }
-

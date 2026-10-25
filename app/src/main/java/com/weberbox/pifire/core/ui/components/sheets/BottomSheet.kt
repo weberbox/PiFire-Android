@@ -50,7 +50,7 @@ fun BottomSheet(
     modifier: Modifier = Modifier,
     sheetState: ModalBottomSheetState,
     contentColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) {
     val windowInsets by remember { mutableStateOf(WindowInsets) }
     ModalBottomSheet(state = sheetState) {
@@ -65,17 +65,17 @@ fun BottomSheet(
                     elevation = MaterialTheme.spacing.small,
                     shape = RoundedCornerShape(
                         topStart = MaterialTheme.spacing.mediumThree,
-                        topEnd = MaterialTheme.spacing.mediumThree
+                        topEnd = MaterialTheme.spacing.mediumThree,
                     ),
                 )
                 .clip(
                     RoundedCornerShape(
                         topStart = MaterialTheme.spacing.mediumThree,
-                        topEnd = MaterialTheme.spacing.mediumThree
-                    )
+                        topEnd = MaterialTheme.spacing.mediumThree,
+                    ),
                 )
                 .widthIn(max = MaterialTheme.size.maxWidth)
-                .background(contentColor)
+                .background(contentColor),
         ) {
             val window = LocalModalWindow.current
             LaunchedEffect(Unit) {
@@ -88,24 +88,24 @@ fun BottomSheet(
                     .fillMaxWidth()
                     .windowInsetsPadding(
                         windowInsets.navigationBars.only(
-                            WindowInsetsSides.Vertical
-                        )
+                            WindowInsetsSides.Vertical,
+                        ),
                     ),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 DragIndication(
                     modifier = Modifier
                         .padding(
                             top = MaterialTheme.spacing.smallThree,
-                            bottom = MaterialTheme.spacing.small
+                            bottom = MaterialTheme.spacing.small,
                         )
                         .background(
                             MaterialTheme.colorScheme.onSurfaceVariant,
-                            RoundedCornerShape(100)
+                            RoundedCornerShape(100),
                         )
                         .width(MaterialTheme.size.large)
-                        .height(MaterialTheme.size.extraSmall)
+                        .height(MaterialTheme.size.extraSmall),
                 )
                 content()
             }
@@ -121,11 +121,11 @@ private fun BottomSheetPreview() {
         Surface {
             BottomSheet(
                 sheetState = rememberModalBottomSheetState(
-                    initialDetent = SheetDetent.FullyExpanded
+                    initialDetent = SheetDetent.FullyExpanded,
                 ),
                 content = {
                     Text(text = "Sheet content")
-                }
+                },
             )
         }
     }

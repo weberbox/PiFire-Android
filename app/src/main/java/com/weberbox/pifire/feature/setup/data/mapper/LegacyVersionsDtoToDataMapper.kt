@@ -11,6 +11,6 @@ object LegacyVersionsDtoToDataMapper : Mapper<LegacyVersionsDto, VersionsData> {
 
     override fun map(from: LegacyVersionsDto) = VersionsData(
         version = from.settings?.versions?.server ?: defaults.version,
-        build = from.settings?.versions?.build ?: defaults.build
+        build = from.settings?.versions?.build ?: defaults.build,
     )
 }

@@ -16,7 +16,7 @@ class SettingsContract {
         val isInitialLoading: Boolean,
         val isRefreshing: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

@@ -43,15 +43,15 @@ internal fun RecipeSteps(
     steps: List<Step>,
     units: String,
     currentStep: Int,
-    onStepPosition: (position: Int) -> Unit
+    onStepPosition: (position: Int) -> Unit,
 ) {
     HeaderCard(
         title = stringResource(R.string.recipes_steps),
         headerIcon = Icons.Filled.FormatListNumbered,
-        headerBottomPadding = 0.dp
+        headerBottomPadding = 0.dp,
     ) {
         Column(
-            modifier = modifier.padding(end = MaterialTheme.spacing.smallOne)
+            modifier = modifier.padding(end = MaterialTheme.spacing.smallOne),
         ) {
             steps.forEachIndexed { index, step ->
                 RecipeStep(
@@ -59,7 +59,7 @@ internal fun RecipeSteps(
                     index = index,
                     units = units,
                     currentStep = currentStep,
-                    onStepPosition = onStepPosition
+                    onStepPosition = onStepPosition,
                 )
             }
         }
@@ -73,14 +73,14 @@ private fun RecipeStep(
     index: Int,
     units: String,
     currentStep: Int,
-    onStepPosition: (position: Int) -> Unit
+    onStepPosition: (position: Int) -> Unit,
 ) {
     if (index != 0) {
         Spacer(
             modifier = Modifier
                 .height(1.dp)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.background),
         )
     }
     Row(
@@ -92,30 +92,38 @@ private fun RecipeStep(
                 .weight(0.2f)
                 .then(
                     if (currentStep != -1) {
-                        if (currentStep == index) Modifier
-                            .background(
-                                MaterialTheme.colorScheme.primary
+                        if (currentStep == index) {
+                            Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.primary,
+                                )
+                                .onGloballyPositioned { coordinates ->
+                                    onStepPosition(coordinates.positionInRoot().y.roundToInt())
+                                }
+                        } else {
+                            Modifier.background(
+                                MaterialTheme.colorScheme.surfaceContainerHighest,
                             )
-                            .onGloballyPositioned { coordinates ->
-                                onStepPosition(coordinates.positionInRoot().y.roundToInt())
-                            }
-                        else Modifier.background(
-                            MaterialTheme.colorScheme.surfaceContainerHighest
-                        )
-                    } else Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                        }
+                    } else {
+                        Modifier.background(MaterialTheme.colorScheme.primaryContainer)
+                    },
                 ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = stringResource(R.string.recipes_step_step, index),
                 style = MaterialTheme.typography.bodyLarge,
                 color = if (currentStep != -1) {
-                    if (currentStep == index)
+                    if (currentStep == index) {
                         MaterialTheme.colorScheme.onPrimary
-                    else
+                    } else {
                         MaterialTheme.colorScheme.onSurface
-                } else MaterialTheme.colorScheme.onPrimaryContainer,
-                fontWeight = FontWeight.Bold
+                    }
+                } else {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                },
+                fontWeight = FontWeight.Bold,
             )
         }
         Column(
@@ -124,23 +132,29 @@ private fun RecipeStep(
                 .padding(
                     start = MaterialTheme.spacing.smallOne,
                     top = MaterialTheme.spacing.extraSmall,
-                    bottom = MaterialTheme.spacing.extraSmall
-                )
+                    bottom = MaterialTheme.spacing.extraSmall,
+                ),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
             ) {
                 Text(
                     text = stringResource(R.string.recipes_step_mode),
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = if (step.mode.equals(RunningMode.Hold.name, ignoreCase = true))
+                    text = if (step.mode.equals(RunningMode.Hold.name, ignoreCase = true)) {
                         stringResource(
-                            R.string.recipes_step_mode_hold, step.mode, step.holdTemp, units
-                        ) else step.mode,
+                            R.string.recipes_step_mode_hold,
+                            step.mode,
+                            step.holdTemp,
+                            units,
+                        )
+                    } else {
+                        step.mode
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
@@ -169,11 +183,12 @@ private fun RecipeStep(
                     Text(
                         modifier = Modifier.padding(
                             start = MaterialTheme.spacing.mediumOne,
-                            bottom = MaterialTheme.spacing.extraSmall
+                            bottom = MaterialTheme.spacing.extraSmall,
                         ),
                         text = stringResource(
                             R.string.recipes_step_notif,
-                            step.message.trim()),
+                            step.message.trim(),
+                        ),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
@@ -194,8 +209,9 @@ private fun formatOptions(step: Step, units: String): String {
             options.add(
                 stringResource(
                     R.string.recipes_step_options_primary,
-                    step.triggerTemps.primary, units
-                )
+                    step.triggerTemps.primary,
+                    units,
+                ),
             )
         }
         var count = 1
@@ -222,13 +238,13 @@ private fun RecipeStepsPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.padding(MaterialTheme.spacing.smallOne)
+                modifier = Modifier.padding(MaterialTheme.spacing.smallOne),
             ) {
                 RecipeSteps(
                     steps = buildRecipe()[0].steps,
                     units = "F",
                     currentStep = 0,
-                    onStepPosition = {}
+                    onStepPosition = {},
                 )
             }
         }

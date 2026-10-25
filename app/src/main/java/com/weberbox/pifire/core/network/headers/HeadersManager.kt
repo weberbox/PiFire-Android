@@ -14,17 +14,17 @@ import okhttp3.Credentials.basic
 import javax.inject.Inject
 
 class HeadersManager @Inject constructor(
-    private val dataStore: DataStore<HeadersData>
+    private val dataStore: DataStore<HeadersData>,
 ) {
 
     suspend fun updateExtraHeader(uuid: Uuid, header: ExtraHeader) {
         dataStore.updateData { current ->
             val currentHeaders = current.headersMap[uuid] ?: Headers()
             val updatedHeaders = currentHeaders.copy(
-                extraHeaders = currentHeaders.extraHeaders.addOrUpdateByKey(header)
+                extraHeaders = currentHeaders.extraHeaders.addOrUpdateByKey(header),
             )
             current.copy(
-                headersMap = current.headersMap + (uuid to updatedHeaders)
+                headersMap = current.headersMap + (uuid to updatedHeaders),
             )
         }
     }
@@ -35,10 +35,10 @@ class HeadersManager @Inject constructor(
             val updatedHeaders = currentHeaders.copy(
                 extraHeaders = currentHeaders.extraHeaders.filterNot {
                     it.key == header.key
-                }
+                },
             )
             current.copy(
-                headersMap = current.headersMap + (uuid to updatedHeaders)
+                headersMap = current.headersMap + (uuid to updatedHeaders),
             )
         }
     }
@@ -47,24 +47,20 @@ class HeadersManager @Inject constructor(
         dataStore.updateData { current ->
             val currentHeaders = current.headersMap[uuid] ?: Headers()
             val updatedHeaders = currentHeaders.copy(
-                credentials = auth
+                credentials = auth,
             )
             current.copy(
-                headersMap = current.headersMap + (uuid to updatedHeaders)
+                headersMap = current.headersMap + (uuid to updatedHeaders),
             )
         }
     }
 
-    fun getExtraHeadersFlow(uuid: String): Flow<List<ExtraHeader>> {
-        return dataStore.data.map { data ->
-            data.headersMap[uuid]?.extraHeaders ?: emptyList()
-        }
+    fun getExtraHeadersFlow(uuid: String): Flow<List<ExtraHeader>> = dataStore.data.map { data ->
+        data.headersMap[uuid]?.extraHeaders ?: emptyList()
     }
 
-    fun getBasicAuthFlow(uuid: String): Flow<BasicAuth> {
-        return dataStore.data.map { data ->
-            data.headersMap[uuid]?.credentials ?: BasicAuth()
-        }
+    fun getBasicAuthFlow(uuid: String): Flow<BasicAuth> = dataStore.data.map { data ->
+        data.headersMap[uuid]?.credentials ?: BasicAuth()
     }
 
     suspend fun buildServerHeadersList(server: Server): Map<String, List<String>> {
@@ -113,7 +109,7 @@ class HeadersManager @Inject constructor(
 
     fun buildSetupServerHeaders(
         credentials: BasicAuth,
-        headers: List<ExtraHeader>
+        headers: List<ExtraHeader>,
     ): Map<String, String> {
         val headersMap = buildMap {
             if (credentials.user.isNotBlank() || credentials.pass.isNotBlank()) {
@@ -136,5 +132,4 @@ class HeadersManager @Inject constructor(
             this + header
         }
     }
-
 }

@@ -20,7 +20,7 @@ class PwmContract {
             val index: Int,
             val temp: Int,
             val dutyCycle: Int,
-            val controlItems: List<PwmControl>
+            val controlItems: List<PwmControl>,
         ) : Event()
     }
 
@@ -28,7 +28,7 @@ class PwmContract {
         val serverData: Server,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

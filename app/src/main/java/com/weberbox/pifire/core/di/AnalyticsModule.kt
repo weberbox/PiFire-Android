@@ -21,18 +21,16 @@ object AnalyticsModule {
     @Provides
     @Singleton
     fun provideFirebaseAnalytics(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     @Provides
     @Singleton
     fun provideAnalytics(
-        firebaseAnalytics: FirebaseAnalytics
-    ): Analytics {
-        return if (BuildConfig.ENABLE_ANALYTICS) {
-            AnalyticsTracker(firebaseAnalytics)
-        } else {
-            NoOpAnalyticsTracker()
-        }
+        firebaseAnalytics: FirebaseAnalytics,
+    ): Analytics = if (BuildConfig.ENABLE_ANALYTICS) {
+        AnalyticsTracker(firebaseAnalytics)
+    } else {
+        NoOpAnalyticsTracker()
     }
 }

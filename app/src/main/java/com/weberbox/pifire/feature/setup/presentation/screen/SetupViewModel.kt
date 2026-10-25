@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SetupViewModel @Inject constructor(
-    private val serverDataCache: ServerDataCache
+    private val serverDataCache: ServerDataCache,
 ) : ViewModel() {
 
     fun clearServerDataCache() {

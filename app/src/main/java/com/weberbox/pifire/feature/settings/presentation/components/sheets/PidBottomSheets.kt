@@ -27,7 +27,7 @@ internal fun PidBottomSheets(
     onEventSent: (WorkContract.Event) -> Unit,
 ) {
     BottomSheet(
-        sheetState = pidPbSheet.sheetState
+        sheetState = pidPbSheet.sheetState,
     ) {
         InputValidationSheet(
             input = when (state.serverData.settings.cntrlrSelected) {
@@ -51,7 +51,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_pb),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
             ),
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
@@ -75,11 +75,11 @@ internal fun PidBottomSheets(
                 }
                 pidPbSheet.close()
             },
-            onDismiss = { pidPbSheet.close() }
+            onDismiss = { pidPbSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidTdSheet.sheetState
+        sheetState = pidTdSheet.sheetState,
     ) {
         InputValidationSheet(
             input = when (state.serverData.settings.cntrlrSelected) {
@@ -103,7 +103,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_td),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
             ),
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
@@ -127,11 +127,11 @@ internal fun PidBottomSheets(
                 }
                 pidTdSheet.close()
             },
-            onDismiss = { pidTdSheet.close() }
+            onDismiss = { pidTdSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidTiSheet.sheetState
+        sheetState = pidTiSheet.sheetState,
     ) {
         InputValidationSheet(
             input = when (state.serverData.settings.cntrlrSelected) {
@@ -155,7 +155,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_ti),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
             ),
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
@@ -179,11 +179,11 @@ internal fun PidBottomSheets(
                 }
                 pidTiSheet.close()
             },
-            onDismiss = { pidTiSheet.close() }
+            onDismiss = { pidTiSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidStableSheet.sheetState
+        sheetState = pidStableSheet.sheetState,
     ) {
         InputValidationSheet(
             input = when (state.serverData.settings.cntrlrSelected) {
@@ -203,7 +203,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_sw),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
             ),
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
@@ -221,11 +221,11 @@ internal fun PidBottomSheets(
                 }
                 pidStableSheet.close()
             },
-            onDismiss = { pidStableSheet.close() }
+            onDismiss = { pidStableSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidCenterSheet.sheetState
+        sheetState = pidCenterSheet.sheetState,
     ) {
         InputValidationSheet(
             input = when (state.serverData.settings.cntrlrSelected) {
@@ -249,7 +249,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_center),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.Decimal,
             ),
             onUpdate = {
                 when (state.serverData.settings.cntrlrSelected) {
@@ -273,11 +273,11 @@ internal fun PidBottomSheets(
                 }
                 pidCenterSheet.close()
             },
-            onDismiss = { pidCenterSheet.close() }
+            onDismiss = { pidCenterSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidTauSheet.sheetState
+        sheetState = pidTauSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.cntrlrPidSpTau.toString(),
@@ -285,7 +285,7 @@ internal fun PidBottomSheets(
             placeholder = stringResource(R.string.settings_pid_cntrlr_tau),
             validationOptions = ValidationOptions(
                 allowBlank = false,
-                keyboardType = KeyboardType.NumberPassword
+                keyboardType = KeyboardType.NumberPassword,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -293,11 +293,11 @@ internal fun PidBottomSheets(
                 }
                 pidTauSheet.close()
             },
-            onDismiss = { pidTauSheet.close() }
+            onDismiss = { pidTauSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = pidThetaSheet.sheetState
+        sheetState = pidThetaSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.cntrlrPidSpTheta.toString(),
@@ -306,7 +306,7 @@ internal fun PidBottomSheets(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -314,11 +314,11 @@ internal fun PidBottomSheets(
                 }
                 pidThetaSheet.close()
             },
-            onDismiss = { pidThetaSheet.close() }
+            onDismiss = { pidThetaSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = holdCycleTimeSheet.sheetState
+        sheetState = holdCycleTimeSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.holdCycleTime.toString(),
@@ -327,7 +327,7 @@ internal fun PidBottomSheets(
             validationOptions = ValidationOptions(
                 allowBlank = false,
                 keyboardType = KeyboardType.NumberPassword,
-                min = 1.0
+                min = 1.0,
             ),
             onUpdate = {
                 it.toIntOrNull()?.let { value ->
@@ -335,11 +335,11 @@ internal fun PidBottomSheets(
                 }
                 holdCycleTimeSheet.close()
             },
-            onDismiss = { holdCycleTimeSheet.close() }
+            onDismiss = { holdCycleTimeSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = uMinSheet.sheetState
+        sheetState = uMinSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.uMin.toString(),
@@ -349,7 +349,7 @@ internal fun PidBottomSheets(
                 allowBlank = false,
                 keyboardType = KeyboardType.Decimal,
                 min = 0.05,
-                max = 0.99
+                max = 0.99,
             ),
             onUpdate = {
                 it.toDoubleOrNull()?.let { value ->
@@ -357,11 +357,11 @@ internal fun PidBottomSheets(
                 }
                 uMinSheet.close()
             },
-            onDismiss = { uMinSheet.close() }
+            onDismiss = { uMinSheet.close() },
         )
     }
     BottomSheet(
-        sheetState = uMaxSheet.sheetState
+        sheetState = uMaxSheet.sheetState,
     ) {
         InputValidationSheet(
             input = state.serverData.settings.uMax.toString(),
@@ -371,7 +371,7 @@ internal fun PidBottomSheets(
                 allowBlank = false,
                 keyboardType = KeyboardType.Decimal,
                 min = 0.1,
-                max = 1.0
+                max = 1.0,
             ),
             onUpdate = {
                 it.toDoubleOrNull()?.let { value ->
@@ -379,7 +379,7 @@ internal fun PidBottomSheets(
                 }
                 uMaxSheet.close()
             },
-            onDismiss = { uMaxSheet.close() }
+            onDismiss = { uMaxSheet.close() },
         )
     }
 }

@@ -33,10 +33,10 @@ fun PullToRefresh(
                     .padding(top = contentPadding.calculateTopPadding())
                     .align(Alignment.TopCenter),
                 isRefreshing = isRefreshing,
-                state = state
+                state = state,
             )
         },
-        modifier = modifier
+        modifier = modifier,
     ) {
         content()
     }

@@ -66,11 +66,11 @@ internal fun ProbePickerSheet(
     isLooping: Boolean = true,
     extraRows: Int = 1,
     itemSpace: Dp = MaterialTheme.spacing.mediumOne,
-    onConfirm: (ProbeNotify) -> Unit
+    onConfirm: (ProbeNotify) -> Unit,
 ) {
     val temps by remember {
         mutableStateOf(
-            getProbeTempRange(probeData.probeType, units, probeData.maxTemp, increment)
+            getProbeTempRange(probeData.probeType, units, probeData.maxTemp, increment),
         )
     }
     var targetTemp by remember {
@@ -79,7 +79,7 @@ internal fun ProbePickerSheet(
                 getDefaultProbeTemp(probeData.probeType, units)
             } else {
                 probeData.target
-            }
+            },
         )
     }
     var highLimitTemp by remember {
@@ -88,7 +88,7 @@ internal fun ProbePickerSheet(
                 getDefaultProbeTemp(probeData.probeType, units)
             } else {
                 probeData.highLimitTemp
-            }
+            },
         )
     }
     var lowLimitTemp by remember {
@@ -97,7 +97,7 @@ internal fun ProbePickerSheet(
                 getDefaultProbeTemp(probeData.probeType, units)
             } else {
                 probeData.lowLimitTemp
-            }
+            },
         )
     }
     var currentSelection by remember { mutableStateOf(NotifType.Target) }
@@ -121,11 +121,11 @@ internal fun ProbePickerSheet(
             .padding(
                 start = MaterialTheme.spacing.mediumOne,
                 end = MaterialTheme.spacing.mediumOne,
-                bottom = MaterialTheme.spacing.smallThree
+                bottom = MaterialTheme.spacing.smallThree,
             )
             .fillMaxWidth()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NotifType.entries.forEach { item ->
             AnimatedVisibility(
@@ -135,13 +135,13 @@ internal fun ProbePickerSheet(
                     NotifType.LowTemp -> lowTempVisible
                 },
                 enter = slideUpExpandEnterTransition(),
-                exit = slideDownShrinkExitTransition()
+                exit = slideDownShrinkExitTransition(),
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = MaterialTheme.spacing.extraSmall),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Box(
                         modifier = Modifier
@@ -149,11 +149,11 @@ internal fun ProbePickerSheet(
                             .fillMaxWidth()
                             .clip(MaterialTheme.shapes.large)
                             .background(MaterialTheme.colorScheme.surfaceContainerHigh),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         PickerMark(
                             modifier = Modifier.align(Alignment.CenterStart),
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = MaterialTheme.colorScheme.primaryContainer,
                         )
                         PickerWheel(
                             items = temps,
@@ -162,7 +162,7 @@ internal fun ProbePickerSheet(
                                     temps.indexOfFirst {
                                         it == findClosestTemp(
                                             list = temps,
-                                            target = targetTemp
+                                            target = targetTemp,
                                         )
                                     }.takeIf { it >= 0 } ?: 0
                                 }
@@ -171,7 +171,7 @@ internal fun ProbePickerSheet(
                                     temps.indexOfFirst {
                                         it == findClosestTemp(
                                             list = temps,
-                                            target = highLimitTemp
+                                            target = highLimitTemp,
                                         )
                                     }.takeIf { it >= 0 } ?: 0
                                 }
@@ -180,7 +180,7 @@ internal fun ProbePickerSheet(
                                     temps.indexOfFirst {
                                         it == findClosestTemp(
                                             list = temps,
-                                            target = lowLimitTemp
+                                            target = lowLimitTemp,
                                         )
                                     }.takeIf { it >= 0 } ?: 0
                                 }
@@ -211,11 +211,11 @@ internal fun ProbePickerSheet(
                             extraRow = extraRows,
                             isLooping = isLooping,
                             itemToString = { it.toString() },
-                            longestText = findLongestString(temps)
+                            longestText = findLongestString(temps),
                         )
                         PickerMark(
                             modifier = Modifier.align(Alignment.CenterEnd),
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = MaterialTheme.colorScheme.primaryContainer,
                         )
                     }
                     AnimatedVisibility(
@@ -225,7 +225,7 @@ internal fun ProbePickerSheet(
                             NotifType.LowTemp -> lowTempOptions
                         },
                         enter = slideUpExpandEnterTransition(),
-                        exit = slideDownShrinkExitTransition()
+                        exit = slideDownShrinkExitTransition(),
                     ) {
                         Column(
                             modifier = Modifier
@@ -233,7 +233,7 @@ internal fun ProbePickerSheet(
                                 .padding(horizontal = MaterialTheme.spacing.extraSmall)
                                 .offset(y = 2.5.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
+                            verticalArrangement = Arrangement.Center,
                         ) {
                             when (item) {
                                 NotifType.Target -> {
@@ -243,13 +243,13 @@ internal fun ProbePickerSheet(
                                                 title = stringResource(R.string.dash_shutdown_temp),
                                                 enabled = !targetKeepWarm,
                                                 checked = targetShutdown,
-                                                onCheckedChange = { targetShutdown = it }
+                                                onCheckedChange = { targetShutdown = it },
                                             )
                                             OptionSwitch(
                                                 title = stringResource(R.string.dash_keep_warm_temp),
                                                 enabled = !targetShutdown,
                                                 checked = targetKeepWarm,
-                                                onCheckedChange = { targetKeepWarm = it }
+                                                onCheckedChange = { targetKeepWarm = it },
                                             )
                                         }
 
@@ -264,7 +264,7 @@ internal fun ProbePickerSheet(
                                                 title = stringResource(R.string.dash_shutdown_temp),
                                                 enabled = true,
                                                 checked = highLimitShutdown,
-                                                onCheckedChange = { highLimitShutdown = it }
+                                                onCheckedChange = { highLimitShutdown = it },
                                             )
                                         }
 
@@ -279,13 +279,13 @@ internal fun ProbePickerSheet(
                                                 title = stringResource(R.string.dash_shutdown_temp),
                                                 enabled = !lowLimitReignite,
                                                 checked = lowLimitShutdown,
-                                                onCheckedChange = { lowLimitShutdown = it }
+                                                onCheckedChange = { lowLimitShutdown = it },
                                             )
                                             OptionSwitch(
                                                 title = stringResource(R.string.dash_reignite_temp),
                                                 enabled = !lowLimitShutdown,
                                                 checked = lowLimitReignite,
-                                                onCheckedChange = { lowLimitReignite = it }
+                                                onCheckedChange = { lowLimitReignite = it },
                                             )
                                         }
 
@@ -330,14 +330,14 @@ internal fun ProbePickerSheet(
                                     highTempOptions = false
                                 }
                             }
-                        }
+                        },
                     ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement
                     .spacedBy(
                         space = MaterialTheme.spacing.smallOne,
-                        alignment = Alignment.Start
-                    )
+                        alignment = Alignment.Start,
+                    ),
             ) {
                 Switch(
                     modifier = Modifier.padding(start = MaterialTheme.spacing.smallOne),
@@ -352,15 +352,15 @@ internal fun ProbePickerSheet(
                             NotifType.HighTemp -> highLimitReq = !highLimitReq
                             NotifType.LowTemp -> lowLimitReq = !lowLimitReq
                         }
-                    }
+                    },
                 )
                 Icon(
                     imageVector = item.icon,
-                    contentDescription = null
+                    contentDescription = null,
                 )
                 Text(
                     text = stringResource(item.title),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
@@ -369,7 +369,7 @@ internal fun ProbePickerSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = MaterialTheme.spacing.extraSmall),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             OutlinedButton(
                 enabled = when (currentSelection) {
@@ -397,29 +397,29 @@ internal fun ProbePickerSheet(
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.options),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             OutlinedButton(
                 onClick = {
                     onConfirm(
                         ProbeNotify(
-                            label = probeData.label
-                        )
+                            label = probeData.label,
+                        ),
                     )
                 },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(end = MaterialTheme.spacing.smallOne)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.clear_all),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Button(
@@ -437,17 +437,17 @@ internal fun ProbePickerSheet(
                             lowLimitShutdown = lowLimitShutdown,
                             lowLimitReignite = lowLimitReignite,
                             targetShutdown = targetShutdown,
-                            targetKeepWarm = targetKeepWarm
-                        )
+                            targetKeepWarm = targetKeepWarm,
+                        ),
                     )
                 },
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Text(
                     text = stringResource(R.string.confirm),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -460,22 +460,22 @@ private fun OptionSwitch(
     title: String,
     enabled: Boolean,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(Modifier.weight(1f))
         Switch(
             enabled = enabled,
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
         )
     }
 }
@@ -488,7 +488,7 @@ private fun ProbePickerSheetPreview() {
     PiFireTheme {
         Surface {
             Box(
-                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow)
+                modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainerLow),
             ) {
                 ProbePickerSheet(
                     probeData = probeData,

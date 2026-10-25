@@ -50,41 +50,41 @@ internal fun OptionCard(
             .height(100.dp)
             .fillMaxWidth()
             .cardOutline(
-                enabled = enabled
+                enabled = enabled,
             ),
         shape = MaterialTheme.shapes.large,
         elevation = CardDefaults.cardElevation(defaultElevation = MaterialTheme.elevation.small),
         onClick = {
             if (onClick != null) onClick()
-        }
+        },
     ) {
         Column(
             modifier = Modifier
                 .background(
                     Brush.horizontalGradient(
-                        colorStops = cardColorStops()
-                    )
+                        colorStops = cardColorStops(),
+                    ),
                 )
                 .padding(10.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 imageVector = icon,
                 contentDescription = null,
                 contentScale = ContentScale.FillHeight,
                 colorFilter = ColorFilter.tint(
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -101,28 +101,28 @@ private fun OptionCardPreview() {
                     .padding(start = 10.dp, end = 10.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 OptionCard(
                     title = stringResource(R.string.dash_smoke_plus),
                     icon = Icon.Filled.Smoke,
                     enabled = true,
                     modifier = Modifier.weight(1f),
-                    onClick = { }
+                    onClick = { },
                 )
                 OptionCard(
                     title = stringResource(R.string.dash_pwm_control),
                     icon = Icon.Filled.Speedometer,
                     enabled = false,
                     modifier = Modifier.weight(1f),
-                    onClick = { }
+                    onClick = { },
                 )
                 OptionCard(
                     title = stringResource(R.string.shutdown),
                     icon = Icons.Filled.PowerSettingsNew,
                     enabled = true,
                     modifier = Modifier.weight(1f),
-                    onClick = { }
+                    onClick = { },
                 )
             }
         }

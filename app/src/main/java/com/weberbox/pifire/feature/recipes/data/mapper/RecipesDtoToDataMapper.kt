@@ -29,7 +29,7 @@ object RecipesDtoToDataMapper : Mapper<RecipesDto, Recipes> {
                         filename = asset.filename ?: defaultAsset.filename,
                         id = asset.id ?: defaultAsset.id,
                         encodedImage = asset.encodedImage ?: defaultAsset.encodedImage,
-                        encodedThumb = asset.encodedThumb ?: defaultAsset.encodedThumb
+                        encodedThumb = asset.encodedThumb ?: defaultAsset.encodedThumb,
                     )
                 } ?: emptyList(),
                 metadata = MetaData(
@@ -47,19 +47,19 @@ object RecipesDtoToDataMapper : Mapper<RecipesDto, Recipes> {
                     thumbnail = recipe.details?.metadata?.thumbnail ?: defaultMetaData.thumbnail,
                     title = recipe.details?.metadata?.title ?: defaultMetaData.title,
                     units = recipe.details?.metadata?.units ?: defaultMetaData.units,
-                    version = recipe.details?.metadata?.version ?: defaultMetaData.version
+                    version = recipe.details?.metadata?.version ?: defaultMetaData.version,
                 ),
                 ingredients = recipe.details?.recipe?.ingredients?.map { ingredient ->
                     Ingredient(
                         name = ingredient.name ?: defaultIngredient.name,
-                        quantity = ingredient.quantity ?: defaultIngredient.quantity
+                        quantity = ingredient.quantity ?: defaultIngredient.quantity,
                     )
                 } ?: emptyList(),
                 instructions = recipe.details?.recipe?.instructions?.map { instruction ->
                     Instruction(
                         ingredients = instruction.ingredients ?: defaultInstruction.ingredients,
                         step = instruction.step ?: defaultInstruction.step,
-                        text = instruction.text ?: defaultInstruction.text
+                        text = instruction.text ?: defaultInstruction.text,
                     )
                 } ?: emptyList(),
                 steps = recipe.details?.recipe?.steps?.map { step ->
@@ -72,11 +72,11 @@ object RecipesDtoToDataMapper : Mapper<RecipesDto, Recipes> {
                         timer = step.timer ?: defaultStep.timer,
                         triggerTemps = TriggerTemps(
                             food = step.triggerTemps?.food ?: defaultTriggerTemps.food,
-                            primary = step.triggerTemps?.primary ?: defaultTriggerTemps.primary
-                        )
+                            primary = step.triggerTemps?.primary ?: defaultTriggerTemps.primary,
+                        ),
                     )
-                } ?: emptyList()
+                } ?: emptyList(),
             )
-        } ?: emptyList()
+        } ?: emptyList(),
     )
 }

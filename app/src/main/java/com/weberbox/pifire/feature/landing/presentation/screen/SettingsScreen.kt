@@ -50,7 +50,7 @@ import me.zhanghai.compose.preference.ProvidePreferenceLocals
 @Composable
 fun SettingsScreenDestination(
     navController: NavHostController,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
@@ -61,6 +61,7 @@ fun SettingsScreenDestination(
             onNavigationRequested = { navigationEffect ->
                 when (navigationEffect) {
                     is SettingsContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
                     is SettingsContract.Effect.Navigation.NavRoute -> {
                         navController.navigateFrom(
                             from = sourceEntry,
@@ -70,7 +71,7 @@ fun SettingsScreenDestination(
                         )
                     }
                 }
-            }
+            },
         )
     }
 }
@@ -81,14 +82,14 @@ private fun SettingsScreen(
     state: SettingsContract.State,
     effectFlow: Flow<SettingsContract.Effect>?,
     onEventSent: (event: SettingsContract.Event) -> Unit,
-    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
 ) {
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     HandleSideEffects(
         effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested
+        onNavigationRequested = onNavigationRequested,
     )
 
     Scaffold(
@@ -101,7 +102,7 @@ private fun SettingsScreen(
                 scrollBehavior = scrollBehavior,
                 onNavigate = {
                     onNavigationRequested(SettingsContract.Effect.Navigation.Back)
-                }
+                },
             )
         },
         containerColor = Color.Transparent,
@@ -110,10 +111,11 @@ private fun SettingsScreen(
     ) { contentPadding ->
         AnimatedContent(
             targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError }
+            contentKey = { it.isInitialLoading or it.isDataError },
         ) { state ->
             when {
                 state.isInitialLoading -> InitialLoadingProgress()
+
                 state.isDataError -> DataError {
                     onNavigationRequested(SettingsContract.Effect.Navigation.Back)
                 }
@@ -122,7 +124,7 @@ private fun SettingsScreen(
                     SettingsScreenContent(
                         state = state,
                         contentPadding = contentPadding,
-                        onEventSent = onEventSent
+                        onEventSent = onEventSent,
                     )
                 }
             }
@@ -134,78 +136,78 @@ private fun SettingsScreen(
 fun SettingsScreenContent(
     state: SettingsContract.State,
     contentPadding: PaddingValues,
-    onEventSent: (event: SettingsContract.Event) -> Unit
+    onEventSent: (event: SettingsContract.Event) -> Unit,
 ) {
     val biometricManager = rememberBiometricPromptManager()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         PreferenceCategory(
             title = {
                 Text(
-                    text = stringResource(R.string.landing_cat_auto_select)
+                    text = stringResource(R.string.landing_cat_auto_select),
                 )
-            }
+            },
         )
         SwitchPreference(
             value = state.autSelectEnabled,
             title = {
                 Text(
-                    text = stringResource(R.string.landing_select_online_title)
+                    text = stringResource(R.string.landing_select_online_title),
                 )
             },
             summary = {
                 Text(
                     text = stringResource(
-                        R.string.landing_select_online_summary
-                    )
+                        R.string.landing_select_online_summary,
+                    ),
                 )
             },
             onValueChange = {
                 onEventSent(SettingsContract.Event.AutoSelectEnabled(it))
-            }
+            },
         )
         PreferenceCategory(
             title = {
                 Text(
-                    text = stringResource(R.string.settings_cat_biometrics_title)
+                    text = stringResource(R.string.settings_cat_biometrics_title),
                 )
-            }
+            },
         )
         SwitchPreference(
             value = state.biometricsEnabled,
             title = {
                 Text(
                     text = stringResource(
-                        R.string.settings_server_biometrics_title
-                    )
+                        R.string.settings_server_biometrics_title,
+                    ),
                 )
             },
             summary = {
                 Text(
-                    text = stringResource(R.string.settings_server_biometrics_summary)
+                    text = stringResource(R.string.settings_server_biometrics_summary),
                 )
             },
             onValueChange = { enabled ->
                 biometricManager?.authenticate(
                     onAuthenticationSuccess = {
                         onEventSent(SettingsContract.Event.BiometricsEnabled(enabled))
-                    }
+                    },
                 )
-            }
+            },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_app_title)) }
+            title = { Text(text = stringResource(R.string.settings_cat_app_title)) },
         )
         Preference(
             title = {
                 Text(text = stringResource(R.string.settings_app_info_title))
             },
             summary = { Text(text = stringResource(R.string.settings_app_info_summary)) },
-            onClick = { onEventSent(SettingsContract.Event.AppInfoDialog) }
+            onClick = { onEventSent(SettingsContract.Event.AppInfoDialog) },
         )
     }
 }
@@ -213,7 +215,7 @@ fun SettingsScreenContent(
 @Composable
 private fun HandleSideEffects(
     effectFlow: Flow<SettingsContract.Effect>?,
-    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
     LaunchedEffect(SIDE_EFFECTS_KEY) {
@@ -226,7 +228,7 @@ private fun HandleSideEffects(
                 is SettingsContract.Effect.Notification -> {
                     activity?.showAlerter(
                         message = effect.text,
-                        isError = effect.error
+                        isError = effect.error,
                     )
                 }
             }
@@ -246,11 +248,11 @@ private fun SettingsScreenPreview() {
                         autSelectEnabled = true,
                         biometricsEnabled = true,
                         isInitialLoading = false,
-                        isDataError = false
+                        isDataError = false,
                     ),
                     effectFlow = null,
                     onEventSent = {},
-                    onNavigationRequested = {}
+                    onNavigationRequested = {},
                 )
             }
         }

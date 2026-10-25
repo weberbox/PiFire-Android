@@ -22,46 +22,46 @@ import com.weberbox.pifire.feature.info.presentation.screen.buildInfo
 
 @Composable
 internal fun InfoPlatform(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_platform),
-        headerIcon = Icons.Outlined.Apps
+        headerIcon = Icons.Outlined.Apps,
     ) {
         Column(
             modifier = Modifier
                 .padding(
-                    horizontal = MaterialTheme.spacing.smallTwo
+                    horizontal = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             InfoItemRow(
                 title = stringResource(R.string.info_platform_system_model),
-                summary = info.platformInfo.systemModel
+                summary = info.platformInfo.systemModel,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_cpu_model),
-                summary = info.platformInfo.cpuModel
+                summary = info.platformInfo.cpuModel,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_hardware),
-                summary = info.platformInfo.cpuHardware
+                summary = info.platformInfo.cpuHardware,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_cores),
-                summary = info.platformInfo.cpuCores
+                summary = info.platformInfo.cpuCores,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_frequency),
-                summary = info.platformInfo.cpuFrequency
+                summary = info.platformInfo.cpuFrequency,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_total_ram),
-                summary = info.platformInfo.totalRam
+                summary = info.platformInfo.totalRam,
             )
             InfoItemRow(
                 title = stringResource(R.string.info_platform_available_ram),
-                summary = info.platformInfo.availableRam
+                summary = info.platformInfo.availableRam,
             )
         }
     }
@@ -75,7 +75,7 @@ private fun InfoPlatformPreview() {
     PiFireTheme {
         Surface {
             InfoPlatform(
-                info = info
+                info = info,
             )
         }
     }

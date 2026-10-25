@@ -22,18 +22,17 @@ import kotlin.math.roundToInt
 
 class DashApiImpl @Inject constructor(
     private val socketManager: SocketManager,
-    private val json: Json
+    private val json: Json,
 ) : DashApi {
 
-    override suspend fun getDashData(): Result<String, DataError> {
-        return socketManager.emitGet(ServerConstants.GA_DASH_DATA)
-    }
+    override suspend fun getDashData(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_DASH_DATA)
 
     override suspend fun listenDashData(): Flow<Result<String, DataError>> {
         val flow = socketManager.onFlow(ServerConstants.LISTEN_DASH_DATA)
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
+
                 is Result.Success -> {
                     if (result.data.isNotEmpty() && result.data[0] != null) {
                         emit(Result.Success(result.data[0].toString()))
@@ -47,42 +46,42 @@ class DashApiImpl @Inject constructor(
 
     override suspend fun sendSmokeMode(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(currentMode = RunningMode.Smoke.name, updated = true)
+            ControlDto(currentMode = RunningMode.Smoke.name, updated = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendStopMode(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(currentMode = RunningMode.Stop.name, updated = true)
+            ControlDto(currentMode = RunningMode.Stop.name, updated = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendStartGrill(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(currentMode = RunningMode.Startup.name, updated = true)
+            ControlDto(currentMode = RunningMode.Startup.name, updated = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendMonitorMode(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(currentMode = RunningMode.Monitor.name, updated = true)
+            ControlDto(currentMode = RunningMode.Monitor.name, updated = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendShutdownMode(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(currentMode = RunningMode.Shutdown.name, updated = true)
+            ControlDto(currentMode = RunningMode.Shutdown.name, updated = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendRecipeUnPause(): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(recipe = Recipe(stepData = StepData(pause = false)), updated = true)
+            ControlDto(recipe = Recipe(stepData = StepData(pause = false)), updated = true),
         )
         return sendEmitPost(json)
     }
@@ -94,22 +93,22 @@ class DashApiImpl @Inject constructor(
 
     override suspend fun setPWMControl(enabled: Boolean): Result<Unit, DataError> {
         val json = json.encodeToString(
-            ControlDto(pwmControl = enabled, settingsUpdate = true)
+            ControlDto(pwmControl = enabled, settingsUpdate = true),
         )
         return sendEmitPost(json)
     }
 
     override suspend fun sendPrimeGrill(
         primeAmount: Int,
-        nextMode: String
+        nextMode: String,
     ): Result<Unit, DataError> {
         val json = json.encodeToString(
             ControlDto(
                 currentMode = RunningMode.Prime.name,
                 primeAmount = primeAmount,
                 nextMode = nextMode,
-                updated = true
-            )
+                updated = true,
+            ),
         )
         return sendEmitPost(json)
     }
@@ -124,8 +123,8 @@ class DashApiImpl @Inject constructor(
             ControlDto(
                 currentMode = RunningMode.Hold.name,
                 primarySetPoint = setPoint,
-                updated = true
-            )
+                updated = true,
+            ),
         )
         return sendEmitPost(json)
     }
@@ -135,7 +134,7 @@ class DashApiImpl @Inject constructor(
         return socketManager.emitPost(
             ServerConstants.PA_NOTIFY_ACTION,
             ServerConstants.PT_NOTIFY_UPDATE,
-            json
+            json,
         )
     }
 
@@ -145,9 +144,9 @@ class DashApiImpl @Inject constructor(
             ManualDto(
                 manual = Manual(
                     change = ServerConstants.OUTPUT_FAN,
-                    output = output
-                )
-            )
+                    output = output,
+                ),
+            ),
         )
         return sendEmitPost(json)
     }
@@ -158,9 +157,9 @@ class DashApiImpl @Inject constructor(
             ManualDto(
                 manual = Manual(
                     change = ServerConstants.OUTPUT_AUGER,
-                    output = output
-                )
-            )
+                    output = output,
+                ),
+            ),
         )
         return sendEmitPost(json)
     }
@@ -171,39 +170,35 @@ class DashApiImpl @Inject constructor(
             ManualDto(
                 manual = Manual(
                     change = ServerConstants.OUTPUT_IGNITER,
-                    output = output
-                )
-            )
+                    output = output,
+                ),
+            ),
         )
         return sendEmitPost(json)
     }
 
-    override suspend fun checkHopperLevel(): Result<Unit, DataError> {
-        return socketManager.emitPost(
-            ServerConstants.PA_PELLETS_ACTION,
-            ServerConstants.PT_HOPPER_CHECK
-        )
-    }
+    override suspend fun checkHopperLevel(): Result<Unit, DataError> = socketManager.emitPost(
+        ServerConstants.PA_PELLETS_ACTION,
+        ServerConstants.PT_HOPPER_CHECK,
+    )
 
     override suspend fun sendToggleLidOpen(lidOpen: Boolean): Result<Unit, DataError> {
         val json = json.encodeToString(
             ControlDto(
                 lidOpenToggle = lidOpen,
-                updated = true
-            )
+                updated = true,
+            ),
         )
         return sendEmitPost(json)
     }
 
-    override suspend fun sendTimerAction(action: String): Result<Unit, DataError> {
-        return socketManager.emitPost(ServerConstants.PA_TIMER_ACTION, action)
-    }
+    override suspend fun sendTimerAction(action: String): Result<Unit, DataError> = socketManager.emitPost(ServerConstants.PA_TIMER_ACTION, action)
 
     override suspend fun sendTimerTime(
         hours: Int,
         minutes: Int,
         shutdown: Boolean,
-        keepWarm: Boolean
+        keepWarm: Boolean,
     ): Result<Unit, DataError> {
         val payload = json.encodeToString(
             PostDto(
@@ -211,21 +206,20 @@ class DashApiImpl @Inject constructor(
                     hoursRange = hours,
                     minutesRange = minutes,
                     timerShutdown = shutdown,
-                    timerKeepWarm = keepWarm
-                )
-            )
+                    timerKeepWarm = keepWarm,
+                ),
+            ),
         )
         return socketManager.emitPost(
             ServerConstants.PA_TIMER_ACTION,
-            ServerConstants.PT_TIMER_START, payload
+            ServerConstants.PT_TIMER_START,
+            payload,
         )
     }
 
-    private suspend fun sendEmitPost(json: String): Result<Unit, DataError> {
-        return socketManager.emitPost(
-            ServerConstants.PA_UPDATE_ACTION,
-            ServerConstants.PT_CONTROL,
-            json
-        )
-    }
+    private suspend fun sendEmitPost(json: String): Result<Unit, DataError> = socketManager.emitPost(
+        ServerConstants.PA_UPDATE_ACTION,
+        ServerConstants.PT_CONTROL,
+        json,
+    )
 }

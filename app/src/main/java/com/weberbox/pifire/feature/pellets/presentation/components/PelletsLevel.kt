@@ -44,7 +44,7 @@ import com.weberbox.pifire.feature.pellets.presentation.util.formatPercentage
 internal fun PelletsLevel(
     pellets: Pellets,
     isConnected: Boolean,
-    onEventSent: (event: PelletsContract.Event) -> Unit
+    onEventSent: (event: PelletsContract.Event) -> Unit,
 ) {
     val level by remember(pellets.hopperLevel) { mutableIntStateOf(pellets.hopperLevel) }
     val progress by animateFloatAsState(level.toFloat() / 100)
@@ -59,7 +59,7 @@ internal fun PelletsLevel(
         }
 
         level > AppConfig.LOW_PELLET_WARNING &&
-                level < AppConfig.MEDIUM_PELLET_WARNING -> {
+            level < AppConfig.MEDIUM_PELLET_WARNING -> {
             color = pelletWarning
             trackColor = pelletWarningTrack
             textColor = Color.White
@@ -73,7 +73,7 @@ internal fun PelletsLevel(
             if (isConnected) {
                 onEventSent(PelletsContract.Event.SendEvent(PelletsEvent.HopperCheck))
             }
-        }
+        },
     ) {
         Box(
             modifier = Modifier
@@ -81,9 +81,9 @@ internal fun PelletsLevel(
                     bottom = MaterialTheme.spacing.smallThree,
                     top = MaterialTheme.spacing.extraSmallOne,
                     start = MaterialTheme.spacing.mediumOne,
-                    end = MaterialTheme.spacing.mediumOne
+                    end = MaterialTheme.spacing.mediumOne,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             LinearProgressIndicator(
                 modifier = Modifier
@@ -96,14 +96,14 @@ internal fun PelletsLevel(
                 color = color,
                 trackColor = trackColor,
                 gapSize = -MaterialTheme.size.mediumFour,
-                drawStopIndicator = {}
+                drawStopIndicator = {},
             )
             Text(
                 text = formatPercentage(level),
                 modifier = Modifier.align(Alignment.Center),
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium,
-                color = textColor
+                color = textColor,
             )
         }
     }
@@ -123,7 +123,7 @@ private fun PelletsLevelPreview() {
             PelletsLevel(
                 pellets = pellets,
                 isConnected = true,
-                onEventSent = {}
+                onEventSent = {},
             )
         }
     }

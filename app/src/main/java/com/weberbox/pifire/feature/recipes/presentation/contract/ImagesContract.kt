@@ -13,7 +13,7 @@ class ImagesContract {
         val imageList: List<ByteArray?>,
         val imageIndex: Int,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

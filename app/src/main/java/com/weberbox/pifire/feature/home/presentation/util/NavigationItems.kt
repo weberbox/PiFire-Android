@@ -20,56 +20,52 @@ import com.weberbox.pifire.feature.home.presentation.model.StaticNavigationItem
 import com.weberbox.pifire.navigation.NavGraph
 
 @Composable
-fun buildNavigationItems(): List<NavigationItem> {
-    return listOf(
-        NavigationItem(
-            title = stringResource(R.string.nav_pellets),
-            route = NavGraph.HomeDest.Pellets,
-            selectedIcon = Icons.Outlined.Grain,
-            unselectedIcon = Icons.Filled.Grain
-        ),
-        NavigationItem(
-            title = stringResource(R.string.nav_dashboard),
-            route = NavGraph.HomeDest.Dashboard,
-            selectedIcon = Icons.Filled.OutdoorGrill,
-            unselectedIcon = Icons.Outlined.OutdoorGrill
-        ),
-        NavigationItem(
-            title = stringResource(R.string.nav_events),
-            route = NavGraph.HomeDest.Events,
-            selectedIcon = Icons.AutoMirrored.Filled.EventNote,
-            unselectedIcon = Icons.AutoMirrored.Outlined.EventNote
-        )
-    )
-}
+fun buildNavigationItems(): List<NavigationItem> = listOf(
+    NavigationItem(
+        title = stringResource(R.string.nav_pellets),
+        route = NavGraph.HomeDest.Pellets,
+        selectedIcon = Icons.Outlined.Grain,
+        unselectedIcon = Icons.Filled.Grain,
+    ),
+    NavigationItem(
+        title = stringResource(R.string.nav_dashboard),
+        route = NavGraph.HomeDest.Dashboard,
+        selectedIcon = Icons.Filled.OutdoorGrill,
+        unselectedIcon = Icons.Outlined.OutdoorGrill,
+    ),
+    NavigationItem(
+        title = stringResource(R.string.nav_events),
+        route = NavGraph.HomeDest.Events,
+        selectedIcon = Icons.AutoMirrored.Filled.EventNote,
+        unselectedIcon = Icons.AutoMirrored.Outlined.EventNote,
+    ),
+)
 
 @Composable
-fun buildStaticNavigationItems(): List<StaticNavigationItem> {
-    return listOf(
-        StaticNavigationItem(
-            title = stringResource(R.string.nav_recipes),
-            route = NavGraph.RecipesDest,
-            icon = Icons.Filled.LocalDining,
-        ),
-        StaticNavigationItem(
-            title = stringResource(R.string.nav_settings),
-            route = NavGraph.SettingsDest,
-            icon = Icons.Filled.Settings,
-        ),
-        StaticNavigationItem(
-            title = stringResource(R.string.nav_info),
-            route = NavGraph.InfoDest,
-            icon = Icons.Filled.Info,
-        ),
-        StaticNavigationItem(
-            title = stringResource(R.string.nav_changelog),
-            route = NavGraph.Changelog,
-            icon = Icons.Filled.FiberNew,
-        ),
-        StaticNavigationItem(
-            title = stringResource(R.string.nav_logout),
-            route = NavGraph.LandingDest.Landing(false),
-            icon = Icons.AutoMirrored.Filled.Logout
-        )
-    )
-}
+fun buildStaticNavigationItems(): List<StaticNavigationItem> = listOf(
+    StaticNavigationItem(
+        title = stringResource(R.string.nav_recipes),
+        route = NavGraph.RecipesDest,
+        icon = Icons.Filled.LocalDining,
+    ),
+    StaticNavigationItem(
+        title = stringResource(R.string.nav_settings),
+        route = NavGraph.SettingsDest,
+        icon = Icons.Filled.Settings,
+    ),
+    StaticNavigationItem(
+        title = stringResource(R.string.nav_info),
+        route = NavGraph.InfoDest,
+        icon = Icons.Filled.Info,
+    ),
+    StaticNavigationItem(
+        title = stringResource(R.string.nav_changelog),
+        route = NavGraph.Changelog,
+        icon = Icons.Filled.FiberNew,
+    ),
+    StaticNavigationItem(
+        title = stringResource(R.string.nav_logout),
+        route = NavGraph.LandingDest.Landing(false),
+        icon = Icons.AutoMirrored.Filled.Logout,
+    ),
+)

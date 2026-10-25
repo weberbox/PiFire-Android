@@ -22,11 +22,11 @@ import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun InfoUptime(
-    info: Info
+    info: Info,
 ) {
     HeaderCard(
         title = stringResource(R.string.info_uptime),
-        headerIcon = Icons.Outlined.Schedule
+        headerIcon = Icons.Outlined.Schedule,
     ) {
         Column(
             modifier = Modifier
@@ -34,13 +34,13 @@ internal fun InfoUptime(
                 .padding(
                     bottom = MaterialTheme.spacing.smallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
-                )
+                    end = MaterialTheme.spacing.smallTwo,
+                ),
         ) {
             Text(
                 text = info.uptime,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -58,7 +58,7 @@ private fun InfoUptimePreview() {
     PiFireTheme {
         Surface {
             InfoUptime(
-                info = info
+                info = info,
             )
         }
     }

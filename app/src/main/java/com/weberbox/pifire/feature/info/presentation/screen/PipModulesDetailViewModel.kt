@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PipModulesDetailViewModel @Inject constructor(
-    private val sessionStateHolder: SessionStateHolder
+    private val sessionStateHolder: SessionStateHolder,
 ) : BaseViewModel<ModulesContract.Event, ModulesContract.State, ModulesContract.Effect>() {
 
     init {
@@ -23,7 +23,7 @@ class PipModulesDetailViewModel @Inject constructor(
         pipModules = emptyList(),
         isInitialLoading = true,
         isRefreshing = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: ModulesContract.Event) {
@@ -38,13 +38,13 @@ class PipModulesDetailViewModel @Inject constructor(
                         setState {
                             copy(
                                 pipModules = modules.orEmpty(),
-                                isInitialLoading = false
+                                isInitialLoading = false,
                             )
                         }
                     } ?: setState {
                         copy(
                             isInitialLoading = false,
-                            isDataError = true
+                            isDataError = true,
                         )
                     }
                 }

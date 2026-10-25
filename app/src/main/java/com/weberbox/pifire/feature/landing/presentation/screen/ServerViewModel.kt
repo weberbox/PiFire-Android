@@ -35,7 +35,7 @@ class ServerViewModel @Inject constructor(
     private val analytics: Analytics,
     private val settingsRepo: SettingsRepo,
     private val headersManager: HeadersManager,
-    val savedStateHandle: SavedStateHandle
+    val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ServerContract.Event, ServerContract.State, ServerContract.Effect>() {
     private var currentUuid by mutableStateOf("")
 
@@ -50,7 +50,7 @@ class ServerViewModel @Inject constructor(
         basicAuth = BasicAuth(),
         serverAddress = InputState(),
         isInitialLoading = true,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: ServerContract.Event) {
@@ -73,11 +73,11 @@ class ServerViewModel @Inject constructor(
                         serverAddress = InputState(
                             input = FieldInput(
                                 value = server.address,
-                                hasInteracted = server.address.isNotBlank()
+                                hasInteracted = server.address.isNotBlank(),
                             ),
-                            error = ErrorStatus(isError = false)
+                            error = ErrorStatus(isError = false),
                         ),
-                        isInitialLoading = false
+                        isInitialLoading = false,
                     )
                 }
             }
@@ -89,7 +89,7 @@ class ServerViewModel @Inject constructor(
             headersManager.getBasicAuthFlow(currentUuid).collect { basicAuth ->
                 setState {
                     copy(
-                        basicAuth = basicAuth
+                        basicAuth = basicAuth,
                     )
                 }
             }
@@ -101,8 +101,8 @@ class ServerViewModel @Inject constructor(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
                 AnalyticsEvent.Param.PrefKey.key to "extraHeaders",
-                AnalyticsEvent.Param.State.key to enabled
-            )
+                AnalyticsEvent.Param.State.key to enabled,
+            ),
         )
         viewModelScope.launch {
             if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
@@ -115,15 +115,17 @@ class ServerViewModel @Inject constructor(
                             buttonText = UiText(R.string.enable),
                             action = {
                                 settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
-                            }
+                            },
                         ),
                         negativeAction = DialogAction(
                             buttonText = UiText(R.string.cancel),
-                            action = { }
-                        )
-                    )
+                            action = { },
+                        ),
+                    ),
                 )
-            } else settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
+            } else {
+                settingsRepo.toggleHeadersEnabled(enabled, currentUuid)
+            }
         }
     }
 
@@ -132,8 +134,8 @@ class ServerViewModel @Inject constructor(
             name = AnalyticsEvent.PrefsChange.name,
             params = mapOf(
                 AnalyticsEvent.Param.PrefKey.key to "basicAuth",
-                AnalyticsEvent.Param.State.key to enabled
-            )
+                AnalyticsEvent.Param.State.key to enabled,
+            ),
         )
         viewModelScope.launch {
             if (viewState.value.serverAddress.input.value.isNotSecureUrl() && enabled) {
@@ -146,15 +148,17 @@ class ServerViewModel @Inject constructor(
                             buttonText = UiText(R.string.enable),
                             action = {
                                 settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
-                            }
+                            },
                         ),
                         negativeAction = DialogAction(
                             buttonText = UiText(R.string.cancel),
-                            action = { }
-                        )
-                    )
+                            action = { },
+                        ),
+                    ),
                 )
-            } else settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
+            } else {
+                settingsRepo.toggleCredentialsEnabled(enabled, currentUuid)
+            }
         }
     }
 
@@ -177,10 +181,10 @@ class ServerViewModel @Inject constructor(
                 serverAddress = InputState(
                     input = FieldInput(
                         value = address,
-                        hasInteracted = true
+                        hasInteracted = true,
                     ),
-                    error = errorStatus
-                )
+                    error = errorStatus,
+                ),
             )
         }
     }

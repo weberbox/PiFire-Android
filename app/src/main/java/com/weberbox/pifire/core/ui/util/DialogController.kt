@@ -12,7 +12,7 @@ data class DialogEvent(
     val message: UiText,
     val dismissible: Boolean = true,
     val positiveAction: DialogAction,
-    val negativeAction: DialogAction? = null
+    val negativeAction: DialogAction? = null,
 ) : Parcelable
 
 @Parcelize

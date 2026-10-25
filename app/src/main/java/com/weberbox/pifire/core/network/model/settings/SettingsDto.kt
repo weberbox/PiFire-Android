@@ -24,7 +24,7 @@ data class SettingsDto(
     val cycleData: CycleData? = null,
 
     @SerialName("dashboard")
-    var dashboard : Dashboard? = null,
+    var dashboard: Dashboard? = null,
 
     @SerialName("controller")
     val controller: Controller? = null,
@@ -54,5 +54,5 @@ data class SettingsDto(
     val pwm: Pwm? = null,
 
     @SerialName("platform")
-    val platform: Platform? = null
+    val platform: Platform? = null,
 )

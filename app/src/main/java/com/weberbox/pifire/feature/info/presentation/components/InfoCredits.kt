@@ -33,7 +33,7 @@ import java.util.Calendar
 @Composable
 internal fun InfoCredits(
     licenseData: Licenses,
-    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
 ) {
     val context = LocalContext.current
     val limit by remember { mutableIntStateOf(AppConfig.LIST_VIEW_LIMIT) }
@@ -47,16 +47,16 @@ internal fun InfoCredits(
         },
         viewAllClick = {
             onNavigationRequested(InfoContract.Effect.Navigation.LicenseDetails)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
                 .padding(
                     bottom = MaterialTheme.spacing.smallOne,
                     start = MaterialTheme.spacing.smallTwo,
-                    end = MaterialTheme.spacing.smallTwo
+                    end = MaterialTheme.spacing.smallTwo,
                 )
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             Text(
                 text = stringResource(R.string.info_credits_text, currentYear),
@@ -83,7 +83,7 @@ private fun InfoCreditsPreview() {
         Surface {
             InfoCredits(
                 licenseData = buildLicenseData(),
-                onNavigationRequested = {}
+                onNavigationRequested = {},
             )
         }
     }

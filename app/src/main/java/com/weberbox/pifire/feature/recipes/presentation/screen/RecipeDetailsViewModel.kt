@@ -33,7 +33,7 @@ class RecipeDetailsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val recipesRepo: RecipesRepo,
     private val analytics: Analytics,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
 
     private var currentRecipe by mutableStateOf(Recipe())
@@ -49,7 +49,7 @@ class RecipeDetailsViewModel @Inject constructor(
         recipeImages = emptyList(),
         isInitialLoading = true,
         isLoading = false,
-        isDataError = false
+        isDataError = false,
     )
 
     override fun handleEvents(event: DetailsContract.Event) {
@@ -77,7 +77,7 @@ class RecipeDetailsViewModel @Inject constructor(
                                     recipeImages = images.toImmutableList(),
                                     isInitialLoading = false,
                                     isLoading = false,
-                                    isDataError = false
+                                    isDataError = false,
                                 )
                             }
                         }
@@ -106,7 +106,7 @@ class RecipeDetailsViewModel @Inject constructor(
                                     recipeImages = images.toImmutableList(),
                                     isInitialLoading = false,
                                     isLoading = false,
-                                    isDataError = false
+                                    isDataError = false,
                                 )
                             }
                         }
@@ -126,7 +126,7 @@ class RecipeDetailsViewModel @Inject constructor(
                                 recipeStep = step,
                                 isInitialLoading = false,
                                 isLoading = false,
-                                isDataError = true
+                                isDataError = true,
                             )
                         }
                     }
@@ -145,13 +145,13 @@ class RecipeDetailsViewModel @Inject constructor(
                                         recipeImages = images.toImmutableList(),
                                         isInitialLoading = false,
                                         isLoading = false,
-                                        isDataError = false
+                                        isDataError = false,
                                     )
                                 }
                                 setEffect {
                                     DetailsContract.Effect.Notification(
                                         text = UiText(R.string.alerter_cached_results),
-                                        error = true
+                                        error = true,
                                     )
                                 }
                             }
@@ -166,8 +166,8 @@ class RecipeDetailsViewModel @Inject constructor(
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "startRecipe"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "startRecipe",
+            ),
         )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
@@ -179,7 +179,7 @@ class RecipeDetailsViewModel @Inject constructor(
                         setEffect {
                             DetailsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -199,8 +199,8 @@ class RecipeDetailsViewModel @Inject constructor(
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "deleteRecipe"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "deleteRecipe",
+            ),
         )
         setLoadingStateTrue()
         viewModelScope.launch(Dispatchers.IO) {
@@ -212,7 +212,7 @@ class RecipeDetailsViewModel @Inject constructor(
                         setEffect {
                             DetailsContract.Effect.Notification(
                                 text = result.error.asUiText(),
-                                error = true
+                                error = true,
                             )
                         }
                     }
@@ -233,7 +233,7 @@ class RecipeDetailsViewModel @Inject constructor(
             setEffect {
                 DetailsContract.Effect.Notification(
                     text = UiText(R.string.recipes_delete_running),
-                    error = true
+                    error = true,
                 )
             }
         }
@@ -243,8 +243,8 @@ class RecipeDetailsViewModel @Inject constructor(
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "printRecipe"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "printRecipe",
+            ),
         )
         setEffect { DetailsContract.Effect.PrintRecipe(viewState.value.recipeData) }
     }
@@ -253,8 +253,8 @@ class RecipeDetailsViewModel @Inject constructor(
         analytics.logEvent(
             name = AnalyticsEvent.ButtonClick.name,
             params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "shareRecipe"
-            )
+                AnalyticsEvent.Param.ButtonAction.key to "shareRecipe",
+            ),
         )
         setEffect { DetailsContract.Effect.ShareRecipe(viewState.value.recipeData) }
     }
@@ -269,7 +269,7 @@ class RecipeDetailsViewModel @Inject constructor(
                 copy(
                     isInitialLoading = false,
                     isLoading = false,
-                    isDataError = true
+                    isDataError = true,
                 )
             }
         }

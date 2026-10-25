@@ -16,7 +16,7 @@ class HeadersContract {
     data class State(
         val extraHeaders: List<ExtraHeader>,
         val isInitialLoading: Boolean,
-        val isDataError: Boolean
+        val isDataError: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {
