@@ -45,7 +45,10 @@ Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `p
   the integration off. Add new keys to both files. One `app/google-services.json` serves every
   flavor (same Firebase project). One Sentry project serves every flavor, split by
   `environment = <flavor>-<buildType>`. Never commit `local.properties`, `google-services.json`
-  or keystores.
+  or keystores. A clean clone builds against the committed `app/google-services.placeholder.json`
+  (fake ids, copied to `google-services.json` only when that file is missing). Sentry instruments
+  release builds too; the R8 mapping uploads only when `SENTRY_AUTH_TOKEN` or `sentry.properties`
+  is present.
 - After changing DTOs, `@Serializable` models, DataStore serializers, or anything Hilt/Firebase
   finds at runtime, build a release APK and add keep rules to `app/proguard-rules.pro`, grouped and
   commented.

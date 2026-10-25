@@ -15,6 +15,13 @@ plugins {
     alias(libs.plugins.kotlin.android.ksp)
 }
 
+// google-services.json isn't committed. Clean clones build against a placeholder with fake ids, so
+// Firebase compiles and its calls just fail at runtime (Remote Config falls back to bundled defaults).
+val googleServicesFile = file("google-services.json")
+if (!googleServicesFile.exists()) {
+    file("google-services.placeholder.json").copyTo(googleServicesFile)
+}
+
 private val keystoreProperties = getKeystoreProperties()
 private val localProperties = getLocalProperties()
 
@@ -187,7 +194,11 @@ sentry {
         enabled.set(true)
         features.set(EnumSet.allOf(InstrumentationFeature::class.java) - InstrumentationFeature.OKHTTP)
     }
-    ignoredBuildTypes.set(setOf("release"))
+    // Uploading the R8 mapping needs a Sentry auth token; without one (e.g. a clean clone) release
+    // builds still get instrumentation, but their crash reports stay obfuscated.
+    autoUploadProguardMapping.set(
+        System.getenv("SENTRY_AUTH_TOKEN") != null || rootProject.file("sentry.properties").exists(),
+    )
 }
 
 fun getKeystoreProperties(): Properties {

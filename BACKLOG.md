@@ -18,11 +18,11 @@ line once it's done.
   Konsist `ArchitectureTest`.
 - (2026-10-22) Clean clones should build. Done: `Secrets.kt` values moved to `local.properties` ->
   `BuildConfig` (fallbacks in `local.defaults.properties`); one `app/google-services.json`; one
-  Sentry project (the former playstore one) with `environment = <flavor>-<buildType>`. Left: the
-  google-services plugin still fails without `app/google-services.json`; decide between a
-  committed placeholder and applying the plugin only when the file exists.
-- [sentry] app/build.gradle.kts `sentry { ignoredBuildTypes = release }`: the plugin skips
-  release builds, so no tracing instrumentation there. Check that's intended.
+  Sentry project (the former playstore one) with `environment = <flavor>-<buildType>`; a
+  committed `app/google-services.placeholder.json` is used when the real file is missing.
+- (2026-10-25) Sentry instruments release builds too. R8 mappings upload only with a Sentry auth
+  token (`SENTRY_AUTH_TOKEN` or `sentry.properties`); without one, release crash reports stay
+  obfuscated.
 
 ## Restructure plan
 One step per commit, compile all flavors after each.
@@ -30,14 +30,11 @@ One step per commit, compile all flavors after each.
    contracts use `NavRoute(route, popUpToRoute, inclusive)`. Only `MainActivity` navigates raw.
 2. Done (2026-10-24): `common/` merged into `core/` (`analytics`, `common/model`, `common/util`,
    `data`, `log`, `model`, `network`, `notification`, `remoteconfig`, `session`, `ui`); navigation
-   in `navigation/`; `MainActivity`/`MainViewModel`/`MainContract` in `application/`. Left for
-   later steps: `core` still imports feature types (`SettingsData.Server`, `HeadersManager`,
-   `SettingsRepo`, `Crypto`); move them to `core` with their feature (step 3/4).
+   in `navigation/`; `MainActivity`/`MainViewModel`/`MainContract` in `application/`.
 3. Done (2026-10-24): every feature in `feature/<name>/` with `components`/`screen`/`util`,
    mappers in `data/mapper`, bindings in `data/di/<Name>DataModule` (`ApiModule`/`RepoModule`
    removed), screen files and `*ScreenDestination` renamed. Left: private composables inside the
-   renamed settings/landing screens still lack the `Screen` suffix (fix with the five-part pattern),
-   and `core/di` (`DataStoreModule`, `StateModule`, `HeadersModule`, ...) still imports features.
+   renamed settings/landing screens still lack the `Screen` suffix (fix with the five-part pattern).
 4. Done (2026-10-25): no `data/` or `core/` code imports `presentation`. Cached server models
    (`SettingsData` + its PWM/probe/smart-start/OneSignal types and `Setting`, `DashData`,
    `EventsData`, `InfoData`, `PelletsData`, `RecipesData`) moved to `core/model/<feature>/`;
