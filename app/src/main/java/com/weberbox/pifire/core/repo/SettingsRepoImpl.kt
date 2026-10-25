@@ -18,11 +18,14 @@ import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.repo.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.core.session.SessionStateHolder
 import dagger.Lazy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -34,19 +37,21 @@ class SettingsRepoImpl @Inject constructor(
     private val json: Json,
 ) : SettingsRepo {
 
-    override suspend fun getSettings(): Result<Server, DataError> = settingsApi.getSettings().let { result ->
-        when (result) {
-            is Result.Error -> Result.Error(result.error)
+    override suspend fun getSettings(): Result<Server, DataError> = withContext(Dispatchers.IO) {
+        settingsApi.getSettings().let { result ->
+            when (result) {
+                is Result.Error -> Result.Error(result.error)
 
-            is Result.Success -> {
-                parseGetResponse(result.data, json, SettingsDtoToDataMapper).let { data ->
-                    when (data) {
-                        is Result.Error -> Result.Error(data.error)
+                is Result.Success -> {
+                    parseGetResponse(result.data, json, SettingsDtoToDataMapper).let { data ->
+                        when (data) {
+                            is Result.Error -> Result.Error(data.error)
 
-                        is Result.Success -> {
-                            sessionStateHolder.setSettingsData(data.data)
-                            updateServerSettings(data.data)
-                            Result.Success(data.data)
+                            is Result.Success -> {
+                                sessionStateHolder.setSettingsData(data.data)
+                                updateServerSettings(data.data)
+                                Result.Success(data.data)
+                            }
                         }
                     }
                 }
@@ -56,7 +61,7 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun listenSettingsData(): Flow<Result<Server, DataError>> {
         val flow = settingsApi.listenSettingsData()
-        return flow.transform { result ->
+        val parsed: Flow<Result<Server, DataError>> = flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
 
@@ -74,12 +79,13 @@ class SettingsRepoImpl @Inject constructor(
                 }
             }
         }
+        return parsed.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun getCachedData(): Result<Server, DataError.Local> {
+    override suspend fun getCachedData(): Result<Server, DataError.Local> = withContext(Dispatchers.IO) {
         val data = dataStore.data.firstOrNull()
         val currentServer = sessionStateHolder.currentServerUuid
-        return if (data != null && currentServer.isNotBlank()) {
+        if (data != null && currentServer.isNotBlank()) {
             data.serverMap[currentServer]?.let { server ->
                 Result.Success(server)
             } ?: Result.Error(DataError.Local.NO_CACHED_DATA)
@@ -508,15 +514,18 @@ class SettingsRepoImpl @Inject constructor(
         .mapNotNull { it.serverMap[uuid] }
         .distinctUntilChanged()
 
+    // Every settings call returns the full settings JSON; parse it off the main thread
     private suspend fun transformResult(
         result: Result<String, DataError>,
-    ): Result<Server, DataError> = when (result) {
-        is Result.Error -> Result.Error(result.error)
+    ): Result<Server, DataError> = withContext(Dispatchers.IO) {
+        when (result) {
+            is Result.Error -> Result.Error(result.error)
 
-        is Result.Success -> {
-            when (val data = parseGetResponse(result.data, json, SettingsDtoToDataMapper)) {
-                is Result.Error -> Result.Error(data.error)
-                is Result.Success -> Result.Success(data.data)
+            is Result.Success -> {
+                when (val data = parseGetResponse(result.data, json, SettingsDtoToDataMapper)) {
+                    is Result.Error -> Result.Error(data.error)
+                    is Result.Success -> Result.Success(data.data)
+                }
             }
         }
     }

@@ -12,9 +12,12 @@ import com.weberbox.pifire.feature.dashboard.data.api.DashApi
 import com.weberbox.pifire.feature.dashboard.data.mapper.DashDtoToDataMapper
 import com.weberbox.pifire.feature.dashboard.data.mapper.toDto
 import com.weberbox.pifire.feature.dashboard.data.model.ProbeNotify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -25,19 +28,21 @@ class DashRepoImpl @Inject constructor(
     private val json: Json,
 ) : DashRepo {
 
-    override suspend fun getDashData(): Result<Dash, DataError> = dashApi.getDashData().let { result ->
-        when (result) {
-            is Result.Error -> Result.Error(result.error)
+    override suspend fun getDashData(): Result<Dash, DataError> = withContext(Dispatchers.IO) {
+        dashApi.getDashData().let { result ->
+            when (result) {
+                is Result.Error -> Result.Error(result.error)
 
-            is Result.Success -> {
-                parseGetResponse(result.data, json, DashDtoToDataMapper).let { data ->
-                    when (data) {
-                        is Result.Error -> Result.Error(data.error)
+                is Result.Success -> {
+                    parseGetResponse(result.data, json, DashDtoToDataMapper).let { data ->
+                        when (data) {
+                            is Result.Error -> Result.Error(data.error)
 
-                        is Result.Success -> {
-                            sessionStateHolder.setDashData(data.data)
-                            updateDashData(data.data)
-                            Result.Success(data.data)
+                            is Result.Success -> {
+                                sessionStateHolder.setDashData(data.data)
+                                updateDashData(data.data)
+                                Result.Success(data.data)
+                            }
                         }
                     }
                 }
@@ -45,10 +50,10 @@ class DashRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCachedData(): Result<Dash, DataError.Local> {
+    override suspend fun getCachedData(): Result<Dash, DataError.Local> = withContext(Dispatchers.IO) {
         val data = dataStore.data.firstOrNull()
         val currentServer = sessionStateHolder.currentServerUuid
-        return if (data != null && currentServer.isNotBlank()) {
+        if (data != null && currentServer.isNotBlank()) {
             data.dashMap[currentServer]?.let { dash ->
                 sessionStateHolder.setDashData(dash)
                 Result.Success(dash)
@@ -60,7 +65,7 @@ class DashRepoImpl @Inject constructor(
 
     override suspend fun listenDashData(): Flow<Result<Dash, DataError>> {
         val flow = dashApi.listenDashData()
-        return flow.transform { result ->
+        val parsed: Flow<Result<Dash, DataError>> = flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
 
@@ -78,6 +83,7 @@ class DashRepoImpl @Inject constructor(
                 }
             }
         }
+        return parsed.flowOn(Dispatchers.IO)
     }
 
     override suspend fun updateDashData(dash: Dash) {

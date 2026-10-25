@@ -31,10 +31,8 @@ import com.weberbox.pifire.feature.dashboard.presentation.model.TimerData
 import com.weberbox.pifire.feature.dashboard.presentation.util.CountDownTimer
 import com.weberbox.pifire.feature.dashboard.presentation.util.ElapsedTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import javax.inject.Inject
 
@@ -90,7 +88,7 @@ class DashboardViewModel @Inject constructor(
 
     private fun sendDashEvent(event: DashEvent) {
         setLoadingState(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(
                 when (event) {
                     is DashEvent.Monitor -> dashRepo.sendMonitorMode()
@@ -179,35 +177,34 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun listenDashData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             dashRepo.listenDashData().collect { result ->
-                withContext(Dispatchers.Main) {
-                    when (result) {
-                        is Result.Error -> {
-                            if (result.error != DataError.Network.SOCKET_ERROR) {
-                                setEffect {
-                                    DashContract.Effect.Notification(
-                                        text = result.error.asUiText(),
-                                        error = true,
-                                    )
-                                }
-                            }
-                            setState { copy(isRefreshing = false, isLoading = false) }
-                        }
-
-                        is Result.Success -> {
-                            checkShowGrillHoldToolTip(result.data)
-                            setState {
-                                copy(
-                                    dash = result.data,
-                                    isInitialLoading = false,
-                                    isLoading = false,
-                                    isRefreshing = false,
+                when (result) {
+                    is Result.Error -> {
+                        if (result.error != DataError.Network.SOCKET_ERROR) {
+                            setEffect {
+                                DashContract.Effect.Notification(
+                                    text = result.error.asUiText(),
+                                    error = true,
                                 )
                             }
-                            toggleElapsed(result.data.startupTimestamp.toDouble())
-                            toggleTimer(result.data.timer)
                         }
+                        setState { copy(isRefreshing = false, isLoading = false) }
+                    }
+
+                    is Result.Success -> {
+                        checkShowGrillHoldToolTip(result.data)
+                        setState {
+                            copy(
+                                dash = result.data,
+                                isInitialLoading = false,
+                                isLoading = false,
+                                isRefreshing = false,
+                                isDataError = false,
+                            )
+                        }
+                        toggleElapsed(result.data.startupTimestamp.toDouble())
+                        toggleTimer(result.data.timer)
                     }
                 }
             }
@@ -266,7 +263,7 @@ class DashboardViewModel @Inject constructor(
     private fun checkHopperLevel() {
         if (viewState.value.dash.hasDistanceSensor) {
             setLoadingState(true)
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 handleResult(dashRepo.checkHopperLevel())
             }
         }
@@ -333,23 +330,21 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun restartControl() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = settingsRepo.restartControl()
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        setLoadingState(false)
-                        setEffect {
-                            DashContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
+            when (result) {
+                is Result.Error -> {
+                    setLoadingState(false)
+                    setEffect {
+                        DashContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
                     }
+                }
 
-                    is Result.Success -> {
-                        setLoadingState(false)
-                    }
+                is Result.Success -> {
+                    setLoadingState(false)
                 }
             }
         }
@@ -425,51 +420,22 @@ class DashboardViewModel @Inject constructor(
 
     private fun setSmokePlus(enabled: Boolean) {
         setLoadingState(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(dashRepo.setSmokePlus(enabled))
         }
     }
 
     private fun setPWMControl(enabled: Boolean) {
         setLoadingState(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             handleResult(dashRepo.setPWMControl(enabled))
         }
     }
 
     private fun setProbeNotify(probeNotify: ProbeNotify) {
         setLoadingState(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = dashRepo.setProbeNotify(probeNotify)
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        if (result.error != DataError.Network.SOCKET_ERROR) {
-                            setEffect {
-                                DashContract.Effect.Notification(
-                                    text = result.error.asUiText(),
-                                    error = true,
-                                )
-                            }
-                        }
-                        setState {
-                            copy(
-                                isRefreshing = false,
-                                isLoading = false,
-                            )
-                        }
-                    }
-
-                    is Result.Success -> {
-                        setLoadingState(false)
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun handleResult(result: Result<Unit, DataError>) {
-        withContext(Dispatchers.Main) {
             when (result) {
                 is Result.Error -> {
                     if (result.error != DataError.Network.SOCKET_ERROR) {
@@ -480,12 +446,37 @@ class DashboardViewModel @Inject constructor(
                             )
                         }
                     }
-                    setState { copy(isRefreshing = false, isLoading = false) }
+                    setState {
+                        copy(
+                            isRefreshing = false,
+                            isLoading = false,
+                        )
+                    }
                 }
 
                 is Result.Success -> {
-                    // listenDashData clears loading
+                    setLoadingState(false)
                 }
+            }
+        }
+    }
+
+    private fun handleResult(result: Result<Unit, DataError>) {
+        when (result) {
+            is Result.Error -> {
+                if (result.error != DataError.Network.SOCKET_ERROR) {
+                    setEffect {
+                        DashContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
+                        )
+                    }
+                }
+                setState { copy(isRefreshing = false, isLoading = false) }
+            }
+
+            is Result.Success -> {
+                // listenDashData clears loading
             }
         }
     }
@@ -515,6 +506,7 @@ class DashboardViewModel @Inject constructor(
                             isInitialLoading = false,
                             isLoading = false,
                             isRefreshing = false,
+                            isDataError = false,
                         )
                     }
                 }
@@ -523,35 +515,34 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun getCachedData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = dashRepo.getCachedData()
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    is Result.Error -> {
-                        setState {
-                            copy(
-                                dash = Dash(),
-                                isInitialLoading = false,
-                                isRefreshing = false,
-                                isDataError = true,
-                            )
-                        }
+            when (result) {
+                is Result.Error -> {
+                    setState {
+                        copy(
+                            dash = Dash(),
+                            isInitialLoading = false,
+                            isRefreshing = false,
+                            isDataError = true,
+                        )
                     }
+                }
 
-                    is Result.Success -> {
-                        setState {
-                            copy(
-                                dash = buildOfflineDash(result.data),
-                                isInitialLoading = false,
-                                isRefreshing = false,
-                            )
-                        }
-                        setEffect {
-                            DashContract.Effect.Notification(
-                                text = UiText(R.string.alerter_cached_results),
-                                error = true,
-                            )
-                        }
+                is Result.Success -> {
+                    setState {
+                        copy(
+                            dash = buildOfflineDash(result.data),
+                            isInitialLoading = false,
+                            isRefreshing = false,
+                            isDataError = false,
+                        )
+                    }
+                    setEffect {
+                        DashContract.Effect.Notification(
+                            text = UiText(R.string.alerter_cached_results),
+                            error = true,
+                        )
                     }
                 }
             }

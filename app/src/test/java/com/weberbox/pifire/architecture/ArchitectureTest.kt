@@ -155,7 +155,7 @@ class ArchitectureTest {
 
         // Not migrated yet (BACKLOG.md "Dispatchers in ViewModels"); remove each as its repo takes over the IO.
         val VIEW_MODELS_WITH_DISPATCHERS = setOf(
-            "AdminSettingsViewModel", "ConnectViewModel", "DashboardViewModel",
+            "AdminSettingsViewModel", "ConnectViewModel",
             "FinishViewModel", "HomeScreenViewModel", "LandingViewModel",
             "ManualSettingsViewModel", "NotificationSettingsViewModel", "PelletSettingsViewModel",
             "ProbeSettingsViewModel",

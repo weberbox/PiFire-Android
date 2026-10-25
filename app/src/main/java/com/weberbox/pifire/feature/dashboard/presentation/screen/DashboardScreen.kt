@@ -130,25 +130,42 @@ private fun DashboardScreen(
     viewModel: DashboardViewModel,
 ) {
     val sourceEntry = rememberSourceEntry()
+    val startToHoldSheet = rememberCustomModalBottomSheetState()
+    val tooltipState = rememberTooltipState(initialIsVisible = false, isPersistent = true)
+    var isVisibleOnScreen by remember { mutableStateOf(false) }
+    val onNavigationRequested: (DashContract.Effect.Navigation) -> Unit = { navigationEffect ->
+        when (navigationEffect) {
+            is DashContract.Effect.Navigation.NavRoute ->
+                navController.navigateFrom(
+                    from = sourceEntry,
+                    route = navigationEffect.route,
+                    popUpToRoute = navigationEffect.popUpToRoute,
+                    inclusive = navigationEffect.inclusive,
+                )
+        }
+    }
+
+    // Only notify while this pager page is on screen
+    HandleSideEffects(
+        activity = LocalActivity.current,
+        isVisibleOnScreen = isVisibleOnScreen,
+        tooltipState = tooltipState,
+        startToHoldSheet = startToHoldSheet,
+        effectFlow = viewModel.effect,
+        onNavigationRequested = onNavigationRequested,
+    )
+
     DashboardScreenContent(
         state = viewModel.viewState.value,
         timerData = viewModel.timerData,
         elapsedData = viewModel.elapsedData,
-        effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
         hazeState = hazeState,
         contentPadding = contentPadding,
-        onNavigationRequested = { navigationEffect ->
-            when (navigationEffect) {
-                is DashContract.Effect.Navigation.NavRoute ->
-                    navController.navigateFrom(
-                        from = sourceEntry,
-                        route = navigationEffect.route,
-                        popUpToRoute = navigationEffect.popUpToRoute,
-                        inclusive = navigationEffect.inclusive,
-                    )
-            }
-        },
+        startToHoldSheet = startToHoldSheet,
+        tooltipState = tooltipState,
+        onVisibilityChanged = { isVisibleOnScreen = it },
+        onNavigationRequested = onNavigationRequested,
     )
 }
 
@@ -158,10 +175,12 @@ private fun DashboardScreenContent(
     state: DashContract.State,
     timerData: StateFlow<TimerData>,
     elapsedData: StateFlow<ElapsedData>,
-    effectFlow: Flow<DashContract.Effect>?,
     onEventSent: (event: DashContract.Event) -> Unit,
     hazeState: HazeState,
     contentPadding: PaddingValues,
+    startToHoldSheet: CustomModalBottomSheetState,
+    tooltipState: TooltipState,
+    onVisibilityChanged: (Boolean) -> Unit,
     onNavigationRequested: (DashContract.Effect.Navigation) -> Unit,
 ) {
     val activity = LocalActivity.current
@@ -171,19 +190,7 @@ private fun DashboardScreenContent(
     val timerSheet = rememberCustomModalBottomSheetState()
     val modeSheet = rememberCustomModalBottomSheetState()
     val holdPickerSheet = rememberCustomModalBottomSheetState()
-    val startToHoldSheet = rememberCustomModalBottomSheetState()
-    val tooltipState = rememberTooltipState(initialIsVisible = false, isPersistent = true)
     var outputsToolbar by rememberSaveable { mutableStateOf(false) }
-    var isVisibleOnScreen by remember { mutableStateOf(false) }
-
-    HandleSideEffects(
-        activity = activity,
-        isVisibleOnScreen = isVisibleOnScreen,
-        tooltipState = tooltipState,
-        startToHoldSheet = startToHoldSheet,
-        effectFlow = effectFlow,
-        onNavigationRequested = onNavigationRequested,
-    )
 
     LaunchedEffect(state.holdTempToolTip) {
         if (state.holdTempToolTip) {
@@ -203,9 +210,7 @@ private fun DashboardScreenContent(
 
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
-        modifier = Modifier.isElementVisible {
-            isVisibleOnScreen = it
-        },
+        modifier = Modifier.isElementVisible(onVisibilityChanged),
         targetState = state,
         contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
@@ -552,10 +557,12 @@ internal fun DashboardScreenPreview(
                 ),
                 timerData = MutableStateFlow(TimerData()),
                 elapsedData = MutableStateFlow(ElapsedData()),
-                effectFlow = null,
                 onEventSent = {},
                 hazeState = hazeState,
                 contentPadding = contentPadding,
+                startToHoldSheet = rememberCustomModalBottomSheetState(),
+                tooltipState = rememberTooltipState(),
+                onVisibilityChanged = {},
                 onNavigationRequested = {},
             )
         }
