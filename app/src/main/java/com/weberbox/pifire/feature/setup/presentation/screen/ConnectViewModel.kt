@@ -10,6 +10,8 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.UrlBuilder
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
+import com.weberbox.pifire.core.network.headers.HeadersManager
 import com.weberbox.pifire.core.remoteconfig.ServerInfo
 import com.weberbox.pifire.core.remoteconfig.ServerSupportManager
 import com.weberbox.pifire.core.remoteconfig.ServerSupportResult
@@ -25,8 +27,6 @@ import com.weberbox.pifire.core.ui.util.createUrl
 import com.weberbox.pifire.core.ui.util.isNotSecureUrl
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.core.ui.util.validateUrl
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
-import com.weberbox.pifire.feature.settings.data.util.HeadersManager
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import com.weberbox.pifire.feature.setup.data.repo.SetupRepo
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache

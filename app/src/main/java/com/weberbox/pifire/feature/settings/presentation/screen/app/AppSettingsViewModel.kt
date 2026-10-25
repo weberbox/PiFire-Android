@@ -3,10 +3,10 @@ package com.weberbox.pifire.feature.settings.presentation.screen.app
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.AppTheme
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import com.weberbox.pifire.feature.settings.presentation.contract.AppContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

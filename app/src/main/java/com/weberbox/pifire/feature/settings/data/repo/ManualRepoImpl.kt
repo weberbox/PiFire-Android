@@ -2,8 +2,8 @@ package com.weberbox.pifire.feature.settings.data.repo
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.network.api.SettingsApi
 import com.weberbox.pifire.core.network.parseGetResponse
-import com.weberbox.pifire.feature.settings.data.api.SettingsApi
 import com.weberbox.pifire.feature.settings.data.mapper.ManualDtoToDataMapper
 import com.weberbox.pifire.feature.settings.data.model.ManualData
 import kotlinx.serialization.json.Json

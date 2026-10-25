@@ -2,10 +2,12 @@ package com.weberbox.pifire.application
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.remoteconfig.FeatureSupport
 import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepository
+import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.AppTheme
@@ -13,8 +15,6 @@ import com.weberbox.pifire.feature.dashboard.data.repo.DashRepo
 import com.weberbox.pifire.feature.events.data.repo.EventsRepo
 import com.weberbox.pifire.feature.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.feature.recipes.data.repo.RecipesRepo
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine

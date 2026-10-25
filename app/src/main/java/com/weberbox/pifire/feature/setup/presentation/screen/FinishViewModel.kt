@@ -10,14 +10,14 @@ import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.network.api.SettingsApiImpl
+import com.weberbox.pifire.core.network.headers.HeadersData
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.FieldInput
 import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.validateName
-import com.weberbox.pifire.feature.settings.data.api.SettingsApiImpl
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.FinishContract
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -3,11 +3,11 @@ package com.weberbox.pifire.core.log
 import android.content.Context
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
-import com.weberbox.pifire.feature.settings.data.model.remote.Modules
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
+import com.weberbox.pifire.core.network.model.settings.Modules
+import com.weberbox.pifire.core.repo.SettingsRepo
 import io.sentry.Hint
 import io.sentry.IScope
 import io.sentry.Sentry

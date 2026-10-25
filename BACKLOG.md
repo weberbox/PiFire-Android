@@ -44,11 +44,11 @@ One step per commit, compile all flavors after each.
    feature-only ones to `feature/<name>/data/model`; `RunningMode` and changelog `Log.icon` split
    into data + UI extensions; info/pellets formatters to `data/util` (they still store display
    strings with English unit suffixes, see Conventions).
-4b. `core` still imports feature data code. Move `Pref`, `Crypto` to `core/data`; headers
-   (`HeadersData`, `HeadersSerializer`, `HeadersManager`) to `core/network`; `SettingsRepo`/`SettingsApi`
-   to `core/repo` (used app-wide); feature DataStore providers from `core/di/DataStoreModule`,
-   `LandingApi`/`SetupApi` from `RetrofitModule` and `ServerDataCache` from `StateModule` into the
-   features' `<Name>DataModule`.
+4b. Done (2026-10-25): `core` imports no feature code. Server settings data (`SettingsRepo`,
+   `SettingsApi`, `ServerDataManager`, settings mappers and DTOs) in `core/repo` and
+   `core/network`, bound in `core/di/RepoModule`; `Pref`/`Crypto`/`SettingsSerializer` in
+   `core/data`; headers in `core/network/headers`; feature DataStores, `LandingApi`/`SetupApi`
+   and `ServerDataCache` provided by the features' `<Name>DataModule`.
 5. Remove ViewModel access to apis/DataStore (see Conventions below).
 6. Rename `RemoteConfigRepository(Impl)` -> `RemoteConfigRepo(Impl)`.
 7. Tooling: `.editorconfig` + Spotless/ktlint (copy the reference project's config), unit tests (JUnit, MockK,

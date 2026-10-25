@@ -1,9 +1,9 @@
 package com.weberbox.pifire.feature.setup.data.util
 
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json

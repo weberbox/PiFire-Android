@@ -2,7 +2,7 @@ package com.weberbox.pifire.core.di
 
 import android.content.Context
 import com.weberbox.pifire.core.notification.OneSignalManager
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
+import com.weberbox.pifire.core.repo.SettingsRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

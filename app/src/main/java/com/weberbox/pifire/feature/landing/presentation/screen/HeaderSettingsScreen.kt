@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
@@ -53,7 +54,6 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.landing.presentation.components.sheets.HeadersSheet
 import com.weberbox.pifire.feature.landing.presentation.contract.HeadersContract
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry

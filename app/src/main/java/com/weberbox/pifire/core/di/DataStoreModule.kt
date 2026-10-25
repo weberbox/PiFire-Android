@@ -6,20 +6,10 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
 import com.weberbox.pifire.core.constants.AppConfig
-import com.weberbox.pifire.core.model.dashboard.DashData
-import com.weberbox.pifire.core.model.events.EventsData
-import com.weberbox.pifire.core.model.info.InfoData
-import com.weberbox.pifire.core.model.pellets.PelletsData
-import com.weberbox.pifire.core.model.recipes.RecipesData
+import com.weberbox.pifire.core.data.datastore.SettingsSerializer
 import com.weberbox.pifire.core.model.settings.SettingsData
-import com.weberbox.pifire.feature.dashboard.data.serializer.DashSerializer
-import com.weberbox.pifire.feature.events.data.serializer.EventsSerializer
-import com.weberbox.pifire.feature.info.data.serializer.InfoSerializer
-import com.weberbox.pifire.feature.pellets.data.serializer.PelletsSerializer
-import com.weberbox.pifire.feature.recipes.data.serializer.RecipesSerializer
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData
-import com.weberbox.pifire.feature.settings.data.serializer.HeadersSerializer
-import com.weberbox.pifire.feature.settings.data.serializer.SettingsSerializer
+import com.weberbox.pifire.core.network.headers.HeadersData
+import com.weberbox.pifire.core.network.headers.HeadersSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,61 +23,11 @@ object DataStoreModule {
 
     @Singleton
     @Provides
-    fun provideEventsDataStore(@ApplicationContext appContext: Context): DataStore<EventsData> {
-        return DataStoreFactory.create(
-            serializer = EventsSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.EVENTS_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { EventsData() }
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun providePelletsDataStore(@ApplicationContext appContext: Context): DataStore<PelletsData> {
-        return DataStoreFactory.create(
-            serializer = PelletsSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.PELLETS_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { PelletsData() }
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideRecipesDataStore(@ApplicationContext appContext: Context): DataStore<RecipesData> {
-        return DataStoreFactory.create(
-            serializer = RecipesSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.RECIPES_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { RecipesData() }
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideInfoDataStore(@ApplicationContext appContext: Context): DataStore<InfoData> {
-        return DataStoreFactory.create(
-            serializer = InfoSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.INFO_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { InfoData() }
-        )
-    }
-
-    @Singleton
-    @Provides
     fun provideSettingsDataStore(@ApplicationContext appContext: Context): DataStore<SettingsData> {
         return DataStoreFactory.create(
             serializer = SettingsSerializer,
             produceFile = { appContext.dataStoreFile(AppConfig.SETTINGS_DATA_NAME) },
             corruptionHandler = ReplaceFileCorruptionHandler { SettingsData() }
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideDashDataStore(@ApplicationContext appContext: Context): DataStore<DashData> {
-        return DataStoreFactory.create(
-            serializer = DashSerializer,
-            produceFile = { appContext.dataStoreFile(AppConfig.DASH_DATA_NAME) },
-            corruptionHandler = ReplaceFileCorruptionHandler { DashData() }
         )
     }
 

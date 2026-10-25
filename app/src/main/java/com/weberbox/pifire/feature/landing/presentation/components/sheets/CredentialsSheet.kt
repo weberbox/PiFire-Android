@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers.BasicAuth
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
 import com.weberbox.pifire.core.ui.model.ErrorStatus
 import com.weberbox.pifire.core.ui.model.FieldInput
@@ -38,7 +39,6 @@ import com.weberbox.pifire.core.ui.state.FieldInputSaver
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.BasicAuth
 
 @Composable
 internal fun CredentialsSheet(

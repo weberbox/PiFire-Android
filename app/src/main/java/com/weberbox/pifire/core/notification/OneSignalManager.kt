@@ -17,8 +17,8 @@ import com.weberbox.pifire.R
 import com.weberbox.pifire.core.annotations.FutureDeprecation
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
+import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.util.checkPermission
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject

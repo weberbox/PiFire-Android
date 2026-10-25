@@ -6,6 +6,7 @@ import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.DialogAction
@@ -15,7 +16,6 @@ import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.getFormattedDate
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.landing.presentation.contract.SettingsContract
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Locale

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Outputs
@@ -14,6 +15,7 @@ import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Timer
 import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
+import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -29,8 +31,6 @@ import com.weberbox.pifire.feature.dashboard.presentation.model.ElapsedData
 import com.weberbox.pifire.feature.dashboard.presentation.model.TimerData
 import com.weberbox.pifire.feature.dashboard.presentation.util.CountDownTimer
 import com.weberbox.pifire.feature.dashboard.presentation.util.ElapsedTimer
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow

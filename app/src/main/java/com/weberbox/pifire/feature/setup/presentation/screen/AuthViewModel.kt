@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.Credentials
 import com.weberbox.pifire.core.ui.model.FieldInput
 import com.weberbox.pifire.core.ui.model.InputState
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.AuthContract
 import dagger.hilt.android.lifecycle.HiltViewModel

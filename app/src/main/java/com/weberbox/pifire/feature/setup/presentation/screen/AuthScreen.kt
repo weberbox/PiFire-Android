@@ -47,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.base.getPagerAnimationSpec
 import com.weberbox.pifire.core.ui.components.OutlineFieldWithState
@@ -63,7 +64,6 @@ import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.landing.presentation.components.sheets.HeadersSheet
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.feature.setup.presentation.components.SetupBottomNavRow
 import com.weberbox.pifire.feature.setup.presentation.contract.AuthContract
 import com.weberbox.pifire.feature.setup.presentation.model.SetupStep

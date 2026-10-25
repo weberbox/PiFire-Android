@@ -26,6 +26,7 @@ import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.ui.util.DialogAction
 import com.weberbox.pifire.core.ui.util.DialogController
@@ -34,7 +35,6 @@ import com.weberbox.pifire.core.ui.util.SnackbarAction
 import com.weberbox.pifire.core.ui.util.SnackbarController
 import com.weberbox.pifire.core.ui.util.SnackbarEvent
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

@@ -10,6 +10,7 @@ import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
+import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.network.SocketManager
@@ -17,6 +18,7 @@ import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.remoteconfig.ServerInfo
 import com.weberbox.pifire.core.remoteconfig.ServerSupportManager
 import com.weberbox.pifire.core.remoteconfig.ServerSupportResult
+import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -27,8 +29,6 @@ import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.dashboard.data.api.DashApi
 import com.weberbox.pifire.feature.home.presentation.contract.HomeContract
-import com.weberbox.pifire.feature.settings.data.model.local.Pref
-import com.weberbox.pifire.feature.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

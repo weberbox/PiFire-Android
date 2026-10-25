@@ -11,9 +11,9 @@ import com.weberbox.pifire.core.network.networkAvailable
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
 import com.weberbox.pifire.core.network.toNetworkError
+import com.weberbox.pifire.core.repo.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.core.ui.util.getReasonPhrase
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
-import com.weberbox.pifire.feature.settings.data.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper

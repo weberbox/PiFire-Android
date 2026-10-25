@@ -1,8 +1,6 @@
 package com.weberbox.pifire.core.di
 
 import com.weberbox.pifire.core.constants.Constants
-import com.weberbox.pifire.feature.landing.data.api.LandingApi
-import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,14 +19,4 @@ object RetrofitModule {
             .baseUrl(Constants.BASE_URL)
             .build()
     }
-
-    @Provides
-    @Singleton
-    fun provideLandingApi(retrofit: Retrofit): LandingApi =
-        retrofit.create(LandingApi::class.java)
-
-    @Provides
-    @Singleton
-    fun providesSetupApi(retrofit: Retrofit): SetupApi =
-        retrofit.create(SetupApi::class.java)
 }

@@ -11,8 +11,8 @@ import com.weberbox.pifire.core.network.model.PostDto.ControlDto.Recipe
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto.StepData
 import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.network.model.PostDto.TimerDto
-import com.weberbox.pifire.feature.settings.data.model.remote.ManualDto
-import com.weberbox.pifire.feature.settings.data.model.remote.ManualDto.Manual
+import com.weberbox.pifire.core.network.model.settings.ManualDto
+import com.weberbox.pifire.core.network.model.settings.ManualDto.Manual
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json

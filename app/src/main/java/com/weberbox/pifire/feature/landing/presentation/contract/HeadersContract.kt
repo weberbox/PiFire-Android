@@ -1,10 +1,10 @@
 package com.weberbox.pifire.feature.landing.presentation.contract
 
+import com.weberbox.pifire.core.network.headers.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.core.ui.base.ViewEvent
 import com.weberbox.pifire.core.ui.base.ViewSideEffect
 import com.weberbox.pifire.core.ui.base.ViewState
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.feature.settings.data.model.local.HeadersData.Headers.ExtraHeader
 
 class HeadersContract {
 

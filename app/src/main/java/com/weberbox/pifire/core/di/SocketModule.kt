@@ -1,8 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import com.weberbox.pifire.core.network.SocketManager
+import com.weberbox.pifire.core.network.headers.HeadersManager
 import com.weberbox.pifire.core.session.SessionStateHolder
-import com.weberbox.pifire.feature.settings.data.util.HeadersManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
