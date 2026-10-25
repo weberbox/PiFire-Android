@@ -31,7 +31,6 @@ import com.weberbox.pifire.feature.landing.presentation.model.ServerData
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData.Server
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -151,7 +150,6 @@ class LandingViewModel @Inject constructor(
             val job = viewModelScope.launch {
                 while (isActive) {
                     CoroutinePoller(
-                        dispatcher = Dispatchers.IO,
                         fetchData = {
                             landingRepo.getServerUuid(
                                 url = buildUuidUrl(server.value.address),

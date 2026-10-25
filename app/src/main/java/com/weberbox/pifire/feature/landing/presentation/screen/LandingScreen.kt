@@ -8,11 +8,13 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -55,6 +57,7 @@ import com.weberbox.pifire.core.ui.components.EmptyItems
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.components.sheets.ConfirmSheet
+import com.weberbox.pifire.core.ui.state.InputModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
@@ -72,6 +75,7 @@ import com.weberbox.pifire.feature.landing.presentation.util.displayName
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
@@ -197,142 +201,169 @@ private fun LandingScreen(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         contentWindowInsets = windowInsets,
     ) { contentPadding ->
-        AnimatedContent(
-            targetState = state,
-            contentKey = { it.isInitialLoading or it.isDataError },
-        ) { state ->
-            when {
-                state.isInitialLoading -> InitialLoadingProgress()
+        LandingScreenContent(
+            state = state,
+            searchQuery = searchQuery,
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            scrollState = scrollState,
+            serverDeleteSheet = serverDeleteSheet,
+            biometricManager = biometricManager,
+            activity = activity,
+            onEventSent = onEventSent,
+            onNavigationRequested = onNavigationRequested,
+        )
+    }
+}
 
-                state.isDataError -> DataError {
-                    onNavigationRequested(LandingContract.Effect.Navigation.Back)
+@Composable
+private fun LandingScreenContent(
+    state: LandingContract.State,
+    searchQuery: String,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    scrollState: LazyListState,
+    serverDeleteSheet: InputModalBottomSheetState<Pair<String, String>>,
+    biometricManager: BiometricPromptManager?,
+    activity: AppCompatActivity?,
+    onEventSent: (event: LandingContract.Event) -> Unit,
+    onNavigationRequested: (LandingContract.Effect.Navigation) -> Unit,
+) {
+    AnimatedContent(
+        targetState = state,
+        contentKey = { it.isInitialLoading or it.isDataError },
+    ) { state ->
+        when {
+            state.isInitialLoading -> InitialLoadingProgress()
+
+            state.isDataError -> DataError {
+                onNavigationRequested(LandingContract.Effect.Navigation.Back)
+            }
+
+            else -> {
+                val context = LocalContext.current
+                val filteredList = remember(searchQuery, state.serverData, context) {
+                    state.serverData.servers.filter { server ->
+                        server.displayName(context).contains(searchQuery, ignoreCase = true)
+                    }
+                }
+                LazyColumn(
+                    state = scrollState,
+                    contentPadding = contentPadding,
+                    verticalArrangement = Arrangement.spacedBy(
+                        MaterialTheme.spacing.extraSmall,
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .hazeSource(state = hazeState)
+                        .padding(
+                            horizontal = MaterialTheme.spacing.smallOne,
+                            vertical = MaterialTheme.spacing.extraSmall,
+                        )
+                        .animateEnterExit()
+                        .fillMaxSize(),
+                ) {
+                    items(
+                        items = filteredList,
+                        key = { it.uuid },
+                    ) { server ->
+                        ServerItem(
+                            server = server,
+                            onClick = { uuid ->
+                                if (server.online) {
+                                    checkAuthentication(
+                                        state = state,
+                                        biometricManager = biometricManager,
+                                        onSuccess = {
+                                            onEventSent(
+                                                LandingContract.Event.SelectServer(
+                                                    uuid = uuid,
+                                                ),
+                                            )
+                                        },
+                                    )
+                                } else {
+                                    activity?.showAlerter(
+                                        message = R.string.alerter_server_offline,
+                                        isError = true,
+                                    )
+                                }
+                            },
+                            onEdit = { uuid ->
+                                checkAuthentication(
+                                    state = state,
+                                    biometricManager = biometricManager,
+                                    onSuccess = {
+                                        onNavigationRequested(
+                                            LandingContract.Effect.Navigation.NavRoute(
+                                                route = NavGraph.LandingDest.ServerSettings(
+                                                    uuid = uuid,
+                                                ),
+                                            ),
+                                        )
+                                    },
+                                )
+                            },
+                            onDelete = { uuid, name ->
+                                checkAuthentication(
+                                    state = state,
+                                    biometricManager = biometricManager,
+                                    onSuccess = {
+                                        serverDeleteSheet.open(
+                                            data = Pair(
+                                                first = uuid,
+                                                second = name,
+                                            ),
+                                        )
+                                    },
+                                )
+                            },
+                        )
+                    }
                 }
 
-                else -> {
-                    val context = LocalContext.current
-                    val filteredList = remember(searchQuery, state.serverData, context) {
-                        state.serverData.servers.filter { server ->
-                            server.displayName(context).contains(searchQuery, ignoreCase = true)
-                        }
-                    }
-                    LazyColumn(
-                        state = scrollState,
-                        contentPadding = contentPadding,
-                        verticalArrangement = Arrangement.spacedBy(
-                            MaterialTheme.spacing.extraSmall,
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .hazeSource(state = hazeState)
-                            .padding(
-                                horizontal = MaterialTheme.spacing.smallOne,
-                                vertical = MaterialTheme.spacing.extraSmall,
-                            )
-                            .animateEnterExit()
-                            .fillMaxSize(),
-                    ) {
-                        items(
-                            items = filteredList,
-                            key = { it.uuid },
-                        ) { server ->
-                            ServerItem(
-                                server = server,
-                                onClick = { uuid ->
-                                    if (server.online) {
-                                        checkAuthentication(
-                                            state = state,
-                                            biometricManager = biometricManager,
-                                            onSuccess = {
-                                                onEventSent(
-                                                    LandingContract.Event.SelectServer(
-                                                        uuid = uuid,
-                                                    ),
-                                                )
-                                            },
-                                        )
-                                    } else {
-                                        activity?.showAlerter(
-                                            message = R.string.alerter_server_offline,
-                                            isError = true,
-                                        )
-                                    }
-                                },
-                                onEdit = { uuid ->
-                                    checkAuthentication(
-                                        state = state,
-                                        biometricManager = biometricManager,
-                                        onSuccess = {
-                                            onNavigationRequested(
-                                                LandingContract.Effect.Navigation.NavRoute(
-                                                    route = NavGraph.LandingDest.ServerSettings(
-                                                        uuid = uuid,
-                                                    ),
-                                                ),
-                                            )
-                                        },
-                                    )
-                                },
-                                onDelete = { uuid, name ->
-                                    checkAuthentication(
-                                        state = state,
-                                        biometricManager = biometricManager,
-                                        onSuccess = {
-                                            serverDeleteSheet.open(
-                                                data = Pair(
-                                                    first = uuid,
-                                                    second = name,
-                                                ),
-                                            )
-                                        },
-                                    )
-                                },
-                            )
-                        }
-                    }
-
-                    AnimatedVisibility(
-                        visible = filteredList.isEmpty(),
-                        enter = fadeEnterTransition(),
-                        exit = fadeExitTransition(),
-                    ) {
-                        EmptyItems(
-                            title = stringResource(R.string.error_no_results_landing_title),
-                            summary = stringResource(R.string.error_no_results_landing_summary),
-                            icon = Icons.Filled.OutdoorGrill,
-                        )
-                    }
-
-                    BottomSheet(
-                        sheetState = serverDeleteSheet.sheetState,
-                    ) {
-                        ConfirmSheet(
-                            title = stringResource(R.string.dialog_confirm_action),
-                            message = stringResource(
-                                R.string.dialog_confirm_delete_item,
-                                serverDeleteSheet.data.second,
-                            ),
-                            negativeButtonText = stringResource(R.string.cancel),
-                            positiveButtonText = stringResource(R.string.delete),
-                            positiveButtonColor = ButtonDefaults.buttonColors(
-                                contentColor = MaterialTheme.colorScheme.onError,
-                                containerColor = MaterialTheme.colorScheme.error,
-                            ),
-                            onPositive = {
-                                onEventSent(
-                                    LandingContract.Event.DeleteServer(
-                                        serverDeleteSheet.data.first,
-                                    ),
-                                )
-                                serverDeleteSheet.close()
-                            },
-                            onNegative = { serverDeleteSheet.close() },
-                        )
-                    }
-
-                    CircularLoadingIndicator(
-                        isLoading = state.isLoading,
+                AnimatedVisibility(
+                    visible = filteredList.isEmpty(),
+                    enter = fadeEnterTransition(),
+                    exit = fadeExitTransition(),
+                ) {
+                    EmptyItems(
+                        title = stringResource(R.string.error_no_results_landing_title),
+                        summary = stringResource(R.string.error_no_results_landing_summary),
+                        icon = Icons.Filled.OutdoorGrill,
                     )
                 }
+
+                BottomSheet(
+                    sheetState = serverDeleteSheet.sheetState,
+                ) {
+                    ConfirmSheet(
+                        title = stringResource(R.string.dialog_confirm_action),
+                        message = stringResource(
+                            R.string.dialog_confirm_delete_item,
+                            serverDeleteSheet.data.second,
+                        ),
+                        negativeButtonText = stringResource(R.string.cancel),
+                        positiveButtonText = stringResource(R.string.delete),
+                        positiveButtonColor = ButtonDefaults.buttonColors(
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            containerColor = MaterialTheme.colorScheme.error,
+                        ),
+                        onPositive = {
+                            onEventSent(
+                                LandingContract.Event.DeleteServer(
+                                    serverDeleteSheet.data.first,
+                                ),
+                            )
+                            serverDeleteSheet.close()
+                        },
+                        onNegative = { serverDeleteSheet.close() },
+                    )
+                }
+
+                CircularLoadingIndicator(
+                    isLoading = state.isLoading,
+                )
             }
         }
     }

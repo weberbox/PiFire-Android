@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,6 +48,7 @@ import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.icons.Icon
 import com.weberbox.pifire.core.ui.icons.outlined.CloudKeyOutline
+import com.weberbox.pifire.core.ui.state.InputModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
@@ -69,7 +71,7 @@ fun HeaderSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        HeaderSettings(
+        HeaderSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -93,7 +95,7 @@ fun HeaderSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun HeaderSettings(
+private fun HeaderSettingsScreen(
     state: HeadersContract.State,
     effectFlow: Flow<HeadersContract.Effect>?,
     onEventSent: (event: HeadersContract.Event) -> Unit,
@@ -123,120 +125,135 @@ private fun HeaderSettings(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         contentWindowInsets = windowInsets,
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
-        ) {
-            Text(
-                text = stringResource(R.string.settings_extra_headers_note),
-                modifier = Modifier.padding(MaterialTheme.spacing.smallThree),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            state.extraHeaders.forEach { header ->
-                Card(
-                    modifier = Modifier.padding(
-                        start = MaterialTheme.spacing.smallThree,
-                        end = MaterialTheme.spacing.smallThree,
-                        bottom = MaterialTheme.spacing.smallOne,
-                    ),
-                    shape = MaterialTheme.shapes.small,
-                    onClick = { headersSheet.open(header) },
+        HeaderSettingsScreenContent(
+            state = state,
+            contentPadding = contentPadding,
+            headersSheet = headersSheet,
+            onEventSent = onEventSent,
+        )
+    }
+}
+
+@Composable
+private fun HeaderSettingsScreenContent(
+    state: HeadersContract.State,
+    contentPadding: PaddingValues,
+    headersSheet: InputModalBottomSheetState<ExtraHeader>,
+    onEventSent: (event: HeadersContract.Event) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding),
+    ) {
+        Text(
+            text = stringResource(R.string.settings_extra_headers_note),
+            modifier = Modifier.padding(MaterialTheme.spacing.smallThree),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        state.extraHeaders.forEach { header ->
+            Card(
+                modifier = Modifier.padding(
+                    start = MaterialTheme.spacing.smallThree,
+                    end = MaterialTheme.spacing.smallThree,
+                    bottom = MaterialTheme.spacing.smallOne,
+                ),
+                shape = MaterialTheme.shapes.small,
+                onClick = { headersSheet.open(header) },
+            ) {
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.spacing.smallOne)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = MaterialTheme.spacing.smallOne)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = Icon.Outlined.CloudKeyOutline,
-                            modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
-                            contentDescription = null,
+                    Icon(
+                        imageVector = Icon.Outlined.CloudKeyOutline,
+                        modifier = Modifier.padding(end = MaterialTheme.spacing.smallOne),
+                        contentDescription = null,
+                    )
+                    Column {
+                        Text(
+                            text = header.key,
+                            modifier = Modifier.padding(
+                                start = MaterialTheme.spacing.extraSmall,
+                                top = MaterialTheme.spacing.extraSmall,
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 15.sp,
                         )
-                        Column {
-                            Text(
-                                text = header.key,
-                                modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmall,
-                                    top = MaterialTheme.spacing.extraSmall,
-                                ),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.Bold,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 15.sp,
-                            )
-                            Text(
-                                text = header.value,
-                                modifier = Modifier.padding(
-                                    start = MaterialTheme.spacing.extraSmall,
-                                    bottom = MaterialTheme.spacing.extraSmall,
-                                ),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                fontSize = 12.sp,
-                            )
-                        }
+                        Text(
+                            text = header.value,
+                            modifier = Modifier.padding(
+                                start = MaterialTheme.spacing.extraSmall,
+                                bottom = MaterialTheme.spacing.extraSmall,
+                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontSize = 12.sp,
+                        )
                     }
                 }
             }
-            if (state.extraHeaders.isEmpty()) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Info,
-                        contentDescription = null,
-                        modifier = Modifier.size(MaterialTheme.size.extraLarge),
-                    )
-                    Text(
-                        text = stringResource(R.string.settings_extra_headers_not_defined),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
-                    )
-                }
-            }
+        }
+        if (state.extraHeaders.isEmpty()) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Button(
-                    modifier = Modifier
-                        .padding(MaterialTheme.spacing.smallThree)
-                        .fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small,
-                    onClick = { headersSheet.open(ExtraHeader()) },
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.settings_extra_headers_add),
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = null,
+                    modifier = Modifier.size(MaterialTheme.size.extraLarge),
+                )
+                Text(
+                    text = stringResource(R.string.settings_extra_headers_not_defined),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
+                )
             }
         }
-        BottomSheet(
-            sheetState = headersSheet.sheetState,
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            HeadersSheet(
-                extraHeader = headersSheet.data,
-                onUpdate = { header ->
-                    headersSheet.close()
-                    onEventSent(HeadersContract.Event.UpdateHeader(header))
-                },
-                onDelete = { header ->
-                    headersSheet.close()
-                    onEventSent(HeadersContract.Event.DeleteHeader(header))
-                },
-            )
+            Button(
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.smallThree)
+                    .fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
+                onClick = { headersSheet.open(ExtraHeader()) },
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.settings_extra_headers_add),
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
+    }
+    BottomSheet(
+        sheetState = headersSheet.sheetState,
+    ) {
+        HeadersSheet(
+            extraHeader = headersSheet.data,
+            onUpdate = { header ->
+                headersSheet.close()
+                onEventSent(HeadersContract.Event.UpdateHeader(header))
+            },
+            onDelete = { header ->
+                headersSheet.close()
+                onEventSent(HeadersContract.Event.DeleteHeader(header))
+            },
+        )
     }
 }
 
@@ -267,12 +284,12 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun HeaderSettingsPreview() {
+private fun HeaderSettingsScreenPreview() {
     val extraHeaders = remember { mutableListOf(ExtraHeader("Test", "Test")) }
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                HeaderSettings(
+                HeaderSettingsScreen(
                     state = HeadersContract.State(
                         extraHeaders = extraHeaders,
                         isInitialLoading = false,

@@ -11,8 +11,10 @@ import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.feature.landing.data.api.LandingApi
 import com.weberbox.pifire.feature.landing.data.mapper.ServerUuidDtoToDataMapper
 import com.weberbox.pifire.feature.landing.data.model.ServerUuidData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
@@ -24,12 +26,12 @@ class LandingRepoImpl @Inject constructor(
     override suspend fun getServerUuid(
         url: String,
         headers: Map<String, String>,
-    ): Result<ServerUuidData, DataError> {
+    ): Result<ServerUuidData, DataError> = withContext(Dispatchers.IO) {
         if (networkAvailable()) {
             try {
                 landingApi.getServerUuid(url, headers).let { response ->
                     if (response.isSuccessful) {
-                        return response.body()?.let { r ->
+                        return@withContext response.body()?.let { r ->
                             parseGetResponse(
                                 response = r.string(),
                                 json = json,
@@ -44,7 +46,7 @@ class LandingRepoImpl @Inject constructor(
                             }
                         } ?: Result.Error(DataError.Network.NULL_RESPONSE)
                     } else {
-                        return if (response.code() == 401) {
+                        return@withContext if (response.code() == 401) {
                             Result.Error(DataError.Network.AUTHENTICATION)
                         } else {
                             Result.Error(
@@ -61,10 +63,10 @@ class LandingRepoImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
-                return Result.Error(e.toNetworkError())
+                return@withContext Result.Error(e.toNetworkError())
             }
         } else {
-            return Result.Error(DataError.Network.NO_CONNECTION)
+            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
         }
     }
 }

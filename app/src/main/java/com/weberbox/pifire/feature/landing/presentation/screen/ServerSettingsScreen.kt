@@ -62,7 +62,7 @@ fun ServerSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
-        ServerSettings(
+        ServerSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -86,7 +86,7 @@ fun ServerSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ServerSettings(
+private fun ServerSettingsScreen(
     state: ServerContract.State,
     effectFlow: Flow<ServerContract.Effect>?,
     onEventSent: (event: ServerContract.Event) -> Unit,
@@ -127,7 +127,7 @@ private fun ServerSettings(
                 }
 
                 else -> {
-                    ServerSettingsContent(
+                    ServerSettingsScreenContent(
                         state = state,
                         contentPadding = contentPadding,
                         onEventSent = onEventSent,
@@ -140,7 +140,7 @@ private fun ServerSettings(
 }
 
 @Composable
-private fun ServerSettingsContent(
+private fun ServerSettingsScreenContent(
     state: ServerContract.State,
     contentPadding: PaddingValues,
     onEventSent: (event: ServerContract.Event) -> Unit,
@@ -244,11 +244,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun ServerSettingsPreview() {
+private fun ServerSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceLocals {
             Surface {
-                ServerSettings(
+                ServerSettingsScreen(
                     state = ServerContract.State(
                         serverData = Server(
                             address = "https://pifire.local",

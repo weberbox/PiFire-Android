@@ -1,6 +1,5 @@
 package com.weberbox.pifire.core.common.util
 
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -10,13 +9,12 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 class CoroutinePoller<T>(
-    private val dispatcher: CoroutineDispatcher,
     private val fetchData: suspend () -> T,
 ) {
     var job: Job? = null
 
     fun poll(delay: Long) = callbackFlow {
-        job = launch(dispatcher) {
+        job = launch {
             while (isActive) {
                 val data = fetchData()
                 trySend(data)

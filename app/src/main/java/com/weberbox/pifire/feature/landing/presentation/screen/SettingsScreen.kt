@@ -133,7 +133,7 @@ private fun SettingsScreen(
 }
 
 @Composable
-fun SettingsScreenContent(
+private fun SettingsScreenContent(
     state: SettingsContract.State,
     contentPadding: PaddingValues,
     onEventSent: (event: SettingsContract.Event) -> Unit,
