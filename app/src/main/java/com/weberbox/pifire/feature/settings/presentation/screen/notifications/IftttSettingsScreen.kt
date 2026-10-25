@@ -57,7 +57,7 @@ fun IftttSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        IftttSettings(
+        IftttSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -81,7 +81,7 @@ fun IftttSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun IftttSettings(
+private fun IftttSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -122,7 +122,7 @@ private fun IftttSettings(
                 }
 
                 else -> {
-                    IftttContent(
+                    IftttSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -134,7 +134,7 @@ private fun IftttSettings(
 }
 
 @Composable
-private fun IftttContent(
+private fun IftttSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -204,11 +204,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun IftttSettingsPreview() {
+private fun IftttSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                IftttSettings(
+                IftttSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

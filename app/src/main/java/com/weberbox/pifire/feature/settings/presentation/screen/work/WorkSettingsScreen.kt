@@ -77,7 +77,7 @@ fun WorkSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        WorkSettings(
+        WorkSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -101,31 +101,19 @@ fun WorkSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun WorkSettings(
+private fun WorkSettingsScreen(
     state: WorkContract.State,
     effectFlow: Flow<WorkContract.Effect>?,
     onEventSent: (event: WorkContract.Event) -> Unit,
     onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
 ) {
-    val activity = LocalActivity.current
     val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    LaunchedEffect(SIDE_EFFECTS_KEY) {
-        effectFlow?.onEach { effect ->
-            when (effect) {
-                is WorkContract.Effect.Navigation -> {
-                    onNavigationRequested(effect)
-                }
 
-                is WorkContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
-                    )
-                }
-            }
-        }?.collect()
-    }
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
 
     Scaffold(
         modifier = Modifier
@@ -154,7 +142,7 @@ private fun WorkSettings(
                 }
 
                 else -> {
-                    WorkSettingsContent(
+                    WorkSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -167,7 +155,7 @@ private fun WorkSettings(
 }
 
 @Composable
-private fun WorkSettingsContent(
+private fun WorkSettingsScreenContent(
     state: WorkContract.State,
     onEventSent: (event: WorkContract.Event) -> Unit,
     onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
@@ -643,13 +631,33 @@ private fun WorkSettingsContent(
 }
 
 @Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<WorkContract.Effect>?,
+    onNavigationRequested: (WorkContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is WorkContract.Effect.Navigation -> onNavigationRequested(effect)
+
+                is WorkContract.Effect.Notification -> activity?.showAlerter(
+                    message = effect.text,
+                    isError = effect.error,
+                )
+            }
+        }?.collect()
+    }
+}
+
+@Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun WorkSettingsPreview() {
+private fun WorkSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                WorkSettings(
+                WorkSettingsScreen(
                     state = WorkContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

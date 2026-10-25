@@ -83,7 +83,7 @@ fun SettingsHomeScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        SettingsHome(
+        SettingsHomeScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -107,7 +107,7 @@ fun SettingsHomeScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SettingsHome(
+private fun SettingsHomeScreen(
     state: SettingsContract.State,
     effectFlow: Flow<SettingsContract.Effect>?,
     onEventSent: (event: SettingsContract.Event) -> Unit,
@@ -155,7 +155,7 @@ private fun SettingsHome(
                 }
 
                 else -> {
-                    SettingsContent(
+                    SettingsHomeScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -169,7 +169,7 @@ private fun SettingsHome(
 }
 
 @Composable
-fun SettingsContent(
+fun SettingsHomeScreenContent(
     state: SettingsContract.State,
     onEventSent: (event: SettingsContract.Event) -> Unit,
     onNavigationRequested: (SettingsContract.Effect.Navigation) -> Unit,
@@ -400,11 +400,11 @@ private fun HandleSideEffects(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @DeviceSizePreviews
-fun SettingsHomePreview() {
+fun SettingsHomeScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                SettingsHome(
+                SettingsHomeScreen(
                     state = SettingsContract.State(
                         supportsDcFan = true,
                         isInitialLoading = false,

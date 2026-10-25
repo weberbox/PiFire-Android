@@ -67,7 +67,7 @@ fun PelletSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        PelletSettings(
+        PelletSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -91,7 +91,7 @@ fun PelletSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PelletSettings(
+private fun PelletSettingsScreen(
     state: PelletsContract.State,
     effectFlow: Flow<PelletsContract.Effect>?,
     onEventSent: (event: PelletsContract.Event) -> Unit,
@@ -132,7 +132,7 @@ private fun PelletSettings(
                 }
 
                 else -> {
-                    PelletsSettingsContent(
+                    PelletSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -144,7 +144,7 @@ private fun PelletSettings(
 }
 
 @Composable
-private fun PelletsSettingsContent(
+private fun PelletSettingsScreenContent(
     state: PelletsContract.State,
     onEventSent: (event: PelletsContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -388,11 +388,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-private fun PelletSettingsPreview() {
+private fun PelletSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                PelletSettings(
+                PelletSettingsScreen(
                     state = PelletsContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

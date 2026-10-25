@@ -58,7 +58,7 @@ fun PushoverSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        PushoverSettings(
+        PushoverSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -82,7 +82,7 @@ fun PushoverSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PushoverSettings(
+private fun PushoverSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -123,7 +123,7 @@ private fun PushoverSettings(
                 }
 
                 else -> {
-                    PushoverSettingsContent(
+                    PushoverSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -135,7 +135,7 @@ private fun PushoverSettings(
 }
 
 @Composable
-private fun PushoverSettingsContent(
+private fun PushoverSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -252,11 +252,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun PushoverSettingsPreview() {
+private fun PushoverSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                PushoverSettings(
+                PushoverSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

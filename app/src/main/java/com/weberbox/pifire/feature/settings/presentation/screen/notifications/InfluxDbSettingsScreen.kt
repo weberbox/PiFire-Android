@@ -57,7 +57,7 @@ fun InfluxDbSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        InfluxDbSettings(
+        InfluxDbSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -81,7 +81,7 @@ fun InfluxDbSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun InfluxDbSettings(
+private fun InfluxDbSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -122,7 +122,7 @@ private fun InfluxDbSettings(
                 }
 
                 else -> {
-                    InfluxDbContent(
+                    InfluxDbSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -134,7 +134,7 @@ private fun InfluxDbSettings(
 }
 
 @Composable
-private fun InfluxDbContent(
+private fun InfluxDbSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -273,11 +273,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun InfluxDbSettingsPreview() {
+private fun InfluxDbSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                InfluxDbSettings(
+                InfluxDbSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

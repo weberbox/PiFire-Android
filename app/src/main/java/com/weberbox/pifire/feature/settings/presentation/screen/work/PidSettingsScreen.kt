@@ -69,7 +69,7 @@ fun PidSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        PidSettings(
+        PidSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -93,7 +93,7 @@ fun PidSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PidSettings(
+private fun PidSettingsScreen(
     state: WorkContract.State,
     effectFlow: Flow<WorkContract.Effect>?,
     onEventSent: (event: WorkContract.Event) -> Unit,
@@ -134,7 +134,7 @@ private fun PidSettings(
                 }
 
                 else -> {
-                    PidSettingsContent(
+                    PidSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -146,7 +146,7 @@ private fun PidSettings(
 }
 
 @Composable
-private fun PidSettingsContent(
+private fun PidSettingsScreenContent(
     state: WorkContract.State,
     onEventSent: (event: WorkContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -302,11 +302,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun PidSettingsPreview() {
+private fun PidSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                PidSettings(
+                PidSettingsScreen(
                     state = WorkContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

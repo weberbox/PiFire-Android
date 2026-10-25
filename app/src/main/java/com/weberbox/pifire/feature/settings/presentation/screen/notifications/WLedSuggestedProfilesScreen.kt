@@ -59,7 +59,7 @@ fun WLedSuggestedProfilesScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        WLedSuggestedProfiles(
+        WLedSuggestedProfilesScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -83,7 +83,7 @@ fun WLedSuggestedProfilesScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun WLedSuggestedProfiles(
+private fun WLedSuggestedProfilesScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -124,7 +124,7 @@ private fun WLedSuggestedProfiles(
                 }
 
                 else -> {
-                    WLedContent(
+                    WLedSuggestedProfilesScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -136,7 +136,7 @@ private fun WLedSuggestedProfiles(
 }
 
 @Composable
-private fun WLedContent(
+private fun WLedSuggestedProfilesScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -519,11 +519,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun WLedSuggestedProfilesPreview() {
+private fun WLedSuggestedProfilesScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                WLedSuggestedProfiles(
+                WLedSuggestedProfilesScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

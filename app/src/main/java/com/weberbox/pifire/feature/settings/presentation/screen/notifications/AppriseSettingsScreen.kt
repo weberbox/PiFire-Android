@@ -71,7 +71,7 @@ fun AppriseSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        AppriseSettings(
+        AppriseSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -95,7 +95,7 @@ fun AppriseSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun AppriseSettings(
+private fun AppriseSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -136,7 +136,7 @@ private fun AppriseSettings(
                 }
 
                 else -> {
-                    AppriseContent(
+                    AppriseSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -148,7 +148,7 @@ private fun AppriseSettings(
 }
 
 @Composable
-private fun AppriseContent(
+private fun AppriseSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -284,11 +284,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun AppriseSettingsPreview() {
+private fun AppriseSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                AppriseSettings(
+                AppriseSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

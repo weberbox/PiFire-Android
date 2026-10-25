@@ -67,7 +67,7 @@ fun AppSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
-        AppSettings(
+        AppSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -91,7 +91,7 @@ fun AppSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun AppSettings(
+private fun AppSettingsScreen(
     state: AppContract.State,
     effectFlow: Flow<AppContract.Effect>?,
     onEventSent: (event: AppContract.Event) -> Unit,
@@ -132,7 +132,7 @@ private fun AppSettings(
                 }
 
                 else -> {
-                    AppContent(
+                    AppSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -144,7 +144,7 @@ private fun AppSettings(
 }
 
 @Composable
-private fun AppContent(
+private fun AppSettingsScreenContent(
     state: AppContract.State,
     onEventSent: (event: AppContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -313,11 +313,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun AppSettingsPreview() {
+private fun AppSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                AppSettings(
+                AppSettingsScreen(
                     state = AppContract.State(
                         appTheme = AppTheme.System,
                         dynamicColorEnabled = false,

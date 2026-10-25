@@ -65,7 +65,7 @@ fun WLedSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        WLedSettings(
+        WLedSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -89,7 +89,7 @@ fun WLedSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun WLedSettings(
+private fun WLedSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -130,7 +130,7 @@ private fun WLedSettings(
                 }
 
                 else -> {
-                    WLedContent(
+                    WLedSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -143,7 +143,7 @@ private fun WLedSettings(
 }
 
 @Composable
-private fun WLedContent(
+private fun WLedSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
@@ -272,11 +272,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun WLedSettingsPreview() {
+private fun WLedSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                WLedSettings(
+                WLedSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

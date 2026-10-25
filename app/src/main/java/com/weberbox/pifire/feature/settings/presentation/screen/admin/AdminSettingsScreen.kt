@@ -60,7 +60,7 @@ fun AdminSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        AdminSettings(
+        AdminSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -84,7 +84,7 @@ fun AdminSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun AdminSettings(
+private fun AdminSettingsScreen(
     state: AdminContract.State,
     effectFlow: Flow<AdminContract.Effect>?,
     onEventSent: (event: AdminContract.Event) -> Unit,
@@ -125,7 +125,7 @@ private fun AdminSettings(
                 }
 
                 else -> {
-                    AdminSettingsContent(
+                    AdminSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -138,7 +138,7 @@ private fun AdminSettings(
 }
 
 @Composable
-private fun AdminSettingsContent(
+private fun AdminSettingsScreenContent(
     state: AdminContract.State,
     onEventSent: (event: AdminContract.Event) -> Unit,
     onNavigationRequested: (AdminContract.Effect.Navigation) -> Unit,
@@ -407,11 +407,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-fun AdminSettingsPreview() {
+fun AdminSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                AdminSettings(
+                AdminSettingsScreen(
                     state = AdminContract.State(
                         adminDebug = true,
                         bootToMonitor = true,

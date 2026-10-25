@@ -57,7 +57,7 @@ fun PushbulletSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        PushbulletSettings(
+        PushbulletSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -81,7 +81,7 @@ fun PushbulletSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PushbulletSettings(
+private fun PushbulletSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -122,7 +122,7 @@ private fun PushbulletSettings(
                 }
 
                 else -> {
-                    PushBulletSettingsContent(
+                    PushbulletSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -134,7 +134,7 @@ private fun PushbulletSettings(
 }
 
 @Composable
-private fun PushBulletSettingsContent(
+private fun PushbulletSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -227,11 +227,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun PushbulletSettingsPreview() {
+private fun PushbulletSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                PushbulletSettings(
+                PushbulletSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

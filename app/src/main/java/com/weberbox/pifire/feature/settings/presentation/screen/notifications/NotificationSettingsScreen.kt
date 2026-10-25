@@ -60,7 +60,7 @@ fun NotificationSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        NotificationSettings(
+        NotificationSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -84,7 +84,7 @@ fun NotificationSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun NotificationSettings(
+private fun NotificationSettingsScreen(
     state: NotifContract.State,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -125,7 +125,7 @@ private fun NotificationSettings(
                 }
 
                 else -> {
-                    NotificationSettingsContent(
+                    NotificationSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -138,7 +138,7 @@ private fun NotificationSettings(
 }
 
 @Composable
-private fun NotificationSettingsContent(
+private fun NotificationSettingsScreenContent(
     state: NotifContract.State,
     onEventSent: (event: NotifContract.Event) -> Unit,
     onNavigationRequested: (NotifContract.Effect.Navigation) -> Unit,
@@ -306,7 +306,7 @@ private fun NotificationsSettingsPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                NotificationSettings(
+                NotificationSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

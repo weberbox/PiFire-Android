@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,7 +55,7 @@ fun PushSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceLocals {
-        PushSettings(
+        PushSettingsScreen(
             consentAccepted = viewModel.acceptedState,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -78,7 +79,7 @@ fun PushSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PushSettings(
+private fun PushSettingsScreen(
     consentAccepted: MutableState<Boolean>,
     effectFlow: Flow<NotifContract.Effect>?,
     onEventSent: (event: NotifContract.Event) -> Unit,
@@ -107,50 +108,63 @@ private fun PushSettings(
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
         contentWindowInsets = windowInsets,
     ) { contentPadding ->
+        PushSettingsScreenContent(
+            consentAccepted = consentAccepted,
+            contentPadding = contentPadding,
+            onEventSent = onEventSent,
+        )
+    }
+}
+
+@Composable
+private fun PushSettingsScreenContent(
+    consentAccepted: MutableState<Boolean>,
+    contentPadding: PaddingValues,
+    onEventSent: (event: NotifContract.Event) -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
+                .fillMaxWidth(),
         ) {
-            Column(
+            Text(
+                text = stringResource(R.string.settings_onesignal_consent_1),
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
-                    .fillMaxWidth(),
-            ) {
-                Text(
-                    text = stringResource(R.string.settings_onesignal_consent_1),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(horizontal = MaterialTheme.spacing.smallThree)
-                        .padding(bottom = MaterialTheme.spacing.extraSmall),
-                )
-                Text(
-                    text = stringResource(R.string.settings_onesignal_consent_2),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .padding(horizontal = MaterialTheme.spacing.smallThree)
-                        .padding(bottom = MaterialTheme.spacing.extraSmall),
-                )
-                PreferenceNote(stringResource(R.string.settings_onesignal_consent_3))
-            }
-            SwitchPreference(
-                value = consentAccepted.value,
-                onValueChange = {
-                    onEventSent(NotifContract.Event.SetOneSignalAccepted(it))
-                },
-                title = { Text(text = stringResource(R.string.enabled)) },
-                summary = {
-                    Text(
-                        text = if (consentAccepted.value) {
-                            stringResource(R.string.settings_onesignal_accepted)
-                        } else {
-                            stringResource(R.string.settings_onesignal_declined)
-                        },
-                    )
-                },
+                    .padding(horizontal = MaterialTheme.spacing.smallThree)
+                    .padding(bottom = MaterialTheme.spacing.extraSmall),
             )
+            Text(
+                text = stringResource(R.string.settings_onesignal_consent_2),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(horizontal = MaterialTheme.spacing.smallThree)
+                    .padding(bottom = MaterialTheme.spacing.extraSmall),
+            )
+            PreferenceNote(stringResource(R.string.settings_onesignal_consent_3))
         }
+        SwitchPreference(
+            value = consentAccepted.value,
+            onValueChange = {
+                onEventSent(NotifContract.Event.SetOneSignalAccepted(it))
+            },
+            title = { Text(text = stringResource(R.string.enabled)) },
+            summary = {
+                Text(
+                    text = if (consentAccepted.value) {
+                        stringResource(R.string.settings_onesignal_accepted)
+                    } else {
+                        stringResource(R.string.settings_onesignal_declined)
+                    },
+                )
+            },
+        )
     }
 }
 
@@ -183,12 +197,12 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun PushSettingsPreview() {
+private fun PushSettingsScreenPreview() {
     val consentAccepted = remember { mutableStateOf(true) }
     PiFireTheme {
         ProvidePreferenceLocals {
             Surface {
-                PushSettings(
+                PushSettingsScreen(
                     consentAccepted = consentAccepted,
                     effectFlow = null,
                     onEventSent = {},

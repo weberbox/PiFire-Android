@@ -61,7 +61,7 @@ fun ManualSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        ManualSettings(
+        ManualSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -85,7 +85,7 @@ fun ManualSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ManualSettings(
+private fun ManualSettingsScreen(
     state: ManualContract.State,
     effectFlow: Flow<ManualContract.Effect>?,
     onEventSent: (event: ManualContract.Event) -> Unit,
@@ -126,7 +126,7 @@ private fun ManualSettings(
                 }
 
                 else -> {
-                    ManualSettingsContent(
+                    ManualSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -138,7 +138,7 @@ private fun ManualSettings(
 }
 
 @Composable
-private fun ManualSettingsContent(
+private fun ManualSettingsScreenContent(
     state: ManualContract.State,
     onEventSent: (event: ManualContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -239,11 +239,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun ManualSettingsPreview() {
+private fun ManualSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                ManualSettings(
+                ManualSettingsScreen(
                     state = ManualContract.State(
                         manualData = ManualData(
                             active = true,

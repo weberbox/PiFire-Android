@@ -66,7 +66,7 @@ fun SmartStartSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        SmartStartSettings(
+        SmartStartSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -90,7 +90,7 @@ fun SmartStartSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SmartStartSettings(
+private fun SmartStartSettingsScreen(
     state: TimerContract.State,
     effectFlow: Flow<TimerContract.Effect>?,
     onEventSent: (event: TimerContract.Event) -> Unit,
@@ -131,7 +131,7 @@ private fun SmartStartSettings(
                 }
 
                 else -> {
-                    SmartStartSettingsContent(
+                    SmartStartSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -143,7 +143,7 @@ private fun SmartStartSettings(
 }
 
 @Composable
-private fun SmartStartSettingsContent(
+private fun SmartStartSettingsScreenContent(
     state: TimerContract.State,
     onEventSent: (event: TimerContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -348,11 +348,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-private fun SmartStartSettingsPreview() {
+private fun SmartStartSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                SmartStartSettings(
+                SmartStartSettingsScreen(
                     state = TimerContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

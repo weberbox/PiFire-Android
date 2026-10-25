@@ -23,6 +23,10 @@ line once it's done.
 - (2026-10-25) The default pellet profile in `PelletsData` ("Generic", "Alder", "Generic Alder")
   mirrors PiFire's built-in profile and is replaced by server data, so it stays untranslated. The
   recipe print HTML `<title>` isn't shown (the print job uses the file name).
+- (2026-10-25) Screens follow the five-part pattern and ViewModels stay on Main (repos do their own
+  IO; `ArchitectureTest` checks no ViewModel imports `Dispatchers`). `HomeScreen` is the app shell
+  around the pager, so its layout stays inline; pager pages and the setup steps have no Scaffold
+  of their own.
 - (2026-10-25) Sentry instruments release builds too. R8 mappings upload only with a Sentry auth
   token (`SENTRY_AUTH_TOKEN` or `sentry.properties`); without one, release crash reports stay
   obfuscated.
@@ -36,8 +40,7 @@ One step per commit, compile all flavors after each.
    in `navigation/`; `MainActivity`/`MainViewModel`/`MainContract` in `application/`.
 3. Done (2026-10-24): every feature in `feature/<name>/` with `components`/`screen`/`util`,
    mappers in `data/mapper`, bindings in `data/di/<Name>DataModule` (`ApiModule`/`RepoModule`
-   removed), screen files and `*ScreenDestination` renamed. Left: private composables inside the
-   renamed settings/landing screens still lack the `Screen` suffix (fix with the five-part pattern).
+   removed), screen files and `*ScreenDestination` renamed.
 4. Done (2026-10-25): no `data/` or `core/` code imports `presentation`. Cached server models
    (`SettingsData` + its PWM/probe/smart-start/OneSignal types and `Setting`, `DashData`,
    `EventsData`, `InfoData`, `PelletsData`, `RecipesData`) moved to `core/model/<feature>/`;
@@ -65,9 +68,5 @@ One step per commit, compile all flavors after each.
 
 ## Conventions to fix
 - SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
-- Dispatchers in ViewModels with `withContext(Main)` before `setEffect`: move IO into repos and
-  bring the screen into the five-part pattern, one feature per commit. `ArchitectureTest`
-  (`VIEW_MODELS_WITH_DISPATCHERS`) lists the ViewModels left. Done: changelog, events, info, pellets, recipes, dashboard, home, landing, setup
-  (`HomeScreen` is the app shell around the pager, so it keeps its layout inline).
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.

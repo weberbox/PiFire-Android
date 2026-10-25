@@ -81,7 +81,7 @@ fun ProbeSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        ProbeSettings(
+        ProbeSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -105,7 +105,7 @@ fun ProbeSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun ProbeSettings(
+private fun ProbeSettingsScreen(
     state: ProbeContract.State,
     effectFlow: Flow<ProbeContract.Effect>?,
     onEventSent: (event: ProbeContract.Event) -> Unit,
@@ -146,7 +146,7 @@ private fun ProbeSettings(
                 }
 
                 else -> {
-                    ProbeSettingsContent(
+                    ProbeSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -158,7 +158,7 @@ private fun ProbeSettings(
 }
 
 @Composable
-private fun ProbeSettingsContent(
+private fun ProbeSettingsScreenContent(
     state: ProbeContract.State,
     onEventSent: (event: ProbeContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -327,11 +327,11 @@ private fun HandleSideEffects(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @DeviceSizePreviews
-private fun ProbeSettingsPreview() {
+private fun ProbeSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                ProbeSettings(
+                ProbeSettingsScreen(
                     state = ProbeContract.State(
                         serverData = Server(
                             settings = Server.Settings(

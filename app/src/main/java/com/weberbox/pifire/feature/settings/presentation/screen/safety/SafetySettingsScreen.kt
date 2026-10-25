@@ -67,7 +67,7 @@ fun SafetySettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        SafetySettings(
+        SafetySettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -91,7 +91,7 @@ fun SafetySettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SafetySettings(
+private fun SafetySettingsScreen(
     state: SafetyContract.State,
     effectFlow: Flow<SafetyContract.Effect>?,
     onEventSent: (event: SafetyContract.Event) -> Unit,
@@ -132,7 +132,7 @@ private fun SafetySettings(
                 }
 
                 else -> {
-                    SafetySettingsContent(
+                    SafetySettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         contentPadding = contentPadding,
@@ -144,7 +144,7 @@ private fun SafetySettings(
 }
 
 @Composable
-fun SafetySettingsContent(
+fun SafetySettingsScreenContent(
     state: SafetyContract.State,
     onEventSent: (event: SafetyContract.Event) -> Unit,
     contentPadding: PaddingValues,
@@ -367,11 +367,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun SafetySettingsPreview() {
+private fun SafetySettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                SafetySettings(
+                SafetySettingsScreen(
                     state = SafetyContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

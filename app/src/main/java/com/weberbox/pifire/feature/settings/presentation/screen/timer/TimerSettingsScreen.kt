@@ -76,7 +76,7 @@ fun TimerSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        TimerSettings(
+        TimerSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -100,7 +100,7 @@ fun TimerSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun TimerSettings(
+private fun TimerSettingsScreen(
     state: TimerContract.State,
     effectFlow: Flow<TimerContract.Effect>?,
     onEventSent: (event: TimerContract.Event) -> Unit,
@@ -141,7 +141,7 @@ private fun TimerSettings(
                 }
 
                 else -> {
-                    TimerSettingsContent(
+                    TimerSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -154,7 +154,7 @@ private fun TimerSettings(
 }
 
 @Composable
-private fun TimerSettingsContent(
+private fun TimerSettingsScreenContent(
     state: TimerContract.State,
     onEventSent: (event: TimerContract.Event) -> Unit,
     onNavigationRequested: (TimerContract.Effect.Navigation) -> Unit,
@@ -566,11 +566,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun TimerSettingsPreview() {
+private fun TimerSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                TimerSettings(
+                TimerSettingsScreen(
                     state = TimerContract.State(
                         serverData = Server(),
                         isInitialLoading = false,

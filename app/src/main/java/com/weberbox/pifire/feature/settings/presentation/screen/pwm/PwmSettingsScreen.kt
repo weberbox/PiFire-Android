@@ -66,7 +66,7 @@ fun PwmSettingsScreenDestination(
 ) {
     val sourceEntry = rememberSourceEntry()
     ProvidePreferenceTheme {
-        PwmSettings(
+        PwmSettingsScreen(
             state = viewModel.viewState.value,
             effectFlow = viewModel.effect,
             onEventSent = { event -> viewModel.setEvent(event) },
@@ -90,7 +90,7 @@ fun PwmSettingsScreenDestination(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun PwmSettings(
+private fun PwmSettingsScreen(
     state: PwmContract.State,
     effectFlow: Flow<PwmContract.Effect>?,
     onEventSent: (event: PwmContract.Event) -> Unit,
@@ -131,7 +131,7 @@ private fun PwmSettings(
                 }
 
                 else -> {
-                    PwmSettingsContent(
+                    PwmSettingsScreenContent(
                         state = state,
                         onEventSent = onEventSent,
                         onNavigationRequested = onNavigationRequested,
@@ -144,7 +144,7 @@ private fun PwmSettings(
 }
 
 @Composable
-private fun PwmSettingsContent(
+private fun PwmSettingsScreenContent(
     state: PwmContract.State,
     onEventSent: (event: PwmContract.Event) -> Unit,
     onNavigationRequested: (PwmContract.Effect.Navigation) -> Unit,
@@ -340,11 +340,11 @@ private fun HandleSideEffects(
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-private fun PwmSettingsPreview() {
+private fun PwmSettingsScreenPreview() {
     PiFireTheme {
         ProvidePreferenceTheme {
             Surface {
-                PwmSettings(
+                PwmSettingsScreen(
                     state = PwmContract.State(
                         serverData = Server(),
                         isInitialLoading = false,
