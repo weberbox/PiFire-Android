@@ -74,11 +74,11 @@ core/
 ├── model/                  # Models several features use (Server, SemanticVersion, TempUnit, ...)
 ├── network/                # SocketManager, AckWithTimeout, response parser, shared DTOs, headers
 ├── notification/           # OneSignal
-├── remoteconfig/           # RemoteConfigRepo, UpdateManager, ServerSupportManager, FeatureSupportManager
+├── remoteconfig/           # RemoteConfigRepo, ServerSupportManager, FeatureSupportManager
 ├── repo/                   # Repos used by several features (e.g. server/settings data)
 ├── session/                # SessionStateHolder
 └── ui/                     # base/, components/, icons/, state/, theme/, util/ (Compose helpers)
-feature/<name>/             # changelog, dashboard, events, home, info, landing, pellets, recipes, settings, setup
+feature/<name>/             # changelog, dashboard, events, home, info, landing, pellets, recipes, settings, setup, update
 ├── data/
 │   ├── api/                # <Name>Api + <Name>ApiImpl: socket/HTTP calls to the PiFire server
 │   ├── di/                 # <Name>DataModule (@Binds for the feature's repos and apis)
@@ -153,8 +153,11 @@ navigation/                 # NavRoutes, NavTypes, RootNavGraph, NavHostUtils
   or remove one without a new key.
 - If a fetch or decode fails, fall back to the bundled defaults, never crash or block the UI.
   Fetch once per need, not on every state emission.
-- Updates: `playstore` uses Play in-app updates (IMMEDIATE/FLEXIBLE from Remote Config); `github`
-  opens the GitHub release link. Both paths go through `UpdateManager`.
+- Updates live in `feature/update` (`AppUpdateRepo`, `AppUpdateViewModel`, `AppUpdateScreenDest`
+  over the nav graph in `MainActivity`). Any IMMEDIATE release newer than the installed version
+  blocks the app; otherwise the latest one is offered in a sheet ("Later" snoozes that version a
+  day). `playstore` installs through Play in-app updates (`PlayAppInstaller`); `github` opens the
+  GitHub release link.
 
 ## Core rules
 

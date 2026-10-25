@@ -1,6 +1,6 @@
 # PiFire Push Notifications: Migration Plan
 
-Replace the OneSignal v1 (unauthenticated) push flow with a self-hosted relay on **Cloudflare Workers + Firebase Cloud Messaging (FCM)**, plus a **local LAN fallback** so alerts still fire when the internet is down.
+Replace the OneSignal v1 (unauthenticated) push flow with a self-hosted relay on **Cloudflare Workers + Firebase Cloud Messaging (FCM)**, plus **local alerts over the v2 live stream** while the app is open. Transport and rollout are in `BACKLOG.md` (v2 API and push plan).
 
 ---
 
@@ -19,7 +19,7 @@ Replace the OneSignal v1 (unauthenticated) push flow with a self-hosted relay on
 │              │ ◀──────────────────────── │ (relay, holds FCM    │
 │              │     push_key              │  service account)    │
 │              │                           └─────────┬───────────┘
-│              │  2. push_key via websocket          │ 4. FCM HTTP v1
+│              │  2. push_key via v2 API             │ 4. FCM HTTP v1
 │              │ ─────────────┐                      ▼
 │              │              ▼             ┌─────────────────────┐
 │              │      ┌──────────────┐      │ Firebase Cloud      │
@@ -29,7 +29,7 @@ Replace the OneSignal v1 (unauthenticated) push flow with a self-hosted relay on
 │              │             └──────▶ Worker            │
 │              │ ◀──────────────────────────────────────┘ 5. push
 │              │
-│  Foreground  │ ◀── LAN websocket (local alerts, works w/o internet)
+│  (app open)  │ ◀── v2 live stream (local alerts, LAN)
 │  service     │
 └──────────────┘
 ```
@@ -56,7 +56,7 @@ All bodies are JSON. All responses include `{ "ok": bool, "error"?: string }`.
 | `POST` | `/v1/register` | App | `{ fcm_token }` | `201 { push_key }` |
 | `PUT` | `/v1/register` | App | `{ push_key, fcm_token }` | `200` (token refresh, same key) |
 | `DELETE` | `/v1/register` | App | `{ push_key }` | `200` |
-| `POST` | `/v1/send` | PiFire | `{ push_key, title, body, alert_id?, data? }` | `200` / `410` / `429` |
+| `POST` | `/v1/send` | PiFire | `{ push_key, alert_id, type, server_uuid, data? }` | `200` / `410` / `429` |
 | `GET` | `/v1/health` | Anyone | – | `200` |
 
 **Status codes for `/v1/send`:**
@@ -91,15 +91,18 @@ Prefer a **data message** with high priority so the app controls display and ded
     "token": "<fcm_token>",
     "android": { "priority": "high", "ttl": "300s" },
     "data": {
-      "title": "Probe 1 hit 203°F",
-      "body": "Brisket is at target temp",
       "alert_id": "<uuid from PiFire>",
-      "type": "probe_target"
+      "type": "probe_target",
+      "server_uuid": "<PiFire server uuid>",
+      "probe": "Probe 1",
+      "temp": "203",
+      "units": "F"
     }
   }
 }
 ```
 - The app **must** post a visible notification for every high-priority data message, or Android may deprioritize future ones.
+- Send structured values, not text: the app builds the wording from its string resources (translated, per-type channels), and less content passes through Cloudflare and Google.
 - A short TTL means stale alerts (e.g. "temp too high" from 2 hours ago) get dropped instead of delivered late.
 
 ### 3.7 Abuse protection
@@ -162,8 +165,8 @@ push-relay/
 
 ### 4.1 Registration
 1. On first launch / FCM `onNewToken`: if no stored push_key, call `POST /v1/register`; otherwise `PUT /v1/register` with the existing key.
-2. Store push_key in app storage (EncryptedSharedPreferences).
-3. Send push_key to each connected PiFire over the websocket, e.g. `{ "cmd": "push_register", "push_key": "..." }`.
+2. Store push_key with the app's existing `Crypto` + DataStore (security-crypto is deprecated).
+3. Send push_key to each PiFire through the v2 push register endpoint (Socket.IO servers keep OneSignal). One key per phone, shared by all its PiFires; alerts carry `server_uuid`.
 4. A settings toggle to disable push calls `DELETE /v1/register` and tells PiFire to remove the key.
 
 ### 4.2 Receiving
@@ -171,23 +174,21 @@ push-relay/
 - **Dedupe** on `alert_id` (keep a small LRU of recently shown IDs) so the local path and FCM don't double-notify.
 - Notification channels per alert type (temp alarms vs. info).
 
-### 4.3 Local LAN fallback (works without internet)
-- While a cook is active (or the user opts in), run a **foreground service** holding the PiFire websocket.
-- PiFire emits alert events over the websocket with the same `alert_id`. The app raises a local notification.
-- Persistent notification required by Android; show current temps in it so it's useful.
-- Stop the service when the cook ends or the connection is lost for X minutes.
-- Requires `FOREGROUND_SERVICE` + appropriate `foregroundServiceType` (likely `dataSync` or `connectedDevice`; check the current Play policy).
+### 4.3 Local alerts (no foreground service)
+- **Decided against a foreground service.** Cooks run 12-16 hours: Android 15 caps `dataSync` services at 6 hours a day, the system may kill it anyway, and holding a connection that long drains the battery.
+- While the app is open, PiFire sends alert events over the v2 live stream with the same `alert_id`, and the app shows them (deduped against FCM).
+- With the internet down and the app closed there is no push. On open, the app shows missed alerts from the events list. Users who need alerts with no internet keep PiFire's other notifiers (Apprise).
 
 ## 5. PiFire (Raspberry Pi, Python)
 
 1. New notification provider next to the existing ones, e.g. `"pifire_push"`.
-2. Settings: list of push_keys (multiple phones), relay URL (default to the official Worker, overridable for self-hosters).
-3. Websocket handler for `push_register` / `push_unregister`: add/remove the key in settings.
+2. Push keys (multiple phones) live in the v2 blueprint's own store, never in the settings file: `settings_data` returns settings to any client. The relay URL is fixed: FCM tokens belong to the app's Firebase project, so a self-hosted relay can't reach the official app (ntfy/UnifiedPush is the zero-cloud option).
+3. v2 endpoints for push register / unregister add or remove the key.
 4. On alert:
    - Generate `alert_id` (uuid4).
-   - Emit the alert event over the websocket (local path).
+   - Send the alert event on the v2 live stream (local path).
    - `POST /v1/send` for each key in a background thread with a short timeout (≤ 5 s).
-5. Response handling: `410` → remove key; `429`/`5xx` → exponential backoff, max 3 tries; network error → log and move on (never block or crash the control loop).
+5. Response handling: `410` → remove key; `404` → remove only after repeated failures over time (KV is eventually consistent right after register); `429`/`5xx` → exponential backoff, max 3 tries; network error → log and move on (never block or crash the control loop).
 6. Keep the OneSignal provider during transition, then deprecate.
 
 ## 6. Implementation Checklist
@@ -203,34 +204,32 @@ push-relay/
 - [ ] Deploy to `*.workers.dev`
 
 ### Android
-- [ ] Add Firebase Messaging dependency + `google-services.json`
 - [ ] Registration flow + `onNewToken` handling
-- [ ] Websocket `push_register` message
+- [ ] v2 push register / unregister calls
 - [ ] `FirebaseMessagingService` + notification channels
 - [ ] `alert_id` dedupe
-- [ ] Foreground service for LAN alerts
+- [ ] Local alerts from the v2 stream while open; missed alerts from the events list
 - [ ] Settings toggle (enable/disable push)
 
 ### PiFire
-- [ ] Push provider + settings schema
-- [ ] Websocket register/unregister handlers
-- [ ] Alert emission over websocket with `alert_id`
+- [ ] Push provider + blueprint key store
+- [ ] v2 register/unregister endpoints
+- [ ] Alert events on the v2 stream with `alert_id`
 - [ ] Async send with backoff + 410 handling
-- [ ] Docs for self-hosters (custom relay URL)
 
 ### Rollout
-- [ ] Ship app + PiFire update with both OneSignal and new provider
+- [ ] Follow the order in `BACKLOG.md` (relay, app, forced update, PiFire PR); keep OneSignal on both sides
 - [ ] Monitor Worker analytics / error rates
 - [ ] Remove OneSignal
 
 ## 7. Testing
 - Unit: push_key gen, hashing, validation, JWT signing (compare with a known-good token).
 - Integration: register → send → receive on a real device; token refresh keeps the same key; uninstall → 410 → PiFire drops key.
-- Offline: unplug the router WAN, confirm the LAN foreground-service alert still fires and no duplicate appears when WAN returns.
+- Offline: unplug the router WAN with the app open, confirm the stream alert fires and no duplicate appears when WAN returns; with the app closed, confirm missed alerts show on open.
 - Abuse: hammer `/v1/send` with one key, confirm 429; confirm KV writes don't grow with sends.
 
 ## 8. Open Questions
 - ~~Is the Workers Rate Limiting binding available on the free plan?~~ **Resolved:** yes, no extra charge. Using it at 10/min per push_key and 3/min per IP for register; daily cap dropped (see 3.7).
-- Should one push_key be shared across multiple PiFire instances, or one per instance?
+- ~~Should one push_key be shared across multiple PiFire instances?~~ **Resolved:** one per phone, alerts carry `server_uuid`; raise the per-key send limit a little for several grills.
 - iOS someday? FCM supports APNs via the same API, so the relay wouldn't change.
 - Offer a UnifiedPush/ntfy option for users who want zero third-party cloud?

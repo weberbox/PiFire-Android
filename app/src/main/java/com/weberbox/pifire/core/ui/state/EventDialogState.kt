@@ -1,6 +1,7 @@
 package com.weberbox.pifire.core.ui.state
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -14,23 +15,26 @@ import com.weberbox.pifire.core.ui.util.DialogEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * What the app-wide dialog shows. [event] keeps the last dialog after it closes, so its content
+ * stays on screen while it animates out.
+ */
 class EventDialogState(
     val state: DialogState,
     private val scope: CoroutineScope,
-    dialogEvent: DialogEvent?,
+    initialEvent: DialogEvent?,
 ) {
-    var event: DialogEvent? by mutableStateOf(dialogEvent)
+    var event: DialogEvent? by mutableStateOf(initialEvent)
         private set
 
-    fun show(dialogEvent: DialogEvent) {
-        event = dialogEvent
-        DialogController.current = dialogEvent
-        state.visible = true
+    internal fun update(current: DialogEvent?) {
+        if (current != null) event = current
+        state.visible = current != null
     }
 
     fun dismiss() {
         state.visible = false
-        DialogController.current = null
+        event?.let(DialogController::dismiss)
     }
 
     /** Runs in the host's scope, which outlives the dismissed dialog's content. */
@@ -40,17 +44,22 @@ class EventDialogState(
     }
 }
 
+/** Follows [DialogController.current], so the dialog comes back (actions included) after rotation. */
 @Composable
 fun rememberEventDialogState(): EventDialogState {
-    // After process death there is no event to restore, so nothing is shown
-    val restored = DialogController.current
+    // Read once for the initial visibility; the effect below follows later changes.
+    val restored = remember { DialogController.current.value }
     val state = rememberDialogState(initiallyVisible = restored != null)
     val scope = rememberCoroutineScope()
-    return remember(state, scope) {
+    val eventDialogState = remember(state, scope) {
         EventDialogState(
             state = state,
             scope = scope,
-            dialogEvent = restored,
+            initialEvent = restored,
         )
     }
+    LaunchedEffect(eventDialogState) {
+        DialogController.current.collect(eventDialogState::update)
+    }
+    return eventDialogState
 }

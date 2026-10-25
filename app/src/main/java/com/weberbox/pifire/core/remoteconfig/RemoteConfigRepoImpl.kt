@@ -33,6 +33,8 @@ class RemoteConfigRepoImpl @Inject constructor(
         .setMinimumFetchIntervalInSeconds(if (AppConfig.DEBUG) 0 else 3600)
         .build()
 
+    private var fetchErrorShown = false
+
     override suspend fun fetchServerSupportConfig(): ServerSupportConfigData? {
         val key = AppConfig.SERVER_SUPPORT_CONFIG
         val bundled = readJsonFromAssets("config_server_support.json", context = appContext)
@@ -42,17 +44,16 @@ class RemoteConfigRepoImpl @Inject constructor(
             ?.find { it.appVersionCode == BuildConfig.VERSION_CODE }
     }
 
-    override suspend fun fetchAppUpdateConfig(): AppUpdateConfigData? {
+    override suspend fun fetchAppUpdateConfig(): List<AppUpdateConfigData> {
         val key = AppConfig.APP_UPDATE_CONFIG
         val bundled = readJsonFromAssets("config_app_update.json", context = appContext)
-        if (!fetchAndActivate(key = key, bundled = bundled)) showFirebaseErrorDialog()
+        // Updates are checked again on every return to the app; tell the user only once.
+        if (!fetchAndActivate(key = key, bundled = bundled) && !fetchErrorShown) {
+            fetchErrorShown = true
+            showFirebaseErrorDialog()
+        }
 
-        return decodeConfig<List<AppUpdateConfigData>>(key = key, bundled = bundled)
-            ?.filter {
-                it.appVersionCode > BuildConfig.VERSION_CODE &&
-                    (BuildConfig.ALPHA_BUILD || !it.isAlpha)
-            }
-            ?.maxByOrNull { it.appVersionCode }
+        return decodeConfig<List<AppUpdateConfigData>>(key = key, bundled = bundled).orEmpty()
     }
 
     override suspend fun fetchFeatureSupportConfig(): Map<String, RemoteFeatureConfigData> {

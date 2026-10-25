@@ -40,7 +40,6 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel<MainContract.Event, MainContract.State, MainContract.Effect>() {
 
     init {
-        checkForAppUpdates()
         collectPrefsFlow()
         collectSessionState()
         checkProcessKilled()
@@ -55,12 +54,6 @@ class MainViewModel @Inject constructor(
     override fun handleEvents(event: MainContract.Event) {
         when (event) {
             MainContract.Event.StoreLatestDataState -> storeLatestDataState()
-        }
-    }
-
-    private fun checkForAppUpdates() {
-        setEffect {
-            MainContract.Effect.CheckForAppUpdates
         }
     }
 

@@ -27,6 +27,7 @@ import java.net.URI
 import java.net.URISyntaxException
 import javax.inject.Inject
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val CONNECT_TIMEOUT_MS = 20_000L
 private const val ACK_TIMEOUT_MS = 10_000L
@@ -132,7 +133,7 @@ class SocketManager @Inject constructor(
         return awaitConnection(target)
     }
 
-    private suspend fun awaitConnection(target: Socket): Boolean = withTimeoutOrNull(CONNECT_TIMEOUT_MS) {
+    private suspend fun awaitConnection(target: Socket): Boolean = withTimeoutOrNull(CONNECT_TIMEOUT_MS.milliseconds) {
         suspendCancellableCoroutine { continuation ->
             val onConnect = Emitter.Listener {
                 if (continuation.isActive) continuation.resume(true)
@@ -178,14 +179,14 @@ class SocketManager @Inject constructor(
             return Result.Error(DataError.Network.SOCKET_ERROR)
         }
 
-        return withTimeoutOrNull(ACK_TIMEOUT_MS) {
+        return withTimeoutOrNull(ACK_TIMEOUT_MS.milliseconds) {
             suspendCancellableCoroutine { continuation ->
                 target.emit(
                     event,
                     *args,
                     Ack { result ->
                         val data = result.firstOrNull()
-                        // A resume after the timeout cancelled the continuation is ignored.
+                        // A resume after the timeout canceled the continuation is ignored.
                         continuation.resume(
                             if (data != null) {
                                 Result.Success(data.toString())

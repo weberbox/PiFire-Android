@@ -13,30 +13,24 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.constants.AppConfig
-import com.weberbox.pifire.core.remoteconfig.UpdateManager
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.AppSnackbarHost
 import com.weberbox.pifire.core.ui.components.EventAlertDialog
 import com.weberbox.pifire.core.ui.model.AppTheme
-import com.weberbox.pifire.core.ui.state.EventDialogState
 import com.weberbox.pifire.core.ui.state.rememberEventDialogState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.DialogController
 import com.weberbox.pifire.core.ui.util.ObserveAsEvents
 import com.weberbox.pifire.core.ui.util.SnackbarController
-import com.weberbox.pifire.core.ui.util.SnackbarEvent
 import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.feature.update.data.installer.PlayAppInstaller
+import com.weberbox.pifire.feature.update.presentation.screen.AppUpdateScreenDest
 import com.weberbox.pifire.navigation.RootNavGraph
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +43,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var appUpdateManager: UpdateManager
+    lateinit var playAppInstaller: PlayAppInstaller
 
     @Inject
     lateinit var analytics: Analytics
@@ -61,10 +55,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        appUpdateManager.attach(this)
-        if (AppConfig.IS_PLAY_BUILD) {
-            appUpdateManager.register(this)
-        }
+        if (AppConfig.IS_PLAY_BUILD) playAppInstaller.bind(this)
 
         setContent {
             MainContent()
@@ -81,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         val eventDialog = rememberEventDialogState()
         val snackbarHostState = remember { SnackbarHostState() }
         val scope = rememberCoroutineScope()
-        var currentSnackbarEvent by remember { mutableStateOf<SnackbarEvent?>(null) }
 
         HandleSideEffects(
             effectFlow = effectFlow,
@@ -103,9 +93,7 @@ class MainActivity : AppCompatActivity() {
             snackbarHostState = snackbarHostState,
             scope = scope,
             context = context,
-            onEventReceived = { currentSnackbarEvent = it },
         )
-        ObserveDialogEvents(eventDialog = eventDialog)
 
         PiFireTheme(
             darkTheme = determineDarkMode(state.appTheme),
@@ -114,10 +102,7 @@ class MainActivity : AppCompatActivity() {
         ) {
             Scaffold(
                 snackbarHost = {
-                    AppSnackbarHost(
-                        snackbarHostState = snackbarHostState,
-                        currentSnackbarEvent = currentSnackbarEvent,
-                    )
+                    AppSnackbarHost(snackbarHostState = snackbarHostState)
                 },
             ) {
                 EventAlertDialog(eventDialogState = eventDialog)
@@ -125,6 +110,8 @@ class MainActivity : AppCompatActivity() {
                     navController = navController,
                     analytics = analytics,
                 )
+                // After the nav graph, so a required update covers it.
+                AppUpdateScreenDest()
             }
         }
     }
@@ -137,8 +124,6 @@ class MainActivity : AppCompatActivity() {
         LaunchedEffect(SIDE_EFFECTS_KEY) {
             effectFlow.onEach { effect ->
                 when (effect) {
-                    is MainContract.Effect.CheckForAppUpdates -> checkForUpdates()
-
                     is MainContract.Effect.Navigation.NavRoute -> onNavigationRequested(effect)
 
                     is MainContract.Effect.Notification -> {
@@ -157,13 +142,11 @@ class MainActivity : AppCompatActivity() {
         snackbarHostState: SnackbarHostState,
         scope: CoroutineScope,
         context: Context,
-        onEventReceived: (SnackbarEvent) -> Unit,
     ) {
         ObserveAsEvents(
             flow = SnackbarController.events,
             key1 = snackbarHostState,
         ) { event ->
-            onEventReceived(event)
             scope.launch {
                 snackbarHostState.currentSnackbarData?.dismiss()
 
@@ -181,44 +164,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     @Composable
-    private fun ObserveDialogEvents(eventDialog: EventDialogState) {
-        ObserveAsEvents(
-            flow = DialogController.events,
-        ) { event ->
-            eventDialog.show(dialogEvent = event)
-        }
-    }
-
-    @Composable
     private fun determineDarkMode(appTheme: AppTheme): Boolean = when (appTheme) {
         AppTheme.Light -> false
         AppTheme.Dark -> true
         AppTheme.System -> isSystemInDarkTheme()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (AppConfig.IS_PLAY_BUILD) {
-            appUpdateManager.resumeUpdateIfNeeded(this)
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         mainViewModel.setEvent(MainContract.Event.StoreLatestDataState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        appUpdateManager.detach(this)
-        if (AppConfig.IS_PLAY_BUILD) {
-            appUpdateManager.unregister()
-        }
-    }
-
-    private fun checkForUpdates() {
-        lifecycleScope.launch {
-            appUpdateManager.checkForUpdate()
-        }
     }
 }

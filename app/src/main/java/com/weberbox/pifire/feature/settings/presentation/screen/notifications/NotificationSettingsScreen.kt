@@ -38,7 +38,7 @@ import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
 import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.NotificationsPermissionDetailsProvider
+import com.weberbox.pifire.core.ui.util.NOTIFICATIONS_PERMISSION
 import com.weberbox.pifire.core.ui.util.rememberPermissionState
 import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.settings.presentation.components.TwoTargetSwitchPreference
@@ -274,13 +274,13 @@ private fun HandleSideEffects(
 ) {
     val activity = LocalActivity.current
     val notificationPermission = rememberPermissionState(
-        permissionDetailsProvider = NotificationsPermissionDetailsProvider(),
+        spec = NOTIFICATIONS_PERMISSION,
     )
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
                 is NotifContract.Effect.RequestPermission -> {
-                    notificationPermission.launchPermissionRequest()
+                    notificationPermission.request()
                 }
 
                 is NotifContract.Effect.Navigation -> {

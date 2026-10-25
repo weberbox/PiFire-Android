@@ -20,7 +20,6 @@ class MainContract {
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {
-        data object CheckForAppUpdates : Effect()
         data class Notification(val text: UiText, val error: Boolean) : Effect()
 
         sealed class Navigation : Effect() {
