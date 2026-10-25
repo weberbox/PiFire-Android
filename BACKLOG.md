@@ -67,6 +67,5 @@ One step per commit, compile all flavors after each.
   `graphicsLayer`/draw.
 
 ## Conventions to fix
-- SetupViewModel is a plain `ViewModel`, not `BaseViewModel`.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.

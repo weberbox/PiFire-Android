@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.base.getPagerAnimationSpec
 import com.weberbox.pifire.core.ui.base.gradientBackground
 import com.weberbox.pifire.core.ui.components.TransparentAppBar
@@ -40,10 +41,13 @@ import com.weberbox.pifire.core.ui.modifier.limitWidthFraction
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.feature.setup.presentation.components.HorizontalDashedStepper
+import com.weberbox.pifire.feature.setup.presentation.contract.SetupContract
 import com.weberbox.pifire.feature.setup.presentation.model.SetupStep
-import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Composable
@@ -55,13 +59,17 @@ fun SetupScreenDestination(
     val sourceEntry = rememberSourceEntry()
     SetupScreen(
         isInEditMode = isInEditMode,
-        onNavigateLanding = {
-            viewModel.clearServerDataCache()
-            navController.navigateFrom(
-                from = sourceEntry,
-                route = NavGraph.LandingDest.Landing(false),
-                popUpToRoute = NavGraph.ServerSetup,
-            )
+        effectFlow = viewModel.effect,
+        onNavigateLanding = { viewModel.setEvent(SetupContract.Event.Exit) },
+        onNavigationRequested = { navigationEffect ->
+            when (navigationEffect) {
+                is SetupContract.Effect.Navigation.NavRoute -> navController.navigateFrom(
+                    from = sourceEntry,
+                    route = navigationEffect.route,
+                    popUpToRoute = navigationEffect.popUpToRoute,
+                    inclusive = navigationEffect.inclusive,
+                )
+            }
         },
     )
 }
@@ -70,8 +78,15 @@ fun SetupScreenDestination(
 @Composable
 private fun SetupScreen(
     isInEditMode: Boolean,
+    effectFlow: Flow<SetupContract.Effect>?,
     onNavigateLanding: () -> Unit,
+    onNavigationRequested: (SetupContract.Effect.Navigation) -> Unit,
 ) {
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
+
     val onBackDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val initialPage by remember { mutableIntStateOf(SetupStep.Terms.ordinal) }
     var currentTitle by rememberSaveable { mutableIntStateOf(SetupStep.entries[initialPage].title) }
@@ -195,6 +210,20 @@ private fun SetupScreen(
 }
 
 @Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<SetupContract.Effect>?,
+    onNavigationRequested: (SetupContract.Effect.Navigation) -> Unit,
+) {
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is SetupContract.Effect.Navigation -> onNavigationRequested(effect)
+            }
+        }?.collect()
+    }
+}
+
+@Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 private fun SetupScreenPreview() {
@@ -202,7 +231,9 @@ private fun SetupScreenPreview() {
         Surface {
             SetupScreen(
                 isInEditMode = true,
+                effectFlow = null,
                 onNavigateLanding = {},
+                onNavigationRequested = {},
             )
         }
     }
