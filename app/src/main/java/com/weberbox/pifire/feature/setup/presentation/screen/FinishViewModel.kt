@@ -18,9 +18,7 @@ import com.weberbox.pifire.feature.setup.data.repo.SetupRepo
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.FinishContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -100,29 +98,27 @@ class FinishViewModel @Inject constructor(
 
     private suspend fun setGrillName(name: String) {
         setupRepo.completeSetup(server = serverData, headers = headersData).let { result ->
-            withContext(Dispatchers.Main) {
-                toggleLoading(false)
-                when (result) {
-                    is Result.Error -> {
-                        setEffect {
-                            FinishContract.Effect.Notification(
-                                text = result.error.asUiText(),
-                                error = true,
-                            )
-                        }
-                    }
-
-                    is Result.Success -> {
-                        analytics.logEvent(
-                            name = AnalyticsEvent.ButtonClick.name,
-                            params = mapOf(
-                                AnalyticsEvent.Param.ButtonAction.key to "setupComplete",
-                            ),
+            toggleLoading(false)
+            when (result) {
+                is Result.Error -> {
+                    setEffect {
+                        FinishContract.Effect.Notification(
+                            text = result.error.asUiText(),
+                            error = true,
                         )
+                    }
+                }
 
-                        setEffect {
-                            FinishContract.Effect.Navigation.Forward
-                        }
+                is Result.Success -> {
+                    analytics.logEvent(
+                        name = AnalyticsEvent.ButtonClick.name,
+                        params = mapOf(
+                            AnalyticsEvent.Param.ButtonAction.key to "setupComplete",
+                        ),
+                    )
+
+                    setEffect {
+                        FinishContract.Effect.Navigation.Forward
                     }
                 }
             }

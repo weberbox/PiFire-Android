@@ -97,6 +97,19 @@ private fun PushScreen(
         onNavigationRequested = onNavigationRequested,
     )
 
+    PushScreenContent(
+        state = state,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun PushScreenContent(
+    state: PushContract.State,
+    onEventSent: (event: PushContract.Event) -> Unit,
+    onNavigationRequested: (PushContract.Effect.Navigation) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -77,6 +77,19 @@ private fun FinishScreen(
         onNavigationRequested = onNavigationRequested,
     )
 
+    FinishScreenContent(
+        state = state,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun FinishScreenContent(
+    state: FinishContract.State,
+    onEventSent: (event: FinishContract.Event) -> Unit,
+    onNavigationRequested: (FinishContract.Effect.Navigation) -> Unit,
+) {
     Box {
         Column(
             modifier = Modifier

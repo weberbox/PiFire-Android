@@ -112,6 +112,23 @@ private fun ConnectScreen(
         onNavigationRequested = onNavigationRequested,
     )
 
+    ConnectScreenContent(
+        state = state,
+        cameraAvailable = cameraAvailable,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun ConnectScreenContent(
+    state: ConnectContract.State,
+    cameraAvailable: Boolean,
+    onEventSent: (event: ConnectContract.Event) -> Unit,
+    onNavigationRequested: (ConnectContract.Effect.Navigation) -> Unit,
+) {
+    val context = LocalContext.current
+    val activity = LocalActivity.current
     Box {
         Column(
             modifier = Modifier

@@ -32,7 +32,6 @@ import com.weberbox.pifire.feature.setup.data.repo.SetupRepo
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import com.weberbox.pifire.feature.setup.presentation.contract.ConnectContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -138,7 +137,7 @@ class ConnectViewModel @Inject constructor(
 
     private fun getServerVersions() {
         toggleLoading(true)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (
                 val result =
                     setupRepo.getVersions(

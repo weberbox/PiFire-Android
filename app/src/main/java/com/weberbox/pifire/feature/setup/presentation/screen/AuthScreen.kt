@@ -58,6 +58,7 @@ import com.weberbox.pifire.core.ui.model.Credentials
 import com.weberbox.pifire.core.ui.model.FieldInput
 import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.core.ui.modifier.limitWidthFraction
+import com.weberbox.pifire.core.ui.state.InputModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
@@ -114,6 +115,21 @@ private fun AuthScreen(
         onNavigationRequested = onNavigationRequested,
     )
 
+    AuthScreenContent(
+        state = state,
+        headersSheet = headersSheet,
+        onEventSent = onEventSent,
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@Composable
+private fun AuthScreenContent(
+    state: AuthContract.State,
+    headersSheet: InputModalBottomSheetState<ExtraHeader>,
+    onEventSent: (event: AuthContract.Event) -> Unit,
+    onNavigationRequested: (AuthContract.Effect.Navigation) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

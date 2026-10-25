@@ -24,8 +24,10 @@ import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapp
 import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.IOException
@@ -44,12 +46,12 @@ class SetupRepoImpl @Inject constructor(
     override suspend fun getVersions(
         url: String,
         headerMap: Map<String, String>,
-    ): Result<VersionsData, DataError> {
+    ): Result<VersionsData, DataError> = withContext(Dispatchers.IO) {
         if (networkAvailable()) {
             try {
                 setupApi.getVersions(url, headerMap).let { response ->
                     if (response.isSuccessful) {
-                        return response.body()?.let { r ->
+                        return@withContext response.body()?.let { r ->
                             parseGetResponse(
                                 response = r.string(),
                                 json = json,
@@ -64,7 +66,7 @@ class SetupRepoImpl @Inject constructor(
                             }
                         } ?: Result.Error(DataError.Network.NULL_RESPONSE)
                     } else {
-                        return if (response.code() == 401) {
+                        return@withContext if (response.code() == 401) {
                             Result.Error(DataError.Network.AUTHENTICATION)
                         } else {
                             Result.Error(
@@ -81,10 +83,10 @@ class SetupRepoImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
-                return Result.Error(e.toNetworkError())
+                return@withContext Result.Error(e.toNetworkError())
             }
         } else {
-            return Result.Error(DataError.Network.NO_CONNECTION)
+            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
         }
     }
 
@@ -92,12 +94,12 @@ class SetupRepoImpl @Inject constructor(
     override suspend fun getVersionsLegacy(
         url: String,
         headerMap: Map<String, String>,
-    ): Result<VersionsData, DataError> {
+    ): Result<VersionsData, DataError> = withContext(Dispatchers.IO) {
         if (networkAvailable()) {
             try {
                 setupApi.getVersions(url, headerMap).let { response ->
                     if (response.isSuccessful) {
-                        return response.body()?.let { r ->
+                        return@withContext response.body()?.let { r ->
                             parseResponse(
                                 response = r.string(),
                                 json = json,
@@ -111,7 +113,7 @@ class SetupRepoImpl @Inject constructor(
                             }
                         } ?: Result.Error(DataError.Network.NULL_RESPONSE)
                     } else {
-                        return if (response.code() == 401) {
+                        return@withContext if (response.code() == 401) {
                             Result.Error(DataError.Network.AUTHENTICATION)
                         } else {
                             Result.Error(
@@ -128,36 +130,38 @@ class SetupRepoImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 currentCoroutineContext().ensureActive()
-                return Result.Error(e.toNetworkError())
+                return@withContext Result.Error(e.toNetworkError())
             }
         } else {
-            return Result.Error(DataError.Network.NO_CONNECTION)
+            return@withContext Result.Error(DataError.Network.NO_CONNECTION)
         }
     }
 
     override suspend fun getSettingsData(
         server: Server,
-    ): Result<Server, DataError> = socketManager.initSocket(
-        server = server,
-        disconnectOnCancellation = true,
-    ).let { connected ->
-        when (connected) {
-            false -> Result.Error(DataError.Network.SOCKET_ERROR)
+    ): Result<Server, DataError> = withContext(Dispatchers.IO) {
+        socketManager.initSocket(
+            server = server,
+            disconnectOnCancellation = true,
+        ).let { connected ->
+            when (connected) {
+                false -> Result.Error(DataError.Network.SOCKET_ERROR)
 
-            true -> {
-                socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA).let { result ->
-                    when (result) {
-                        is Result.Error -> Result.Error(result.error)
+                true -> {
+                    socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA).let { result ->
+                        when (result) {
+                            is Result.Error -> Result.Error(result.error)
 
-                        is Result.Success -> {
-                            parseGetResponse(
-                                response = result.data,
-                                json = json,
-                                mapper = SettingsDtoToDataMapper,
-                            ).let { data ->
-                                when (data) {
-                                    is Result.Error -> Result.Error(data.error)
-                                    is Result.Success -> Result.Success(data.data)
+                            is Result.Success -> {
+                                parseGetResponse(
+                                    response = result.data,
+                                    json = json,
+                                    mapper = SettingsDtoToDataMapper,
+                                ).let { data ->
+                                    when (data) {
+                                        is Result.Error -> Result.Error(data.error)
+                                        is Result.Success -> Result.Success(data.data)
+                                    }
                                 }
                             }
                         }
@@ -195,21 +199,23 @@ class SetupRepoImpl @Inject constructor(
     override suspend fun completeSetup(
         server: Server,
         headers: Headers,
-    ): Result<Unit, DataError> = when (val result = settingsApi.setGrillName(server.name)) {
-        is Result.Error -> Result.Error(result.error)
+    ): Result<Unit, DataError> = withContext(Dispatchers.IO) {
+        when (val result = settingsApi.setGrillName(server.name)) {
+            is Result.Error -> Result.Error(result.error)
 
-        is Result.Success -> try {
-            settingsDataStore.updateData { data ->
-                data.copy(serverMap = data.serverMap.plus(server.uuid to server))
+            is Result.Success -> try {
+                settingsDataStore.updateData { data ->
+                    data.copy(serverMap = data.serverMap.plus(server.uuid to server))
+                }
+                headersDataStore.updateData { data ->
+                    data.copy(headersMap = data.headersMap.plus(server.uuid to headers))
+                }
+                serverDataCache.clearServerData()
+                Result.Success(Unit)
+            } catch (e: IOException) {
+                Timber.e(e, "Failed saving the new server")
+                Result.Error(DataError.Local.UNKNOWN)
             }
-            headersDataStore.updateData { data ->
-                data.copy(headersMap = data.headersMap.plus(server.uuid to headers))
-            }
-            serverDataCache.clearServerData()
-            Result.Success(Unit)
-        } catch (e: IOException) {
-            Timber.e(e, "Failed saving the new server")
-            Result.Error(DataError.Local.UNKNOWN)
         }
     }
 }
