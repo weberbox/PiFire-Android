@@ -1,9 +1,11 @@
 package com.weberbox.pifire.feature.changelog.presentation.screen
 
 import android.content.res.Configuration
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,11 +37,13 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.util.withUniqueKeys
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.base.gradientBackground
 import com.weberbox.pifire.core.ui.components.HazeAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.showAlerter
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Changelog
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Log
@@ -49,9 +54,12 @@ import com.weberbox.pifire.feature.changelog.presentation.contract.ChangelogCont
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 
 @Composable
 fun ChangelogScreenDestination(
@@ -64,7 +72,6 @@ fun ChangelogScreenDestination(
         showAnimation = showAnimation,
         state = viewModel.viewState.value,
         effectFlow = viewModel.effect,
-        onEventSent = { event -> viewModel.setEvent(event) },
         onNavigationRequested = { navigationEffect ->
             when (navigationEffect) {
                 is ChangelogContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
@@ -82,19 +89,21 @@ fun ChangelogScreenDestination(
     )
 }
 
-@Suppress("UNUSED_PARAMETER")
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ChangelogScreen(
     showAnimation: Boolean,
     state: ChangelogContract.State,
     effectFlow: Flow<ChangelogContract.Effect>?,
-    onEventSent: (event: ChangelogContract.Event) -> Unit,
     onNavigationRequested: (ChangelogContract.Effect.Navigation) -> Unit,
 ) {
-    val windowInsets = WindowInsets.safeDrawing
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val hazeState = rememberHazeState()
+
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
 
     Scaffold(
         modifier = Modifier
@@ -116,53 +125,89 @@ private fun ChangelogScreen(
         },
         containerColor = Color.Transparent,
         contentColor = contentColorFor(MaterialTheme.colorScheme.background),
-        contentWindowInsets = windowInsets,
+        contentWindowInsets = WindowInsets.safeDrawing,
     ) { contentPadding ->
-        LazyColumn(
+        ChangelogScreenContent(
+            state = state,
             contentPadding = contentPadding,
-            modifier = Modifier
-                .hazeSource(state = hazeState)
-                .fillMaxSize(),
-        ) {
-            items(items = state.changelogData.changelog.withUniqueKeys { it.version }, key = { it.key }) { (_, item) ->
-                Column {
-                    LogHeader(
-                        current = item.current,
-                        version = item.version,
-                        date = item.date,
-                        isAlpha = item.isAlpha,
-                    )
-                    item.logs.forEach { log ->
-                        LogItem(log)
-                    }
-                }
-            }
-            if (!state.isInitialLoading && state.changelogData.changelog.isEmpty()) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .padding(top = MaterialTheme.spacing.largeTwo)
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = null,
-                            modifier = Modifier.size(MaterialTheme.size.extraLarge),
-                        )
-                        Text(
-                            text = stringResource(R.string.changelog_error),
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
-                        )
-                    }
-                }
-            }
-        }
+            hazeState = hazeState,
+        )
         if (showAnimation) {
             LogAnimation()
         }
+    }
+}
+
+@Composable
+private fun ChangelogScreenContent(
+    state: ChangelogContract.State,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+) {
+    LazyColumn(
+        contentPadding = contentPadding,
+        modifier = Modifier
+            .hazeSource(state = hazeState)
+            .fillMaxSize(),
+    ) {
+        items(
+            items = state.changelogData.changelog.withUniqueKeys { it.version },
+            key = { it.key },
+        ) { (_, item) ->
+            Column {
+                LogHeader(
+                    current = item.current,
+                    version = item.version,
+                    date = item.date,
+                    isAlpha = item.isAlpha,
+                )
+                item.logs.forEach { log ->
+                    LogItem(log)
+                }
+            }
+        }
+        if (!state.isInitialLoading && state.changelogData.changelog.isEmpty()) {
+            item {
+                Column(
+                    modifier = Modifier
+                        .padding(top = MaterialTheme.spacing.largeTwo)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        modifier = Modifier.size(MaterialTheme.size.extraLarge),
+                    )
+                    Text(
+                        text = stringResource(R.string.changelog_error),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = MaterialTheme.spacing.smallOne),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ChangelogContract.Effect>?,
+    onNavigationRequested: (ChangelogContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ChangelogContract.Effect.Notification -> activity?.showAlerter(
+                    message = effect.text,
+                    isError = effect.error,
+                )
+
+                is ChangelogContract.Effect.Navigation -> onNavigationRequested(effect)
+            }
+        }?.collect()
     }
 }
 
@@ -181,7 +226,6 @@ private fun ChangelogScreenPreview() {
                     isDataError = false,
                 ),
                 effectFlow = null,
-                onEventSent = {},
                 onNavigationRequested = {},
             )
         }
