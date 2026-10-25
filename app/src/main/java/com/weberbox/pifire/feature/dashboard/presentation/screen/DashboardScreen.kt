@@ -122,6 +122,7 @@ fun DashboardScreenDestination(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DashboardScreen(
     navController: NavHostController,
@@ -534,6 +535,7 @@ private fun HandleSideEffects(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)

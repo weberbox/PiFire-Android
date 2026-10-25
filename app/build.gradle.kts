@@ -164,7 +164,10 @@ dependencies {
     implementation(libs.haze.materials)
     implementation(libs.timber.android)
     implementation(libs.tapadoo.alerter)
-    implementation(libs.compose.ratingbar)
+    implementation(libs.compose.ratingbar) {
+        // It lists the Compose compiler plugin as a runtime dependency, which R8 warns about
+        exclude(group = "androidx.compose.compiler", module = "compiler")
+    }
     implementation(libs.compose.preference)
     implementation(libs.compose.lottie)
     implementation(libs.compose.coil)
@@ -202,7 +205,7 @@ sentry {
 }
 
 fun getKeystoreProperties(): Properties {
-    val propertiesFile: String? by project
+    val propertiesFile = project.findProperty("propertiesFile") as? String
     val keystoreProperties = Properties()
     propertiesFile?.let { file ->
         val keystoreFile = File(file)

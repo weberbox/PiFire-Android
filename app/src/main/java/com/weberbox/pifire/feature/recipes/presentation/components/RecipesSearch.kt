@@ -208,7 +208,6 @@ internal fun RecipesSearchResults(
     ) {
         filteredList.forEach { recipe ->
             ListItem(
-                headlineContent = { Text(recipe.metadata.title) },
                 supportingContent = {
                     if (recipe.metadata.description.isNotBlank()) {
                         Row(
@@ -241,7 +240,9 @@ internal fun RecipesSearchResults(
                         horizontal = MaterialTheme.spacing.smallThree,
                         vertical = MaterialTheme.spacing.extraSmall,
                     ),
-            )
+            ) {
+                Text(text = recipe.metadata.title)
+            }
         }
     }
 }

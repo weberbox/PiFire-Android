@@ -3,7 +3,7 @@ package com.weberbox.pifire.core.ui.components
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.weberbox.pifire.core.ui.base.outlinedTextFieldColors
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownTextField(
     modifier: Modifier = Modifier,
@@ -73,7 +72,6 @@ fun DropdownTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> DropdownTextField(
     modifier: Modifier = Modifier,

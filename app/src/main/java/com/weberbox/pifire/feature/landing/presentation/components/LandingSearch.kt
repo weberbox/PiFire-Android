@@ -221,7 +221,6 @@ internal fun LandingSearchResults(
     ) {
         filteredList.forEach { server ->
             ListItem(
-                headlineContent = { Text(text = server.displayName(context)) },
                 supportingContent = {
                     Text(text = server.address)
                 },
@@ -240,7 +239,9 @@ internal fun LandingSearchResults(
                             horizontal = MaterialTheme.spacing.smallThree,
                             vertical = MaterialTheme.spacing.extraSmall,
                         ),
-            )
+            ) {
+                Text(text = server.displayName(context))
+            }
         }
     }
 }
