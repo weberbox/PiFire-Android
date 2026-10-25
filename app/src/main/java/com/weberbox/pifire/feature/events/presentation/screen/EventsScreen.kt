@@ -68,10 +68,18 @@ private fun EventsScreen(
     hazeState: HazeState,
     viewModel: EventsViewModel,
 ) {
+    var isVisibleOnScreen by remember { mutableStateOf(false) }
+
+    // Only notify while this pager page is on screen
+    HandleSideEffects(
+        isVisibleOnScreen = isVisibleOnScreen,
+        effectFlow = viewModel.effect,
+    )
+
     EventsScreenContent(
         state = viewModel.viewState.value,
-        effectFlow = viewModel.effect,
         onEventSent = { event -> viewModel.setEvent(event) },
+        onVisibilityChanged = { isVisibleOnScreen = it },
         hazeState = hazeState,
         contentPadding = contentPadding,
     )
@@ -80,23 +88,14 @@ private fun EventsScreen(
 @Composable
 private fun EventsScreenContent(
     state: EventsContract.State,
-    effectFlow: Flow<EventsContract.Effect>?,
     onEventSent: (event: EventsContract.Event) -> Unit,
+    onVisibilityChanged: (Boolean) -> Unit,
     hazeState: HazeState,
     contentPadding: PaddingValues,
 ) {
-    var isVisibleOnScreen by remember { mutableStateOf(false) }
-
-    HandleSideEffects(
-        isVisibleOnScreen = isVisibleOnScreen,
-        effectFlow = effectFlow,
-    )
-
     @Suppress("NAME_SHADOWING")
     AnimatedContent(
-        modifier = Modifier.isElementVisible {
-            isVisibleOnScreen = it
-        },
+        modifier = Modifier.isElementVisible(onVisibilityChanged),
         targetState = state,
         contentKey = { it.isInitialLoading or it.isDataError },
     ) { state ->
@@ -175,8 +174,8 @@ internal fun EventsScreenPreview(
                     isDataError = false,
                     isRefreshing = false,
                 ),
-                effectFlow = null,
                 onEventSent = {},
+                onVisibilityChanged = {},
                 hazeState = hazeState,
                 contentPadding = contentPadding,
             )

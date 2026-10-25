@@ -10,9 +10,7 @@ import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.feature.events.data.repo.EventsRepo
 import com.weberbox.pifire.feature.events.presentation.contract.EventsContract
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,30 +37,29 @@ class EventsViewModel @Inject constructor(
     }
 
     private fun listenEventsData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             eventsRepo.listenEventsData().collect { result ->
-                withContext(Dispatchers.Main) {
-                    when (result) {
-                        is Result.Error -> {
-                            if (result.error != DataError.Network.SOCKET_ERROR) {
-                                setEffect {
-                                    EventsContract.Effect.Notification(
-                                        text = result.error.asUiText(),
-                                        error = true,
-                                    )
-                                }
-                            }
-                            setState { copy(isRefreshing = false) }
-                        }
-
-                        is Result.Success -> {
-                            setState {
-                                copy(
-                                    eventsList = result.data,
-                                    isInitialLoading = false,
-                                    isRefreshing = false,
+                when (result) {
+                    is Result.Error -> {
+                        if (result.error != DataError.Network.SOCKET_ERROR) {
+                            setEffect {
+                                EventsContract.Effect.Notification(
+                                    text = result.error.asUiText(),
+                                    error = true,
                                 )
                             }
+                        }
+                        setState { copy(isRefreshing = false) }
+                    }
+
+                    is Result.Success -> {
+                        setState {
+                            copy(
+                                eventsList = result.data,
+                                isInitialLoading = false,
+                                isRefreshing = false,
+                                isDataError = false,
+                            )
                         }
                     }
                 }
@@ -72,51 +69,19 @@ class EventsViewModel @Inject constructor(
 
     private fun getEventsData(forced: Boolean) {
         if (forced) setState { copy(isRefreshing = true) }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             when (val result = eventsRepo.getEvents()) {
                 is Result.Error -> {
                     if (forced) {
-                        withContext(Dispatchers.Main) {
-                            setEffect {
-                                EventsContract.Effect.Notification(
-                                    text = result.error.asUiText(),
-                                    error = true,
-                                )
-                            }
-                            setState { copy(isRefreshing = false) }
-                        }
-                    } else {
-                        getCachedData()
-                    }
-                }
-
-                is Result.Success -> {
-                    withContext(Dispatchers.Main) {
-                        setState {
-                            copy(
-                                eventsList = result.data,
-                                isInitialLoading = false,
-                                isRefreshing = false,
+                        setEffect {
+                            EventsContract.Effect.Notification(
+                                text = result.error.asUiText(),
+                                error = true,
                             )
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun getCachedData() {
-        val result = eventsRepo.getCachedData()
-        withContext(Dispatchers.Main) {
-            when (result) {
-                is Result.Error -> {
-                    setState {
-                        copy(
-                            eventsList = emptyList(),
-                            isInitialLoading = false,
-                            isRefreshing = false,
-                            isDataError = true,
-                        )
+                        setState { copy(isRefreshing = false) }
+                    } else {
+                        getCachedData()
                     }
                 }
 
@@ -126,14 +91,42 @@ class EventsViewModel @Inject constructor(
                             eventsList = result.data,
                             isInitialLoading = false,
                             isRefreshing = false,
+                            isDataError = false,
                         )
                     }
-                    setEffect {
-                        EventsContract.Effect.Notification(
-                            text = UiText(R.string.alerter_cached_results),
-                            error = true,
-                        )
-                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun getCachedData() {
+        val result = eventsRepo.getCachedData()
+        when (result) {
+            is Result.Error -> {
+                setState {
+                    copy(
+                        eventsList = emptyList(),
+                        isInitialLoading = false,
+                        isRefreshing = false,
+                        isDataError = true,
+                    )
+                }
+            }
+
+            is Result.Success -> {
+                setState {
+                    copy(
+                        eventsList = result.data,
+                        isInitialLoading = false,
+                        isRefreshing = false,
+                        isDataError = false,
+                    )
+                }
+                setEffect {
+                    EventsContract.Effect.Notification(
+                        text = UiText(R.string.alerter_cached_results),
+                        error = true,
+                    )
                 }
             }
         }
