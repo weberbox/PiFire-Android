@@ -4,7 +4,7 @@ import com.weberbox.pifire.changelog.data.model.ChangelogDto
 import com.weberbox.pifire.changelog.presentation.model.ChangelogData
 import com.weberbox.pifire.changelog.presentation.model.ChangelogData.Changelog
 import com.weberbox.pifire.changelog.presentation.model.ChangelogData.Log
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 
 object ChangelogDtoToDataMapper : Mapper<ChangelogDto, ChangelogData> {
     override fun map(from: ChangelogDto) = ChangelogData(

@@ -1,7 +1,8 @@
 # Backlog
 
 Standing decisions, known bugs and deferred work. Format: `- [area] file: what, and the suggested fix`.
-Paths are relative to `app/src/main/java/com/weberbox/pifire/` (current, pre-restructure layout).
+Paths are relative to `app/src/main/java/com/weberbox/pifire/` (features still in their
+pre-restructure layout; `core/` and `navigation/` restructured).
 Findings from the 2026-10-22 review; verify each against the code before fixing, and delete the
 line once it's done.
 
@@ -26,10 +27,11 @@ line once it's done.
 One step per commit, compile all flavors after each.
 1. Done (2026-10-24): `navigateFrom` / `popBackStackFrom` / `rememberSourceEntry` in `NavHostUtils`;
    contracts use `NavRoute(route, popUpToRoute, inclusive)`. Only `MainActivity` navigates raw.
-2. Merge `common/` into `core/` (`core/common`, `core/ui`, `core/network`, `core/session`,
-   `core/remoteconfig`, ...); move `NavRoutes`/`NavTypes`/`RootNavGraph`/`NavHostUtils` to `navigation/`.
-   Also move `settings/data/serializer/IntOrDoubleSerializer.kt` to `core/network` (dashboard and
-   recipes DTOs use it).
+2. Done (2026-10-24): `common/` merged into `core/` (`analytics`, `common/model`, `common/util`,
+   `data`, `log`, `model`, `network`, `notification`, `remoteconfig`, `session`, `ui`); navigation
+   in `navigation/`; `MainActivity`/`MainViewModel`/`MainContract` in `application/`. Left for
+   later steps: `core` still imports feature types (`SettingsData.Server`, `HeadersManager`,
+   `SettingsRepo`, `Crypto`); move them to `core` with their feature (step 3/4).
 3. Per feature, move to `feature/<name>/`, rename `component`->`components`, `screens`->`screen`,
    `sheets` -> `components/sheets` (or `screen/` if it has a ViewModel), DTO mappers from `domain/`
    to `data/mapper`, and split its Hilt bindings out of `core/di/{RepoModule,ApiModule}` into
@@ -42,7 +44,7 @@ One step per commit, compile all flavors after each.
    coroutines-test, Konsist `ArchitectureTest` for the layout rules), then add them to CLAUDE.md.
 
 ## Bugs: presentation
-- [picker] common/presentation/component/PickerWheel.kt: scroll offset is read in composition to
+- [picker] core/ui/components/PickerWheel.kt: scroll offset is read in composition to
   interpolate size/color, so every scroll frame recomposes the wheel. Move it to
   `graphicsLayer`/draw.
 
@@ -61,5 +63,4 @@ One step per commit, compile all flavors after each.
 - Dispatchers in ViewModels (24) with `withContext(Main)` before `setEffect`: move IO into repos.
 - Duplication: each feature repo repeats get -> parse -> session -> DataStore; Landing/Setup repeat
   HTTP error mapping 3x; `SettingsRepoImpl` is ~100 one-line forwards. Extract shared helpers.
-- Dead code: `DashApiImpl.requestDashUpdate`, `Secrets.AWS_FCM_*`. `DashApiImpl.kt:206` default `Json`;
-  `common/data/parser/ReponseParser.kt` misspelled.
+- Dead code: `DashApiImpl.requestDashUpdate`, `Secrets.AWS_FCM_*`. `DashApiImpl.kt:206` default `Json`.

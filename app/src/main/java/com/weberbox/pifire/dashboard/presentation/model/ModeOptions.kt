@@ -6,12 +6,12 @@ import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material.icons.outlined.StopCircle
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.outlined.ArrowRightCircle
-import com.weberbox.pifire.common.icons.outlined.CloudCircle
-import com.weberbox.pifire.common.icons.outlined.NextCircle
-import com.weberbox.pifire.common.icons.outlined.Target
-import com.weberbox.pifire.common.icons.outlined.VisibilityCircle
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.outlined.ArrowRightCircle
+import com.weberbox.pifire.core.ui.icons.outlined.CloudCircle
+import com.weberbox.pifire.core.ui.icons.outlined.NextCircle
+import com.weberbox.pifire.core.ui.icons.outlined.Target
+import com.weberbox.pifire.core.ui.icons.outlined.VisibilityCircle
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract.DashEvent
 
 internal enum class ModeOptions(val title: Int, val icon: ImageVector, val event: DashEvent) {

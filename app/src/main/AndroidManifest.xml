@@ -22,7 +22,7 @@
         android:theme="@style/Theme.PiFire"
         android:supportsRtl="false">
         <activity
-            android:name=".MainActivity"
+            android:name=".application.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.PiFire.Starting">
@@ -34,7 +34,7 @@
 
         <meta-data
             android:name="com.onesignal.NotificationServiceExtension"
-            android:value="com.weberbox.pifire.core.service.NotificationServiceExtension" />
+            android:value="com.weberbox.pifire.core.notification.NotificationServiceExtension" />
         <meta-data
             android:name="io.sentry.auto-init"
             android:value="false" />

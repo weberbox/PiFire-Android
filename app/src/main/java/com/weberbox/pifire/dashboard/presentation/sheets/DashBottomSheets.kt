@@ -2,13 +2,13 @@ package com.weberbox.pifire.dashboard.presentation.sheets
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.weberbox.pifire.common.presentation.sheets.BottomSheet
-import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
-import com.weberbox.pifire.common.presentation.state.InputModalBottomSheetState
-import com.weberbox.pifire.common.presentation.state.rememberCustomModalBottomSheetState
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.core.util.Feature
-import com.weberbox.pifire.core.util.LocalFeatureSupport
+import com.weberbox.pifire.core.remoteconfig.Feature
+import com.weberbox.pifire.core.remoteconfig.LocalFeatureSupport
+import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
+import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
+import com.weberbox.pifire.core.ui.state.InputModalBottomSheetState
+import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract
 import com.weberbox.pifire.dashboard.presentation.contract.DashContract.DashEvent
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.Probe

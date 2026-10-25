@@ -1,12 +1,12 @@
 package com.weberbox.pifire.events.data.repo
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.parser.parseGetResponse
-import com.weberbox.pifire.common.data.parser.parseResponse
-import com.weberbox.pifire.common.presentation.state.SessionStateHolder
-import com.weberbox.pifire.core.singleton.Prefs
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.network.parseGetResponse
+import com.weberbox.pifire.core.network.parseResponse
+import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.events.data.api.EventsApi
 import com.weberbox.pifire.events.domain.EventsDtoToDataMapper
 import com.weberbox.pifire.events.presentation.model.EventsData

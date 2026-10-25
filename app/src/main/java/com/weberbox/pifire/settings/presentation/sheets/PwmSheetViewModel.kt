@@ -7,10 +7,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.model.ErrorStatus
-import com.weberbox.pifire.common.presentation.model.FieldInput
-import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
+import com.weberbox.pifire.core.ui.model.ErrorStatus
+import com.weberbox.pifire.core.ui.model.FieldInput
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.settings.presentation.model.PwmControl
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import java.text.DecimalFormat

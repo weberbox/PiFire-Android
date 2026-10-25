@@ -1,10 +1,10 @@
 package com.weberbox.pifire.recipes.data.repo
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.parser.parseGetResponse
-import com.weberbox.pifire.common.presentation.state.SessionStateHolder
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.network.parseGetResponse
+import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.recipes.data.api.RecipesApi
 import com.weberbox.pifire.recipes.domain.RecipesDtoToDataMapper
 import com.weberbox.pifire.recipes.presentation.model.RecipesData

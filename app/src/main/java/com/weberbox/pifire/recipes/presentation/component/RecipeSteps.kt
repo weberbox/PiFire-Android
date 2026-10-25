@@ -27,10 +27,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.HeaderCard
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.size
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.components.HeaderCard
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.size
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe

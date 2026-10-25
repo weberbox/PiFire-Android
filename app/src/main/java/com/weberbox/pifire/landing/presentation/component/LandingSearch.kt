@@ -45,9 +45,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.keyboardAsState
-import com.weberbox.pifire.common.presentation.util.showToast
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.keyboardAsState
+import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.landing.presentation.model.ServerData.Server
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle

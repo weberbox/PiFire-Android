@@ -1,6 +1,6 @@
 package com.weberbox.pifire.settings.data.model.remote
 
-import com.weberbox.pifire.settings.data.serializer.IntOrDoubleListSerializer
+import com.weberbox.pifire.core.network.IntOrDoubleListSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

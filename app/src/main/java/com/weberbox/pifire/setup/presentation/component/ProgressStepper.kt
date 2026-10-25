@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
 
 @Composable
 internal fun HorizontalDashedStepper(

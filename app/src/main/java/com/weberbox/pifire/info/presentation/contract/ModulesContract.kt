@@ -1,9 +1,9 @@
 package com.weberbox.pifire.info.presentation.contract
 
-import com.weberbox.pifire.common.presentation.base.ViewEvent
-import com.weberbox.pifire.common.presentation.base.ViewSideEffect
-import com.weberbox.pifire.common.presentation.base.ViewState
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.info.presentation.model.InfoData.Info.Module
 
 class ModulesContract {

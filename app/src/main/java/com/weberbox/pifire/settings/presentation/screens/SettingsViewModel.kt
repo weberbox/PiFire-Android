@@ -2,10 +2,10 @@ package com.weberbox.pifire.settings.presentation.screens
 
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.SettingsContract
 import dagger.hilt.android.lifecycle.HiltViewModel

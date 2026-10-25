@@ -4,11 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.util.DialogAction
-import com.weberbox.pifire.common.presentation.util.DialogEvent
-import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.core.util.OneSignalManager
+import com.weberbox.pifire.core.notification.OneSignalManager
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.DialogAction
+import com.weberbox.pifire.core.ui.util.DialogEvent
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.setup.presentation.contract.PushContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

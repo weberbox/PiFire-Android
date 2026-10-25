@@ -1,7 +1,7 @@
 package com.weberbox.pifire.core.di
 
-import com.weberbox.pifire.common.presentation.state.SessionStateHolder
-import com.weberbox.pifire.core.singleton.Prefs
+import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.setup.data.util.ServerDataCache
 import com.weberbox.pifire.setup.data.util.ServerDataCacheImpl
 import dagger.Module

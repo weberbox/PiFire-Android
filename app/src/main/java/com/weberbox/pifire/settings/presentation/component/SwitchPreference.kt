@@ -37,8 +37,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.settings.presentation.util.copy
 import me.zhanghai.compose.preference.LocalPreferenceTheme
 import me.zhanghai.compose.preference.Preference

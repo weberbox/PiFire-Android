@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.hazeAppBarStyle
-import com.weberbox.pifire.common.presentation.component.HazeLargeSearchAppBar
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
+import com.weberbox.pifire.core.ui.base.hazeAppBarStyle
+import com.weberbox.pifire.core.ui.components.HazeLargeSearchAppBar
 import com.weberbox.pifire.landing.presentation.contract.LandingContract
+import com.weberbox.pifire.navigation.NavGraph
 import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.launch
 

@@ -11,10 +11,10 @@ import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.filled.FireAlert
-import com.weberbox.pifire.common.icons.outlined.FlagCheckered
-import com.weberbox.pifire.common.icons.outlined.Target
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.FireAlert
+import com.weberbox.pifire.core.ui.icons.outlined.FlagCheckered
+import com.weberbox.pifire.core.ui.icons.outlined.Target
 
 enum class RunningMode(val title: Int, val icon: ImageVector) {
     Stop(R.string.dash_mode_stop, Icons.Outlined.PowerSettingsNew),

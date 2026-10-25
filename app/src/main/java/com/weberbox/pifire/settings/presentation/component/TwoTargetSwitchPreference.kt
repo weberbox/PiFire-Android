@@ -27,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.settings.presentation.util.copy
 import com.weberbox.pifire.settings.presentation.util.offset
 import me.zhanghai.compose.preference.LocalPreferenceTheme

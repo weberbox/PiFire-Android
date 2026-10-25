@@ -1,9 +1,9 @@
 package com.weberbox.pifire.settings.presentation.model
 
-import com.weberbox.pifire.common.domain.Location
-import com.weberbox.pifire.common.domain.ProbeId
-import com.weberbox.pifire.common.domain.Temp
-import com.weberbox.pifire.common.domain.Uuid
+import com.weberbox.pifire.core.common.model.Location
+import com.weberbox.pifire.core.common.model.ProbeId
+import com.weberbox.pifire.core.common.model.Temp
+import com.weberbox.pifire.core.common.model.Uuid
 import com.weberbox.pifire.settings.data.model.local.Setting
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 import kotlinx.serialization.Serializable

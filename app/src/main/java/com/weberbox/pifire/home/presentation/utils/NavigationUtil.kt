@@ -11,9 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
-import com.weberbox.pifire.common.presentation.util.WindowSize
-import com.weberbox.pifire.common.presentation.util.windowHeightSize
-import com.weberbox.pifire.common.presentation.util.windowWidthSize
+import com.weberbox.pifire.core.ui.util.WindowSize
+import com.weberbox.pifire.core.ui.util.windowHeightSize
+import com.weberbox.pifire.core.ui.util.windowWidthSize
 
 @Composable
 fun navigationType(): NavigationType {

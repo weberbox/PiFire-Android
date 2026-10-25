@@ -1,9 +1,9 @@
 package com.weberbox.pifire.events.data.api
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
-import com.weberbox.pifire.core.singleton.SocketManager
+import com.weberbox.pifire.core.network.SocketManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import javax.inject.Inject

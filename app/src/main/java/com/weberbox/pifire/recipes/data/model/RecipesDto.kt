@@ -1,7 +1,7 @@
 package com.weberbox.pifire.recipes.data.model
 
-import com.weberbox.pifire.settings.data.serializer.IntOrDoubleListSerializer
-import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
+import com.weberbox.pifire.core.network.IntOrDoubleListSerializer
+import com.weberbox.pifire.core.network.IntOrDoubleSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

@@ -1,6 +1,6 @@
 package com.weberbox.pifire.settings.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.settings.data.model.remote.NotifyServices.OneSignalPush
 import com.weberbox.pifire.settings.presentation.model.OneSignalPush.OneSignalDeviceInfo
 

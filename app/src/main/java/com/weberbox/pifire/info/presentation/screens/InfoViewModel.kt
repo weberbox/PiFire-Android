@@ -2,15 +2,15 @@ package com.weberbox.pifire.info.presentation.screens
 
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.info.data.repo.InfoRepo
 import com.weberbox.pifire.info.presentation.contract.InfoContract
 import com.weberbox.pifire.info.presentation.model.InfoData.Info
 import com.weberbox.pifire.info.presentation.model.Licenses
+import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -32,4 +32,4 @@
 -keep class ** implements com.onesignal.OneSignal$OSRemoteNotificationReceivedHandler {
    void remoteNotificationReceived(android.content.Context, com.onesignal.OSNotificationReceivedEvent);
 }
--keep class com.weberbox.pifire.core.service.NotificationServiceExtension { *; }
+-keep class com.weberbox.pifire.core.notification.NotificationServiceExtension { *; }

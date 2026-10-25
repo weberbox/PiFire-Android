@@ -15,9 +15,9 @@ import androidx.compose.material.icons.outlined.OutdoorGrill
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
 import com.weberbox.pifire.home.presentation.model.NavigationItem
 import com.weberbox.pifire.home.presentation.model.StaticNavigationItem
+import com.weberbox.pifire.navigation.NavGraph
 
 @Composable
 fun buildNavigationItems(): List<NavigationItem> {

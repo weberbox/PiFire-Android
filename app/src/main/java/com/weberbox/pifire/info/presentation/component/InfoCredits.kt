@@ -21,10 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.HeaderCard
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.ui.components.HeaderCard
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.info.presentation.contract.InfoContract
 import com.weberbox.pifire.info.presentation.model.Licenses
 import com.weberbox.pifire.info.presentation.screens.buildLicenseData

@@ -1,7 +1,7 @@
 package com.weberbox.pifire.core.di
 
 import android.content.Context
-import com.weberbox.pifire.core.singleton.Prefs
+import com.weberbox.pifire.core.data.pref.Prefs
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

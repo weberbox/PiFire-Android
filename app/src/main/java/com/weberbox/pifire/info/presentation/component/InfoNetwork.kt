@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.HeaderCard
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.components.HeaderCard
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.info.presentation.model.InfoData.Info
 import com.weberbox.pifire.info.presentation.screens.buildInfo
 

@@ -1,7 +1,7 @@
 package com.weberbox.pifire.recipes.data.api
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 
 interface RecipesApi {
     suspend fun getRecipes(): Result<String, DataError>

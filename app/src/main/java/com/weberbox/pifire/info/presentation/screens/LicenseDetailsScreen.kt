@@ -11,12 +11,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
-import com.weberbox.pifire.common.presentation.screens.DetailsScreen
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.popBackStackFrom
-import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
+import com.weberbox.pifire.core.ui.components.DetailsScreen
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.info.presentation.component.LicenseItem
+import com.weberbox.pifire.navigation.NavGraph
+import com.weberbox.pifire.navigation.popBackStackFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
 
 @Composable
 fun LicenseDetailsScreen(

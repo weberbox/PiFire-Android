@@ -1,6 +1,6 @@
 package com.weberbox.pifire.setup.data.util
 
-import com.weberbox.pifire.core.singleton.Prefs
+import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server

@@ -26,16 +26,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.filled.DoubleArrowRight
-import com.weberbox.pifire.common.icons.filled.Fan
-import com.weberbox.pifire.common.icons.filled.Flame
-import com.weberbox.pifire.common.presentation.base.cardColorStops
-import com.weberbox.pifire.common.presentation.modifier.rotateEffect
-import com.weberbox.pifire.common.presentation.modifier.scaleEffect
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.elevation
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.base.cardColorStops
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.DoubleArrowRight
+import com.weberbox.pifire.core.ui.icons.filled.Fan
+import com.weberbox.pifire.core.ui.icons.filled.Flame
+import com.weberbox.pifire.core.ui.modifier.rotateEffect
+import com.weberbox.pifire.core.ui.modifier.scaleEffect
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.elevation
+import com.weberbox.pifire.core.ui.theme.spacing
 
 @Composable
 internal fun OutputsCard(

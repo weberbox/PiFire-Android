@@ -1,11 +1,11 @@
 package com.weberbox.pifire.settings.presentation.screens.app
 
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.common.data.interfaces.Analytics
-import com.weberbox.pifire.common.domain.AnalyticsEvent
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.model.AppTheme
-import com.weberbox.pifire.core.singleton.Prefs
+import com.weberbox.pifire.core.analytics.Analytics
+import com.weberbox.pifire.core.analytics.AnalyticsEvent
+import com.weberbox.pifire.core.data.pref.Prefs
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.model.AppTheme
 import com.weberbox.pifire.settings.data.model.local.Pref
 import com.weberbox.pifire.settings.presentation.contract.AppContract
 import dagger.hilt.android.lifecycle.HiltViewModel

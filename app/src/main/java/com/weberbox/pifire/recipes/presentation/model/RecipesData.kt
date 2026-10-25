@@ -2,7 +2,7 @@ package com.weberbox.pifire.recipes.presentation.model
 
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
-import com.weberbox.pifire.common.domain.Uuid
+import com.weberbox.pifire.core.common.model.Uuid
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 

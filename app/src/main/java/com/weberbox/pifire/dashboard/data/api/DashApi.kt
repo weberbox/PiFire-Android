@@ -1,8 +1,8 @@
 package com.weberbox.pifire.dashboard.data.api
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.model.PostDto.NotifyDto
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import kotlinx.coroutines.flow.Flow
 
 interface DashApi {

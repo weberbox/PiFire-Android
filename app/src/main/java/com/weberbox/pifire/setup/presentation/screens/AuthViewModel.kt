@@ -4,10 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.model.Credentials
-import com.weberbox.pifire.common.presentation.model.FieldInput
-import com.weberbox.pifire.common.presentation.model.InputState
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.model.Credentials
+import com.weberbox.pifire.core.ui.model.FieldInput
+import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server

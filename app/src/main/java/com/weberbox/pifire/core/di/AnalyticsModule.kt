@@ -3,9 +3,9 @@ package com.weberbox.pifire.core.di
 import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weberbox.pifire.BuildConfig
-import com.weberbox.pifire.common.data.interfaces.Analytics
-import com.weberbox.pifire.core.singleton.AnalyticsTracker
-import com.weberbox.pifire.core.singleton.NoOpAnalyticsTracker
+import com.weberbox.pifire.core.analytics.Analytics
+import com.weberbox.pifire.core.analytics.AnalyticsTracker
+import com.weberbox.pifire.core.analytics.NoOpAnalyticsTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

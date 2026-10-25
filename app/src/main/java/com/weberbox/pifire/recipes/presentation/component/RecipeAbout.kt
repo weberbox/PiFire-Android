@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.HeaderCard
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.formatMinutes
+import com.weberbox.pifire.core.ui.components.HeaderCard
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.formatMinutes
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe
 

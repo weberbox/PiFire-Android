@@ -1,15 +1,15 @@
 package com.weberbox.pifire.info.domain
 
 import androidx.compose.ui.graphics.toArgb
-import com.weberbox.pifire.common.data.interfaces.Mapper
-import com.weberbox.pifire.common.presentation.theme.eventsDebug
-import com.weberbox.pifire.common.presentation.theme.eventsError
-import com.weberbox.pifire.common.presentation.theme.eventsInfo
-import com.weberbox.pifire.common.presentation.theme.eventsModeEnded
-import com.weberbox.pifire.common.presentation.theme.eventsModeStarted
-import com.weberbox.pifire.common.presentation.theme.eventsScriptEnded
-import com.weberbox.pifire.common.presentation.theme.eventsScriptStart
-import com.weberbox.pifire.common.presentation.theme.eventsWarning
+import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.ui.theme.eventsDebug
+import com.weberbox.pifire.core.ui.theme.eventsError
+import com.weberbox.pifire.core.ui.theme.eventsInfo
+import com.weberbox.pifire.core.ui.theme.eventsModeEnded
+import com.weberbox.pifire.core.ui.theme.eventsModeStarted
+import com.weberbox.pifire.core.ui.theme.eventsScriptEnded
+import com.weberbox.pifire.core.ui.theme.eventsScriptStart
+import com.weberbox.pifire.core.ui.theme.eventsWarning
 import com.weberbox.pifire.info.data.model.LicenseDto
 import com.weberbox.pifire.info.presentation.model.Licenses
 import com.weberbox.pifire.info.presentation.model.Licenses.License

@@ -1,8 +1,8 @@
 package com.weberbox.pifire.setup.data.repo
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
 import com.weberbox.pifire.core.annotations.Compatibility
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.setup.presentation.model.VersionsData
 

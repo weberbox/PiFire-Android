@@ -28,17 +28,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.outlined.FlagCheckered
-import com.weberbox.pifire.common.icons.outlined.CarDefrostRear
-import com.weberbox.pifire.common.presentation.base.cardColorStops
-import com.weberbox.pifire.common.presentation.component.AnimatedCounter
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.elevation
-import com.weberbox.pifire.common.presentation.theme.size
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
-import com.weberbox.pifire.common.presentation.util.fadeExitTransition
+import com.weberbox.pifire.core.ui.base.cardColorStops
+import com.weberbox.pifire.core.ui.components.AnimatedCounter
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.outlined.CarDefrostRear
+import com.weberbox.pifire.core.ui.icons.outlined.FlagCheckered
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.elevation
+import com.weberbox.pifire.core.ui.theme.size
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.fadeEnterTransition
+import com.weberbox.pifire.core.ui.util.fadeExitTransition
 
 @Composable
 internal fun TimerCard(

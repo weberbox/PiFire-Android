@@ -1,6 +1,6 @@
 package com.weberbox.pifire.info.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.info.data.model.InfoDto
 import com.weberbox.pifire.info.presentation.model.InfoData.Info.Module
 

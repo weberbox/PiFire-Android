@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.home.presentation.utils.buildNavigationItems
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.home.presentation.model.NavigationItem
+import com.weberbox.pifire.home.presentation.utils.buildNavigationItems
 
 @Composable
 internal fun NavSideRail(

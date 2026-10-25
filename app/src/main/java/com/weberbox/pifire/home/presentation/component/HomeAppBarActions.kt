@@ -18,11 +18,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.filled.TrayArrowUp
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
-import com.weberbox.pifire.common.presentation.util.fadeExitTransition
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.TrayArrowUp
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.util.fadeEnterTransition
+import com.weberbox.pifire.core.ui.util.fadeExitTransition
 
 @Composable
 internal fun HomeAppBarActions(

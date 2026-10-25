@@ -29,13 +29,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.filled.Smoke
-import com.weberbox.pifire.common.icons.filled.Speedometer
-import com.weberbox.pifire.common.presentation.base.cardColorStops
-import com.weberbox.pifire.common.presentation.modifier.cardOutline
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.elevation
+import com.weberbox.pifire.core.ui.base.cardColorStops
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.Smoke
+import com.weberbox.pifire.core.ui.icons.filled.Speedometer
+import com.weberbox.pifire.core.ui.modifier.cardOutline
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.elevation
 
 @Composable
 internal fun OptionCard(

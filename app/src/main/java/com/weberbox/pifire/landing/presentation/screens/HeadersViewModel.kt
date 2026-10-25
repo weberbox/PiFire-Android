@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.navigation.NavGraph
+import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.landing.presentation.contract.HeadersContract
+import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.ExtraHeader
 import com.weberbox.pifire.settings.data.util.HeadersManager
 import dagger.hilt.android.lifecycle.HiltViewModel

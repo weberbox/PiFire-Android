@@ -2,11 +2,11 @@ package com.weberbox.pifire.events.presentation.screens
 
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.events.data.repo.EventsRepo
 import com.weberbox.pifire.events.presentation.contract.EventsContract
 import dagger.hilt.android.lifecycle.HiltViewModel

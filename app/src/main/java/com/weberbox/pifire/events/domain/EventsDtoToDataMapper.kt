@@ -1,8 +1,8 @@
 package com.weberbox.pifire.events.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
-import com.weberbox.pifire.common.presentation.util.formatDateString
-import com.weberbox.pifire.common.presentation.util.formatTimeString
+import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.ui.util.formatDateString
+import com.weberbox.pifire.core.ui.util.formatTimeString
 import com.weberbox.pifire.events.data.model.EventsDto
 import com.weberbox.pifire.events.presentation.model.EventType
 import com.weberbox.pifire.events.presentation.model.EventsData.Events

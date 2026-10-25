@@ -1,9 +1,9 @@
 package com.weberbox.pifire.recipes.presentation.contract
 
-import com.weberbox.pifire.common.presentation.base.ViewEvent
-import com.weberbox.pifire.common.presentation.base.ViewSideEffect
-import com.weberbox.pifire.common.presentation.base.ViewState
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe
 
 class RecipesContract {

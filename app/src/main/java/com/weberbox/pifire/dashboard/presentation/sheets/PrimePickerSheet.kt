@@ -34,17 +34,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.pickerSelectedTextStyle
-import com.weberbox.pifire.common.presentation.base.pickerUnselectedTextStyle
-import com.weberbox.pifire.common.presentation.component.PickerMark
-import com.weberbox.pifire.common.presentation.component.PickerWheel
-import com.weberbox.pifire.common.presentation.model.PickerWheelTextStyle
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.findLongestString
-import com.weberbox.pifire.common.presentation.util.slideDownShrinkExitTransition
-import com.weberbox.pifire.common.presentation.util.slideUpExpandEnterTransition
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.ui.base.pickerSelectedTextStyle
+import com.weberbox.pifire.core.ui.base.pickerUnselectedTextStyle
+import com.weberbox.pifire.core.ui.components.PickerMark
+import com.weberbox.pifire.core.ui.components.PickerWheel
+import com.weberbox.pifire.core.ui.model.PickerWheelTextStyle
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.findLongestString
+import com.weberbox.pifire.core.ui.util.slideDownShrinkExitTransition
+import com.weberbox.pifire.core.ui.util.slideUpExpandEnterTransition
 import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 import com.weberbox.pifire.dashboard.presentation.util.findClosestTemp
 

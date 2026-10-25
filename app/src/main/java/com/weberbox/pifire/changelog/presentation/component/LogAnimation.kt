@@ -21,7 +21,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.gradientBackground
+import com.weberbox.pifire.core.ui.base.gradientBackground
 
 @Composable
 internal fun LogAnimation(

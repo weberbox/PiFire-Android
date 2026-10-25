@@ -1,6 +1,6 @@
 package com.weberbox.pifire.settings.data.model.local
 
-import com.weberbox.pifire.common.presentation.model.AppTheme
+import com.weberbox.pifire.core.ui.model.AppTheme
 
 data class Pref<T>(
     val key: String,

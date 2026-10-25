@@ -1,8 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.weberbox.pifire.common.data.repo.RemoteConfigRepository
-import com.weberbox.pifire.common.data.repo.RemoteConfigRepositoryImpl
+import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepository
+import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

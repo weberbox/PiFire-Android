@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.sheets.BottomSheet
-import com.weberbox.pifire.common.presentation.sheets.InputValidationSheet
-import com.weberbox.pifire.common.presentation.sheets.ValidationOptions
-import com.weberbox.pifire.common.presentation.state.CustomModalBottomSheetState
 import com.weberbox.pifire.core.constants.ServerConstants
+import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
+import com.weberbox.pifire.core.ui.components.sheets.InputValidationSheet
+import com.weberbox.pifire.core.ui.components.sheets.ValidationOptions
+import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
 import com.weberbox.pifire.settings.presentation.contract.WorkContract
 
 @Composable

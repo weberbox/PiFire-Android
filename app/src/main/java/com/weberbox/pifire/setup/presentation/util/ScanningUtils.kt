@@ -9,9 +9,9 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.util.UiText
-import com.weberbox.pifire.common.presentation.util.showAlerter
-import com.weberbox.pifire.common.presentation.util.showToast
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.setup.presentation.contract.ConnectContract
 
 internal fun isCameraAvailable(context: Context): Boolean {

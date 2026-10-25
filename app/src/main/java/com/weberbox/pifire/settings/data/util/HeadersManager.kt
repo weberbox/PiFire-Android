@@ -1,8 +1,8 @@
 package com.weberbox.pifire.settings.data.util
 
 import androidx.datastore.core.DataStore
-import com.weberbox.pifire.common.domain.Uuid
-import com.weberbox.pifire.common.presentation.util.toImmutableMap
+import com.weberbox.pifire.core.common.model.Uuid
+import com.weberbox.pifire.core.ui.util.toImmutableMap
 import com.weberbox.pifire.settings.data.model.local.HeadersData
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers
 import com.weberbox.pifire.settings.data.model.local.HeadersData.Headers.BasicAuth

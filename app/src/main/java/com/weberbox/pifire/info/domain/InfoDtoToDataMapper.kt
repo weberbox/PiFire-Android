@@ -1,10 +1,10 @@
 package com.weberbox.pifire.info.domain
 
 import com.weberbox.pifire.BuildConfig
-import com.weberbox.pifire.common.data.interfaces.Mapper
-import com.weberbox.pifire.common.presentation.util.getFormattedDate
 import com.weberbox.pifire.core.annotations.Compatibility
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.ui.util.getFormattedDate
 import com.weberbox.pifire.info.data.model.InfoDto
 import com.weberbox.pifire.info.presentation.model.GPIODeviceData
 import com.weberbox.pifire.info.presentation.model.GPIOInOutData

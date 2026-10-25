@@ -5,8 +5,8 @@ import androidx.compose.material.icons.filled.VerticalAlignBottom
 import androidx.compose.material.icons.filled.VerticalAlignTop
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.outlined.Target
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.outlined.Target
 
 enum class NotifType(val title: Int, val icon: ImageVector, val defaultVisibility: Boolean) {
     Target(R.string.dialog_probe_type_target, Icon.Outlined.Target, true),

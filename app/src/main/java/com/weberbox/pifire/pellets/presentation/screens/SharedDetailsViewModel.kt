@@ -1,11 +1,11 @@
 package com.weberbox.pifire.pellets.presentation.screens
 
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.state.SessionStateHolder
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.session.SessionStateHolder
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.pellets.data.api.PelletsApi
 import com.weberbox.pifire.pellets.data.repo.PelletsRepo
 import com.weberbox.pifire.pellets.presentation.contract.PelletsContract

@@ -35,12 +35,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.cardColorStops
-import com.weberbox.pifire.common.presentation.modifier.doublePulseEffect
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.elevation
-import com.weberbox.pifire.common.presentation.util.fadeEnterTransition
-import com.weberbox.pifire.common.presentation.util.fadeExitTransition
+import com.weberbox.pifire.core.ui.base.cardColorStops
+import com.weberbox.pifire.core.ui.modifier.doublePulseEffect
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.elevation
+import com.weberbox.pifire.core.ui.util.fadeEnterTransition
+import com.weberbox.pifire.core.ui.util.fadeExitTransition
 import com.weberbox.pifire.dashboard.presentation.model.RunningMode
 
 @Composable

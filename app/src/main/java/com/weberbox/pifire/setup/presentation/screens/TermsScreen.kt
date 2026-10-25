@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.base.getPagerAnimationSpec
-import com.weberbox.pifire.common.presentation.modifier.limitWidthFraction
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
+import com.weberbox.pifire.core.ui.base.getPagerAnimationSpec
+import com.weberbox.pifire.core.ui.modifier.limitWidthFraction
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.setup.presentation.component.SetupBottomNavRow
 import com.weberbox.pifire.setup.presentation.model.SetupStep
 import kotlinx.coroutines.launch

@@ -23,8 +23,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
-import com.weberbox.pifire.common.presentation.component.CircularLoadingIndicator
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.components.CircularLoadingIndicator
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe
 import com.weberbox.pifire.recipes.presentation.util.coinImageBuilder
 import com.weberbox.pifire.recipes.presentation.util.decodeBase64Image

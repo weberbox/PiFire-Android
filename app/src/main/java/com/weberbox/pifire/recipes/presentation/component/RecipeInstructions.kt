@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.HeaderCard
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.ui.components.HeaderCard
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe.Instruction
 import com.weberbox.pifire.recipes.presentation.screens.buildRecipe
 import com.weberbox.pifire.recipes.presentation.util.toBulletedList

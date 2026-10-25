@@ -1,7 +1,7 @@
 package com.weberbox.pifire.pellets.presentation.model
 
-import com.weberbox.pifire.common.domain.Brand
-import com.weberbox.pifire.common.domain.Wood
+import com.weberbox.pifire.core.common.model.Brand
+import com.weberbox.pifire.core.common.model.Wood
 import kotlinx.serialization.Serializable
 
 @Serializable

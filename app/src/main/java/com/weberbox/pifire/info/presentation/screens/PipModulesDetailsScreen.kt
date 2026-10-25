@@ -13,16 +13,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.InitialLoadingProgress
-import com.weberbox.pifire.common.presentation.screens.DataError
-import com.weberbox.pifire.common.presentation.screens.DetailsScreen
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.common.presentation.util.popBackStackFrom
-import com.weberbox.pifire.common.presentation.util.rememberSourceEntry
+import com.weberbox.pifire.core.ui.components.DataError
+import com.weberbox.pifire.core.ui.components.DetailsScreen
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.info.presentation.component.PipItem
 import com.weberbox.pifire.info.presentation.component.buildModules
 import com.weberbox.pifire.info.presentation.contract.ModulesContract
+import com.weberbox.pifire.navigation.popBackStackFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
 
 @Composable
 fun PipModulesDetailsScreen(

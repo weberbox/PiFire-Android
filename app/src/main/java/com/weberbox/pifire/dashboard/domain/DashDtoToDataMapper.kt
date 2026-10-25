@@ -1,6 +1,6 @@
 package com.weberbox.pifire.dashboard.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.dashboard.data.model.DashDto
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash
 import com.weberbox.pifire.dashboard.presentation.model.DashData.Dash.Outputs

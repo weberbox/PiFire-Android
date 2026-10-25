@@ -21,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.icons.Icon
-import com.weberbox.pifire.common.icons.filled.DoubleArrowRight
-import com.weberbox.pifire.common.icons.filled.Fan
-import com.weberbox.pifire.common.icons.filled.Flame
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.DoubleArrowRight
+import com.weberbox.pifire.core.ui.icons.filled.Fan
+import com.weberbox.pifire.core.ui.icons.filled.Flame
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

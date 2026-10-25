@@ -1,7 +1,7 @@
 package com.weberbox.pifire.setup.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
 import com.weberbox.pifire.core.annotations.Compatibility
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.setup.data.model.LegacyVersionsDto
 import com.weberbox.pifire.setup.presentation.model.VersionsData
 

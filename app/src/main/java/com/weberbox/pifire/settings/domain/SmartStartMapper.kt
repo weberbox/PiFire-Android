@@ -1,6 +1,6 @@
 package com.weberbox.pifire.settings.domain
 
-import com.weberbox.pifire.common.data.interfaces.DualItemMapper
+import com.weberbox.pifire.core.common.model.DualItemMapper
 import com.weberbox.pifire.settings.data.model.remote.Startup
 import com.weberbox.pifire.settings.presentation.model.SmartStart
 

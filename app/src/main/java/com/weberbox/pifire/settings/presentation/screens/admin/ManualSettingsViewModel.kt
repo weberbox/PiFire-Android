@@ -1,10 +1,10 @@
 package com.weberbox.pifire.settings.presentation.screens.admin
 
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.presentation.AsUiText.asUiText
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.settings.data.repo.ManualRepoImpl
 import com.weberbox.pifire.settings.data.repo.SettingsRepo
 import com.weberbox.pifire.settings.presentation.contract.ManualContract

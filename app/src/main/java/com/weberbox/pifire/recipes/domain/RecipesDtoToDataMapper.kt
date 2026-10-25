@@ -1,6 +1,6 @@
 package com.weberbox.pifire.recipes.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.recipes.data.model.RecipesDto
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes
 import com.weberbox.pifire.recipes.presentation.model.RecipesData.Recipes.Recipe

@@ -1,10 +1,10 @@
 package com.weberbox.pifire.settings.presentation.contract
 
-import com.weberbox.pifire.common.data.model.PostDto.ProbesDto
-import com.weberbox.pifire.common.presentation.base.ViewEvent
-import com.weberbox.pifire.common.presentation.base.ViewSideEffect
-import com.weberbox.pifire.common.presentation.base.ViewState
-import com.weberbox.pifire.common.presentation.util.UiText
+import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 
 class ProbeContract {

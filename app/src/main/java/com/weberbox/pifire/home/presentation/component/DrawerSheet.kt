@@ -29,14 +29,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.presentation.component.PiFireLogo
-import com.weberbox.pifire.common.presentation.theme.PiFireTheme
-import com.weberbox.pifire.common.presentation.theme.navFontFamily
-import com.weberbox.pifire.common.presentation.theme.spacing
-import com.weberbox.pifire.home.presentation.utils.buildNavigationItems
-import com.weberbox.pifire.home.presentation.utils.buildStaticNavigationItems
+import com.weberbox.pifire.core.ui.components.PiFireLogo
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.navFontFamily
+import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.home.presentation.model.NavigationItem
 import com.weberbox.pifire.home.presentation.model.StaticNavigationItem
+import com.weberbox.pifire.home.presentation.utils.buildNavigationItems
+import com.weberbox.pifire.home.presentation.utils.buildStaticNavigationItems
 import com.weberbox.pifire.home.presentation.utils.isPermDrawerNavigation
 
 @Composable

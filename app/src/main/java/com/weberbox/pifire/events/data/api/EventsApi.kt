@@ -1,7 +1,7 @@
 package com.weberbox.pifire.events.data.api
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import kotlinx.coroutines.flow.Flow
 
 interface EventsApi {

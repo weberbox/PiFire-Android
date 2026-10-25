@@ -1,6 +1,6 @@
 package com.weberbox.pifire.dashboard.data.model
 
-import com.weberbox.pifire.settings.data.serializer.IntOrDoubleSerializer
+import com.weberbox.pifire.core.network.IntOrDoubleSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable

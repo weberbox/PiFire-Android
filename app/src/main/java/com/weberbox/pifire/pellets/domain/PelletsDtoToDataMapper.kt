@@ -1,8 +1,8 @@
 package com.weberbox.pifire.pellets.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
-import com.weberbox.pifire.common.presentation.util.formatDateString
-import com.weberbox.pifire.common.presentation.util.formatDateTimeString
+import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.ui.util.formatDateString
+import com.weberbox.pifire.core.ui.util.formatDateTimeString
 import com.weberbox.pifire.pellets.data.model.PelletsDto
 import com.weberbox.pifire.pellets.presentation.model.PelletsData.Pellets
 import com.weberbox.pifire.pellets.presentation.model.PelletsData.Pellets.PelletLog

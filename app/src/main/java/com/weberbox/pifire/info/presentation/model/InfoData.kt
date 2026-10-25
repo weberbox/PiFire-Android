@@ -1,7 +1,7 @@
 package com.weberbox.pifire.info.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.weberbox.pifire.common.domain.Uuid
+import com.weberbox.pifire.core.common.model.Uuid
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -1,8 +1,8 @@
 package com.weberbox.pifire.info.presentation.screens
 
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.common.presentation.base.BaseViewModel
-import com.weberbox.pifire.common.presentation.state.SessionStateHolder
+import com.weberbox.pifire.core.session.SessionStateHolder
+import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.info.presentation.contract.ModulesContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

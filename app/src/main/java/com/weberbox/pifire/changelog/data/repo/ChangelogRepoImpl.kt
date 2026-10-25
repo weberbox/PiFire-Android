@@ -3,9 +3,9 @@ package com.weberbox.pifire.changelog.data.repo
 import com.weberbox.pifire.changelog.data.model.ChangelogDto
 import com.weberbox.pifire.changelog.domain.ChangelogDtoToDataMapper
 import com.weberbox.pifire.changelog.presentation.model.ChangelogData
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.util.readJsonFromAssets
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.data.util.readJsonFromAssets
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.json.Json

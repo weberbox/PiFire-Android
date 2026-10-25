@@ -1,17 +1,17 @@
 package com.weberbox.pifire.setup.data.repo
 
 import com.weberbox.pifire.R
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
-import com.weberbox.pifire.common.data.parser.parseGetResponse
-import com.weberbox.pifire.common.data.parser.parseResponse
-import com.weberbox.pifire.common.data.util.networkAvailable
-import com.weberbox.pifire.common.data.util.toNetworkError
-import com.weberbox.pifire.common.presentation.util.getReasonPhrase
-import com.weberbox.pifire.common.presentation.util.uiTextArgsOf
 import com.weberbox.pifire.core.annotations.Compatibility
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
-import com.weberbox.pifire.core.singleton.SocketManager
+import com.weberbox.pifire.core.network.SocketManager
+import com.weberbox.pifire.core.network.networkAvailable
+import com.weberbox.pifire.core.network.parseGetResponse
+import com.weberbox.pifire.core.network.parseResponse
+import com.weberbox.pifire.core.network.toNetworkError
+import com.weberbox.pifire.core.ui.util.getReasonPhrase
+import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import com.weberbox.pifire.settings.domain.SettingsDtoToDataMapper
 import com.weberbox.pifire.settings.presentation.model.SettingsData.Server
 import com.weberbox.pifire.setup.data.api.SetupApi

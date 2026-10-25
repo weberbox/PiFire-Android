@@ -1,7 +1,7 @@
 package com.weberbox.pifire.pellets.data.api
 
-import com.weberbox.pifire.common.data.interfaces.DataError
-import com.weberbox.pifire.common.data.interfaces.Result
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.pellets.presentation.model.PelletsData.Pellets.PelletProfile
 import kotlinx.coroutines.flow.Flow
 

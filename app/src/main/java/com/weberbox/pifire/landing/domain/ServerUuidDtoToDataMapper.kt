@@ -1,6 +1,6 @@
 package com.weberbox.pifire.landing.domain
 
-import com.weberbox.pifire.common.data.interfaces.Mapper
+import com.weberbox.pifire.core.common.model.Mapper
 import com.weberbox.pifire.landing.data.model.ServerUuidDto
 import com.weberbox.pifire.landing.presentation.model.ServerUuidData
 
