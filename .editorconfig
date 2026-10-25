@@ -1,0 +1,41 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{kt,kts}]
+# Matches Android Studio's formatter; ktlint_official forces wraps the IDE undoes. Spotless reads this file too.
+ktlint_code_style = android_studio
+# The IDE's import order; android_studio style alone would sort java/javax/kotlin in with the rest.
+ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
+max_line_length = 120
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# Compose: PascalCase @Composable functions are idiomatic.
+ktlint_function_naming_ignore_when_annotated_with = Composable
+# Keep compose-friendly composable param ordering/modifier rules out of the way.
+ktlint_standard_compose-rules = disabled
+
+# Conventions in CLAUDE.md that these rules would fight (wildcards, KDoc/comment layout, signatures).
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_filename = disabled
+ktlint_standard_property-naming = disabled
+ktlint_standard_max-line-length = disabled
+ktlint_standard_function-signature = disabled
+ktlint_standard_class-signature = disabled
+ktlint_standard_blank-line-before-declaration = disabled
+ktlint_standard_no-blank-line-in-list = disabled
+ktlint_standard_package-name = disabled
+ktlint_standard_backing-property-naming = disabled
+ktlint_standard_no-consecutive-comments = disabled
+# Off by default in ktlint 1.x.
+ktlint_standard_no-unused-imports = enabled
+
+[*.md]
+trim_trailing_whitespace = false

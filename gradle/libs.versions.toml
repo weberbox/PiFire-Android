@@ -42,6 +42,8 @@ junit = "4.13.2"
 mockk = "1.14.11"
 turbine = "1.2.1"
 konsist = "0.18.1"
+spotless = "8.10.4"
+ktlint = "1.8.0"
 
 [libraries]
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
@@ -102,6 +104,7 @@ konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesVersion" }
 
 [plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 google-gms-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 android-application = { id = "com.android.application", version.ref = "gradle" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
