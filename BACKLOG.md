@@ -54,11 +54,9 @@ One step per commit, compile all flavors after each.
    new `core/repo` `PrefsRepo` and `ConnectionRepo` replace `Prefs`/`SocketManager`. No DTOs in
    presentation (`ProbeNotify`, `ProbeInfoUpdate`, `PwmProfile`, `SmartStartProfile` instead).
 6. Done (2026-10-25): `RemoteConfigRepository(Impl)` renamed `RemoteConfigRepo(Impl)`.
-7. Tooling. Done (2026-10-25): JUnit/MockK/coroutines-test/Turbine, first unit tests (version
-   parsing, network errors, input validation, range tables, dash/events mappers) and a Konsist
-   `ArchitectureTest` for the CLAUDE.md rules; in CLAUDE.md. Left: `.editorconfig` + Spotless/ktlint
-   (reference project's config); the first `spotlessApply` reformats most files, so do it as its
-   own commit and list that commit in `.git-blame-ignore-revs`.
+7. Done (2026-10-25): JUnit/MockK/coroutines-test/Turbine, first unit tests, a Konsist
+   `ArchitectureTest` for the CLAUDE.md rules, and Spotless/ktlint from `.editorconfig` (the
+   reformat commit is in `.git-blame-ignore-revs`).
 
 ## Bugs: presentation
 - [picker] core/ui/components/PickerWheel.kt: scroll offset is read in composition to

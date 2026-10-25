@@ -33,6 +33,7 @@ Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `p
 |---|---|
 | Compile both flavors | `./gradlew :app:compileGithubDebugKotlin :app:compilePlaystoreDebugKotlin` |
 | Lint | `./gradlew :app:lintPlaystoreDebug` |
+| Format (ktlint) | `./gradlew spotlessApply` (CI-style check: `spotlessCheck`) |
 | Unit tests (incl. `ArchitectureTest`) | `./gradlew :app:testPlaystoreDebugUnitTest` |
 | Release build | `./gradlew :app:assemblePlaystoreRelease :app:assembleGithubRelease` |
 
@@ -52,9 +53,11 @@ Windows machine; use `./gradlew` from the repo root. Flavors are `github` and `p
   package. `architecture/ArchitectureTest` (Konsist) checks the layout and dependency rules below;
   keep it passing, and when a rule needs an exception, add it there with a comment saying why.
   Add tests for new pure logic (mappers, parsing, validation, helpers).
-- There is no formatter yet (see `BACKLOG.md`). Until there is, match the surrounding formatting:
-  4-space indent, trailing commas in multi-line lists, `modifier = Modifier` on one line and then
-  one call per line once a chain has two or more calls.
+- Formatting is Spotless + ktlint with the rules in `.editorconfig` (android_studio style, 120
+  columns, trailing commas). Run `./gradlew spotlessApply` before finishing; after editing
+  `.editorconfig`, run `./gradlew --stop` so the daemon reloads it. Beyond what ktlint enforces,
+  keep `modifier = Modifier` on one line and then one call per line once a chain has two or more
+  calls.
 
 ## Project layout
 App code is in `app/src/main/java/com/weberbox/pifire/`. Target layout:
@@ -264,7 +267,7 @@ Other screen rules:
 
 ## Checklist before finishing a task
 - [ ] Both flavors compile. Release build checked if DTOs, serialization or reflection changed.
-- [ ] Unit tests pass, including `ArchitectureTest`.
+- [ ] Unit tests pass, including `ArchitectureTest`; `spotlessCheck` passes.
 - [ ] ViewModels inject repos only; no DTOs in ViewModels, contracts or composables.
 - [ ] DTO changes tolerate missing, null, Int-vs-Double and unknown fields from any PiFire version.
 - [ ] No hardcoded UI strings or colors; spacing uses `MaterialTheme.spacing`.
