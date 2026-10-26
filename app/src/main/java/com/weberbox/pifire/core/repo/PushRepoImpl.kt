@@ -1,14 +1,19 @@
 package com.weberbox.pifire.core.repo
 
+import android.os.Build
 import androidx.datastore.core.DataStore
+import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.common.model.andThen
 import com.weberbox.pifire.core.common.model.map
 import com.weberbox.pifire.core.model.push.AlertType
+import com.weberbox.pifire.core.model.push.PushDevice
 import com.weberbox.pifire.core.model.push.PushRegistration
+import com.weberbox.pifire.core.network.api.PushDevicesApi
 import com.weberbox.pifire.core.network.api.RelayApi
+import com.weberbox.pifire.core.network.model.push.PushDeviceRegisterDto
 import com.weberbox.pifire.core.network.model.push.RelaySendDto
 import com.weberbox.pifire.core.notification.FcmTokenSource
 import com.weberbox.pifire.core.ui.util.EmptyUiArgs
@@ -17,6 +22,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
+import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Inject
 
@@ -25,6 +31,7 @@ class PushRepoImpl @Inject constructor(
     private val fcmTokenSource: FcmTokenSource,
     private val registrationStore: DataStore<PushRegistration>,
     private val settingsRepo: SettingsRepo,
+    private val pushDevicesApi: PushDevicesApi,
 ) : PushRepo {
 
     // One registration at a time, so two callers never create two push keys.
@@ -65,6 +72,39 @@ class PushRepoImpl @Inject constructor(
         }.toUserError()
     }
 
+    override suspend fun registerWithServer(oneSignalPlayerId: String?): Result<Unit, DataError> = getPushKey().andThen { pushKey ->
+        pushDevicesApi.register(
+            PushDeviceRegisterDto(
+                pushKey = pushKey,
+                relayUrl = relayApi.baseUrl,
+                deviceName = Build.MODEL.orEmpty(),
+                appVersion = BuildConfig.VERSION_NAME,
+            ),
+        )
+    }.andThen {
+        val leftover = oneSignalPlayerId?.takeIf { playerId ->
+            settingsRepo.getCurrentServer()?.settings?.onesignalDevices.orEmpty().containsKey(playerId)
+        }
+        if (leftover == null) Result.Success(Unit) else pushDevicesApi.removeOneSignalDevice(leftover)
+    }
+
+    override suspend fun getServerDevices(): Result<List<PushDevice>, DataError> = pushDevicesApi.list().map { devices ->
+        val thisPhoneId = registrationStore.data.first().pushKey.takeIf { it.isNotEmpty() }?.let(::serverDeviceId)
+        devices.mapNotNull { device ->
+            device.id?.let { id ->
+                PushDevice(
+                    id = id,
+                    deviceName = device.deviceName.orEmpty(),
+                    appVersion = device.appVersion.orEmpty(),
+                    registered = device.registered ?: 0,
+                    isThisPhone = id == thisPhoneId,
+                )
+            }
+        }
+    }
+
+    override suspend fun removeServerDevice(id: String): Result<Unit, DataError> = pushDevicesApi.remove(id)
+
     /** Callers hold [mutex]. Returns the push key, registering or updating the token as needed. */
     private suspend fun syncRegistration(fcmToken: String): Result<String, DataError> {
         val saved = registrationStore.data.first()
@@ -88,6 +128,12 @@ class PushRepoImpl @Inject constructor(
         }
     }
 
+    // PiFire's device id: the first 16 hex chars of sha256(push key) (docs/V2_API.md section 6).
+    private fun serverDeviceId(pushKey: String): String = MessageDigest.getInstance("SHA-256")
+        .digest(pushKey.toByteArray())
+        .joinToString(separator = "") { byte -> "%02x".format(byte) }
+        .take(SERVER_DEVICE_ID_LENGTH)
+
     private fun DataError.relayCode(): String? = (this as? DataError.Server)?.data
 
     // The relay's codes are for us, not the user: wrap them in a sentence.
@@ -104,6 +150,7 @@ class PushRepoImpl @Inject constructor(
     private companion object {
         // Shown as the server when no PiFire is saved; any id matching the relay's pattern works.
         const val TEST_SERVER_UUID = "app-test"
+        const val SERVER_DEVICE_ID_LENGTH = 16
         val DEAD_KEY_CODES = setOf(RelayApi.ERROR_UNKNOWN_KEY, RelayApi.ERROR_UNREGISTERED)
         val NOT_CONFIGURED = DataError.UiText(resId = R.string.data_error_push_not_configured, args = EmptyUiArgs)
     }

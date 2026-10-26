@@ -4,7 +4,6 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.dashboard.RunningMode
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto.Recipe
@@ -13,6 +12,7 @@ import com.weberbox.pifire.core.network.model.PostDto.NotifyDto
 import com.weberbox.pifire.core.network.model.PostDto.TimerDto
 import com.weberbox.pifire.core.network.model.settings.ManualDto
 import com.weberbox.pifire.core.network.model.settings.ManualDto.Manual
+import com.weberbox.pifire.core.network.transport.PiFireTransport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
@@ -21,14 +21,14 @@ import javax.inject.Inject
 import kotlin.math.roundToInt
 
 class DashApiImpl @Inject constructor(
-    private val socketManager: SocketManager,
+    private val transport: PiFireTransport,
     private val json: Json,
 ) : DashApi {
 
-    override suspend fun getDashData(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_DASH_DATA)
+    override suspend fun getDashData(): Result<String, DataError> = transport.get(ServerConstants.GA_DASH_DATA)
 
     override suspend fun listenDashData(): Flow<Result<String, DataError>> {
-        val flow = socketManager.onFlow(ServerConstants.LISTEN_DASH_DATA)
+        val flow = transport.listen(ServerConstants.LISTEN_DASH_DATA)
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
@@ -131,7 +131,7 @@ class DashApiImpl @Inject constructor(
 
     override suspend fun setProbeNotify(notifyDto: NotifyDto): Result<Unit, DataError> {
         val json = json.encodeToString(PostDto(notifyDto = notifyDto))
-        return socketManager.emitPost(
+        return transport.post(
             ServerConstants.PA_NOTIFY_ACTION,
             ServerConstants.PT_NOTIFY_UPDATE,
             json,
@@ -177,7 +177,7 @@ class DashApiImpl @Inject constructor(
         return sendEmitPost(json)
     }
 
-    override suspend fun checkHopperLevel(): Result<Unit, DataError> = socketManager.emitPost(
+    override suspend fun checkHopperLevel(): Result<Unit, DataError> = transport.post(
         ServerConstants.PA_PELLETS_ACTION,
         ServerConstants.PT_HOPPER_CHECK,
     )
@@ -192,7 +192,7 @@ class DashApiImpl @Inject constructor(
         return sendEmitPost(json)
     }
 
-    override suspend fun sendTimerAction(action: String): Result<Unit, DataError> = socketManager.emitPost(ServerConstants.PA_TIMER_ACTION, action)
+    override suspend fun sendTimerAction(action: String): Result<Unit, DataError> = transport.post(ServerConstants.PA_TIMER_ACTION, action)
 
     override suspend fun sendTimerTime(
         hours: Int,
@@ -210,14 +210,14 @@ class DashApiImpl @Inject constructor(
                 ),
             ),
         )
-        return socketManager.emitPost(
+        return transport.post(
             ServerConstants.PA_TIMER_ACTION,
             ServerConstants.PT_TIMER_START,
             payload,
         )
     }
 
-    private suspend fun sendEmitPost(json: String): Result<Unit, DataError> = socketManager.emitPost(
+    private suspend fun sendEmitPost(json: String): Result<Unit, DataError> = transport.post(
         ServerConstants.PA_UPDATE_ACTION,
         ServerConstants.PT_CONTROL,
         json,

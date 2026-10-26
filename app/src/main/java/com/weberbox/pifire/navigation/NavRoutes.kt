@@ -84,6 +84,8 @@ sealed class NavGraph {
 
         @Serializable data object Push
 
+        @Serializable data object AppPush
+
         @Serializable data object Ifttt
 
         @Serializable data object Mqtt

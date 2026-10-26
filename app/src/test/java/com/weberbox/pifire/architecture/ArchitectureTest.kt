@@ -58,7 +58,7 @@ class ArchitectureTest {
     }
 
     @Test
-    fun `ViewModels inject repos, not apis, DTOs, DataStore, Prefs or the socket`() {
+    fun `ViewModels inject repos, not apis, DTOs, DataStore, Prefs or a transport`() {
         scope
             .classes()
             .filter { it.name.endsWith("ViewModel") }
@@ -66,7 +66,8 @@ class ArchitectureTest {
                 viewModel.primaryConstructor?.parameters.orEmpty().any { parameter ->
                     val type = parameter.type.name
                     type.endsWith("Api") || type.endsWith("ApiImpl") || type.endsWith("Dto") ||
-                        type.startsWith("DataStore") || type == "Prefs" || type == "SocketManager"
+                        type.startsWith("DataStore") || type == "Prefs" || type == "SocketManager" ||
+                        type.endsWith("Transport") || type == "PiFireConnection"
                 }
             }
     }

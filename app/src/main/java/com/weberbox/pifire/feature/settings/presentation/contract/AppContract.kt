@@ -18,6 +18,7 @@ class AppContract {
         data class IncrementTemps(val enabled: Boolean) : Event()
         data class SentryEnabled(val enabled: Boolean) : Event()
         data class SentryDebugEnabled(val enabled: Boolean) : Event()
+        data class ForceApiV2(val enabled: Boolean) : Event()
         data class UpdateUserEmail(val email: String) : Event()
         data object SendTestPush : Event()
     }
@@ -32,6 +33,7 @@ class AppContract {
         val incrementTemps: Boolean,
         val sentryEnabled: Boolean,
         val sentryDebugEnabled: Boolean,
+        val forceApiV2: Boolean,
         val userEmail: String,
         val isInitialLoading: Boolean,
         val isDataError: Boolean,

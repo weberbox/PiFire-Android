@@ -12,6 +12,9 @@ interface RelayApi {
     /** False when this build has no relay URL (`PUSH_RELAY_URL` in local.properties). */
     val isConfigured: Boolean
 
+    /** The relay's base URL, which PiFire servers send alerts to. */
+    val baseUrl: String
+
     /** Returns the new push key. */
     suspend fun register(fcmToken: String): Result<String, DataError>
     suspend fun updateToken(pushKey: String, fcmToken: String): Result<Unit, DataError>

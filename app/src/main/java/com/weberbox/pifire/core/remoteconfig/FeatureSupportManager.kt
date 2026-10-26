@@ -13,6 +13,9 @@ enum class Feature {
     PWMStartupDuty,
     ETACalculations,
     FanPidSettings,
+
+    /** HTTP + SSE transport and relay push (docs/V2_API.md); checked against the version `/hello` reports. */
+    MobileApiV2,
 }
 
 class FeatureSupport(

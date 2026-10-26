@@ -5,7 +5,6 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.dashboard.RunningMode
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.ControlDto
 import com.weberbox.pifire.core.network.model.PostDto.ProbesDto
@@ -31,20 +30,21 @@ import com.weberbox.pifire.core.network.model.settings.Startup
 import com.weberbox.pifire.core.network.model.settings.Startup.SmartStart
 import com.weberbox.pifire.core.network.model.settings.Startup.SmartStart.SSProfile
 import com.weberbox.pifire.core.network.model.settings.Startup.StartToMode
+import com.weberbox.pifire.core.network.transport.PiFireTransport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class SettingsApiImpl @Inject constructor(
-    private val socketManager: SocketManager,
+    private val transport: PiFireTransport,
     private val json: Json,
 ) : SettingsApi {
 
-    override suspend fun getSettings(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA)
+    override suspend fun getSettings(): Result<String, DataError> = transport.get(ServerConstants.GA_SETTINGS_DATA)
 
     override suspend fun listenSettingsData(): Flow<Result<String, DataError>> {
-        val flow = socketManager.onFlow(ServerConstants.LISTEN_SETTINGS_DATA)
+        val flow = transport.listen(ServerConstants.LISTEN_SETTINGS_DATA)
         return flow.transform { result ->
             when (result) {
                 is Result.Error -> {
@@ -118,7 +118,7 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
-    override suspend fun getManualData(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_MANUAL_DATA)
+    override suspend fun getManualData(): Result<String, DataError> = transport.get(ServerConstants.GA_MANUAL_DATA)
 
     override suspend fun setManualMode(enabled: Boolean): Result<String, DataError> {
         val mode = if (enabled) RunningMode.Manual.name else RunningMode.Stop.name
@@ -985,6 +985,17 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
+    override suspend fun setMobilePushEnabled(enabled: Boolean): Result<String, DataError> {
+        val json = json.encodeToString(
+            SettingsDto(
+                notifyServices = NotifyServices(
+                    mobilePush = NotifyServices.MobilePush(enabled = enabled),
+                ),
+            ),
+        )
+        return sendAction(ServerConstants.PT_SETTINGS, json)
+    }
+
     override suspend fun setOneSignalAppID(appID: String): Result<String, DataError> {
         val json = json.encodeToString(
             SettingsDto(
@@ -1642,14 +1653,14 @@ class SettingsApiImpl @Inject constructor(
         return sendAction(ServerConstants.PT_SETTINGS, json)
     }
 
-    private suspend fun sendAdminAction(type: String): Result<Unit, DataError> = socketManager.emitPost(ServerConstants.PA_ADMIN_ACTION, type)
+    private suspend fun sendAdminAction(type: String): Result<Unit, DataError> = transport.post(ServerConstants.PA_ADMIN_ACTION, type)
 
-    private suspend fun sendAction(type: String, jsonString: String): Result<String, DataError> = socketManager.emitPostResult(ServerConstants.PA_UPDATE_ACTION, type, jsonString)
+    private suspend fun sendAction(type: String, jsonString: String): Result<String, DataError> = transport.postResult(ServerConstants.PA_UPDATE_ACTION, type, jsonString)
 
-    private suspend fun sendUnitsAction(units: String): Result<String, DataError> = socketManager.emitPostResult(ServerConstants.PA_UNITS_ACTION, units)
+    private suspend fun sendUnitsAction(units: String): Result<String, DataError> = transport.postResult(ServerConstants.PA_UNITS_ACTION, units)
 
     private suspend fun sendProbesAction(
         type: String,
         jsonString: String,
-    ): Result<String, DataError> = socketManager.emitPostResult(ServerConstants.PA_PROBES_ACTION, type, jsonString)
+    ): Result<String, DataError> = transport.postResult(ServerConstants.PA_PROBES_ACTION, type, jsonString)
 }

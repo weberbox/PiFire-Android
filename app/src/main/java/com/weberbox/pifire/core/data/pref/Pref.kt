@@ -19,6 +19,7 @@ data class Pref<T>(
         val sentryEnabled = Pref("pref_sentry_enable", true)
         val sentryUserEmail = Pref("pref_sentry_user_email", "", true)
         val sentryDebugEnabled = Pref("pref_sentry_dev_enable", false)
+        val forceMobileApiV2 = Pref("pref_force_mobile_api_v2", false)
         val incrementTemps = Pref("pref_increment_temps", true)
         val showBottomBar = Pref("pref_show_bottom_bar", true)
         val appTheme = Pref("pref_app_theme", AppTheme.System)

@@ -28,6 +28,8 @@
     <string name="settings_crash_summary">Sends crash reports to the developer which helps in resolving issues and improving the app</string>
     <string name="settings_dev_crash_title">Debug Crash</string>
     <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
+    <string name="settings_dev_api_v2_title">Use API v2</string>
+    <string name="settings_dev_api_v2_summary">Connect over HTTP and SSE when the server supports it, even with Remote Config off. Applies on the next connect.</string>
     <string name="settings_dev_test_push_title">Send Test Push</string>
     <string name="settings_dev_test_push_summary">Send a test notification to this phone through the push relay</string>
     <string name="settings_dev_test_push_sent">Test push sent</string>

@@ -90,6 +90,8 @@ compose-preference = { module = "me.zhanghai.compose.preference:library", versio
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "composeLottie" }
 compose-coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "composeCoil" }
 squareup-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+squareup-okhttp-sse = { module = "com.squareup.okhttp3:okhttp-sse", version.ref = "okhttp" }
+squareup-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver3", version.ref = "okhttp" }
 squareup-retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 squareup-retrofit-kotlinx = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 squareup-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakCanary" }

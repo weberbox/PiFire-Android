@@ -9,6 +9,8 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.notification.OneSignalStatus
+import com.weberbox.pifire.core.repo.ConnectionRepo
+import com.weberbox.pifire.core.repo.PushRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -22,14 +24,18 @@ import javax.inject.Inject
 class NotificationSettingsViewModel @Inject constructor(
     private val oneSignalManager: OneSignalManager,
     private val settingsRepo: SettingsRepo,
+    private val connectionRepo: ConnectionRepo,
+    private val pushRepo: PushRepo,
 ) : BaseViewModel<NotifContract.Event, NotifContract.State, NotifContract.Effect>() {
 
     init {
+        setState { copy(isAppPush = connectionRepo.isApiV2 && pushRepo.isRelayConfigured) }
         collectServerData()
     }
 
     override fun setInitialState() = NotifContract.State(
         serverData = Server(),
+        isAppPush = false,
         isInitialLoading = true,
         isLoading = false,
         isDataError = false,
@@ -58,6 +64,7 @@ class NotificationSettingsViewModel @Inject constructor(
             is NotifContract.Event.SetMqttUsername -> setMqttUsername(event.username)
             is NotifContract.Event.SetOneSignalAccepted -> onSignalAccepted = event.accepted
             is NotifContract.Event.SetOneSignalEnabled -> setOneSignalEnabled(event.enabled)
+            is NotifContract.Event.SetMobilePushEnabled -> setMobilePushEnabled(event.enabled)
             is NotifContract.Event.SetPushBulletAPIKey -> setPushBulletAPIKey(event.apiKey)
             is NotifContract.Event.SetPushBulletEnabled -> setPushBulletEnabled(event.enabled)
             is NotifContract.Event.SetPushBulletURL -> setPushBulletURL(event.url)
@@ -484,6 +491,12 @@ class NotificationSettingsViewModel @Inject constructor(
         viewModelScope.launch {
             handleResult(settingsRepo.setOneSignalEnabled(enabled))
             if (enabled) checkOneSignalStatus()
+        }
+    }
+
+    private fun setMobilePushEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setMobilePushEnabled(enabled))
         }
     }
 

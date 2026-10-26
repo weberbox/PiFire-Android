@@ -258,6 +258,12 @@ private fun AppSettingsScreenContent(
                 summary = { Text(text = stringResource(R.string.settings_dev_crash_summary)) },
                 onValueChange = { onEventSent(AppContract.Event.SentryDebugEnabled(it)) },
             )
+            SwitchPreference(
+                value = state.forceApiV2,
+                title = { Text(text = stringResource(R.string.settings_dev_api_v2_title)) },
+                summary = { Text(text = stringResource(R.string.settings_dev_api_v2_summary)) },
+                onValueChange = { onEventSent(AppContract.Event.ForceApiV2(it)) },
+            )
             Preference(
                 title = { Text(text = stringResource(R.string.settings_dev_test_push_title)) },
                 summary = { Text(text = stringResource(R.string.settings_dev_test_push_summary)) },
@@ -334,6 +340,7 @@ private fun AppSettingsScreenPreview() {
                         incrementTemps = false,
                         sentryEnabled = true,
                         sentryDebugEnabled = false,
+                        forceApiV2 = false,
                         userEmail = "",
                         isInitialLoading = false,
                         isDataError = false,

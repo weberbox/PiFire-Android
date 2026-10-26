@@ -173,6 +173,7 @@ dependencies {
     implementation(libs.compose.lottie)
     implementation(libs.compose.coil)
     implementation(libs.squareup.okhttp)
+    implementation(libs.squareup.okhttp.sse)
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.kotlinx)
     implementation(libs.zoomable)
@@ -189,6 +190,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
+    testImplementation(libs.squareup.mockwebserver)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.konsist)
 }

@@ -18,6 +18,7 @@ import com.weberbox.pifire.core.remoteconfig.ServerSupportManager
 import com.weberbox.pifire.core.remoteconfig.ServerSupportResult
 import com.weberbox.pifire.core.repo.ConnectionRepo
 import com.weberbox.pifire.core.repo.PrefsRepo
+import com.weberbox.pifire.core.repo.PushRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -33,6 +34,7 @@ import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -46,6 +48,7 @@ class HomeScreenViewModel @Inject constructor(
     private val settingsRepo: SettingsRepo,
     private val analytics: Analytics,
     private val prefsRepo: PrefsRepo,
+    private val pushRepo: PushRepo,
 ) : BaseViewModel<HomeContract.Event, HomeContract.State, HomeContract.Effect>() {
 
     init {
@@ -53,7 +56,7 @@ class HomeScreenViewModel @Inject constructor(
         collectPrefsFlow()
         collectConnectedState()
         collectDashDataState()
-        checkOneSignalStatus()
+        setUpPush()
         checkServerSupported()
     }
 
@@ -137,9 +140,17 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun checkOneSignalStatus() {
+    // API v2 servers get relay push (and lose this phone's old OneSignal entry); Socket.IO ones keep OneSignal.
+    private fun setUpPush() {
         viewModelScope.launch {
-            oneSignalManager.checkOneSignalStatus()
+            if (!connectionRepo.isApiV2) {
+                oneSignalManager.checkOneSignalStatus()
+                return@launch
+            }
+            // Same consent as OneSignal: the user agreed to push notifications in setup.
+            if (!pushRepo.isRelayConfigured || !oneSignalManager.getUserConsent()) return@launch
+            val result = pushRepo.registerWithServer(oneSignalPlayerId = oneSignalManager.playerId())
+            if (result is Result.Error) Timber.w("App push registration failed: %s", result.error)
         }
     }
 

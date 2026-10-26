@@ -40,6 +40,9 @@ class OneSignalManager @Inject constructor(
 
     fun getUserConsent(): Boolean = OneSignal.userProvidedPrivacyConsent()
 
+    /** This install's OneSignal id, if it has one. */
+    suspend fun playerId(): String? = withContext(Dispatchers.IO) { OneSignal.getDeviceState()?.userId }
+
     private suspend fun registerDevice(registrationResult: OneSignalStatus) {
         if (OneSignal.userProvidedPrivacyConsent()) {
             OneSignal.getDeviceState()?.also { state ->

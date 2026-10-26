@@ -165,6 +165,7 @@ object SettingsDtoToDataMapper : Mapper<SettingsDto, Server> {
                 onesignalEnabled = notify?.onesignal?.enabled ?: Setting.onesignalEnabled.value,
                 onesignalUuid = notify?.onesignal?.uuid ?: Setting.onesignalUuid.value,
                 onesignalDevices = OneSignalDeviceMapper.map(from.notifyServices?.onesignal?.devices),
+                mobilePushEnabled = notify?.mobilePush?.enabled ?: Setting.mobilePushEnabled.value,
                 influxDbEnabled = notify?.influxDB?.enabled ?: Setting.influxdbEnabled.value,
                 influxDbUrl = notify?.influxDB?.url ?: Setting.influxdbUrl.value,
                 influxDbToken = notify?.influxDB?.token ?: Setting.influxdbToken.value,

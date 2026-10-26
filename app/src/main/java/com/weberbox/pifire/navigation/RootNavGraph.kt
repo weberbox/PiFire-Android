@@ -37,6 +37,7 @@ import com.weberbox.pifire.feature.settings.presentation.screen.SettingsHomeScre
 import com.weberbox.pifire.feature.settings.presentation.screen.admin.AdminSettingsScreenDestination
 import com.weberbox.pifire.feature.settings.presentation.screen.admin.ManualSettingsScreenDestination
 import com.weberbox.pifire.feature.settings.presentation.screen.app.AppSettingsScreenDestination
+import com.weberbox.pifire.feature.settings.presentation.screen.notifications.AppPushScreenDestination
 import com.weberbox.pifire.feature.settings.presentation.screen.notifications.AppriseSettingsScreenDestination
 import com.weberbox.pifire.feature.settings.presentation.screen.notifications.IftttSettingsScreenDestination
 import com.weberbox.pifire.feature.settings.presentation.screen.notifications.InfluxDbSettingsScreenDestination
@@ -253,6 +254,9 @@ fun NavGraphBuilder.settingsNavGraph(
         composable<NavGraph.SettingsDest.Push> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)
             PushSettingsScreenDestination(navController, viewModel)
+        }
+        composable<NavGraph.SettingsDest.AppPush> {
+            AppPushScreenDestination(navController)
         }
         composable<NavGraph.SettingsDest.Ifttt> {
             val viewModel = it.sharedViewModel<NotificationSettingsViewModel>(navController)

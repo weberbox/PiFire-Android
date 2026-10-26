@@ -4,6 +4,9 @@ import com.weberbox.pifire.core.model.push.AlertType
 import com.weberbox.pifire.core.model.push.PushAlert
 import com.weberbox.pifire.core.network.model.push.AlertDataDto
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 import timber.log.Timber
 
 /**
@@ -52,3 +55,33 @@ fun parsePushAlert(
         fallbackBody = data["fallback_body"]?.takeIf { it.isNotBlank() },
     )
 }
+
+/**
+ * Reads an alert from the v2 live stream: the relay's send body (docs/PUSH.md 3.6) without
+ * `push_key`. Converted to the FCM data map so both paths share one parser and give the same
+ * [PushAlert] (and `alert_id`, which drops whichever copy arrives second).
+ */
+fun parseStreamAlert(
+    raw: String,
+    json: Json,
+): PushAlert? {
+    val alert = try {
+        json.parseToJsonElement(raw) as? JsonObject
+    } catch (e: IllegalArgumentException) {
+        Timber.w(e, "Unreadable stream alert")
+        null
+    } ?: return null
+    val fallback = alert["fallback"] as? JsonObject
+    val data = buildMap {
+        alert.text("alert_id")?.let { put("alert_id", it) }
+        alert.text("type")?.let { put("type", it) }
+        alert.text("server_uuid")?.let { put("server_uuid", it) }
+        alert.text("time")?.let { put("time", it) }
+        (alert["data"] as? JsonObject)?.let { put("data", it.toString()) }
+        fallback?.text("title")?.let { put("fallback_title", it) }
+        fallback?.text("body")?.let { put("fallback_body", it) }
+    }
+    return parsePushAlert(data = data, json = json)
+}
+
+private fun JsonObject.text(key: String): String? = (get(key) as? JsonPrimitive)?.contentOrNull

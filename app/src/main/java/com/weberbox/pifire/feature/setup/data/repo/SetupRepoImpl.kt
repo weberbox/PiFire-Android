@@ -7,13 +7,13 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.api.SettingsApi
 import com.weberbox.pifire.core.network.headers.HeadersData
 import com.weberbox.pifire.core.network.headers.HeadersData.Headers
 import com.weberbox.pifire.core.network.httpRequest
 import com.weberbox.pifire.core.network.parseGetResponse
 import com.weberbox.pifire.core.network.parseResponse
+import com.weberbox.pifire.core.network.transport.PiFireTransport
 import com.weberbox.pifire.core.repo.mapper.SettingsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.api.SetupApi
 import com.weberbox.pifire.feature.setup.data.mapper.LegacyVersionsDtoToDataMapper
@@ -28,7 +28,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class SetupRepoImpl @Inject constructor(
-    private val socketManager: SocketManager,
+    private val transport: PiFireTransport,
     private val setupApi: SetupApi,
     private val settingsApi: SettingsApi,
     private val settingsDataStore: DataStore<SettingsData>,
@@ -63,7 +63,7 @@ class SetupRepoImpl @Inject constructor(
     override suspend fun getSettingsData(
         server: Server,
     ): Result<Server, DataError> = withContext(Dispatchers.IO) {
-        socketManager.initSocket(
+        transport.connect(
             server = server,
             disconnectOnCancellation = true,
         ).let { connected ->
@@ -71,7 +71,7 @@ class SetupRepoImpl @Inject constructor(
                 false -> Result.Error(DataError.Network.SOCKET_ERROR)
 
                 true -> {
-                    socketManager.emitGet(ServerConstants.GA_SETTINGS_DATA).let { result ->
+                    transport.get(ServerConstants.GA_SETTINGS_DATA).let { result ->
                         when (result) {
                             is Result.Error -> Result.Error(result.error)
 

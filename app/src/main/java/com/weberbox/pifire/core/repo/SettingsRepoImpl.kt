@@ -301,6 +301,8 @@ class SettingsRepoImpl @Inject constructor(
 
     override suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError> = transformResult(settingsApi.setOneSignalEnabled(enabled))
 
+    override suspend fun setMobilePushEnabled(enabled: Boolean): Result<Server, DataError> = transformResult(settingsApi.setMobilePushEnabled(enabled))
+
     override suspend fun setOneSignalAppID(appID: String): Result<Server, DataError> = transformResult(settingsApi.setOneSignalAppID(appID))
 
     override suspend fun registerOneSignalDevice(

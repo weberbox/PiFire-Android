@@ -174,6 +174,9 @@ data class SettingsData(
             val onesignalUuid: String = Setting.onesignalUuid.value,
             val onesignalDevices: Map<String, OneSignalDeviceInfo> = Setting.onesignalDevices.value,
 
+            // App push (mobile API v2)
+            val mobilePushEnabled: Boolean = Setting.mobilePushEnabled.value,
+
             // InfluxDb
             val influxDbEnabled: Boolean = Setting.influxdbEnabled.value,
             val influxDbUrl: String = Setting.influxdbUrl.value,

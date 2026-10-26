@@ -265,7 +265,7 @@ PiFire maps each `send_notifications` event to a `type`. Temps are numbers and m
 ## 5. PiFire (Raspberry Pi, Python)
 
 1. New notification provider next to the existing ones, e.g. `"pifire_push"`.
-2. Push keys (multiple phones) live in the v2 blueprint's own store, never in the settings file: `settings_data` returns settings to any client. The relay URL is fixed: FCM tokens belong to the app's Firebase project, so a self-hosted relay can't reach the official app (ntfy/UnifiedPush is the zero-cloud option).
+2. Push keys (multiple phones) live in the v2 blueprint's own store, never in the settings file: `settings_data` returns settings to any client. The app sends its relay URL with the push key (`docs/V2_API.md` section 6), so PiFire hardcodes no relay. A relay only reaches apps built from its own Firebase project, so self-builders pair their app with their relay (ntfy/UnifiedPush is the zero-cloud option).
 3. v2 endpoints for push register / unregister add or remove the key.
 4. On alert:
    - Generate `alert_id` (uuid4).
@@ -292,7 +292,8 @@ PiFire maps each `send_notifications` event to a `type`. Temps are numbers and m
 - [x] `FirebaseMessagingService` + notification channels (`PushMessagingService`, `AlertChannel`)
 - [x] `alert_id` dedupe (`AlertDeduper`, in memory)
 - [x] Debug-only "Send Test Push" in App settings: registers and sends a `test` alert to this phone
-- [ ] Local alerts from the v2 stream while open; missed alerts from the events list
+- [x] Local alerts from the v2 stream while open (`StreamAlertNotifier`; PiFire's App Push switch gates both paths, the app applies push consent)
+- [ ] Missed alerts from the events list
 - [ ] Settings toggle (enable/disable push)
 
 ### PiFire

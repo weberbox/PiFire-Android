@@ -2,6 +2,7 @@ package com.weberbox.pifire.core.repo
 
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.push.PushDevice
 
 /** This phone's registration with the push relay (docs/PUSH.md 4.1). */
 interface PushRepo {
@@ -16,4 +17,15 @@ interface PushRepo {
 
     /** Sends a test alert to this phone through the relay (debug builds). */
     suspend fun sendTestPush(): Result<Unit, DataError>
+
+    /**
+     * Registers this phone for push with the connected API v2 server, then removes the OneSignal
+     * entry [oneSignalPlayerId] left there from Socket.IO days, so alerts don't arrive twice.
+     */
+    suspend fun registerWithServer(oneSignalPlayerId: String?): Result<Unit, DataError>
+
+    /** Phones registered for push on the connected API v2 server. */
+    suspend fun getServerDevices(): Result<List<PushDevice>, DataError>
+
+    suspend fun removeServerDevice(id: String): Result<Unit, DataError>
 }

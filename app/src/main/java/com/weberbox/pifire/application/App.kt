@@ -14,6 +14,7 @@ import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.data.util.getAppLanguage
 import com.weberbox.pifire.core.log.DebugLogTree
 import com.weberbox.pifire.core.log.SentryIO
+import com.weberbox.pifire.core.notification.StreamAlertNotifier
 import com.weberbox.pifire.core.notification.createAlertChannels
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
@@ -29,6 +30,9 @@ class App : Application() {
 
     @Inject
     lateinit var analytics: Analytics
+
+    @Inject
+    lateinit var streamAlertNotifier: StreamAlertNotifier
 
     override fun onCreate() {
         super.onCreate()
@@ -47,6 +51,7 @@ class App : Application() {
 
         // Before any push can arrive: relay alerts post to these channels, OneSignal's name them.
         createAlertChannels(this)
+        streamAlertNotifier.start()
 
         analytics.setUserProperty(
             name = AnalyticsEvent.Language.name,

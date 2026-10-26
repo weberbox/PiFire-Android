@@ -154,7 +154,21 @@ private fun NotificationSettingsScreenContent(
             .verticalScroll(rememberScrollState())
             .padding(contentPadding),
     ) {
-        if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
+        if (state.isAppPush) {
+            TwoTargetSwitchPreference(
+                value = state.serverData.settings.mobilePushEnabled,
+                onValueChange = { onEventSent(NotifContract.Event.SetMobilePushEnabled(it)) },
+                title = { Text(text = stringResource(R.string.settings_app_push_title)) },
+                summary = { Text(text = getSummary(state.serverData.settings.mobilePushEnabled)) },
+                onClick = {
+                    onNavigationRequested(
+                        NotifContract.Effect.Navigation.NavRoute(
+                            NavGraph.SettingsDest.AppPush,
+                        ),
+                    )
+                },
+            )
+        } else if (BuildConfig.ONESIGNAL_APP_ID.isNotBlank()) {
             TwoTargetSwitchPreference(
                 value = state.serverData.settings.onesignalEnabled,
                 onValueChange = { onEventSent(NotifContract.Event.SetOneSignalEnabled(it)) },
@@ -309,6 +323,7 @@ private fun NotificationsSettingsPreview() {
                 NotificationSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
+                        isAppPush = false,
                         isInitialLoading = false,
                         isLoading = true,
                         isDataError = false,

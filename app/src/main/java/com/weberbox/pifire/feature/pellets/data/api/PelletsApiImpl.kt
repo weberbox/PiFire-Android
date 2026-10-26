@@ -4,27 +4,27 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
-import com.weberbox.pifire.core.network.SocketManager
 import com.weberbox.pifire.core.network.model.PostDto
 import com.weberbox.pifire.core.network.model.PostDto.PelletsDto
+import com.weberbox.pifire.core.network.transport.PiFireTransport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class PelletsApiImpl @Inject constructor(
-    private val socketManager: SocketManager,
+    private val transport: PiFireTransport,
     private val json: Json,
 ) : PelletsApi {
 
-    override suspend fun getPellets(): Result<String, DataError> = socketManager.emitGet(ServerConstants.GA_PELLETS_DATA)
+    override suspend fun getPellets(): Result<String, DataError> = transport.get(ServerConstants.GA_PELLETS_DATA)
 
-    override suspend fun getPelletLevel(): Result<Unit, DataError> = socketManager.emitPost(
+    override suspend fun getPelletLevel(): Result<Unit, DataError> = transport.post(
         ServerConstants.PA_PELLETS_ACTION,
         ServerConstants.PT_HOPPER_CHECK,
     )
 
-    override suspend fun listenPelletsData(): Flow<Result<String, DataError>> = socketManager.onFlow(ServerConstants.LISTEN_PELLET_DATA)
+    override suspend fun listenPelletsData(): Flow<Result<String, DataError>> = transport.listen(ServerConstants.LISTEN_PELLET_DATA)
         .transform { result ->
             when (result) {
                 is Result.Error -> emit(Result.Error(result.error))
@@ -108,5 +108,5 @@ class PelletsApiImpl @Inject constructor(
         return sendEmitPost(ServerConstants.PT_DELETE_PROFILE, json)
     }
 
-    private suspend fun sendEmitPost(type: String, json: String): Result<Unit, DataError> = socketManager.emitPost(ServerConstants.PA_PELLETS_ACTION, type, json)
+    private suspend fun sendEmitPost(type: String, json: String): Result<Unit, DataError> = transport.post(ServerConstants.PA_PELLETS_ACTION, type, json)
 }

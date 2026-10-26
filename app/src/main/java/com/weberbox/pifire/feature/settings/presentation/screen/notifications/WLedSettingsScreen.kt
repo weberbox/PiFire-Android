@@ -279,6 +279,7 @@ private fun WLedSettingsScreenPreview() {
                 WLedSettingsScreen(
                     state = NotifContract.State(
                         serverData = Server(),
+                        isAppPush = false,
                         isInitialLoading = false,
                         isLoading = true,
                         isDataError = false,

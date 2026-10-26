@@ -1,15 +1,11 @@
 package com.weberbox.pifire.core.notification
 
 import android.Manifest
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.TaskStackBuilder
 import com.weberbox.pifire.R
-import com.weberbox.pifire.application.MainActivity
 import com.weberbox.pifire.core.model.push.PushAlert
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.ui.util.checkPermission
@@ -50,7 +46,7 @@ class AlertNotifier @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setContentIntent(openAppIntent())
+            .setContentIntent(openAppPendingIntent(context))
             .build()
 
         try {
@@ -59,15 +55,6 @@ class AlertNotifier @Inject constructor(
             // Permission revoked between the check and the post.
             Timber.w(e, "Couldn't post alert notification")
         }
-    }
-
-    private fun openAppIntent(): PendingIntent? {
-        val intent = Intent(context, MainActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-        }
-        return TaskStackBuilder.create(context)
-            .addNextIntentWithParentStack(intent)
-            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     private companion object {

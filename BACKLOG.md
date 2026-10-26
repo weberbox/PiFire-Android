@@ -29,17 +29,18 @@ before acting on it, and delete it once it's done.
 
 ## Open
 - [ui] `core/ui/components/PickerWheel`: verify the scaled-text look on a device.
-- [push] `core/repo/PushRepo`: relay push is built (registration, receiver, channels, dedupe) but
-  only reachable from the debug "Send Test Push" row in App settings. Round trip through the
-  live relay checked on a device 2026-10-25; still to check: sound per channel, token refresh.
-  Next: call
-  `getPushKey()` and send the key to v2 servers, plus a toggle that calls `DELETE /v1/register`
-  (not in `RelayApi` yet). Registration stays lazy so installs that never use relay push cost no
-  KV write.
+- [push] Relay push on v2 servers works end to end (2026-10-25: a real low pellet alert from
+  the dev PiFire reached the phone). Still to check: sound per channel, token refresh. Not done:
+  a phone-wide "turn off app push" that calls `DELETE /v1/register` (not in `RelayApi` yet);
+  per-grill removal is the App Push screen. Registration stays lazy so installs that never use
+  relay push cost no KV write. Consent reuses the OneSignal setup screen, whose wording still
+  names OneSignal: reword when OneSignal goes.
 
 ## v2 API and push plan (PiFire + app)
 Replaces OneSignal v1 push (details in `docs/PUSH.md`) and the Socket.IO transport. PiFire is
 built in full on a fork branch and submitted as one PR; only this app uses `socket_io.py`.
+- Contract: `docs/V2_API.md` (2026-10-25: same actions and payloads as Socket.IO over HTTP + SSE,
+  so the app swaps transport and repos stay unchanged).
 - PiFire side: a new self-contained blueprint (`blueprints/mobile/v2/`, mounted at `/mobile/v2`)
   with HTTP endpoints + one SSE stream (snapshot on connect, then changes, plus alert events),
   an `{ok, code, data}` envelope with error codes, a `hello` endpoint (api version +
@@ -80,6 +81,9 @@ built in full on a fork branch and submitted as one PR; only this app uses `sock
     3030200) know to update from the Play Store.
   - Remove `socket_io.py` in the PR only if the forced update has been live a few weeks;
     otherwise keep it one more PiFire release.
+- Upstream, separate from the PR: the web UI's recipe delete (`blueprints/recipes/routes.py`)
+  passes the client's file name to `os.system(f'rm ...')` (shell injection from anything on the
+  LAN). The PR fixes the mobile copy only (`_recipe_path` in `app_data.py`).
 - Upstream (fold into the PR): Socket.IO uses `cors_allowed_origins="*"` with no auth, so any web
   page can call `post_app_data` (reboot, shutdown, factory reset); `settings_data` returns
   notifier credentials; a second client gets no snapshot on connect; `app.py` creates

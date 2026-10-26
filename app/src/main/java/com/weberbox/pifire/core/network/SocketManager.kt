@@ -5,6 +5,7 @@ import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.headers.HeadersManager
+import com.weberbox.pifire.core.network.transport.PiFireTransport
 import com.weberbox.pifire.core.session.SessionStateHolder
 import io.socket.client.Ack
 import io.socket.client.IO
@@ -38,8 +39,8 @@ class SocketManager @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
     private val json: Json,
-) {
-    // A StateFlow so onFlow listeners move to the new socket after initSocket.
+) : PiFireTransport {
+    // A StateFlow so listen() flows move to the new socket after connect.
     private val socket = MutableStateFlow<Socket?>(null)
 
     private suspend fun createSocket(server: Server): Socket? {
@@ -94,9 +95,9 @@ class SocketManager @Inject constructor(
         return "${uri.scheme}://${uri.rawAuthority}" to "$subPath$SOCKET_IO_PATH"
     }
 
-    suspend fun initSocket(
+    override suspend fun connect(
         server: Server,
-        disconnectOnCancellation: Boolean = false,
+        disconnectOnCancellation: Boolean,
     ): Boolean {
         disconnect()
         val newSocket = createSocket(server) ?: return false
@@ -113,7 +114,7 @@ class SocketManager @Inject constructor(
         return connected
     }
 
-    fun disconnect() {
+    override fun disconnect() {
         disconnect(target = socket.value)
         sessionStateHolder.tryEmitConnectedState(false)
     }
@@ -126,7 +127,7 @@ class SocketManager @Inject constructor(
         sessionStateHolder.tryEmitConnectedState(false)
     }
 
-    fun isConnected(): Boolean = socket.value?.connected() == true
+    override fun isConnected(): Boolean = socket.value?.connected() == true
 
     private suspend fun connected(target: Socket): Boolean {
         if (target.connected()) return true
@@ -151,13 +152,11 @@ class SocketManager @Inject constructor(
         }
     } ?: false
 
-    suspend fun emit(event: String, vararg args: Any): Result<String, DataError> = internalEmit(event, *args)
+    override suspend fun get(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.GF_GET_APP_DATA, *args)
 
-    suspend fun emitGet(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.GF_GET_APP_DATA, *args)
+    override suspend fun postResult(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args)
 
-    suspend fun emitPostResult(vararg args: Any): Result<String, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args)
-
-    suspend fun emitPost(vararg args: Any): Result<Unit, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args).let { result ->
+    override suspend fun post(vararg args: Any): Result<Unit, DataError> = internalEmit(ServerConstants.PF_POST_APP_DATA, *args).let { result ->
         when (result) {
             is Result.Error -> Result.Error(result.error)
 
@@ -201,7 +200,7 @@ class SocketManager @Inject constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun onFlow(event: String): Flow<Result<Array<out Any?>, DataError>> =
+    override fun listen(event: String): Flow<Result<Array<out Any?>, DataError>> =
         socket.flatMapLatest { current ->
             if (current == null) {
                 flowOf(Result.Error(DataError.Network.SOCKET_ERROR))

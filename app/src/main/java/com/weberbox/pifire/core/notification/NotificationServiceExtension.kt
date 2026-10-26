@@ -1,14 +1,10 @@
 package com.weberbox.pifire.core.notification
 
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.onesignal.OSNotificationReceivedEvent
 import com.onesignal.OneSignal.OSRemoteNotificationReceivedHandler
 import com.weberbox.pifire.R
-import com.weberbox.pifire.application.MainActivity
 
 @Suppress("unused")
 class NotificationServiceExtension : OSRemoteNotificationReceivedHandler {
@@ -19,17 +15,7 @@ class NotificationServiceExtension : OSRemoteNotificationReceivedHandler {
     ) {
         val notification = receivedEvent.notification
 
-        val activityIntent = Intent(context, MainActivity::class.java).apply {
-            action = Intent.ACTION_VIEW
-        }
-
-        val pendingIntent = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(activityIntent)
-            getPendingIntent(
-                0,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-        }
+        val pendingIntent = openAppPendingIntent(context)
 
         val mutableNotification = notification.mutableCopy()
         mutableNotification.setExtender { builder: NotificationCompat.Builder ->

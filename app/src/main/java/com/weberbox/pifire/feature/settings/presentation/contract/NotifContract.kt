@@ -68,11 +68,14 @@ class NotifContract {
         data class SetWLedProfileTarget(val profile: Int) : Event()
         data class SetWLedProfileTimer(val profile: Int) : Event()
         data class SetOneSignalEnabled(val enabled: Boolean) : Event()
+        data class SetMobilePushEnabled(val enabled: Boolean) : Event()
         data class SetOneSignalAccepted(val accepted: Boolean) : Event()
     }
 
     data class State(
         val serverData: Server,
+        /** Connected over API v2 with relay push available: show app push instead of OneSignal. */
+        val isAppPush: Boolean,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
         val isDataError: Boolean,

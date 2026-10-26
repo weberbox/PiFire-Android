@@ -38,6 +38,7 @@ class AppSettingsViewModel @Inject constructor(
         incrementTemps = true,
         sentryEnabled = true,
         sentryDebugEnabled = false,
+        forceApiV2 = false,
         userEmail = "",
         isInitialLoading = true,
         isDataError = false,
@@ -136,6 +137,9 @@ class AppSettingsViewModel @Inject constructor(
             is AppContract.Event.SentryDebugEnabled ->
                 prefsRepo.set(Pref.sentryDebugEnabled, event.enabled)
 
+            is AppContract.Event.ForceApiV2 ->
+                prefsRepo.set(Pref.forceMobileApiV2, event.enabled)
+
             is AppContract.Event.UpdateUserEmail ->
                 prefsRepo.set(Pref.sentryUserEmail, event.email)
 
@@ -170,6 +174,7 @@ class AppSettingsViewModel @Inject constructor(
         collectAndUpdateState(Pref.incrementTemps) { copy(incrementTemps = it) }
         collectAndUpdateState(Pref.sentryEnabled) { copy(sentryEnabled = it) }
         collectAndUpdateState(Pref.sentryDebugEnabled) { copy(sentryDebugEnabled = it) }
+        collectAndUpdateState(Pref.forceMobileApiV2) { copy(forceApiV2 = it) }
         collectAndUpdateState(Pref.sentryUserEmail) { copy(userEmail = it) }
     }
 

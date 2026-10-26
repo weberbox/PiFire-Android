@@ -110,6 +110,7 @@ interface SettingsRepo {
     suspend fun setWLedProfileTarget(profile: Int): Result<Server, DataError>
     suspend fun setWLedProfileTimer(profile: Int): Result<Server, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<Server, DataError>
+    suspend fun setMobilePushEnabled(enabled: Boolean): Result<Server, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<Server, DataError>
     suspend fun registerOneSignalDevice(device: Map<String, OneSignalDeviceInfo>): Result<Server, DataError>
 

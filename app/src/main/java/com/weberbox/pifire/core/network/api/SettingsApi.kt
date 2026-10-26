@@ -94,6 +94,7 @@ interface SettingsApi {
     suspend fun setWLedProfileTarget(profile: Int): Result<String, DataError>
     suspend fun setWLedProfileTimer(profile: Int): Result<String, DataError>
     suspend fun setOneSignalEnabled(enabled: Boolean): Result<String, DataError>
+    suspend fun setMobilePushEnabled(enabled: Boolean): Result<String, DataError>
     suspend fun setOneSignalAppID(appID: String): Result<String, DataError>
     suspend fun registerOneSignalDevice(devices: Map<String, OneSignalDeviceInfo>): Result<String, DataError>
 

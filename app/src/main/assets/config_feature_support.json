@@ -41,6 +41,13 @@
       "minBuild": "8",
       "maxVersion": "",
       "maxBuild": ""
+    },
+    "MobileApiV2": {
+      "enabled": false,
+      "minVersion": "1.11.0",
+      "minBuild": "19",
+      "maxVersion": "",
+      "maxBuild": ""
     }
   }
 ]

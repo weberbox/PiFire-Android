@@ -158,6 +158,9 @@ data class Setting<T>(
         val onesignalUuid = Setting("uuid", "")
         val onesignalDevices = Setting("devices", mapOf<String, OneSignalDeviceInfo>())
 
+        // App push (mobile API v2)
+        val mobilePushEnabled = Setting("enabled", true)
+
         // InfluxDb
         val influxdbEnabled = Setting("enabled", false)
         val influxdbUrl = Setting("url", "")

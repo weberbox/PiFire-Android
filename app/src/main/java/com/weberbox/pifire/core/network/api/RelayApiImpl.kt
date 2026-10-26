@@ -38,9 +38,11 @@ class RelayApiImpl @Inject constructor(
 
     override val isConfigured: Boolean = BuildConfig.PUSH_RELAY_URL.isNotBlank()
 
+    override val baseUrl: String = BuildConfig.PUSH_RELAY_URL.trimEnd('/')
+
     private val service = retrofit.create(RelayService::class.java)
-    private val registerUrl = "${BuildConfig.PUSH_RELAY_URL.trimEnd('/')}/v1/register"
-    private val sendUrl = "${BuildConfig.PUSH_RELAY_URL.trimEnd('/')}/v1/send"
+    private val registerUrl = "$baseUrl/v1/register"
+    private val sendUrl = "$baseUrl/v1/send"
 
     override suspend fun register(fcmToken: String): Result<String, DataError> = call {
         service.post(

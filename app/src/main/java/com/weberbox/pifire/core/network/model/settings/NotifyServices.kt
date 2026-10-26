@@ -20,6 +20,10 @@ data class NotifyServices(
     @SerialName("onesignal")
     val onesignal: OneSignalPush? = null,
 
+    // App push (mobile API v2); missing on servers without v2.
+    @SerialName("mobile_push")
+    val mobilePush: MobilePush? = null,
+
     @SerialName("influxdb")
     val influxDB: InfluxDB? = null,
 
@@ -73,6 +77,12 @@ data class NotifyServices(
 
         @SerialName("PublicURL")
         val publicURL: String? = null,
+    )
+
+    @Serializable
+    data class MobilePush(
+        @SerialName("enabled")
+        val enabled: Boolean? = null,
     )
 
     @Serializable

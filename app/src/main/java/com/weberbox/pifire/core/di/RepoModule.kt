@@ -1,5 +1,7 @@
 package com.weberbox.pifire.core.di
 
+import com.weberbox.pifire.core.network.api.PushDevicesApi
+import com.weberbox.pifire.core.network.api.PushDevicesApiImpl
 import com.weberbox.pifire.core.network.api.RelayApi
 import com.weberbox.pifire.core.network.api.RelayApiImpl
 import com.weberbox.pifire.core.network.api.SettingsApi
@@ -54,6 +56,12 @@ abstract class RepoModule {
     abstract fun bindRelayApi(
         relayApiImpl: RelayApiImpl,
     ): RelayApi
+
+    @Binds
+    @Singleton
+    abstract fun bindPushDevicesApi(
+        pushDevicesApiImpl: PushDevicesApiImpl,
+    ): PushDevicesApi
 
     @Binds
     @Singleton
