@@ -19,6 +19,7 @@ class AppContract {
         data class SentryEnabled(val enabled: Boolean) : Event()
         data class SentryDebugEnabled(val enabled: Boolean) : Event()
         data class UpdateUserEmail(val email: String) : Event()
+        data object SendTestPush : Event()
     }
 
     data class State(

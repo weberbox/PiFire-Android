@@ -199,7 +199,7 @@ private val UiTextArgList.rawList: List<UiTextArg?>
         return sourceList
     }
 
-private val EmptyUiArgs: UiTextArgList = UiTextArgListImpl(emptyList())
+val EmptyUiArgs: UiTextArgList = UiTextArgListImpl(emptyList())
 
 private data class SerializableArg(val value: Serializable) : UiTextArg {
 

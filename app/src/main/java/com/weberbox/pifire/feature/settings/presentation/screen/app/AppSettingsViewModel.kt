@@ -1,12 +1,17 @@
 package com.weberbox.pifire.feature.settings.presentation.screen.app
 
 import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.R
 import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.core.analytics.AnalyticsEvent
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.repo.PrefsRepo
+import com.weberbox.pifire.core.repo.PushRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.model.AppTheme
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.feature.settings.presentation.contract.AppContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,6 +21,7 @@ import javax.inject.Inject
 class AppSettingsViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
     private val analytics: Analytics,
+    private val pushRepo: PushRepo,
 ) : BaseViewModel<AppContract.Event, AppContract.State, AppContract.Effect>() {
 
     init {
@@ -132,6 +138,25 @@ class AppSettingsViewModel @Inject constructor(
 
             is AppContract.Event.UpdateUserEmail ->
                 prefsRepo.set(Pref.sentryUserEmail, event.email)
+
+            is AppContract.Event.SendTestPush -> sendTestPush()
+        }
+    }
+
+    private fun sendTestPush() {
+        viewModelScope.launch {
+            val notification = when (val result = pushRepo.sendTestPush()) {
+                is Result.Success -> AppContract.Effect.Notification(
+                    text = UiText(resId = R.string.settings_dev_test_push_sent),
+                    error = false,
+                )
+
+                is Result.Error -> AppContract.Effect.Notification(
+                    text = result.error.asUiText(),
+                    error = true,
+                )
+            }
+            setEffect { notification }
         }
     }
 

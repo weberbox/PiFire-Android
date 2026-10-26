@@ -29,6 +29,13 @@ before acting on it, and delete it once it's done.
 
 ## Open
 - [ui] `core/ui/components/PickerWheel`: verify the scaled-text look on a device.
+- [push] `core/repo/PushRepo`: relay push is built (registration, receiver, channels, dedupe) but
+  only reachable from the debug "Send Test Push" row in App settings. Round trip through the
+  live relay checked on a device 2026-10-25; still to check: sound per channel, token refresh.
+  Next: call
+  `getPushKey()` and send the key to v2 servers, plus a toggle that calls `DELETE /v1/register`
+  (not in `RelayApi` yet). Registration stays lazy so installs that never use relay push cost no
+  KV write.
 
 ## v2 API and push plan (PiFire + app)
 Replaces OneSignal v1 push (details in `docs/PUSH.md`) and the Socket.IO transport. PiFire is
@@ -48,8 +55,8 @@ built in full on a fork branch and submitted as one PR; only this app uses `sock
   and fall back to the cached version, so they never see an unsupported-server prompt on a
   socket-less server.
 - Relay (Cloudflare Worker): in `relay/` (TypeScript), 1.0.0 deployed 2026-10-25; FCM auth
-  checked live, first real push to a device still to test once the app registers. It's the app's own backend (sends through the app's Firebase project, payload is a contract with
-  this app), not something we package for others to host.
+  checked live, first push delivered to a device. It's the app's own backend (sends through the app's Firebase project, payload is
+  a contract with this app), not something we package for others to host.
   - Versioning is for our own tracking: `RELAY_VERSION` bumped on deploy and returned by
     `/v1/health`, plus a `Relay` section in commit messages. No tags or GitHub releases (keeps it
     clear of the app's release flow). Deploy by hand with `npm run deploy`; a workflow filtered to

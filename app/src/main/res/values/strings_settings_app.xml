@@ -28,6 +28,9 @@
     <string name="settings_crash_summary">Sends crash reports to the developer which helps in resolving issues and improving the app</string>
     <string name="settings_dev_crash_title">Debug Crash</string>
     <string name="settings_dev_crash_summary">Send crash reports to Sentry in debug build</string>
+    <string name="settings_dev_test_push_title">Send Test Push</string>
+    <string name="settings_dev_test_push_summary">Send a test notification to this phone through the push relay</string>
+    <string name="settings_dev_test_push_sent">Test push sent</string>
     <string name="settings_crash_email">Email</string>
     <string name="settings_crash_email_summary">Includes your email address with the crash report</string>
 </resources>

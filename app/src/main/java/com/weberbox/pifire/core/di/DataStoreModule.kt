@@ -6,7 +6,9 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
 import com.weberbox.pifire.core.constants.AppConfig
+import com.weberbox.pifire.core.data.datastore.PushRegistrationSerializer
 import com.weberbox.pifire.core.data.datastore.SettingsSerializer
+import com.weberbox.pifire.core.model.push.PushRegistration
 import com.weberbox.pifire.core.model.settings.SettingsData
 import com.weberbox.pifire.core.network.headers.HeadersData
 import com.weberbox.pifire.core.network.headers.HeadersSerializer
@@ -35,5 +37,13 @@ object DataStoreModule {
         serializer = HeadersSerializer,
         produceFile = { appContext.dataStoreFile(AppConfig.HEADERS_DATA_NAME) },
         corruptionHandler = ReplaceFileCorruptionHandler { HeadersData() },
+    )
+
+    @Singleton
+    @Provides
+    fun providePushRegistrationDataStore(@ApplicationContext appContext: Context): DataStore<PushRegistration> = DataStoreFactory.create(
+        serializer = PushRegistrationSerializer,
+        produceFile = { appContext.dataStoreFile(AppConfig.PUSH_REGISTRATION_DATA_NAME) },
+        corruptionHandler = ReplaceFileCorruptionHandler { PushRegistration() },
     )
 }

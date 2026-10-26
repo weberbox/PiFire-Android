@@ -258,6 +258,12 @@ private fun AppSettingsScreenContent(
                 summary = { Text(text = stringResource(R.string.settings_dev_crash_summary)) },
                 onValueChange = { onEventSent(AppContract.Event.SentryDebugEnabled(it)) },
             )
+            Preference(
+                title = { Text(text = stringResource(R.string.settings_dev_test_push_title)) },
+                summary = { Text(text = stringResource(R.string.settings_dev_test_push_summary)) },
+            ) {
+                onEventSent(AppContract.Event.SendTestPush)
+            }
         }
         Preference(
             title = { Text(text = stringResource(R.string.settings_crash_email)) },

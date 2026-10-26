@@ -1,19 +1,11 @@
 package com.weberbox.pifire.core.notification
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.ContentResolver
 import android.content.Context
-import android.media.AudioAttributes
 import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import androidx.core.net.toUri
 import com.onesignal.OSDeviceState
 import com.onesignal.OneSignal
 import com.weberbox.pifire.BuildConfig
-import com.weberbox.pifire.R
 import com.weberbox.pifire.core.annotations.FutureDeprecation
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.OneSignalPush.OneSignalDeviceInfo
@@ -40,7 +32,6 @@ class OneSignalManager @Inject constructor(
         OneSignal.setRequiresUserPrivacyConsent(true)
         OneSignal.initWithContext(appContext)
         OneSignal.setAppId(BuildConfig.ONESIGNAL_APP_ID)
-        initNotificationChannels(appContext)
     }
 
     fun provideUserConsent(accepted: Boolean) {
@@ -192,103 +183,6 @@ class OneSignalManager @Inject constructor(
     }
 
     private suspend fun getDevicesHash(): Map<String, OneSignalDeviceInfo> = settingsRepo.getCurrentServer()?.settings?.onesignalDevices ?: emptyMap()
-
-    private fun initNotificationChannels(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            val channels = listOf(
-                NotificationChannelConfig(
-                    channelId = context.getString(R.string.notification_channel_base),
-                    name = context.getString(R.string.notification_channel_base_name),
-                    description = context.getString(R.string.notification_desc_base),
-                ),
-                NotificationChannelConfig(
-                    channelId = context.getString(R.string.notification_channel_temp),
-                    name = context.getString(R.string.notification_channel_temp_name),
-                    description = context.getString(R.string.notification_desc_temp),
-                    soundResourceId = R.raw.temp_achieved,
-                ),
-                NotificationChannelConfig(
-                    channelId = context.getString(R.string.notification_channel_timer),
-                    name = context.getString(R.string.notification_channel_timer_name),
-                    description = context.getString(R.string.notification_desc_timer),
-                    soundResourceId = R.raw.timer_alarm,
-                    useVibrationPattern = true,
-                ),
-                NotificationChannelConfig(
-                    channelId = context.getString(R.string.notification_channel_error),
-                    name = context.getString(R.string.notification_channel_error_name),
-                    description = context.getString(R.string.notification_desc_error),
-                    soundResourceId = R.raw.grill_error,
-                    useVibrationPattern = true,
-                ),
-                NotificationChannelConfig(
-                    channelId = context.getString(R.string.notification_channel_pellets),
-                    name = context.getString(R.string.notification_channel_pellets_name),
-                    description = context.getString(R.string.notification_desc_pellets),
-                    soundResourceId = R.raw.pellet_alarm,
-                    useVibrationPattern = true,
-                ),
-            )
-
-            channels.forEach { config ->
-                createNotificationChannel(
-                    notificationManager = notificationManager,
-                    config = config,
-                )
-            }
-        }
-    }
-
-    private data class NotificationChannelConfig(
-        val channelId: String,
-        val name: String,
-        val description: String,
-        val soundResourceId: Int? = null,
-        val useVibrationPattern: Boolean = false,
-    )
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(
-        notificationManager: NotificationManager,
-        config: NotificationChannelConfig,
-    ) {
-        val channel = NotificationChannel(
-            config.channelId,
-            config.name,
-            NotificationManager.IMPORTANCE_HIGH,
-        ).apply {
-            description = config.description
-            enableLights(true)
-            setShowBadge(true)
-            enableVibration(true)
-            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-
-            if (config.useVibrationPattern) {
-                vibrationPattern = longArrayOf(1000, 1000, 1000, 1000, 1000)
-            }
-
-            config.soundResourceId?.let { resourceId ->
-                val soundUri = buildNotificationUri(resourceId)
-                setSound(soundUri, createAudioAttributes())
-            }
-        }
-
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun buildNotificationUri(resourceId: Int) =
-        (
-            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-                BuildConfig.APPLICATION_ID + "/" + resourceId
-            ).toUri()
-
-    private fun createAudioAttributes() = AudioAttributes.Builder()
-        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-        .build()
 }
 
 enum class OneSignalStatus {

@@ -43,6 +43,7 @@ android {
         versionName = "$vMajor.$vMinor.$vPatch"
         buildConfigField("String", "SENTRY_DSN", "\"${localProperties.getProperty("SENTRY_DSN", "")}\"")
         buildConfigField("String", "ONESIGNAL_APP_ID", "\"${localProperties.getProperty("ONESIGNAL_APP_ID", "")}\"")
+        buildConfigField("String", "PUSH_RELAY_URL", "\"${localProperties.getProperty("PUSH_RELAY_URL", "")}\"")
     }
 
     if (keystoreProperties.isNotEmpty()) {

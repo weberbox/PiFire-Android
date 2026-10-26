@@ -280,17 +280,18 @@ PiFire maps each `send_notifications` event to a `type`. Temps are numbers and m
 - [x] Create Cloudflare account, KV namespace, `wrangler.toml`
 - [x] Create Firebase project, add Android app, generate service account key
 - [x] `wrangler secret put FCM_SERVICE_ACCOUNT`
-- [x] Implement JWT signing + token cache (live FCM auth checked; first real push still to test)
+- [x] Implement JWT signing + token cache (first push delivered to a device 2026-10-25)
 - [x] Implement register / update / delete
 - [x] Implement send with 410 cleanup
 - [x] Rate limiting bindings (`SEND_LIMITER`, `REGISTER_LIMITER`) + validation
 - [x] Deploy to `*.workers.dev`
 
 ### Android
-- [ ] Registration flow + `onNewToken` handling
+- [x] Registration flow + `onNewToken` handling (`PushRepo`; registers on first use, not at install)
 - [ ] v2 push register / unregister calls
-- [ ] `FirebaseMessagingService` + notification channels
-- [ ] `alert_id` dedupe
+- [x] `FirebaseMessagingService` + notification channels (`PushMessagingService`, `AlertChannel`)
+- [x] `alert_id` dedupe (`AlertDeduper`, in memory)
+- [x] Debug-only "Send Test Push" in App settings: registers and sends a `test` alert to this phone
 - [ ] Local alerts from the v2 stream while open; missed alerts from the events list
 - [ ] Settings toggle (enable/disable push)
 

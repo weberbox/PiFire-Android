@@ -14,6 +14,7 @@ import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.data.util.getAppLanguage
 import com.weberbox.pifire.core.log.DebugLogTree
 import com.weberbox.pifire.core.log.SentryIO
+import com.weberbox.pifire.core.notification.createAlertChannels
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -43,6 +44,9 @@ class App : Application() {
         }
 
         Timber.d("Startup - Application Start")
+
+        // Before any push can arrive: relay alerts post to these channels, OneSignal's name them.
+        createAlertChannels(this)
 
         analytics.setUserProperty(
             name = AnalyticsEvent.Language.name,

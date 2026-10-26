@@ -19,6 +19,7 @@ object AppConfig {
     const val INFO_DATA_NAME = "info_data"
     const val DASH_DATA_NAME = "dash_data"
     const val HEADERS_DATA_NAME = "headers_data"
+    const val PUSH_REGISTRATION_DATA_NAME = "push_registration_data"
 
     // Pellet Warning
     const val MEDIUM_PELLET_WARNING: Int = 50
