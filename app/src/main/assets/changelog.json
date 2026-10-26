@@ -1,9 +1,81 @@
 {
   "changelog": [
     {
-      "version": "3.3.3",
+      "version": "3.4.0",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Required updates show a full-screen update screen; optional updates are offered in a sheet with release notes and download progress"
+        },
+        {
+          "type": "new",
+          "text": "Added a Recipe Notifications channel"
+        },
+        {
+          "type": "imp",
+          "text": "Connection errors now say what's wrong (unknown host, unreachable, timeout, untrusted certificate)"
+        },
+        {
+          "type": "imp",
+          "text": "Tapping a notification returns to the app where it was instead of restarting it"
+        },
+        {
+          "type": "imp",
+          "text": "Dashboard timers no longer drift and no longer redraw the whole dashboard every second"
+        },
+        {
+          "type": "imp",
+          "text": "Smoother picker wheels for hold temp, timer, prime amount and probe settings"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix dashboard, recipes and settings failing to load on Celsius servers sending decimal temps"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix connecting hanging on an invalid address and endless background reconnects"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix servers behind a reverse proxy subpath not connecting"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix live updates stopping after switching or reconnecting to a server"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix saved servers being wiped when stored settings could not be read"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix crashes in number fields, PWM and Smart Start tables, and the pellet profile picker"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix PWM fan and Smart Start tables losing their pairing with temperatures when saving"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix dialog buttons not working after rotating the device"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix food probe low-limit settings showing the high-limit values"
+        },
+        {
+          "type": "imp",
+          "text": "Update various dependencies"
+        }
+      ]
+    },
+    {
+      "version": "3.3.3",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {
