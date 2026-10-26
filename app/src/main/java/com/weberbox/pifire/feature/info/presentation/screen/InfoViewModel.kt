@@ -1,0 +1,134 @@
+package com.weberbox.pifire.feature.info.presentation.screen
+
+import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.info.InfoData.Info
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.feature.info.data.model.Licenses
+import com.weberbox.pifire.feature.info.data.repo.InfoRepo
+import com.weberbox.pifire.feature.info.presentation.contract.InfoContract
+import com.weberbox.pifire.navigation.NavGraph
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class InfoViewModel @Inject constructor(
+    private val infoRepo: InfoRepo,
+) : BaseViewModel<InfoContract.Event, InfoContract.State, InfoContract.Effect>() {
+
+    init {
+        getInitialData()
+    }
+
+    override fun setInitialState() = InfoContract.State(
+        info = Info(),
+        licenseData = Licenses(),
+        isInfoLoading = true,
+        isLicencesLoading = true,
+        isRefreshing = false,
+        isDataError = false,
+    )
+
+    override fun handleEvents(event: InfoContract.Event) {
+        when (event) {
+            is InfoContract.Event.BackButtonClicked ->
+                setEffect { InfoContract.Effect.Navigation.Back }
+
+            is InfoContract.Event.Refresh -> getInfoData(true)
+
+            is InfoContract.Event.PipModulesViewAll ->
+                setEffect {
+                    InfoContract.Effect.Navigation.NavRoute(
+                        route = NavGraph.InfoDest.PipModulesDetails,
+                    )
+                }
+        }
+    }
+
+    private fun getInitialData() {
+        viewModelScope.launch {
+            getInfoData(false)
+            getLicences()
+        }
+    }
+
+    private fun getInfoData(forced: Boolean) {
+        if (forced) setState { copy(isRefreshing = true) }
+        viewModelScope.launch {
+            val result = infoRepo.getInfo()
+            when (result) {
+                is Result.Error -> {
+                    if (forced) {
+                        setEffect {
+                            InfoContract.Effect.Notification(
+                                text = result.error.asUiText(),
+                                error = true,
+                            )
+                        }
+                        setState { copy(isInfoLoading = false, isRefreshing = false) }
+                    } else {
+                        getCachedData()
+                    }
+                }
+
+                is Result.Success -> {
+                    setState {
+                        copy(
+                            info = result.data,
+                            isInfoLoading = false,
+                            isRefreshing = false,
+                            isDataError = false,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun getCachedData() {
+        val result = infoRepo.getCachedData()
+        when (result) {
+            is Result.Error -> {
+                setState {
+                    copy(
+                        info = Info(),
+                        isInfoLoading = false,
+                        isLicencesLoading = false,
+                        isRefreshing = false,
+                        isDataError = true,
+                    )
+                }
+            }
+
+            is Result.Success -> {
+                setState { copy(info = result.data, isInfoLoading = false, isDataError = false) }
+                setEffect {
+                    InfoContract.Effect.Notification(
+                        text = UiText(R.string.alerter_cached_results),
+                        error = true,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun getLicences() {
+        viewModelScope.launch {
+            val result = infoRepo.getLicences()
+            when (result) {
+                is Result.Error -> {
+                    // Should never happen but set isLicencesLoading false just in case
+                    setState { copy(licenseData = Licenses(), isLicencesLoading = false) }
+                }
+
+                is Result.Success -> {
+                    setState { copy(licenseData = result.data, isLicencesLoading = false) }
+                }
+            }
+        }
+    }
+}

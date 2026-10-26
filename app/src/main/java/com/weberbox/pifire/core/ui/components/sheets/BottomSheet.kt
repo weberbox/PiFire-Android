@@ -1,0 +1,132 @@
+package com.weberbox.pifire.core.ui.components.sheets
+
+import android.content.res.Configuration
+import android.os.Build
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import com.composables.core.DragIndication
+import com.composables.core.ModalBottomSheet
+import com.composables.core.ModalBottomSheetState
+import com.composables.core.Scrim
+import com.composables.core.Sheet
+import com.composables.core.SheetDetent
+import com.composables.core.rememberModalBottomSheetState
+import com.composeunstyled.LocalModalWindow
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.size
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.fadeEnterTransition
+import com.weberbox.pifire.core.ui.util.fadeExitTransition
+
+@Composable
+fun BottomSheet(
+    modifier: Modifier = Modifier,
+    sheetState: ModalBottomSheetState,
+    contentColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    content: @Composable () -> Unit = {},
+) {
+    val windowInsets by remember { mutableStateOf(WindowInsets) }
+    ModalBottomSheet(state = sheetState) {
+        Scrim(
+            enter = fadeEnterTransition(),
+            exit = fadeExitTransition(),
+        )
+        Sheet(
+            modifier = Modifier
+                .windowInsetsPadding(windowInsets.ime)
+                .shadow(
+                    elevation = MaterialTheme.spacing.small,
+                    shape = RoundedCornerShape(
+                        topStart = MaterialTheme.spacing.mediumThree,
+                        topEnd = MaterialTheme.spacing.mediumThree,
+                    ),
+                )
+                .clip(
+                    RoundedCornerShape(
+                        topStart = MaterialTheme.spacing.mediumThree,
+                        topEnd = MaterialTheme.spacing.mediumThree,
+                    ),
+                )
+                .widthIn(max = MaterialTheme.size.maxWidth)
+                .background(contentColor),
+        ) {
+            val window = LocalModalWindow.current
+            LaunchedEffect(Unit) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    window.isNavigationBarContrastEnforced = false
+                }
+            }
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(
+                        windowInsets.navigationBars.only(
+                            WindowInsetsSides.Vertical,
+                        ),
+                    ),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                DragIndication(
+                    modifier = Modifier
+                        .padding(
+                            top = MaterialTheme.spacing.smallThree,
+                            bottom = MaterialTheme.spacing.small,
+                        )
+                        .background(
+                            MaterialTheme.colorScheme.onSurfaceVariant,
+                            RoundedCornerShape(100),
+                        )
+                        .width(MaterialTheme.size.large)
+                        .height(MaterialTheme.size.extraSmall),
+                )
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+private fun BottomSheetPreview() {
+    PiFireTheme {
+        Surface {
+            BottomSheet(
+                sheetState = rememberModalBottomSheetState(
+                    initialDetent = SheetDetent.FullyExpanded,
+                ),
+                content = {
+                    Text(text = "Sheet content")
+                },
+            )
+        }
+    }
+}

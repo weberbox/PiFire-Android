@@ -1,0 +1,5 @@
+# Formatting-only commits, skipped by `git blame` (GitHub reads this file; locally run
+# `git config blame.ignoreRevsFile .git-blame-ignore-revs` once).
+
+# Format with ktlint (spotlessApply)
+e3e1dd71f875ca58dc2a4a330fb46760b29f7780

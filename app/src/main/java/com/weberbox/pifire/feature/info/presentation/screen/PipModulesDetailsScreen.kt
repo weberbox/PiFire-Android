@@ -1,0 +1,98 @@
+package com.weberbox.pifire.feature.info.presentation.screen
+
+import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.weberbox.pifire.R
+import com.weberbox.pifire.core.common.util.withUniqueKeys
+import com.weberbox.pifire.core.ui.components.DataError
+import com.weberbox.pifire.core.ui.components.DetailsScreen
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.feature.info.presentation.components.PipItem
+import com.weberbox.pifire.feature.info.presentation.components.buildModules
+import com.weberbox.pifire.feature.info.presentation.contract.ModulesContract
+import com.weberbox.pifire.navigation.popBackStackFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
+
+@Composable
+fun PipModulesDetailsScreenDestination(
+    navController: NavHostController,
+    viewModel: PipModulesDetailViewModel = hiltViewModel(),
+) {
+    val sourceEntry = rememberSourceEntry()
+    PipModulesDetailsScreenContent(
+        state = viewModel.viewState.value,
+        onNavigationRequested = { navigationEffect ->
+            when (navigationEffect) {
+                is ModulesContract.Effect.Navigation.Back ->
+                    navController.popBackStackFrom(from = sourceEntry)
+            }
+        },
+    )
+}
+
+@Composable
+private fun PipModulesDetailsScreenContent(
+    state: ModulesContract.State,
+    onNavigationRequested: (ModulesContract.Effect.Navigation) -> Unit,
+) {
+    AnimatedContent(
+        targetState = state,
+        contentKey = { it.isInitialLoading or it.isDataError },
+    ) { state ->
+        when {
+            state.isInitialLoading -> InitialLoadingProgress()
+
+            state.isDataError -> DataError {
+                onNavigationRequested(ModulesContract.Effect.Navigation.Back)
+            }
+
+            else -> {
+                DetailsScreen(
+                    title = stringResource(R.string.info_pip_modules),
+                    onNavigate = {
+                        onNavigationRequested(ModulesContract.Effect.Navigation.Back)
+                    },
+                ) {
+                    items(items = state.pipModules.withUniqueKeys { it.name }, key = { it.key }) { (_, module) ->
+                        PipItem(
+                            modifier = Modifier.padding(bottom = MaterialTheme.spacing.smallOne),
+                            module = module,
+                            maxLines = 2,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+private fun PipModulesDetailsScreenPreview() {
+    PiFireTheme {
+        Surface {
+            PipModulesDetailsScreenContent(
+                state = ModulesContract.State(
+                    pipModules = buildModules(),
+                    isInitialLoading = false,
+                    isRefreshing = false,
+                    isDataError = false,
+                ),
+                onNavigationRequested = {},
+            )
+        }
+    }
+}

@@ -8,9 +8,6 @@ object AppConfig {
     val DEBUG: Boolean
         get() = BuildConfig.DEBUG
 
-    val IS_DEV_BUILD: Boolean
-        get() = BuildConfig.FLAVOR == "dev"
-
     val IS_PLAY_BUILD: Boolean
         get() = BuildConfig.FLAVOR == "playstore"
 
@@ -22,6 +19,7 @@ object AppConfig {
     const val INFO_DATA_NAME = "info_data"
     const val DASH_DATA_NAME = "dash_data"
     const val HEADERS_DATA_NAME = "headers_data"
+    const val PUSH_REGISTRATION_DATA_NAME = "push_registration_data"
 
     // Pellet Warning
     const val MEDIUM_PELLET_WARNING: Int = 50

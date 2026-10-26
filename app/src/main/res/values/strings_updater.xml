@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="inapp_update_available_title">Update Available</string>
-    <string name="inapp_update_available_message_flexible">A new app version is available, please check the release notes as it may or may not support your current PiFire version</string>
-    <string name="inapp_update_available_message_immediate">A critical update is available and is required for continued use. Please update ASAP</string>
-    <string name="inapp_update_checking">Checking for App Updates.</string>
-    <string name="inapp_update_downloading">Update is currently downloading.</string>
-    <string name="inapp_update_downloaded">App update has finished downloading</string>
-    <string name="inapp_update_current">App is currently up to date!</string>
-    <string name="inapp_update_check_failed">Checking for Updates Failed. Please try again later.</string>
-    <string name="inapp_update_complete">App update completed</string>
-    <string name="inapp_update_canceled">App update canceled</string>
-    <string name="inapp_update_failed">App update failed!</string>
+    <string name="update_available_title">Update Available</string>
+    <string name="update_available_message">A new app version is available. Please check the release notes, as it may or may not support your current PiFire version.</string>
+    <string name="update_required_title">Update Required</string>
+    <string name="update_required_message">A critical update is available and is required to keep using the app.</string>
+    <string name="update_downloading_title">Downloading Update</string>
+    <string name="update_ready_title">Update Ready</string>
+    <string name="update_ready_message">The update has finished downloading. Restart the app to install it.</string>
+    <string name="update_failed_title">Update Failed</string>
+    <string name="update_failed_message">The update could not be installed. Please try again.</string>
+    <string name="update_downloading">Downloading…</string>
+    <string name="update_downloading_percent">Downloading… %1$d%%</string>
+    <string name="update_installing">Installing…</string>
+    <string name="update_download_size">Download size: %1$s</string>
+    <string name="update_github_hint">The new version is downloaded from the GitHub releases page.</string>
+    <string name="update_play_not_ready">Google Play does not offer this update to your device yet. Please try again later or check the Play Store.</string>
+    <string name="update_now">Update Now</string>
+    <string name="update_restart">Restart</string>
+    <string name="update_try_again">Try Again</string>
+    <string name="update_later">Later</string>
+    <string name="update_hide">Hide</string>
+    <string name="update_open_play_store">Open Play Store</string>
+    <string name="update_check_again">Check Again</string>
+    <string name="update_no_browser">No app found to open the update link</string>
 </resources>

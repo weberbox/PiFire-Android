@@ -1,10 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import com.weberbox.pifire.core.constants.AppConfig
-import com.weberbox.pifire.common.data.repo.RemoteConfigRepository
-import com.weberbox.pifire.common.data.repo.RemoteConfigRepositoryImpl
+import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepo
+import com.weberbox.pifire.core.remoteconfig.RemoteConfigRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,21 +16,13 @@ object RemoteConfigModule {
     @Provides
     @Singleton
     fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig {
-        return FirebaseRemoteConfig.getInstance().apply {
-            setConfigSettingsAsync(
-                FirebaseRemoteConfigSettings.Builder().apply {
-                    setFetchTimeoutInSeconds(2000)
-                    setMinimumFetchIntervalInSeconds(
-                        if (AppConfig.DEBUG) 0 else 3600
-                    )
-                }.build()
-            )
-        }
+        // Config settings are applied (and awaited) by RemoteConfigRepoImpl before each fetch
+        return FirebaseRemoteConfig.getInstance()
     }
 
     @Provides
     @Singleton
-    fun provideRemoteConfigRepository(
-        impl: RemoteConfigRepositoryImpl
-    ): RemoteConfigRepository = impl
+    fun provideRemoteConfigRepo(
+        impl: RemoteConfigRepoImpl,
+    ): RemoteConfigRepo = impl
 }

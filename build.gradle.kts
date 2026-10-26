@@ -19,9 +19,19 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.android.ksp) apply false
     alias(libs.plugins.android.dagger.hilt) apply false
+    alias(libs.plugins.spotless)
 }
 
-tasks.register("clean", Delete::class) {
-    description = "Cleans the build directory"
-    delete(rootProject.layout.buildDirectory)
+// Formatting: `./gradlew spotlessCheck` / `spotlessApply`. ktlint reads its code style and rules from the root
+// .editorconfig, shared with Android Studio. The Gradle daemon caches it: run `./gradlew --stop` after editing it.
+spotless {
+    kotlin {
+        target("app/src/**/*.kt")
+        targetExclude("**/build/**")
+        ktlint(libs.versions.ktlint.get())
+    }
+    kotlinGradle {
+        target("*.gradle.kts", "app/*.gradle.kts")
+        ktlint(libs.versions.ktlint.get())
+    }
 }

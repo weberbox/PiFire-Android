@@ -1,0 +1,613 @@
+package com.weberbox.pifire.feature.dashboard.presentation.screen
+
+import android.app.Activity
+import android.content.res.Configuration
+import android.view.WindowManager
+import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TooltipState
+import androidx.compose.material3.rememberTooltipState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.Probe
+import com.weberbox.pifire.core.model.dashboard.DashData.Dash.RecipeStatus
+import com.weberbox.pifire.core.model.dashboard.RunningMode
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.core.ui.components.CachedDataError
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
+import com.weberbox.pifire.core.ui.components.PagerIndicator
+import com.weberbox.pifire.core.ui.components.PullToRefresh
+import com.weberbox.pifire.core.ui.components.ToolTipBox
+import com.weberbox.pifire.core.ui.icons.Icon
+import com.weberbox.pifire.core.ui.icons.filled.Smoke
+import com.weberbox.pifire.core.ui.icons.filled.Speedometer
+import com.weberbox.pifire.core.ui.modifier.isElementVisible
+import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
+import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
+import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.slideDownExitTransition
+import com.weberbox.pifire.core.ui.util.slideUpEnterTransition
+import com.weberbox.pifire.feature.dashboard.presentation.components.Action
+import com.weberbox.pifire.feature.dashboard.presentation.components.CriticalErrorCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.ElapsedCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.ErrorCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.FoodProbe
+import com.weberbox.pifire.feature.dashboard.presentation.components.GrillProbe
+import com.weberbox.pifire.feature.dashboard.presentation.components.LidDetectedCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.ModeCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.OptionCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.OutputsCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.OutputsToolbar
+import com.weberbox.pifire.feature.dashboard.presentation.components.PelletsCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.RecipeCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.RemainingCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.TimerCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.WarningCard
+import com.weberbox.pifire.feature.dashboard.presentation.components.sheets.DashBottomSheets
+import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract
+import com.weberbox.pifire.feature.dashboard.presentation.contract.DashContract.DashEvent
+import com.weberbox.pifire.feature.dashboard.presentation.model.ElapsedData
+import com.weberbox.pifire.feature.dashboard.presentation.model.TimerData
+import com.weberbox.pifire.navigation.NavGraph
+import com.weberbox.pifire.navigation.navigateFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import kotlin.math.ceil
+
+@Composable
+fun DashboardScreenDestination(
+    navController: NavHostController,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: DashboardViewModel? = null,
+) = when {
+    LocalInspectionMode.current -> {
+        DashboardScreenPreview(
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+        )
+    }
+
+    else -> {
+        DashboardScreen(
+            navController = navController,
+            contentPadding = contentPadding,
+            hazeState = hazeState,
+            viewModel = viewModel ?: hiltViewModel(),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DashboardScreen(
+    navController: NavHostController,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    viewModel: DashboardViewModel,
+) {
+    val sourceEntry = rememberSourceEntry()
+    val startToHoldSheet = rememberCustomModalBottomSheetState()
+    val tooltipState = rememberTooltipState(initialIsVisible = false, isPersistent = true)
+    var isVisibleOnScreen by remember { mutableStateOf(false) }
+    val onNavigationRequested: (DashContract.Effect.Navigation) -> Unit = { navigationEffect ->
+        when (navigationEffect) {
+            is DashContract.Effect.Navigation.NavRoute ->
+                navController.navigateFrom(
+                    from = sourceEntry,
+                    route = navigationEffect.route,
+                    popUpToRoute = navigationEffect.popUpToRoute,
+                    inclusive = navigationEffect.inclusive,
+                )
+        }
+    }
+
+    // Only notify while this pager page is on screen
+    HandleSideEffects(
+        activity = LocalActivity.current,
+        isVisibleOnScreen = isVisibleOnScreen,
+        tooltipState = tooltipState,
+        startToHoldSheet = startToHoldSheet,
+        effectFlow = viewModel.effect,
+        onNavigationRequested = onNavigationRequested,
+    )
+
+    DashboardScreenContent(
+        state = viewModel.viewState.value,
+        timerData = viewModel.timerData,
+        elapsedData = viewModel.elapsedData,
+        onEventSent = { event -> viewModel.setEvent(event) },
+        hazeState = hazeState,
+        contentPadding = contentPadding,
+        startToHoldSheet = startToHoldSheet,
+        tooltipState = tooltipState,
+        onVisibilityChanged = { isVisibleOnScreen = it },
+        onNavigationRequested = onNavigationRequested,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DashboardScreenContent(
+    state: DashContract.State,
+    timerData: StateFlow<TimerData>,
+    elapsedData: StateFlow<ElapsedData>,
+    onEventSent: (event: DashContract.Event) -> Unit,
+    hazeState: HazeState,
+    contentPadding: PaddingValues,
+    startToHoldSheet: CustomModalBottomSheetState,
+    tooltipState: TooltipState,
+    onVisibilityChanged: (Boolean) -> Unit,
+    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    val scrollState = rememberScrollState()
+    val grillSheet = rememberCustomModalBottomSheetState()
+    val foodSheet = rememberInputModalBottomSheetState<Probe>()
+    val timerSheet = rememberCustomModalBottomSheetState()
+    val modeSheet = rememberCustomModalBottomSheetState()
+    val holdPickerSheet = rememberCustomModalBottomSheetState()
+    var outputsToolbar by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(state.holdTempToolTip) {
+        if (state.holdTempToolTip) {
+            tooltipState.show()
+        }
+    }
+
+    DisposableEffect(state.keepScreenOn) {
+        val window = activity?.window
+        if (state.keepScreenOn) {
+            window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+        onDispose {
+            window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+
+    @Suppress("NAME_SHADOWING")
+    AnimatedContent(
+        modifier = Modifier.isElementVisible(onVisibilityChanged),
+        targetState = state,
+        contentKey = { it.isInitialLoading or it.isDataError },
+    ) { state ->
+        when {
+            state.isInitialLoading -> InitialLoadingProgress()
+
+            state.isDataError -> CachedDataError { onEventSent(DashContract.Event.Refresh) }
+
+            else -> {
+                PullToRefresh(
+                    isRefreshing = state.isRefreshing,
+                    onRefresh = { onEventSent(DashContract.Event.Refresh) },
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.smallOne),
+                        modifier = Modifier
+                            .hazeSource(state = hazeState)
+                            .verticalScroll(scrollState)
+                            .padding(contentPadding)
+                            .padding(vertical = MaterialTheme.spacing.smallOne)
+                            .fillMaxSize(),
+                    ) {
+                        val totalProbes = state.dash.foodProbes.size
+                        val probesPerPage = 2
+                        val numPages = ceil(totalProbes.toDouble() / probesPerPage).toInt()
+                        val pagerState = rememberPagerState(pageCount = { numPages })
+                        CriticalErrorCard(
+                            criticalError = state.dash.criticalError,
+                        )
+                        ErrorCard(
+                            errors = state.dash.errors,
+                            onClick = {
+                                if (state.isConnected) {
+                                    onEventSent(DashContract.Event.RestartControl)
+                                }
+                            },
+                        )
+                        WarningCard(
+                            warnings = state.dash.warnings,
+                        )
+                        LidDetectedCard(
+                            lidOpenDetected = state.dash.lidOpenDetected,
+                            lidOpenEndTime = state.dash.lidOpenEndTime,
+                            onClick = {
+                                if (state.isConnected) {
+                                    onEventSent(DashContract.Event.ToggleLidDetect)
+                                }
+                            },
+                        )
+                        RemainingCard(
+                            currentMode = state.dash.currentMode,
+                            modeStartTime = state.dash.modeStartTime,
+                            startDuration = state.dash.startDuration,
+                            shutdownDuration = state.dash.shutdownDuration,
+                        )
+                        RecipeCard(
+                            recipeStatus = state.dash.recipeStatus,
+                            onClick = { filename, step ->
+                                onNavigationRequested(
+                                    DashContract.Effect.Navigation.NavRoute(
+                                        NavGraph.RecipesDest.Details(filename, step),
+                                    ),
+                                )
+                            },
+                        )
+                        ToolTipBox(
+                            title = stringResource(R.string.dash_hold_temp_tip_title),
+                            details = stringResource(R.string.dash_hold_temp_tip_details),
+                            buttonText = stringResource(R.string.dismiss),
+                            spacing = -MaterialTheme.spacing.mediumOne,
+                            onClick = {
+                                onEventSent(DashContract.Event.HideHoldTempTip)
+                            },
+                            tooltipState = tooltipState,
+                        ) {
+                            GrillProbe(
+                                probe = state.dash.primaryProbe,
+                                onClick = { if (state.isConnected) grillSheet.open() },
+                                onLongClick = {
+                                    if (state.dash.currentMode == RunningMode.Hold.name &&
+                                        state.isConnected
+                                    ) {
+                                        holdPickerSheet.open()
+                                    }
+                                },
+                            )
+                        }
+                        HorizontalPager(
+                            state = pagerState,
+                            pageSpacing = MaterialTheme.spacing.smallOne,
+                            contentPadding = PaddingValues(
+                                horizontal = MaterialTheme.spacing.smallOne,
+                            ),
+                            beyondViewportPageCount = 1,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { page ->
+                            val startIndex = page * probesPerPage
+                            val endIndex = minOf(startIndex + probesPerPage, totalProbes)
+                            val foodProbes = state.dash.foodProbes.subList(startIndex, endIndex)
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    MaterialTheme.spacing.smallOne,
+                                ),
+                            ) {
+                                foodProbes.forEach { item ->
+                                    FoodProbe(
+                                        probe = item,
+                                        tempUnits = state.dash.tempUnits,
+                                        modifier = Modifier.weight(1f),
+                                        onClick = {
+                                            if (state.isConnected) foodSheet.open(item)
+                                        },
+                                    )
+                                }
+                            }
+                        }
+                        Row(
+                            Modifier
+                                .wrapContentHeight()
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            PagerIndicator(
+                                numberOfPages = pagerState.pageCount,
+                                selectedPage = pagerState.currentPage,
+                                animationDurationInMillis = 500,
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.smallOne)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                MaterialTheme.spacing.smallOne,
+                            ),
+                        ) {
+                            with(state.dash.timer) {
+                                TickingTimerCard(
+                                    timerData = timerData,
+                                    keepWarm = keepWarm,
+                                    shutdown = shutdown,
+                                    paused = timerPaused,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        if (state.isConnected) timerSheet.open()
+                                    },
+                                )
+                            }
+                            PelletsCard(
+                                level = state.dash.hopperLevel,
+                                hasDistanceSensor = state.dash.hasDistanceSensor,
+                                modifier = Modifier.weight(1f),
+                                onClick = {
+                                    if (state.isConnected) {
+                                        onEventSent(DashContract.Event.CheckHopperLevel)
+                                    }
+                                },
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.smallOne)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                MaterialTheme.spacing.smallOne,
+                            ),
+                        ) {
+                            TickingElapsedCard(
+                                elapsedData = elapsedData,
+                                modifier = Modifier.weight(1f),
+                            )
+                            with(state.dash.outputs) {
+                                OutputsCard(
+                                    fanOutput = fan,
+                                    augerOutput = auger,
+                                    igniterOutput = igniter,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        if (state.isConnected &&
+                                            state.dash.allowManualOutputs &&
+                                            state.dash.currentMode != RunningMode.Stop.name
+                                        ) {
+                                            outputsToolbar = !outputsToolbar
+                                        }
+                                    },
+                                )
+                            }
+                        }
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = MaterialTheme.spacing.smallOne)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            OptionCard(
+                                title = stringResource(R.string.dash_smoke_plus),
+                                icon = Icon.Filled.Smoke,
+                                enabled = state.dash.smokePlus,
+                                modifier = Modifier.weight(1f),
+                                onClick = {
+                                    if (state.isConnected) {
+                                        onEventSent(DashContract.Event.SmokePlus)
+                                    }
+                                },
+                            )
+                            if (state.dash.hasDcFan) {
+                                OptionCard(
+                                    title = stringResource(R.string.dash_pwm_control),
+                                    icon = Icon.Filled.Speedometer,
+                                    enabled = state.dash.pwmControl,
+                                    modifier = Modifier.weight(1f),
+                                    onClick = {
+                                        if (state.isConnected) {
+                                            onEventSent(DashContract.Event.PWMControl)
+                                        }
+                                    },
+                                )
+                            }
+                            ModeCard(
+                                modifier = Modifier.weight(1f),
+                                mode = state.dash.currentMode,
+                                recipePaused = state.dash.recipeStatus.paused,
+                                onClick = {
+                                    if (state.isConnected) modeSheet.open()
+                                },
+                            )
+                        }
+                    }
+                    AnimatedVisibility(
+                        visible = outputsToolbar,
+                        enter = slideUpEnterTransition(),
+                        exit = slideDownExitTransition(),
+                    ) {
+                        OutputsToolbar(
+                            contentPadding = contentPadding,
+                            onActionClick = { action ->
+                                if (state.isConnected) {
+                                    onEventSent(
+                                        DashContract.Event.SendEvent(
+                                            when (action) {
+                                                Action.Fan -> DashEvent.ToggleFan(
+                                                    !state.dash.outputs.fan,
+                                                )
+
+                                                Action.Auger -> DashEvent.ToggleAuger(
+                                                    !state.dash.outputs.auger,
+                                                )
+
+                                                Action.Igniter -> DashEvent.ToggleIgniter(
+                                                    !state.dash.outputs.igniter,
+                                                )
+                                            },
+                                        ),
+                                    )
+                                }
+                            },
+                            onClose = { outputsToolbar = false },
+                        )
+                    }
+                    LinearLoadingIndicator(
+                        isLoading = state.isLoading,
+                        contentPadding = contentPadding,
+                    )
+                }
+                DashBottomSheets(
+                    state = state,
+                    grillSheet = grillSheet,
+                    foodSheet = foodSheet,
+                    timerSheet = timerSheet,
+                    modeSheet = modeSheet,
+                    holdPickerSheet = holdPickerSheet,
+                    startToHoldSheet = startToHoldSheet,
+                    onEventSent = onEventSent,
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HandleSideEffects(
+    activity: Activity?,
+    isVisibleOnScreen: Boolean,
+    tooltipState: TooltipState,
+    startToHoldSheet: CustomModalBottomSheetState,
+    effectFlow: Flow<DashContract.Effect>?,
+    onNavigationRequested: (DashContract.Effect.Navigation) -> Unit,
+) {
+    LaunchedEffect(SIDE_EFFECTS_KEY, isVisibleOnScreen) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is DashContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is DashContract.Effect.Notification -> {
+                    if (isVisibleOnScreen) {
+                        activity?.showAlerter(
+                            message = effect.text,
+                            isError = effect.error,
+                        )
+                    }
+                }
+
+                is DashContract.Effect.HideHoldTempToolTip -> {
+                    tooltipState.dismiss()
+                }
+
+                is DashContract.Effect.ShowStartupHoldDialog -> {
+                    startToHoldSheet.open()
+                }
+            }
+        }?.collect()
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+internal fun DashboardScreenPreview(
+    contentPadding: PaddingValues = PaddingValues(),
+    hazeState: HazeState = rememberHazeState(),
+) {
+    PiFireTheme {
+        Surface {
+            DashboardScreenContent(
+                state = DashContract.State(
+                    dash = buildDash(),
+                    incrementTemps = true,
+                    keepScreenOn = false,
+                    isInitialLoading = false,
+                    isLoading = true,
+                    isDataError = false,
+                    isRefreshing = false,
+                    isConnected = true,
+                    holdTempToolTip = false,
+                ),
+                timerData = MutableStateFlow(TimerData()),
+                elapsedData = MutableStateFlow(ElapsedData()),
+                onEventSent = {},
+                hazeState = hazeState,
+                contentPadding = contentPadding,
+                startToHoldSheet = rememberCustomModalBottomSheetState(),
+                tooltipState = rememberTooltipState(),
+                onVisibilityChanged = {},
+                onNavigationRequested = {},
+            )
+        }
+    }
+}
+
+// Collected here, not in the screen, so each tick recomposes only this card
+@Composable
+private fun TickingTimerCard(
+    timerData: StateFlow<TimerData>,
+    keepWarm: Boolean,
+    shutdown: Boolean,
+    paused: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    val timer by timerData.collectAsStateWithLifecycle()
+    TimerCard(
+        time = timer.remainingTime,
+        keepWarm = keepWarm,
+        shutdown = shutdown,
+        paused = paused,
+        modifier = modifier,
+        onClick = onClick,
+    )
+}
+
+@Composable
+private fun TickingElapsedCard(
+    elapsedData: StateFlow<ElapsedData>,
+    modifier: Modifier = Modifier,
+) {
+    val elapsed by elapsedData.collectAsStateWithLifecycle()
+    ElapsedCard(
+        time = elapsed.elapsedTime,
+        modifier = modifier,
+    )
+}
+
+private fun buildDash(): Dash = Dash(
+    hasDcFan = true,
+    currentMode = RunningMode.Startup.name,
+    recipeStatus = RecipeStatus(
+        recipeMode = false,
+    ),
+)

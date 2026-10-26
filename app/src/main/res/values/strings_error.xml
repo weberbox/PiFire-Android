@@ -22,9 +22,15 @@
     <string name="data_error_offline">No connection to PiFire your request could not be completed. Please try again</string>
     <string name="data_error_socket_error">Could not make socket connection to PiFire. Please check your connection</string>
     <string name="data_error_socket_timeout">Request to PiFire has timed out. Please check your connection</string>
-    <string name="data_error_http_auth_error">PiFire server requires authentications</string>
+    <string name="data_error_http_auth_error">PiFire server requires authentication</string>
+    <string name="data_error_unknown_host">Could not find the PiFire server. Check the address and try again</string>
+    <string name="data_error_unreachable_host">Could not reach the PiFire server. Check the address and port, and that the server is running</string>
     <string name="data_error_http_certificate_error">PiFire is using an untrusted certificate</string>
     <string name="data_error_http_response_null">PiFire response was null. Please try again</string>
     <string name="data_error_http_unsuccessful">PiFire responded with error code %1$s - %2$s</string>
+    <string name="data_error_push_relay">Push relay error: %1$s</string>
+    <string name="data_error_push_relay_http">Push relay responded with error code %1$s - %2$s</string>
+    <string name="data_error_push_token">Couldn\'t get a push token from Google Play services</string>
+    <string name="data_error_push_not_configured">This build has no push relay configured</string>
     <string name="data_error_http_on_failure">The request failed with a cancellation, a connectivity problem or timeout. Please verify your smoker is online and try again</string>
 </resources>

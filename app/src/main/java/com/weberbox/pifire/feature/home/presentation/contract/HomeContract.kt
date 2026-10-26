@@ -1,0 +1,41 @@
+package com.weberbox.pifire.feature.home.presentation.contract
+
+import android.content.Intent
+import com.weberbox.pifire.core.ui.base.ViewEvent
+import com.weberbox.pifire.core.ui.base.ViewSideEffect
+import com.weberbox.pifire.core.ui.base.ViewState
+import com.weberbox.pifire.core.ui.util.UiText
+
+class HomeContract {
+
+    sealed class Event : ViewEvent {
+        data object SignOut : Event()
+        data object TriggerLidOpen : Event()
+    }
+
+    data class State(
+        val showBottomBar: Boolean,
+        val isConnected: Boolean,
+        val isHoldMode: Boolean,
+        val lidOpenDetectEnabled: Boolean,
+        val biometricSettingsPrompt: Boolean,
+        val grillName: String,
+        val isInitialLoading: Boolean,
+        val isDataError: Boolean,
+    ) : ViewState
+
+    sealed class Effect : ViewSideEffect {
+        data class Notification(val text: UiText, val error: Boolean) : Effect()
+        data class OpenUpdateIntent(val intent: Intent) : Effect()
+
+        sealed class Navigation : Effect() {
+            data object Back : Navigation()
+            data object Changelog : Navigation()
+            data class NavRoute(
+                val route: Any,
+                val popUpToRoute: Any? = null,
+                val inclusive: Boolean = true,
+            ) : Navigation()
+        }
+    }
+}

@@ -45,4 +45,6 @@
 
     <string name="dash_hold_temp_tip_title">Set Grill Temp</string>
     <string name="dash_hold_temp_tip_details">To change the Hold temperature long press on the Grill Probe or select Hold mode again</string>
+    <string name="dash_probe_default_name">Probe</string>
+    <string name="dash_grill_default_name">Grill</string>
 </resources>

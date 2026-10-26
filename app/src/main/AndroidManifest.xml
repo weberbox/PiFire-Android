@@ -22,7 +22,7 @@
         android:theme="@style/Theme.PiFire"
         android:supportsRtl="false">
         <activity
-            android:name=".MainActivity"
+            android:name=".application.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.PiFire.Starting">
@@ -32,15 +32,20 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".core.notification.PushMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.onesignal.NotificationServiceExtension"
-            android:value="com.weberbox.pifire.core.service.NotificationServiceExtension" />
+            android:value="com.weberbox.pifire.core.notification.NotificationServiceExtension" />
         <meta-data
             android:name="io.sentry.auto-init"
             android:value="false" />
-        <meta-data
-            android:name="io.sentry.environment"
-            android:value="${environment}" />
 
     </application>
 </manifest>

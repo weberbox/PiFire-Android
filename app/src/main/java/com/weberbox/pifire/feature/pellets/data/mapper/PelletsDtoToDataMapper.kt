@@ -1,0 +1,60 @@
+package com.weberbox.pifire.feature.pellets.data.mapper
+
+import com.weberbox.pifire.core.common.model.Mapper
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletLog
+import com.weberbox.pifire.core.model.pellets.PelletsData.Pellets.PelletProfile
+import com.weberbox.pifire.core.ui.util.formatDateString
+import com.weberbox.pifire.core.ui.util.formatDateTimeString
+import com.weberbox.pifire.feature.pellets.data.model.PelletsDto
+
+object PelletsDtoToDataMapper : Mapper<PelletsDto, Pellets> {
+    private val defaults = Pellets()
+
+    override fun map(from: PelletsDto) = Pellets(
+        uuid = from.uuid.orEmpty(),
+        dateLoaded = from.pellets?.current?.dateLoaded?.let {
+            formatDateTimeString(
+                input = it,
+                inputFormat = "yyyy-MM-dd HH:mm:ss",
+            )
+        } ?: defaults.dateLoaded,
+        estUsageGrams = from.pellets?.current?.estUsage?.takeIf { it.isFinite() } ?: defaults.estUsageGrams,
+        currentPelletId = from.pellets?.current?.pelletId ?: defaults.currentPelletId,
+        currentBrand = from.pellets?.profiles?.get(from.pellets.current?.pelletId)?.brand
+            ?: defaults.currentBrand,
+        currentWood = from.pellets?.profiles?.get(from.pellets.current?.pelletId)?.wood
+            ?: defaults.currentWood,
+        currentComments = from.pellets?.profiles?.get(from.pellets.current?.pelletId)?.comments
+            ?: defaults.currentComments,
+        currentRating = from.pellets?.profiles?.get(from.pellets.current?.pelletId)?.rating
+            ?: defaults.currentRating,
+        logsList = from.pellets?.log?.map { (date, id) ->
+            PelletLog(
+                pelletID = id,
+                // A log can outlive its deleted profile
+                pelletName = from.pellets.profiles?.get(id)
+                    ?.let { listOfNotNull(it.brand, it.wood).joinToString(separator = " ") }
+                    .orEmpty(),
+                pelletRating = from.pellets.profiles?.get(id)?.rating ?: defaults.currentRating,
+                pelletDate = formatDateString(
+                    input = date,
+                    inputFormat = "yyyy-MM-dd HH:mm:ss",
+                ),
+                logDate = date,
+            )
+        } ?: emptyList(),
+        brandsList = from.pellets?.brands ?: defaults.brandsList,
+        woodsList = from.pellets?.woods ?: defaults.woodsList,
+        profilesList = from.pellets?.profiles?.map { (id, profile) ->
+            PelletProfile(
+                brand = profile.brand ?: defaults.currentBrand,
+                wood = profile.wood ?: defaults.currentWood,
+                rating = profile.rating ?: defaults.currentRating,
+                comments = profile.comments ?: defaults.currentComments,
+                id = id,
+            )
+        } ?: emptyList(),
+        hopperLevel = from.pellets?.current?.hopperLevel ?: defaults.hopperLevel,
+    )
+}

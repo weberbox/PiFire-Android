@@ -1,9 +1,3 @@
 /build
-src/dev/google-services.json
-src/playstore/google-services.json
-src/github/google-services.json
-src/github/
-src/playstore/
-src/dev/
 src/debug/
 *.log

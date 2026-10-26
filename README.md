@@ -9,9 +9,9 @@ control my smoker using the awesome PiFire project, so I created this.
 **Note:** I am not a developer by trade and this is just a hobby for me. While I try my best to keep the app stable you may find bugs or experience a crash. If you see something in the code that could be done better please let me know, I am always willing to learn more.
 
 ## Screenshots
-| Dashboard                                    | Recipes                                  | Pellet Manager                                        | Drawer                                 |
-|----------------------------------------------|------------------------------------------|-------------------------------------------------------|----------------------------------------|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Recipes](docs/screenshots/recipes.png) | ![Pellet Manager](docs/screenshots/pelletmanager.png) | ![Drawer](docs/screenshots/drawer.png) |
+| Dashboard                                                | Recipes                                                | Pellet Manager                                               | Drawer                                                |
+|----------------------------------------------------------|--------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------------------|
+| <img src="docs/screenshots/dashboard.png" width="200" /> | <img src="docs/screenshots/recipes.png" width="200" /> | <img src="docs/screenshots/pelletmanager.png" width="200" /> | <img src="docs/screenshots/drawer.png" width="200" /> | 
 
 ### Warnings
 

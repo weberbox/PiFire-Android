@@ -1,0 +1,317 @@
+package com.weberbox.pifire.feature.info.presentation.screen
+
+import android.content.res.Configuration
+import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.weberbox.pifire.R
+import com.weberbox.pifire.core.model.info.GPIODeviceData
+import com.weberbox.pifire.core.model.info.GPIOInOutData
+import com.weberbox.pifire.core.model.info.InfoData.Info
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.core.ui.components.CachedDataError
+import com.weberbox.pifire.core.ui.components.HazeAppBar
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.feature.info.data.model.Licenses
+import com.weberbox.pifire.feature.info.data.model.Licenses.License
+import com.weberbox.pifire.feature.info.presentation.components.InfoList
+import com.weberbox.pifire.feature.info.presentation.contract.InfoContract
+import com.weberbox.pifire.navigation.NavGraph.InfoDest.LicenseDetails
+import com.weberbox.pifire.navigation.navigateFrom
+import com.weberbox.pifire.navigation.popBackStackFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+
+@Composable
+fun InfoScreenDestination(
+    navController: NavHostController,
+    viewModel: InfoViewModel = hiltViewModel(),
+) {
+    val sourceEntry = rememberSourceEntry()
+    InfoScreen(
+        state = viewModel.viewState.value,
+        effectFlow = viewModel.effect,
+        onEventSent = { event -> viewModel.setEvent(event) },
+        onNavigationRequested = { navigationEffect ->
+            when (navigationEffect) {
+                is InfoContract.Effect.Navigation.Back ->
+                    navController.popBackStackFrom(from = sourceEntry)
+
+                is InfoContract.Effect.Navigation.LicenseDetails ->
+                    navController.navigateFrom(
+                        from = sourceEntry,
+                        route = LicenseDetails(
+                            licenses = viewModel.viewState.value.licenseData,
+                        ),
+                    )
+
+                is InfoContract.Effect.Navigation.NavRoute ->
+                    navController.navigateFrom(
+                        from = sourceEntry,
+                        route = navigationEffect.route,
+                        popUpToRoute = navigationEffect.popUpToRoute,
+                        inclusive = navigationEffect.inclusive,
+                    )
+            }
+        },
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun InfoScreen(
+    state: InfoContract.State,
+    effectFlow: Flow<InfoContract.Effect>?,
+    onEventSent: (event: InfoContract.Event) -> Unit,
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
+) {
+    val windowInsets = WindowInsets.safeDrawing
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val hazeState = rememberHazeState()
+
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            HazeAppBar(
+                title = {
+                    Text(
+                        fontWeight = FontWeight.Bold,
+                        text = stringResource(R.string.nav_info),
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+                hazeState = hazeState,
+                onNavigate = { onNavigationRequested(InfoContract.Effect.Navigation.Back) },
+            )
+        },
+        containerColor = Color.Transparent,
+        contentColor = contentColorFor(MaterialTheme.colorScheme.background),
+        contentWindowInsets = windowInsets,
+    ) { contentPadding ->
+        InfoScreenContent(
+            state = state,
+            onEventSent = onEventSent,
+            onNavigationRequested = onNavigationRequested,
+            hazeState = hazeState,
+            contentPadding = contentPadding,
+        )
+    }
+}
+
+@Composable
+private fun InfoScreenContent(
+    state: InfoContract.State,
+    onEventSent: (event: InfoContract.Event) -> Unit,
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
+    hazeState: HazeState,
+    contentPadding: PaddingValues,
+) {
+    @Suppress("NAME_SHADOWING")
+    AnimatedContent(
+        targetState = state,
+        contentKey = { it.isInfoLoading or it.isDataError or it.isLicencesLoading },
+    ) { state ->
+        when {
+            state.isInfoLoading || state.isLicencesLoading -> InitialLoadingProgress()
+
+            state.isDataError -> CachedDataError { onEventSent(InfoContract.Event.Refresh) }
+
+            else -> {
+                InfoList(
+                    state = state,
+                    onEventSent = onEventSent,
+                    onNavigationRequested = onNavigationRequested,
+                    hazeState = hazeState,
+                    contentPadding = contentPadding,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<InfoContract.Effect>?,
+    onNavigationRequested: (InfoContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is InfoContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is InfoContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error,
+                    )
+                }
+            }
+        }?.collect()
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+private fun InfoScreenPreview() {
+    PiFireTheme {
+        Surface {
+            InfoScreen(
+                state = InfoContract.State(
+                    info = buildInfo(),
+                    licenseData = buildLicenseData(),
+                    isInfoLoading = false,
+                    isLicencesLoading = false,
+                    isRefreshing = false,
+                    isDataError = false,
+
+                ),
+                effectFlow = null,
+                onEventSent = {},
+                onNavigationRequested = {},
+            )
+        }
+    }
+}
+
+internal fun buildInfo(): Info = Info(
+    platformInfo = Info.PlatformInfo(
+        systemModel = "Raspberry Pi 4",
+        cpuModel = "ARM Cortex-A72",
+        cpuHardware = "BCM2711",
+        cpuCores = "4",
+        cpuFrequency = "1.5GHz",
+        totalRamBytes = 4L * 1024 * 1024 * 1024,
+        availableRamBytes = 2L * 1024 * 1024 * 1024,
+    ),
+    osInfo = Info.OsInfo(
+        prettyName = "Ubuntu 20.04.3 LTS",
+        version = "20.04",
+        codeName = "Focal Fossa",
+        architecture = "x86_64",
+    ),
+    networkMap = mapOf(
+        "eth0" to Info.NetworkInfo(
+            ipAddress = "192.168.1.2",
+            macAddress = "00:00:00:00:00",
+        ),
+    ),
+    wifiQualityValue = "60",
+    wifiQualityMax = "70",
+    wifiQualityPercent = 80.0,
+    cpuInfo = "Intel(R) Xeon(R) CPU-D-1520 @ 2.20GHz",
+    cpuTemp = "40",
+    networkInfo = "Ethernet",
+    outPins = listOf(
+        GPIOInOutData(
+            name = "fan",
+            pin = "15",
+        ),
+        GPIOInOutData(
+            name = "dc_fan",
+            pin = "26",
+        ),
+        GPIOInOutData(
+            name = "pwm",
+            pin = "13",
+        ),
+        GPIOInOutData(
+            name = "igniter",
+            pin = "18",
+        ),
+    ),
+    inPins = listOf(
+        GPIOInOutData(
+            name = "selector",
+            pin = "17",
+        ),
+        GPIOInOutData(
+            name = "shutdown",
+            pin = "",
+        ),
+    ),
+    devPins = listOf(
+        GPIODeviceData(
+            name = "Input",
+            function = "enter_sw",
+            pin = "21",
+        ),
+        GPIODeviceData(
+            name = "",
+            function = "up_clk",
+            pin = "16",
+        ),
+    ),
+    platform = "Prototype",
+    display = "Prototype",
+    distance = "Prototype",
+    uptime = "3 Days 24 Hours",
+    serverVersion = "1.9.0",
+    serverBuild = "23",
+    appVersion = "3.0.0",
+    appVersionCode = "300000",
+    appFlavor = "Playstore",
+    appBuildType = "Debug",
+    appBuildDate = "04/21/2025",
+    appGitRev = "147",
+    appGitBranch = "development",
+)
+
+fun buildLicenseData(): Licenses = Licenses(
+    listOf(
+        License(
+            project = "PiFire Android",
+            license = "https://github.com/weberbox/PiFire-Android/blob/master/LICENSE",
+            title = "P",
+            color = "#32FF4731",
+        ),
+        License(
+            project = "Sentry",
+            license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
+            title = "S",
+            color = "#32004CFA",
+        ),
+        License(
+            project = "Sentry",
+            license = "https://github.com/getsentry/sentry-java/blob/main/LICENSE",
+            title = "T",
+            color = "#64666666",
+        ),
+    ),
+)

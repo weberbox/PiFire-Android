@@ -1,8 +1,8 @@
 package com.weberbox.pifire.core.di
 
 import android.content.Context
-import com.weberbox.pifire.core.util.OneSignalManager
-import com.weberbox.pifire.settings.data.repo.SettingsRepo
+import com.weberbox.pifire.core.notification.OneSignalManager
+import com.weberbox.pifire.core.repo.SettingsRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +19,8 @@ object OneSignalModule {
     fun provideOneSignalManager(
         @ApplicationContext appContext: Context,
         settingsRepo: SettingsRepo,
-    ): OneSignalManager {
-        return OneSignalManager(
-            appContext = appContext,
-            settingsRepo = settingsRepo
-        )
-    }
-
+    ): OneSignalManager = OneSignalManager(
+        appContext = appContext,
+        settingsRepo = settingsRepo,
+    )
 }

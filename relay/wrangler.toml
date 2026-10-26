@@ -1,0 +1,26 @@
+# The KV namespace id stays out of the repo: `npm run deploy` fills it in from deploy.local.json
+# (see README.md). Local dev and tests use the placeholder.
+name = "pifire-push-relay"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "PUSH_KEYS"
+id = "__PUSH_KEYS_NAMESPACE_ID__"
+
+[[ratelimits]]
+name = "SEND_LIMITER"
+namespace_id = "1001"
+  [ratelimits.simple]
+  limit = 20
+  period = 60
+
+[[ratelimits]]
+name = "REGISTER_LIMITER"
+namespace_id = "1002"
+  [ratelimits.simple]
+  limit = 3
+  period = 60

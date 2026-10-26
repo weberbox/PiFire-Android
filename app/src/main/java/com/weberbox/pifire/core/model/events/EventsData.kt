@@ -1,0 +1,26 @@
+package com.weberbox.pifire.core.model.events
+
+import androidx.compose.runtime.Immutable
+import com.weberbox.pifire.core.common.model.Uuid
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class EventsData(
+    val eventsMap: Map<Uuid, Events> = emptyMap(),
+) {
+    @Immutable
+    @Serializable
+    data class Events(
+        val uuid: String = "",
+        val events: List<Event> = emptyList(),
+    ) {
+        @Serializable
+        class Event(
+            val id: String = "",
+            val date: String = "",
+            val time: String = "",
+            val message: String = "",
+            val type: EventType = EventType.Info,
+        )
+    }
+}

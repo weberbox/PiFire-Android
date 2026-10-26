@@ -19,4 +19,7 @@
     <string name="settings_pwm_temp_range_note_range">Note: Enter a value in the range %1$s-%2$s%3$s</string>
     <string name="settings_pwm_temp_range_note_max">Note: Enter a value greater than %1$s%2$s</string>
     <string name="settings_pwm_temp_range_note_last">Note: Temp cannot be changed for the last profile</string>
+    <string name="settings_pwm_range_below">&lt; %1$d %2$s</string>
+    <string name="settings_pwm_range_above">&gt; %1$d %2$s</string>
+    <string name="settings_pwm_range_between">%1$d-%2$d %3$s</string>
 </resources>

@@ -1,0 +1,77 @@
+package com.weberbox.pifire.core.model.info
+
+import androidx.compose.runtime.Immutable
+import com.weberbox.pifire.core.common.model.Uuid
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class InfoData(
+    val infoMap: Map<Uuid, Info> = emptyMap(),
+) {
+    @Immutable
+    @Serializable
+    data class Info(
+        val uuid: String = "",
+        val platformInfo: PlatformInfo = PlatformInfo(),
+        val osInfo: OsInfo = OsInfo(),
+        val networkMap: Map<String, NetworkInfo> = emptyMap(),
+        val cpuInfo: String = "",
+        val networkInfo: String = "",
+        val wifiQualityValue: String = "",
+        val wifiQualityMax: String = "",
+        val wifiQualityPercent: Double? = null,
+        val uptime: String = "",
+        val cpuTemp: String = "",
+        val cpuThrottled: Boolean = false,
+        val cpuUnderVolt: Boolean = false,
+        val outPins: List<GPIOInOutData> = emptyList(),
+        val inPins: List<GPIOInOutData> = emptyList(),
+        val devPins: List<GPIODeviceData> = emptyList(),
+        val pipList: List<Module> = emptyList(),
+        val platform: String = "",
+        val display: String = "",
+        val distance: String = "",
+        val serverVersion: String = "",
+        val serverBuild: String = "",
+        val appVersion: String = "",
+        val appVersionCode: String = "",
+        val appBuildType: String = "",
+        val appFlavor: String = "",
+        val appBuildDate: String = "",
+        val appGitBranch: String = "",
+        val appGitRev: String = "",
+        val alphaBuild: Boolean = false,
+        val debugBuild: Boolean = false,
+    ) {
+        @Serializable
+        data class PlatformInfo(
+            val systemModel: String = "",
+            val cpuModel: String = "",
+            val cpuHardware: String = "",
+            val cpuCores: String = "",
+            val cpuFrequency: String = "",
+            val totalRamBytes: Long? = null,
+            val availableRamBytes: Long? = null,
+        )
+
+        @Serializable
+        data class OsInfo(
+            val prettyName: String = "",
+            val version: String = "",
+            val codeName: String = "",
+            val architecture: String = "",
+        )
+
+        @Serializable
+        data class NetworkInfo(
+            val ipAddress: String = "",
+            val macAddress: String = "",
+        )
+
+        @Serializable
+        data class Module(
+            val name: String = "",
+            val version: String = "",
+        )
+    }
+}

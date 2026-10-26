@@ -1,94 +1,77 @@
 package com.weberbox.pifire.core.di
 
-import com.weberbox.pifire.changelog.data.repo.ChangelogRepo
-import com.weberbox.pifire.changelog.data.repo.ChangelogRepoImpl
-import com.weberbox.pifire.dashboard.data.repo.DashRepo
-import com.weberbox.pifire.dashboard.data.repo.DashRepoImpl
-import com.weberbox.pifire.events.data.repo.EventsRepo
-import com.weberbox.pifire.events.data.repo.EventsRepoImpl
-import com.weberbox.pifire.info.data.repo.InfoRepo
-import com.weberbox.pifire.info.data.repo.InfoRepoImpl
-import com.weberbox.pifire.landing.data.repo.LandingRepo
-import com.weberbox.pifire.landing.data.repo.LandingRepoImpl
-import com.weberbox.pifire.pellets.data.repo.PelletsRepo
-import com.weberbox.pifire.pellets.data.repo.PelletsRepoImpl
-import com.weberbox.pifire.recipes.data.repo.RecipesRepo
-import com.weberbox.pifire.recipes.data.repo.RecipesRepoImpl
-import com.weberbox.pifire.settings.data.repo.ManualRepo
-import com.weberbox.pifire.settings.data.repo.ManualRepoImpl
-import com.weberbox.pifire.settings.data.repo.SettingsRepoImpl
-import com.weberbox.pifire.settings.data.repo.SettingsRepo
-import com.weberbox.pifire.setup.data.repo.SetupRepo
-import com.weberbox.pifire.setup.data.repo.SetupRepoImpl
+import com.weberbox.pifire.core.network.api.PushDevicesApi
+import com.weberbox.pifire.core.network.api.PushDevicesApiImpl
+import com.weberbox.pifire.core.network.api.RelayApi
+import com.weberbox.pifire.core.network.api.RelayApiImpl
+import com.weberbox.pifire.core.network.api.SettingsApi
+import com.weberbox.pifire.core.network.api.SettingsApiImpl
+import com.weberbox.pifire.core.notification.FcmTokenSource
+import com.weberbox.pifire.core.notification.FirebaseFcmTokenSource
+import com.weberbox.pifire.core.repo.ConnectionRepo
+import com.weberbox.pifire.core.repo.ConnectionRepoImpl
+import com.weberbox.pifire.core.repo.PrefsRepo
+import com.weberbox.pifire.core.repo.PrefsRepoImpl
+import com.weberbox.pifire.core.repo.PushRepo
+import com.weberbox.pifire.core.repo.PushRepoImpl
+import com.weberbox.pifire.core.repo.SettingsRepo
+import com.weberbox.pifire.core.repo.SettingsRepoImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-@Suppress("unused")
+/** Repos used app-wide (several features and core services). */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepoModule {
 
     @Binds
     @Singleton
-    abstract fun bindDashRepo(
-        dashRepoImpl: DashRepoImpl
-    ): DashRepo
-
-    @Binds
-    @Singleton
-    abstract fun bindPelletsRepo(
-        pelletsRepoImpl: PelletsRepoImpl
-    ): PelletsRepo
-
-    @Binds
-    @Singleton
-    abstract fun bindEventsRepo(
-        eventsRepoImpl: EventsRepoImpl
-    ): EventsRepo
-
-    @Binds
-    @Singleton
-    abstract fun bindInfoRepo(
-        infoRepoImpl: InfoRepoImpl
-    ): InfoRepo
+    abstract fun bindSettingsApi(
+        settingsApiImpl: SettingsApiImpl,
+    ): SettingsApi
 
     @Binds
     @Singleton
     abstract fun bindSettingsRepo(
-        settingsRepoImpl: SettingsRepoImpl
+        settingsRepoImpl: SettingsRepoImpl,
     ): SettingsRepo
 
     @Binds
     @Singleton
-    abstract fun bindManualRepo(
-        manualRepoImpl: ManualRepoImpl
-    ): ManualRepo
+    abstract fun bindPrefsRepo(
+        prefsRepoImpl: PrefsRepoImpl,
+    ): PrefsRepo
 
     @Binds
     @Singleton
-    abstract fun bindRecipesRepo(
-        recipesRepoImpl: RecipesRepoImpl
-    ): RecipesRepo
+    abstract fun bindConnectionRepo(
+        connectionRepoImpl: ConnectionRepoImpl,
+    ): ConnectionRepo
 
     @Binds
     @Singleton
-    abstract fun bindSetupRepo(
-        setupRepoImpl: SetupRepoImpl
-    ): SetupRepo
+    abstract fun bindRelayApi(
+        relayApiImpl: RelayApiImpl,
+    ): RelayApi
 
     @Binds
     @Singleton
-    abstract fun bindLandingRepo(
-        landingRepoImpl: LandingRepoImpl
-    ): LandingRepo
+    abstract fun bindPushDevicesApi(
+        pushDevicesApiImpl: PushDevicesApiImpl,
+    ): PushDevicesApi
 
     @Binds
     @Singleton
-    abstract fun bindChangelogRepo(
-        changelogRepoImpl: ChangelogRepoImpl
-    ): ChangelogRepo
+    abstract fun bindFcmTokenSource(
+        firebaseFcmTokenSource: FirebaseFcmTokenSource,
+    ): FcmTokenSource
 
+    @Binds
+    @Singleton
+    abstract fun bindPushRepo(
+        pushRepoImpl: PushRepoImpl,
+    ): PushRepo
 }

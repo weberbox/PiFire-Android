@@ -1,0 +1,179 @@
+package com.weberbox.pifire.feature.settings.presentation.screen.timer
+
+import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.model.settings.SmartStart
+import com.weberbox.pifire.core.model.settings.SmartStartProfile
+import com.weberbox.pifire.core.repo.SettingsRepo
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.feature.settings.presentation.contract.TimerContract
+import com.weberbox.pifire.feature.settings.presentation.util.sortRangesByTemp
+import com.weberbox.pifire.feature.settings.presentation.util.updateRange
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class TimerSettingsViewModel @Inject constructor(
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<TimerContract.Event, TimerContract.State, TimerContract.Effect>() {
+
+    init {
+        collectServerData()
+    }
+
+    override fun setInitialState() = TimerContract.State(
+        serverData = Server(),
+        isInitialLoading = true,
+        isLoading = false,
+        isDataError = false,
+    )
+
+    override fun handleEvents(event: TimerContract.Event) {
+        toggleLoading(true)
+        when (event) {
+            is TimerContract.Event.SetAutoPowerOffEnabled ->
+                launchAndHandle { settingsRepo.setAutoPowerOffEnabled(event.enabled) }
+
+            is TimerContract.Event.SetPrimeOnStartup ->
+                launchAndHandle { settingsRepo.setPrimeOnStartup(event.amount) }
+
+            is TimerContract.Event.SetShutdownDuration ->
+                launchAndHandle { settingsRepo.setShutdownDuration(event.duration) }
+
+            is TimerContract.Event.SetSmartStartEnabled ->
+                launchAndHandle { settingsRepo.setSmartStartEnabled(event.enabled) }
+
+            is TimerContract.Event.SetSmartStartExitTemp ->
+                launchAndHandle { settingsRepo.setSmartStartExitTemp(event.temp) }
+
+            is TimerContract.Event.SetStartExitTemp ->
+                launchAndHandle { settingsRepo.setStartExitTemp(event.temp) }
+
+            is TimerContract.Event.SetStartToHoldPrompt ->
+                launchAndHandle { settingsRepo.setStartToHoldPrompt(event.enabled) }
+
+            is TimerContract.Event.SetStartToMode ->
+                launchAndHandle { settingsRepo.setStartToMode(event.mode) }
+
+            is TimerContract.Event.SetStartToModeTemp ->
+                launchAndHandle { settingsRepo.setStartToModeTemp(event.temp) }
+
+            is TimerContract.Event.SetStartupDuration ->
+                launchAndHandle { settingsRepo.setStartupDuration(event.duration) }
+
+            is TimerContract.Event.DeleteSmartStartItem ->
+                deleteSmartStartItem(event.smartStartItems)
+
+            is TimerContract.Event.SetSmartStartItem ->
+                setSmartStartItem(
+                    index = event.index,
+                    temp = event.temp,
+                    startUp = event.startUp,
+                    augerOn = event.augerOn,
+                    pMode = event.pMode,
+                    smartStartItems = event.smartStartItems,
+                )
+
+            is TimerContract.Event.SetStartupPWMDuty ->
+                launchAndHandle { settingsRepo.setStartupPWMDuty(event.duty) }
+        }
+    }
+
+    private fun collectServerData() {
+        viewModelScope.launch {
+            settingsRepo.getCurrentServerFlow().collect { server ->
+                setState {
+                    copy(
+                        serverData = server,
+                        isInitialLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun launchAndHandle(block: suspend () -> Result<Server, DataError>) {
+        viewModelScope.launch {
+            handleResult(block())
+        }
+    }
+
+    private fun setSmartStartItem(
+        index: Int,
+        temp: Int,
+        startUp: Int,
+        augerOn: Int,
+        pMode: Int,
+        smartStartItems: List<SmartStart>,
+    ) {
+        val (temps, profiles) = updateRange(
+            index = index,
+            temp = temp,
+            profile = SmartStartProfile(startUpTime = startUp, augerOnTime = augerOn, pMode = pMode),
+            rowTemps = smartStartItems.map { item -> item.temp },
+            rowProfiles = smartStartItems.map { item ->
+                SmartStartProfile(
+                    startUpTime = item.startUp,
+                    augerOnTime = item.augerOn,
+                    pMode = item.pMode,
+                )
+            },
+        )
+        viewModelScope.launch {
+            handleResult(settingsRepo.setSmartStartTable(temps, profiles))
+        }
+    }
+
+    private fun deleteSmartStartItem(smartStartItems: List<SmartStart>) {
+        val (temps, profiles) = sortRangesByTemp(
+            temps = smartStartItems.map { item -> item.temp }.dropLast(2),
+            profiles = smartStartItems.map { item ->
+                SmartStartProfile(
+                    startUpTime = item.startUp,
+                    augerOnTime = item.augerOn,
+                    pMode = item.pMode,
+                )
+            }.dropLast(1),
+        )
+
+        viewModelScope.launch {
+            handleResult(settingsRepo.setSmartStartTable(temps, profiles))
+        }
+    }
+
+    private suspend fun handleResult(result: Result<Server, DataError>) {
+        toggleLoading(false)
+        when (result) {
+            is Result.Error -> {
+                setEffect {
+                    TimerContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
+                }
+            }
+
+            is Result.Success -> {
+                settingsRepo.updateServerSettings(result.data)
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleLoading(loading: Boolean) {
+        setState {
+            copy(
+                isLoading = loading,
+            )
+        }
+    }
+}

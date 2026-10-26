@@ -9,7 +9,6 @@ object ServerConstants {
     const val LISTEN_DASH_DATA: String = "socket_dash_data"
 
     // Get Function
-    const val GF_LISTEN_APP_DATA: String = "listen_app_data"
     const val GF_GET_APP_DATA: String = "get_app_data"
 
     // Get Action

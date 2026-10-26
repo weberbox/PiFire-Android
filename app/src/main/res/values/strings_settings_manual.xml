@@ -6,4 +6,5 @@
     <string name="settings_manual_igniter">Toggle Igniter</string>
     <string name="settings_manual_power">Toggle Power</string>
     <string name="settings_manual_pwm">Duty Cycle</string>
+    <string name="settings_manual_pwm_value">%1$d %%</string>
 </resources>

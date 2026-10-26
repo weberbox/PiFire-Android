@@ -63,4 +63,6 @@
     <string name="info_app_build_git_branch">Git Branch</string>
     <string name="info_app_build_git_rev">Git Revisions</string>
     <string name="info_credits_text">PiFire created by Ben Parmeter, &#169; %1$s\n\nPiFire Android created by James Weber, &#169; %1$s</string>
+    <string name="info_ram_value">%1$.2f GB (%2$.0f MB)</string>
+    <string name="info_percent_value">%1$s%%</string>
 </resources>

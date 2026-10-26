@@ -1,0 +1,130 @@
+package com.weberbox.pifire.feature.settings.presentation.screen.safety
+
+import androidx.lifecycle.viewModelScope
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
+import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.repo.SettingsRepo
+import com.weberbox.pifire.core.ui.base.BaseViewModel
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
+import com.weberbox.pifire.feature.settings.presentation.contract.SafetyContract
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class SafetySettingsViewModel @Inject constructor(
+    private val settingsRepo: SettingsRepo,
+) : BaseViewModel<SafetyContract.Event, SafetyContract.State, SafetyContract.Effect>() {
+
+    init {
+        collectServerData()
+    }
+
+    override fun setInitialState() = SafetyContract.State(
+        serverData = Server(),
+        isInitialLoading = true,
+        isLoading = false,
+        isDataError = false,
+    )
+
+    override fun handleEvents(event: SafetyContract.Event) {
+        toggleLoading(true)
+        when (event) {
+            is SafetyContract.Event.SetMaxGrillTemp -> setMaxGrillTemp(event.temp)
+            is SafetyContract.Event.SetMaxStartTemp -> setMaxStartTemp(event.temp)
+            is SafetyContract.Event.SetMinStartTemp -> setMinStartTemp(event.temp)
+            is SafetyContract.Event.SetReigniteRetries -> setReigniteRetries(event.retries)
+            is SafetyContract.Event.SetSafetyStartupCheck -> setSafetyStartupCheck(event.enabled)
+            is SafetyContract.Event.SetAllowManualChanges -> setAllowManualChanges(event.enabled)
+            is SafetyContract.Event.SetOverrideTime -> setOverrideTime(event.time)
+        }
+    }
+
+    private fun collectServerData() {
+        viewModelScope.launch {
+            settingsRepo.getCurrentServerFlow().collect { server ->
+                setState {
+                    copy(
+                        serverData = server,
+                        isInitialLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun setAllowManualChanges(enabled: Boolean) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setAllowManualChanges(enabled))
+        }
+    }
+
+    private fun setOverrideTime(time: Int) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setOverrideTime(time))
+        }
+    }
+
+    private fun setSafetyStartupCheck(enabled: Boolean) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setSafetyStartupCheck(enabled))
+        }
+    }
+
+    private fun setMinStartTemp(temp: Int) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setMinStartTemp(temp))
+        }
+    }
+
+    private fun setMaxStartTemp(temp: Int) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setMaxStartTemp(temp))
+        }
+    }
+
+    private fun setMaxGrillTemp(temp: Int) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setMaxGrillTemp(temp))
+        }
+    }
+
+    private fun setReigniteRetries(retries: Int) {
+        viewModelScope.launch {
+            handleResult(settingsRepo.setReigniteRetries(retries))
+        }
+    }
+
+    private suspend fun handleResult(result: Result<Server, DataError>) {
+        toggleLoading(false)
+        when (result) {
+            is Result.Error -> {
+                setEffect {
+                    SafetyContract.Effect.Notification(
+                        text = result.error.asUiText(),
+                        error = true,
+                    )
+                }
+            }
+
+            is Result.Success -> {
+                settingsRepo.updateServerSettings(result.data)
+                setState {
+                    copy(
+                        serverData = result.data,
+                        isLoading = false,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun toggleLoading(loading: Boolean) {
+        setState {
+            copy(
+                isLoading = loading,
+            )
+        }
+    }
+}

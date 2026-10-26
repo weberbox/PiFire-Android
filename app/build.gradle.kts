@@ -15,11 +15,19 @@ plugins {
     alias(libs.plugins.kotlin.android.ksp)
 }
 
+// google-services.json isn't committed. Clean clones build against a placeholder with fake ids, so
+// Firebase compiles and its calls just fail at runtime (Remote Config falls back to bundled defaults).
+val googleServicesFile = file("google-services.json")
+if (!googleServicesFile.exists()) {
+    file("google-services.placeholder.json").copyTo(googleServicesFile)
+}
+
 private val keystoreProperties = getKeystoreProperties()
+private val localProperties = getLocalProperties()
 
 val vMajor = 3
-val vMinor = 3
-val vPatch = 3
+val vMinor = 4
+val vPatch = 0
 val isAlpha = false
 
 android {
@@ -32,7 +40,10 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = vMajor * 1000000 + vMinor * 10000 + vPatch * 100
-        versionName = "${vMajor}.${vMinor}.${vPatch}"
+        versionName = "$vMajor.$vMinor.$vPatch"
+        buildConfigField("String", "SENTRY_DSN", "\"${localProperties.getProperty("SENTRY_DSN", "")}\"")
+        buildConfigField("String", "ONESIGNAL_APP_ID", "\"${localProperties.getProperty("ONESIGNAL_APP_ID", "")}\"")
+        buildConfigField("String", "PUSH_RELAY_URL", "\"${localProperties.getProperty("PUSH_RELAY_URL", "")}\"")
     }
 
     if (keystoreProperties.isNotEmpty()) {
@@ -48,26 +59,26 @@ android {
 
     buildTypes {
         release {
-            manifestPlaceholders += mapOf()
-            manifestPlaceholders.putAll(mapOf("appName" to "PiFire", "environment" to "production"))
+            manifestPlaceholders.putAll(mapOf("appName" to "PiFire"))
             isMinifyEnabled = true
             isShrinkResources = true
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-                )
+                    "proguard-rules.pro",
+                ),
             )
             buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
             buildConfigField("String", "GIT_REV", "\"${getGitRevCount()}\"")
-            if (keystoreProperties.isNotEmpty())
+            if (keystoreProperties.isNotEmpty()) {
                 signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
-            manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug", "environment" to "debug"))
+            manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug"))
             applicationIdSuffix = ".debug"
             isDebuggable = true
             buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
@@ -80,9 +91,6 @@ android {
 
     flavorDimensions += "version"
     productFlavors {
-        create("dev") {
-            dimension = "version"
-        }
         create("github") {
             dimension = "version"
         }
@@ -116,7 +124,7 @@ androidComponents {
         val flavor = variant.flavorName
         val buildType = variant.buildType
         variant.outputs.forEach {
-            val apkName = "${appName}-${flavor}-${buildType}-${it.versionName.get()}.apk"
+            val apkName = "$appName-$flavor-$buildType-${it.versionName.get()}.apk"
             (it as VariantOutputImpl).outputFileName = apkName
         }
     }
@@ -157,11 +165,15 @@ dependencies {
     implementation(libs.haze.materials)
     implementation(libs.timber.android)
     implementation(libs.tapadoo.alerter)
-    implementation(libs.compose.ratingbar)
+    implementation(libs.compose.ratingbar) {
+        // It lists the Compose compiler plugin as a runtime dependency, which R8 warns about
+        exclude(group = "androidx.compose.compiler", module = "compiler")
+    }
     implementation(libs.compose.preference)
     implementation(libs.compose.lottie)
     implementation(libs.compose.coil)
     implementation(libs.squareup.okhttp)
+    implementation(libs.squareup.okhttp.sse)
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.kotlinx)
     implementation(libs.zoomable)
@@ -175,6 +187,12 @@ dependencies {
     coreLibraryDesugaring(libs.desugar)
     debugImplementation(libs.squareup.leakcanary)
 
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.squareup.mockwebserver)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.konsist)
 }
 
 sentry {
@@ -182,11 +200,15 @@ sentry {
         enabled.set(true)
         features.set(EnumSet.allOf(InstrumentationFeature::class.java) - InstrumentationFeature.OKHTTP)
     }
-    ignoredBuildTypes.set(setOf("release"))
+    // Uploading the R8 mapping needs a Sentry auth token; without one (e.g. a clean clone) release
+    // builds still get instrumentation, but their crash reports stay obfuscated.
+    autoUploadProguardMapping.set(
+        System.getenv("SENTRY_AUTH_TOKEN") != null || rootProject.file("sentry.properties").exists(),
+    )
 }
 
 fun getKeystoreProperties(): Properties {
-    val propertiesFile: String? by project
+    val propertiesFile = project.findProperty("propertiesFile") as? String
     val keystoreProperties = Properties()
     propertiesFile?.let { file ->
         val keystoreFile = File(file)
@@ -197,9 +219,19 @@ fun getKeystoreProperties(): Properties {
     return keystoreProperties
 }
 
-fun getCurrentTime(): String {
-    return System.currentTimeMillis().toString()
+// local.defaults.properties (committed) supplies fallbacks so clean clones build; local.properties overrides it.
+fun getLocalProperties(): Properties {
+    val properties = Properties()
+    listOf("local.defaults.properties", "local.properties").forEach { name ->
+        val file = rootProject.file(name)
+        if (file.exists()) {
+            FileInputStream(file).use { properties.load(it) }
+        }
+    }
+    return properties
 }
+
+fun getCurrentTime(): String = System.currentTimeMillis().toString()
 
 fun getGitRevCount(): String {
     val process = ProcessBuilder("git", "rev-list", "--count", "HEAD")

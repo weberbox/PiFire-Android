@@ -1,0 +1,6 @@
+node_modules/
+.wrangler/
+.dev.vars
+deploy.local.json
+wrangler.deploy.toml
+service-account.json

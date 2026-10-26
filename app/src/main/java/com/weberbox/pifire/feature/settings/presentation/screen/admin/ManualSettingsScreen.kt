@@ -1,0 +1,264 @@
+package com.weberbox.pifire.feature.settings.presentation.screen.admin
+
+import android.content.res.Configuration
+import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.weberbox.pifire.R
+import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.core.ui.components.DataError
+import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
+import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
+import com.weberbox.pifire.core.ui.components.SettingsAppBar
+import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.feature.settings.data.model.ManualData
+import com.weberbox.pifire.feature.settings.presentation.components.PreferenceNote
+import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
+import com.weberbox.pifire.feature.settings.presentation.components.getSummary
+import com.weberbox.pifire.feature.settings.presentation.contract.ManualContract
+import com.weberbox.pifire.navigation.navigateFrom
+import com.weberbox.pifire.navigation.popBackStackFrom
+import com.weberbox.pifire.navigation.rememberSourceEntry
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
+import me.zhanghai.compose.preference.PreferenceCategory
+import me.zhanghai.compose.preference.ProvidePreferenceTheme
+import me.zhanghai.compose.preference.SliderPreference
+
+@Composable
+fun ManualSettingsScreenDestination(
+    navController: NavHostController,
+    viewModel: ManualSettingsViewModel = hiltViewModel(),
+) {
+    val sourceEntry = rememberSourceEntry()
+    ProvidePreferenceTheme {
+        ManualSettingsScreen(
+            state = viewModel.viewState.value,
+            effectFlow = viewModel.effect,
+            onEventSent = { event -> viewModel.setEvent(event) },
+            onNavigationRequested = { navigationEffect ->
+                when (navigationEffect) {
+                    is ManualContract.Effect.Navigation.Back -> navController.popBackStackFrom(from = sourceEntry)
+
+                    is ManualContract.Effect.Navigation.NavRoute -> {
+                        navController.navigateFrom(
+                            from = sourceEntry,
+                            route = navigationEffect.route,
+                            popUpToRoute = navigationEffect.popUpToRoute,
+                            inclusive = navigationEffect.inclusive,
+                        )
+                    }
+                }
+            },
+        )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ManualSettingsScreen(
+    state: ManualContract.State,
+    effectFlow: Flow<ManualContract.Effect>?,
+    onEventSent: (event: ManualContract.Event) -> Unit,
+    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit,
+) {
+    val windowInsets = WindowInsets.safeDrawing
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    HandleSideEffects(
+        effectFlow = effectFlow,
+        onNavigationRequested = onNavigationRequested,
+    )
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            SettingsAppBar(
+                title = stringResource(R.string.settings_manual),
+                scrollBehavior = scrollBehavior,
+                onNavigate = { onNavigationRequested(ManualContract.Effect.Navigation.Back) },
+            )
+        },
+        containerColor = Color.Transparent,
+        contentColor = contentColorFor(MaterialTheme.colorScheme.background),
+        contentWindowInsets = windowInsets,
+    ) { contentPadding ->
+        AnimatedContent(
+            targetState = state,
+            contentKey = { it.isInitialLoading or it.isDataError },
+        ) { state ->
+            when {
+                state.isInitialLoading -> InitialLoadingProgress()
+
+                state.isDataError -> DataError {
+                    onNavigationRequested(ManualContract.Effect.Navigation.Back)
+                }
+
+                else -> {
+                    ManualSettingsScreenContent(
+                        state = state,
+                        onEventSent = onEventSent,
+                        contentPadding = contentPadding,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ManualSettingsScreenContent(
+    state: ManualContract.State,
+    onEventSent: (event: ManualContract.Event) -> Unit,
+    contentPadding: PaddingValues,
+) {
+    var pwm by remember(state.manualData.pwm) { mutableIntStateOf(state.manualData.pwm) }
+    LinearLoadingIndicator(
+        isLoading = state.isLoading,
+        contentPadding = contentPadding,
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding),
+    ) {
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_manual)) },
+        )
+        SwitchPreference(
+            value = state.manualData.active,
+            onValueChange = { onEventSent(ManualContract.Event.SetManualMode(it)) },
+            title = { Text(text = stringResource(R.string.settings_manual)) },
+            summary = { Text(text = getSummary(state.manualData.active)) },
+        )
+        PreferenceNote(stringResource(R.string.settings_admin_manual_note))
+        PreferenceCategory(
+            title = { Text(text = stringResource(R.string.settings_cat_manual_functions)) },
+        )
+        SwitchPreference(
+            value = state.manualData.fan,
+            onValueChange = { onEventSent(ManualContract.Event.SetFanEnabled(it)) },
+            enabled = state.manualData.active,
+            title = { Text(text = stringResource(R.string.settings_manual_fan)) },
+            summary = { Text(text = getSummary(state.manualData.fan)) },
+        )
+        if (state.manualData.dcFan) {
+            SliderPreference(
+                value = pwm.toFloat(),
+                onValueChange = { onEventSent(ManualContract.Event.SetDutyCycle(it.toInt())) },
+                enabled = state.manualData.active && state.manualData.fan,
+                sliderValue = pwm.toFloat(),
+                valueRange = 0f..100f,
+                onSliderValueChange = {
+                    pwm = it.toInt()
+                },
+                title = { Text(text = stringResource(R.string.settings_manual_pwm)) },
+                summary = { Text(text = stringResource(R.string.settings_manual_pwm_value, pwm)) },
+            )
+        }
+        SwitchPreference(
+            value = state.manualData.auger,
+            onValueChange = { onEventSent(ManualContract.Event.SetAugerEnabled(it)) },
+            enabled = state.manualData.active,
+            title = { Text(text = stringResource(R.string.settings_manual_auger)) },
+            summary = { Text(text = getSummary(state.manualData.auger)) },
+        )
+        SwitchPreference(
+            value = state.manualData.igniter,
+            onValueChange = { onEventSent(ManualContract.Event.SetIgniterEnabled(it)) },
+            enabled = state.manualData.active,
+            title = { Text(text = stringResource(R.string.settings_manual_igniter)) },
+            summary = { Text(text = getSummary(state.manualData.igniter)) },
+        )
+        SwitchPreference(
+            value = state.manualData.power,
+            onValueChange = { onEventSent(ManualContract.Event.SetPowerEnabled(it)) },
+            enabled = state.manualData.active,
+            title = { Text(text = stringResource(R.string.settings_manual_power)) },
+            summary = { Text(text = getSummary(state.manualData.power)) },
+        )
+    }
+}
+
+@Composable
+private fun HandleSideEffects(
+    effectFlow: Flow<ManualContract.Effect>?,
+    onNavigationRequested: (ManualContract.Effect.Navigation) -> Unit,
+) {
+    val activity = LocalActivity.current
+    LaunchedEffect(SIDE_EFFECTS_KEY) {
+        effectFlow?.onEach { effect ->
+            when (effect) {
+                is ManualContract.Effect.Navigation -> {
+                    onNavigationRequested(effect)
+                }
+
+                is ManualContract.Effect.Notification -> {
+                    activity?.showAlerter(
+                        message = effect.text,
+                        isError = effect.error,
+                    )
+                }
+            }
+        }?.collect()
+    }
+}
+
+@Composable
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+private fun ManualSettingsScreenPreview() {
+    PiFireTheme {
+        ProvidePreferenceTheme {
+            Surface {
+                ManualSettingsScreen(
+                    state = ManualContract.State(
+                        manualData = ManualData(
+                            active = true,
+                            fan = true,
+                            dcFan = true,
+                        ),
+                        isInitialLoading = false,
+                        isLoading = true,
+                        isDataError = false,
+                    ),
+                    effectFlow = null,
+                    onEventSent = {},
+                    onNavigationRequested = {},
+                )
+            }
+        }
+    }
+}
