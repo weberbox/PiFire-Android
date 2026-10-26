@@ -47,25 +47,19 @@ built in full on a fork branch and submitted as one PR; only this app uses `sock
   version over HTTP on every connect, not via the socket: old apps read it from `get_app_data`
   and fall back to the cached version, so they never see an unsupported-server prompt on a
   socket-less server.
-- Relay (Cloudflare Worker): lives in this repo under `relay/` and is committed. It's the app's
-  own backend (sends through the app's Firebase project, payload is a contract with this app),
-  not something we package for others to host.
-  - Separate from the Android build: not in `settings.gradle.kts`, not covered by Spotless/ktlint,
-    own `package.json`, `tsconfig.json` and `.gitignore` (`node_modules/`, `.wrangler/`,
-    `.dev.vars`). Add a `CLAUDE.md` note that the Android rules don't apply under `relay/`.
-  - Secrets never committed: FCM credentials via `wrangler secret put` (`.dev.vars` locally);
-    account and KV/D1 ids in a gitignored local config, not the committed `wrangler.toml`.
-  - Versioning is for our own tracking: a version constant bumped on deploy and returned by a
-    health endpoint, plus a `Relay` section in commit messages. No tags or GitHub releases (keeps
-    it clear of the app's release flow). Deploy by hand with `wrangler deploy`; a workflow
-    filtered to `relay/**` only if that gets tedious.
-  - Payload is a contract with installed apps: only add fields, never rename or remove.
+- Relay (Cloudflare Worker): in `relay/` (TypeScript), 1.0.0 deployed 2026-10-25; FCM auth
+  checked live, first real push to a device still to test once the app registers. It's the app's own backend (sends through the app's Firebase project, payload is a contract with
+  this app), not something we package for others to host.
+  - Versioning is for our own tracking: `RELAY_VERSION` bumped on deploy and returned by
+    `/v1/health`, plus a `Relay` section in commit messages. No tags or GitHub releases (keeps it
+    clear of the app's release flow). Deploy by hand with `npm run deploy`; a workflow filtered to
+    `relay/**` only if that gets tedious.
   - App reads the relay URL from `local.properties` as `BuildConfig.*`, with an empty fallback in
     `local.defaults.properties` (empty turns relay push off), so our deployment's URL stays out of
     the repo. Self-builders need their own Firebase project, `google-services.json`, relay deploy
-    and URL; document the steps in `relay/README.md` / `docs/PUSH.md`.
+    and URL; `relay/README.md` covers the relay part.
 - Order:
-  1. Relay live.
+  1. ~~Relay live.~~ Done 2026-10-25.
   2. App release, tested against the fork branch, v2 switched off.
   3. `app_update_config` entry for that release as FLEXIBLE.
   4. Once the rollout and Sentry look clean, switch it to IMMEDIATE (reaches every 3.x app,

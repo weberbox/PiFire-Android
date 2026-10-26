@@ -13,6 +13,10 @@ Firebase Remote Config instead.
 Sentry IDs, keystore details, emails, or personal domains and server addresses. Keys go in
 `local.properties` only; use placeholders like `example.com` or `192.168.1.x` in docs and previews.
 
+`relay/` is the push relay (Cloudflare Worker, TypeScript), separate from the Android build. The
+rules below don't apply there; `relay/README.md` has its own commands and rules. The public-repo
+rule above does: no account ids, KV ids, service accounts or deployment URLs in it.
+
 Follow the rules below in new and edited code; don't refactor unrelated files unless asked.
 Write everything in American English (code, identifiers, comments, strings, docs, commit messages).
 Standing decisions, known bugs and parked work are in `BACKLOG.md`: check it before
