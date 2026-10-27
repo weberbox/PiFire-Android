@@ -15,6 +15,8 @@ sealed interface DataError : Error {
         CERTIFICATE,
         UNKNOWN_HOST,
         UNREACHABLE_HOST,
+        NOT_PIFIRE,
+        CLOUDFLARE_ACCESS,
         UNKNOWN,
     }
 

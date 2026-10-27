@@ -14,8 +14,8 @@ import retrofit2.Response
 
 /**
  * Runs an HTTP request to the user's PiFire server and parses the body on Dispatchers.IO, mapping
- * every failure to an error the user can act on: offline, credentials (401), another HTTP status,
- * or the network exception.
+ * every failure to an error the user can act on: offline, credentials (401), a proxy or login page
+ * answering instead of PiFire, another HTTP status, or the network exception.
  */
 suspend fun <T> httpRequest(
     request: suspend () -> Response<ResponseBody>,
@@ -28,8 +28,14 @@ suspend fun <T> httpRequest(
         val code = response.code()
         when {
             response.isSuccessful ->
-                response.body()?.use { body -> parse(body.string()) }
-                    ?: Result.Error(DataError.Network.NULL_RESPONSE)
+                response.body()?.use { body ->
+                    val text = body.string()
+                    proxyResponseError(
+                        url = response.raw().request.url,
+                        contentType = body.contentType()?.toString(),
+                        body = text,
+                    )?.let { error -> Result.Error(error) } ?: parse(text)
+                } ?: Result.Error(DataError.Network.NULL_RESPONSE)
 
             code == 401 -> Result.Error(DataError.Network.AUTHENTICATION)
 

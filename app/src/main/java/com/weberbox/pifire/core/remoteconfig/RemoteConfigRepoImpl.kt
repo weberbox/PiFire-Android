@@ -35,25 +35,25 @@ class RemoteConfigRepoImpl @Inject constructor(
 
     private var fetchErrorShown = false
 
-    override suspend fun fetchServerSupportConfig(): ServerSupportConfigData? {
+    override suspend fun fetchServerSupportRule(): ServerSupportRule? {
         val key = AppConfig.SERVER_SUPPORT_CONFIG
-        val bundled = readJsonFromAssets("config_server_support.json", context = appContext)
+        val bundled = readJsonFromAssets("config_server_support_v2.json", context = appContext)
         fetchAndActivate(key = key, bundled = bundled)
 
-        return decodeConfig<List<ServerSupportConfigData>>(key = key, bundled = bundled)
-            ?.find { it.appVersionCode == BuildConfig.VERSION_CODE }
+        return decodeConfig<ServerSupportConfigData>(key = key, bundled = bundled)
+            ?.ruleFor(appVersionCode = BuildConfig.VERSION_CODE)
     }
 
-    override suspend fun fetchAppUpdateConfig(): List<AppUpdateConfigData> {
+    override suspend fun fetchAppUpdateConfig(): AppUpdateConfigData? {
         val key = AppConfig.APP_UPDATE_CONFIG
-        val bundled = readJsonFromAssets("config_app_update.json", context = appContext)
+        val bundled = readJsonFromAssets("config_app_update_v2.json", context = appContext)
         // Updates are checked again on every return to the app; tell the user only once.
         if (!fetchAndActivate(key = key, bundled = bundled) && !fetchErrorShown) {
             fetchErrorShown = true
             showFirebaseErrorDialog()
         }
 
-        return decodeConfig<List<AppUpdateConfigData>>(key = key, bundled = bundled).orEmpty()
+        return decodeConfig<AppUpdateConfigData>(key = key, bundled = bundled)
     }
 
     override suspend fun fetchFeatureSupportConfig(): Map<String, RemoteFeatureConfigData> {

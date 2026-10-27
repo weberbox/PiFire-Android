@@ -1,6 +1,7 @@
 package com.weberbox.pifire.core.network.transport
 
 import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
@@ -20,10 +21,10 @@ class PiFireConnectionTest {
 
     private val server = Server(uuid = "server-1", address = "http://192.168.1.x")
     private val socketManager = mockk<SocketManager>(relaxed = true) {
-        coEvery { connect(any(), any()) } returns true
+        coEvery { connect(any(), any()) } returns Result.Success(Unit)
     }
     private val httpSseTransport = mockk<HttpSseTransport>(relaxed = true) {
-        coEvery { connect(any(), any()) } returns true
+        coEvery { connect(any(), any()) } returns Result.Success(Unit)
     }
     private val remoteConfigRepo = mockk<RemoteConfigRepo>()
     private val prefs = mockk<Prefs> {

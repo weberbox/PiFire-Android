@@ -1,20 +1,21 @@
 package com.weberbox.pifire.feature.update.data.mapper
 
 import com.weberbox.pifire.core.remoteconfig.AppUpdateConfigData
-import com.weberbox.pifire.core.remoteconfig.UpdateType
 import com.weberbox.pifire.feature.update.data.model.AppUpdatePolicy
 
 /**
- * The releases newer than [currentVersionCode] (alpha ones only for alpha builds), or null when
- * there are none. Any IMMEDIATE one among them makes the update required, even when a newer
- * FLEXIBLE release followed it.
+ * The latest release newer than [currentVersionCode] (the alpha channel counts only for alpha
+ * builds), or null when there is none. The update is required when [currentVersionCode] is below
+ * a counted channel's minimum.
  */
-fun List<AppUpdateConfigData>.toUpdatePolicy(currentVersionCode: Int, includeAlpha: Boolean): AppUpdatePolicy? {
-    val newer = filter { it.appVersionCode > currentVersionCode && (includeAlpha || !it.isAlpha) }
-    val latest = newer.maxByOrNull { it.appVersionCode } ?: return null
+fun AppUpdateConfigData.toUpdatePolicy(currentVersionCode: Int, includeAlpha: Boolean): AppUpdatePolicy? {
+    val channels = listOfNotNull(stable, alpha.takeIf { includeAlpha })
+    val latest = channels.maxByOrNull { it.latestVersionCode }
+        ?.takeIf { it.latestVersionCode > currentVersionCode }
+        ?: return null
     return AppUpdatePolicy(
-        latestVersionCode = latest.appVersionCode,
-        isRequired = newer.any { it.type == UpdateType.IMMEDIATE },
+        latestVersionCode = latest.latestVersionCode,
+        isRequired = channels.any { it.minVersionCode > currentVersionCode },
         message = latest.message.ifBlank { null },
     )
 }

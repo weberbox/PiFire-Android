@@ -55,6 +55,14 @@ object AsUiText {
             R.string.data_error_unreachable_host,
         )
 
+        DataError.Network.NOT_PIFIRE -> UiText(
+            R.string.data_error_not_pifire,
+        )
+
+        DataError.Network.CLOUDFLARE_ACCESS -> UiText(
+            R.string.data_error_cloudflare_access,
+        )
+
         DataError.Network.UNKNOWN -> UiText(
             R.string.data_error_unknown,
         )

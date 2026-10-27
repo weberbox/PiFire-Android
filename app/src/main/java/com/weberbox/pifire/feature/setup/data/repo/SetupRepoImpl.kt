@@ -69,9 +69,9 @@ class SetupRepoImpl @Inject constructor(
             disconnectOnCancellation = true,
         ).let { connected ->
             when (connected) {
-                false -> Result.Error(DataError.Network.SOCKET_ERROR)
+                is Result.Error -> Result.Error(connected.error)
 
-                true -> {
+                is Result.Success -> {
                     transport.get(ServerConstants.GA_SETTINGS_DATA).let { result ->
                         when (result) {
                             is Result.Error -> Result.Error(result.error)

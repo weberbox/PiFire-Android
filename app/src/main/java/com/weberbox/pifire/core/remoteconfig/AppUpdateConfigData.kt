@@ -2,18 +2,19 @@ package com.weberbox.pifire.core.remoteconfig
 
 import kotlinx.serialization.Serializable
 
-/** One release in Remote Config `app_update_config`. */
+/** Remote Config `app_update_config_v2`. */
 @Serializable
 data class AppUpdateConfigData(
-    val appVersionCode: Int,
-    val type: UpdateType,
-    val message: String = "",
-    val isAlpha: Boolean = false,
+    val stable: AppUpdateChannelData? = null,
+    /** Offered to alpha builds only, alongside [stable]. */
+    val alpha: AppUpdateChannelData? = null,
 )
 
 @Serializable
-enum class UpdateType {
-    /** Versions below this release can't be used until they update. */
-    IMMEDIATE,
-    FLEXIBLE,
-}
+data class AppUpdateChannelData(
+    val latestVersionCode: Int = 0,
+    /** Versions below this can't be used until they update. */
+    val minVersionCode: Int = 0,
+    /** Release notes of [latestVersionCode]. */
+    val message: String = "",
+)

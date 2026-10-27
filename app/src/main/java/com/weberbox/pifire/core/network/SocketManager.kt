@@ -11,7 +11,10 @@ import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -20,20 +23,31 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import timber.log.Timber
+import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 private const val CONNECT_TIMEOUT_MS = 20_000L
 private const val ACK_TIMEOUT_MS = 10_000L
 private const val LISTEN_BUFFER_SIZE = 64
 private const val SOCKET_IO_PATH = "/socket.io"
+private const val DIAGNOSE_PEEK_BYTES = 512L
+
+// Short, so a server that already timed out doesn't keep the user waiting much longer.
+private val DIAGNOSE_TIMEOUT = 5.seconds
 
 class SocketManager @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
@@ -42,6 +56,13 @@ class SocketManager @Inject constructor(
 ) : PiFireTransport {
     // A StateFlow so listen() flows move to the new socket after connect.
     private val socket = MutableStateFlow<Socket?>(null)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val diagnoseClient by lazy {
+        OkHttpClient.Builder()
+            .connectTimeout(DIAGNOSE_TIMEOUT.toJavaDuration())
+            .readTimeout(DIAGNOSE_TIMEOUT.toJavaDuration())
+            .build()
+    }
 
     private suspend fun createSocket(server: Server): Socket? {
         Timber.i("Creating Socket connection")
@@ -57,7 +78,14 @@ class SocketManager @Inject constructor(
             }
 
             IO.socket(address, options).apply {
+                // Socket events arrive on one thread. connect() diagnoses the first connect, so
+                // only a dropped socket's reconnects are diagnosed here, once per outage.
+                var hasConnected = false
+                var outageDiagnosed = false
+
                 on(Socket.EVENT_CONNECT) {
+                    hasConnected = true
+                    outageDiagnosed = false
                     sessionStateHolder.tryEmitConnectedState(true)
                 }
 
@@ -68,6 +96,10 @@ class SocketManager @Inject constructor(
                 on(Socket.EVENT_CONNECT_ERROR) { args ->
                     Timber.d("Socket connect error: ${args.firstOrNull()}")
                     sessionStateHolder.tryEmitConnectedState(false)
+                    if (hasConnected && !outageDiagnosed) {
+                        outageDiagnosed = true
+                        reportBlockedReconnect(target = this, server = server)
+                    }
                 }
             }
         } catch (e: IllegalArgumentException) {
@@ -98,9 +130,9 @@ class SocketManager @Inject constructor(
     override suspend fun connect(
         server: Server,
         disconnectOnCancellation: Boolean,
-    ): Boolean {
+    ): Result<Unit, DataError> {
         disconnect()
-        val newSocket = createSocket(server) ?: return false
+        val newSocket = createSocket(server) ?: return Result.Error(DataError.Network.UNKNOWN_HOST)
         socket.value = newSocket
 
         val connected = try {
@@ -109,9 +141,61 @@ class SocketManager @Inject constructor(
             if (disconnectOnCancellation) disconnect(target = newSocket)
             throw e
         }
+        if (connected) return Result.Success(Unit)
         // Without this a failed socket keeps reconnecting and later flips the connected state.
-        if (!connected) disconnect(target = newSocket)
-        return connected
+        disconnect(target = newSocket)
+        return Result.Error(diagnose(server))
+    }
+
+    private fun reportBlockedReconnect(
+        target: Socket,
+        server: Server,
+    ) {
+        scope.launch {
+            val error = diagnose(server)
+            if (socket.value === target && error.blocksConnection()) {
+                sessionStateHolder.tryEmitConnectionBlocked(error)
+            }
+        }
+    }
+
+    /**
+     * Why the socket can't connect. Socket.IO's own error doesn't say (a proxy's login page is just
+     * a "poll error"), so this makes one plain request to the Engine.IO endpoint and maps the answer.
+     */
+    private suspend fun diagnose(server: Server): DataError = withContext(Dispatchers.IO) {
+        try {
+            val (address, enginePath) = splitSocketAddress(server.address)
+            val request = Request.Builder()
+                .url("${address.trimEnd('/')}${enginePath ?: SOCKET_IO_PATH}/?EIO=4&transport=polling")
+                .apply {
+                    headersManager.buildServerHeadersList(server).forEach { (name, values) ->
+                        values.forEach { value -> addHeader(name, value) }
+                    }
+                }
+                .build()
+            diagnoseClient.newCall(request).execute().use { response ->
+                when {
+                    response.code == 401 -> DataError.Network.AUTHENTICATION
+
+                    response.isSuccessful -> proxyResponseError(
+                        url = response.request.url,
+                        contentType = response.header("Content-Type"),
+                        body = response.peekBody(DIAGNOSE_PEEK_BYTES).string(),
+                    ) ?: DataError.Network.SOCKET_ERROR
+
+                    else -> DataError.Network.SOCKET_ERROR
+                }
+            }
+        } catch (e: IOException) {
+            e.toNetworkError()
+        } catch (e: IllegalArgumentException) {
+            Timber.d(e, "Invalid socket server address")
+            DataError.Network.UNKNOWN_HOST
+        } catch (e: URISyntaxException) {
+            Timber.d(e, "Malformed socket URI")
+            DataError.Network.UNKNOWN_HOST
+        }
     }
 
     override fun disconnect() {

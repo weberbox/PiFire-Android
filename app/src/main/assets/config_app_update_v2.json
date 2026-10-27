@@ -1,0 +1,7 @@
+{
+  "stable": {
+    "latestVersionCode": 3040200,
+    "minVersionCode": 3030100,
+    "message": "Clear errors when a proxy or Cloudflare Access blocks PiFire, connection failure reasons when selecting a server, Bugfix back animation shrinking the screen"
+  }
+}

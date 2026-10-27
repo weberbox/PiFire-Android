@@ -1,9 +1,10 @@
 package com.weberbox.pifire.core.remoteconfig
 
 interface RemoteConfigRepo {
-    suspend fun fetchServerSupportConfig(): ServerSupportConfigData?
+    /** The rule covering this app version; null when none does. */
+    suspend fun fetchServerSupportRule(): ServerSupportRule?
 
-    /** Every release listed, newest or not; empty when neither the remote nor bundled list decodes. */
-    suspend fun fetchAppUpdateConfig(): List<AppUpdateConfigData>
+    /** Null when neither the remote nor the bundled config decodes. */
+    suspend fun fetchAppUpdateConfig(): AppUpdateConfigData?
     suspend fun fetchFeatureSupportConfig(): Map<String, RemoteFeatureConfigData>
 }

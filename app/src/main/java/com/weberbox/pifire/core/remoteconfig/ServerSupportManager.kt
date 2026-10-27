@@ -9,8 +9,7 @@ class ServerSupportManager @Inject constructor(
 ) {
 
     suspend fun isServerVersionSupported(current: ServerInfo): ServerSupportResult {
-        val serverConfigData = remoteConfigRepo.fetchServerSupportConfig()
-        val config = serverConfigData ?: return ServerSupportResult.Untested
+        val config = remoteConfigRepo.fetchServerSupportRule() ?: return ServerSupportResult.Untested
 
         val min = config.minServerInfo
         val max = config.maxServerInfo
@@ -95,14 +94,32 @@ sealed class ServerSupportResult {
 
 @Serializable
 data class ServerInfo(
-    val version: String,
-    val build: String,
+    val version: String = "",
+    val build: String = "",
 )
 
+/** Remote Config `server_support_config_v2`. */
 @Serializable
 data class ServerSupportConfigData(
-    val appVersionCode: Int,
-    val isMandatory: Boolean,
-    val minServerInfo: ServerInfo,
-    val maxServerInfo: ServerInfo,
+    val rules: List<ServerSupportRule> = emptyList(),
 )
+
+/**
+ * The PiFire range that app versions [minAppVersionCode] to [maxAppVersionCode] work with. A rule
+ * stays open-ended until a PiFire release breaks it, so a new app release needs no new rule.
+ */
+@Serializable
+data class ServerSupportRule(
+    val minAppVersionCode: Int = 0,
+    /** Null covers every later app version too. */
+    val maxAppVersionCode: Int? = null,
+    val isMandatory: Boolean = true,
+    val minServerInfo: ServerInfo = ServerInfo(),
+    /** A blank version means no upper limit. */
+    val maxServerInfo: ServerInfo = ServerInfo(),
+)
+
+/** The rule covering [appVersionCode]; where ranges overlap, the one starting latest wins. */
+fun ServerSupportConfigData.ruleFor(appVersionCode: Int): ServerSupportRule? = rules
+    .filter { appVersionCode in it.minAppVersionCode..(it.maxAppVersionCode ?: Int.MAX_VALUE) }
+    .maxByOrNull { it.minAppVersionCode }

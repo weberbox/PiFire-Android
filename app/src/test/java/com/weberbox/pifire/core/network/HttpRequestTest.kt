@@ -3,6 +3,9 @@ package com.weberbox.pifire.core.network
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.Protocol
+import okhttp3.Request
 import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
@@ -23,6 +26,29 @@ class HttpRequestTest {
     @Test
     fun `a successful response parses its body`() = runTest {
         assertEquals(Result.Success<String, DataError>("parsed:{}"), request { Response.success("{}".toResponseBody()) })
+    }
+
+    @Test
+    fun `an HTML page instead of PiFire is not a JSON error`() = runTest {
+        val loginPage = "<!DOCTYPE html><html>Sign in</html>".toResponseBody("text/html".toMediaType())
+        assertEquals(
+            Result.Error<String, DataError>(DataError.Network.NOT_PIFIRE),
+            request { Response.success(loginPage) },
+        )
+    }
+
+    @Test
+    fun `a redirect to Cloudflare Access names it`() = runTest {
+        val raw = okhttp3.Response.Builder()
+            .request(Request.Builder().url("https://team.cloudflareaccess.com/cdn-cgi/access/login/pifire.example.com").build())
+            .protocol(Protocol.HTTP_1_1)
+            .code(200)
+            .message("OK")
+            .build()
+        assertEquals(
+            Result.Error<String, DataError>(DataError.Network.CLOUDFLARE_ACCESS),
+            request { Response.success("<html></html>".toResponseBody(), raw) },
+        )
     }
 
     @Test

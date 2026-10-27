@@ -27,7 +27,7 @@ private val localProperties = getLocalProperties()
 
 val vMajor = 3
 val vMinor = 4
-val vPatch = 1
+val vPatch = 2
 val isAlpha = false
 
 android {

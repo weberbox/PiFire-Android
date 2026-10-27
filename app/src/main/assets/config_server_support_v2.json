@@ -1,0 +1,17 @@
+{
+  "rules": [
+    {
+      "minAppVersionCode": 3040200,
+      "maxAppVersionCode": null,
+      "isMandatory": true,
+      "minServerInfo": {
+        "version": "1.10.0",
+        "build": "29"
+      },
+      "maxServerInfo": {
+        "version": "",
+        "build": ""
+      }
+    }
+  ]
+}

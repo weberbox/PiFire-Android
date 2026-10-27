@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.Flow
  * their parsers work the same over either (docs/V2_API.md).
  */
 interface PiFireTransport {
-    /** Connects to [server], replacing any current connection; false if it couldn't connect. */
+    /** Connects to [server], replacing any current connection; the error says why it couldn't. */
     suspend fun connect(
         server: Server,
         disconnectOnCancellation: Boolean,
-    ): Boolean
+    ): Result<Unit, DataError>
 
     fun disconnect()
 

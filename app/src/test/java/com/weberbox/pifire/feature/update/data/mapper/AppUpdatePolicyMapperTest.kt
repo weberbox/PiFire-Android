@@ -1,7 +1,7 @@
 package com.weberbox.pifire.feature.update.data.mapper
 
+import com.weberbox.pifire.core.remoteconfig.AppUpdateChannelData
 import com.weberbox.pifire.core.remoteconfig.AppUpdateConfigData
-import com.weberbox.pifire.core.remoteconfig.UpdateType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -9,64 +9,68 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AppUpdatePolicyMapperTest {
-    private fun release(
-        versionCode: Int,
-        type: UpdateType = UpdateType.FLEXIBLE,
-        message: String = "",
-        isAlpha: Boolean = false,
-    ) = AppUpdateConfigData(
-        appVersionCode = versionCode,
-        type = type,
+    private fun channel(latest: Int, min: Int = 0, message: String = "") = AppUpdateChannelData(
+        latestVersionCode = latest,
+        minVersionCode = min,
         message = message,
-        isAlpha = isAlpha,
     )
 
     @Test
     fun `nothing newer means no policy`() {
-        val releases = listOf(release(versionCode = 100), release(versionCode = 90, type = UpdateType.IMMEDIATE))
-        assertNull(releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false))
+        val config = AppUpdateConfigData(stable = channel(latest = 100, min = 90))
+        assertNull(config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false))
     }
 
     @Test
-    fun `the latest newer release is offered with its notes`() {
-        val releases = listOf(release(versionCode = 110, message = "Old"), release(versionCode = 120, message = "New"))
-        val policy = releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
+    fun `no channels means no policy`() {
+        assertNull(AppUpdateConfigData().toUpdatePolicy(currentVersionCode = 100, includeAlpha = true))
+    }
+
+    @Test
+    fun `the latest release is offered with its notes`() {
+        val config = AppUpdateConfigData(stable = channel(latest = 120, min = 90, message = "New"))
+        val policy = config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
         assertEquals(120, policy?.latestVersionCode)
         assertEquals("New", policy?.message)
         assertFalse(policy?.isRequired == true)
     }
 
     @Test
-    fun `an immediate release in between makes the update required`() {
-        val releases = listOf(
-            release(versionCode = 110, type = UpdateType.IMMEDIATE),
-            release(versionCode = 120),
+    fun `a version below the minimum must update`() {
+        val config = AppUpdateConfigData(stable = channel(latest = 120, min = 110))
+        assertTrue(config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)?.isRequired == true)
+    }
+
+    @Test
+    fun `the minimum version itself doesn't have to update`() {
+        val config = AppUpdateConfigData(stable = channel(latest = 120, min = 100))
+        assertFalse(config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)?.isRequired == true)
+    }
+
+    @Test
+    fun `the alpha channel counts only for alpha builds`() {
+        val config = AppUpdateConfigData(
+            stable = channel(latest = 110),
+            alpha = channel(latest = 120, min = 105, message = "Alpha"),
         )
-        val policy = releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
-        assertEquals(120, policy?.latestVersionCode)
-        assertTrue(policy?.isRequired == true)
-    }
-
-    @Test
-    fun `an immediate release this version already has doesn't require anything`() {
-        val releases = listOf(release(versionCode = 100, type = UpdateType.IMMEDIATE), release(versionCode = 120))
-        assertFalse(releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)?.isRequired == true)
-    }
-
-    @Test
-    fun `alpha releases count only for alpha builds`() {
-        val releases = listOf(release(versionCode = 110), release(versionCode = 120, type = UpdateType.IMMEDIATE, isAlpha = true))
-        val stable = releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
+        val stable = config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
         assertEquals(110, stable?.latestVersionCode)
         assertFalse(stable?.isRequired == true)
-        val alpha = releases.toUpdatePolicy(currentVersionCode = 100, includeAlpha = true)
+        val alpha = config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = true)
         assertEquals(120, alpha?.latestVersionCode)
+        assertEquals("Alpha", alpha?.message)
         assertTrue(alpha?.isRequired == true)
     }
 
     @Test
+    fun `alpha builds get a stable release newer than the latest alpha`() {
+        val config = AppUpdateConfigData(stable = channel(latest = 130), alpha = channel(latest = 120))
+        assertEquals(130, config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = true)?.latestVersionCode)
+    }
+
+    @Test
     fun `blank notes become null`() {
-        val policy = listOf(release(versionCode = 110, message = " ")).toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)
-        assertNull(policy?.message)
+        val config = AppUpdateConfigData(stable = channel(latest = 110, message = " "))
+        assertNull(config.toUpdatePolicy(currentVersionCode = 100, includeAlpha = false)?.message)
     }
 }

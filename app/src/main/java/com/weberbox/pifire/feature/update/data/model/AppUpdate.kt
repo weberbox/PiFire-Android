@@ -14,7 +14,7 @@ enum class UpdateSource {
 /** What Remote Config says about versions newer than this one. */
 data class AppUpdatePolicy(
     val latestVersionCode: Int,
-    /** A release between this version and the latest is IMMEDIATE: the app is blocked until it updates. */
+    /** This version is below the minimum Remote Config allows: the app is blocked until it updates. */
     val isRequired: Boolean,
     /** Release notes of the latest version, from Remote Config. */
     val message: String?,

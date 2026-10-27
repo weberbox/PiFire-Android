@@ -3,6 +3,7 @@ package com.weberbox.pifire.core.remoteconfig
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalView
+import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.core.model.SemanticVersion
 import kotlinx.serialization.Serializable
 
@@ -22,12 +23,14 @@ class FeatureSupport(
     private val currentVersion: String = "0.0.0",
     private val currentBuild: String = "0",
     private val featureMap: FeatureFlagsConfig = emptyMap(),
+    private val appVersionCode: Int = BuildConfig.VERSION_CODE,
 ) {
     fun isSupported(feature: Feature): Boolean {
         val config = featureMap[feature.name]
 
         val enabled = config?.enabled ?: false
         if (!enabled) return false
+        if (appVersionCode < config.minAppVersionCode) return false
 
         val version = SemanticVersion.fromString(currentVersion)
         val build = currentBuild.toIntOrNull() ?: 0
@@ -74,6 +77,11 @@ data class RemoteFeatureConfigData(
     val minBuild: String = "",
     val maxVersion: String = "",
     val maxBuild: String = "",
+    /**
+     * Turns the feature off in older app versions, e.g. ones whose side of it is broken. App
+     * versions before 3.4.2 don't know this field and ignore it.
+     */
+    val minAppVersionCode: Int = 0,
 )
 
 typealias FeatureFlagsConfig = Map<String, RemoteFeatureConfigData>

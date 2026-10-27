@@ -76,11 +76,13 @@ built in full on a fork branch and submitted as one PR; only this app uses `sock
   1. ~~Relay live.~~ Done 2026-10-25.
   2. App release, tested against the fork branch, v2 switched off.
   3. `app_update_config` entry for that release as FLEXIBLE.
-  4. Once the rollout and Sentry look clean, switch it to IMMEDIATE (reaches every 3.x app,
-     independent of the server).
+  4. Once the rollout and Sentry look clean, force it (reaches every 3.x app, independent of the
+     server): IMMEDIATE on that release's entry in the frozen v1 `app_update_config` (apps before
+     3.4.2), and `minVersionCode` in `app_update_config_v2`.
   5. PiFire PR.
-  6. After merge: v2 on in Remote Config, `maxServerInfo` for old version codes set to the
-     last Socket.IO PiFire.
+  6. After merge: v2 on in Remote Config, and `maxServerInfo` set to the last Socket.IO PiFire on
+     the v1 `server_support_config` entries for apps before 3.4.0. Apps reading
+     `server_support_config_v2` (3.4.2+) all speak v2, so its rules need no cap.
 - Open:
   - Check the version distribution (Play Console) before forcing.
   - Word the forced-update message so 3.0.0-3.3.1 Play users (in-app update crash, fixed in

@@ -31,6 +31,7 @@ import com.weberbox.pifire.feature.home.presentation.contract.HomeContract
 import com.weberbox.pifire.navigation.NavGraph
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -52,6 +53,7 @@ class HomeScreenViewModel @Inject constructor(
         checkIfAppUpdated()
         collectPrefsFlow()
         collectConnectedState()
+        collectConnectionBlockedState()
         collectDashDataState()
         setUpPush()
         checkServerSupported()
@@ -114,6 +116,20 @@ class HomeScreenViewModel @Inject constructor(
                 setState {
                     copy(
                         isConnected = connected,
+                    )
+                }
+            }
+        }
+    }
+
+    // The app bar already shows "connecting"; this says why it won't, when the user has to act.
+    private fun collectConnectionBlockedState() {
+        viewModelScope.launch {
+            sessionStateHolder.connectionBlockedState.filterNotNull().collect { error ->
+                setEffect {
+                    HomeContract.Effect.Notification(
+                        text = error.asUiText(),
+                        error = true,
                     )
                 }
             }

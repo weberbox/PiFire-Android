@@ -3,6 +3,7 @@ package com.weberbox.pifire.core.session
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.model.dashboard.DashData.Dash
 import com.weberbox.pifire.core.model.events.EventsData.Events
 import com.weberbox.pifire.core.model.info.InfoData.Info
@@ -20,6 +21,11 @@ class SessionStateHolder {
 
     private val _isConnectedState = MutableStateFlow(false)
     val isConnectedState = _isConnectedState.asStateFlow()
+
+    // Why a dropped connection can't come back that the user has to fix (a proxy or login page in
+    // front of PiFire, credentials); cleared once connected again.
+    private val _connectionBlockedState = MutableStateFlow<DataError?>(null)
+    val connectionBlockedState: StateFlow<DataError?> = _connectionBlockedState.asStateFlow()
 
     private val _pelletsDataState = MutableStateFlow<Pellets?>(null)
     val pelletsDataState: StateFlow<Pellets?> = _pelletsDataState.asStateFlow()
@@ -42,6 +48,7 @@ class SessionStateHolder {
     fun clearSessionState() {
         currentServerUuid = ""
         _isConnectedState.value = false
+        _connectionBlockedState.value = null
         _pelletsDataState.value = null
         _dashDataState.value = null
         _eventsDataState.value = null
@@ -51,11 +58,17 @@ class SessionStateHolder {
     }
 
     suspend fun setConnectedState(connected: Boolean) {
+        if (connected) _connectionBlockedState.value = null
         _isConnectedState.emit(connected)
     }
 
     fun tryEmitConnectedState(connected: Boolean) {
+        if (connected) _connectionBlockedState.value = null
         _isConnectedState.tryEmit(connected)
+    }
+
+    fun tryEmitConnectionBlocked(error: DataError) {
+        _connectionBlockedState.tryEmit(error)
     }
 
     suspend fun setPelletsData(pellets: Pellets) {

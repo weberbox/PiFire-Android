@@ -1,9 +1,33 @@
 {
   "changelog": [
     {
-      "version": "3.4.1",
+      "version": "3.4.2",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "imp",
+          "text": "When a proxy or login page answers instead of PiFire, the app says so instead of showing a JSON parsing error. Cloudflare Access is named, with how to add a service token under Extra Headers"
+        },
+        {
+          "type": "imp",
+          "text": "The dashboard says why it can't reconnect when a proxy, Cloudflare Access or the server's credentials block the connection"
+        },
+        {
+          "type": "imp",
+          "text": "Selecting a server shows why the connection failed instead of a generic message"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix going back shrinking the screen into the middle on Samsung phones and with back swipes"
+        }
+      ]
+    },
+    {
+      "version": "3.4.1",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {
