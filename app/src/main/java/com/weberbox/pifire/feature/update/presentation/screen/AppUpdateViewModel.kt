@@ -1,9 +1,6 @@
 package com.weberbox.pifire.feature.update.presentation.screen
 
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
-import com.weberbox.pifire.core.remoteconfig.UpdateType
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.feature.update.data.model.InstallProgress
 import com.weberbox.pifire.feature.update.data.model.UpdateSource
@@ -28,7 +25,6 @@ import kotlin.time.TimeSource
 @HiltViewModel
 class AppUpdateViewModel @Inject constructor(
     private val appUpdateRepo: AppUpdateRepo,
-    private val analytics: Analytics,
 ) : BaseViewModel<AppUpdateContract.Event, AppUpdateContract.State, AppUpdateContract.Effect>() {
     private var checkJob: Job? = null
 
@@ -82,7 +78,6 @@ class AppUpdateViewModel @Inject constructor(
             val update = policy?.let { appUpdateRepo.findUpdate(policy = it) }
             val isRequired = policy?.isRequired == true
             val isOffered = !isRequired && update != null && !appUpdateRepo.isSnoozed(versionCode = update.versionCode)
-            val previous = viewState.value
             setState {
                 copy(
                     isChecking = false,
@@ -97,12 +92,6 @@ class AppUpdateViewModel @Inject constructor(
                         else -> null
                     },
                 )
-            }
-            val current = viewState.value
-            if (current.isRequired && !previous.isRequired) {
-                logUpdateAvailable(type = UpdateType.IMMEDIATE)
-            } else if (current.sheet == UpdateSheet.OFFER && previous.sheet != UpdateSheet.OFFER) {
-                logUpdateAvailable(type = UpdateType.FLEXIBLE)
             }
             // Play: an immediate update that was interrupted (e.g. the app was closed) goes on.
             if (isRequired && update?.isInProgress == true) {
@@ -141,10 +130,6 @@ class AppUpdateViewModel @Inject constructor(
         if (state.source == UpdateSource.GITHUB) {
             setState { copy(sheet = null) }
             setEffect { AppUpdateContract.Effect.OpenReleasePage }
-            analytics.logEvent(
-                name = AnalyticsEvent.ButtonClick.name,
-                params = mapOf(AnalyticsEvent.Param.ButtonAction.key to "githubUpdateLink"),
-            )
             return
         }
         if (state.update == null) {
@@ -164,7 +149,6 @@ class AppUpdateViewModel @Inject constructor(
         val state = viewState.value
         if (state.sheet == UpdateSheet.OFFER) {
             state.update?.let { appUpdateRepo.snooze(versionCode = it.versionCode) }
-            analytics.logEvent(name = AnalyticsEvent.PostponeUpdate.name)
         }
         setState {
             copy(
@@ -172,13 +156,6 @@ class AppUpdateViewModel @Inject constructor(
                 isDownloadHidden = isDownloadHidden || state.sheet == UpdateSheet.DOWNLOADING,
             )
         }
-    }
-
-    private fun logUpdateAvailable(type: UpdateType) {
-        analytics.logEvent(
-            name = AnalyticsEvent.UpdateAvailable.name,
-            params = mapOf(AnalyticsEvent.Param.UpdateType.key to type.name),
-        )
     }
 
     private companion object {

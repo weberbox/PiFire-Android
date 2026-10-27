@@ -53,7 +53,8 @@ import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.landing.presentation.components.sheets.HeadersSheet
 import com.weberbox.pifire.feature.landing.presentation.contract.HeadersContract
 import com.weberbox.pifire.navigation.navigateFrom
@@ -271,9 +272,8 @@ private fun HandleSideEffects(
                 }
 
                 is HeadersContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

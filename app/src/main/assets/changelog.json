@@ -1,9 +1,37 @@
 {
   "changelog": [
     {
-      "version": "3.4.0",
+      "version": "3.4.1",
       "date": "",
       "current": true,
+      "isAlpha": false,
+      "logs": [
+        {
+          "type": "new",
+          "text": "Setup on newer PiFire servers now has a Push Notifications step: turn on notifications for the grill or skip"
+        },
+        {
+          "type": "new",
+          "text": "Added an Alerts on This Phone switch to App Push settings to turn push notifications on or off for each grill"
+        },
+        {
+          "type": "imp",
+          "text": "New in-app message banners that match the app theme and can be tapped or swiped away"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix notification settings saying the app is registering with PiFire on every visit"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix this phone registering for push again after removing it from the App Push list"
+        }
+      ]
+    },
+    {
+      "version": "3.4.0",
+      "date": "",
+      "current": false,
       "isAlpha": false,
       "logs": [
         {

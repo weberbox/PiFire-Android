@@ -27,7 +27,6 @@ This app used the following open-source libraries and/or code inspired from thes
 - [Socket.IO](https://github.com/socketio/socket.io-client-java)
 - [Sentry](https://github.com/getsentry/sentry-java)
 - [Timber](https://github.com/JakeWharton/timber)
-- [Alerter](https://github.com/Tapadoo/Alerter)
 - [ComposePreference](https://github.com/zhanghai/ComposePreference)
 - [Compose Unstyled](https://github.com/composablehorizons/compose-unstyled)
 - [Haze](https://github.com/chrisbanes/haze)

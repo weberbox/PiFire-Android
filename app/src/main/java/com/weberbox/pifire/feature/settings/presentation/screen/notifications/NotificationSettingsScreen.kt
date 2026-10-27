@@ -39,8 +39,9 @@ import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.util.NOTIFICATIONS_PERMISSION
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.rememberPermissionState
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.components.TwoTargetSwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.components.getSummary
 import com.weberbox.pifire.feature.settings.presentation.contract.NotifContract
@@ -302,10 +303,8 @@ private fun HandleSideEffects(
                 }
 
                 is NotifContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
-                        duration = 6000,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

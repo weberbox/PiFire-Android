@@ -24,7 +24,6 @@ sentryGradle = "6.24.0"
 sentryAndroid = "8.61.1"
 hazeVersion = "1.7.2"
 timberVersion = "5.0.1"
-alerterVersion = "7.2.4"
 composeRatingbar = "1.3.12"
 composePreference = "1.1.1"
 composeLottie = "6.7.1"
@@ -51,7 +50,6 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-config = { module = "com.google.firebase:firebase-config" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref= "navigationCompose"}
 androidx-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref= "navigationHiltCompose"}
@@ -84,7 +82,6 @@ composables-core = { module = "com.composables:core", version.ref = "composables
 haze-android = { module = "dev.chrisbanes.haze:haze-android", version.ref = "hazeVersion" }
 haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeVersion" }
 timber-android = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
-tapadoo-alerter = { module = "com.github.tapadoo:alerter", version.ref = "alerterVersion" }
 compose-ratingbar = { module = "com.github.a914-gowtham:compose-ratingbar", version.ref = "composeRatingbar" }
 compose-preference = { module = "me.zhanghai.compose.preference:library", version.ref = "composePreference" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "composeLottie" }

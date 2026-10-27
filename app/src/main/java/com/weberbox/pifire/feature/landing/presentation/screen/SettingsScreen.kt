@@ -33,8 +33,9 @@ import com.weberbox.pifire.core.ui.components.DataError
 import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.rememberBiometricPromptManager
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.landing.presentation.contract.SettingsContract
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
 import com.weberbox.pifire.navigation.navigateFrom
@@ -226,9 +227,8 @@ private fun HandleSideEffects(
                 }
 
                 is SettingsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

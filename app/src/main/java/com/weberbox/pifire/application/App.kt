@@ -6,12 +6,9 @@ import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.os.StrictMode.VmPolicy
 import com.weberbox.pifire.BuildConfig
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.data.pref.Prefs
-import com.weberbox.pifire.core.data.util.getAppLanguage
 import com.weberbox.pifire.core.log.DebugLogTree
 import com.weberbox.pifire.core.log.SentryIO
 import com.weberbox.pifire.core.notification.StreamAlertNotifier
@@ -27,9 +24,6 @@ class App : Application() {
 
     @Inject
     lateinit var sentryIO: SentryIO
-
-    @Inject
-    lateinit var analytics: Analytics
 
     @Inject
     lateinit var streamAlertNotifier: StreamAlertNotifier
@@ -52,16 +46,6 @@ class App : Application() {
         // Before any push can arrive: relay alerts post to these channels, OneSignal's name them.
         createAlertChannels(this)
         streamAlertNotifier.start()
-
-        analytics.setUserProperty(
-            name = AnalyticsEvent.Language.name,
-            value = getAppLanguage(this),
-        )
-
-        analytics.setUserProperty(
-            name = AnalyticsEvent.AppFlavor.name,
-            value = BuildConfig.FLAVOR,
-        )
     }
 
     companion object {

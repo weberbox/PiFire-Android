@@ -20,10 +20,6 @@
     "license": "https://github.com/JakeWharton/timber/blob/trunk/LICENSE.txt"
   },
   {
-    "project": "Alerter",
-    "license": "https://github.com/Tapadoo/Alerter/blob/master/LICENSE.md"
-  },
-  {
     "project": "ComposePreference",
     "license": "https://github.com/zhanghai/ComposePreference/blob/master/LICENSE"
   },

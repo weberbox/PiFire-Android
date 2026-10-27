@@ -46,8 +46,9 @@ import com.weberbox.pifire.core.ui.modifier.limitWidthFraction
 import com.weberbox.pifire.core.ui.modifier.pagerCubeInDepthTransition
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.rememberPaletteColorState
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.recipes.presentation.contract.ImagesContract
 import com.weberbox.pifire.feature.recipes.presentation.util.decodeBase64Image
 import com.weberbox.pifire.feature.setup.presentation.components.RecipeAsyncImage
@@ -225,9 +226,8 @@ private fun HandleSideEffects(
                 }
 
                 is ImagesContract.Effect.Notification ->
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
             }
         }?.collect()

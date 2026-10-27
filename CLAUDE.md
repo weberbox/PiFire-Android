@@ -265,6 +265,10 @@ Other screen rules:
 - Only commit when asked. Work on `development`; PRs go to `master`.
 - Create PRs to `master` only when asked; never merge them (the user reviews and merges, using a
   merge commit, not squash).
+- Before opening a PR to `master`, update the bundled assets in `app/src/main/assets/` as the
+  release needs: `changelog.json` (always), `config_app_update.json`, `config_server_support.json`
+  and `config_feature_support.json` (when the release changes them). Keep the Remote Config console
+  in sync and list the console changes under `Remote Config:` in the PR.
 - Message style: a one-line summary, then sections (e.g. `Dashboard`, `Settings`, `Setup`,
   `Under the hood`) of short `- ` bullets describing user-visible effect. Note Remote Config
   changes that must be made in the Firebase console under `Remote Config:`.

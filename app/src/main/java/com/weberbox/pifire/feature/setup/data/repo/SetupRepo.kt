@@ -24,6 +24,9 @@ interface SetupRepo {
         server: Server,
     ): Result<Server, DataError>
 
+    /** The UUID of the server being set up, once it's connected. */
+    suspend fun getServerUuid(): String
+
     /** Sends the grill name, then saves the new server and its headers and clears the setup cache. */
     suspend fun completeSetup(
         server: Server,

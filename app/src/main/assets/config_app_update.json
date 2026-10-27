@@ -1,5 +1,11 @@
 [
   {
+    "appVersionCode": 3040100,
+    "type": "FLEXIBLE",
+    "message": "Push Notifications setup step and per-grill alert switch on newer PiFire servers, new message banners, Bugfix repeated push registration message",
+    "isAlpha": false
+  },
+  {
     "appVersionCode": 3040000,
     "type": "FLEXIBLE",
     "message": "New update screens, clearer connection errors, Bugfix Celsius decimal temps, reverse proxy subpaths, reconnects and many crashes",

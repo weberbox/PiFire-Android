@@ -2,7 +2,6 @@
 <resources>
     <color name="splash_background">#FF12131B</color>
 
-    <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimary">#FF262626</color>
     <color name="colorPrimaryDark">#FF1D1D1D</color>
 

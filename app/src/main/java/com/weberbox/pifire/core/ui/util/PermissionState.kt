@@ -58,6 +58,7 @@ class PermissionState internal constructor(
     private val checkGranted: () -> Boolean,
     private val launch: () -> Unit,
 ) {
+    /** Also true below the spec's minSdk, where there's nothing to grant. */
     val isGranted: Boolean get() = granted.value
 
     /** Shows the system prompt; if declined, our dialog offers to ask again or the settings. */
@@ -82,12 +83,12 @@ fun rememberPermissionState(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val currentOnResult by rememberUpdatedState(onResult)
-    val granted = remember(spec) { mutableStateOf(context.hasAll(spec.permissions)) }
+    val granted = remember(spec) { mutableStateOf(context.hasAll(spec)) }
     // Shown from an effect: asking again needs the launcher, which its own callback can't reach.
     var declined by remember { mutableStateOf<PermissionOutcome?>(null) }
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-        granted.value = context.hasAll(spec.permissions)
+        granted.value = context.hasAll(spec)
         val outcome = outcomeAfterAsking(
             granted = granted.value,
             showRationale = activity.showsRationale(spec.permissions),
@@ -112,7 +113,7 @@ fun rememberPermissionState(
     return remember(spec, launcher) {
         PermissionState(
             granted = granted,
-            checkGranted = { context.hasAll(spec.permissions) },
+            checkGranted = { context.hasAll(spec) },
             launch = { requestIfSupported(spec = spec, launch = launcher::launch) },
         )
     }
@@ -151,7 +152,9 @@ private fun declinedDialog(
     ),
 )
 
-private fun Context.hasAll(permissions: List<String>) = permissions.all { checkPermission(it) }
+// Below minSdk the permission doesn't exist and is implicitly granted.
+private fun Context.hasAll(spec: PermissionSpec) =
+    Build.VERSION.SDK_INT < spec.minSdk || spec.permissions.all { checkPermission(it) }
 
 private fun Activity?.showsRationale(permissions: List<String>) =
     this != null && permissions.any { ActivityCompat.shouldShowRequestPermissionRationale(this, it) }

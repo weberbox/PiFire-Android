@@ -62,10 +62,12 @@ import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.BiometricPromptManager
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.UiText
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
 import com.weberbox.pifire.core.ui.util.rememberBiometricPromptManager
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.landing.presentation.components.LandingTopBar
 import com.weberbox.pifire.feature.landing.presentation.components.ServerItem
 import com.weberbox.pifire.feature.landing.presentation.contract.LandingContract
@@ -166,10 +168,7 @@ private fun LandingScreen(
             LandingTopBar(
                 state = state,
                 hazeState = hazeState,
-                onSearchUpdated = {
-                    searchQuery = it
-                    onEventSent(LandingContract.Event.VoiceSearch)
-                },
+                onSearchUpdated = { searchQuery = it },
                 onNavigationRequested = onNavigationRequested,
             )
         },
@@ -283,9 +282,8 @@ private fun LandingScreenContent(
                                         },
                                     )
                                 } else {
-                                    activity?.showAlerter(
-                                        message = R.string.alerter_server_offline,
-                                        isError = true,
+                                    activity?.showMessage(
+                                        message = UiMessage.error(text = UiText(R.string.alerter_server_offline)),
                                     )
                                 }
                             },
@@ -399,9 +397,8 @@ private fun HandleSideEffects(
                 }
 
                 is LandingContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
 

@@ -10,11 +10,18 @@ class PushContract {
 
     sealed class Event : ViewEvent {
         data class ToggleConsent(val enabled: Boolean) : Event()
+
+        /** Notification permission is granted: turn on app push for this server. */
+        data object AllowAppPush : Event()
         data object NavigateToFinish : Event()
     }
 
     data class State(
         val consent: Boolean,
+        /** API v2 server: app push through the relay instead of OneSignal. */
+        val isAppPush: Boolean,
+        val isAppPushAllowed: Boolean,
+        val isLoading: Boolean,
     ) : ViewState
 
     sealed class Effect : ViewSideEffect {

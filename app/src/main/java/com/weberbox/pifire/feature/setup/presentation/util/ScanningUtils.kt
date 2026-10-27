@@ -9,8 +9,9 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.feature.setup.presentation.contract.ConnectContract
 
@@ -36,13 +37,12 @@ internal fun openQRCodeScanner(
                 if (barcode.valueType == Barcode.TYPE_URL) {
                     barcode.url?.url?.let {
                         onEventSent(ConnectContract.Event.ValidateAddress(it))
-                    } ?: activity.showAlerter(
-                        message = UiText(R.string.setup_scan_qr_failed),
-                        isError = true,
+                    } ?: activity.showMessage(
+                        message = UiMessage.error(text = UiText(R.string.setup_scan_qr_failed)),
                     )
                 } else {
-                    activity.showAlerter(
-                        message = UiText(R.string.setup_qr_invalid_url),
+                    activity.showMessage(
+                        message = UiMessage.alert(text = UiText(R.string.setup_qr_invalid_url)),
                     )
                 }
             }

@@ -66,6 +66,7 @@
     <string name="update">Update</string>
     <string name="voice_input">Voice Input</string>
     <string name="next">Next</string>
+    <string name="skip">Skip</string>
     <string name="dismiss">Dismiss</string>
     <string name="settings">Settings</string>
     <string name="status">Status:</string>

@@ -11,7 +11,6 @@ class LandingContract {
     sealed class Event : ViewEvent {
         data class SelectServer(val uuid: String) : Event()
         data class DeleteServer(val uuid: String) : Event()
-        data object VoiceSearch : Event()
         data object StartPolling : Event()
         data object StopPolling : Event()
         data object Back : Event()

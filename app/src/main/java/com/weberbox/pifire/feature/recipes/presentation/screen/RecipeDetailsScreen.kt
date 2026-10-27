@@ -61,9 +61,10 @@ import com.weberbox.pifire.core.ui.state.CustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.home.presentation.screen.SHOW_DASHBOARD_KEY
 import com.weberbox.pifire.feature.recipes.presentation.components.FloatingActionMenu
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipeAbout
@@ -383,9 +384,8 @@ private fun HandleSideEffects(
                 }
 
                 is DetailsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
 
