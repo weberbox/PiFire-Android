@@ -38,7 +38,8 @@ import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.components.sheets.InputValidationSheet
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.components.getSummary
 import com.weberbox.pifire.feature.settings.presentation.contract.NotifContract
 import com.weberbox.pifire.navigation.navigateFrom
@@ -191,9 +192,8 @@ private fun HandleSideEffects(
                 }
 
                 is NotifContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

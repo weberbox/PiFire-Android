@@ -51,9 +51,10 @@ import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
 import com.weberbox.pifire.core.ui.components.PullToRefresh
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.fadeEnterTransition
 import com.weberbox.pifire.core.ui.util.fadeExitTransition
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipeItem
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipesInputField
 import com.weberbox.pifire.feature.recipes.presentation.components.RecipesSearchResults
@@ -131,7 +132,6 @@ private fun RecipesScreen(
                         recipeData = state.recipesList,
                         searchQuery = textFieldState.text,
                         onResultClick = { result ->
-                            onEventSent(RecipesContract.Event.VoiceSearch)
                             textFieldState.setTextAndPlaceCursorAtEnd(result)
                             searchQuery = result
                         },
@@ -271,9 +271,8 @@ private fun HandleSideEffects(
                 }
 
                 is RecipesContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

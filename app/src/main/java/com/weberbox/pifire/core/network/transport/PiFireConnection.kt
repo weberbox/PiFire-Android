@@ -14,6 +14,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,6 +39,9 @@ class PiFireConnection @Inject constructor(
     /** True while connected through API v2. */
     val isApiV2: Boolean
         get() = active.value === httpSseTransport
+
+    /** [isApiV2], updated on every connect. */
+    val isApiV2Flow: Flow<Boolean> = active.map { it === httpSseTransport }
 
     override suspend fun connect(
         server: Server,

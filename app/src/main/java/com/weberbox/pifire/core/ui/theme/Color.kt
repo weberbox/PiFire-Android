@@ -20,8 +20,6 @@ val onPelletLevel = Color(0xFFFFFFFF)
 
 // Online marker on the landing server list, same in both themes
 val serverOnline = Color(0x8F00FF00)
-val alerterInfo = Color(0xFF3E3D3D)
-val alerterError = Color(0xFFFF5449)
 
 val primaryLight = Color(0xFF002CAE)
 val onPrimaryLight = Color(0xFFFFFFFF)

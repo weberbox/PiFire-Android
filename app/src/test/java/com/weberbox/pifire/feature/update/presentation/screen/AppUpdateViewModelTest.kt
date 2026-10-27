@@ -1,7 +1,6 @@
 package com.weberbox.pifire.feature.update.presentation.screen
 
 import app.cash.turbine.test
-import com.weberbox.pifire.core.analytics.Analytics
 import com.weberbox.pifire.feature.update.data.model.AppUpdatePolicy
 import com.weberbox.pifire.feature.update.data.model.AvailableUpdate
 import com.weberbox.pifire.feature.update.data.model.InstallProgress
@@ -30,14 +29,13 @@ class AppUpdateViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val progress = MutableStateFlow<InstallProgress>(InstallProgress.Idle)
-    private val analytics = mockk<Analytics>(relaxed = true)
     private val repo = mockk<AppUpdateRepo>(relaxed = true) {
         every { progress } returns this@AppUpdateViewModelTest.progress
         every { source } returns UpdateSource.PLAY_STORE
         every { isSnoozed(any()) } returns false
     }
 
-    private fun viewModel() = AppUpdateViewModel(appUpdateRepo = repo, analytics = analytics)
+    private fun viewModel() = AppUpdateViewModel(appUpdateRepo = repo)
 
     private fun givenPolicy(isRequired: Boolean, update: AvailableUpdate? = AvailableUpdate(versionCode = 120)) {
         val policy = AppUpdatePolicy(latestVersionCode = 120, isRequired = isRequired, message = "Notes")

@@ -39,7 +39,8 @@ import com.weberbox.pifire.core.ui.components.sheets.InputStateSheet
 import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.landing.presentation.components.sheets.CredentialsSheet
 import com.weberbox.pifire.feature.landing.presentation.contract.ServerContract
 import com.weberbox.pifire.feature.settings.presentation.components.PreferenceWarning
@@ -231,9 +232,8 @@ private fun HandleSideEffects(
                 }
 
                 is ServerContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

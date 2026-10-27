@@ -7,8 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.session.SessionStateHolder
@@ -30,7 +28,6 @@ import javax.inject.Inject
 class RecipeDetailsViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
     private val recipesRepo: RecipesRepo,
-    private val analytics: Analytics,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<DetailsContract.Event, DetailsContract.State, DetailsContract.Effect>() {
 
@@ -151,12 +148,6 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun startRecipe() {
-        analytics.logEvent(
-            name = AnalyticsEvent.ButtonClick.name,
-            params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "startRecipe",
-            ),
-        )
         setLoadingStateTrue()
         viewModelScope.launch {
             val result = recipesRepo.startRecipe(currentRecipe.recipeFilename)
@@ -182,12 +173,6 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun deleteRecipe() {
-        analytics.logEvent(
-            name = AnalyticsEvent.ButtonClick.name,
-            params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "deleteRecipe",
-            ),
-        )
         setLoadingStateTrue()
         viewModelScope.launch {
             val result = recipesRepo.deleteRecipe(currentRecipe.recipeFilename)
@@ -224,22 +209,10 @@ class RecipeDetailsViewModel @Inject constructor(
     }
 
     private fun handlePrintRequest() {
-        analytics.logEvent(
-            name = AnalyticsEvent.ButtonClick.name,
-            params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "printRecipe",
-            ),
-        )
         setEffect { DetailsContract.Effect.PrintRecipe(viewState.value.recipeData) }
     }
 
     private fun handleShareRequest() {
-        analytics.logEvent(
-            name = AnalyticsEvent.ButtonClick.name,
-            params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "shareRecipe",
-            ),
-        )
         setEffect { DetailsContract.Effect.ShareRecipe(viewState.value.recipeData) }
     }
 

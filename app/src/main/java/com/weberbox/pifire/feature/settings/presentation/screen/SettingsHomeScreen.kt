@@ -61,7 +61,8 @@ import com.weberbox.pifire.core.ui.icons.filled.ThermometerProbe
 import com.weberbox.pifire.core.ui.icons.filled.TuneVerticalVariant
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.contract.SettingsContract
 import com.weberbox.pifire.navigation.NavGraph
 import com.weberbox.pifire.navigation.navigateFrom
@@ -386,9 +387,8 @@ private fun HandleSideEffects(
                 }
 
                 is SettingsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

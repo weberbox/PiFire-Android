@@ -28,13 +28,19 @@ before acting on it, and delete it once it's done.
   rules are listed with reasons in `ArchitectureTest`.
 
 ## Open
+- [ui] Messages (`showMessage` + `MessageHost` in `MainActivity`) replaced the Alerter library 1:1:
+  every call is an Alert or Error, none a Toast yet. Review which ones only confirm a user action
+  and should be `UiMessage.toast`. The host draws in the activity window, so a message raised
+  while a bottom sheet or dialog is open shows behind it.
 - [ui] `core/ui/components/PickerWheel`: verify the scaled-text look on a device.
 - [push] Relay push on v2 servers works end to end (2026-10-25: a real low pellet alert from
   the dev PiFire reached the phone). Still to check: sound per channel, token refresh. Not done:
   a phone-wide "turn off app push" that calls `DELETE /v1/register` (not in `RelayApi` yet);
   per-grill removal is the App Push screen. Registration stays lazy so installs that never use
-  relay push cost no KV write. Consent reuses the OneSignal setup screen, whose wording still
-  names OneSignal: reword when OneSignal goes.
+  relay push cost no KV write. App push is opted into per server (setup page or the App Push
+  screen's "Alerts on This Phone" switch, stored in `PushRegistration.serverChoices`); servers
+  without a choice follow the old OneSignal consent. Declining removes this phone from that
+  server only and never turns off the server-wide `mobile_push` switch, which other phones use.
 
 ## v2 API and push plan (PiFire + app)
 Replaces OneSignal v1 push (details in `docs/PUSH.md`) and the Socket.IO transport. PiFire is
@@ -76,7 +82,7 @@ built in full on a fork branch and submitted as one PR; only this app uses `sock
   6. After merge: v2 on in Remote Config, `maxServerInfo` for old version codes set to the
      last Socket.IO PiFire.
 - Open:
-  - Check the version distribution (Play Console / Firebase Analytics) before forcing.
+  - Check the version distribution (Play Console) before forcing.
   - Word the forced-update message so 3.0.0-3.3.1 Play users (in-app update crash, fixed in
     3030200) know to update from the Play Store.
   - Remove `socket_io.py` in the PR only if the forced update has been live a few weeks;

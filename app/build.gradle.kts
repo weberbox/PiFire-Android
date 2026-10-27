@@ -27,7 +27,7 @@ private val localProperties = getLocalProperties()
 
 val vMajor = 3
 val vMinor = 4
-val vPatch = 0
+val vPatch = 1
 val isAlpha = false
 
 android {
@@ -68,7 +68,6 @@ android {
                     "proguard-rules.pro",
                 ),
             )
-            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
@@ -81,7 +80,6 @@ android {
             manifestPlaceholders.putAll(mapOf("appName" to "PiFire Debug"))
             applicationIdSuffix = ".debug"
             isDebuggable = true
-            buildConfigField("Boolean", "ENABLE_ANALYTICS", "true")
             buildConfigField("Boolean", "ALPHA_BUILD", isAlpha.toString())
             buildConfigField("String", "BUILD_TIME", "\"${getCurrentTime()}\"")
             buildConfigField("String", "GIT_BRANCH", "\"${getGitBranch()}\"")
@@ -164,7 +162,6 @@ dependencies {
     implementation(libs.haze.android)
     implementation(libs.haze.materials)
     implementation(libs.timber.android)
-    implementation(libs.tapadoo.alerter)
     implementation(libs.compose.ratingbar) {
         // It lists the Compose compiler plugin as a runtime dependency, which R8 warns about
         exclude(group = "androidx.compose.compiler", module = "compiler")
@@ -180,7 +177,6 @@ dependencies {
     implementation(libs.onesignal)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.config)
-    implementation(libs.firebase.analytics)
     implementation(libs.socket.io) {
         exclude(group = "org.json", module = "json")
     }

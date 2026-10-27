@@ -36,6 +36,7 @@ import com.weberbox.pifire.core.ui.theme.spacing
 @Composable
 internal fun SetupBottomNavRow(
     modifier: Modifier = Modifier,
+    text: String = stringResource(R.string.next),
     enabled: Boolean = true,
     icon: ImageVector = Icons.AutoMirrored.Default.ArrowForward,
     description: String? = null,
@@ -79,7 +80,7 @@ internal fun SetupBottomNavRow(
             ) {
                 Row {
                     Text(
-                        text = stringResource(R.string.next),
+                        text = text,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold,
                     )

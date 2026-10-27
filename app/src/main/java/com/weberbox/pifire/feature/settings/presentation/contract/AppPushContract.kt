@@ -11,10 +11,14 @@ class AppPushContract {
     sealed class Event : ViewEvent {
         data object Refresh : Event()
         data class DeleteDevice(val id: String) : Event()
+
+        /** Turning on is sent once notification permission is granted. */
+        data class SetThisPhoneOn(val isOn: Boolean) : Event()
     }
 
     data class State(
         val devices: List<PushDevice>,
+        val isThisPhoneOn: Boolean,
         val isInitialLoading: Boolean,
         val isLoading: Boolean,
         val isDataError: Boolean,

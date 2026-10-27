@@ -21,6 +21,7 @@ import com.weberbox.pifire.feature.setup.data.mapper.VersionsDtoToDataMapper
 import com.weberbox.pifire.feature.setup.data.model.VersionsData
 import com.weberbox.pifire.feature.setup.data.util.ServerDataCache
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -118,6 +119,8 @@ class SetupRepoImpl @Inject constructor(
 
         is Result.Success -> Result.Success(data.data)
     }
+
+    override suspend fun getServerUuid(): String = serverDataCache.getServerData().first().uuid
 
     override suspend fun completeSetup(
         server: Server,

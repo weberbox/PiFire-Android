@@ -38,7 +38,8 @@ import com.weberbox.pifire.core.ui.components.InitialLoadingProgress
 import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.data.model.ManualData
 import com.weberbox.pifire.feature.settings.presentation.components.PreferenceNote
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
@@ -226,9 +227,8 @@ private fun HandleSideEffects(
                 }
 
                 is ManualContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

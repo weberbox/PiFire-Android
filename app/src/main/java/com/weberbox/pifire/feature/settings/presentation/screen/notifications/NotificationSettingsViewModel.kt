@@ -28,6 +28,8 @@ class NotificationSettingsViewModel @Inject constructor(
     private val pushRepo: PushRepo,
 ) : BaseViewModel<NotifContract.Event, NotifContract.State, NotifContract.Effect>() {
 
+    private var isOneSignalChecked = false
+
     init {
         setState { copy(isAppPush = connectionRepo.isApiV2 && pushRepo.isRelayConfigured) }
         collectServerData()
@@ -117,7 +119,10 @@ class NotificationSettingsViewModel @Inject constructor(
                         isInitialLoading = false,
                     )
                 }
-                if (server.settings.onesignalEnabled) {
+                // Once per visit: every settings change emits again, and registering refreshes settings too.
+                // App push servers had this phone's OneSignal entry removed on purpose, so don't re-register it.
+                if (!isOneSignalChecked && !viewState.value.isAppPush && server.settings.onesignalEnabled) {
+                    isOneSignalChecked = true
                     checkOneSignalStatus()
                 }
             }

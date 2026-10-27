@@ -2,8 +2,6 @@ package com.weberbox.pifire.feature.settings.presentation.screen.app
 
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.repo.PrefsRepo
@@ -20,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AppSettingsViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
-    private val analytics: Analytics,
     private val pushRepo: PushRepo,
 ) : BaseViewModel<AppContract.Event, AppContract.State, AppContract.Effect>() {
 
@@ -48,90 +45,34 @@ class AppSettingsViewModel @Inject constructor(
         when (event) {
             is AppContract.Event.UpdateAppTheme -> {
                 prefsRepo.set(Pref.appTheme, event.theme)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "appThemeChange",
-                        AnalyticsEvent.Param.State.key to event.theme.name,
-                    ),
-                )
             }
 
             is AppContract.Event.DynamicColorEnabled -> {
                 prefsRepo.set(Pref.dynamicColor, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "dynamicColorChange",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.KeepScreenOn -> {
                 prefsRepo.set(Pref.keepScreenOn, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "keepScreenOnChange",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.ShowBottomBar -> {
                 prefsRepo.set(Pref.showBottomBar, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "showBottomBarChange",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.BiometricsEnabled -> {
                 prefsRepo.set(Pref.biometricSettingsPrompt, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "settingsBiometrics",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.SetEventsAmount -> {
                 prefsRepo.set(Pref.eventsAmount, event.amount)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "eventsAmount",
-                        AnalyticsEvent.Param.State.key to event.amount,
-                    ),
-                )
             }
 
             is AppContract.Event.IncrementTemps -> {
                 prefsRepo.set(Pref.incrementTemps, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "incrementTemps",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.SentryEnabled -> {
                 prefsRepo.set(Pref.sentryEnabled, event.enabled)
-                analytics.logEvent(
-                    name = AnalyticsEvent.PrefsChange.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.PrefKey.key to "sentryEnabled",
-                        AnalyticsEvent.Param.State.key to event.enabled,
-                    ),
-                )
             }
 
             is AppContract.Event.SentryDebugEnabled ->

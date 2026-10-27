@@ -61,7 +61,8 @@ import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.core.ui.util.slideDownExitTransition
 import com.weberbox.pifire.core.ui.util.slideUpEnterTransition
 import com.weberbox.pifire.feature.dashboard.presentation.components.Action
@@ -516,9 +517,8 @@ private fun HandleSideEffects(
 
                 is DashContract.Effect.Notification -> {
                     if (isVisibleOnScreen) {
-                        activity?.showAlerter(
-                            message = effect.text,
-                            isError = effect.error,
+                        activity?.showMessage(
+                            message = UiMessage.of(text = effect.text, isError = effect.error),
                         )
                     }
                 }

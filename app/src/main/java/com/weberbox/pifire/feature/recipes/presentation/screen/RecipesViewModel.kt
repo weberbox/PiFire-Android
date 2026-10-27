@@ -3,8 +3,6 @@ package com.weberbox.pifire.feature.recipes.presentation.screen
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.ui.base.BaseViewModel
 import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
@@ -18,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RecipesViewModel @Inject constructor(
     private val recipesRepo: RecipesRepo,
-    private val analytics: Analytics,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<RecipesContract.Event, RecipesContract.State, RecipesContract.Effect>() {
 
@@ -37,12 +34,6 @@ class RecipesViewModel @Inject constructor(
     override fun handleEvents(event: RecipesContract.Event) {
         when (event) {
             is RecipesContract.Event.Refresh -> getRecipesData(forced = true)
-
-            is RecipesContract.Event.VoiceSearch -> {
-                analytics.logEvent(
-                    name = AnalyticsEvent.VoiceSearch.name,
-                )
-            }
         }
     }
 

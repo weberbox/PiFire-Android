@@ -36,7 +36,8 @@ import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.components.PreferenceNote
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.contract.NotifContract
@@ -184,9 +185,8 @@ private fun HandleSideEffects(
                 }
 
                 is NotifContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

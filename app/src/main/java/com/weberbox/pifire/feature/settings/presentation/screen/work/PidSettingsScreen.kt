@@ -39,7 +39,8 @@ import com.weberbox.pifire.core.ui.components.LinearLoadingIndicator
 import com.weberbox.pifire.core.ui.components.SettingsAppBar
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.components.PidAcControlSettings
 import com.weberbox.pifire.feature.settings.presentation.components.PidControlSettings
 import com.weberbox.pifire.feature.settings.presentation.components.PidSpControlSettings
@@ -289,9 +290,8 @@ private fun HandleSideEffects(
                 }
 
                 is WorkContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

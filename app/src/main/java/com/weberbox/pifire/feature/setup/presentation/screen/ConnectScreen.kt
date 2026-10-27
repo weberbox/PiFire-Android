@@ -54,8 +54,9 @@ import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.DialogAction
 import com.weberbox.pifire.core.ui.util.DialogController
 import com.weberbox.pifire.core.ui.util.DialogEvent
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.UiText
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.setup.presentation.components.SetupBottomNavRow
 import com.weberbox.pifire.feature.setup.presentation.contract.ConnectContract
 import com.weberbox.pifire.feature.setup.presentation.model.SetupStep
@@ -184,8 +185,8 @@ private fun ConnectScreenContent(
                                 if (googlePlayAvailable) {
                                     openQRCodeScanner(activity, onEventSent)
                                 } else {
-                                    activity?.showAlerter(
-                                        message = UiText(R.string.setup_error_play_services),
+                                    activity?.showMessage(
+                                        message = UiMessage.alert(text = UiText(R.string.setup_error_play_services)),
                                     )
                                 }
                             }
@@ -229,9 +230,8 @@ private fun HandleSideEffects(
                 is ConnectContract.Effect.Navigation -> onNavigationRequested(effect)
 
                 is ConnectContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
 

@@ -52,8 +52,9 @@ import com.weberbox.pifire.core.ui.modifier.customTouch
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.BiometricPromptManager
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.rememberBiometricPromptManager
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.dashboard.presentation.screen.DashboardScreenDestination
 import com.weberbox.pifire.feature.events.presentation.screen.EventsScreenDestination
 import com.weberbox.pifire.feature.home.presentation.components.BottomBar
@@ -498,9 +499,8 @@ private fun HandleSideEffects(
                 }
 
                 is HomeContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
 

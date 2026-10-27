@@ -3,7 +3,7 @@
     <string name="setup_terms">Terms</string>
     <string name="setup_auth">Authentication</string>
     <string name="setup_connect">Connect</string>
-    <string name="setup_push">Consent</string>
+    <string name="setup_push">Notifications</string>
     <string name="setup_finish">Finish</string>
     <string name="setup_grill_name">Grill Name</string>
     <string name="setup_server_address">Server Address</string>
@@ -25,6 +25,14 @@
     <string name="setup_push_consent_title">OneSignal Data Privacy</string>
     <string name="setup_push_dialog_declined_title">Skip Consent</string>
     <string name="setup_push_dialog_declined_message">You will need to consent to the OneSignal data privacy later if you wish to have PiFire Android receive push notifications</string>
+    <string name="setup_app_push_title">Push Notifications</string>
+    <string name="setup_app_push_text">Your PiFire can alert this phone when a probe reaches its target, a timer ends, pellets run low or something goes wrong, even when the app is closed.</string>
+    <string name="setup_app_push_privacy">Alerts travel from your PiFire through the PiFire Android push service and Google Firebase Cloud Messaging. They carry only the alert itself, never your server address or login.</string>
+    <string name="setup_app_push_allow_title">Turn On Notifications</string>
+    <string name="setup_app_push_allow_summary">Allow PiFire to send alerts to this phone</string>
+    <string name="setup_app_push_on_title">Notifications On</string>
+    <string name="setup_app_push_on_summary">This phone will get alerts from this grill</string>
+    <string name="setup_app_push_later">You can change this later in Settings, Notifications, App Push</string>
     <string name="setup_begin_terms_title">Terms of Use</string>
     <string name="setup_begin_terms">The creator of this project takes no responsibility for any damage that you may do to yourself or your personal property. The creator also takes no responsibility for any resulting harm or damages that may come from issues with the hardware or software design.</string>
 </resources>

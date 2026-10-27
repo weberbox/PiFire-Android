@@ -88,17 +88,15 @@ class BiometricPromptManager(
 
         when (manager.canAuthenticate(authenticators)) {
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
-                activity.showAlerter(
-                    message = UiText(R.string.alerter_biometric_not_available),
-                    isError = true,
+                activity.showMessage(
+                    message = UiMessage.error(text = UiText(R.string.alerter_biometric_not_available)),
                 )
                 return
             }
 
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                activity.showAlerter(
-                    message = UiText(R.string.alerter_biometric_not_supported),
-                    isError = true,
+                activity.showMessage(
+                    message = UiMessage.error(text = UiText(R.string.alerter_biometric_not_supported)),
                 )
                 return
             }
@@ -113,9 +111,8 @@ class BiometricPromptManager(
                     }
                     launchEnroll.invoke(enrollIntent)
                 } else {
-                    activity.showAlerter(
-                        message = UiText(R.string.alerter_biometric_not_enrolled),
-                        isError = true,
+                    activity.showMessage(
+                        message = UiMessage.error(text = UiText(R.string.alerter_biometric_not_enrolled)),
                     )
                 }
                 return
@@ -132,9 +129,8 @@ class BiometricPromptManager(
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     if (errorCode != BiometricPrompt.ERROR_USER_CANCELED) {
-                        activity.showAlerter(
-                            message = UiText(errString.toString()),
-                            isError = true,
+                        activity.showMessage(
+                            message = UiMessage.error(text = UiText(errString.toString())),
                         )
                     }
                 }
@@ -155,9 +151,8 @@ class BiometricPromptManager(
         if (manager.canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS) {
             lastAuthRequest?.invoke()
         } else {
-            activity.showAlerter(
-                message = UiText(R.string.alerter_biometric_still_not_enrolled),
-                isError = true,
+            activity.showMessage(
+                message = UiMessage.error(text = UiText(R.string.alerter_biometric_still_not_enrolled)),
             )
         }
     }

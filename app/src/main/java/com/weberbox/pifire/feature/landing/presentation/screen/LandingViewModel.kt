@@ -7,8 +7,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.common.util.CoroutinePoller
@@ -44,7 +42,6 @@ class LandingViewModel @Inject constructor(
     private val landingRepo: LandingRepo,
     private val settingsRepo: SettingsRepo,
     private val connectionRepo: ConnectionRepo,
-    private val analytics: Analytics,
     private val sessionStateHolder: SessionStateHolder,
     private val headersManager: HeadersManager,
     savedStateHandle: SavedStateHandle,
@@ -77,12 +74,6 @@ class LandingViewModel @Inject constructor(
             is LandingContract.Event.DeleteServer -> deleteServer(event.uuid)
 
             is LandingContract.Event.SelectServer -> selectServer(event.uuid)
-
-            is LandingContract.Event.VoiceSearch -> {
-                analytics.logEvent(
-                    name = AnalyticsEvent.VoiceSearch.name,
-                )
-            }
 
             is LandingContract.Event.StartPolling -> {
                 pollingActive = true
@@ -245,12 +236,6 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun deleteServer(uuid: String) {
-        analytics.logEvent(
-            name = AnalyticsEvent.ButtonClick.name,
-            params = mapOf(
-                AnalyticsEvent.Param.ButtonAction.key to "deleteServer",
-            ),
-        )
         viewModelScope.launch {
             settingsRepo.deleteServer(uuid)
         }

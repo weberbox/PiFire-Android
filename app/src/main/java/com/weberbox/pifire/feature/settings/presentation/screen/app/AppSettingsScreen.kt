@@ -43,8 +43,9 @@ import com.weberbox.pifire.core.ui.components.sheets.ValidationOptions
 import com.weberbox.pifire.core.ui.model.AppTheme
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
+import com.weberbox.pifire.core.ui.util.UiMessage
 import com.weberbox.pifire.core.ui.util.rememberBiometricPromptManager
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.components.SwitchPreference
 import com.weberbox.pifire.feature.settings.presentation.contract.AppContract
 import com.weberbox.pifire.navigation.navigateFrom
@@ -243,7 +244,7 @@ private fun AppSettingsScreenContent(
             onValueChange = { onEventSent(AppContract.Event.IncrementTemps(it)) },
         )
         PreferenceCategory(
-            title = { Text(text = stringResource(R.string.settings_cat_analytics)) },
+            title = { Text(text = stringResource(R.string.settings_cat_crash_reporting)) },
         )
         SwitchPreference(
             value = state.sentryEnabled,
@@ -251,7 +252,16 @@ private fun AppSettingsScreenContent(
             summary = { Text(text = stringResource(R.string.settings_crash_summary)) },
             onValueChange = { onEventSent(AppContract.Event.SentryEnabled(it)) },
         )
+        Preference(
+            title = { Text(text = stringResource(R.string.settings_crash_email)) },
+            summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) },
+        ) {
+            emailSheet.open()
+        }
         if (AppConfig.DEBUG) {
+            PreferenceCategory(
+                title = { Text(text = stringResource(R.string.settings_cat_debug)) },
+            )
             SwitchPreference(
                 value = state.sentryDebugEnabled,
                 title = { Text(text = stringResource(R.string.settings_dev_crash_title)) },
@@ -270,12 +280,6 @@ private fun AppSettingsScreenContent(
             ) {
                 onEventSent(AppContract.Event.SendTestPush)
             }
-        }
-        Preference(
-            title = { Text(text = stringResource(R.string.settings_crash_email)) },
-            summary = { Text(text = stringResource(R.string.settings_crash_email_summary)) },
-        ) {
-            emailSheet.open()
         }
     }
     BottomSheet(
@@ -312,9 +316,8 @@ private fun HandleSideEffects(
                 }
 
                 is AppContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import com.weberbox.pifire.core.network.headers.HeadersData.Headers
@@ -25,7 +23,6 @@ import javax.inject.Inject
 class FinishViewModel @Inject constructor(
     private val serverDataCache: ServerDataCache,
     private val setupRepo: SetupRepo,
-    private val analytics: Analytics,
 ) : BaseViewModel<FinishContract.Event, FinishContract.State, FinishContract.Effect>() {
     private var headersData by mutableStateOf(Headers())
     private var serverData by mutableStateOf(Server())
@@ -110,13 +107,6 @@ class FinishViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
-                    analytics.logEvent(
-                        name = AnalyticsEvent.ButtonClick.name,
-                        params = mapOf(
-                            AnalyticsEvent.Param.ButtonAction.key to "setupComplete",
-                        ),
-                    )
-
                     setEffect {
                         FinishContract.Effect.Navigation.Forward
                     }

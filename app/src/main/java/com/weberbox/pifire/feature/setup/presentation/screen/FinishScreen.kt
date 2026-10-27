@@ -39,7 +39,8 @@ import com.weberbox.pifire.core.ui.model.InputState
 import com.weberbox.pifire.core.ui.modifier.limitWidthFraction
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.setup.presentation.components.SetupBottomNavRow
 import com.weberbox.pifire.feature.setup.presentation.contract.FinishContract
 import kotlinx.coroutines.flow.Flow
@@ -163,9 +164,8 @@ private fun HandleSideEffects(
                 is FinishContract.Effect.Navigation -> onNavigationRequested(effect)
 
                 is FinishContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }

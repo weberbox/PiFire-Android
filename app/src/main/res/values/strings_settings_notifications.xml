@@ -96,6 +96,9 @@
     <string name="settings_onesignal_token_message">OneSignal cannot obtain a push token from Google. If this device does not have Google Play Services installed push notifications will not be available</string>
     <string name="settings_onesignal_subscribe_message">This device is not subscribed to OneSignal servers. Verify notifications for this app are not disabled in device settings. If notifications are not disabled the device will now attempt to subscribe</string>
     <string name="settings_app_push_title">App Push</string>
+    <string name="settings_app_push_this_phone_title">Alerts on This Phone</string>
+    <string name="settings_app_push_this_phone_on">This phone gets alerts from this grill</string>
+    <string name="settings_app_push_this_phone_off">This phone doesn\'t get alerts from this grill</string>
     <string name="settings_app_push_devices">Registered Phones</string>
     <string name="settings_app_push_this_phone">%1$s (this phone)</string>
     <string name="settings_app_push_device_summary">App %1$s, registered %2$s</string>

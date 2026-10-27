@@ -26,7 +26,9 @@ import com.weberbox.pifire.core.constants.Constants
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
 import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.update.data.model.AvailableUpdate
 import com.weberbox.pifire.feature.update.data.model.UpdateSource
 import com.weberbox.pifire.feature.update.presentation.components.UpdateRequiredContent
@@ -176,9 +178,8 @@ private fun Activity.openLink(url: String) {
         startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
     } catch (e: ActivityNotFoundException) {
         Timber.w(e, "No activity to open the update link")
-        showAlerter(
-            message = R.string.update_no_browser,
-            isError = true,
+        showMessage(
+            message = UiMessage.error(text = UiText(R.string.update_no_browser)),
         )
     }
 }

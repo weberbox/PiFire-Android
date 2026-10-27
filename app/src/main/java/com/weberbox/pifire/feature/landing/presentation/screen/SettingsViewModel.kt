@@ -4,8 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.data.pref.Pref
 import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.ui.base.BaseViewModel
@@ -24,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val prefsRepo: PrefsRepo,
-    private val analytics: Analytics,
     val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsContract.Event, SettingsContract.State, SettingsContract.Effect>() {
 
@@ -57,24 +54,10 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleAutoSelectEnabled(enabled: Boolean) {
         prefsRepo.set(Pref.landingAutoSelect, enabled)
-        analytics.logEvent(
-            name = AnalyticsEvent.PrefsChange.name,
-            params = mapOf(
-                AnalyticsEvent.Param.PrefKey.key to "autoSelectServer",
-                AnalyticsEvent.Param.State.key to enabled,
-            ),
-        )
     }
 
     private fun handleBiometricsEnabled(enabled: Boolean) {
         prefsRepo.set(Pref.biometricServerPrompt, enabled)
-        analytics.logEvent(
-            name = AnalyticsEvent.PrefsChange.name,
-            params = mapOf(
-                AnalyticsEvent.Param.PrefKey.key to "serverBiometrics",
-                AnalyticsEvent.Param.State.key to enabled,
-            ),
-        )
     }
 
     private fun handleAboutDialog() {

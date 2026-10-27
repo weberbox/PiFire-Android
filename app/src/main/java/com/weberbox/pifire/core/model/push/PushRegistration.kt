@@ -11,4 +11,6 @@ data class PushRegistration(
     val pushKey: String = "",
     /** The FCM token the relay has for [pushKey]. */
     val fcmToken: String = "",
+    /** Whether the user wants app push from each server, by server UUID. Missing until they choose. */
+    val serverChoices: Map<String, Boolean> = emptyMap(),
 )

@@ -16,6 +16,7 @@ import com.weberbox.pifire.core.network.api.RelayApi
 import com.weberbox.pifire.core.network.model.push.PushDeviceRegisterDto
 import com.weberbox.pifire.core.network.model.push.RelaySendDto
 import com.weberbox.pifire.core.notification.FcmTokenSource
+import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.ui.util.EmptyUiArgs
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import kotlinx.coroutines.flow.first
@@ -32,6 +33,7 @@ class PushRepoImpl @Inject constructor(
     private val registrationStore: DataStore<PushRegistration>,
     private val settingsRepo: SettingsRepo,
     private val pushDevicesApi: PushDevicesApi,
+    private val oneSignalManager: OneSignalManager,
 ) : PushRepo {
 
     // One registration at a time, so two callers never create two push keys.
@@ -67,12 +69,36 @@ class PushRepoImpl @Inject constructor(
         relayApi.send(alert).also { result ->
             // The relay deleted the key (FCM said the token is gone): register fresh next time.
             if (result is Result.Error && result.error.relayCode() in DEAD_KEY_CODES) {
-                registrationStore.updateData { PushRegistration() }
+                registrationStore.updateData { it.copy(pushKey = "", fcmToken = "") }
             }
         }.toUserError()
     }
 
-    override suspend fun registerWithServer(oneSignalPlayerId: String?): Result<Unit, DataError> = getPushKey().andThen { pushKey ->
+    // Servers set up before this choice existed follow the push consent given in OneSignal setup.
+    override suspend fun isAppPushOn(serverUuid: String): Boolean =
+        registrationStore.data.first().serverChoices[serverUuid] ?: oneSignalManager.getUserConsent()
+
+    override suspend fun allowAppPush(serverUuid: String) {
+        saveChoice(serverUuid = serverUuid, isOn = true)
+    }
+
+    override suspend fun declineAppPush(serverUuid: String): Result<Unit, DataError> {
+        // Without a push key this phone was never registered anywhere, so there's nothing to remove.
+        val thisPhoneId = registrationStore.data.first().pushKey.takeIf { it.isNotEmpty() }?.let(::serverDeviceId)
+        val removed = if (thisPhoneId == null) {
+            Result.Success(Unit)
+        } else {
+            pushDevicesApi.list().andThen { devices ->
+                if (devices.any { it.id == thisPhoneId }) pushDevicesApi.remove(thisPhoneId) else Result.Success(Unit)
+            }
+        }
+        return removed.andThen {
+            saveChoice(serverUuid = serverUuid, isOn = false)
+            Result.Success(Unit)
+        }
+    }
+
+    override suspend fun registerWithServer(): Result<Unit, DataError> = getPushKey().andThen { pushKey ->
         pushDevicesApi.register(
             PushDeviceRegisterDto(
                 pushKey = pushKey,
@@ -82,7 +108,7 @@ class PushRepoImpl @Inject constructor(
             ),
         )
     }.andThen {
-        val leftover = oneSignalPlayerId?.takeIf { playerId ->
+        val leftover = oneSignalManager.playerId()?.takeIf { playerId ->
             settingsRepo.getCurrentServer()?.settings?.onesignalDevices.orEmpty().containsKey(playerId)
         }
         if (leftover == null) Result.Success(Unit) else pushDevicesApi.removeOneSignalDevice(leftover)
@@ -112,7 +138,7 @@ class PushRepoImpl @Inject constructor(
             if (saved.fcmToken == fcmToken) return Result.Success(saved.pushKey)
             when (val update = relayApi.updateToken(pushKey = saved.pushKey, fcmToken = fcmToken)) {
                 is Result.Success -> {
-                    registrationStore.updateData { saved.copy(fcmToken = fcmToken) }
+                    registrationStore.updateData { it.copy(fcmToken = fcmToken) }
                     return Result.Success(saved.pushKey)
                 }
 
@@ -123,9 +149,13 @@ class PushRepoImpl @Inject constructor(
             }
         }
         return relayApi.register(fcmToken = fcmToken).andThen { pushKey ->
-            registrationStore.updateData { PushRegistration(pushKey = pushKey, fcmToken = fcmToken) }
+            registrationStore.updateData { it.copy(pushKey = pushKey, fcmToken = fcmToken) }
             Result.Success(pushKey)
         }
+    }
+
+    private suspend fun saveChoice(serverUuid: String, isOn: Boolean) {
+        registrationStore.updateData { it.copy(serverChoices = it.serverChoices + (serverUuid to isOn)) }
     }
 
     // PiFire's device id: the first 16 hex chars of sha256(push key) (docs/V2_API.md section 6).

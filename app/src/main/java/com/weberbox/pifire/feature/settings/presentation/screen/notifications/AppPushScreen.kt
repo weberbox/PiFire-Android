@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -47,7 +48,10 @@ import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.components.sheets.ConfirmSheet
 import com.weberbox.pifire.core.ui.state.rememberCustomModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.NOTIFICATIONS_PERMISSION
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.rememberPermissionState
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.settings.presentation.contract.AppPushContract
 import com.weberbox.pifire.navigation.navigateFrom
 import com.weberbox.pifire.navigation.popBackStackFrom
@@ -58,8 +62,12 @@ import kotlinx.coroutines.flow.onEach
 import me.zhanghai.compose.preference.Preference
 import me.zhanghai.compose.preference.PreferenceCategory
 import me.zhanghai.compose.preference.ProvidePreferenceTheme
+import me.zhanghai.compose.preference.SwitchPreference
 import java.text.DateFormat
 import java.util.Date
+
+// The empty message sits below the switch, so it doesn't need the whole screen.
+private const val EMPTY_HEIGHT_FRACTION = 0.7f
 
 @Composable
 fun AppPushScreenDestination(
@@ -150,22 +158,44 @@ private fun AppPushScreenContent(
 ) {
     val deleteSheet = rememberCustomModalBottomSheetState()
     var pendingDelete by remember { mutableStateOf<PushDevice?>(null) }
+    val notificationPermission = rememberPermissionState(
+        spec = NOTIFICATIONS_PERMISSION,
+        onResult = { granted ->
+            if (granted) onEventSent(AppPushContract.Event.SetThisPhoneOn(isOn = true))
+        },
+    )
 
     LinearLoadingIndicator(
         isLoading = state.isLoading,
         contentPadding = contentPadding,
     )
-    if (state.devices.isEmpty()) {
-        EmptyItems(
-            title = stringResource(R.string.settings_app_push_empty_title),
-            summary = stringResource(R.string.settings_app_push_empty_summary),
-            icon = Icons.Outlined.PhoneAndroid,
-        )
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding,
-        ) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = contentPadding,
+    ) {
+        item(key = "this_phone") {
+            ThisPhoneItem(
+                isOn = state.isThisPhoneOn,
+                enabled = !state.isLoading,
+                onValueChange = { isOn ->
+                    when {
+                        !isOn -> onEventSent(AppPushContract.Event.SetThisPhoneOn(isOn = false))
+                        notificationPermission.isGranted -> onEventSent(AppPushContract.Event.SetThisPhoneOn(isOn = true))
+                        else -> notificationPermission.request()
+                    }
+                },
+            )
+        }
+        if (state.devices.isEmpty()) {
+            item(key = "empty") {
+                EmptyItems(
+                    modifier = Modifier.fillParentMaxHeight(fraction = EMPTY_HEIGHT_FRACTION),
+                    title = stringResource(R.string.settings_app_push_empty_title),
+                    summary = stringResource(R.string.settings_app_push_empty_summary),
+                    icon = Icons.Outlined.PhoneAndroid,
+                )
+            }
+        } else {
             item(key = "header") {
                 PreferenceCategory(
                     title = { Text(text = stringResource(R.string.settings_app_push_devices)) },
@@ -204,6 +234,35 @@ private fun AppPushScreenContent(
             )
         }
     }
+}
+
+@Composable
+private fun ThisPhoneItem(
+    isOn: Boolean,
+    enabled: Boolean,
+    onValueChange: (Boolean) -> Unit,
+) {
+    SwitchPreference(
+        value = isOn,
+        onValueChange = onValueChange,
+        enabled = enabled,
+        title = { Text(text = stringResource(R.string.settings_app_push_this_phone_title)) },
+        summary = {
+            Text(
+                text = if (isOn) {
+                    stringResource(R.string.settings_app_push_this_phone_on)
+                } else {
+                    stringResource(R.string.settings_app_push_this_phone_off)
+                },
+            )
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Outlined.NotificationsActive,
+                contentDescription = null,
+            )
+        },
+    )
 }
 
 @Composable
@@ -259,9 +318,8 @@ private fun HandleSideEffects(
                 is AppPushContract.Effect.Navigation -> onNavigationRequested(effect)
 
                 is AppPushContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
             }
@@ -278,6 +336,7 @@ private fun AppPushScreenPreview() {
             Surface {
                 AppPushScreen(
                     state = AppPushContract.State(
+                        isThisPhoneOn = true,
                         devices = listOf(
                             PushDevice(
                                 id = "a1",

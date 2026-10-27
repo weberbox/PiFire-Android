@@ -18,11 +18,23 @@ interface PushRepo {
     /** Sends a test alert to this phone through the relay (debug builds). */
     suspend fun sendTestPush(): Result<Unit, DataError>
 
+    /** Whether the user wants app push from the server [serverUuid] on this phone. */
+    suspend fun isAppPushOn(serverUuid: String): Boolean
+
+    /** Saves that the user wants app push from [serverUuid]; the next [registerWithServer] registers. */
+    suspend fun allowAppPush(serverUuid: String)
+
+    /**
+     * Removes this phone from the connected API v2 server [serverUuid] if it's registered there, then
+     * saves that the user doesn't want app push from it, so it isn't registered again.
+     */
+    suspend fun declineAppPush(serverUuid: String): Result<Unit, DataError>
+
     /**
      * Registers this phone for push with the connected API v2 server, then removes the OneSignal
-     * entry [oneSignalPlayerId] left there from Socket.IO days, so alerts don't arrive twice.
+     * entry this phone left there from Socket.IO days, so alerts don't arrive twice.
      */
-    suspend fun registerWithServer(oneSignalPlayerId: String?): Result<Unit, DataError>
+    suspend fun registerWithServer(): Result<Unit, DataError>
 
     /** Phones registered for push on the connected API v2 server. */
     suspend fun getServerDevices(): Result<List<PushDevice>, DataError>

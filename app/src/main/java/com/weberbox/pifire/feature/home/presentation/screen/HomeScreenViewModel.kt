@@ -5,8 +5,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.weberbox.pifire.BuildConfig
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.analytics.Analytics
-import com.weberbox.pifire.core.analytics.AnalyticsEvent
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.AppConfig
 import com.weberbox.pifire.core.constants.Constants
@@ -46,7 +44,6 @@ class HomeScreenViewModel @Inject constructor(
     private val oneSignalManager: OneSignalManager,
     private val connectionRepo: ConnectionRepo,
     private val settingsRepo: SettingsRepo,
-    private val analytics: Analytics,
     private val prefsRepo: PrefsRepo,
     private val pushRepo: PushRepo,
 ) : BaseViewModel<HomeContract.Event, HomeContract.State, HomeContract.Effect>() {
@@ -104,7 +101,6 @@ class HomeScreenViewModel @Inject constructor(
                 popUpToRoute = NavGraph.HomeDest.DashHome,
             )
         }
-        analytics.logEvent(AnalyticsEvent.SignOut.name)
     }
 
     private fun collectPrefsFlow() {
@@ -147,9 +143,10 @@ class HomeScreenViewModel @Inject constructor(
                 oneSignalManager.checkOneSignalStatus()
                 return@launch
             }
-            // Same consent as OneSignal: the user agreed to push notifications in setup.
-            if (!pushRepo.isRelayConfigured || !oneSignalManager.getUserConsent()) return@launch
-            val result = pushRepo.registerWithServer(oneSignalPlayerId = oneSignalManager.playerId())
+            if (!pushRepo.isRelayConfigured) return@launch
+            val serverUuid = settingsRepo.getCurrentServer()?.uuid ?: return@launch
+            if (!pushRepo.isAppPushOn(serverUuid)) return@launch
+            val result = pushRepo.registerWithServer()
             if (result is Result.Error) Timber.w("App push registration failed: %s", result.error)
         }
     }
@@ -189,14 +186,6 @@ class HomeScreenViewModel @Inject constructor(
             is ServerSupportResult.Supported -> {}
 
             is ServerSupportResult.UnsupportedMin -> {
-                analytics.logEvent(
-                    name = AnalyticsEvent.UnsupportedServerMin.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
-                        AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
-                    ),
-                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
@@ -229,14 +218,6 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is ServerSupportResult.UnsupportedMax -> {
-                analytics.logEvent(
-                    name = AnalyticsEvent.UnsupportedServerMax.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.ServerVersion.key to supportResult.currentVersion,
-                        AnalyticsEvent.Param.ServerBuild.key to supportResult.currentBuild,
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
-                    ),
-                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(
@@ -284,12 +265,6 @@ class HomeScreenViewModel @Inject constructor(
             }
 
             is ServerSupportResult.Untested -> {
-                analytics.logEvent(
-                    name = AnalyticsEvent.UntestedServer.name,
-                    params = mapOf(
-                        AnalyticsEvent.Param.AppVersion.key to BuildConfig.VERSION_CODE,
-                    ),
-                )
                 DialogController.sendEvent(
                     DialogEvent(
                         title = UiText(

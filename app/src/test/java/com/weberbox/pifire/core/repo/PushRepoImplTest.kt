@@ -13,6 +13,7 @@ import com.weberbox.pifire.core.network.model.push.PushDeviceDto
 import com.weberbox.pifire.core.network.model.push.PushDeviceRegisterDto
 import com.weberbox.pifire.core.network.model.push.RelaySendDto
 import com.weberbox.pifire.core.notification.FcmTokenSource
+import com.weberbox.pifire.core.notification.OneSignalManager
 import com.weberbox.pifire.core.ui.util.uiTextArgsOf
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,6 +24,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.MessageDigest
 
@@ -39,6 +42,10 @@ class PushRepoImplTest {
     private val settingsRepo = mockk<SettingsRepo> {
         coEvery { getCurrentServer() } returns Server(uuid = "server-1")
     }
+    private val oneSignalManager = mockk<OneSignalManager> {
+        coEvery { playerId() } returns "player-1"
+        every { getUserConsent() } returns false
+    }
     private val store = FakeDataStore(PushRegistration())
 
     private val repo = PushRepoImpl(
@@ -47,6 +54,7 @@ class PushRepoImplTest {
         registrationStore = store,
         settingsRepo = settingsRepo,
         pushDevicesApi = pushDevicesApi,
+        oneSignalManager = oneSignalManager,
     )
 
     @Test
@@ -151,7 +159,7 @@ class PushRepoImplTest {
         coEvery { pushDevicesApi.register(capture(registered)) } returns Result.Success(Unit)
         coEvery { pushDevicesApi.removeOneSignalDevice("player-1") } returns Result.Success(Unit)
 
-        assertEquals(Result.Success<Unit, DataError>(Unit), repo.registerWithServer(oneSignalPlayerId = "player-1"))
+        assertEquals(Result.Success<Unit, DataError>(Unit), repo.registerWithServer())
         assertEquals(KEY, registered.captured.pushKey)
         assertEquals("https://relay.example.com", registered.captured.relayUrl)
         coVerify { pushDevicesApi.removeOneSignalDevice("player-1") }
@@ -162,8 +170,9 @@ class PushRepoImplTest {
         store.value = PushRegistration(pushKey = KEY, fcmToken = TOKEN)
         coEvery { pushDevicesApi.register(any()) } returns Result.Success(Unit)
 
-        repo.registerWithServer(oneSignalPlayerId = "player-1")
-        repo.registerWithServer(oneSignalPlayerId = null)
+        repo.registerWithServer()
+        coEvery { oneSignalManager.playerId() } returns null
+        repo.registerWithServer()
         coVerify(exactly = 0) { pushDevicesApi.removeOneSignalDevice(any()) }
     }
 
@@ -174,7 +183,7 @@ class PushRepoImplTest {
 
         assertEquals(
             Result.Error<Unit, DataError>(DataError.Server("At most 20 devices can be registered")),
-            repo.registerWithServer(oneSignalPlayerId = "player-1"),
+            repo.registerWithServer(),
         )
         coVerify(exactly = 0) { pushDevicesApi.removeOneSignalDevice(any()) }
     }
@@ -182,9 +191,7 @@ class PushRepoImplTest {
     @Test
     fun `marks this phone in the server's device list`() = runTest {
         store.value = PushRegistration(pushKey = KEY, fcmToken = TOKEN)
-        // PiFire's id for KEY: the first 16 hex chars of sha256("pfk_key").
-        val thisPhoneId = MessageDigest.getInstance("SHA-256").digest(KEY.toByteArray())
-            .joinToString(separator = "") { "%02x".format(it) }.take(16)
+        val thisPhoneId = thisPhoneId()
         coEvery { pushDevicesApi.list() } returns Result.Success(
             listOf(
                 PushDeviceDto(id = thisPhoneId, deviceName = "Pixel", appVersion = "3.4.0", registered = 5),
@@ -197,6 +204,63 @@ class PushRepoImplTest {
 
         assertEquals(listOf("Pixel" to true, "Galaxy" to false), devices.map { it.deviceName to it.isThisPhone })
     }
+
+    @Test
+    fun `a server without a choice follows the OneSignal consent`() = runTest {
+        assertFalse(repo.isAppPushOn("server-1"))
+        every { oneSignalManager.getUserConsent() } returns true
+        assertTrue(repo.isAppPushOn("server-1"))
+    }
+
+    @Test
+    fun `the choice for each server wins over the OneSignal consent`() = runTest {
+        every { oneSignalManager.getUserConsent() } returns true
+        repo.allowAppPush("server-1")
+        repo.declineAppPush("server-2")
+
+        assertTrue(repo.isAppPushOn("server-1"))
+        assertFalse(repo.isAppPushOn("server-2"))
+    }
+
+    @Test
+    fun `declining without a push key makes no server call`() = runTest {
+        assertEquals(Result.Success<Unit, DataError>(Unit), repo.declineAppPush("server-1"))
+        coVerify(exactly = 0) { pushDevicesApi.list() }
+        assertEquals(mapOf("server-1" to false), store.value.serverChoices)
+    }
+
+    @Test
+    fun `declining removes this phone from the server when it's registered there`() = runTest {
+        store.value = PushRegistration(pushKey = KEY, fcmToken = TOKEN)
+        coEvery { pushDevicesApi.list() } returns Result.Success(listOf(PushDeviceDto(id = thisPhoneId())))
+        coEvery { pushDevicesApi.remove(thisPhoneId()) } returns Result.Success(Unit)
+
+        assertEquals(Result.Success<Unit, DataError>(Unit), repo.declineAppPush("server-1"))
+        coVerify { pushDevicesApi.remove(thisPhoneId()) }
+        assertFalse(repo.isAppPushOn("server-1"))
+    }
+
+    @Test
+    fun `a failed removal keeps the old choice`() = runTest {
+        store.value = PushRegistration(pushKey = KEY, fcmToken = TOKEN, serverChoices = mapOf("server-1" to true))
+        coEvery { pushDevicesApi.list() } returns Result.Error(DataError.Network.NO_CONNECTION)
+
+        assertEquals(Result.Error<Unit, DataError>(DataError.Network.NO_CONNECTION), repo.declineAppPush("server-1"))
+        assertTrue(repo.isAppPushOn("server-1"))
+    }
+
+    @Test
+    fun `forgetting a dead key keeps the server choices`() = runTest {
+        store.value = PushRegistration(pushKey = KEY, fcmToken = TOKEN, serverChoices = mapOf("server-1" to true))
+        coEvery { relayApi.send(any()) } returns Result.Error(DataError.Server(RelayApi.ERROR_UNREGISTERED))
+
+        repo.sendTestPush()
+        assertEquals(PushRegistration(serverChoices = mapOf("server-1" to true)), store.value)
+    }
+
+    // PiFire's id for KEY: the first 16 hex chars of sha256("pfk_key").
+    private fun thisPhoneId() = MessageDigest.getInstance("SHA-256").digest(KEY.toByteArray())
+        .joinToString(separator = "") { "%02x".format(it) }.take(16)
 
     private class FakeDataStore<T>(initial: T) : DataStore<T> {
         private val state = MutableStateFlow(initial)

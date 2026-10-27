@@ -43,7 +43,8 @@ import com.weberbox.pifire.core.ui.components.HazeAppBar
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
 import com.weberbox.pifire.core.ui.theme.size
 import com.weberbox.pifire.core.ui.theme.spacing
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Changelog
 import com.weberbox.pifire.feature.changelog.data.model.ChangelogData.Log
@@ -200,9 +201,8 @@ private fun HandleSideEffects(
     LaunchedEffect(SIDE_EFFECTS_KEY) {
         effectFlow?.onEach { effect ->
             when (effect) {
-                is ChangelogContract.Effect.Notification -> activity?.showAlerter(
-                    message = effect.text,
-                    isError = effect.error,
+                is ChangelogContract.Effect.Notification -> activity?.showMessage(
+                    message = UiMessage.of(text = effect.text, isError = effect.error),
                 )
 
                 is ChangelogContract.Effect.Navigation -> onNavigationRequested(effect)

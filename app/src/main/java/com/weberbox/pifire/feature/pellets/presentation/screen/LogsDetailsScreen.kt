@@ -24,7 +24,8 @@ import com.weberbox.pifire.core.ui.components.sheets.BottomSheet
 import com.weberbox.pifire.core.ui.components.sheets.ConfirmSheet
 import com.weberbox.pifire.core.ui.state.rememberInputModalBottomSheetState
 import com.weberbox.pifire.core.ui.theme.PiFireTheme
-import com.weberbox.pifire.core.ui.util.showAlerter
+import com.weberbox.pifire.core.ui.util.UiMessage
+import com.weberbox.pifire.core.ui.util.showMessage
 import com.weberbox.pifire.feature.pellets.presentation.components.LogItem
 import com.weberbox.pifire.feature.pellets.presentation.contract.PelletsContract
 import com.weberbox.pifire.feature.pellets.presentation.model.PelletsEvent
@@ -165,9 +166,8 @@ private fun HandleSideEffects(
         effectFlow?.onEach { effect ->
             when (effect) {
                 is PelletsContract.Effect.Notification -> {
-                    activity?.showAlerter(
-                        message = effect.text,
-                        isError = effect.error,
+                    activity?.showMessage(
+                        message = UiMessage.of(text = effect.text, isError = effect.error),
                     )
                 }
 

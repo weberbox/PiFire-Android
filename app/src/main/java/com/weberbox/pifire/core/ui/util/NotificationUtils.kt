@@ -4,38 +4,11 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.view.Gravity
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.tapadoo.alerter.Alerter
-import com.weberbox.pifire.R
-import com.weberbox.pifire.core.ui.components.Alerter
-import com.weberbox.pifire.core.ui.components.iconPulse
-import com.weberbox.pifire.core.ui.theme.alerterError
-import com.weberbox.pifire.core.ui.theme.alerterInfo
-import com.weberbox.pifire.core.ui.theme.spacing
+import com.weberbox.pifire.core.ui.components.message.MessageHostOwner
+import timber.log.Timber
 
 fun Activity.showToast(
     @StringRes message: Int,
@@ -51,71 +24,28 @@ fun Context.showToast(
     Toast.makeText(this, this.getString(message), duration).show()
 }
 
-fun Activity.showAlerter(
-    @StringRes title: Int? = null,
-    @StringRes message: Int,
-    @DrawableRes icon: Int = R.drawable.ic_info,
-    backgroundColor: Color = alerterInfo,
-    duration: Long = 3000,
-    enableVibration: Boolean = true,
-    enableSwipeToDismiss: Boolean = false,
-    disableOutsideTouch: Boolean = false,
-    enableInfiniteDuration: Boolean = false,
-    gravity: Int = Gravity.TOP,
-    isError: Boolean = false,
+fun Activity.showToast(
+    message: UiText,
+    duration: Int = Toast.LENGTH_LONG,
 ) {
-    this.showAlerter(
-        title = title?.let { UiText(it) },
-        message = UiText(message),
-        icon = icon,
-        backgroundColor = backgroundColor,
-        duration = duration,
-        enableVibration = enableVibration,
-        enableSwipeToDismiss = enableSwipeToDismiss,
-        disableOutsideTouch = disableOutsideTouch,
-        enableInfiniteDuration = enableInfiniteDuration,
-        gravity = gravity,
-        isError = isError,
-    )
+    Toast.makeText(this, message.asString(this), duration).show()
 }
 
-fun Activity.showAlerter(
-    title: UiText? = null,
-    message: UiText,
-    @DrawableRes icon: Int = R.drawable.ic_info,
-    backgroundColor: Color = alerterInfo,
-    duration: Long = 3000,
-    enableVibration: Boolean = true,
-    enableSwipeToDismiss: Boolean = false,
-    disableOutsideTouch: Boolean = false,
-    enableInfiniteDuration: Boolean = false,
-    gravity: Int = Gravity.TOP,
-    isError: Boolean = false,
-) {
-    Alerter.create(this)
-        .setText(message.asString(this))
-        .setIcon(icon)
-        .setBackgroundColorInt(
-            if (isError) {
-                alerterError.toArgb()
+/** Shows [message] the way its style calls for (see [UiMessage]). */
+fun Activity.showMessage(message: UiMessage) {
+    when (message.style) {
+        UiMessage.Style.Toast -> showToast(message = message.text, duration = Toast.LENGTH_SHORT)
+
+        UiMessage.Style.Alert, UiMessage.Style.Error -> {
+            val host = (this as? MessageHostOwner)?.messageHost
+            if (host != null) {
+                host.show(message = message)
             } else {
-                backgroundColor.toArgb()
-            },
-        )
-        .enableClickAnimation(false)
-        .enableSwipeToDismiss()
-        .enableVibration(enableVibration)
-        .setTextAppearance(R.style.Text14QuestrialBold)
-        .enableInfiniteDuration(enableInfiniteDuration)
-        .setIconSize(R.dimen.alerter_icon_size_small)
-        .setLayoutGravity(gravity)
-        .setDuration(duration)
-        .also { alerter ->
-            if (enableSwipeToDismiss) alerter.enableSwipeToDismiss()
-            if (disableOutsideTouch) alerter.disableOutsideTouch()
-            if (title != null) alerter.setTitle(title.asString(this))
+                Timber.w("No message host in ${javaClass.simpleName}, showing a toast instead")
+                showToast(message = message.text)
+            }
         }
-        .show()
+    }
 }
 
 @Suppress("unused")
@@ -143,102 +73,4 @@ fun Activity.showAlertDialog(
             }
         }
         .show()
-}
-
-@Suppress("unused")
-@Composable
-fun ErrorAlerter(
-    modifier: Modifier = Modifier,
-    title: String,
-    message: String,
-    showAlert: Boolean,
-    onChanged: (showAlert: Boolean) -> Unit,
-) {
-    Alerter(
-        isShown = showAlert,
-        onChanged = onChanged,
-        backgroundColor = MaterialTheme.colorScheme.errorContainer,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Notifications,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier
-                    .padding(start = MaterialTheme.spacing.smallTwo)
-                    .iconPulse(),
-            )
-
-            Column(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo),
-            ) {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                )
-                Text(
-                    text = message,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
-                    fontSize = 14.sp,
-                )
-            }
-        }
-    }
-}
-
-@Suppress("unused")
-@Composable
-fun InfoAlerter(
-    modifier: Modifier = Modifier,
-    showAlert: Boolean = false,
-    title: String,
-    message: String,
-) {
-    var show by remember(showAlert) { mutableStateOf(showAlert) }
-    Alerter(
-        isShown = show,
-        onChanged = {
-            show = it
-        },
-        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-    ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Notifications,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .padding(start = MaterialTheme.spacing.smallTwo)
-                    .iconPulse(),
-            )
-
-            Column(
-                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallTwo),
-            ) {
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                )
-                Text(
-                    text = message,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    fontSize = 14.sp,
-                )
-            }
-        }
-    }
 }
