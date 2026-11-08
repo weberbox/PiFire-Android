@@ -1,0 +1,153 @@
+# Drafts a GitHub release with the signed github-flavor APK when a new version lands on master.
+# Publish the draft by hand. Pushes whose version already has a release (or draft) are skipped.
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   KEYSTORE_BASE64             release keystore, base64-encoded
+#   KEYSTORE_PASSWORD           store password
+#   KEY_ALIAS                   key alias
+#   KEY_PASSWORD                key password
+#   GOOGLE_SERVICES_JSON_BASE64 app/google-services.json, base64-encoded
+#   SENTRY_DSN, ONESIGNAL_APP_ID, PUSH_RELAY_URL   same values as local.properties
+#   SENTRY_PROPERTIES           optional: contents of sentry.properties, to upload the R8 mapping
+name: Release
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # GIT_REV in BuildConfig counts commits, so it needs the full history.
+          fetch-depth: 0
+
+      - name: Read version
+        id: version
+        run: |
+          major=$(sed -n 's/^val vMajor = \([0-9]*\)$/\1/p' app/build.gradle.kts)
+          minor=$(sed -n 's/^val vMinor = \([0-9]*\)$/\1/p' app/build.gradle.kts)
+          patch=$(sed -n 's/^val vPatch = \([0-9]*\)$/\1/p' app/build.gradle.kts)
+          if [ -z "$major" ] || [ -z "$minor" ] || [ -z "$patch" ]; then
+            echo "::error::Couldn't read vMajor/vMinor/vPatch from app/build.gradle.kts"
+            exit 1
+          fi
+          echo "version=$major.$minor.$patch" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if already released
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v${{ steps.version.outputs.version }}
+        run: |
+          # Lists drafts too, so a second push before publishing doesn't create another draft.
+          if gh release list --limit 100 --json tagName --jq '.[].tagName' | grep -qx "$TAG" \
+            || git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+            echo "$TAG already has a release or tag, nothing to do"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Release notes
+        if: steps.check.outputs.skip != 'true'
+        run: python3 .github/scripts/release_notes.py "${{ steps.version.outputs.version }}" > "$RUNNER_TEMP/notes.md"
+
+      - name: Check secrets
+        if: steps.check.outputs.skip != 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          # Without these the build silently falls back to an unsigned APK or placeholder Firebase ids.
+          missing=""
+          for name in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD GOOGLE_SERVICES_JSON_BASE64; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing"
+            exit 1
+          fi
+
+      - name: Write signing and config files
+        if: steps.check.outputs.skip != 'true'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+          PUSH_RELAY_URL: ${{ secrets.PUSH_RELAY_URL }}
+          SENTRY_PROPERTIES: ${{ secrets.SENTRY_PROPERTIES }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          {
+            echo "storeFile=$RUNNER_TEMP/release.jks"
+            echo "storePassword=$KEYSTORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > "$RUNNER_TEMP/keystore.properties"
+          echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > app/google-services.json
+          {
+            echo "SENTRY_DSN=$SENTRY_DSN"
+            echo "ONESIGNAL_APP_ID=$ONESIGNAL_APP_ID"
+            echo "PUSH_RELAY_URL=$PUSH_RELAY_URL"
+          } > local.properties
+          # The Sentry plugin uploads the mapping whenever sentry.properties exists, so only write it
+          # when there's something to write.
+          if [ -n "$SENTRY_PROPERTIES" ]; then
+            echo "$SENTRY_PROPERTIES" > sentry.properties
+          fi
+
+      - uses: actions/setup-java@v6
+        if: steps.check.outputs.skip != 'true'
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v6
+        if: steps.check.outputs.skip != 'true'
+
+      - name: Build release APK
+        if: steps.check.outputs.skip != 'true'
+        run: ./gradlew :app:assembleGithubRelease -PpropertiesFile="$RUNNER_TEMP/keystore.properties"
+
+      - name: Verify signature
+        if: steps.check.outputs.skip != 'true'
+        id: apk
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          apk="app/build/outputs/apk/github/release/pifire-github-release-$VERSION.apk"
+          apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -n 1)
+          "$apksigner" verify "$apk"
+          echo "path=$apk" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft release
+        if: steps.check.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "v$VERSION" "${{ steps.apk.outputs.path }}" \
+            --draft \
+            --target "$GITHUB_SHA" \
+            --title "Version $VERSION" \
+            --notes-file "$RUNNER_TEMP/notes.md"
+
+      - name: Clean up secrets
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.jks" "$RUNNER_TEMP/keystore.properties" app/google-services.json local.properties sentry.properties
