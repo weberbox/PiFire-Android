@@ -141,20 +141,69 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         if: steps.check.outputs.skip != 'true'
 
+      - name: Read Gradle distribution
+        if: steps.check.outputs.skip != 'true'
+        id: gradle
+        run: |
+          props=gradle/wrapper/gradle-wrapper.properties
+          url=$(sed -n 's/^distributionUrl=//p' "$props")
+          sha=$(sed -n 's/^distributionSha256Sum=//p' "$props" | tr -d '[:space:]')
+          if [ -z "$url" ] || [ -z "$sha" ]; then
+            echo "::error::$props needs distributionUrl and distributionSha256Sum"
+            exit 1
+          fi
+          echo "zip=$(basename "$url")" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      # Keeps the ~135 MB distribution between runs so a release doesn't depend on Gradle's servers.
+      - uses: actions/cache@v6
+        if: steps.check.outputs.skip != 'true'
+        with:
+          path: ~/gradle-dist
+          key: gradle-dist-${{ steps.gradle.outputs.zip }}-${{ steps.gradle.outputs.sha }}
+
       - name: Download Gradle
         if: steps.check.outputs.skip != 'true'
+        env:
+          ZIP: ${{ steps.gradle.outputs.zip }}
+          SHA: ${{ steps.gradle.outputs.sha }}
         run: |
-          # The Gradle distribution servers sometimes answer 504 or time out; retry before giving up.
-          for attempt in 1 2 3 4 5; do
-            ./gradlew --version && exit 0
-            echo "Gradle download failed (attempt $attempt), retrying in $((attempt * 30))s"
-            sleep $((attempt * 30))
-          done
-          exit 1
+          # services.gradle.org sometimes answers 504 for a long stretch, so try each official host
+          # with retries and accept only the checksum pinned in gradle-wrapper.properties.
+          mkdir -p ~/gradle-dist
+          file=~/gradle-dist/"$ZIP"
+          version=${ZIP#gradle-}
+          version=${version%-bin.zip}
+          verified() { [ -f "$file" ] && echo "$SHA  $file" | sha256sum --check --status; }
+          if ! verified; then
+            hosts=(
+              "https://github.com/gradle/gradle-distributions/releases/download/v$version/$ZIP"
+              "https://downloads.gradle.org/distributions/$ZIP"
+              "https://services.gradle.org/distributions/$ZIP"
+            )
+            for url in "${hosts[@]}"; do
+              echo "Downloading $url"
+              curl --fail --location --silent --show-error \
+                --connect-timeout 30 --max-time 600 \
+                --retry 4 --retry-delay 20 --retry-all-errors \
+                --output "$file" "$url" || true
+              verified && break
+              echo "Download from $url failed or didn't match the checksum"
+              rm -f "$file"
+            done
+          fi
+          if ! verified; then
+            echo "::error::Couldn't download $ZIP from any Gradle host"
+            exit 1
+          fi
+          unzip -q "$file" -d "$RUNNER_TEMP"
+          echo "GRADLE_BIN=$RUNNER_TEMP/gradle-$version/bin/gradle" >> "$GITHUB_ENV"
 
       - name: Build release APK
         if: steps.check.outputs.skip != 'true'
-        run: ./gradlew :app:assembleGithubRelease -PpropertiesFile="$RUNNER_TEMP/keystore.properties"
+        run: |
+          # Runs the verified distribution directly; the wrapper would download it again.
+          "$GRADLE_BIN" :app:assembleGithubRelease -PpropertiesFile="$RUNNER_TEMP/keystore.properties"
 
       - name: Verify signature
         if: steps.check.outputs.skip != 'true'
