@@ -41,8 +41,6 @@ before acting on it, and delete it once it's done.
   screen's "Alerts on This Phone" switch, stored in `PushRegistration.serverChoices`); servers
   without a choice follow the old OneSignal consent. Declining removes this phone from that
   server only and never turns off the server-wide `mobile_push` switch, which other phones use.
-- [ui] Haze 2.x (`hazeBlur` + `haze-blur-materials`) replaced 1.x: verify the app bar and search
-  bar blur on a device in light and dark, and on one pre-API-31 device (different blur path).
 
 ## v2 API and push plan (PiFire + app)
 Replaces OneSignal v1 push (details in `docs/PUSH.md`) and the Socket.IO transport. PiFire is

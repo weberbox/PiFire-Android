@@ -19,8 +19,16 @@
           "text": "Selecting a server shows why the connection failed instead of a generic message"
         },
         {
+          "type": "imp",
+          "text": "Update various dependencies"
+        },
+        {
           "type": "fix",
           "text": "Bugfix going back shrinking the screen into the middle on Samsung phones and with back swipes"
+        },
+        {
+          "type": "fix",
+          "text": "Bugfix recipe photos losing their rounded corners while swiping between them"
         }
       ]
     },
