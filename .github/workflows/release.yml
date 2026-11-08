@@ -1,6 +1,11 @@
 # Drafts a GitHub release with the signed github-flavor APK when a new version lands on master.
 # Publish the draft by hand. Pushes whose version already has a release (or draft) are skipped.
 #
+# To test a change to this workflow before it reaches master, run it on another branch as a dry run:
+#   gh workflow run release.yml --ref development -f dry_run=true
+# A dry run builds, signs and verifies the APK and writes the notes to the run summary, but creates
+# no release, even if one already exists for the version.
+#
 # Repository secrets (Settings > Secrets and variables > Actions):
 #   KEYSTORE_BASE64             release keystore, base64-encoded
 #   KEYSTORE_PASSWORD           store password
@@ -15,6 +20,11 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build and verify only; don't create a release
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -49,7 +59,17 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: v${{ steps.version.outputs.version }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
         run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Dry run: building $TAG without creating a release"
+            echo "dry_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$GITHUB_REF" != "refs/heads/master" ]; then
+            echo "::error::Releases are only created from master; run other branches with dry_run"
+            exit 1
+          fi
           # Lists drafts too, so a second push before publishing doesn't create another draft.
           if gh release list --limit 100 --json tagName --jq '.[].tagName' | grep -qx "$TAG" \
             || git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
@@ -147,8 +167,30 @@ jobs:
           "$apksigner" verify "$apk"
           echo "path=$apk" >> "$GITHUB_OUTPUT"
 
+      - name: Dry run summary
+        if: steps.check.outputs.dry_run == 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          APK: ${{ steps.apk.outputs.path }}
+        run: |
+          apksigner=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -n 1)
+          {
+            echo "## Dry run: v$VERSION, no release created"
+            echo
+            echo "**APK:** \`$(basename "$APK")\`, $(stat -c %s "$APK") bytes"
+            echo
+            echo "**Signing certificate:**"
+            echo '```'
+            "$apksigner" verify --print-certs "$APK" | grep -E "DN:|SHA-256"
+            echo '```'
+            echo
+            echo "**Release notes:**"
+            echo
+            cat "$RUNNER_TEMP/notes.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Create draft release
-        if: steps.check.outputs.skip != 'true'
+        if: steps.check.outputs.skip != 'true' && steps.check.outputs.dry_run != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
