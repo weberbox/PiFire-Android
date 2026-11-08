@@ -121,6 +121,17 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         if: steps.check.outputs.skip != 'true'
 
+      - name: Download Gradle
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          # The Gradle distribution servers sometimes answer 504 or time out; retry before giving up.
+          for attempt in 1 2 3 4 5; do
+            ./gradlew --version && exit 0
+            echo "Gradle download failed (attempt $attempt), retrying in $((attempt * 30))s"
+            sleep $((attempt * 30))
+          done
+          exit 1
+
       - name: Build release APK
         if: steps.check.outputs.skip != 'true'
         run: ./gradlew :app:assembleGithubRelease -PpropertiesFile="$RUNNER_TEMP/keystore.properties"
