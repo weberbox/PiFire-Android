@@ -46,7 +46,7 @@ class PiFireConnection @Inject constructor(
     override suspend fun connect(
         server: Server,
         disconnectOnCancellation: Boolean,
-    ): Boolean {
+    ): Result<Unit, DataError> {
         disconnect()
         val transport = chooseTransport(server)
         Timber.i("Connecting with %s", if (transport === httpSseTransport) "API v2" else "Socket.IO")

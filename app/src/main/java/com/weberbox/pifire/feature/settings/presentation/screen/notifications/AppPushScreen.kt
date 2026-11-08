@@ -14,7 +14,6 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -99,7 +98,6 @@ fun AppPushScreenDestination(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun AppPushScreen(
     state: AppPushContract.State,
     effectFlow: Flow<AppPushContract.Effect>?,

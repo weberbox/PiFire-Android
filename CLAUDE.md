@@ -143,23 +143,32 @@ navigation/                 # NavRoutes, NavTypes, RootNavGraph, NavHostUtils
   server strings with `toInt()`/`toDouble()`; use `toIntOrNull()`/`toDoubleOrNull()` with a fallback.
 - Features that only exist on some server versions go behind `FeatureSupportManager`
   (`Feature` + `FeatureGate`); legacy handling is marked with `@Compatibility`. Keep the supported
-  server range in Remote Config `server_support_config`, not in code.
+  server range in Remote Config `server_support_config_v2`, not in code.
 - Map network failures to specific `DataError.Network` values (timeout, unreachable host,
   certificate, auth) so the user learns what to fix on *their* server; never show raw exception text.
 - Never log credentials, auth headers, or a URL that may contain `user:pass@`. Timber logs become
   Sentry breadcrumbs.
 
 ## Firebase Remote Config (our "backend")
-- Remote Config keys `app_update_config`, `server_support_config`, `feature_support_config` drive
-  app updates, the supported PiFire version range and feature gating. Defaults ship in
+- Remote Config keys `app_update_config_v2`, `server_support_config_v2`, `feature_support_config`
+  drive app updates, the supported PiFire version range and feature gating. Defaults ship in
   `app/src/main/assets/config_*.json`; keep them in sync with the console when the schema changes.
+  None of them needs an entry per release:
+  - `app_update_config_v2`: per channel (`stable`, optional `alpha`) the latest version code, its
+    message and `minVersionCode` (versions below it are blocked until they update).
+  - `server_support_config_v2`: `rules`, each an app version range (`maxAppVersionCode` null =
+    open-ended) with its PiFire min/max. Add or close a rule only when the supported range changes.
+  - `feature_support_config`: per feature, the PiFire range, `enabled` and an optional
+    `minAppVersionCode` (ignored by app versions before 3.4.2).
 - Old app versions in the wild read the same keys: only add fields (with defaults), never rename
-  or remove one without a new key.
+  or remove one without a new key (`<key>_v2`, `_v3`, ...). The v1 `app_update_config` and
+  `server_support_config` are frozen for app versions before 3.4.2; their last `app_update_config`
+  entry (3040200) is enough to send those apps to the current release.
 - If a fetch or decode fails, fall back to the bundled defaults, never crash or block the UI.
   Fetch once per need, not on every state emission.
 - Updates live in `feature/update` (`AppUpdateRepo`, `AppUpdateViewModel`, `AppUpdateScreenDest`
-  over the nav graph in `MainActivity`). Any IMMEDIATE release newer than the installed version
-  blocks the app; otherwise the latest one is offered in a sheet ("Later" snoozes that version a
+  over the nav graph in `MainActivity`). An installed version below `minVersionCode` is blocked;
+  otherwise the latest one is offered in a sheet ("Later" snoozes that version a
   day). `playstore` installs through Play in-app updates (`PlayAppInstaller`); `github` opens the
   GitHub release link.
 
@@ -266,8 +275,9 @@ Other screen rules:
 - Create PRs to `master` only when asked; never merge them (the user reviews and merges, using a
   merge commit, not squash).
 - Before opening a PR to `master`, update the bundled assets in `app/src/main/assets/` as the
-  release needs: `changelog.json` (always), `config_app_update.json`, `config_server_support.json`
-  and `config_feature_support.json` (when the release changes them). Keep the Remote Config console
+  release needs: `changelog.json` (always), `config_app_update_v2.json` (always: latest version
+  and message), `config_server_support_v2.json` and `config_feature_support.json` (when the release
+  changes them). Keep the Remote Config console
   in sync and list the console changes under `Remote Config:` in the PR.
 - Message style: a one-line summary, then sections (e.g. `Dashboard`, `Settings`, `Setup`,
   `Under the hood`) of short `- ` bullets describing user-visible effect. Note Remote Config

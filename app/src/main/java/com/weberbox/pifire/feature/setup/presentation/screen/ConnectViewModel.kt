@@ -189,6 +189,23 @@ class ConnectViewModel @Inject constructor(
                             }
                         }
 
+                        DataError.Network.NOT_PIFIRE, DataError.Network.CLOUDFLARE_ACCESS -> {
+                            setEffect {
+                                ConnectContract.Effect.Dialog(
+                                    dialogEvent = DialogEvent(
+                                        title = UiText(
+                                            R.string.setup_server_not_pifire_title,
+                                        ),
+                                        message = result.error.asUiText(),
+                                        positiveAction = DialogAction(
+                                            buttonText = UiText(R.string.close),
+                                            action = { },
+                                        ),
+                                    ),
+                                )
+                            }
+                        }
+
                         else ->
                             setEffect {
                                 ConnectContract.Effect.Notification(

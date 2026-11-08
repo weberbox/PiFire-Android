@@ -18,6 +18,7 @@
     <string name="setup_scan_qr">Scan QR Code</string>
     <string name="setup_scan_qr_canceled">Scanning Canceled</string>
     <string name="setup_scan_qr_failed">Scanning Failed</string>
+    <string name="setup_server_not_pifire_title">PiFire Not Reached</string>
     <string name="setup_server_auth_error_title">Authentication Failure</string>
     <string name="setup_server_auth_error_message">PiFire has responded with an authentication error. Verify your credentials are correct and try again</string>
     <string name="setup_server_self_signed_title">Certificate Error</string>

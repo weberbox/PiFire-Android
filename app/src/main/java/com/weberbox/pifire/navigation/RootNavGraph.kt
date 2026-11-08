@@ -70,6 +70,10 @@ fun RootNavGraph(
         exitTransition = { fadeExitTransition() },
         popEnterTransition = { slidePopEnterTransition() },
         popExitTransition = { fadeExitTransition() },
+        // Predictive back (a back swipe, and on Samsung also the back button) would otherwise
+        // shrink the leaving screen (Navigation's default) instead of animating like other pops.
+        predictivePopEnterTransition = { slidePopEnterTransition() },
+        predictivePopExitTransition = { fadeExitTransition() },
         startDestination = NavGraph.LandingDest,
     ) {
         composable<NavGraph.Changelog> {

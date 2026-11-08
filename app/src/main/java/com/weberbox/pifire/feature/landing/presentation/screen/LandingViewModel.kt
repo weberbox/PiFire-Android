@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.weberbox.pifire.R
 import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.common.util.CoroutinePoller
@@ -20,7 +19,7 @@ import com.weberbox.pifire.core.repo.PrefsRepo
 import com.weberbox.pifire.core.repo.SettingsRepo
 import com.weberbox.pifire.core.session.SessionStateHolder
 import com.weberbox.pifire.core.ui.base.BaseViewModel
-import com.weberbox.pifire.core.ui.util.UiText
+import com.weberbox.pifire.core.ui.util.AsUiText.asUiText
 import com.weberbox.pifire.core.ui.util.createUrl
 import com.weberbox.pifire.feature.landing.data.model.ServerUuidData
 import com.weberbox.pifire.feature.landing.data.repo.LandingRepo
@@ -209,18 +208,18 @@ class LandingViewModel @Inject constructor(
         toggleLoading(true)
         viewModelScope.launch {
             settingsRepo.selectServer(uuid)?.let { server ->
-                when (connectionRepo.connect(server)) {
-                    false -> {
+                when (val result = connectionRepo.connect(server)) {
+                    is Result.Error -> {
                         toggleLoading(false)
                         setEffect {
                             LandingContract.Effect.Notification(
-                                text = UiText(R.string.alerter_socket_connection_failed),
+                                text = result.error.asUiText(),
                                 error = true,
                             )
                         }
                     }
 
-                    true -> {
+                    is Result.Success -> {
                         toggleLoading(false)
                         sessionStateHolder.currentServerUuid = uuid
                         setEffect {

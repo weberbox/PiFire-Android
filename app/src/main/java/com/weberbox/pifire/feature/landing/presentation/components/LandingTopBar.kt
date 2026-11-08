@@ -6,7 +6,6 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,14 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.weberbox.pifire.R
-import com.weberbox.pifire.core.ui.base.hazeAppBarStyle
 import com.weberbox.pifire.core.ui.components.HazeLargeSearchAppBar
 import com.weberbox.pifire.feature.landing.presentation.contract.LandingContract
 import com.weberbox.pifire.navigation.NavGraph
 import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LandingTopBar(
     modifier: Modifier = Modifier,
@@ -63,9 +60,7 @@ internal fun LandingTopBar(
                 searchBarState = searchBarState,
                 textFieldState = textFieldState,
                 hazeState = hazeState,
-                searchStyle = hazeAppBarStyle(
-                    MaterialTheme.colorScheme.surfaceContainerHigh,
-                ),
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 onSearch = { result ->
                     scope.launch {
                         searchBarState.animateToCollapsed()

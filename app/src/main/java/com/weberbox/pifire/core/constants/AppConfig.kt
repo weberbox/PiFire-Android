@@ -48,11 +48,9 @@ object AppConfig {
     const val PRIME_MIN_GRAMS: Int = 10
     const val PRIME_MAX_GRAMS: Int = 50
 
-    // In App Updates
-    const val APP_UPDATE_CONFIG: String = "app_update_config"
-
-    // Server Version Support
-    const val SERVER_SUPPORT_CONFIG: String = "server_support_config"
+    // Remote Config keys. Older app versions read the v1 keys, which stay frozen in the console.
+    const val APP_UPDATE_CONFIG: String = "app_update_config_v2"
+    const val SERVER_SUPPORT_CONFIG: String = "server_support_config_v2"
 
     // Feature Support Config
     const val FEATURE_SUPPORT_CONFIG: String = "feature_support_config"

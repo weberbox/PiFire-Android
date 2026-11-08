@@ -34,7 +34,7 @@ class AppUpdateRepoImpl @Inject constructor(
     }
 
     override suspend fun fetchPolicy(): AppUpdatePolicy? = remoteConfigRepo.fetchAppUpdateConfig()
-        .toUpdatePolicy(currentVersionCode = BuildConfig.VERSION_CODE, includeAlpha = BuildConfig.ALPHA_BUILD)
+        ?.toUpdatePolicy(currentVersionCode = BuildConfig.VERSION_CODE, includeAlpha = BuildConfig.ALPHA_BUILD)
 
     override suspend fun findUpdate(policy: AppUpdatePolicy): AvailableUpdate? = when (source) {
         UpdateSource.PLAY_STORE -> playInstaller.get().findUpdate()

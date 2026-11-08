@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.weberbox.pifire.application.App.Companion.getAppContext
 import com.weberbox.pifire.core.common.model.DataError
+import okhttp3.HttpUrl
 import timber.log.Timber
 import java.io.InterruptedIOException
 import java.net.ConnectException
@@ -50,6 +51,34 @@ fun Throwable.toNetworkError(): DataError.Network {
         else -> DataError.Network.SERVER_ERROR
     }
 }
+
+/**
+ * The error for a successful response that came from something in front of PiFire rather than
+ * PiFire itself, or null if it looks like PiFire's. OkHttp follows redirects, so a proxy login page
+ * arrives as a 200 with HTML, which would otherwise surface as a JSON error. [url] is the final URL after
+ * redirects; [body] may be empty when it can't be read (e.g. a stream).
+ */
+fun proxyResponseError(
+    url: HttpUrl,
+    contentType: String?,
+    body: String,
+): DataError.Network? = when {
+    url.host.endsWith(CLOUDFLARE_ACCESS_HOST) ||
+        url.encodedPath.startsWith(CLOUDFLARE_ACCESS_PATH) -> DataError.Network.CLOUDFLARE_ACCESS
+
+    contentType?.contains("html", ignoreCase = true) == true ||
+        body.trimStart().startsWith("<") -> DataError.Network.NOT_PIFIRE
+
+    else -> null
+}
+
+/** Errors a reconnect can't get past until the user changes something on their side. */
+fun DataError.blocksConnection(): Boolean = this == DataError.Network.NOT_PIFIRE ||
+    this == DataError.Network.CLOUDFLARE_ACCESS ||
+    this == DataError.Network.AUTHENTICATION
+
+private const val CLOUDFLARE_ACCESS_HOST = ".cloudflareaccess.com"
+private const val CLOUDFLARE_ACCESS_PATH = "/cdn-cgi/access/"
 
 private fun Throwable.causes(): Sequence<Throwable> =
     generateSequence(this) { it.cause.takeIf { cause -> cause !== it } }

@@ -4,8 +4,10 @@ import com.weberbox.pifire.core.common.model.DataError
 import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.constants.ServerConstants
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
+import com.weberbox.pifire.core.network.blocksConnection
 import com.weberbox.pifire.core.network.headers.HeadersManager
 import com.weberbox.pifire.core.network.parsePostResponse
+import com.weberbox.pifire.core.network.proxyResponseError
 import com.weberbox.pifire.core.network.toNetworkError
 import com.weberbox.pifire.core.session.SessionStateHolder
 import kotlinx.coroutines.CompletableDeferred
@@ -112,9 +114,17 @@ class HttpSseTransport @Inject constructor(
             try {
                 client.newCall(request).await().use { response ->
                     when {
-                        response.isSuccessful -> response.body.string().toAvailable()
+                        response.isSuccessful -> {
+                            val text = response.body.string()
+                            // A proxy page here may only cover unknown paths; Socket.IO gets its own try.
+                            response.proxyError(body = text)?.let { error -> ProbeResult.Failed(error) }
+                                ?: text.toAvailable()
+                        }
+
                         response.code == 404 -> ProbeResult.NotAvailable
+
                         response.code == 401 -> ProbeResult.Failed(DataError.Network.AUTHENTICATION)
+
                         else -> ProbeResult.Failed(DataError.Network.SERVER_ERROR)
                     }
                 }
@@ -131,26 +141,26 @@ class HttpSseTransport @Inject constructor(
     override suspend fun connect(
         server: Server,
         disconnectOnCancellation: Boolean,
-    ): Boolean {
+    ): Result<Unit, DataError> {
         disconnect()
         val target = try {
             Connection(baseUrl = baseUrl(server.address), headers = headers(server))
         } catch (e: IllegalArgumentException) {
             Timber.e(e, "Invalid server address")
-            return false
+            return Result.Error(DataError.Network.UNKNOWN_HOST)
         }
         connection = target
         reconnectDelay = RECONNECT_DELAY_MIN
-        val opened = CompletableDeferred<Boolean>()
+        val opened = CompletableDeferred<Result<Unit, DataError>>()
         openStream(target = target, opened = opened)
-        val isOpen = try {
-            withTimeoutOrNull(CONNECT_TIMEOUT) { opened.await() } ?: false
+        val result = try {
+            withTimeoutOrNull(CONNECT_TIMEOUT) { opened.await() } ?: Result.Error(DataError.Network.SOCKET_TIMEOUT)
         } catch (e: Exception) {
             if (disconnectOnCancellation) disconnect()
             throw e
         }
-        if (!isOpen) disconnect()
-        return isOpen
+        if (result is Result.Error) disconnect()
+        return result
     }
 
     override fun disconnect() {
@@ -243,14 +253,14 @@ class HttpSseTransport @Inject constructor(
             client.newCall(request).await().use { response ->
                 if (response.code == 401) return@use Result.Error(DataError.Network.AUTHENTICATION)
                 // PiFire's own failures (4xx/422) carry an envelope too; anything else is the proxy or a crash.
-                val envelope = response.body.string().let { text ->
-                    try {
-                        json.decodeFromString(V2Envelope.serializer(), text)
-                    } catch (_: IllegalArgumentException) {
-                        null
-                    }
+                val text = response.body.string()
+                val envelope = try {
+                    json.decodeFromString(V2Envelope.serializer(), text)
+                } catch (_: IllegalArgumentException) {
+                    null
                 }
-                envelope?.let(onEnvelope) ?: Result.Error(DataError.Network.SERVER_ERROR)
+                envelope?.let(onEnvelope)
+                    ?: Result.Error(response.proxyError(body = text) ?: DataError.Network.SERVER_ERROR)
             }
         } catch (e: IOException) {
             currentCoroutineContext().ensureActive()
@@ -260,7 +270,7 @@ class HttpSseTransport @Inject constructor(
 
     private fun openStream(
         target: Connection,
-        opened: CompletableDeferred<Boolean>?,
+        opened: CompletableDeferred<Result<Unit, DataError>>?,
     ) {
         val request = Request.Builder()
             .url("${target.baseUrl}/stream")
@@ -275,7 +285,7 @@ class HttpSseTransport @Inject constructor(
 
     private inner class StreamListener(
         private val target: Connection,
-        private val opened: CompletableDeferred<Boolean>?,
+        private val opened: CompletableDeferred<Result<Unit, DataError>>?,
     ) : EventSourceListener() {
         private var wasOpen = false
 
@@ -284,7 +294,7 @@ class HttpSseTransport @Inject constructor(
             wasOpen = true
             this@HttpSseTransport.reconnectDelay = RECONNECT_DELAY_MIN
             setConnected(true)
-            opened?.complete(true)
+            opened?.complete(Result.Success(Unit))
         }
 
         override fun onEvent(eventSource: EventSource, id: String?, type: String?, data: String) {
@@ -300,9 +310,19 @@ class HttpSseTransport @Inject constructor(
             if (connection !== target) return
             Timber.d("Stream ended: %s %s", response?.code, error?.javaClass?.simpleName)
             setConnected(false)
-            opened?.complete(false)
-            // A first connect that fails reports false to the caller; a dropped stream comes back on its own.
-            if (wasOpen || opened == null) scheduleReconnect(target)
+            val reason = streamError(response = response, error = error)
+            opened?.complete(Result.Error(reason))
+            // A first connect that fails reports its error to the caller; a dropped stream comes back on its own.
+            if (wasOpen || opened == null) {
+                if (reason.blocksConnection()) sessionStateHolder.tryEmitConnectionBlocked(reason)
+                scheduleReconnect(target)
+            }
+        }
+
+        // The body isn't read: a stream that did open may still be on it.
+        private fun streamError(response: Response?, error: Throwable?): DataError = when {
+            response?.code == 401 -> DataError.Network.AUTHENTICATION
+            else -> response?.proxyError(body = "") ?: error?.toNetworkError() ?: DataError.Network.SOCKET_ERROR
         }
     }
 
@@ -332,6 +352,13 @@ class HttpSseTransport @Inject constructor(
         val trimmed = address.trimEnd('/')
         require(trimmed.startsWith("http://") || trimmed.startsWith("https://")) { "Address needs a scheme" }
         return "$trimmed$API_PATH"
+    }
+
+    // Only a 2xx: an error page (e.g. a proxy's 502) is a failure, not a different server.
+    private fun Response.proxyError(body: String): DataError.Network? = if (isSuccessful) {
+        proxyResponseError(url = request.url, contentType = header("Content-Type"), body = body)
+    } else {
+        null
     }
 
     private fun V2Envelope.toLegacyResponse(): String = buildJsonObject {

@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Grain
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.OutdoorGrill
 import androidx.compose.material.icons.filled.PowerSettingsNew
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -107,7 +106,6 @@ fun SettingsHomeScreenDestination(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun SettingsHomeScreen(
     state: SettingsContract.State,
     effectFlow: Flow<SettingsContract.Effect>?,

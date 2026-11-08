@@ -9,20 +9,20 @@ androidXActivityKtx = "1.13.0"
 androidxCrypto = "1.1.0"
 androidxBiometrics = "1.1.0"
 googleScanner = "16.1.0"
-material3Android = "1.5.0-beta02"
+material3Android = "1.5.0-rc01"
 navigationCompose = "2.10.2"
 navigationHiltCompose = "1.4.0"
 kotlinSerialization = "1.12.0"
 coroutinesVersion = "1.11.0"
 composablesCore = "1.49.9"
 daggerHilt = "2.60.1"
-kspVersion = "2.3.12"
+kspVersion = "2.3.13"
 desugar = "2.1.5"
 googleServices = "4.5.0"
 googlePlayUpdate = "2.1.0"
-sentryGradle = "6.24.0"
-sentryAndroid = "8.61.1"
-hazeVersion = "1.7.2"
+sentryGradle = "6.26.0"
+sentryAndroid = "8.63.0"
+hazeVersion = "2.1.0"
 timberVersion = "5.0.1"
 composeRatingbar = "1.3.12"
 composePreference = "1.1.1"
@@ -32,16 +32,16 @@ retrofit = "3.0.0"
 okhttp = "5.5.1"
 socketIO = "2.1.2"
 leakCanary = "2.14"
-gradle = "9.4.1"
+gradle = "9.5.1"
 kotlin = "2.4.21"
 zoomable = "2.16.0"
 #noinspection NewerVersionAvailable
 onesignal = "4.8.12"
 junit = "4.13.2"
-mockk = "1.14.11"
+mockk = "1.14.12"
 turbine = "1.2.1"
 konsist = "0.18.1"
-spotless = "8.10.4"
+spotless = "8.11.0"
 ktlint = "1.8.0"
 
 [libraries]
@@ -80,7 +80,8 @@ google-play-scanner = { module = "com.google.android.gms:play-services-code-scan
 google-play-update = { module = "com.google.android.play:app-update-ktx", version.ref = "googlePlayUpdate" }
 composables-core = { module = "com.composables:core", version.ref = "composablesCore" }
 haze-android = { module = "dev.chrisbanes.haze:haze-android", version.ref = "hazeVersion" }
-haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "hazeVersion" }
+haze-blur = { module = "dev.chrisbanes.haze:haze-blur", version.ref = "hazeVersion" }
+haze-blur-materials = { module = "dev.chrisbanes.haze:haze-blur-materials", version.ref = "hazeVersion" }
 timber-android = { module = "com.jakewharton.timber:timber", version.ref = "timberVersion" }
 compose-ratingbar = { module = "com.github.a914-gowtham:compose-ratingbar", version.ref = "composeRatingbar" }
 compose-preference = { module = "me.zhanghai.compose.preference:library", version.ref = "composePreference" }

@@ -74,7 +74,7 @@ class HttpSseTransportTest {
 
     private fun connect() = runBlocking {
         stream()
-        assertTrue(transport.connect(server = pifire, disconnectOnCancellation = false))
+        assertEquals(Result.Success<Unit, DataError>(Unit), transport.connect(server = pifire, disconnectOnCancellation = false))
         server.takeRequest()
     }
 
@@ -162,6 +162,35 @@ class HttpSseTransportTest {
 
         assertEquals(Result.Error<String, DataError>(DataError.Network.AUTHENTICATION), transport.get(ServerConstants.GA_DASH_DATA))
         assertEquals(Result.Error<String, DataError>(DataError.Network.SERVER_ERROR), transport.get(ServerConstants.GA_DASH_DATA))
+    }
+
+    @Test
+    fun `a proxy page instead of PiFire is reported as such`() = runBlocking {
+        server.enqueue(
+            MockResponse.Builder()
+                .addHeader("Content-Type", "text/html")
+                .body("<!DOCTYPE html><html>Sign in</html>")
+                .build(),
+        )
+        assertEquals(HttpSseTransport.ProbeResult.Failed(DataError.Network.NOT_PIFIRE), transport.probe(pifire))
+
+        connect()
+        respond(code = 200, body = "<html>Sign in</html>")
+        assertEquals(Result.Error<String, DataError>(DataError.Network.NOT_PIFIRE), transport.get(ServerConstants.GA_DASH_DATA))
+    }
+
+    @Test
+    fun `a stream answered by a proxy page fails with the reason`() = runBlocking {
+        server.enqueue(
+            MockResponse.Builder()
+                .addHeader("Content-Type", "text/html")
+                .body("<html>Sign in</html>")
+                .build(),
+        )
+        assertEquals(
+            Result.Error<Unit, DataError>(DataError.Network.NOT_PIFIRE),
+            transport.connect(server = pifire, disconnectOnCancellation = false),
+        )
     }
 
     @Test

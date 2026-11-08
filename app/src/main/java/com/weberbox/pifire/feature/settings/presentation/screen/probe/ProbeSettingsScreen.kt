@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -105,7 +104,6 @@ fun ProbeSettingsScreenDestination(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun ProbeSettingsScreen(
     state: ProbeContract.State,
     effectFlow: Flow<ProbeContract.Effect>?,

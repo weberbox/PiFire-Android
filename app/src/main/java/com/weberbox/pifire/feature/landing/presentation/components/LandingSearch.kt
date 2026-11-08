@@ -23,7 +23,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -45,27 +44,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import com.weberbox.pifire.R
+import com.weberbox.pifire.core.ui.base.hazeAppBarStyle
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.keyboardAsState
 import com.weberbox.pifire.core.ui.util.showToast
 import com.weberbox.pifire.feature.landing.presentation.model.ServerData.Server
 import com.weberbox.pifire.feature.landing.presentation.util.displayName
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.hazeBlur
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LandingInputField(
     modifier: Modifier = Modifier,
     searchBarState: SearchBarState,
     textFieldState: TextFieldState,
     hazeState: HazeState,
-    searchStyle: HazeStyle,
+    containerColor: Color,
     onSearch: (String) -> Unit,
     onSearchClear: () -> Unit,
 ) {
@@ -77,7 +76,7 @@ internal fun LandingInputField(
         targetValue = if (searchBarState.targetValue == SearchBarValue.Collapsed) {
             Color.Transparent
         } else {
-            searchStyle.backgroundColor
+            containerColor
         },
         animationSpec = tween(durationMillis = 400),
     )
@@ -103,9 +102,9 @@ internal fun LandingInputField(
             .focusProperties { canFocus = searchBarState.currentValue == SearchBarValue.Expanded }
             .then(
                 if (searchBarState.currentValue == SearchBarValue.Collapsed) {
-                    Modifier.hazeEffect(
-                        state = hazeState,
-                        style = searchStyle,
+                    Modifier.hazeBlur(
+                        input = HazeInput.Sources(state = hazeState),
+                        style = hazeAppBarStyle(color = containerColor),
                     )
                 } else {
                     Modifier

@@ -1,5 +1,7 @@
 package com.weberbox.pifire.core.repo
 
+import com.weberbox.pifire.core.common.model.DataError
+import com.weberbox.pifire.core.common.model.Result
 import com.weberbox.pifire.core.model.settings.SettingsData.Server
 import kotlinx.coroutines.flow.Flow
 
@@ -11,7 +13,7 @@ interface ConnectionRepo {
     /** [isApiV2], updated on every connect. */
     val isApiV2Flow: Flow<Boolean>
 
-    /** Connects to [server], replacing any current connection; false if it couldn't connect. */
-    suspend fun connect(server: Server): Boolean
+    /** Connects to [server], replacing any current connection; the error says why it couldn't. */
+    suspend fun connect(server: Server): Result<Unit, DataError>
     fun disconnect()
 }
