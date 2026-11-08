@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -91,7 +90,6 @@ fun AppSettingsScreenDestination(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun AppSettingsScreen(
     state: AppContract.State,
     effectFlow: Flow<AppContract.Effect>?,

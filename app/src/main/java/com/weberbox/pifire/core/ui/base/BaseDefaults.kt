@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -13,9 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.weberbox.pifire.core.ui.model.PickerWheelTextStyle
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.materials.HazeMaterials
 
 fun getPagerAnimationSpec(): FiniteAnimationSpec<Float> = tween(300)
 
@@ -68,9 +68,13 @@ fun pickerUnselectedTextStyle(
     fontWeight = FontWeight.Normal,
 )
 
-@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 fun hazeAppBarStyle(
     color: Color = MaterialTheme.colorScheme.background,
     noiseFactor: Float = 0f,
-): HazeStyle = HazeMaterials.ultraThin(color).copy(noiseFactor = noiseFactor)
+): HazeBlurStyle {
+    val material = HazeMaterials.ultraThin(containerColor = color)
+    // Presets compare by value, but a style built with then {} compares by identity: remember it so
+    // the blur nodes don't re-resolve it on every recomposition.
+    return remember(material, noiseFactor) { material.then { noiseFactor(factor = noiseFactor) } }
+}

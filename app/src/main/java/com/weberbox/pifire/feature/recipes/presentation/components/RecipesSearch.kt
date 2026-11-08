@@ -24,7 +24,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -52,22 +51,22 @@ import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe
 import com.weberbox.pifire.core.ui.theme.spacing
 import com.weberbox.pifire.core.ui.util.keyboardAsState
 import com.weberbox.pifire.core.ui.util.showToast
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.hazeBlur
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun RecipesInputField(
     modifier: Modifier = Modifier,
     searchBarState: SearchBarState,
     textFieldState: TextFieldState,
     hazeState: HazeState,
-    searchStyle: HazeStyle,
+    searchStyle: HazeBlurStyle,
     onNavigate: () -> Unit,
     onSearch: (String) -> Unit,
     onSearchClear: () -> Unit,
@@ -106,8 +105,8 @@ internal fun RecipesInputField(
             .focusProperties { canFocus = searchBarState.currentValue == SearchBarValue.Expanded }
             .then(
                 if (searchBarState.currentValue == SearchBarValue.Collapsed) {
-                    Modifier.hazeEffect(
-                        state = hazeState,
+                    Modifier.hazeBlur(
+                        input = HazeInput.Sources(state = hazeState),
                         style = searchStyle,
                     )
                 } else {

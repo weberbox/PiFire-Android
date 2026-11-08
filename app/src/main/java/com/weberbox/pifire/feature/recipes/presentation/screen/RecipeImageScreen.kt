@@ -5,6 +5,7 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -181,16 +182,20 @@ private fun RecipeImagesScreenContent(
                         beyondViewportPageCount = AppConfig.PAGER_BEYOND_COUNT,
                     ) { index ->
                         state.imageList.getOrNull(index)?.let { image ->
-                            RecipeAsyncImage(
-                                image = image,
-                                zoomState = rememberZoomState(),
-                                modifier = Modifier
-                                    .limitWidthFraction()
-                                    .pagerCubeInDepthTransition(
-                                        page = index,
-                                        pagerState = pagerState,
-                                    ),
-                            )
+                            // Rotate the whole page: RecipeAsyncImage clips to its bounds for zoom,
+                            // and that flat clip cut the turning photo's near edge square.
+                            Box(
+                                modifier = Modifier.pagerCubeInDepthTransition(
+                                    page = index,
+                                    pagerState = pagerState,
+                                ),
+                            ) {
+                                RecipeAsyncImage(
+                                    image = image,
+                                    zoomState = rememberZoomState(),
+                                    modifier = Modifier.limitWidthFraction(),
+                                )
+                            }
                         }
                     }
                     Row(

@@ -160,7 +160,8 @@ dependencies {
     implementation(libs.google.play.update)
     implementation(libs.composables.core)
     implementation(libs.haze.android)
-    implementation(libs.haze.materials)
+    implementation(libs.haze.blur)
+    implementation(libs.haze.blur.materials)
     implementation(libs.timber.android)
     implementation(libs.compose.ratingbar) {
         // It lists the Compose compiler plugin as a runtime dependency, which R8 warns about

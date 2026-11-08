@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExpandedFullScreenSearchBar
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,11 +44,11 @@ import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import com.weberbox.pifire.core.ui.base.hazeAppBarStyle
 import com.weberbox.pifire.core.ui.theme.spacing
+import dev.chrisbanes.haze.HazeInput
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.hazeBlur
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsAppBar(
     title: String,
@@ -110,7 +109,6 @@ fun SettingsAppBar(
 }
 
 @Suppress("unused")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandardAppBar(
     title: @Composable () -> Unit = {},
@@ -140,7 +138,6 @@ fun StandardAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransparentAppBar(
     title: @Composable () -> Unit = {},
@@ -180,13 +177,12 @@ fun TransparentAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HazeAppBar(
     title: @Composable () -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior,
     hazeState: HazeState,
-    style: HazeStyle = hazeAppBarStyle(),
+    style: HazeBlurStyle = hazeAppBarStyle(),
     showNavigationIcon: Boolean = true,
     navigationIcon: ImageVector = Icons.AutoMirrored.Filled.ArrowBack,
     navigationIconDescription: String? = null,
@@ -203,8 +199,8 @@ fun HazeAppBar(
             scrolledContainerColor = Color.Transparent,
         ),
         modifier = Modifier
-            .hazeEffect(
-                state = hazeState,
+            .hazeBlur(
+                input = HazeInput.Sources(state = hazeState),
                 style = style,
             )
             .fillMaxWidth(),
@@ -222,19 +218,18 @@ fun HazeAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HazeSearchAppBar(
     searchBarState: SearchBarState,
     hazeState: HazeState,
-    style: HazeStyle = hazeAppBarStyle(),
+    style: HazeBlurStyle = hazeAppBarStyle(),
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     inputField: @Composable () -> Unit,
     searchResults: @Composable ColumnScope.() -> Unit,
 ) {
     Box(
-        modifier = Modifier.hazeEffect(
-            state = hazeState,
+        modifier = Modifier.hazeBlur(
+            input = HazeInput.Sources(state = hazeState),
             style = style,
         ),
         contentAlignment = Alignment.Center,
@@ -259,14 +254,13 @@ fun HazeSearchAppBar(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HazeLargeSearchAppBar(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
     searchBarState: SearchBarState,
     hazeState: HazeState,
-    style: HazeStyle = hazeAppBarStyle(),
+    style: HazeBlurStyle = hazeAppBarStyle(),
     windowInsets: WindowInsets = SearchBarDefaults.windowInsets,
     inputField: @Composable () -> Unit,
     searchResults: @Composable ColumnScope.() -> Unit,
@@ -275,8 +269,8 @@ fun HazeLargeSearchAppBar(
 ) {
     Column(
         modifier = modifier
-            .hazeEffect(
-                state = hazeState,
+            .hazeBlur(
+                input = HazeInput.Sources(state = hazeState),
                 style = style,
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -289,8 +283,8 @@ fun HazeLargeSearchAppBar(
                 scrolledContainerColor = Color.Transparent,
             ),
             modifier = Modifier
-                .hazeEffect(
-                    state = hazeState,
+                .hazeBlur(
+                    input = HazeInput.Sources(state = hazeState),
                     style = style,
                 )
                 .fillMaxWidth(),

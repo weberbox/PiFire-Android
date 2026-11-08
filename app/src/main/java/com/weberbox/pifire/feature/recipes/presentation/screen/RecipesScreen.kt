@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NoFood
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,6 +43,7 @@ import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Asset
 import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.MetaData
 import com.weberbox.pifire.core.model.recipes.RecipesData.Recipes.Recipe.Step
 import com.weberbox.pifire.core.ui.base.SIDE_EFFECTS_KEY
+import com.weberbox.pifire.core.ui.base.hazeAppBarStyle
 import com.weberbox.pifire.core.ui.components.CachedDataError
 import com.weberbox.pifire.core.ui.components.EmptyItems
 import com.weberbox.pifire.core.ui.components.HazeSearchAppBar
@@ -65,8 +65,6 @@ import com.weberbox.pifire.navigation.popBackStackFrom
 import com.weberbox.pifire.navigation.rememberSourceEntry
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
-import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
-import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -102,7 +100,6 @@ fun RecipesScreenDestination(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalHazeMaterialsApi::class)
 private fun RecipesScreen(
     state: RecipesContract.State,
     effectFlow: Flow<RecipesContract.Effect>?,
@@ -142,10 +139,9 @@ private fun RecipesScreen(
                         searchBarState = searchBarState,
                         textFieldState = textFieldState,
                         hazeState = hazeState,
-                        searchStyle = HazeMaterials.ultraThin(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        )
-                            .copy(noiseFactor = 0f),
+                        searchStyle = hazeAppBarStyle(
+                            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        ),
                         onNavigate = {
                             onNavigationRequested(RecipesContract.Effect.Navigation.Back)
                         },
