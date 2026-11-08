@@ -279,6 +279,10 @@ Other screen rules:
   and message), `config_server_support_v2.json` and `config_feature_support.json` (when the release
   changes them). Keep the Remote Config console
   in sync and list the console changes under `Remote Config:` in the PR.
+- A merge to `master` with a new version runs `.github/workflows/release.yml`: it builds the signed
+  `github` release APK and drafts the GitHub release, with notes made from the current
+  `changelog.json` entry by `.github/scripts/release_notes.py`, which fails if that entry isn't the
+  build's version. The user publishes the draft.
 - Message style: a one-line summary, then sections (e.g. `Dashboard`, `Settings`, `Setup`,
   `Under the hood`) of short `- ` bullets describing user-visible effect. Note Remote Config
   changes that must be made in the Firebase console under `Remote Config:`.
