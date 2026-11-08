@@ -1,3 +1,6 @@
 # Kotlin is LF everywhere (.editorconfig), so Spotless does not flag CRLF checkouts on Windows.
 *.kt text eol=lf
 *.kts text eol=lf
+# gradlew runs on Linux CI runners; gradlew.bat only on Windows.
+gradlew text eol=lf
+*.bat text eol=crlf
