@@ -1,1 +1,4 @@
-remote_theme: rundocs/jekyll-rtd-theme
+# Built-in GitHub Pages theme. The previous remote theme (rundocs/jekyll-rtd-theme) was deleted
+# from GitHub, which broke every build.
+theme: jekyll-theme-primer
+title: PiFire Android
